@@ -1,0 +1,437 @@
+{
+  "schema": "s11-public-scene-controls-v1",
+  "base_head": "2f5d814f1dab8201f28884d06dd8f2063fa5905d",
+  "scope": "Pre-detector source-bound scene inventory, not an evaluator packet or annotated acceptance dataset.",
+  "preflight": {
+    "schema": "s11-public-scene-control-preflight-v1",
+    "base_head": "2f5d814f1dab8201f28884d06dd8f2063fa5905d",
+    "purpose": "Bind pre-detector scene/control roles and a new physical ambiguity; no operating-point fit or predictions.",
+    "inputs": {
+      "docs/50-diagnostics/s11/2026-10-09-public-video-intake.json": "e36b0804bd5b4f7504444a2d5d216f8e12a1725ed75465a46f7164b5257ab4bc",
+      "docs/50-diagnostics/s11/2026-10-09-public-video-rename.json": "7f925235e6a1cbc34313380f22bb616ba68c384b9395e73324cd2782b1e7a649",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000000.png": "bd248d9331c4b1d267572d2e44a1a016589e2065509dc16f0de0b83d7bcd808f",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000822.png": "19a94ae8bb16454440033559aecbe6ca714853d505423288bd2dc113767ce8b1",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22",
+      "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000000.png": "20814859d027ce5fa50b3f00c56084ec778d74ff5b38bd05fb980d8e208837fd",
+      "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000146.png": "2f45e444880a4f8e3df9cb29adbf269259f12544a29ddd60ae73d776d44741b4",
+      "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000436.png": "72fe651d0c719c08b8e63fa44c5be77b1fd9e9ad3af09dc6152c2fc6ffeffd35",
+      "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000000.png": "f339911bc43748030ebace5b0843d0362ee213f2b38364fe48f9f52ba479f21b",
+      "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000532.png": "8549006127569fd3d06950616db870418c36503ae761b51827f3949e1698d4b7",
+      "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png": "35b020932c0c93d278674caecd6641463552ff66ea6cc32cbeca39af1c3ef64c",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000815.png": "38425a7172d682c2cb6fe94533d7201c686763672bcc9cd251d18b59a16e6b31",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/quarter-f000829.png": "07adeee2f636b3355d48c89c3f8da920895688fd417008869a90aa4049b83c1d",
+      "sample/sample5.mp4": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+      "sample/sample6.mp4": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2",
+      "sample/sample7.mp4": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+    },
+    "selection": [
+      {
+        "case_id": "s5-empty",
+        "video": "sample/sample5.mp4",
+        "frame_index": 0
+      },
+      {
+        "case_id": "s5-inclined",
+        "video": "sample/sample5.mp4",
+        "frame_index": 822
+      },
+      {
+        "case_id": "s5-settled",
+        "video": "sample/sample5.mp4",
+        "frame_index": 1643
+      },
+      {
+        "case_id": "s6-empty",
+        "video": "sample/sample6.mp4",
+        "frame_index": 0
+      },
+      {
+        "case_id": "s6-forming",
+        "video": "sample/sample6.mp4",
+        "frame_index": 146
+      },
+      {
+        "case_id": "s6-layer",
+        "video": "sample/sample6.mp4",
+        "frame_index": 436
+      },
+      {
+        "case_id": "s7-empty",
+        "video": "sample/sample7.mp4",
+        "frame_index": 0
+      },
+      {
+        "case_id": "s7-pouring",
+        "video": "sample/sample7.mp4",
+        "frame_index": 532
+      },
+      {
+        "case_id": "s7-settled",
+        "video": "sample/sample7.mp4",
+        "frame_index": 1063
+      }
+    ],
+    "rule": "Use already exposed native intake frames for empty/filled/uncertain/cropped roles before model results. Agent interpretations remain provisional, all scalar/contour truth absent.",
+    "question": "At sample5 27.194–27.661 s, is the large sloped upper boundary the real displaced water surface or an overlying splash sheet?",
+    "marker_scope": "Display-only rectangle X[800,1110), Y[400,650); no traced contour, pixel truth or production mask.",
+    "partition": "development",
+    "detector_run": false,
+    "model_fit": false,
+    "recipe_change": false
+  },
+  "preflight_sha256": "956113a6339783527b45654444bf09658bac9430698afb895f7cd465f6f7a7a0",
+  "display_receipt": {
+    "preflight_sha256": "956113a6339783527b45654444bf09658bac9430698afb895f7cd465f6f7a7a0",
+    "inputs_preserved": true,
+    "outputs": {
+      "sample/output/s11-public-scene-controls-20261009-001/beer-controls.png": "8f517f004195bae8a748c60d826331dc220e94df99ed297fab613a35ee80c705",
+      "sample/output/s11-public-scene-controls-20261009-001/milk-controls.png": "70534445476bf1486e86aad39c8762255a4ba0b9382a26130aef6691483c3290",
+      "sample/output/s11-public-scene-controls-20261009-001/sample5-inclined-surface-review.png": "17fb80ee706642dd522439ec9ef37347023aa9fc317b23c0bab9952635849c47",
+      "sample/output/s11-public-scene-controls-20261009-001/water-controls.png": "ab9460cfd6daa7d7d9cb191aeec33660449cfd8e1241e9271e88bd77fcc96442"
+    },
+    "script": "from pathlib import Path\nimport hashlib,json\nfrom PIL import Image\nimport matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\nfrom matplotlib.patches import Rectangle\nroot=Path.cwd();out=root/'sample/output/s11-public-scene-controls-20261009-001';out.mkdir(exist_ok=False)\nsha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()\nintake=root/'docs/50-diagnostics/s11/2026-10-09-public-video-intake.json';rename=root/'docs/50-diagnostics/s11/2026-10-09-public-video-rename.json'\nr=json.loads(intake.read_text());ren=json.loads(rename.read_text());aliases={p['original_path']:p for p in ren['renames']}\nlookup={}\nfor v in r['overview']['videos']:\n for f in v['frames']:lookup[(v['path'],f['frame_index'])]=dict(f,origin=[0,0],view='native_full_frame')\nfor v in r['temporal']['results']:\n for f in v['frames']:\n  lookup.setdefault((v['path'],f['frame_index']),dict(f,origin=v['display_crop_xyxy'][:2],view='saved_display_crop'))\nold=lambda suffix:next(k for k in aliases if suffix in k)\ndef source(kind,frame):\n p=lookup[(old(kind),frame)];assert sha(root/p['path'])==p['sha256'];return p\nselection=[('s5-empty','water',0),('s5-inclined','water',822),('s5-settled','water',1643),('s6-empty','beer',0),('s6-forming','beer',146),('s6-layer','beer',436),('s7-empty','milk',0),('s7-pouring','milk',532),('s7-settled','milk',1063)]\npre=dict(schema='s11-public-scene-control-preflight-v1',base_head='2f5d814f1dab8201f28884d06dd8f2063fa5905d',purpose='Bind pre-detector scene/control roles and a new physical ambiguity; no operating-point fit or predictions.',inputs={str(intake.relative_to(root)):sha(intake),str(rename.relative_to(root)):sha(rename)},\n selection=[dict(case_id=case,video=aliases[old(kind)]['current_path'],frame_index=frame) for case,kind,frame in selection],\n rule='Use already exposed native intake frames for empty/filled/uncertain/cropped roles before model results. Agent interpretations remain provisional, all scalar/contour truth absent.',\n question='At sample5 27.194–27.661 s, is the large sloped upper boundary the real displaced water surface or an overlying splash sheet?',\n marker_scope='Display-only rectangle X[800,1110), Y[400,650); no traced contour, pixel truth or production mask.',\n partition='development',detector_run=False,model_fit=False,recipe_change=False)\nfor _,kind,frame in selection:\n p=source(kind,frame);pre['inputs'][p['path']]=p['sha256']\nfor frame in (815,822,829):\n p=source('water',frame);pre['inputs'][p['path']]=p['sha256']\nfor entry in aliases.values():\n p=root/entry['current_path'];assert sha(p)==entry['sha256_after'];pre['inputs'][entry['current_path']]=entry['sha256_after']\n(out/'preflight.json').write_text(json.dumps(pre,indent=2)+'\\n')\nfig,axes=plt.subplots(1,3,figsize=(10.5,5.8),layout='constrained')\nfor ax,frame in zip(axes,(815,822,829),strict=True):\n p=source('water',frame);im=Image.open(root/p['path']);ox,oy=p['origin'];w,h=im.size\n ax.imshow(im,extent=(ox-.5,ox+w-.5,oy+h-.5,oy-.5),interpolation='nearest');ax.set_xlim(740,1160);ax.set_ylim(940,250)\n ax.set_xticks([]);ax.set_yticks([]);ax.set_title(f'{frame/(30000/1001):.3f} s / f{frame}')\n if frame==822:ax.add_patch(Rectangle((800,400),310,250,fill=False,edgecolor='#ff9c2b',lw=1.8))\nfig.suptitle('sample5: physical role of the sloped upper water feature',fontsize=14)\nfig.supxlabel('Orange box: approximate review region only. No detector prediction or exact contour label.',fontsize=10)\npath=out/'sample5-inclined-surface-review.png';fig.savefig(path,dpi=150);plt.close(fig)\n# One control overview per source, using the earlier frozen display crop.\nboxes={'water':[740,250,1160,1080],'beer':[200,0,2500,1440],'milk':[760,240,1480,1060]}\nfor kind in boxes:\n fig,axes=plt.subplots(1,3,figsize=(12,6.4),layout='constrained')\n for ax,(case,_,frame) in zip(axes,[s for s in selection if s[1]==kind],strict=True):\n  p=source(kind,frame);im=Image.open(root/p['path']);assert p['origin']==[0,0]\n  ax.imshow(im.crop(boxes[kind]),interpolation='nearest');ax.set_axis_off();ax.set_title(f'{case} / f{frame}')\n fig.suptitle(f'{kind}: pre-detector scene controls; agent provisional roles only')\n fig.savefig(out/f'{kind}-controls.png',dpi=120);plt.close(fig)\nfor name,pin in pre['inputs'].items():assert sha(root/name)==pin,name\n(out/'display-receipt.json').write_text(json.dumps(dict(preflight_sha256=sha(out/'preflight.json'),inputs_preserved=True,outputs={str(p.relative_to(root)):sha(p) for p in sorted(out.glob('*.png'))},script=Path(__file__).read_text()),indent=2)+'\\n')\nprint(out)\n"
+  },
+  "display_receipt_sha256": "1dd878efc0d27a29a419a277584cbb7b649efd38c391eaa066312e7be52d5217",
+  "cases": [
+    {
+      "case_id": "s5-empty",
+      "video": "sample/sample5.mp4",
+      "frame_index": 0,
+      "video_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+      "historical_video_path": "sample/public_water_fill_pexels_6381722.mp4",
+      "nominal_playback_time_sec": 0.0,
+      "source_raster": {
+        "frame_index": 0,
+        "nominal_time_sec": 0.0,
+        "decoder_pos_msec": 0.0,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000000.png",
+        "sha256": "bd248d9331c4b1d267572d2e44a1a016589e2065509dc16f0de0b83d7bcd808f"
+      },
+      "recording_group": "sample/sample5.mp4",
+      "partition": "development",
+      "exposure": "Previously visually inspected native intake frame; no detector predictions viewed.",
+      "interpretation_authority": "agent_provisional",
+      "observation": "Empty-looking glass interior, fixed rim and patterned base.",
+      "proposed_control_purpose": "Structure opposition and same-scene context before filling.",
+      "limitation": "No canonical EMPTY phase or per-pixel structure mask; appearance can change under refraction.",
+      "human_review_status": "NOT_REQUESTED",
+      "physical_truth": null,
+      "target_role_truth": null,
+      "scalar_truth": null,
+      "contour_truth": null,
+      "packet_binding": null
+    },
+    {
+      "case_id": "s5-inclined",
+      "video": "sample/sample5.mp4",
+      "frame_index": 822,
+      "video_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+      "historical_video_path": "sample/public_water_fill_pexels_6381722.mp4",
+      "nominal_playback_time_sec": 27.427400000000002,
+      "source_raster": {
+        "frame_index": 822,
+        "nominal_time_sec": 27.427400000000002,
+        "decoder_pos_msec": 27427.4,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f000822.png",
+        "sha256": "19a94ae8bb16454440033559aecbe6ca714853d505423288bd2dc113767ce8b1"
+      },
+      "recording_group": "sample/sample5.mp4",
+      "partition": "development",
+      "exposure": "Previously visually inspected native intake frame; no detector predictions viewed.",
+      "interpretation_authority": "agent_provisional",
+      "observation": "A large inclined upper bubbly-water feature during pouring; agent leans toward a displaced surface, but splash-sheet alternative remains.",
+      "proposed_control_purpose": "UNRESOLVED: either protect real surface deformation or oppose following a separate splash sheet.",
+      "limitation": "Human interpretation pending; neither a positive nor negative physical-control label is assigned.",
+      "human_review_status": "PENDING",
+      "physical_truth": null,
+      "target_role_truth": null,
+      "scalar_truth": null,
+      "contour_truth": null,
+      "packet_binding": null
+    },
+    {
+      "case_id": "s5-settled",
+      "video": "sample/sample5.mp4",
+      "frame_index": 1643,
+      "video_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+      "historical_video_path": "sample/public_water_fill_pexels_6381722.mp4",
+      "nominal_playback_time_sec": 54.82143333333333,
+      "source_raster": {
+        "frame_index": 1643,
+        "nominal_time_sec": 54.82143333333333,
+        "decoder_pos_msec": 54821.43333333334,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png",
+        "sha256": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22"
+      },
+      "recording_group": "sample/sample5.mp4",
+      "partition": "development",
+      "exposure": "Previously visually inspected native intake frame; no detector predictions viewed.",
+      "interpretation_authority": "agent_provisional",
+      "observation": "Comparatively settled visible upper liquid surface, with bubbles below and persistent glass pattern.",
+      "proposed_control_purpose": "Provisional visible-surface context with glass and internal-bubble opposition.",
+      "limitation": "No scalar, exact contour, or cross-frame point correspondence is certified.",
+      "human_review_status": "NOT_REQUESTED",
+      "physical_truth": null,
+      "target_role_truth": null,
+      "scalar_truth": null,
+      "contour_truth": null,
+      "packet_binding": null
+    },
+    {
+      "case_id": "s6-empty",
+      "video": "sample/sample6.mp4",
+      "frame_index": 0,
+      "video_sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2",
+      "historical_video_path": "sample/public_beer_fill_pexels_5538050.mp4",
+      "nominal_playback_time_sec": 0.0,
+      "source_raster": {
+        "frame_index": 0,
+        "nominal_time_sec": 0.0,
+        "decoder_pos_msec": 0.0,
+        "shape": [
+          1440,
+          2732,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000000.png",
+        "sha256": "20814859d027ce5fa50b3f00c56084ec778d74ff5b38bd05fb980d8e208837fd"
+      },
+      "recording_group": "sample/sample6.mp4",
+      "partition": "development",
+      "exposure": "Previously visually inspected native intake frame; no detector predictions viewed.",
+      "interpretation_authority": "agent_provisional",
+      "observation": "Empty-looking glass with a thick fixed base, rim and reflections.",
+      "proposed_control_purpose": "Static structure opposition before liquid/Foam formation.",
+      "limitation": "No canonical EMPTY phase or whole-image negative label.",
+      "human_review_status": "NOT_REQUESTED",
+      "physical_truth": null,
+      "target_role_truth": null,
+      "scalar_truth": null,
+      "contour_truth": null,
+      "packet_binding": null
+    },
+    {
+      "case_id": "s6-forming",
+      "video": "sample/sample6.mp4",
+      "frame_index": 146,
+      "video_sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2",
+      "historical_video_path": "sample/public_beer_fill_pexels_5538050.mp4",
+      "nominal_playback_time_sec": 5.84,
+      "source_raster": {
+        "frame_index": 146,
+        "nominal_time_sec": 5.84,
+        "decoder_pos_msec": 5840.0,
+        "shape": [
+          1440,
+          2732,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000146.png",
+        "sha256": "2f45e444880a4f8e3df9cb29adbf269259f12544a29ddd60ae73d776d44741b4"
+      },
+      "recording_group": "sample/sample6.mp4",
+      "partition": "development",
+      "exposure": "Previously visually inspected native intake frame; no detector predictions viewed.",
+      "interpretation_authority": "agent_provisional",
+      "observation": "Early frothy layer and upper surface; turbulent, diffuse lower transition.",
+      "proposed_control_purpose": "Separate layer presence, upper-front visibility and lower-interface availability.",
+      "limitation": "Do not manufacture two clean contours from a diffuse forming region.",
+      "human_review_status": "NOT_REQUESTED",
+      "physical_truth": null,
+      "target_role_truth": null,
+      "scalar_truth": null,
+      "contour_truth": null,
+      "packet_binding": null
+    },
+    {
+      "case_id": "s6-layer",
+      "video": "sample/sample6.mp4",
+      "frame_index": 436,
+      "video_sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2",
+      "historical_video_path": "sample/public_beer_fill_pexels_5538050.mp4",
+      "nominal_playback_time_sec": 17.44,
+      "source_raster": {
+        "frame_index": 436,
+        "nominal_time_sec": 17.44,
+        "decoder_pos_msec": 17440.0,
+        "shape": [
+          1440,
+          2732,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_beer_fill_pexels_5538050/f000436.png",
+        "sha256": "72fe651d0c719c08b8e63fa44c5be77b1fd9e9ad3af09dc6152c2fc6ffeffd35"
+      },
+      "recording_group": "sample/sample6.mp4",
+      "partition": "development",
+      "exposure": "Previously visually inspected native intake frame; no detector predictions viewed.",
+      "interpretation_authority": "agent_provisional",
+      "observation": "Visible liquid–Foam transition; upper Foam–air surface is outside the original source image.",
+      "proposed_control_purpose": "Unavailable upper-coordinate opposition with a separately visible lower interface.",
+      "limitation": "Do not copy the lower interface into a missing upper target or independent Foam-front output; Foam presence does not supply its top coordinate.",
+      "human_review_status": "NOT_REQUESTED",
+      "physical_truth": null,
+      "target_role_truth": null,
+      "scalar_truth": null,
+      "contour_truth": null,
+      "packet_binding": null
+    },
+    {
+      "case_id": "s7-empty",
+      "video": "sample/sample7.mp4",
+      "frame_index": 0,
+      "video_sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+      "historical_video_path": "sample/public_milk_fill_pexels_11158788.mp4",
+      "nominal_playback_time_sec": 0.0,
+      "source_raster": {
+        "frame_index": 0,
+        "nominal_time_sec": 0.0,
+        "decoder_pos_msec": 0.0,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000000.png",
+        "sha256": "f339911bc43748030ebace5b0843d0362ee213f2b38364fe48f9f52ba479f21b"
+      },
+      "recording_group": "sample/sample7.mp4",
+      "partition": "development",
+      "exposure": "Previously visually inspected native intake frame; no detector predictions viewed.",
+      "interpretation_authority": "agent_provisional",
+      "observation": "Empty-looking glass with visible rim and base.",
+      "proposed_control_purpose": "Same-scene fixed-structure opposition before opaque liquid arrives.",
+      "limitation": "No canonical EMPTY phase, exact support mask or certified camera alignment.",
+      "human_review_status": "NOT_REQUESTED",
+      "physical_truth": null,
+      "target_role_truth": null,
+      "scalar_truth": null,
+      "contour_truth": null,
+      "packet_binding": null
+    },
+    {
+      "case_id": "s7-pouring",
+      "video": "sample/sample7.mp4",
+      "frame_index": 532,
+      "video_sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+      "historical_video_path": "sample/public_milk_fill_pexels_11158788.mp4",
+      "nominal_playback_time_sec": 22.18883333333333,
+      "source_raster": {
+        "frame_index": 532,
+        "nominal_time_sec": 22.18883333333333,
+        "decoder_pos_msec": 22188.833333333332,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f000532.png",
+        "sha256": "8549006127569fd3d06950616db870418c36503ae761b51827f3949e1698d4b7"
+      },
+      "recording_group": "sample/sample7.mp4",
+      "partition": "development",
+      "exposure": "Previously visually inspected native intake frame; no detector predictions viewed.",
+      "interpretation_authority": "agent_provisional",
+      "observation": "Opaque white liquid body, incoming stream and frothy/splash-like surface features.",
+      "proposed_control_purpose": "Bulk-white-liquid versus Foam opposition, with stream/surface alternatives.",
+      "limitation": "Do not classify the entire white body as Foam or the whole video as Foam-negative.",
+      "human_review_status": "NOT_REQUESTED",
+      "physical_truth": null,
+      "target_role_truth": null,
+      "scalar_truth": null,
+      "contour_truth": null,
+      "packet_binding": null
+    },
+    {
+      "case_id": "s7-settled",
+      "video": "sample/sample7.mp4",
+      "frame_index": 1063,
+      "video_sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+      "historical_video_path": "sample/public_milk_fill_pexels_11158788.mp4",
+      "nominal_playback_time_sec": 44.33595833333333,
+      "source_raster": {
+        "frame_index": 1063,
+        "nominal_time_sec": 44.33595833333333,
+        "decoder_pos_msec": 44335.95833333333,
+        "shape": [
+          1080,
+          1920,
+          3
+        ],
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png",
+        "sha256": "35b020932c0c93d278674caecd6641463552ff66ea6cc32cbeca39af1c3ef64c"
+      },
+      "recording_group": "sample/sample7.mp4",
+      "partition": "development",
+      "exposure": "Previously visually inspected native intake frame; no detector predictions viewed.",
+      "interpretation_authority": "agent_provisional",
+      "observation": "Settled white body with a thin bubbly/frothy top region.",
+      "proposed_control_purpose": "Upper-surface context and uncertain internal milk/froth separation.",
+      "limitation": "Exact milk/froth dividing contour remains unknown; bright-body extrema are not physical truth.",
+      "human_review_status": "NOT_REQUESTED",
+      "physical_truth": null,
+      "target_role_truth": null,
+      "scalar_truth": null,
+      "contour_truth": null,
+      "packet_binding": null
+    }
+  ],
+  "review_question": {
+    "case_id": "s5-inclined",
+    "status": "PENDING_USER_INTERPRETATION",
+    "text": "주황 박스 안의 크게 기울어진 윗경계는 실제로 출렁이는 수면인가, 수면과 별개로 튄 물막인가?",
+    "choices": [
+      "실제 출렁이는 수면",
+      "수면과 별개로 튄 물막",
+      "영상만으로 판단 어려움"
+    ],
+    "context_frames": [
+      815,
+      822,
+      829
+    ],
+    "image_path": "sample/output/s11-public-scene-controls-20261009-001/sample5-inclined-surface-review.png",
+    "scope": "Display-only rectangle X[800,1110), Y[400,650); no traced contour, pixel truth or production mask.",
+    "answer": null,
+    "answer_effect": "Qualitative control purpose only; no exact contour/scalar truth, speed limit, horizontal flattening or production exclusion follows."
+  },
+  "existing_evaluation_owners": {
+    "packet_and_metrics": "tests/diagnostics/s11_interface_shadow_evaluation.py",
+    "physical_to_target_binding": "tests/diagnostics/s11_target_truth.py",
+    "integration_limit": "These owners require actual bound R22-3 candidate packets and physical/target annotations. None exists for this inventory; do not synthesize a packet from provisional scene descriptions."
+  },
+  "verification": {
+    "input_pin_count": 16,
+    "input_pins_match": true,
+    "unique_case_count": 9,
+    "all_cases_previously_exposed": true,
+    "generated_display_count": 4,
+    "display_hashes_match": true,
+    "display_visual_review": "All four generated sheets inspected by agent; no new physical truth recorded."
+  },
+  "actions": {
+    "new_video_decode": false,
+    "detector_run": false,
+    "model_fit": false,
+    "recipe_change": false,
+    "label_change": false,
+    "production_code_change": false,
+    "acceptance_change": false
+  },
+  "packaging_script": "from pathlib import Path\nimport hashlib\nimport json\n\nroot = Path('/Users/sunjaekim/Developer/oil_level_tracker')\nlocal = root / 'sample/output/s11-public-scene-controls-20261009-001'\nsha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()\npreflight = json.loads((local / 'preflight.json').read_text())\nreceipt = json.loads((local / 'display-receipt.json').read_text())\nintake = json.loads((root / 'docs/50-diagnostics/s11/2026-10-09-public-video-intake.json').read_text())\nrename = json.loads((root / 'docs/50-diagnostics/s11/2026-10-09-public-video-rename.json').read_text())\naliases = {v['current_path']: v for v in rename['renames']}\nvideos = {v['path']: v for v in intake['overview']['videos']}\n\nreadings = {\n    's5-empty': (\n        'Empty-looking glass interior, fixed rim and patterned base.',\n        'Structure opposition and same-scene context before filling.',\n        'No canonical EMPTY phase or per-pixel structure mask; appearance can change under refraction.'),\n    's5-inclined': (\n        'A large inclined upper bubbly-water feature during pouring; agent leans toward a displaced surface, but splash-sheet alternative remains.',\n        'UNRESOLVED: either protect real surface deformation or oppose following a separate splash sheet.',\n        'Human interpretation pending; neither a positive nor negative physical-control label is assigned.'),\n    's5-settled': (\n        'Comparatively settled visible upper liquid surface, with bubbles below and persistent glass pattern.',\n        'Provisional visible-surface context with glass and internal-bubble opposition.',\n        'No scalar, exact contour, or cross-frame point correspondence is certified.'),\n    's6-empty': (\n        'Empty-looking glass with a thick fixed base, rim and reflections.',\n        'Static structure opposition before liquid/Foam formation.',\n        'No canonical EMPTY phase or whole-image negative label.'),\n    's6-forming': (\n        'Early frothy layer and upper surface; turbulent, diffuse lower transition.',\n        'Separate layer presence, upper-front visibility and lower-interface availability.',\n        'Do not manufacture two clean contours from a diffuse forming region.'),\n    's6-layer': (\n        'Visible liquid–Foam transition; upper Foam–air surface is outside the original source image.',\n        'Unavailable upper-coordinate opposition with a separately visible lower interface.',\n        'Do not copy the lower interface into a missing upper target or independent Foam-front output; Foam presence does not supply its top coordinate.'),\n    's7-empty': (\n        'Empty-looking glass with visible rim and base.',\n        'Same-scene fixed-structure opposition before opaque liquid arrives.',\n        'No canonical EMPTY phase, exact support mask or certified camera alignment.'),\n    's7-pouring': (\n        'Opaque white liquid body, incoming stream and frothy/splash-like surface features.',\n        'Bulk-white-liquid versus Foam opposition, with stream/surface alternatives.',\n        'Do not classify the entire white body as Foam or the whole video as Foam-negative.'),\n    's7-settled': (\n        'Settled white body with a thin bubbly/frothy top region.',\n        'Upper-surface context and uncertain internal milk/froth separation.',\n        'Exact milk/froth dividing contour remains unknown; bright-body extrema are not physical truth.'),\n}\n\ncases = []\nfor selected in preflight['selection']:\n    alias = aliases[selected['video']]\n    video = videos[alias['original_path']]\n    frame = next(f for f in video['frames'] if f['frame_index'] == selected['frame_index'])\n    observed, purpose, limitation = readings[selected['case_id']]\n    cases.append({\n        **selected,\n        'video_sha256': alias['sha256_after'],\n        'historical_video_path': alias['original_path'],\n        'nominal_playback_time_sec': frame['nominal_time_sec'],\n        'source_raster': frame,\n        'recording_group': alias['current_path'],\n        'partition': 'development',\n        'exposure': 'Previously visually inspected native intake frame; no detector predictions viewed.',\n        'interpretation_authority': 'agent_provisional',\n        'observation': observed,\n        'proposed_control_purpose': purpose,\n        'limitation': limitation,\n        'human_review_status': 'PENDING' if selected['case_id'] == 's5-inclined' else 'NOT_REQUESTED',\n        'physical_truth': None,\n        'target_role_truth': None,\n        'scalar_truth': None,\n        'contour_truth': None,\n        'packet_binding': None,\n    })\n\nfor path, pin in preflight['inputs'].items():\n    assert sha(root / path) == pin, path\nassert receipt['inputs_preserved'] is True\nassert receipt['preflight_sha256'] == sha(local / 'preflight.json')\nfor path, pin in receipt['outputs'].items():\n    assert sha(root / path) == pin, path\nassert len(cases) == len({c['case_id'] for c in cases}) == 9\nassert len({(c['video_sha256'], c['frame_index']) for c in cases}) == 9\nassert all(c['source_raster']['frame_index'] == c['frame_index'] for c in cases)\nassert all(c['source_raster']['path'] in preflight['inputs'] for c in cases)\nassert all(c['source_raster']['sha256'] == preflight['inputs'][c['source_raster']['path']] for c in cases)\n\nrecord = {\n    'schema': 's11-public-scene-controls-v1',\n    'base_head': preflight['base_head'],\n    'scope': 'Pre-detector source-bound scene inventory, not an evaluator packet or annotated acceptance dataset.',\n    'preflight': preflight,\n    'preflight_sha256': sha(local / 'preflight.json'),\n    'display_receipt': receipt,\n    'display_receipt_sha256': sha(local / 'display-receipt.json'),\n    'cases': cases,\n    'review_question': {\n        'case_id': 's5-inclined',\n        'status': 'PENDING_USER_INTERPRETATION',\n        'text': '주황 박스 안의 크게 기울어진 윗경계는 실제로 출렁이는 수면인가, 수면과 별개로 튄 물막인가?',\n        'choices': ['실제 출렁이는 수면', '수면과 별개로 튄 물막', '영상만으로 판단 어려움'],\n        'context_frames': [815, 822, 829],\n        'image_path': 'sample/output/s11-public-scene-controls-20261009-001/sample5-inclined-surface-review.png',\n        'scope': preflight['marker_scope'],\n        'answer': None,\n        'answer_effect': 'Qualitative control purpose only; no exact contour/scalar truth, speed limit, horizontal flattening or production exclusion follows.',\n    },\n    'existing_evaluation_owners': {\n        'packet_and_metrics': 'tests/diagnostics/s11_interface_shadow_evaluation.py',\n        'physical_to_target_binding': 'tests/diagnostics/s11_target_truth.py',\n        'integration_limit': 'These owners require actual bound R22-3 candidate packets and physical/target annotations. None exists for this inventory; do not synthesize a packet from provisional scene descriptions.',\n    },\n    'verification': {\n        'input_pin_count': len(preflight['inputs']),\n        'input_pins_match': True,\n        'unique_case_count': len(cases),\n        'all_cases_previously_exposed': True,\n        'generated_display_count': len(receipt['outputs']),\n        'display_hashes_match': True,\n        'display_visual_review': 'All four generated sheets inspected by agent; no new physical truth recorded.',\n    },\n    'actions': {\n        'new_video_decode': False,\n        'detector_run': False,\n        'model_fit': False,\n        'recipe_change': False,\n        'label_change': False,\n        'production_code_change': False,\n        'acceptance_change': False,\n    },\n    'packaging_script': Path(__file__).read_text(),\n}\ndestination = root / 'docs/50-diagnostics/s11/2026-10-09-public-scene-controls.json'\nwith destination.open('x') as handle:\n    json.dump(record, handle, indent=2, ensure_ascii=False)\n    handle.write('\\n')\n(local / 'prepare_controls.py').write_text(receipt['script'])\nprint(json.dumps(record['verification'], indent=2))\n"
+}

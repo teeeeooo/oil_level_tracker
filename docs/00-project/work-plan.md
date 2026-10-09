@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** The Foam checkpoint is CLOSED: the user identifies the displayed 54/55.5/56 s cyan proposals as internal Foam texture changes, not physical fronts. Saved geometry reproduces the bounding-box rule that chooses those component lower edges; final rejection of these wrong fronts is not evidence of losing a correct front. D5 must establish raw physical-front identity before changing episode rules, using existing real-front/rim controls plus these three negatives. Oil's saved 52 s selection / 54–56 s admission distinctions and closed yellow-Foam/dark-Oil target reply remain. Local XY WP1–WP5 are complete, fixed configuration CLOSED WITHOUT PROMOTION, scope OFF by default. O2 OPEN / FIELD FAIL remain; no repeated physical question or Windows work is needed now.
+**Next transition:** Nine source-bound development scenes from sample5/6/7 are prepared before detector predictions. One new sample5 checkpoint awaits user interpretation: is the inclined feature at about 27.4 s an actual displaced water surface or a separate splash sheet? Keep that control unresolved until answered. D5 still needs a distinct joint-correspondence/side-ownership rule before a new trial; earlier Foam texture/rim and Oil target replies stay CLOSED. Local XY WP1–WP5 remain complete, fixed configuration CLOSED WITHOUT PROMOTION, scope OFF by default. O2 OPEN / FIELD FAIL remain; no Windows work is needed at this checkpoint.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -313,6 +313,14 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    evidence. Before a new bounded trial, freeze its rule and source-bound controls;
    keep the existing Mac regressions and Windows gate. No repeated strip rule,
    automatic truth, new Recipe or current behavior change follows from intake.
+   **Source-bound scene controls prepared:** the [nine-case inventory](../50-diagnostics/s11/2026-10-09-public-scene-controls.md)
+   reuses exposed native frames and keeps all scene readings agent-provisional.
+   A new sample5 f822 question compares f815/f822/f829: actual displaced water
+   surface versus separate splash sheet. Keep this control's physical role
+   unresolved while awaiting the user's regional interpretation; no exact XY,
+   scalar, speed limit or production exclusion follows. Beer supplies a cropped
+   upper-surface control and milk bulk-white-liquid/froth opposition. This is
+   pre-detector context, not a new truth/packet format or a validated mechanism.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require
