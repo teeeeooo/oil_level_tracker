@@ -121,7 +121,13 @@ Foam/Oil-boundary judgments remain closed.
 - If uncertain, retain the named visibility unknown and abstention; do not
   request microscopic repeated markings or substitute the brightest edge.
 
-The question is pending. No dependent implementation follows until the reply.
+At this experiment's closeout the question was pending. The subsequent
+[user reply](2026-10-09-foam-upper-visibility-reply.json) closes it: “아주 약간의
+빈공간이 있어서 윗경계가 보임”. A small space above Foam and a visible upper
+surface are established for the three displayed times, without exact XY or
+candidate approval. The [follow-up](2026-10-09-foam-upper-gap-representation.md)
+records the support-cleanup check and ordered-edge representation; the original
+machine record's pending field remains historical provenance.
 No Windows action, file export, ML, Oil/Foam coupling, formal-label change or
 production threshold change is needed to resolve this checkpoint.
 

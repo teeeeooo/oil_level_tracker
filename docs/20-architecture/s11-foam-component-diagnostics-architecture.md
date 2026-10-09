@@ -140,6 +140,38 @@ mutation and real runner receipt/no-overwrite checks. These validate representat
 and abstention, not Foam classification. The saved three-frame regression results
 are recorded in [local boundary alternatives](../60-evidence/s11/2026-10-06-foam-front-alternatives.md).
 
+### Optional ordered dark-gap brackets
+
+`measure(..., include_gap_brackets=True)` adds a separate signed photometric
+observation to the existing offline alternatives. The default remains byte-for-
+byte equivalent as a JSON object, and no production caller is added. This
+addresses the [visible narrow-space reply](../50-diagnostics/s11/2026-10-09-foam-upper-visibility-reply.json)
+without selecting the component upper extreme or labelling any dark pixel air.
+
+Use the same raw central-difference stencil and visibility as the existing
+O1 measurement, retaining exact signed byte differences. Find fully bracketed
+local maxima separately on positive and negative magnitudes with the existing
+plateau helper and unchanged ±4/±8 inspection windows. This preserves adjacent
+opposite slopes that an absolute-magnitude plateau can merge around a two-pixel
+trough. Merge the two ordered peak lists; every adjacent negative/positive pair
+whose complete corridor/flanks are valid and whose raw intermediate minimum is
+strictly darker than both outer raw samples becomes a photometric bracket.
+
+Retain both edge plateau intervals, the intermediate sampling interval, every
+equal-minimum row, and the raw above/minimum/below values. The lower rising edge
+is an unselected alternative. No amplitude/width threshold, gap-ratio cutoff,
+ranking, continuity fit, interpolation or air/Foam decision is introduced.
+Physical gap identity stays `UNRESOLVED` and selected Foam front stays null.
+Component-conditioned windows cannot recover unsupported/censored regions.
+
+A partly censored inspection window may contain a complete local bracket;
+record the existing window censoring and never bridge an invalid corridor.
+Mask/glare and resource/type bounds remain unchanged. Counterexamples with
+identical pixels representing air, internal Foam texture or glass must produce
+identical unresolved results. Step/ribbon direction, one-/two-pixel troughs,
+ties, multiple gaps, clipping, polarity and opt-in/default equality are checked.
+This is a representation tool, not a classifier or an accepted runtime change.
+
 ## Offline registered boundary residuals
 
 `tests/diagnostics/s11_boundary_temporal_probe.py` reuses `_translation` and
@@ -186,9 +218,9 @@ records the bounded saved-sequence result and remaining human checkpoint.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `TRACE-PUBLICATION`
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`
-- Prior mechanisms reviewed: motion-only identity and episode confirmation, component identity leakage, Foam/Oil evidence cross-coupling, current-versus-final confusion and threshold shortcuts; the local audit finds spatially rejected components absent from the saved trace.
-- Prior mechanisms rejected: no restoration of rejected Foam authority, geometry-as-identity, blanket material veto, lowering thresholds or using human coordinates in runtime.
+- Prior mechanisms reviewed: motion-only identity and episode confirmation, component identity leakage, Foam/Oil evidence cross-coupling, current-versus-final confusion and threshold shortcuts; missing rejected components; discarded chromatic support and support-extreme fronts; the rejected strongest/lowest/nearest/smoothest rules and existing unsigned peak representation.
+- Prior mechanisms rejected: no restoration of rejected Foam authority, geometry-as-identity, blanket material veto, lowering thresholds, naive white/chromatic union, automatic upper-edge substitution, polarity-as-identity or using human coordinates in runtime.
 - Preserved contracts: independent Oil/Foam owners, same-frame source provenance, fail-closed publication and unchanged temporal/sequence decisions.
-- Difference from prior failures: capture computed rejected evidence in a bounded non-authoritative sidecar; no decision owner consumes it.
+- Difference from prior failures: capture computed rejected evidence in a bounded non-authoritative sidecar; optional ordered opposite-slope brackets preserve narrow troughs lost by unsigned-plateau merging, with all alternatives and ambiguity retained. No decision owner consumes them and no physical identity is inferred.
 - Logic-map impact: NONE — offline probes have no production caller; optional registration reasons do not change tuples, thresholds or decision ownership.
 - Failure-registry impact: NONE — existing failure classes and guards apply; no new behavior mechanism or efficacy claim.

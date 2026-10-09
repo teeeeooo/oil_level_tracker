@@ -293,6 +293,17 @@ retune its fraction, or repeat a naive white/chromatic union. Before seeking an
 alternate upper front at 54–56 s, establish whether that surface is visible at
 all; Foam presence can coexist with an occluded or unavailable upper coordinate.
 
+**Upper-visibility reply and representation follow-up:** the user confirms a
+very small space above Foam and a visible upper boundary in the three reviewed
+late frames. This closes that visibility question without exact XY or candidate
+approval. The [follow-up](2026-10-09-foam-upper-gap-representation.md) finds no
+sufficient evidence that cleanup alone erased the upper gap. An opt-in offline
+signed-gradient representation preserves both slopes of a narrow trough that
+unsigned plateaus can merge; default outputs remain equal. The confirmed glass
+rim also produces 30 paired edges at the existing radius 8, so paired-gap presence
+cannot establish Foam identity. Retain alternatives for independent local
+material/structural comparison, not another polarity/strength/window shortcut.
+
 ### S11-F08 — Lifecycle closure and owner-loss dead ends
 
 **Affected detector logic node(s):** `OIL-TRACKLET` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.

@@ -1,0 +1,33 @@
+{
+  "schema": "s11-foam-upper-visibility-reply-v1",
+  "date": "2026-10-09",
+  "source_head": "98466befb24c6b8777c9b12cd45219144a3b49a7",
+  "status": "HUMAN_CHECKPOINT_CLOSED",
+  "user_reply": "아주 약간의 빈공간이 있어서 윗경계가 보임",
+  "basis": "Direct user reply to the saved 54/55.5/56 s upper-visibility image.",
+  "frames": [
+    1620,
+    1665,
+    1680
+  ],
+  "image_path": "docs/50-diagnostics/s11/2026-10-09-foam-upper-visibility-review.png",
+  "image_sha256": "702105c83491bea889a674cb0b32c0259aad8931a6db7efd426761b7bc0add06",
+  "source_images": {
+    "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001620_523615198887/original_roi_512ed6ab.png": "e00d97a5f265f5e6353d27014a46b6aca692112efb3b1c29fc170b171ba0462b",
+    "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001665_62f9dce1fd63/original_roi_512ed6ab.png": "f22078682f895b945b3e7db1c79def713ac0a6aea14577316a5e43971e206de5",
+    "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001680_c45cf0ca7009/original_roi_512ed6ab.png": "c6461782b828f81d4785c241c1e814fe5a054e34181f5698a36cb4782d54cbea"
+  },
+  "supersedes": "The pending upper-visibility question in the cross-appearance record only.",
+  "physical_interpretation": {
+    "foam_upper_surface_visible": true,
+    "small_space_above_foam": true
+  },
+  "limits": [
+    "No exact XY, contour, tolerance, per-column visibility or gas-mask label.",
+    "Does not validate any current or proposed detector candidate.",
+    "No visibility transfer to 54.5 s, earlier/later frames, or Windows.",
+    "Internal-texture and lower Foam/Oil-boundary replies remain unchanged."
+  ],
+  "formal_labels_changed": false,
+  "auto_acceptance": false
+}

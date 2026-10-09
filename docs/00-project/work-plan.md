@@ -262,13 +262,18 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    warm support that crosses many white-component endpoints in the three
    internal-texture cases. The same cue is absent in both earlier real-Foam and
    glass-rim controls, so neither union nor a physical classifier is adopted.
-   **Current human checkpoint:** [54–56 s upper-region visibility](../50-diagnostics/s11/2026-10-09-foam-upper-visibility-review.png)
-   — is there a visible Foam upper surface with non-Foam space above it, or does
-   Foam reach the top / remain occluded? No exact XY is requested. Await this
-   new regional judgment before a replacement-front implementation. If the
-   upper surface is invisible or uncertain, preserve missing coordinates despite
-   Foam presence; do not force a bright/texture boundary. The earlier internal
-   texture and lower Oil-boundary replies stay closed.
+   **Upper visibility CLOSED:** the [user reply](../50-diagnostics/s11/2026-10-09-foam-upper-visibility-reply.json)
+   confirms a very small space above Foam and a visible upper boundary at the
+   displayed 54/55.5/56 s times; no exact XY, candidate or 54.5 s label follows.
+   The [gap-representation experiment](../50-diagnostics/s11/2026-10-09-foam-upper-gap-representation.md)
+   does not support cleanup alone as the missing-front cause. An opt-in offline
+   signed-edge helper retains both sides of narrow dark troughs; 28 tests and
+   default equality across seven cases / 990 columns pass. The confirmed glass
+   rim also produces pairs, so paired-gap existence is not a Foam classifier.
+   No production change is adopted. Reuse this representation for candidate-local
+   side-support and independently attributed structural comparison before any
+   scalar reduction or physical decision. No repeat visibility/texture question,
+   exact marks, automatic upper-edge selection or window tuning is required.
    **Next design entry:** D5 addresses raw-front identity before episode
    retention. Reuse existing 14/15/16 s approximate Foam references, mixed
    component/rim controls and these three internal-texture negatives. Require
