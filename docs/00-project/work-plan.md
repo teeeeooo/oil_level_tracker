@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** WP1–WP5 Local XY implementation and the fixed comparison are complete. The opt-in Oil-only scope passes 84 focused tests, preserves all 299 OFF baseline rows and has identical scoped NONE/BASIC/FULL outputs. Its fixed configuration is CLOSED WITHOUT PROMOTION: 40/51.5 s lose final Oil/Foam validity and 56 s selects the lower glass rim. The user confirms the 54–56 s yellow Foam / dark Oil boundary as the Oil target; both series remain independently required. Saved witnesses separate 52 s unselected admitted support, 54–56 s tracklet non-admission, and pre-existing Foam episode loss. Default R22 behavior, O2 OPEN / FIELD FAIL remain. Reuse this evidence before a new physical-support/association design; no mask/threshold continuation, repeated physical question or Windows work is needed now.
+**Next transition:** Local XY WP1–WP5 remain complete and the fixed configuration CLOSED WITHOUT PROMOTION. The saved-input causal audit reproduces all 226 complete results: Oil loses a committed-owner transition at 52 s and confirmation after a 54 s ambiguous restart; the 56 s glass-rim chain instead confirms through progress. Foam's stored front alternates between component edges before episode rejection. The next checkpoint is the physical role of the separately displayed Foam proposals at 54/55.5/56 s, to distinguish raw-front meaning from episode loss. The yellow-Foam/dark-Oil target reply stays closed; both series remain required. Default scope OFF, O2 OPEN / FIELD FAIL remain. No threshold/mask continuation or Windows work is authorized by this evidence.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)
@@ -32,7 +32,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; Local XY WP1–WP5 implemented/verified, fixed configuration CLOSED WITHOUT PROMOTION | Reuse the saved support/selection/admission distinctions and closed endpoint reply before proposing a different physical discriminator. Keep the opt-in scope OFF by default. | [Local XY implementation](../60-evidence/s11/2026-10-09-local-xy-implementation.md), [scope contract](../20-architecture/s11-interface-observability-witness-architecture.md#local-xy-oil-measurement-exclusion--proposed-contract) |
+| W4 / O2 challenger | OPEN; Local XY WP1–WP5 implemented/verified, fixed configuration CLOSED WITHOUT PROMOTION | Saved 226-output causal audit complete; preserve separate selection/admission failures and the closed Oil reply. Physical Foam-front review pending; opt-in scope remains OFF. | [Local XY implementation](../60-evidence/s11/2026-10-09-local-xy-implementation.md), [scope contract](../20-architecture/s11-interface-observability-witness-architecture.md#local-xy-oil-measurement-exclusion--proposed-contract) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -240,11 +240,27 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    unknown. Current Foam stays identical in all 113 rows, while final Foam
    disappears at 54–56 s in both baseline and challenger through its existing
    episode/persistence rules. Preserve this separate D5 obligation.
-   **Next design entry:** reuse these records to separate physical support,
-   association and final two-series acceptance. Do not enlarge this mask, sweep
-   thresholds, repeat A–D/this challenger, promote nearby coordinates to truth,
-   bypass admission/phase or silently enter O3/O4. No UI/schema rewrite, ML,
-   repeated endpoint question, Windows run or file export is required.
+   **Saved causal audit complete:** the [unchanged-owner replay](../50-diagnostics/s11/2026-10-09-local-xy-sequence-causality.md)
+   reproduces 226/226 complete detections. At 52 s the Y833 proposal has a
+   forbidden transition from the committed owner. At 54 s ambiguous association
+   marks the boundary-region track's first observation incompatible; later
+   windows have only two anchors and at most 1 px progress. The other track
+   reaching the 56 s glass-rim winner confirms with 42.5 px progress. These are
+   numerical causes, not proof of the first physical correspondence error.
+   **Separate Foam checkpoint prepared:** saved component fronts alternate
+   upper/lower edges before formation rejection. OFF/scoped raw Foam is equal,
+   but final Oil availability changes the 56 s confirmation window. The
+   [54/55.5/56 s originals and cyan proposal guides](../50-diagnostics/s11/2026-10-09-local-xy-foam-front-review.png)
+   require one regional physical judgment: internal Foam appearance versus a
+   true Foam/material boundary. The agent's interpretation is not human truth.
+   This determines raw-front versus episode design priority, without reopening
+   Oil's yellow/dark target, requesting exact pixels or accepting a scalar.
+   **Next design entry:** preserve the returned physical role before a separate
+   D5 rule; if unresolved, keep it unavailable. For Oil, require candidate-support
+   and cross-frame identity evidence before treating row groups as physical.
+   Do not enlarge the mask, sweep thresholds, repeat A–D/this challenger or the
+   reciprocal probe, waive admission/phase, or silently enter O3/O4. No UI/schema
+   rewrite, ML, repeated Oil endpoint question, Windows run or export is needed.
    D2-B's stationary/crossing/optical opposing efficacy remains NOT_ASSESSABLE;
    no missing gate is waived or manufactured by this qualitative reply.
    D3 additionally requires a physical decision/abstention rule, input identities,

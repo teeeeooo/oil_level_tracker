@@ -182,6 +182,16 @@ relax association/phase without independent evidence. The first physical
 association error remains unproven; this is not a proof against every local XY
 measurement policy.
 
+**2026-10-09 saved causal refinement:** the
+[226-output equal replay](2026-10-09-local-xy-sequence-causality.md) shows a
+forbidden committed-owner transition at 52 s. At 54 s two established-parent
+costs differ by 0.018125; the boundary-region row restarts incompatibly and later
+has two valid anchor frames / at most 1 px progress, below confirmation.
+The other chain that reaches the glass rim passes `ANCHOR_TRAJECTORY` with
+42.5 px progress. This is not evidence to reduce confirmation requirements:
+physical correspondence remains unproven, including OFF's recovery track.
+Do not rerun the closed reciprocal probe or strip its physical-child guard.
+
 ### S11-F05 — Initial-state and material-phase hard-lock asymmetry
 
 **Affected detector logic node(s):** `OIL-HYPOTHESIS` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.
@@ -253,6 +263,16 @@ measurement policy.
 **Current relevance/status:** **Active.** The completed R18 rerun records seven false ENTRY-SPLASH paths, zero confirmed POST-FOAM/DRAIN Foam, and the exact eligibility/formation gates. The active behavioral adaptation now bounds confirmation to local four-frame/2.0-second suffix witnesses and counts actual dynamic stable-layer support; it remains a local behavior change with its own validation/field gate, not a claim that the seven paths disappear.
 
 **Confidence:** Confirmed false episode stage and local historical mechanisms; strong inference for front formation as field discriminator.
+
+**2026-10-09 endpoint measurement distinction:** the
+[Local XY causal audit](2026-10-09-local-xy-sequence-causality.md) records saved
+Foam component fronts switching upper/lower conventions at 53–56 s before
+bounded formation rejects their trajectory. Raw measurements are equal OFF and
+scoped; final Oil context nevertheless splits the scoped 56 s dynamic window.
+The physical role of the displayed cyan fronts remains pending human review.
+Do not interpret missing final Foam as disappearance, presume every raw front
+is correct, or loosen episode gates before establishing the measured boundary.
+This diagnostic changes neither front convention nor acceptance.
 
 ### S11-F08 — Lifecycle closure and owner-loss dead ends
 
