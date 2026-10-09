@@ -1,0 +1,31 @@
+{
+  "scope": "Source review only, no detector; frozen native frame indices in existing fixed-geometry windows. No new truth or error tolerances. Existing public water/beer/milk sheets are reviewed separately.",
+  "plans": {
+    "base_sample_1": [
+      0,
+      150,
+      151,
+      433
+    ],
+    "sample2": [
+      0,
+      30,
+      60
+    ],
+    "sample3": [
+      930,
+      1800,
+      2550,
+      3090
+    ],
+    "sample4": [
+      420,
+      480,
+      1275,
+      1320,
+      1560,
+      1620,
+      1680
+    ]
+  }
+}

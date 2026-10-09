@@ -1,0 +1,14 @@
+{
+  "helper_constructed_checks_passed": 6,
+  "checks": [
+    "matching fixture",
+    "modified bytes detected",
+    "missing ignored evidence reported",
+    "changed head not accepted as current baseline",
+    "path escape rejected",
+    "malformed hash rejected"
+  ],
+  "scope": "Delivery-helper controls in isolated synthetic Git fixture; not native detector tests.",
+  "markdown_code_fences_balanced": true,
+  "summary_denominators_consistent": true
+}

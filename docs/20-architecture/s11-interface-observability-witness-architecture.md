@@ -1574,10 +1574,73 @@ O2 identity and Windows field acceptance open. `FIELD FAIL` is unchanged.
 
 The [D1 closeout](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed)
 locates recorded exclusions, not a new physical discriminator. H-ROLE remains a
-design question; no model, operating point or production route is selected here.
+design question; the bounded CBR-1 proposal below is an offline measurement
+candidate, with no accepted operating point or production route.
 The immediate question is whether a target-bound positive and a relevant
 non-target have candidate-local support/opposition that justifies a **distinct**
 mechanism after the closed appearance and temporal experiments.
+
+### CBR-1 current-boundary reference comparison — proposed offline contract
+
+The [cc17924 intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md)
+qualifies the supplied `current-boundary-reference-comparison-v1` proposal.
+It changes **where reference evidence is measured**: enumerate currently observed
+geometry first, then compare its sides with a source-bound role reference.
+Transported LK seeds do not determine the current measurement location. The
+closed H0 minimax partition and G1 face ablation are supporting counterexamples,
+not the new candidate generator or a physical selector to promote.
+
+Reuse the existing offline owners:
+
+- `tests/diagnostics/s11_boundary_temporal_probe.py` owns the narrow side/reference
+  measurement extension; existing correspondence functions remain unchanged.
+- `s11_contour_contact_probe.measure_edge_fragments` preserves current observed
+  edges and junction alternatives; `s11_foam_support_geometry.measure_boundary_faces`
+  preserves labeled-support faces and censorship. Faces require an actual input
+  label raster: the API is not a label generator or a material classifier.
+- Existing raster/preprocessing capture, source origins and reference provenance
+  supply inputs. Accepted Foam, old brightness-support faces, H0 partitions or
+  surviving LK points cannot be prerequisites for an Oil candidate.
+- Existing Glass-center rounding and `GlassGeometry` conversion own scalar
+  geometry. No report renderer, public detector route or new Recipe field is added.
+
+At each current candidate compare ordered A/B, swapped B/A, same-side A/A and
+B/B, and any actually measurable structure-reference explanation on identical
+support with identical weights. Use native BGR L1 residuals without fitted
+gain/offset, reference updates or new thresholds. A strictly preferred A/B
+explanation can produce only a **provisional appearance hypothesis**. Ties,
+multiple surviving candidates and contradictory measured opposition remain
+unresolved. Unmeasured opposition is recorded separately; it is never a favorable
+vote. Missing positive reference leaves this comparison unavailable while the
+existing automatic detector retains its own behavior.
+
+The first implementation task must freeze these unresolved details **before
+new real-data outcomes are inspected**, in this owner or a linked preflight:
+
+| Decision | Required contract |
+|---|---|
+| Geometry and enumeration | Name the existing edge/face input for each basis, acquisition cadence, bounds, junction/duplicate-face handling and all alternatives. No nearest-face rescue, closed H0 segmentation dependency, gap filling or best-looking subset. |
+| Reference correspondence | Define the mapping from current source pixels to reference pixels, side orientation, stencil offsets/width, reference mixture/unavailability and missing-column handling. Approximate initial points do not automatically provide this mapping or pure material masks. |
+| Equal comparison domain | Record requested and usable support, mask/crop reasons and exactly the same support for every competing explanation. Preserve contradictory parts; do not compare raw residual ranks across different support sets. |
+| Arithmetic and resources | Freeze loss normalization, tie arithmetic, per-frame candidate/sample/operation/storage bounds and explicit budget-exceeded output before allocation. Existing per-helper bounds do not bound their product. Never silently truncate to favorable candidates. |
+| Output and falsification | Separate measurement availability, provisional comparison outcome, physical decision and scalar eligibility. Freeze positive/opposing/unresolved controls and the event-level progression rule owned by validation. |
+
+Every output retains frame/role/candidate-geometry identity, geometry basis,
+source origin, fixed center, all current intersections, reference identity and
+declared role, exact side samples, masks/missingness, losses and opposition
+availability. Keep provisional Y distinct from the original W3 candidate Y and
+all public series. `physical_decision` stays `NOT_EVALUATED` during this
+measurement experiment; calling an appearance tie unresolved does not emit an
+O2 typed physical decision. A future physical decision rule has its own V2/V3
+entry conditions. Half-pixel face coordinates certify representation, not
+subpixel physical accuracy.
+
+Oil and Foam use independent references, support and disposition. D5 separately
+tests raw Foam-front identity before any episode change. Reference comparison
+still uses appearance evidence: current geometry alone cannot defeat a copied
+distractor, optical warp or same-observable structural boundary. The experiment
+must demonstrate useful target support as well as opposition; all-abstain is
+not success. No CBR-1 implementation or efficacy is accepted by this contract.
 
 ### Fixed control matrix and input separation
 
@@ -2153,6 +2216,13 @@ and Work Plan for execution/acceptance.
 
 ## History Review
 
+2026-10-10 cc17924 intake: reviewed H0 seed/partition and G1 geometry results,
+the existing observed-edge/face and reference-comparison helpers, fixed-center
+conversion, and F02/F04/F06/F07/F09/F10. CBR-1 binds measurements to current
+geometry but adds no independent physical observable by itself. Preserve the
+closed variants and require explicit correspondence/support/resource preflight
+before the bounded offline test. No runtime or field acceptance changes.
+
 2026-10-09 fixed-center target: review W1's identity/local/scalar separation,
 F09 coordinate/provenance failures, the changing-coverage scalar illustration,
 and the optional-reference/current-support limitations (F04/F07). The change
@@ -2374,11 +2444,11 @@ from reduced summaries. The raw-2D prototype separately tests added
 support versus added color and retain optically equivalent structural-step
 ambiguity; this is not a new executing detector node or identity acceptance.
 
-- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
-- Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`, `FOAM-CANDIDATE`.
+- Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F08`, `S11-F09`, `S11-F10`.
 - Prior mechanisms reviewed: saved BGR versus O1 gray projection, same-support column-side color differences and apparent-transparency limits; unpooled O1 gradient stencils, central-difference aliases and stored-output binding; ordered column-side preservation and joint-marginal collisions; candidate-relative reindexing, whole-inventory O1 novelty and central-gap peak controls; full-height ordered sampling versus finite-band collisions, existing dark-cap/material-profile and registered-motion owners, recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated.
-- Logic-map impact: NONE — this revision declares the next fixed-center scalar target and reuses existing geometry in an offline readout; no executing detector owner changes. Previously documented Local XY routing remains as mapped.
-- Failure-registry impact: NONE — existing F04/F07 mixed-support limits and F09 scalar/provenance risks already cover this prerequisite; no new physical mechanism or field repair is claimed.
+- Logic-map impact: NONE — the fixed-center contract and proposed CBR-1 offline measurement reuse existing owners; this intake changes no executing detector route. Previously documented Local XY routing remains as mapped.
+- Failure-registry impact: NONE — existing F02/F04/F06/F07 representation, role and coupling limits plus F09/F10 provenance and tuning guards cover the reviewed H0/G1 result and CBR-1 proposal; no new field cause or repair is claimed.

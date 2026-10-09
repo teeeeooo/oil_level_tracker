@@ -1,0 +1,240 @@
+{
+  "schema": "s11-detector-design-execution-summary-v1",
+  "date": "2026-10-09",
+  "repository": "teeeeooo/oil_level_tracker",
+  "base_head": "cc179244c89ea59bd097fa165ea493942629e23e",
+  "verified_final_head": "cc179244c89ea59bd097fa165ea493942629e23e",
+  "status": "AUDIT_AND_OFFLINE_EXPERIMENTS_COMPLETE; FOLLOWUP_DESIGN_PROPOSED; NO_RUNTIME_PROMOTION",
+  "execution_root_relative": "sample/output/s11-design-audit-cc17924-20261009-001",
+  "accepted_state": {
+    "behavior": "R22",
+    "diagnostics": "R22-3/O1",
+    "O1": "LOCALLY_ACCEPTED",
+    "W4": "OPEN",
+    "O2": "OPEN",
+    "latest_user_windows_result": "FIELD_FAIL",
+    "local_xy_default": "OFF",
+    "report_adjuncts": "MAIN_ADOPTED"
+  },
+  "repo_closeout": {
+    "worktree_clean": true,
+    "production_changed": false,
+    "recipe_or_truth_changed": false,
+    "commit_or_push": false,
+    "windows_executed": false,
+    "governance_check": "PASS; tracked worktree unchanged, not new-design acceptance",
+    "git_diff_check": "PASS"
+  },
+  "environment": {
+    "python": "3.14.4",
+    "opencv": "4.14.0",
+    "numpy": "2.5.1",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "extra_dependencies_installed": false
+  },
+  "fresh_verification": {
+    "prior_checkpoint_paths": 413,
+    "additional_tracked_figures": 2,
+    "total_sha256_matches": 415,
+    "sha256_mismatches": 0,
+    "production_python_source_pins": 221,
+    "focused_pytest_passed": 84,
+    "focused_pytest_elapsed_seconds": 9.06,
+    "constructed_check_groups": 9,
+    "small_graph_oracle_cases_within_one_group": 32,
+    "first_probe_decisions_checked": 198,
+    "geometry_ablation_decisions_checked": 198
+  },
+  "visual_review": {
+    "new_decoded_frames": 18,
+    "plans": {
+      "base_sample_1": [
+        0,
+        150,
+        151,
+        433
+      ],
+      "sample2": [
+        0,
+        30,
+        60
+      ],
+      "sample3": [
+        930,
+        1800,
+        2550,
+        3090
+      ],
+      "sample4": [
+        420,
+        480,
+        1275,
+        1320,
+        1560,
+        1620,
+        1680
+      ]
+    },
+    "existing_public_native_frames": 9,
+    "full_frame_by_frame_screening": false,
+    "new_formal_truth_created": false
+  },
+  "experiments": {
+    "unique_rasters": 167,
+    "plan_frame_queries": 198,
+    "total_continuation_queries_excluding_three_initial_frames": 195,
+    "all_exposure": "DEVELOPMENT; ADJACENT AND PARTLY REUSED RASTERS; NOT INDEPENDENT HOLDOUT",
+    "H0": {
+      "id": "reference-paired-minimax-partition-v1",
+      "disposition": "CLOSED_WITHOUT_PROMOTION",
+      "results": [
+        {
+          "plan": "oil-positive",
+          "continuation_frames": 75,
+          "unique_appearance_proposals": 3,
+          "no_center_proposal": 72
+        },
+        {
+          "plan": "foam-positive",
+          "continuation_frames": 90,
+          "unique_appearance_proposals": 21,
+          "no_center_proposal": 69
+        },
+        {
+          "plan": "rim-opposition",
+          "continuation_frames": 30,
+          "unique_appearance_proposals": 0,
+          "no_center_proposal": 30
+        }
+      ]
+    },
+    "G1": {
+      "id": "reference-partition-center-projection-ablation-v1",
+      "scope": "SAME STORED PARTITIONS; CURRENT PARTITION FACES INSTEAD OF LEGACY BRIGHTNESS SUPPORT FACES",
+      "disposition": "NO_PHYSICAL_SELECTOR_PROMOTION",
+      "results": [
+        {
+          "plan": "oil-positive",
+          "continuation_frames": 75,
+          "unique_appearance_proposals": 15,
+          "no_center_proposal": 60,
+          "longest_unique_native_frame_run": 4
+        },
+        {
+          "plan": "foam-positive",
+          "continuation_frames": 90,
+          "unique_appearance_proposals": 50,
+          "no_center_proposal": 40,
+          "longest_unique_native_frame_run": 10
+        },
+        {
+          "plan": "rim-opposition",
+          "continuation_frames": 30,
+          "unique_appearance_proposals": 0,
+          "no_center_proposal": 30,
+          "longest_unique_native_frame_run": 0
+        }
+      ]
+    },
+    "physical_efficacy": "NOT_EVALUATED",
+    "numeric_counts_are": "PROPOSAL_AVAILABILITY, NOT PRECISION, RECALL, FIELD_ACCURACY, OR SUCCESSFUL_ABSTENTION",
+    "important_limits": [
+      "All initial frames excluded from continuation counts.",
+      "Rim seed input has different information amount and position from positive references; zero output is not false-positive 0%.",
+      "Native-rate saved LK positions are not demonstrated compatible with production sampling cadence.",
+      "Same stored inputs are reused; the two 198-row checks are not independent datasets."
+    ],
+    "new_agent_observation": {
+      "frame": 1348,
+      "source_x": 595,
+      "proposed_y": 825.5,
+      "assessment": "Appears to move into bright Foam interior rather than the lower intended boundary.",
+      "authority": "AGENT_QUALITATIVE_REVIEW_ONLY; NO_NEW_USER_POINT_TRUTH",
+      "does_not_supersede": "User qualitative partial right-side Oil/LK continuation at 45 seconds."
+    }
+  },
+  "next_design": {
+    "name": "current-boundary-reference-comparison-v1",
+    "implemented_in_this_session": false,
+    "purpose": "Measure role-reference agreement at current observed candidate geometry, not transported seed positions.",
+    "first_tasks": [
+      "D2-A current-boundary reference comparison",
+      "D2-B independent observed geometry",
+      "D3 fixed offline comparison",
+      "D5 independent Foam raw-front comparison"
+    ],
+    "integration_gate": "O2 followed by separate O3/O4 plans; exact Windows field qualification later."
+  },
+  "verification_script_corrections": [
+    "Portable figure names first resolved from the wrong base directory.",
+    "Portable figure entries were objects containing sha256/source, not bare digests.",
+    "Only verifier manifest handling changed; no experiment, input, threshold or numerical readout was altered."
+  ],
+  "local_artifacts": {
+    "side_partition_probe.py": {
+      "sha256": "1dafb7ecf71acad55c89d2567aed789625b80c53354a37b8ccac3661adc59df8",
+      "bytes": 9658
+    },
+    "partition-trial/preflight.json": {
+      "sha256": "9b24a8189c67d559748c753f647816f6806dd6cc4e0d764b42c3879be60d181f",
+      "bytes": 60599
+    },
+    "partition-trial/readout.json": {
+      "sha256": "34c64b77e40ea38293c3d3a1190d96e8fc9f8281d5c9021577f0d552018b4dc7",
+      "bytes": 117533
+    },
+    "verify_probe.py": {
+      "sha256": "17d08105ed30d0cba3aa991914ca8ad9741c347fdd9c535ca6864370facc2ffa",
+      "bytes": 6200
+    },
+    "verification.json": {
+      "sha256": "db1bd08e19729dd145c31852af396cad8fa73b352b06c5356ab399ac11cd7ca1",
+      "bytes": 4427
+    },
+    "verification-correction.txt": {
+      "sha256": "5d38317c3df0dfafc3455488c6295be9c3b7d1679c1756436379f9ba0b40df79",
+      "bytes": 636
+    },
+    "center_projection_ablation.py": {
+      "sha256": "1435af0e51745ca3e6a2a31035ddbd19903edf2c222d9fa02cbd7c46fed5829a",
+      "bytes": 4105
+    },
+    "center-projection-ablation-preflight.json": {
+      "sha256": "50678390b059b84d690e26d192fe08caf368248008eba3aa2af5d3d395c06275",
+      "bytes": 34480
+    },
+    "center-projection-ablation.json": {
+      "sha256": "84d5415febd005d87220f7651a2f0991c1aadc5fcb995245cae30110f3b267a3",
+      "bytes": 58162
+    },
+    "inspect_visuals.py": {
+      "sha256": "eecd2a9ec28e0d09f0751dfb9b2143759c0780ff6d3928482a1378feb47fe15d",
+      "bytes": 3650
+    },
+    "visual-preflight.json": {
+      "sha256": "57e45f524b2d878513b36da49efc0f72cc0e04eca9da1b21fdd10408ca2f8817",
+      "bytes": 527
+    },
+    "visual-review.json": {
+      "sha256": "3b74b521545270e97d1e04bd941cdfeba701eef28fef787175792e164e1eaef4",
+      "bytes": 12646
+    },
+    "focused-tests.log": {
+      "sha256": "c48d9127cad0e6a06b5c35eedc621d7604f3e9b5070dcfcad6c5269532fff1f8",
+      "bytes": 179
+    },
+    "oil-late-ablation-review.png": {
+      "sha256": "295907780412f709e6fc42d50e5a01be3cca76f4f2a4005b0da1172e1b9e646e",
+      "bytes": 56731
+    }
+  },
+  "source_authority_paths": [
+    "docs/00-project/work-plan.md",
+    "docs/60-evidence/s11/2026-10-09-fixed-center-handoff.md",
+    "docs/50-diagnostics/s11/2026-10-09-fixed-center-readout.json",
+    "docs/30-validation/windows-sample1-heating-coldstart-reviewed-truth.md",
+    "docs/20-architecture/s11-interface-observability-witness-architecture.md",
+    "docs/30-validation/s11-interface-observability-witness-validation.md",
+    "docs/50-diagnostics/s11/s11-detector-mechanism-failure-registry.md"
+  ]
+}

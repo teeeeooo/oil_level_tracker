@@ -994,10 +994,71 @@ These local checks do not satisfy O2 opposing/holdout/Windows controls, authoriz
 an authority/phase rewrite, or change FIELD FAIL. They also do not add a 100%
 per-frame recall or per-pixel semantic-labeling requirement to the product.
 
+## CBR-1 offline comparison entry
+
+This is the validation boundary for the
+[proposed current-boundary comparison](../20-architecture/s11-interface-observability-witness-architecture.md#cbr-1-current-boundary-reference-comparison--proposed-offline-contract),
+qualified by the [cc17924 intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md).
+It supplies no passing model or replacement O2 gate.
+
+Before coding the measurement, freeze source/input/reference identities,
+geometry basis, current-to-reference correspondence, side stencil, common support,
+tie semantics and combined resource limits. Select one operation; at most one
+structurally distinct ablation may be declared before observing results.
+Control fixtures must cover masked/absent/mixed references, stationary inclined
+fronts, center-only loss, side-only visibility, multiple intersections,
+junctions/duplicate faces, same-shape structure, copied texture, optical warp,
+true-boundary/structure crossing, independent Oil/Foam availability, coordinate
+conversion and budget exhaustion. Exact synthetic labels never enter inference.
+
+The first real-data scope is the complete exposed 167-raster/198-query plan
+(195 continuation queries after the three initial queries), with every candidate
+and every missingness reason retained. Initial reference frames are initialization,
+not continuation success. Keep native-rate results and the actual configured
+analysis cadence separate; no hidden LK/native-rate acquisition prerequisite is
+permitted. Report geometry availability → side comparability → provisional role
+comparison → fixed-center availability, separately from physical target quality.
+Oil f1348 remains an agent-observed suspect wrong region, not new user point truth.
+
+Before that comparison, bind the existing positive/opposing/unresolved controls
+and named event intervals to a written progression rule: useful non-initial target
+support in the intended role, no new P0 event reversal/loss or false major episode,
+and no increase in P1 wrong-owner runs traded for coverage. Enumerate missing and
+wrong-owner runs, visibility denominators, onset/offset/direction/reappearance,
+improved/worsened/unassessable intervals, and actual sampled times. Exact errors
+and run classifications require compatible truth; otherwise report NOT_MEASURED
+and attributed qualitative evidence. P2 residuals may be listed without claiming
+field acceptance. Raw counts, a favorable screenshot or all-UNKNOWN cannot pass.
+Define the applicable intervals and qualitative adjudication before results;
+do not invent tolerances afterward. If available evidence cannot judge the rule,
+retain NOT_ASSESSABLE and name the missing distinction.
+
+Only a useful bounded result proceeds to the existing four Mac regression
+windows (including full sample4) and public water/beer/milk opposition controls.
+These already exposed recordings are not fresh holdouts; public crop centers
+are not calibrated Glass centers. Compare fixed-center scalar error only where
+truth declares compatible measurement semantics. Existing candidate-Y truth and
+W3 records remain intact. D5 Foam uses its own controls and single-change
+comparison; Oil results cannot satisfy Foam acceptance.
+
+Measurement feasibility keeps physical decisions NOT_EVALUATED. A later frozen
+physical rule still requires V2/V3 controls, partition/holdout evidence, a reviewed
+operating point, V4 behavior equality and V5 Windows shadow review for O2. Existing
+holdout limitations stay open; this plan neither manufactures an untouched split
+nor repeats the closed recording-availability question. O3/O4 and the exact-runtime
+nine-segment field procedure remain later gates. No new Windows request is part
+of this intake. Stop the fixed variant if useful role support is absent or it
+needs manual seed rescue, retuning, filled gaps or downstream gate relaxation.
+
 ## Detector Governance
 
-- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
-- Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
+The 2026-10-10 CBR-1 intake adds offline entry and progression conditions only.
+H0's support-face intersection loses available partition geometry; the first
+physical identity failure and field effectiveness remain unqualified. F07's
+Foam front/texture distinction is preserved alongside the guards below.
+
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`, `FOAM-CANDIDATE`.
+- Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: current evidence supports an upstream contour/observability and physical-discrimination gap; exact private first harmful stages remain segment-specific until reviewed.
 - Prior mechanisms reviewed: R22/R22-2 evidence and diagnostics, public probe, reviewed BASE/Accum checkpoints, R23 rejection, and existing parent validation.
 - Prior mechanisms rejected: threshold widening, polarity/source/motion identity, unpartitioned calibration, private-coordinate tuning, missing-as-zero, stale identity/coordinate transfer, interpolation/carry and downstream repair.

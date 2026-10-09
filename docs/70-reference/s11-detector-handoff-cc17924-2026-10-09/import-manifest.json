@@ -1,0 +1,186 @@
+{
+  "schema": "s11-external-handoff-import-v1",
+  "intake_date": "2026-10-10",
+  "source_authored_date": "2026-10-09",
+  "base_head": "cc179244c89ea59bd097fa165ea493942629e23e",
+  "source_zip": {
+    "filename": "1-S11-detector-handoff-cc17924-2026-10-09.zip",
+    "sha256": "07272f147c48de6d592e1b30fd65e321558fc68da0883a4c8121669555718016",
+    "bytes": 26069,
+    "local_preserved_copy": "sample/output/s11-handoff-intake-cc17924-20261010-001/supplied-handoff.zip"
+  },
+  "supplied_files": {
+    "README.md": {
+      "sha256": "911aa1f69c5a93fa90b4d6d371279fd5dda84fe3a1effd88bc0ae9e0d18fcb88",
+      "bytes": 2084
+    },
+    "S11-detector-design-work-spec-cc17924-2026-10-09.md": {
+      "sha256": "09aa1e799fd584dd04ee00346757038ae449c38913dc62da66047c2f4655c887",
+      "bytes": 44465
+    },
+    "S11-execution-summary-cc17924-2026-10-09.json": {
+      "sha256": "62ea08ab26bf69683c0630aa8cb8a3146487debf9e072b3282f4b4ea3e41065b",
+      "bytes": 8491
+    },
+    "verify_local_evidence.py": {
+      "sha256": "e8a024803308e4dd10999163a624481458094be91d171ee734824ef129787ebe",
+      "bytes": 4258
+    },
+    "delivery-validation.json": {
+      "sha256": "54eb1bb8eb708a1f60b11fb576f18d6d570a3b7f90a24556d61f6168f9aa23d2",
+      "bytes": 455
+    },
+    "SHA256SUMS.txt": {
+      "sha256": "f8ac431c80f2e976848ad8de0af89ed4a13c881c4b44084810237eca79d9134b",
+      "bytes": 488
+    }
+  },
+  "supplied_preservation": "All six original files byte-identical, including README, helper and checksum file. Original README commands remain historical.",
+  "native_evidence_copies": [
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/base_sample_1-source-review.png",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/base_sample_1-source-review.png",
+      "sha256": "35f3a121eb3ff14e13ac79aebb3c549f0f9b3426d77aee3183e4119116008d4e",
+      "bytes": 309975
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/center-projection-ablation-preflight.json",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/center-projection-ablation-preflight.json",
+      "sha256": "50678390b059b84d690e26d192fe08caf368248008eba3aa2af5d3d395c06275",
+      "bytes": 34480
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/center-projection-ablation.json",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/center-projection-ablation.json",
+      "sha256": "84d5415febd005d87220f7651a2f0991c1aadc5fcb995245cae30110f3b267a3",
+      "bytes": 58162
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/center_projection_ablation.py",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/center_projection_ablation.py",
+      "sha256": "1435af0e51745ca3e6a2a31035ddbd19903edf2c222d9fa02cbd7c46fed5829a",
+      "bytes": 4105
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/closeout.json",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/closeout.json",
+      "sha256": "0b8bb6cb877ef600fb2547a84f0db102a6f74a29c90ff272f9549de870fcb79a",
+      "bytes": 2610
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/foam-positive-partition-review.png",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/foam-positive-partition-review.png",
+      "sha256": "eece216fd186af4946490ff64a3e50ed6cfdb9a4d8bb4641a1f6d6f736dff00e",
+      "bytes": 158995
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/focused-tests.log",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/focused-tests.log.txt",
+      "sha256": "c48d9127cad0e6a06b5c35eedc621d7604f3e9b5070dcfcad6c5269532fff1f8",
+      "bytes": 179,
+      "filename_note": "Copied as .log.txt to retain the original log bytes outside the repository-wide *.log ignore rule."
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/inspect_visuals.py",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/inspect_visuals.py",
+      "sha256": "eecd2a9ec28e0d09f0751dfb9b2143759c0780ff6d3928482a1378feb47fe15d",
+      "bytes": 3650
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/oil-late-ablation-review.png",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/oil-late-ablation-review.png",
+      "sha256": "295907780412f709e6fc42d50e5a01be3cca76f4f2a4005b0da1172e1b9e646e",
+      "bytes": 56731
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/oil-positive-partition-review.png",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/oil-positive-partition-review.png",
+      "sha256": "7af9839221d047c1228c14da8b316a0dd5018c45152ad5a215d84e1429970a39",
+      "bytes": 163591
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/partition-trial/preflight.json",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/partition-trial/preflight.json",
+      "sha256": "9b24a8189c67d559748c753f647816f6806dd6cc4e0d764b42c3879be60d181f",
+      "bytes": 60599
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/partition-trial/readout.json",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/partition-trial/readout.json",
+      "sha256": "34c64b77e40ea38293c3d3a1190d96e8fc9f8281d5c9021577f0d552018b4dc7",
+      "bytes": 117533
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/sample2-source-review.png",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/sample2-source-review.png",
+      "sha256": "58f124cfd71d408a38f8fd54d2158568fa2cd9562eb5171bee23c16c45dfd290",
+      "bytes": 451156
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/sample3-source-review.png",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/sample3-source-review.png",
+      "sha256": "39db0b6bb162f228e3dab4e42f1fcdc1281027e7b2287c43c94aca3a09304317",
+      "bytes": 137602
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/sample4-source-review.png",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/sample4-source-review.png",
+      "sha256": "4a3c414be0cc6bf853dd04eba29e7fedede16f86eeb80e7639599708f4c3aae6",
+      "bytes": 121527
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/side_partition_probe.py",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/side_partition_probe.py",
+      "sha256": "1dafb7ecf71acad55c89d2567aed789625b80c53354a37b8ccac3661adc59df8",
+      "bytes": 9658
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/verification-correction.txt",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/verification-correction.txt",
+      "sha256": "5d38317c3df0dfafc3455488c6295be9c3b7d1679c1756436379f9ba0b40df79",
+      "bytes": 636
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/verification.json",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/verification.json",
+      "sha256": "db1bd08e19729dd145c31852af396cad8fa73b352b06c5356ab399ac11cd7ca1",
+      "bytes": 4427
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/verify_probe.py",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/verify_probe.py",
+      "sha256": "17d08105ed30d0cba3aa991914ca8ad9741c347fdd9c535ca6864370facc2ffa",
+      "bytes": 6200
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/visual-preflight.json",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/visual-preflight.json",
+      "sha256": "57e45f524b2d878513b36da49efc0f72cc0e04eca9da1b21fdd10408ca2f8817",
+      "bytes": 527
+    },
+    {
+      "source": "sample/output/s11-design-audit-cc17924-20261009-001/visual-review.json",
+      "copy": "docs/70-reference/s11-detector-handoff-cc17924-2026-10-09/native-evidence/visual-review.json",
+      "sha256": "3b74b521545270e97d1e04bd941cdfeba701eef28fef787175792e164e1eaef4",
+      "bytes": 12646
+    }
+  ],
+  "native_evidence_role": "Byte-preserved historical scripts/results/images, not supplied ZIP members or production/test-discovery entry points. Do not execute copied native runners over original outputs.",
+  "native_archive": {
+    "path": "sample/output/s11-handoff-intake-cc17924-20261010-001/native-evidence.zip",
+    "sha256": "d7eb9da3b97130e190f5b38ab6a846b7b3250c0723111debc8d61d483f912850",
+    "bytes": 5799703,
+    "entries": 219,
+    "uncompressed_bytes": 6154685,
+    "verification": "all members byte-identical; CRC passes",
+    "boundary": "Local ignored archive only; no remote/off-machine backup; upstream videos/support inputs are not included."
+  },
+  "local_inventory_receipt": "docs/60-evidence/s11/2026-10-10-cc17924-handoff-intake.json",
+  "local_only": "198 NPZ arrays remain at original sample/output paths and in the ignored archive; one interpreter cache is inventoried but excluded. Neither archive includes all upstream inputs or original videos.",
+  "authority": {
+    "intake": "docs/60-evidence/s11/2026-10-10-cc17924-handoff-intake.md",
+    "current_plan": "docs/00-project/work-plan.md",
+    "architecture": "docs/20-architecture/s11-interface-observability-witness-architecture.md",
+    "validation": "docs/30-validation/s11-interface-observability-witness-validation.md"
+  }
+}

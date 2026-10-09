@@ -1,0 +1,216 @@
+{
+  "base_head": "cc179244c89ea59bd097fa165ea493942629e23e",
+  "algorithm_version": "reference-paired-minimax-partition-v1",
+  "constructed_check_count": 9,
+  "checks": [
+    {
+      "name": "32 small random graphs equal threshold-reachability oracle",
+      "result": "PASS"
+    },
+    {
+      "name": "ideal two-side current partition",
+      "result": "PASS"
+    },
+    {
+      "name": "constant appearance is all unresolved",
+      "result": "PASS"
+    },
+    {
+      "name": "missing side never yields a material decision",
+      "result": "PASS"
+    },
+    {
+      "name": "mask barrier blocks all graph paths",
+      "result": "PASS"
+    },
+    {
+      "name": "role swap exchanges labels without changing geometry",
+      "result": "PASS"
+    },
+    {
+      "name": "deterministic repeated distances",
+      "result": "PASS"
+    },
+    {
+      "name": "coordinate translation with censored padding",
+      "result": "PASS"
+    },
+    {
+      "name": "resource bound rejects oversized input",
+      "result": "PASS"
+    },
+    {
+      "name": "all 198 saved center decisions independently reconstructed",
+      "result": "PASS",
+      "rows": 198
+    }
+  ],
+  "real_saved_decisions_checked": 198,
+  "probe_results": [
+    {
+      "plan": "foam-positive",
+      "total_frames": 91,
+      "continuation_frames": 90,
+      "provisional_unique": 21,
+      "ambiguous": 0,
+      "no_supported_center": 69,
+      "longest_no_center_native_frames_including_initial": 28,
+      "paired_seed_absent_frames": 0,
+      "center_face_label_pairs": {
+        "(0, 0)": 258,
+        "(2, 0)": 32,
+        "(0, 1)": 11,
+        "(1, 1)": 16,
+        "(1, 0)": 11,
+        "(1, 2)": 21,
+        "(0, 2)": 7,
+        "(2, 2)": 4
+      },
+      "timing_s_total": 16.556016713089775,
+      "outputs": [
+        [
+          438,
+          840.5
+        ],
+        [
+          467,
+          840.5
+        ],
+        [
+          468,
+          840.5
+        ],
+        [
+          474,
+          846.5
+        ],
+        [
+          475,
+          846.5
+        ],
+        [
+          479,
+          841.5
+        ],
+        [
+          481,
+          842.5
+        ],
+        [
+          482,
+          842.5
+        ],
+        [
+          486,
+          842.5
+        ],
+        [
+          488,
+          841.5
+        ],
+        [
+          492,
+          840.5
+        ],
+        [
+          493,
+          842.5
+        ],
+        [
+          494,
+          843.5
+        ],
+        [
+          495,
+          843.5
+        ],
+        [
+          496,
+          843.5
+        ],
+        [
+          497,
+          843.5
+        ],
+        [
+          498,
+          841.5
+        ],
+        [
+          499,
+          841.5
+        ],
+        [
+          503,
+          839.5
+        ],
+        [
+          507,
+          838.5
+        ],
+        [
+          509,
+          842.5
+        ]
+      ]
+    },
+    {
+      "plan": "oil-positive",
+      "total_frames": 76,
+      "continuation_frames": 75,
+      "provisional_unique": 3,
+      "ambiguous": 0,
+      "no_supported_center": 72,
+      "longest_no_center_native_frames_including_initial": 38,
+      "paired_seed_absent_frames": 1,
+      "center_face_label_pairs": {
+        "(1, 1)": 44,
+        "(2, 2)": 8,
+        "(0, 0)": 264,
+        "(0, 2)": 14,
+        "(1, 2)": 3,
+        "(0, 1)": 15,
+        "(1, 0)": 9,
+        "(2, 0)": 14
+      },
+      "timing_s_total": 13.598300125682727,
+      "outputs": [
+        [
+          1281,
+          838.5
+        ],
+        [
+          1282,
+          841.5
+        ],
+        [
+          1321,
+          843.5
+        ]
+      ]
+    },
+    {
+      "plan": "rim-opposition",
+      "total_frames": 31,
+      "continuation_frames": 30,
+      "provisional_unique": 0,
+      "ambiguous": 0,
+      "no_supported_center": 30,
+      "longest_no_center_native_frames_including_initial": 31,
+      "paired_seed_absent_frames": 24,
+      "center_face_label_pairs": {
+        "(1, 1)": 27,
+        "(1, 0)": 1,
+        "(0, 0)": 96
+      },
+      "timing_s_total": 1.374764041043818,
+      "outputs": []
+    }
+  ],
+  "prior_checkpoint_hashes_checked": 415,
+  "prior_checkpoint_hash_mismatches": [],
+  "production_source_pins_checked": 221,
+  "physical_efficacy": "NOT_EVALUATED",
+  "classifier_promotion": false,
+  "verification_scope": "arithmetic, saved proposal projection and immutability; not physical accuracy or successful abstention"
+}

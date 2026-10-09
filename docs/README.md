@@ -188,6 +188,17 @@ own the adopted proposal and Work Plan owns sequencing. The manifest inventories
 all 165 local artifacts and their verified local archive; it is not a claim that
 full traces and HTML assets have been uploaded or backed up off-machine.
 
+The [cc17924 October 9 handoff](70-reference/s11-detector-handoff-cc17924-2026-10-09/README.md)
+is preserved as six original files plus 21 separately identified native scripts,
+records and images. Its [import manifest](70-reference/s11-detector-handoff-cc17924-2026-10-09/import-manifest.json)
+routes the complete local inventory and ignored archive; 198 native arrays remain
+local, not part of a fresh clone. The [October 10 intake](60-evidence/s11/2026-10-10-cc17924-handoff-intake.md)
+verifies saved projections and qualifies CBR-1 as a proposed offline measurement.
+H0/G1 remain closed without promotion. Adopted proposal/acceptance conditions live
+in Witness Architecture/Validation, and the next D2–D6 sequence lives only in
+Work Plan. The original specification and historical runners are not rewritten
+or placed in production/test discovery.
+
 ## Supporting collection indexes
 
 - S11 diagnostics — [`50-diagnostics/s11/`](50-diagnostics/s11/)

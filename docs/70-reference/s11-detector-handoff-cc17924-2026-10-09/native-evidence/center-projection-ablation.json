@@ -1,0 +1,1977 @@
+{
+  "id": "reference-partition-center-projection-ablation-v1",
+  "results": [
+    {
+      "summary": {
+        "plan": "foam-positive",
+        "continuation_frames": 90,
+        "r1_states": {
+          "unique": 50,
+          "none": 40
+        },
+        "longest_provisional_run_frames": 10,
+        "runs": [
+          {
+            "first_frame": 420,
+            "last_frame": 422,
+            "frames": 3,
+            "y_min": 840.5,
+            "y_max": 845.5
+          },
+          {
+            "first_frame": 424,
+            "last_frame": 426,
+            "frames": 3,
+            "y_min": 844.5,
+            "y_max": 844.5
+          },
+          {
+            "first_frame": 429,
+            "last_frame": 429,
+            "frames": 1,
+            "y_min": 845.5,
+            "y_max": 845.5
+          },
+          {
+            "first_frame": 432,
+            "last_frame": 434,
+            "frames": 3,
+            "y_min": 844.5,
+            "y_max": 844.5
+          },
+          {
+            "first_frame": 438,
+            "last_frame": 438,
+            "frames": 1,
+            "y_min": 840.5,
+            "y_max": 840.5
+          },
+          {
+            "first_frame": 449,
+            "last_frame": 453,
+            "frames": 5,
+            "y_min": 841.5,
+            "y_max": 845.5
+          },
+          {
+            "first_frame": 455,
+            "last_frame": 456,
+            "frames": 2,
+            "y_min": 844.5,
+            "y_max": 844.5
+          },
+          {
+            "first_frame": 459,
+            "last_frame": 461,
+            "frames": 3,
+            "y_min": 844.5,
+            "y_max": 846.5
+          },
+          {
+            "first_frame": 465,
+            "last_frame": 469,
+            "frames": 5,
+            "y_min": 840.5,
+            "y_max": 841.5
+          },
+          {
+            "first_frame": 474,
+            "last_frame": 475,
+            "frames": 2,
+            "y_min": 846.5,
+            "y_max": 846.5
+          },
+          {
+            "first_frame": 479,
+            "last_frame": 486,
+            "frames": 8,
+            "y_min": 841.5,
+            "y_max": 843.5
+          },
+          {
+            "first_frame": 488,
+            "last_frame": 488,
+            "frames": 1,
+            "y_min": 841.5,
+            "y_max": 841.5
+          },
+          {
+            "first_frame": 491,
+            "last_frame": 500,
+            "frames": 10,
+            "y_min": 838.5,
+            "y_max": 844.5
+          },
+          {
+            "first_frame": 503,
+            "last_frame": 503,
+            "frames": 1,
+            "y_min": 839.5,
+            "y_max": 839.5
+          },
+          {
+            "first_frame": 507,
+            "last_frame": 507,
+            "frames": 1,
+            "y_min": 838.5,
+            "y_max": 838.5
+          },
+          {
+            "first_frame": 509,
+            "last_frame": 510,
+            "frames": 2,
+            "y_min": 841.5,
+            "y_max": 842.5
+          }
+        ]
+      },
+      "rows": [
+        {
+          "frame": 420,
+          "initialized": true,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            845.5
+          ],
+          "r1_provisional_y": 845.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 421,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            840.5
+          ],
+          "r1_provisional_y": 840.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 422,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            840.5
+          ],
+          "r1_provisional_y": 840.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 423,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 424,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 425,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 426,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 427,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 428,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 429,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            845.5
+          ],
+          "r1_provisional_y": 845.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 430,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 431,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 432,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 433,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 434,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 435,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 436,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 437,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 438,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            840.5
+          ],
+          "r1_current_partition_candidates": [
+            840.5
+          ],
+          "r1_provisional_y": 840.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 439,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 440,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 441,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 442,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 443,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 444,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 445,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 446,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 447,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 448,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 449,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            845.5
+          ],
+          "r1_provisional_y": 845.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 450,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            845.5
+          ],
+          "r1_provisional_y": 845.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 451,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            845.5
+          ],
+          "r1_provisional_y": 845.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 452,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            841.5
+          ],
+          "r1_provisional_y": 841.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 453,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            842.5
+          ],
+          "r1_provisional_y": 842.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 454,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 455,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 456,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 457,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 458,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 459,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 460,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 461,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            846.5
+          ],
+          "r1_provisional_y": 846.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 462,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 463,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 464,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 465,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            841.5
+          ],
+          "r1_provisional_y": 841.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 466,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            841.5
+          ],
+          "r1_provisional_y": 841.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 467,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            840.5
+          ],
+          "r1_current_partition_candidates": [
+            840.5
+          ],
+          "r1_provisional_y": 840.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 468,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            840.5
+          ],
+          "r1_current_partition_candidates": [
+            840.5
+          ],
+          "r1_provisional_y": 840.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 469,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            841.5
+          ],
+          "r1_provisional_y": 841.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 470,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 471,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 472,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 473,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 474,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            846.5
+          ],
+          "r1_current_partition_candidates": [
+            846.5
+          ],
+          "r1_provisional_y": 846.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 475,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            846.5
+          ],
+          "r1_current_partition_candidates": [
+            846.5
+          ],
+          "r1_provisional_y": 846.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 476,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 477,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 478,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 479,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            841.5
+          ],
+          "r1_current_partition_candidates": [
+            841.5
+          ],
+          "r1_provisional_y": 841.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 480,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            843.5
+          ],
+          "r1_provisional_y": 843.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 481,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            842.5
+          ],
+          "r1_current_partition_candidates": [
+            842.5
+          ],
+          "r1_provisional_y": 842.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 482,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            842.5
+          ],
+          "r1_current_partition_candidates": [
+            842.5
+          ],
+          "r1_provisional_y": 842.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 483,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            843.5
+          ],
+          "r1_provisional_y": 843.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 484,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            842.5
+          ],
+          "r1_provisional_y": 842.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 485,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            842.5
+          ],
+          "r1_provisional_y": 842.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 486,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            842.5
+          ],
+          "r1_current_partition_candidates": [
+            842.5
+          ],
+          "r1_provisional_y": 842.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 487,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 488,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            841.5
+          ],
+          "r1_current_partition_candidates": [
+            841.5
+          ],
+          "r1_provisional_y": 841.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 489,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 490,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 491,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            838.5
+          ],
+          "r1_provisional_y": 838.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 492,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            840.5
+          ],
+          "r1_current_partition_candidates": [
+            840.5
+          ],
+          "r1_provisional_y": 840.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 493,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            842.5
+          ],
+          "r1_current_partition_candidates": [
+            842.5
+          ],
+          "r1_provisional_y": 842.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 494,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            843.5
+          ],
+          "r1_current_partition_candidates": [
+            843.5
+          ],
+          "r1_provisional_y": 843.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 495,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            843.5
+          ],
+          "r1_current_partition_candidates": [
+            843.5
+          ],
+          "r1_provisional_y": 843.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 496,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            843.5
+          ],
+          "r1_current_partition_candidates": [
+            843.5
+          ],
+          "r1_provisional_y": 843.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 497,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            843.5
+          ],
+          "r1_current_partition_candidates": [
+            843.5
+          ],
+          "r1_provisional_y": 843.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 498,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            841.5
+          ],
+          "r1_current_partition_candidates": [
+            841.5
+          ],
+          "r1_provisional_y": 841.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 499,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            841.5
+          ],
+          "r1_current_partition_candidates": [
+            841.5
+          ],
+          "r1_provisional_y": 841.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 500,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 501,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 502,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 503,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            839.5
+          ],
+          "r1_current_partition_candidates": [
+            839.5
+          ],
+          "r1_provisional_y": 839.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 504,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 505,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 506,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 507,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            838.5
+          ],
+          "r1_current_partition_candidates": [
+            838.5
+          ],
+          "r1_provisional_y": 838.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 508,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 509,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            842.5
+          ],
+          "r1_current_partition_candidates": [
+            842.5
+          ],
+          "r1_provisional_y": 842.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 510,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            841.5
+          ],
+          "r1_provisional_y": 841.5,
+          "physical_decision": "NOT_EVALUATED"
+        }
+      ]
+    },
+    {
+      "summary": {
+        "plan": "oil-positive",
+        "continuation_frames": 75,
+        "r1_states": {
+          "none": 60,
+          "unique": 15
+        },
+        "longest_provisional_run_frames": 4,
+        "runs": [
+          {
+            "first_frame": 1281,
+            "last_frame": 1282,
+            "frames": 2,
+            "y_min": 838.5,
+            "y_max": 841.5
+          },
+          {
+            "first_frame": 1284,
+            "last_frame": 1286,
+            "frames": 3,
+            "y_min": 835.5,
+            "y_max": 838.5
+          },
+          {
+            "first_frame": 1298,
+            "last_frame": 1298,
+            "frames": 1,
+            "y_min": 835.5,
+            "y_max": 835.5
+          },
+          {
+            "first_frame": 1301,
+            "last_frame": 1301,
+            "frames": 1,
+            "y_min": 836.5,
+            "y_max": 836.5
+          },
+          {
+            "first_frame": 1318,
+            "last_frame": 1321,
+            "frames": 4,
+            "y_min": 840.5,
+            "y_max": 844.5
+          },
+          {
+            "first_frame": 1333,
+            "last_frame": 1335,
+            "frames": 3,
+            "y_min": 838.5,
+            "y_max": 841.5
+          },
+          {
+            "first_frame": 1348,
+            "last_frame": 1348,
+            "frames": 1,
+            "y_min": 825.5,
+            "y_max": 825.5
+          }
+        ]
+      },
+      "rows": [
+        {
+          "frame": 1275,
+          "initialized": true,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1276,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1277,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1278,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1279,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1280,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1281,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            838.5
+          ],
+          "r1_current_partition_candidates": [
+            838.5
+          ],
+          "r1_provisional_y": 838.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1282,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            841.5
+          ],
+          "r1_current_partition_candidates": [
+            841.5
+          ],
+          "r1_provisional_y": 841.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1283,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1284,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            838.5
+          ],
+          "r1_provisional_y": 838.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1285,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            835.5
+          ],
+          "r1_provisional_y": 835.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1286,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            835.5
+          ],
+          "r1_provisional_y": 835.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1287,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1288,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1289,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1290,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1291,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1292,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1293,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1294,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1295,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1296,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1297,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1298,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            835.5
+          ],
+          "r1_provisional_y": 835.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1299,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1300,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1301,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            836.5
+          ],
+          "r1_provisional_y": 836.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1302,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1303,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1304,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1305,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1306,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1307,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1308,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1309,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1310,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1311,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1312,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1313,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1314,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1315,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1316,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1317,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1318,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            840.5
+          ],
+          "r1_provisional_y": 840.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1319,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            843.5
+          ],
+          "r1_provisional_y": 843.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1320,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            844.5
+          ],
+          "r1_provisional_y": 844.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1321,
+          "initialized": false,
+          "r0_legacy_support_candidates": [
+            843.5
+          ],
+          "r1_current_partition_candidates": [
+            843.5
+          ],
+          "r1_provisional_y": 843.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1322,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1323,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1324,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1325,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1326,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1327,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1328,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1329,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1330,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1331,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1332,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1333,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            840.5
+          ],
+          "r1_provisional_y": 840.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1334,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            841.5
+          ],
+          "r1_provisional_y": 841.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1335,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            838.5
+          ],
+          "r1_provisional_y": 838.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1336,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1337,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1338,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1339,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1340,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1341,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1342,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1343,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1344,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1345,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1346,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1347,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1348,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [
+            825.5
+          ],
+          "r1_provisional_y": 825.5,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1349,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 1350,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        }
+      ]
+    },
+    {
+      "summary": {
+        "plan": "rim-opposition",
+        "continuation_frames": 30,
+        "r1_states": {
+          "none": 30
+        },
+        "longest_provisional_run_frames": 0,
+        "runs": []
+      },
+      "rows": [
+        {
+          "frame": 450,
+          "initialized": true,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 451,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 452,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 453,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 454,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 455,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 456,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 457,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 458,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 459,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 460,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 461,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 462,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 463,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 464,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 465,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 466,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 467,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 468,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 469,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 470,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 471,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 472,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 473,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 474,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 475,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 476,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 477,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 478,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 479,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        },
+        {
+          "frame": 480,
+          "initialized": false,
+          "r0_legacy_support_candidates": [],
+          "r1_current_partition_candidates": [],
+          "r1_provisional_y": null,
+          "physical_decision": "NOT_EVALUATED"
+        }
+      ]
+    }
+  ],
+  "independent_face_projection_checks": 198,
+  "inputs_unchanged": true,
+  "physical_efficacy": "NOT_EVALUATED",
+  "production_change": false
+}

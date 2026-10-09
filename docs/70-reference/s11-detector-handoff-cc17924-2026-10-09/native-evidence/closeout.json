@@ -1,0 +1,72 @@
+{
+  "base_head": "cc179244c89ea59bd097fa165ea493942629e23e",
+  "final_head": "cc179244c89ea59bd097fa165ea493942629e23e",
+  "tracked_or_untracked_git_changes": "",
+  "artifacts": {
+    "side_partition_probe.py": {
+      "sha256": "1dafb7ecf71acad55c89d2567aed789625b80c53354a37b8ccac3661adc59df8",
+      "bytes": 9658
+    },
+    "partition-trial/preflight.json": {
+      "sha256": "9b24a8189c67d559748c753f647816f6806dd6cc4e0d764b42c3879be60d181f",
+      "bytes": 60599
+    },
+    "partition-trial/readout.json": {
+      "sha256": "34c64b77e40ea38293c3d3a1190d96e8fc9f8281d5c9021577f0d552018b4dc7",
+      "bytes": 117533
+    },
+    "verify_probe.py": {
+      "sha256": "17d08105ed30d0cba3aa991914ca8ad9741c347fdd9c535ca6864370facc2ffa",
+      "bytes": 6200
+    },
+    "verification.json": {
+      "sha256": "db1bd08e19729dd145c31852af396cad8fa73b352b06c5356ab399ac11cd7ca1",
+      "bytes": 4427
+    },
+    "verification-correction.txt": {
+      "sha256": "5d38317c3df0dfafc3455488c6295be9c3b7d1679c1756436379f9ba0b40df79",
+      "bytes": 636
+    },
+    "center_projection_ablation.py": {
+      "sha256": "1435af0e51745ca3e6a2a31035ddbd19903edf2c222d9fa02cbd7c46fed5829a",
+      "bytes": 4105
+    },
+    "center-projection-ablation-preflight.json": {
+      "sha256": "50678390b059b84d690e26d192fe08caf368248008eba3aa2af5d3d395c06275",
+      "bytes": 34480
+    },
+    "center-projection-ablation.json": {
+      "sha256": "84d5415febd005d87220f7651a2f0991c1aadc5fcb995245cae30110f3b267a3",
+      "bytes": 58162
+    },
+    "inspect_visuals.py": {
+      "sha256": "eecd2a9ec28e0d09f0751dfb9b2143759c0780ff6d3928482a1378feb47fe15d",
+      "bytes": 3650
+    },
+    "visual-preflight.json": {
+      "sha256": "57e45f524b2d878513b36da49efc0f72cc0e04eca9da1b21fdd10408ca2f8817",
+      "bytes": 527
+    },
+    "visual-review.json": {
+      "sha256": "3b74b521545270e97d1e04bd941cdfeba701eef28fef787175792e164e1eaef4",
+      "bytes": 12646
+    },
+    "focused-tests.log": {
+      "sha256": "c48d9127cad0e6a06b5c35eedc621d7604f3e9b5070dcfcad6c5269532fff1f8",
+      "bytes": 179
+    },
+    "oil-late-ablation-review.png": {
+      "sha256": "295907780412f709e6fc42d50e5a01be3cca76f4f2a4005b0da1172e1b9e646e",
+      "bytes": 56731
+    }
+  },
+  "runtime": {
+    "python": "3.14.4",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O"
+  },
+  "new_production_behavior": false,
+  "windows_execution": false,
+  "field_disposition_changed": false,
+  "commit_or_push": false,
+  "result": "H0 and its G1 geometry ablation not promoted; current-boundary-reference-comparison-v1 is a next design proposal, not an executed solution."
+}
