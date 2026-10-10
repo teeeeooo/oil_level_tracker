@@ -1056,10 +1056,17 @@ successful selected scalar. Preserve the original candidate median separately.
 An interval is not filled target support, and its midpoint is not exact truth.
 The later [A/C reply](../50-diagnostics/s11/2026-10-10-upper-projection-ac-reply.json)
 separately qualifies A Foam-upper rows476–481 and C water-upper rows489–494 at
-X950, under these same limits. A's lower interface remains unclear. The pending
-[sample4 preparation](../50-diagnostics/s11/2026-10-10-sample4-center-source-review.md)
-is not numeric truth; a new target-domain reference needs its own visible,
-source-bound position judgment even when prior Oil correspondence is closed.
+X950, under these same limits. A's lower interface remains unclear. The separate
+[sample4 reply](../50-diagnostics/s11/2026-10-10-sample4-center-source-reply.json)
+qualifies f1275/42.5s at existing Recipe X595, rows833–841 / Y[832.5,841.5].
+Its [saved readout](../50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md)
+finds selected idx12/Y835 position-compatible and already human-confirmed as
+Oil, while preserving its absent native contour. The current-frame no-scalar
+is not a completed-window failure. Other interval-compatible candidates gain
+no identity label. New target-domain references still need their own visible,
+source-bound position judgment; neither neighbouring frames nor a whole sector
+inherit this one-column uncertainty range. These four queries are closed;
+wholesale relabeling is not a prerequisite to local mechanism development.
 
 Keep every qualified/unqualified case, denominator, missing output and reason
 visible. Do not select only easy frames after results or turn crop-center geometry

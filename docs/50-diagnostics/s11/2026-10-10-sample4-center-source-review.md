@@ -1,9 +1,14 @@
 # sample4 fixed-column source-position qualification
 
 Date: 2026-10-10. Base: `725d5b1a710e6c587b268577ccf85b1357b9713d`.
-This is one pending source judgment after the
+This prepared one source judgment after the
 [closed A/B/C interval comparison](2026-10-10-abc-source-interval-comparison.md).
-The [Work Plan](../../00-project/work-plan.md) owns the current pause.
+The [Work Plan](../../00-project/work-plan.md) owns current execution.
+The subsequent **“표시한 범위 안으로 판단 가능”** reply is
+[bound separately](2026-10-10-sample4-center-source-reply.json), closing this
+position question. The frozen preparation JSON/PNG and original question below
+are preserved. The [saved-output comparison](2026-10-10-sample4-center-interval-comparison.md)
+records the newly qualified interval's limited numerical use.
 
 ## Why this one frame
 
@@ -27,7 +32,7 @@ bounds **Y[832.5,841.5]**. This is a broad position uncertainty, not an exact Y,
 thickness, region mask or approved annotation. Earlier Y835 was already exposed;
 this preparation is not blinded or a new holdout.
 
-## Pending question
+## Original question — now closed
 
 > sample4의 42.5초 장면입니다. 청록색 중앙선에서 기포가 많은 위쪽 유체와 기포가 적은 아래쪽 액체의 경계 위치를 노란 범위 안으로 판단할 수 있나요? 흐려서 위치 판단이 어려우면 “불명확”으로 남기겠습니다.
 

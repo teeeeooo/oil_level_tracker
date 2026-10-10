@@ -700,6 +700,15 @@ qualify the new target. Separately reviewed intervals can support scoped
 position comparisons; a pooled sector row matching one interval still does not
 become an observed contour or a physically accepted candidate.
 
+When a selected candidate already has separately reviewed physical correspondence,
+source-interval compatibility adds only the scoped position claim. Preserve the
+actual representation: `candidate_center_only` does not become a native contour,
+and a single reviewed X cannot label a whole sampling sector. Retain current,
+completed and stored selection layers separately; current-stage absence cannot
+overrule a supported completed observation. The
+[sample4 readout](../50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md)
+demonstrates this distinction without changing runtime projection.
+
 #### Versioning, migration and implementation boundary
 
 Use a versioned label/frozen/report contract for the changed meaning, with explicit

@@ -1,0 +1,79 @@
+{
+  "schema": "s11-reviewed-source-position-intervals-v1",
+  "base_head": "c927ab819a135e3498136bd4181da905a01e35c3",
+  "authority": "direct user review of the displayed sample4 fixed-column uncertainty box",
+  "question_verbatim": "sample4의 42.5초 장면입니다. 청록색 중앙선에서 기포가 많은 위쪽 유체와 기포가 적은 아래쪽 액체의 경계 위치를 노란 범위 안으로 판단할 수 있나요? 흐려서 위치 판단이 어려우면 “불명확”으로 남기겠습니다.",
+  "reply_verbatim": "표시한 범위 안으로 판단 가능",
+  "status": "CLOSED",
+  "question_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-sample4-center-source-review.json",
+    "sha256": "1c2e6c5f3824e46977da7d5521399647236379b38ee0eefbdb8c73af164a8145",
+    "original_status": "PENDING_HUMAN_POSITION_QUALIFICATION"
+  },
+  "source_figure": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-sample4-center-source-review.png",
+    "sha256": "512041fe33820c23523dc849f7372e7501022f487e5cf0e1453c0c833d0c9559",
+    "size": [
+      1440,
+      870
+    ]
+  },
+  "source_video": "sample/sample4.mp4",
+  "source_video_sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+  "recipe": {
+    "path": "sample/sample4.oilrecipe",
+    "sha256": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849"
+  },
+  "choice": "fixed-center-upper-image-projection-v1",
+  "choice_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-upper-projection-choice.json",
+    "sha256": "9415a0ba4ef1bf68990d46ffbe6dd8b41c8b33b31e19bb449d865c99723a11d0"
+  },
+  "reviewed_references": [
+    {
+      "case_id": "sample4:f1275",
+      "frame_index": 1275,
+      "time_sec": 42.5,
+      "glass_id": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2",
+      "physical_role": "previously confirmed Oil interface between upper bubbly fluid and lower less-bubbly liquid",
+      "source_x": 595,
+      "reviewed_pixel_rows_inclusive": [
+        833,
+        841
+      ],
+      "reviewed_y_cell_bounds": [
+        832.5,
+        841.5
+      ],
+      "source_raster": {
+        "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png",
+        "sha256": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+        "source_origin_xy": [
+          543,
+          798
+        ],
+        "size": [
+          104,
+          104
+        ]
+      },
+      "status": "QUALIFIED_SOURCE_POSITION_INTERVAL_ONLY"
+    }
+  ],
+  "prior_correspondence": {
+    "path": "docs/50-diagnostics/s11/2026-10-07-sample4-a2-control-preflight.json",
+    "sha256": "5e3d00edcc9bd571a261bbeb2647593f3563a327f4706d0bd13d1dcd712674b4"
+  },
+  "prior_side_roles": {
+    "path": "docs/50-diagnostics/s11/2026-10-07-sample4-region-context-preflight.json",
+    "sha256": "575ee23e57fab879d199f9c94fcdb5682b3d2451245ef617cc72da845089d640"
+  },
+  "interpretation": "The displayed interval contains the Oil-boundary position at existing Recipe X595. It qualifies location uncertainty for this one frame; previous Oil correspondence and adjoining material roles remain separate evidence.",
+  "scope": "Not exact Y, a dense contour or material mask, neighbouring-frame truth, calibrated physical thickness, an observed candidate-owned contour, or detector/Windows acceptance.",
+  "exposure": "Previously exposed development/regression case; Y835 was already visible before preparation. Not blind or a holdout.",
+  "supersedes": "Pending sample4 source-position question only. Frozen preparation/figure and formal legacy annotations are unchanged.",
+  "production_changed": false,
+  "legacy_truth_changed": false,
+  "new_user_judgment_pending": false,
+  "windows_execution_required": false
+}

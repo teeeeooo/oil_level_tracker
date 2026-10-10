@@ -690,3 +690,6 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-10 | [sample4 source qualification](50-diagnostics/s11/2026-10-10-sample4-center-source-review.md) | 기존 실제 Oil 사례 한 장의 중앙 위치 평가 가능성 질문 |
 | 2026-10-10 | [sample4 preparation record](50-diagnostics/s11/2026-10-10-sample4-center-source-review.json) | 원본 crop 좌표·기존 Recipe 중앙 열·제안 범위·질문과 검산 |
 | 2026-10-10 | [sample4 clean/marked source](50-diagnostics/s11/2026-10-10-sample4-center-source-review.png) | 42.5초 원본 6배 확대와 미검토 위치 범위; 검출 출력 아님 |
+| 2026-10-10 | [sample4 interval reply](50-diagnostics/s11/2026-10-10-sample4-center-source-reply.json) | X595/833–841행의 위치 범위 승인; 과거 정답 파일·원본 제안 보존 |
+| 2026-10-10 | [sample4 saved comparison](50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md) | 저장된 후보 20개와 최종 Y835 비교; 단독 프레임 부재와 최종 성공 구분 |
+| 2026-10-10 | [sample4 comparison record](50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.json) | 원본·전체 후보·선택 출처·화소 검산 및 실패 시도 보존 |

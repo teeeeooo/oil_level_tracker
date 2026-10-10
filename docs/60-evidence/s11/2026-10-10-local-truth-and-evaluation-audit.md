@@ -155,8 +155,11 @@ height, C, a dense contour or any legacy coordinate. The later
 [A/C reply](../../50-diagnostics/s11/2026-10-10-upper-projection-ac-reply.json)
 separately closes A Foam-upper rows476–481 and C water-upper rows489–494 at X950.
 The [saved-array readout](../../50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.md)
-keeps their roles and position/identity limits separate. The single pending
-sample4 position review has no numeric authority yet.
+keeps their roles and position/identity limits separate. The subsequent
+[sample4 reply and comparison](../../50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md)
+qualify one target-domain interval at X595/rows833–841. Its already confirmed
+completed Oil selection Y835 is compatible; no native contour or neighbouring
+truth is inferred. All four source-position questions are closed.
 Neither the broad early-empty reading nor 41–55 s becomes continuous truth. These source corrections
 preserve this audit's original machine record and all old/new observations; no
 detector result was used to drop cases.

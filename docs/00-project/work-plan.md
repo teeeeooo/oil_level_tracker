@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** A/B/C source intervals are all human reviewed: A Foam-upper rows 476–481, B water-upper 484–489, and C water-upper 489–494 at diagnostic X950. Saved-array verification locates A's initial white-support loss, preserves B's pre-top-k path-compression finding, and finds one compatible C native centre sample but none at height 200; no physical selector or detector fix is adopted. The legacy 13-case comparator now explicitly reports historical scalar agreement with physical acceptance NOT_EVALUATED, retaining its original checks and PASS/FAIL. One target-domain source question is prepared: whether sample4/f1275's already confirmed Oil boundary is locatable within rows 833–841 at existing Recipe X595. Pause numerical use of that unreviewed range for the human answer; A's lower interface remains unclear and no prior role/convention judgment is reopened. No Windows work is pending. Preserve all seven recordings, all 13 legacy values, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
+**Next transition:** The four source-position queries are CLOSED: A Foam-upper rows476–481, B water-upper484–489 and C water-upper489–494 at diagnostic X950; sample4/f1275 Oil rows833–841 at Recipe X595. The saved sample4 join retains correct completed idx12/Y835 inside its reviewed interval despite current-stage ambiguity; its native contour remains unavailable. A support loss, B pre-top-k compression and C scale-dependent retention are distinct findings, not one common repair. Source qualification is sufficient to resume bounded mechanism development without further wholesale relabeling. Name a distinct physical observation and frozen decision/abstention rule before a challenger; no physical selector is established. No human judgment or Windows work is pending. Preserve all seven recordings, all 13 legacy values and their qualified comparison scope, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -39,7 +39,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Upper projection and all A/B/C source intervals are CLOSED. Saved-array comparison distinguishes A support loss, B early path compression and C scale-dependent retention. One sample4 target-domain position range awaits human qualification; no physical selector is adopted. | [A/B/C comparison](../50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.md), [sample4 source question](../50-diagnostics/s11/2026-10-10-sample4-center-source-review.md), [selected convention](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--upper-image-projection-selected), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
+| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Upper projection and all four source intervals are CLOSED. Saved comparisons distinguish A support loss, B early compression, C scale-dependent retention and sample4's preserved correct completed Oil. Resume distinct-mechanism development; no physical selector is adopted. | [A/B/C comparison](../50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.md), [sample4 comparison](../50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md), [selected convention](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--upper-image-projection-selected), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -169,15 +169,18 @@ The existing legacy comparator now exposes `legacy_scalar_agreement` and
 `physical_acceptance=NOT_EVALUATED` at its JSON/CLI entry, with original rules,
 PASS/FAIL and exit codes preserved; five focused checks and four CLI scenarios pass.
 
-**Target-domain source-position checkpoint OPEN:** the
-[sample4 preparation](../50-diagnostics/s11/2026-10-10-sample4-center-source-review.md)
-uses f1275/42.5s, whose Oil correspondence and adjoining material roles are already
-closed. Its proposed X595 range, rows 833–841, is unreviewed. This asks whether
-one small compressor-sight-glass image supports a fixed-column interval at all;
-unclear keeps it qualitative-only for the new scalar metric. It is not a repeat
-role judgment or a wholesale legacy relabel. Pause this range's numerical use
-for the source-position answer. All A/B/C judgments stay closed; no Windows work
-or new filming is requested.
+**Target-domain source-position checkpoint CLOSED:** the user answered
+**“표시한 범위 안으로 판단 가능”**. The
+[bound sample4 reply](../50-diagnostics/s11/2026-10-10-sample4-center-source-reply.json)
+qualifies f1275/42.5s at existing Recipe X595 within rows833–841 / Y[832.5,841.5].
+Its [saved comparison](../50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md)
+finds raw Canny Y836, four compatible candidate scalars and one native centre
+sample. Exact selected idx12/Y835 is already human-confirmed Oil and now
+position-compatible; current-stage ambiguity is not final failure. The selected
+candidate still has no captured native contour, and other matching Y values
+gain no physical identity. All twenty candidates and original layers are retained.
+These four source queries are complete; no further blanket source review,
+Windows work or new filming is required before bounded local mechanism work.
 
 Before another trial, name one distinct physical boundary/role observation,
 the existing measurement owner and a reproducible decision/abstention rule.

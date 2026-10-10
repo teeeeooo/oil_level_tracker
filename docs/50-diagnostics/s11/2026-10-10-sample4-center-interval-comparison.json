@@ -1,0 +1,1378 @@
+{
+  "schema": "s11-sample4-reviewed-interval-record-v1",
+  "preflight": {
+    "schema": "s11-saved-source-interval-join-preflight-v1",
+    "base_head": "c927ab819a135e3498136bd4181da905a01e35c3",
+    "scope": "One human-qualified sample4 frame; join all twenty saved Oil candidates and original raw/current/completed/stored evidence. No new detector or proposal run.",
+    "inputs": {
+      "docs/50-diagnostics/s11/2026-10-10-sample4-center-source-reply.json": "ec61f606fb6d2fc0161be5763d0f94cdacfc662f9fe054699b7d46bc621aaa76",
+      "docs/50-diagnostics/s11/2026-10-10-sample4-center-source-review.json": "1c2e6c5f3824e46977da7d5521399647236379b38ee0eefbdb8c73af164a8145",
+      "docs/50-diagnostics/s11/2026-10-10-sample4-center-source-review.png": "512041fe33820c23523dc849f7372e7501022f487e5cf0e1453c0c833d0c9559",
+      "docs/50-diagnostics/s11/2026-10-07-sample4-a2-control-preflight.json": "5e3d00edcc9bd571a261bbeb2647593f3563a327f4706d0bd13d1dcd712674b4",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/capture-manifest.json": "fca7623eddf3b8b199a2090a257ebab73fb4a620f2f8c50a6605ab0129045b45",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275.json": "40eea7e489ba09bd881f5b212db1996f4ee431f9b1b61f43110a7f5b7dc7bb55",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-normalized.png": "22c34bf394f1f27f9bab8d9062e37c4d58bfba54c87d16c84b91275165c014fb",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-canny.png": "9b4dddaeae47e441118b65c6bd13dc6bb9f9a17541ffd48361fc910c3118961c",
+      "sample/sample4.oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+      "sample/output/s11-a2-target-binding-20261007-001/packet.json": "be57465f80235a65edbf16f338e45ecd5590a43238bb718762052a965d0f24c4",
+      "tests/diagnostics/s11_interface_shadow_evaluation.py": "5909c468871ed3c5cd2095c7c4a4a88df4d08569b10985c22e999aff0f42c808"
+    },
+    "source_x": 595,
+    "reviewed_rows_inclusive": [
+      833,
+      841
+    ],
+    "reviewed_y_cell_bounds": [
+      832.5,
+      841.5
+    ],
+    "recipe_origin_xy": [
+      543,
+      798
+    ],
+    "comparison": "Report scalar and native-centre-sector compatibility independently. Do not assign candidate identity from an interval hit. No pooled accuracy, fitted tolerance, expanded X band or W3 contour label.",
+    "prior_identity": "Only the existing exact f1275 idx12/source/Y reviewed control certifies correspondence; bind through the executed sequence witness, not nearest Y.",
+    "first_loss_policy": "Separate raw availability, retained representation, current selection and completed selection. If a positive survives, do not impose the failure cause from another source.",
+    "detector_execution": false,
+    "video_decode": false,
+    "runner_sha256": "c4522e2747882274843e3f2e1a109c9249513272554cf63ae5377d2dee9322f4"
+  },
+  "preflight_sha256": "57aeb92081e03fafbd8390c82c5e2beb5d65da92de32bfd2b772417c85cabbbb",
+  "readout": {
+    "schema": "s11-saved-source-interval-join-v1",
+    "preflight_sha256": "57aeb92081e03fafbd8390c82c5e2beb5d65da92de32bfd2b772417c85cabbbb",
+    "reference": {
+      "case_id": "sample4:f1275",
+      "frame_index": 1275,
+      "time_sec": 42.5,
+      "glass_id": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2",
+      "physical_role": "previously confirmed Oil interface between upper bubbly fluid and lower less-bubbly liquid",
+      "source_x": 595,
+      "reviewed_pixel_rows_inclusive": [
+        833,
+        841
+      ],
+      "reviewed_y_cell_bounds": [
+        832.5,
+        841.5
+      ],
+      "source_raster": {
+        "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png",
+        "sha256": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+        "source_origin_xy": [
+          543,
+          798
+        ],
+        "size": [
+          104,
+          104
+        ]
+      },
+      "status": "QUALIFIED_SOURCE_POSITION_INTERVAL_ONLY"
+    },
+    "raw": {
+      "all_canny_source_rows_at_x": [
+        804,
+        807,
+        810,
+        813,
+        817,
+        822,
+        828,
+        836,
+        845,
+        869,
+        872,
+        876,
+        888
+      ],
+      "canny_rows_in_reviewed_interval": [
+        836
+      ],
+      "reviewed_column_pixels": [
+        {
+          "source_y": 833,
+          "canny": 0,
+          "effective_mask": 255,
+          "normalized": 233
+        },
+        {
+          "source_y": 834,
+          "canny": 0,
+          "effective_mask": 255,
+          "normalized": 232
+        },
+        {
+          "source_y": 835,
+          "canny": 0,
+          "effective_mask": 255,
+          "normalized": 217
+        },
+        {
+          "source_y": 836,
+          "canny": 255,
+          "effective_mask": 255,
+          "normalized": 177
+        },
+        {
+          "source_y": 837,
+          "canny": 0,
+          "effective_mask": 255,
+          "normalized": 138
+        },
+        {
+          "source_y": 838,
+          "canny": 0,
+          "effective_mask": 255,
+          "normalized": 102
+        },
+        {
+          "source_y": 839,
+          "canny": 0,
+          "effective_mask": 255,
+          "normalized": 66
+        },
+        {
+          "source_y": 840,
+          "canny": 0,
+          "effective_mask": 255,
+          "normalized": 66
+        },
+        {
+          "source_y": 841,
+          "canny": 0,
+          "effective_mask": 255,
+          "normalized": 70
+        }
+      ]
+    },
+    "candidates": [
+      {
+        "candidate_input_index": 0,
+        "source": "oil_hypothesis:f42e06af16c450cb2539eca4",
+        "original_scalar_source_y": 805.0,
+        "scalar_distance_to_interval_px": 27.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": true,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "measured",
+        "lineage_reason": "exact_id_y_score_reproduction",
+        "sequence_row": null,
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 1,
+        "source": "oil_hypothesis:0a3b1d1ca2a3e5d1b8faa019",
+        "original_scalar_source_y": 813.0,
+        "scalar_distance_to_interval_px": 19.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": true,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "measured",
+        "lineage_reason": "exact_id_y_score_reproduction",
+        "sequence_row": null,
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 2,
+        "source": "oil_hypothesis:aa9a3f694e63e163889d0f95",
+        "original_scalar_source_y": 823.0,
+        "scalar_distance_to_interval_px": 9.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": true,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "measured",
+        "lineage_reason": "exact_id_y_score_reproduction",
+        "sequence_row": null,
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 3,
+        "source": "oil_hypothesis:dc9d51cd02d04052eb6e4db0",
+        "original_scalar_source_y": 825.0,
+        "scalar_distance_to_interval_px": 7.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": true,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "measured",
+        "lineage_reason": "exact_id_y_score_reproduction",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 3,
+            "source": "oil_hypothesis:dc9d51cd02d04052eb6e4db0",
+            "y": 825.0,
+            "authority": "CANDIDATE_ONLY",
+            "authority_reason": "insufficient_authority",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          },
+          "phase_admitted": false,
+          "publishable": false,
+          "row_hypothesis_id": null,
+          "tracklet_id": null
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 4,
+        "source": "oil_hypothesis:52b5423c35cdbfb157ff63a6",
+        "original_scalar_source_y": 836.0,
+        "scalar_distance_to_interval_px": 0.0,
+        "scalar_compatible": true,
+        "rejected_after_calibration": true,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "measured",
+        "lineage_reason": "exact_id_y_score_reproduction",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 4,
+            "source": "oil_hypothesis:52b5423c35cdbfb157ff63a6",
+            "y": 836.0,
+            "authority": "CANDIDATE_ONLY",
+            "authority_reason": "insufficient_authority",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          },
+          "phase_admitted": false,
+          "publishable": false,
+          "row_hypothesis_id": null,
+          "tracklet_id": null
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 5,
+        "source": "oil_hypothesis:d34209d84403bccf8ef309b8",
+        "original_scalar_source_y": 868.0,
+        "scalar_distance_to_interval_px": 26.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": true,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "measured",
+        "lineage_reason": "exact_id_y_score_reproduction",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 5,
+            "source": "oil_hypothesis:d34209d84403bccf8ef309b8",
+            "y": 868.0,
+            "authority": "CANDIDATE_ONLY",
+            "authority_reason": "static_material_front_twin",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          },
+          "phase_admitted": false,
+          "publishable": false,
+          "row_hypothesis_id": null,
+          "tracklet_id": null
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 6,
+        "source": "oil_hypothesis:a4f6932dd3a7a3cd7a0640be",
+        "original_scalar_source_y": 884.0,
+        "scalar_distance_to_interval_px": 42.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": true,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "measured",
+        "lineage_reason": "exact_id_y_score_reproduction",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 6,
+            "source": "oil_hypothesis:a4f6932dd3a7a3cd7a0640be",
+            "y": 884.0,
+            "authority": "CANDIDATE_ONLY",
+            "authority_reason": "insufficient_authority",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          },
+          "phase_admitted": false,
+          "publishable": false,
+          "row_hypothesis_id": null,
+          "tracklet_id": null
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 7,
+        "source": "material_path",
+        "original_scalar_source_y": 836.0,
+        "scalar_distance_to_interval_px": 0.0,
+        "scalar_compatible": true,
+        "rejected_after_calibration": false,
+        "geometry_source": "native_generator_path",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          586,
+          605
+        ],
+        "native_centre_sample_source_y": 836,
+        "native_centre_distance_to_interval_px": 0.0,
+        "native_centre_compatible": true,
+        "all_native_sector_samples": [
+          {
+            "sector": 0,
+            "source_x_range": [
+              547,
+              566
+            ],
+            "source_y": 835
+          },
+          {
+            "sector": 1,
+            "source_x_range": [
+              566,
+              586
+            ],
+            "source_y": 837
+          },
+          {
+            "sector": 2,
+            "source_x_range": [
+              586,
+              605
+            ],
+            "source_y": 836
+          },
+          {
+            "sector": 3,
+            "source_x_range": [
+              605,
+              625
+            ],
+            "source_y": 836
+          },
+          {
+            "sector": 4,
+            "source_x_range": [
+              625,
+              644
+            ],
+            "source_y": 834
+          }
+        ],
+        "lineage_status": "unavailable",
+        "lineage_reason": "different_candidate_family",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 7,
+            "source": "material_path",
+            "y": 836.0,
+            "authority": "CANDIDATE_ONLY",
+            "authority_reason": "material_layer_terminal",
+            "phase_identity": "ordered_lower_interface",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          },
+          "phase_admitted": false,
+          "publishable": false,
+          "row_hypothesis_id": null,
+          "tracklet_id": null
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 8,
+        "source": "material_path",
+        "original_scalar_source_y": 879.0,
+        "scalar_distance_to_interval_px": 37.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": false,
+        "geometry_source": "native_generator_path",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          586,
+          605
+        ],
+        "native_centre_sample_source_y": 887,
+        "native_centre_distance_to_interval_px": 45.5,
+        "native_centre_compatible": false,
+        "all_native_sector_samples": [
+          {
+            "sector": 0,
+            "source_x_range": [
+              547,
+              566
+            ],
+            "source_y": 876
+          },
+          {
+            "sector": 1,
+            "source_x_range": [
+              566,
+              586
+            ],
+            "source_y": 881
+          },
+          {
+            "sector": 2,
+            "source_x_range": [
+              586,
+              605
+            ],
+            "source_y": 887
+          },
+          {
+            "sector": 3,
+            "source_x_range": [
+              605,
+              625
+            ],
+            "source_y": 879
+          },
+          {
+            "sector": 4,
+            "source_x_range": [
+              625,
+              644
+            ],
+            "source_y": 876
+          }
+        ],
+        "lineage_status": "unavailable",
+        "lineage_reason": "different_candidate_family",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 8,
+            "source": "material_path",
+            "y": 879.0,
+            "authority": "CANDIDATE_ONLY",
+            "authority_reason": "material_layer_terminal",
+            "phase_identity": "ordered_lower_interface",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          },
+          "phase_admitted": false,
+          "publishable": false,
+          "row_hypothesis_id": null,
+          "tracklet_id": null
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 9,
+        "source": "material_path",
+        "original_scalar_source_y": 823.0,
+        "scalar_distance_to_interval_px": 9.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": false,
+        "geometry_source": "native_generator_path",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          586,
+          605
+        ],
+        "native_centre_sample_source_y": 823,
+        "native_centre_distance_to_interval_px": 9.5,
+        "native_centre_compatible": false,
+        "all_native_sector_samples": [
+          {
+            "sector": 0,
+            "source_x_range": [
+              547,
+              566
+            ],
+            "source_y": 823
+          },
+          {
+            "sector": 1,
+            "source_x_range": [
+              566,
+              586
+            ],
+            "source_y": 821
+          },
+          {
+            "sector": 2,
+            "source_x_range": [
+              586,
+              605
+            ],
+            "source_y": 823
+          },
+          {
+            "sector": 3,
+            "source_x_range": [
+              605,
+              625
+            ],
+            "source_y": 828
+          },
+          {
+            "sector": 4,
+            "source_x_range": [
+              625,
+              644
+            ],
+            "source_y": 824
+          }
+        ],
+        "lineage_status": "unavailable",
+        "lineage_reason": "different_candidate_family",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 9,
+            "source": "material_path",
+            "y": 823.0,
+            "authority": "CONTINUATION_ELIGIBLE",
+            "authority_reason": "continuation",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          },
+          "phase_admitted": false,
+          "publishable": false,
+          "row_hypothesis_id": "oil-row:000085:001",
+          "tracklet_id": "oil-tracklet:000084:0016"
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 10,
+        "source": "material_path",
+        "original_scalar_source_y": 864.0,
+        "scalar_distance_to_interval_px": 22.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": false,
+        "geometry_source": "native_generator_path",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          586,
+          605
+        ],
+        "native_centre_sample_source_y": 867,
+        "native_centre_distance_to_interval_px": 25.5,
+        "native_centre_compatible": false,
+        "all_native_sector_samples": [
+          {
+            "sector": 1,
+            "source_x_range": [
+              566,
+              586
+            ],
+            "source_y": 863
+          },
+          {
+            "sector": 2,
+            "source_x_range": [
+              586,
+              605
+            ],
+            "source_y": 867
+          },
+          {
+            "sector": 3,
+            "source_x_range": [
+              605,
+              625
+            ],
+            "source_y": 865
+          },
+          {
+            "sector": 4,
+            "source_x_range": [
+              625,
+              644
+            ],
+            "source_y": 861
+          }
+        ],
+        "lineage_status": "unavailable",
+        "lineage_reason": "different_candidate_family",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 10,
+            "source": "material_path",
+            "y": 864.0,
+            "authority": "CANDIDATE_ONLY",
+            "authority_reason": "material_path_no_corridor",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          },
+          "phase_admitted": false,
+          "publishable": false,
+          "row_hypothesis_id": null,
+          "tracklet_id": null
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 11,
+        "source": "calibrated_high_recall",
+        "original_scalar_source_y": 805.0,
+        "scalar_distance_to_interval_px": 27.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": false,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "unavailable",
+        "lineage_reason": "different_candidate_family",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 11,
+            "source": "calibrated_high_recall",
+            "y": 805.0,
+            "authority": "CONTINUATION_ELIGIBLE",
+            "authority_reason": "continuation",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "continuing",
+            "tracklet_admitted": true,
+            "selected": false
+          },
+          "phase_admitted": true,
+          "publishable": true,
+          "row_hypothesis_id": "oil-row:000085:000",
+          "tracklet_id": "oil-tracklet:000079:0013"
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 12,
+        "source": "calibrated_high_recall",
+        "original_scalar_source_y": 835.0,
+        "scalar_distance_to_interval_px": 0.0,
+        "scalar_compatible": true,
+        "rejected_after_calibration": false,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "unavailable",
+        "lineage_reason": "different_candidate_family",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 12,
+            "source": "calibrated_high_recall",
+            "y": 835.0,
+            "authority": "CONTINUATION_ELIGIBLE",
+            "authority_reason": "continuation",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": true,
+            "selected": true
+          },
+          "phase_admitted": true,
+          "publishable": true,
+          "row_hypothesis_id": "oil-row:000085:002",
+          "tracklet_id": "oil-tracklet:000084:0017"
+        },
+        "completed_selected": true,
+        "prior_human_correspondence": "CONFIRMED_TARGET"
+      },
+      {
+        "candidate_input_index": 13,
+        "source": "calibrated_high_recall",
+        "original_scalar_source_y": 813.0,
+        "scalar_distance_to_interval_px": 19.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": false,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "unavailable",
+        "lineage_reason": "different_candidate_family",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 13,
+            "source": "calibrated_high_recall",
+            "y": 813.0,
+            "authority": "CONTINUATION_ELIGIBLE",
+            "authority_reason": "continuation",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "continuing",
+            "tracklet_admitted": true,
+            "selected": false
+          },
+          "phase_admitted": true,
+          "publishable": true,
+          "row_hypothesis_id": "oil-row:000085:000",
+          "tracklet_id": "oil-tracklet:000079:0013"
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 14,
+        "source": "calibrated_high_recall",
+        "original_scalar_source_y": 821.0,
+        "scalar_distance_to_interval_px": 11.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": false,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "unavailable",
+        "lineage_reason": "different_candidate_family",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 14,
+            "source": "calibrated_high_recall",
+            "y": 821.0,
+            "authority": "CONTINUATION_ELIGIBLE",
+            "authority_reason": "continuation",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          },
+          "phase_admitted": false,
+          "publishable": false,
+          "row_hypothesis_id": "oil-row:000085:001",
+          "tracklet_id": "oil-tracklet:000084:0016"
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 15,
+        "source": "calibrated_high_recall",
+        "original_scalar_source_y": 844.0,
+        "scalar_distance_to_interval_px": 2.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": false,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "unavailable",
+        "lineage_reason": "different_candidate_family",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 15,
+            "source": "calibrated_high_recall",
+            "y": 844.0,
+            "authority": "CONTINUATION_ELIGIBLE",
+            "authority_reason": "continuation",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": true,
+            "selected": false
+          },
+          "phase_admitted": true,
+          "publishable": true,
+          "row_hypothesis_id": "oil-row:000085:002",
+          "tracklet_id": "oil-tracklet:000084:0017"
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 16,
+        "source": "calibrated_high_recall",
+        "original_scalar_source_y": 868.0,
+        "scalar_distance_to_interval_px": 26.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": false,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "unavailable",
+        "lineage_reason": "different_candidate_family",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 16,
+            "source": "calibrated_high_recall",
+            "y": 868.0,
+            "authority": "CANDIDATE_ONLY",
+            "authority_reason": "static_material_front_twin",
+            "phase_identity": "ordered_lower_interface",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          },
+          "phase_admitted": false,
+          "publishable": false,
+          "row_hypothesis_id": null,
+          "tracklet_id": null
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 17,
+        "source": "phase_transition_scan",
+        "original_scalar_source_y": 818.0,
+        "scalar_distance_to_interval_px": 14.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": false,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "measured",
+        "lineage_reason": "production_phase_scan_bands",
+        "sequence_row": null,
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 18,
+        "source": "phase_transition_scan",
+        "original_scalar_source_y": 833.0,
+        "scalar_distance_to_interval_px": 0.0,
+        "scalar_compatible": true,
+        "rejected_after_calibration": false,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "measured",
+        "lineage_reason": "production_phase_scan_bands",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 18,
+            "source": "phase_transition_scan",
+            "y": 833.0,
+            "authority": "CONTINUATION_ELIGIBLE",
+            "authority_reason": "continuation",
+            "phase_identity": "continuation_only",
+            "tracklet_lifecycle": "provisional",
+            "tracklet_admitted": false,
+            "selected": false
+          },
+          "phase_admitted": false,
+          "publishable": false,
+          "row_hypothesis_id": "oil-row:000085:001",
+          "tracklet_id": "oil-tracklet:000084:0016"
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      },
+      {
+        "candidate_input_index": 19,
+        "source": "phase_transition_scan",
+        "original_scalar_source_y": 882.0,
+        "scalar_distance_to_interval_px": 40.5,
+        "scalar_compatible": false,
+        "rejected_after_calibration": false,
+        "geometry_source": "candidate_center_only",
+        "centre_sector": 2,
+        "centre_source_x_range": [
+          584,
+          605
+        ],
+        "native_centre_sample_source_y": null,
+        "native_centre_distance_to_interval_px": null,
+        "native_centre_compatible": null,
+        "all_native_sector_samples": [],
+        "lineage_status": "measured",
+        "lineage_reason": "production_phase_scan_bands",
+        "sequence_row": {
+          "member": {
+            "candidate_offset": 19,
+            "source": "phase_transition_scan",
+            "y": 882.0,
+            "authority": "ANCHOR_ELIGIBLE",
+            "authority_reason": "ordered_lower_interface",
+            "phase_identity": "ordered_lower_interface",
+            "tracklet_lifecycle": "continuing",
+            "tracklet_admitted": true,
+            "selected": false
+          },
+          "phase_admitted": true,
+          "publishable": true,
+          "row_hypothesis_id": "oil-row:000085:003",
+          "tracklet_id": "oil-tracklet:000079:0014"
+        },
+        "completed_selected": false,
+        "prior_human_correspondence": "NOT_ESTABLISHED_BY_THIS_REVIEW"
+      }
+    ],
+    "summary": {
+      "oil_candidates": 20,
+      "scalar_compatible_indices": [
+        4,
+        7,
+        12,
+        18
+      ],
+      "native_centre_available_indices": [
+        7,
+        8,
+        9,
+        10
+      ],
+      "native_centre_compatible_indices": [
+        7
+      ],
+      "current_y": null,
+      "current_decision": "ambiguous",
+      "current_reason": "competing_boundary_artifact_or_no_interface_evidence",
+      "completed_selected": {
+        "candidate_offset": 12,
+        "source": "calibrated_high_recall",
+        "y": 835.0,
+        "tracklet_id": "oil-tracklet:000084:0017",
+        "row_hypothesis_id": "oil-row:000085:002"
+      },
+      "final_y": 835.0,
+      "stored_row": {
+        "frame": 1275,
+        "t": 42.5,
+        "oil_y": 835.0,
+        "oil_h": 15.0,
+        "foam_y": 818.0,
+        "foam_h": 32.0,
+        "oil_valid": true,
+        "foam_valid": true,
+        "state": "FOAMING_VISIBLE",
+        "flags": [
+          "FOAM_STRONG_EVIDENCE",
+          "R10_FOAM_LAYER_SEPARATED",
+          "R17_RESOLVED_OIL",
+          "R17_TRACKLET_WITNESS",
+          "R7_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EPISODE_CONFIRMED",
+          "R8_FOAM_EVIDENCE_PRESERVED",
+          "SEQUENCE_RESOLVED_OIL",
+          "SEQUENCE_SAME_FRAME_CANDIDATE"
+        ]
+      },
+      "selected_scalar_distance_to_interval_px": 0.0,
+      "selected_correspondence": "confirmed_target",
+      "selected_native_path_available": false
+    },
+    "distinction": "Interval-compatible scalar and native-sector sample are different geometry claims. Only the prior exact selected candidate has human-confirmed Oil correspondence. No observed contour at X595 is serialized for the selected calibrated candidate.",
+    "first_harmful_stage": "No completed target loss in this bound frame. Current-stage no-scalar is not completed failure. Do not transfer the water support/path-loss diagnosis to this successful legacy target.",
+    "exposure": "One exposed frame, one broad uncertainty interval; no aggregate accuracy or holdout claim.",
+    "tracking_fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+    "recipe_binding": "Original AUTO file unchanged; saved official replay explicitly used UNKNOWN_REVIEW and serialized the empty artifact_templates default. All other recipe fields equal.",
+    "w3_label_change": false,
+    "production_changed": false,
+    "legacy_truth_changed": false
+  },
+  "readout_sha256": "e6f628319bbfd74658ada6f6fde9dbe916a6843431fdcdd774a61f7e593d4be5",
+  "local_artifact_root": "sample/output/s11-sample4-reviewed-interval-20261010-002",
+  "runner": "from pathlib import Path\nimport hashlib\nimport json\nimport subprocess\n\nimport numpy as np\nfrom PIL import Image\n\nROOT = Path('/Users/sunjaekim/Developer/oil_level_tracker')\nDOC = ROOT / 'docs/50-diagnostics/s11'\nCAP = ROOT / 'sample/output/s11-a1-lineage-20261007-001/frames-final'\nOUT = ROOT / 'sample/output/s11-sample4-reviewed-interval-20261010-002'\nOUT.mkdir(exist_ok=False)\nsha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()\nread = lambda p: json.loads(p.read_text())\nwrite = lambda p, v: p.write_text(json.dumps(v, indent=2, ensure_ascii=False) + '\\n')\npaths = [DOC / '2026-10-10-sample4-center-source-reply.json',\n         DOC / '2026-10-10-sample4-center-source-review.json',\n         DOC / '2026-10-10-sample4-center-source-review.png',\n         DOC / '2026-10-07-sample4-a2-control-preflight.json',\n         CAP / 'capture-manifest.json', CAP / 'f1275.json',\n         CAP / 'f1275-original_roi.png', CAP / 'f1275-effective_mask.png',\n         CAP / 'f1275-normalized.png', CAP / 'f1275-canny.png',\n         ROOT / 'sample/sample4.oilrecipe',\n         ROOT / 'sample/output/s11-a2-target-binding-20261007-001/packet.json',\n         ROOT / 'tests/diagnostics/s11_interface_shadow_evaluation.py']\npins = {str(p.relative_to(ROOT)): sha(p) for p in paths}\npre = dict(schema='s11-saved-source-interval-join-preflight-v1',\n           base_head='c927ab819a135e3498136bd4181da905a01e35c3',\n           scope='One human-qualified sample4 frame; join all twenty saved Oil candidates and original raw/current/completed/stored evidence. No new detector or proposal run.',\n           inputs=pins, source_x=595, reviewed_rows_inclusive=[833, 841],\n           reviewed_y_cell_bounds=[832.5, 841.5],\n           recipe_origin_xy=[543, 798],\n           comparison='Report scalar and native-centre-sector compatibility independently. Do not assign candidate identity from an interval hit. No pooled accuracy, fitted tolerance, expanded X band or W3 contour label.',\n           prior_identity='Only the existing exact f1275 idx12/source/Y reviewed control certifies correspondence; bind through the executed sequence witness, not nearest Y.',\n           first_loss_policy='Separate raw availability, retained representation, current selection and completed selection. If a positive survives, do not impose the failure cause from another source.',\n           detector_execution=False, video_decode=False,\n           runner_sha256=sha(Path(__file__)))\nwrite(OUT / 'preflight.json', pre)\n(OUT / 'run.py').write_bytes(Path(__file__).read_bytes())\n\nreply = read(paths[0]); ref = reply['reviewed_references'][0]\nassert reply['status'] == 'CLOSED' and reply['reply_verbatim'] == '표시한 범위 안으로 판단 가능'\nassert sha(paths[1]) == reply['question_record']['sha256']\nassert sha(paths[2]) == reply['source_figure']['sha256']\nassert sha(paths[3]) == reply['prior_correspondence']['sha256']\nassert sha(paths[6]) == ref['source_raster']['sha256']\nmanifest = read(CAP / 'capture-manifest.json')\ncontrol = read(paths[3])\nassert sha(paths[4]) == control['input_pins'][str(paths[4].relative_to(ROOT))]\nfor p in paths[5:10]:\n    assert sha(p) == manifest['files'][p.name]\nrecipe = read(ROOT / 'sample/sample4.oilrecipe')\nassert recipe['glasses'][0]['initial_state'] == 'AUTO'\nreplay_recipe = json.loads(json.dumps(recipe))\nreplay_recipe['glasses'][0]['initial_state'] = 'UNKNOWN_REVIEW'\nassert 'artifact_templates' not in replay_recipe['glasses'][0]['geometry']\nreplay_recipe['glasses'][0]['geometry']['artifact_templates'] = []\nassert replay_recipe == manifest['recipe']\nassert 'UNKNOWN' in manifest['scope']\nassert recipe['glasses'][0]['geometry']['ellipse']['center_x'] == 595\nassert manifest['source_video_sha256'] == reply['source_video_sha256']\nassert manifest['fingerprint'] == control['tracking_fingerprint']\nframe = read(CAP / 'f1275.json')\nwitness = frame['state']['oil_interface_witness']\ndiagnostics = frame['state']['oil_interface_diagnostics']\nlineage = frame['state']['oil_measurement_lineage']\nassert witness['crop_origin'] == [543, 798] and witness['crop_size'] == [104, 104]\nassert witness['source_frame_index'] == 1275\npacket = read(paths[11])\npacket_frame = next(f for f in packet['frames'] if f['frame_index'] == 1275)\nassert packet_frame['witness'] == witness\nassert packet['source_capture_sha256'] == sha(paths[4])\nby_index = lambda rows: {c['candidate_input_index']: c for c in rows}\ndiag = by_index(diagnostics['candidates'])\nlin = by_index(lineage['candidates'])\nlo, hi = ref['reviewed_y_cell_bounds']\ndistance = lambda y: None if y is None else max(lo - y, 0.0, y - hi)\nseq = frame['completed']['debug_metrics']['sequence_decision_witness']\nselected = seq['selection']['selected_candidate']\nselected_control = next(r for r in control['rows'] if r['frame'] == 1275)\nassert selected_control['completed_selection'] == selected\nauthority_rows = {}\nfor row in seq['rows']:\n    for member in row['members']:\n        assert member['candidate_offset'] not in authority_rows\n        authority_rows[member['candidate_offset']] = {\n            'member': member, 'phase_admitted': row['phase_admitted'],\n            'publishable': row['publishable'],\n            'row_hypothesis_id': row['row_hypothesis_id'],\n            'tracklet_id': row['tracklet_id']}\nrows = []\nfor c in witness['candidates']:\n    idx = c['candidate_input_index']\n    original = frame['current']['candidates'][idx]\n    assert original['kind'] == c['kind'] == 'oil_air'\n    assert original['source'] == c['source'] == diag[idx]['source'] == lin[idx]['source']\n    assert original['y'] == c['canonical_y'] == diag[idx]['canonical_y'] == lin[idx]['source_y']\n    sectors = [s for s in c['sectors'] if s['source_x_range'][0] <= 595 < s['source_x_range'][1]]\n    assert len(sectors) == 1\n    centre = sectors[0]\n    native = centre['path_source_y']\n    is_selected = idx == selected['candidate_offset']\n    if is_selected:\n        assert c['source'] == selected['source'] and c['canonical_y'] == selected['y']\n        assert selected_control['target_role'] == 'confirmed_target'\n    rows.append(dict(candidate_input_index=idx, source=c['source'],\n                     original_scalar_source_y=c['canonical_y'],\n                     scalar_distance_to_interval_px=distance(c['canonical_y']),\n                     scalar_compatible=distance(c['canonical_y']) == 0,\n                     rejected_after_calibration=c['rejected'],\n                     geometry_source=c['contour']['geometry_source'],\n                     centre_sector=centre['sector'],\n                     centre_source_x_range=centre['source_x_range'],\n                     native_centre_sample_source_y=native,\n                     native_centre_distance_to_interval_px=distance(native),\n                     native_centre_compatible=None if native is None else distance(native) == 0,\n                     all_native_sector_samples=[dict(sector=s['sector'], source_x_range=s['source_x_range'], source_y=s['path_source_y']) for s in c['sectors'] if s['path_source_y'] is not None],\n                     lineage_status=lin[idx].get('status'),\n                     lineage_reason=lin[idx].get('reason'),\n                     sequence_row=authority_rows.get(idx),\n                     completed_selected=is_selected,\n                     prior_human_correspondence='CONFIRMED_TARGET' if is_selected else 'NOT_ESTABLISHED_BY_THIS_REVIEW'))\nassert len(rows) == 20 and len({r['candidate_input_index'] for r in rows}) == 20\nassert {r['candidate_input_index'] for r in rows} == set(diag) == set(lin)\norigin_x, origin_y = witness['crop_origin']\narrays = {name: np.asarray(Image.open(CAP / f'f1275-{name}.png'))\n          for name in ['canny', 'effective_mask', 'normalized']}\nassert all(a.shape == (104, 104) for a in arrays.values())\npixels = [dict(source_y=y, **{name: int(a[y-origin_y, 595-origin_x]) for name, a in arrays.items()})\n          for y in range(833, 842)]\nedges = (np.flatnonzero(arrays['canny'][:, 595-origin_x] > 0) + origin_y).tolist()\nfinal_y = frame['completed']['raw_oil_air_level_y']\nassert final_y == frame['completed']['oil_air_level_y'] == frame['completed']['smoothed_oil_air_level_y'] == selected['y'] == frame['stored_row']['oil_y']\nassert frame['stored_row']['frame'] == 1275 and frame['stored_row']['t'] == 42.5\nassert frame['stored_row']['oil_valid'] is True\nreadout = dict(schema='s11-saved-source-interval-join-v1',\n               preflight_sha256=sha(OUT / 'preflight.json'),\n               reference=ref,\n               raw=dict(all_canny_source_rows_at_x=edges,\n                        canny_rows_in_reviewed_interval=[y for y in edges if lo <= y <= hi],\n                        reviewed_column_pixels=pixels),\n               candidates=rows,\n               summary=dict(oil_candidates=len(rows),\n                            scalar_compatible_indices=[r['candidate_input_index'] for r in rows if r['scalar_compatible']],\n                            native_centre_available_indices=[r['candidate_input_index'] for r in rows if r['native_centre_sample_source_y'] is not None],\n                            native_centre_compatible_indices=[r['candidate_input_index'] for r in rows if r['native_centre_compatible']],\n                            current_y=frame['current']['raw_oil_air_level_y'],\n                            current_decision=frame['state']['oil_decision_status'],\n                            current_reason=frame['state']['oil_decision_reason'],\n                            completed_selected=selected,\n                            final_y=final_y, stored_row=frame['stored_row'],\n                            selected_scalar_distance_to_interval_px=distance(final_y),\n                            selected_correspondence=selected_control['target_role'],\n                            selected_native_path_available=rows[selected['candidate_offset']]['native_centre_sample_source_y'] is not None),\n               distinction='Interval-compatible scalar and native-sector sample are different geometry claims. Only the prior exact selected candidate has human-confirmed Oil correspondence. No observed contour at X595 is serialized for the selected calibrated candidate.',\n               first_harmful_stage='No completed target loss in this bound frame. Current-stage no-scalar is not completed failure. Do not transfer the water support/path-loss diagnosis to this successful legacy target.',\n               exposure='One exposed frame, one broad uncertainty interval; no aggregate accuracy or holdout claim.',\n               tracking_fingerprint=manifest['fingerprint'],\n               recipe_binding='Original AUTO file unchanged; saved official replay explicitly used UNKNOWN_REVIEW and serialized the empty artifact_templates default. All other recipe fields equal.',\n               w3_label_change=False, production_changed=False, legacy_truth_changed=False)\nfor path, digest in pins.items():\n    assert sha(ROOT / path) == digest\nwrite(OUT / 'readout.json', readout)\nrecord = dict(schema='s11-sample4-reviewed-interval-record-v1', preflight=pre,\n              preflight_sha256=sha(OUT / 'preflight.json'), readout=readout,\n              readout_sha256=sha(OUT / 'readout.json'), local_artifact_root=str(OUT.relative_to(ROOT)),\n              runner=Path(__file__).read_text(), verification='PENDING_INDEPENDENT_SAVED_DATA_CHECK',\n              preserved_failed_preparation=dict(path='sample/output/s11-sample4-reviewed-interval-20261010-001', reason='Literal recipe equality rejected the documented UNKNOWN replay override and empty default before any pixel or candidate readout. Retry explicitly verifies those two differences; no detector settings or source changed.'))\ntarget = DOC / '2026-10-10-sample4-center-interval-comparison.json'\nassert not target.exists()\nwrite(target, record)\nprint(json.dumps({'raw_rows':readout['raw']['canny_rows_in_reviewed_interval'], 'summary':readout['summary'], 'record':str(target.relative_to(ROOT))}, ensure_ascii=False, indent=2))\n",
+  "verification": {
+    "status": "PASS",
+    "independent_reader": "OpenCV PNG reader and raw candidate/sequence joins; no generator or scorer execution",
+    "input_pins_checked": 13,
+    "candidate_rows_checked": 20,
+    "reviewed_pixel_values_checked": 27,
+    "all_central_edge_rows": [
+      804,
+      807,
+      810,
+      813,
+      817,
+      822,
+      828,
+      836,
+      845,
+      869,
+      872,
+      876,
+      888
+    ],
+    "scalar_compatible_indices": [
+      4,
+      7,
+      12,
+      18
+    ],
+    "native_centre_compatible_indices": [
+      7
+    ],
+    "exact_selected_member": {
+      "candidate_offset": 12,
+      "source": "calibrated_high_recall",
+      "y": 835.0,
+      "authority": "CONTINUATION_ELIGIBLE",
+      "authority_reason": "continuation",
+      "phase_identity": "continuation_only",
+      "tracklet_lifecycle": "provisional",
+      "tracklet_admitted": true,
+      "selected": true
+    },
+    "preserved_files": {
+      "docs/50-diagnostics/s11/2026-10-10-sample4-center-source-review.json": "1c2e6c5f3824e46977da7d5521399647236379b38ee0eefbdb8c73af164a8145",
+      "docs/50-diagnostics/s11/2026-10-10-sample4-center-source-review.png": "512041fe33820c23523dc849f7372e7501022f487e5cf0e1453c0c833d0c9559",
+      "sample/base_sample_1.oilrecipe": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7",
+      "sample/base_sample_1.oiltruth": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a",
+      "sample/sample2.oilrecipe": "061a190996318ecc2520644f21922ca82de24dc5accb91536f127bb3accaa458",
+      "sample/sample2.oiltruth": "f45479f7bb5f4216cb9c6920ac994d2d690942f2ed432d5d8a8647af030c731f",
+      "sample/sample3.oilrecipe": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43",
+      "sample/sample3.oiltruth": "8cb2b917eede7708894fa90f59f96f1d9eac272813af6d457dcbc292496dd8ab",
+      "sample/sample4.oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+      "sample/sample4.oiltruth": "f02575ac2379b4d135567f1835aa772803af13a20413b8aa58175d890f5241bd",
+      "src/oil_tracker/__init__.py": "b68611ce5bc1601c18598799cfefbc632e74924ee1bb4f315ffbc799d0132830",
+      "src/oil_tracker/__main__.py": "6deec222cff062b35381cd5c9a463b15229d66a902415352ce9ecc2ce867cfc1",
+      "src/oil_tracker/adapters/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/adapters/presentation/__init__.py": "1dda7e7a20d0730a8ceb7445639154087c1267942bc2db244373ba5a6792fc88",
+      "src/oil_tracker/adapters/presentation/qt_debug_artifact_presenter.py": "88e4e8c8b7b300beaadaa1318429ff12f89d94c64873cdcd25888354a47dfd73",
+      "src/oil_tracker/adapters/presentation/qt_frame_image_converter.py": "25392dd50933fa1342b65e2660dca555ce3de88d9bf554333a6320c02c9468fe",
+      "src/oil_tracker/adapters/presentation/review_frame_presenter.py": "7e5ca4017661a54a6e5126e574de8e457843a3378cfc47f6549063c840d68ec6",
+      "src/oil_tracker/adapters/reporting/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/adapters/reporting/csv_exporter.py": "a0a0b0f79729945e6e5f90374dc01555b4cfabdf3a994f7a437f56669ad9d7d7",
+      "src/oil_tracker/adapters/reporting/graph_renderer.py": "8618347c0ac6fb5eaae04b7e1259aacb3614e0c27ea86315f2b644759de90b67",
+      "src/oil_tracker/adapters/reporting/html_reporter.py": "86ae486bb4c32932c5b80f8857a9717e44d361ad32e1b9e25791840396f3e547",
+      "src/oil_tracker/adapters/reporting/source_context_renderer.py": "7579b0caf425cb427458f71dc31cba1874db2204f308117a750e3620da6bee01",
+      "src/oil_tracker/adapters/reporting/source_sequence_renderer.py": "b630b5a96055231e829872e4991431d842d02ac2214898d0f8e147a63bc565b5",
+      "src/oil_tracker/adapters/reporting/templates/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/adapters/reporting/templates/report.html.j2": "b096005f50212c7de01b0aa4e58df1cd763fd5b0162d0571bbc4a8f8265adeb4",
+      "src/oil_tracker/adapters/reporting/templates/source_sequences.html.j2": "059cfc86d34eadfd67474d74be76fb18013c52f1a382a05570b9a2df4bd4a9c6",
+      "src/oil_tracker/adapters/reporting/templates/source_sequences.js.j2": "da57b4198a7b69811bc14ad09b36023f26b4f07cc46f2301e8c11b217f7c6b26",
+      "src/oil_tracker/adapters/storage/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/adapters/storage/benchmark_result_writer.py": "04990b0fe5f5081bb7d4c12a0587e60e962489d7da75a37414193f5f2daaa0eb",
+      "src/oil_tracker/adapters/storage/bundle_asset_resolver.py": "83a92189f9715bbf58196584a19558dec3b854e127c291e762266c2fb02f0e36",
+      "src/oil_tracker/adapters/storage/debug_case_exporter.py": "3e69e81d25b428a3619afe34fe403184f35bd14d62258d050d2d2f08a73dc9e6",
+      "src/oil_tracker/adapters/storage/debug_trace_repository.py": "fb0e380e050458f90860e6765f984fa3b12507c3a72a7d2881c05098cb5a0134",
+      "src/oil_tracker/adapters/storage/image_capture_store.py": "3bb99cd7d7ceed9b01074a43ef5e89cda52f4e498809f268c62917b30d8dfad1",
+      "src/oil_tracker/adapters/storage/json_recipe_repository.py": "241694afbbe6d8f26b6234f1e3ec6de3c3deb2c77f0ab2e574a399cacb1f5ddb",
+      "src/oil_tracker/adapters/storage/json_truth_repository.py": "16846e76fd41637d34ebe93a462049e952d082d5ddee6b6c938ce4d08c571f2d",
+      "src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py": "62fd82a030af9492f07935299a4ac003992e9cd5cffdc82335b88c5b318a0d33",
+      "src/oil_tracker/adapters/storage/output_bundle_store.py": "1b1ebf4dda0b9f92bd3a20cc5e8a149c3fec1af62e73763a551fc721071d43a1",
+      "src/oil_tracker/adapters/storage/recent_profile_history.py": "10d96021f2b49d6e66e6a4e57caf1cb059d6350e6576ebfba3a17cb403d6c244",
+      "src/oil_tracker/adapters/storage/recent_result_history.py": "eab60b6b67c3655b88ebf23abd8a84b515700f2925e38019b398653f0de92fe7",
+      "src/oil_tracker/adapters/storage/redetection_workspace.py": "085e25e1d49cd3beb1af02935be60d4b6395e9d1d0ff2f7873bc8dd4938e921f",
+      "src/oil_tracker/adapters/storage/regression_dataset_reader.py": "7abf2935c95c86ca7cb742a99a11769a8f627c1223a7155ada4db74fc19a709c",
+      "src/oil_tracker/adapters/storage/regression_fixture_exporter.py": "bf55b130ccdbcc9bb99b49d687b1440f48d3f70d0afbe444c46687b15dd760a4",
+      "src/oil_tracker/adapters/storage/result_bundle_reader.py": "2d2a8e4f254b96ead60ed6535ae35617776063a0a7aaedbf384a8a676242e882",
+      "src/oil_tracker/adapters/storage/review_mp4_exporter.py": "599d339844f726e8f79b38190357487169b1994616e0922c4fe8d286e788ed8b",
+      "src/oil_tracker/adapters/storage/review_png_exporter.py": "2dcfd0acf1dfcd7d9314920e79853beec95bc85a1f0f38ed4841374a7112a878",
+      "src/oil_tracker/adapters/system/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/adapters/system/app_paths.py": "510f608932538e0a488faf0dd295e5fa89b092085db924da9e8ef0076b273bf2",
+      "src/oil_tracker/adapters/system/logging_config.py": "299c2fff523e02fdc44b493a80b522fa40a66d07eb9fb6001caa2f5be93981f1",
+      "src/oil_tracker/adapters/vision/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/adapters/vision/artifact_calibration.py": "6f0bf8b47fc0368b152f3fb227e99f623cc2772604a56ccbf23b2f93bbddfc8a",
+      "src/oil_tracker/adapters/vision/artifact_proposal.py": "24c08617848d4a31de6e9df2d76e09ee5caa726e80235de63a1e6bd52c930351",
+      "src/oil_tracker/adapters/vision/artifact_reference.py": "01ad89b354df99c5b23eb1f4001ed38cfc525dad3303b79940f6a9a0bfee029d",
+      "src/oil_tracker/adapters/vision/artifact_reference_diagnostics.py": "9fb0e586ae6038ebc97b2c07d9a301ce02fae8f94e3c1d7fd3d93524ec0e7997",
+      "src/oil_tracker/adapters/vision/debug_renderer.py": "e5ca9442d86d210f7adb6e1714f336781570d318b301381e048a0aff73e4eba0",
+      "src/oil_tracker/adapters/vision/fill_state_classifier.py": "fe6aff8964e660ed91141c4a1f0ab4f9b83b9da7bc7cd102134535f78eaf1a4c",
+      "src/oil_tracker/adapters/vision/foam_episode_resolver.py": "d1e4ee1da0c9801c08a317e4f4255a0f37b8f53b50c45cf537da79f41c5faefb",
+      "src/oil_tracker/adapters/vision/foam_front_detector.py": "b1b19e3384925c44344ebaa8010ff75569885448f314f8531fec94294cfde947",
+      "src/oil_tracker/adapters/vision/foam_material_identity.py": "e65fd5f574e1910b86815e663ac59f1edaad7c706d17fd3073fb24e6475570d9",
+      "src/oil_tracker/adapters/vision/foam_temporal_gate.py": "f251a930c069fd816b89f70ac49d776bd7445a19e4b3e7d8e0965a5a96948d22",
+      "src/oil_tracker/adapters/vision/geometry_masks.py": "8c9bbbed8e3a9c3abb5f1c97832fc1ab8d34d5cc4b7b07f706626d4653244820",
+      "src/oil_tracker/adapters/vision/observation_sequence_resolver.py": "6221224771d72f3ee670ee6e5ba93e05460e9bbd16471222d6c5feabe56d278a",
+      "src/oil_tracker/adapters/vision/oil_candidate_authority.py": "588274ee686220a611c27e41c7bbeec5f2b7841799b2617e602fc15b92a121ac",
+      "src/oil_tracker/adapters/vision/oil_candidate_evidence.py": "4c7253d5e11e781c696e2090fcdec9ff93aee5acecbb3989fc8f7b2038eaa51b",
+      "src/oil_tracker/adapters/vision/oil_decision_witness.py": "929590eac209d5b34ac97bac0d051e6c982ceaae2c959301064fb584431e7c3c",
+      "src/oil_tracker/adapters/vision/oil_hypothesis_projection.py": "bc24baebf7c57969d3671f7ae97eaabff8a8e00b7a2f48d53181fb6c2ab1bd1e",
+      "src/oil_tracker/adapters/vision/oil_interface_diagnostics.py": "c49abb50e21bf19b90d8fe4d5159e1d19c2c24468bfb57cd61634e166a043fad",
+      "src/oil_tracker/adapters/vision/oil_interface_selector.py": "ffad1560a57c5467b1e5ef287ff92f1e1836d467fbdd421757b155b6eedc3477",
+      "src/oil_tracker/adapters/vision/oil_interface_tracklets.py": "62a5d8fb6ff888b5cbf1de11eb167697c863fd30ec7715b9da9b0061ab0f428c",
+      "src/oil_tracker/adapters/vision/oil_interface_witness.py": "e8eea2c249ca7b0940c9d5fd006e281c2e9030746436fd8c6343c74103eda042",
+      "src/oil_tracker/adapters/vision/oil_material_path.py": "0ccc85e54f0084e6b42eca602986625835275b37fe6b3f25fba8ed405e02f66e",
+      "src/oil_tracker/adapters/vision/oil_measurement_scope.py": "64857469e2659c87fec58f16965e267e37ac61c958225f26e44ab280959cd5f8",
+      "src/oil_tracker/adapters/vision/oil_observation_resolver.py": "21efc55c87faef192ff9e3a7c033b7f9c18c196b9426fd0a61403ac85598d45a",
+      "src/oil_tracker/adapters/vision/oil_phase_identity.py": "75d6b8d6830acbe988eb569cc59656bfcffe19119a163bfac179c73d6f9561a5",
+      "src/oil_tracker/adapters/vision/oil_phase_lifecycle.py": "9b833ee492981fc930a9af305b9e11425c420e27054c74bac603ff6977e87e3f",
+      "src/oil_tracker/adapters/vision/oil_phase_topology.py": "c676461426c003f51df8506837fa59da08a72198a5a22cbad34fc744e483c988",
+      "src/oil_tracker/adapters/vision/oil_pipeline_diagnostics.py": "9e4e4a584338128878672e73d870fa75f237cbbd5b56a993f8af6843de6fec5e",
+      "src/oil_tracker/adapters/vision/oil_pipeline_validation.py": "5f1bc660fc72f1aee0cc62c2454d221b6683d4f40a83af24e7e545a66bdd8557",
+      "src/oil_tracker/adapters/vision/oil_sequence_types.py": "56ef0536957888b3b42dbe7eadf87ff0e367df11f0fd6173a5c08c29a8e3b2f0",
+      "src/oil_tracker/adapters/vision/oil_shadow_observations.py": "56dc2fb2e18b2f6bd3fb3e0ff7454a920c14ec1f0046cc189e20b1f23933a0e5",
+      "src/oil_tracker/adapters/vision/oil_shadow_pipeline.py": "0eade9f714044cc7b9f54f71ee5351c714ad38a533edd8cfa02a9daa846826b5",
+      "src/oil_tracker/adapters/vision/oil_shadow_temporal.py": "9ada30051d2270938005c4638c0aa5a4d3aa2c59603c3e959488d9449a8f0078",
+      "src/oil_tracker/adapters/vision/oil_shadow_types.py": "f79de7ecdf5ea36f01f05194e6cb0f2829079a77ba44def48631921d2848568c",
+      "src/oil_tracker/adapters/vision/oil_spatial_fallback.py": "7823b34c1c8cfcfb4bc9d1a506646ef0cb3e887a1f129ee5c36298cc5b2a6b3f",
+      "src/oil_tracker/adapters/vision/oil_supplemental_path.py": "eb2cd11c1d6c178a1518d225ebb635b06a3dc3eb3f8e4406343ed7f529f76396",
+      "src/oil_tracker/adapters/vision/opencv_phase_detector.py": "4bb1a761eed1445dc044a5727ed22e3ba6670a9a055128e5ce830707e4d080b8",
+      "src/oil_tracker/adapters/vision/opencv_video_reader.py": "b4d3304d37890570b57101418e69546133b9a8317ce18766d52b7ab221b34686",
+      "src/oil_tracker/adapters/vision/phase_candidate_assembler.py": "5a024e5e01e66afba6da7a38c0577f9f69e5ab0668e14a13b379facf344cfb49",
+      "src/oil_tracker/adapters/vision/phase_frame_detection.py": "85777a652891f67941c9d2150588a2efabdd5530ed6f5d1c521945a33d98f564",
+      "src/oil_tracker/adapters/vision/preprocessing.py": "55e33486cf34e709ccaf1930720f41978f74c3448baa69eceac8bb570233236e",
+      "src/oil_tracker/adapters/vision/review_debug_overlay_renderer.py": "f6bbc99132cf8d98c56f33d6b3543683852b5804e8fb17d767834d46803ae913",
+      "src/oil_tracker/adapters/vision/review_overlay_renderer.py": "966c77a9177b913dd2ab6098b9a93366d467aed228c6f131f0c2f96aceaf8a4d",
+      "src/oil_tracker/adapters/vision/row_features.py": "31536ade50d4cb151a7f756981da229d0655812a8a7d8c95582724613d771b1b",
+      "src/oil_tracker/adapters/vision/source_video_resolver.py": "edc1bc089d9eb512d2fff57be84b4cf52a271435ba37f5a31bd18869c0fe68c2",
+      "src/oil_tracker/adapters/vision/temporal_raster_evidence.py": "c2d6a4222e06cbffb3c32b8bc6b13f6142d810b9febabfa86afd6542107b9f15",
+      "src/oil_tracker/adapters/vision/temporal_tracker.py": "7fa6b8304b80c257e1d17fc4a5f0e18573bd2c8675480d52b7314f183494171c",
+      "src/oil_tracker/application/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/application/detection_quality.py": "ad4e4f88b6426c6634bf3bb5303bd149428f014095fdbf8a0311222e55dac5e8",
+      "src/oil_tracker/application/observation_settings_copy.py": "9316283a4508ea482be787beaa76bc6c4aedd218499419325a6bfabcb0e3ad45",
+      "src/oil_tracker/application/ports/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/application/ports/benchmark_result_writer.py": "91c077b018bfe3cb7ebd1a66e967cc351826e6e086eb070b1e86266e1c3b2ff9",
+      "src/oil_tracker/application/ports/debug_trace_sink.py": "311ab910cd1a4344e9f9be6628525961b65f52175786d00feffe1268c7c03a76",
+      "src/oil_tracker/application/ports/phase_detector.py": "1707b82aa7e2f780e7b44253897ba3f5633ada5913f5d381d77d27607bb4bfe6",
+      "src/oil_tracker/application/ports/progress.py": "b17cf72e759ca02a0f98c5eea1cb516a4906761f563419f24f26d60d3e98a57f",
+      "src/oil_tracker/application/ports/recipe_repository.py": "42ecb412577c4e533770ceee5510fbc96cfc6dd3f5e1fe82a07a186db6902aee",
+      "src/oil_tracker/application/ports/regression_dataset_reader.py": "32f1e4a161694d74179fa1b7f604cf04bf1516679decb953c2fcb6cf2f1d30a6",
+      "src/oil_tracker/application/ports/result_store.py": "b3f1209192374712b0bf08e3305d8acfc79e4839cc45de6afc01696ab76fe8d4",
+      "src/oil_tracker/application/ports/review_io.py": "6bdf3d0845acc4ff039ca3ece717f21b33d8345a6e5d6ba28b3bd0ea87a9e66f",
+      "src/oil_tracker/application/ports/video_reader.py": "3e9167379379e064912df6915e67bd790750c2dd10948b009b358c766341d3f4",
+      "src/oil_tracker/application/preflight.py": "c88d505d521f76890800bc5dd9c212a4e00e1c8d37703504481ab7006f3e9f4d",
+      "src/oil_tracker/application/services/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/application/services/analysis_outcome.py": "256aea5435e5a83c8f07ad1ae84db7de7ceb660f0f584f55be010092dd4ec77d",
+      "src/oil_tracker/application/services/analysis_pipeline.py": "e1e3631be2ec562fa05ac69d9ff1dbd684bcd7d9f655987491df99e2444e921c",
+      "src/oil_tracker/application/services/debug_capture_policy.py": "9d62e20b5a9e5c89a9a33d4f1b84df373b955601ad45e6d3d056164d4d45839a",
+      "src/oil_tracker/application/services/detection_processing.py": "9dc74b2ae485a350f6043efc27a21e581f2b00c561df6874644f410b46956e9b",
+      "src/oil_tracker/application/services/detection_run.py": "80dd947bfcb9e3b00c22f5bd277137fb9a4940a7e2589d73b17177d8c153ee56",
+      "src/oil_tracker/application/services/detector_benchmark_service.py": "9c896132cd42aec516b268e25f407930c1957d64a61db985c25067cacdc4c36d",
+      "src/oil_tracker/application/services/detector_settings.py": "ca7bdcc572bf3ac1648aabd7300cb486387d4849f1a0dc2a9e5851eb36c8fd74",
+      "src/oil_tracker/application/services/event_detection_service.py": "29c4d9bffc0a7ed03b318c51393b6ab12a55daaf108c30fa9add4cbf5ebfb439",
+      "src/oil_tracker/application/services/event_presentation.py": "5877609d112f55266599554e29f0b9c75aaca2bd0fc1cd89991de744b55252f9",
+      "src/oil_tracker/application/services/graph_axis.py": "a7faa25b2f7f8faf8ecb604bb903c25fa504a45f87580cdb3e23f6c85072f3cc",
+      "src/oil_tracker/application/services/graph_series.py": "298637bb466882c849b4e49e2871cd79e633202e8bb406af4b7570657340b8e9",
+      "src/oil_tracker/application/services/initial_state_confirmation.py": "988cd04e20af6b16be57f2c5f5355d5e69bcc2ebca688c9b808e3089fdf18f71",
+      "src/oil_tracker/application/services/initial_state_reconstruction.py": "85311654270d8b41c7e8a43e9f40da2dbebefeb8191a5415d7659de9b2fa4168",
+      "src/oil_tracker/application/services/judgment_service.py": "de7ed35fa825155ab229e9178b40a8ca18fc7426f5c82f4b1c1c94b50bbb7df8",
+      "src/oil_tracker/application/services/recipe_validation_service.py": "18750cb583a7c040d20aa298dc00a0cab77c65b1c34e546db54c2dab630c70d5",
+      "src/oil_tracker/application/services/redetection_apply.py": "00e2f63835b7b24b39328a48b771eb8192ea0e6b2445535f81ebff486d858f14",
+      "src/oil_tracker/application/services/redetection_comparison.py": "dc1ae775ab30b6512859ac455a839c00f1fa1be3a060d5c59e4991804f74958b",
+      "src/oil_tracker/application/services/redetection_request.py": "f52e523e9bbf859f0979730fb9d4ff460851a769100f0c748e5e9a1775f0949b",
+      "src/oil_tracker/application/services/redetection_service.py": "302ab4a38b3a558b66043021e6b9c0f9c2269e3091c03682cee7c5ef6dec3880",
+      "src/oil_tracker/application/services/report_presentation.py": "ee4c6fc68ebd33651394c3ef8267f3906542eb47cb2308b3c779645353116f36",
+      "src/oil_tracker/application/services/report_review_windows.py": "93a7a1023db8795a7cdfa5d8164dec5d862fa4bacb977d24490632019f762efa",
+      "src/oil_tracker/application/services/review_graph.py": "5a4e19a92bfd943f9ff1735fef5d743f47343c7ef41a198d86e47e0fae1d210b",
+      "src/oil_tracker/application/services/review_query.py": "3a886fce8b534a0096426cdc317ae02694a68805efacaa6fbfc9cd4dd89d6905",
+      "src/oil_tracker/application/services/truth_identity.py": "5835e2ab1ebf490a80d852819ad1d522a8f1451fb0e454cfef6723817e433556",
+      "src/oil_tracker/application/services/user_truth.py": "c12a4eb1d901c38883f2ebc9a5c29453b6555ecd30bfe6e9da0c37c0a01f5bfa",
+      "src/oil_tracker/application/use_cases/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/application/use_cases/analyze_video.py": "47fb35c40d7cc81c7b081a7ee7a3d9f256e8145e005741f43142b487e59360c6",
+      "src/oil_tracker/application/use_cases/load_recipe.py": "fe8978d95c1e47ee9a6a16f105471f5fc169d42bc01fd4a12d4f364149e4d644",
+      "src/oil_tracker/application/use_cases/preflight_check.py": "257e4a56262786ac3de7d9e23c9dbc837b5297652036484d2256cba50dbe37d5",
+      "src/oil_tracker/application/use_cases/preview_detection.py": "87c528fa1d2567e42c39d0fa7f6f58fefd5a2d09ec938c5da1d5feef0f60f221",
+      "src/oil_tracker/application/use_cases/save_recipe.py": "4c70116d99013c42fc342b8274aedc408d150f4ab3780155f4869363fee74fb1",
+      "src/oil_tracker/application/use_cases/validate_workbench.py": "6d8f61f6d8bcc0b1a06b995e64edc25b92401ebd67c1cacab301bc2b9220a676",
+      "src/oil_tracker/bootstrap.py": "5edb2c59c948fe36c2920955036877d367bcc5ec33215a8ded44256e849f6e10",
+      "src/oil_tracker/cli.py": "10d9e3f7754ff4e19dd11db8001fbde54a5bab4399aa4b5f8eccf073bf10eee9",
+      "src/oil_tracker/config/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/config/defaults.py": "b3a0ce3f31f2d6dbabe768b692e94dd9af31552f4997731679f854cc3b5ed92e",
+      "src/oil_tracker/config/schemas.py": "06953c09b910c3561554597dec804335edcd83c2f8d0ac1be3b90e605a11fa52",
+      "src/oil_tracker/domain/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/domain/artifact_reference.py": "70f4ba30e05c8bb3082837e126c47e10467cb8518837dedd016b2b32e7e656ab",
+      "src/oil_tracker/domain/debug_trace.py": "840cd2a88081127e9fb2d21bb825f52d4256eb27a8213db80082d08c44154d2d",
+      "src/oil_tracker/domain/detection.py": "5fa5f13462ae5a2f11fede751e6c2df10f2d1cde10b156224ecd8595ef999123",
+      "src/oil_tracker/domain/detector_benchmark.py": "e520b82eaa820ec83397fab33cc56e44f48110523a9c77f798451ac73360382d",
+      "src/oil_tracker/domain/enums.py": "2ba9f4ec3d2feea7a85fea541cc08464a442702c5f54a5b0413b181a1b24962f",
+      "src/oil_tracker/domain/events.py": "8c128d6fdb20dded70901ca6211c64ae09562a9b07b679fbdab422436111b2e3",
+      "src/oil_tracker/domain/geometry.py": "451f38447d4decfaaf841ec78cbd44453040c83543744ef8fa4b96220f015242",
+      "src/oil_tracker/domain/judgment.py": "c52622d9f25c5aa64bc2d583e189838d63567c3ce1ad53112d10d4dbcd8f3f01",
+      "src/oil_tracker/domain/oil_boundary_topology.py": "b7b7b36ea408a7f51240b63805dbcaf5acbea34146d023674a0bf0ebfdaa61f0",
+      "src/oil_tracker/domain/recipe.py": "2ded05b7b5db1f44e394bd0aead92a3cdd74efe655361911cffb1a16e448e039",
+      "src/oil_tracker/domain/redetection.py": "d9b58ba98e7555f0e99d0dd3506faef06d3f0ad348c3cc41468502f88dcaeda7",
+      "src/oil_tracker/domain/results.py": "f84a7b82139f10e71497c995655bf0cb6c414ca3d894ac546b313f38cf8b4289",
+      "src/oil_tracker/domain/retrospective.py": "91878c81391d6a9f04bd65f7c1f962613b012517785c8ed6e81a43b1cd8f395c",
+      "src/oil_tracker/domain/review.py": "04fffd0797671cdf39736bbcde0272fa0bf1f1678ee25ac60bb78fad0d61de92",
+      "src/oil_tracker/domain/session.py": "4914e31a16aaf7810d2724d82736e4a98d739a437da4bbc686e87485b1315b27",
+      "src/oil_tracker/domain/user_truth.py": "dbe963d3737c0444a39b7f8d1b986e37086cbe7b5b906948f2d8d47f3ddfacc7",
+      "src/oil_tracker/domain/validation.py": "2e3dd9de23241275918adce8c451f19e885e3e5a53593c75366fa4267311bec4",
+      "src/oil_tracker/resources/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/resources/icons/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/resources/styles/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/resources/styles/app.qss": "92a2f4494506f66fc26a410a31194ef9a83e8972a851ea5f58d16e80e1aa55da",
+      "src/oil_tracker/resources/styles/compact.qss": "864d7f480e93948c677ae08570b7e870ce82e960ba2ad7be8f9a1a1a6a22f5a9",
+      "src/oil_tracker/ui/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/ui/analysis_completion_coordinator.py": "37046a892be12aeba8aec3a9dc51a1783103a07978a1f3b8ea87f5272c281685",
+      "src/oil_tracker/ui/analysis_completion_summary.py": "d7caa92abca6c2a18b41d8b1943b68e11e0eb18fef086ced2f0f44977fd48361",
+      "src/oil_tracker/ui/controllers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/ui/controllers/analysis_controller.py": "a973d09e4b853b9c4199276773cece65abf81934a63757d9af8d0d2b5f62c569",
+      "src/oil_tracker/ui/controllers/preflight_controller.py": "6a7470958710a83dc4d4cebd0f775b3a5153ecc0b75855b18fa2ebb585a735bf",
+      "src/oil_tracker/ui/controllers/preview_controller.py": "d18993e7552112fbe633fffb1248e548c25b782ddd6e81528902d2b5edb5dc4a",
+      "src/oil_tracker/ui/controllers/redetection_controller.py": "ae959abfe3e4225763b5553f4a65e768f557ec02393b114660f63c8a3d3cc428",
+      "src/oil_tracker/ui/controllers/result_review_controller.py": "02ccecdd7d0ae1308f120cdc2482ee215088fcc89886291011ad780fd4240c69",
+      "src/oil_tracker/ui/controllers/review_mp4_export_controller.py": "e50769edecf6585f6368e40c35978fbe61541490a846214cfb7055a495178fca",
+      "src/oil_tracker/ui/controllers/truth_export_controller.py": "9081b240d08afab64d9c21700d6d6629572fcc04e7b8689a8616ccbcfbd6394c",
+      "src/oil_tracker/ui/controllers/workbench_controller.py": "4c7992339c2b500cf0cd3de7808098a8982f04b751df414222f431ade691d8d7",
+      "src/oil_tracker/ui/controllers/workbench_playback_controller.py": "1d832f7e9a2ea9a7151b8d24252c07a4dc46fe090bbcb9214b68fac2590697a5",
+      "src/oil_tracker/ui/debug_trace_settings.py": "92e943c5f475f8f5adf382a13e0d0957e6f32109f6678686826921a72192eadb",
+      "src/oil_tracker/ui/main_window.py": "5866da88c61b2dbe92edd38d5ba5da421ee40e0eb58dd2295d679f51c6bf562a",
+      "src/oil_tracker/ui/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/ui/observation_settings_copy_coordinator.py": "04e0edc4d6c1a1df35cd6c69b8c319a111dbb749c703fe002118963b53d3e171",
+      "src/oil_tracker/ui/preflight_coordinator.py": "3e29a12d82e4b20cb049e6aacb13e7ebfad23f357dd0d14e26c7462c84493a53",
+      "src/oil_tracker/ui/presentation_labels.py": "c35313fbe8c93599739623dd80a4554b1783efd273dbf81840fa43f2492eb06c",
+      "src/oil_tracker/ui/profile_lifecycle_coordinator.py": "4e7a1f5c773d630b20d0f928aa537d6f5fd4fb051a7a6f1527bf1255daff7733",
+      "src/oil_tracker/ui/readiness.py": "bd320842517dffcf928e009b51036ecb571ebb7e5aa7dfde8971e5893ba24dcf",
+      "src/oil_tracker/ui/redetection_comparison_coordinator.py": "431bc4dd2aee20ce939ad2fdb1bc75d402db3d8a0631e298ceab1eac20d1f34d",
+      "src/oil_tracker/ui/redetection_comparison_window.py": "59776a61e9e91eb1c6c2e4c51db649605223a83c972a16602788f88be406a505",
+      "src/oil_tracker/ui/redetection_result_review_window.py": "a868c03b18679ab98baa3fe01297fb27225c4383f537141e6fe6213531113208",
+      "src/oil_tracker/ui/result_actions.py": "9207197750a8a606c4a6a48a91dbacc1b340a6a41ccfa7746521a2c83782c3c1",
+      "src/oil_tracker/ui/result_review_coordinator.py": "419919928b16571b0f4268236d7e3ca417a70919910edb1d3478d5a42920d3fe",
+      "src/oil_tracker/ui/result_review_window.py": "bb7cb532211308eebad123a647ef315ea169fe37cd8b6e22e0670fea2377e3ca",
+      "src/oil_tracker/ui/same_profile_analysis_coordinator.py": "705cea2e24be46165838b53c7e7365e1a14cdfd1159e4bbd5ab3343e04949d80",
+      "src/oil_tracker/ui/style.py": "3af33283ce2e8b6ee6a061c94ee19a59b8bd0ab83c082a6da974fc29e6c2c304",
+      "src/oil_tracker/ui/truth_annotation_coordinator.py": "5c4b333b15833a62dbec482d0015aa1d4c5081fd1728ec07d0caa335a0bba6d2",
+      "src/oil_tracker/ui/truth_annotation_window.py": "26a8a7b4e8df6ca544c32872642dd6b10973987e62b8eb3a50c6b4dbc1bfa4ec",
+      "src/oil_tracker/ui/undo.py": "7e12aca6754bb8543049e041a9c076c28d3eabc3b005809a27d1318e83e93125",
+      "src/oil_tracker/ui/widgets/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/ui/widgets/analysis_complete_dialog.py": "99e95513ef51558e455b15944d4bcce88623a622544efd0e1d04886b466d48a1",
+      "src/oil_tracker/ui/widgets/analysis_progress_dialog.py": "7cd2c75de4dfcd97f9d9db7d50d517c1e3f8238ebfe588d69bec63069a7cc484",
+      "src/oil_tracker/ui/widgets/artifact_support_dialog.py": "ef252c2b1ab33b69c4c8213d501b3730ae84cd015c61c3730c6c9981619b0e09",
+      "src/oil_tracker/ui/widgets/bottom_action_bar.py": "d07832987ba49be4ed94ec5fabfcd45ba87eeb982495cde4609173045234a12a",
+      "src/oil_tracker/ui/widgets/debug_panel.py": "e2f527063f0059b71718ee251bdc9495cb04eb2a20b283d1cdcd3e5ad287b2ee",
+      "src/oil_tracker/ui/widgets/detection_summary_card.py": "8f246e2b66171728c7ea84e2ced6533f85096117b18d43e57135cf0115712614",
+      "src/oil_tracker/ui/widgets/detector_settings_editor.py": "1dc0ebe926e24097558f6da9291f44f1b27ffd8903a408801383bdb04c806cc2",
+      "src/oil_tracker/ui/widgets/glass_list_panel.py": "7f7883a0a8e9d11db83b42d9299b6820f59d113c08e510add687bf0560fabc37",
+      "src/oil_tracker/ui/widgets/glass_settings_copy_dialog.py": "08931d8e6336d9c060fcacfc5d31291665989494e64a0ce52215c6f661417bb3",
+      "src/oil_tracker/ui/widgets/glass_settings_panel.py": "a323a375acccc8aab1a76d3c5b12da203bd46f2ea046f1d2f8f23331aa220999",
+      "src/oil_tracker/ui/widgets/preflight_panel.py": "e7b18dc54e9bf6ef517ae700d3f0c74612f6e8f93d01647376605699048bbf14",
+      "src/oil_tracker/ui/widgets/preflight_window.py": "3d05ac12dfbc19955e815ee5add994dad3fb8ccb03f1242e83c88b5b78999d7e",
+      "src/oil_tracker/ui/widgets/redetection_comparison_graph.py": "7e90945c3a37a9325ad340d654318d963bd4cf2cdd928f27d848458c43303bca",
+      "src/oil_tracker/ui/widgets/redetection_debug_comparison.py": "73cd3fef96a9ee4ee9dd4440e69681af6aec26c797fcb20645a1ca7e94078951",
+      "src/oil_tracker/ui/widgets/result_debug_panel.py": "886892860099ac73945d5f8c1faec3c74268288251023ed8618ce93746a57a27",
+      "src/oil_tracker/ui/widgets/result_review_canvas.py": "ecb12786d43d476f4ef4e0eb4dace064040e41a3290cedf9fc271154cd681c0c",
+      "src/oil_tracker/ui/widgets/result_review_details.py": "f08368f613e099b08f68db34ebb2f07e5fbe7d4e8848014a0b826e378baed035",
+      "src/oil_tracker/ui/widgets/result_review_graph.py": "864096a00cf52085195c64504da7f3b679ec57364fe2c75e6c206f68272a9ead",
+      "src/oil_tracker/ui/widgets/result_review_navigation.py": "46f374c6db5ce3f57a603c91a4553e2e6cc97ce8bc46ff766b20977d7ab6cca9",
+      "src/oil_tracker/ui/widgets/result_review_view.py": "a7e70710a018512024753ea8e039e0c28ad4d302dca5ffcb559689b69f527148",
+      "src/oil_tracker/ui/widgets/roi_editor_dialog.py": "8d95e7d7dd9a9d26f8666d506813558c9004227f463674e9f7f321a03602765a",
+      "src/oil_tracker/ui/widgets/transport_bar.py": "c2d57b602dbb387adda0f9227502b99f175308d072aa5c09d4a3418a5b67430a",
+      "src/oil_tracker/ui/widgets/truth_annotation_canvas.py": "06656d62552ccda184ea3b96971998fa1f8e895495e9d4db5ac7ac4600b9a1d9",
+      "src/oil_tracker/ui/widgets/validation_panel.py": "5a7dab3c22e791811f78de49ab61830fdb25a418dccdda6cfb8d048119bbcb58",
+      "src/oil_tracker/ui/widgets/video_overlay_canvas.py": "68700be85f717b0444766e86785d317448eadf1569848418e2a7b312aa8e3992",
+      "src/oil_tracker/ui/widgets/video_playback_panel.py": "afbb15d28b3471cad136203913f03f12d97f48e2549725888ef4bd786be1032f",
+      "src/oil_tracker/ui/widgets/video_preview_widget.py": "9990ceef6ef333df96d45278242d88cafc146e6addc790f96960bbe642792592",
+      "src/oil_tracker/ui/widgets/wheel_safe_controls.py": "bfbdfceb7f7e0a4435af8e835a5cb413bb457d8407a313481bf3d9b12fe6093f",
+      "src/oil_tracker/ui/widgets/workbench_progress.py": "01df69617f66cc132e47fa3c2fa285248b36ac71b9814b79ebfff2ee93f2a495",
+      "src/oil_tracker/ui/wizard/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/oil_tracker/ui/wizard/new_recipe_wizard.py": "c64f12901403f373d3ee4f695e7772026d7631536750e94441cb40b4c6de19fe",
+      "src/oil_tracker/visualization/__init__.py": "63e96083bed6be3dc58be44988fc221421ef4192ac5c3a2a1b1b210299e3d5e2",
+      "src/oil_tracker/visualization/matplotlib_font.py": "d215a30ed3c49a68ccc2661a2d8befde15bb4208dd7321bf18b8c3d0eb68d920"
+    },
+    "verifier_sha256": "a49b6996fb1fbcf0069ebf26c5887683d880abcdc207556885e3c449a23be055"
+  },
+  "preserved_failed_preparation": {
+    "path": "sample/output/s11-sample4-reviewed-interval-20261010-001",
+    "reason": "Literal recipe equality rejected the documented UNKNOWN replay override and empty default before any pixel or candidate readout. Retry explicitly verifies those two differences; no detector settings or source changed."
+  },
+  "verifier": "from pathlib import Path\nimport hashlib\nimport json\nimport subprocess\n\nimport cv2\n\nROOT = Path('/Users/sunjaekim/Developer/oil_level_tracker')\nDOC = ROOT / 'docs/50-diagnostics/s11'\npath = DOC / '2026-10-10-sample4-center-interval-comparison.json'\nrecord = json.loads(path.read_text())\nout = ROOT / record['local_artifact_root']\ndigest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()\nassert digest(out / 'preflight.json') == record['preflight_sha256']\nassert digest(out / 'readout.json') == record['readout_sha256']\nassert (out / 'run.py').read_text() == record['runner']\nassert digest(out / 'run.py') == record['preflight']['runner_sha256']\nfor p, h in record['preflight']['inputs'].items():\n    assert digest(ROOT / p) == h\nref = json.loads((DOC / '2026-10-10-sample4-center-source-reply.json').read_text())['reviewed_references'][0]\ncap = ROOT / 'sample/output/s11-a1-lineage-20261007-001/frames-final'\noriginal = json.loads((cap / 'f1275.json').read_text())\nreadout = record['readout']\nassert readout['reference'] == ref\nlo, hi = ref['reviewed_y_cell_bounds']\norigins = original['state']['oil_interface_witness']['crop_origin']\ncol = ref['source_x'] - origins[0]\nrasters = {name: cv2.imread(str(cap / f'f1275-{name}.png'), cv2.IMREAD_GRAYSCALE)\n           for name in ('effective_mask', 'normalized', 'canny')}\nedge_rows = [y + origins[1] for y in range(104) if rasters['canny'][y, col] != 0]\nassert edge_rows == readout['raw']['all_canny_source_rows_at_x']\nassert [y for y in edge_rows if lo <= y <= hi] == [836] == readout['raw']['canny_rows_in_reviewed_interval']\nfor pixel in readout['raw']['reviewed_column_pixels']:\n    for name, array in rasters.items():\n        assert pixel[name] == int(array[pixel['source_y'] - origins[1], col])\nscalar_hits, native_hits = [], []\nfor result in readout['candidates']:\n    i = result['candidate_input_index']\n    orig = original['current']['candidates'][i]\n    wit = next(c for c in original['state']['oil_interface_witness']['candidates'] if c['candidate_input_index'] == i)\n    assert result['source'] == orig['source'] == wit['source']\n    assert result['original_scalar_source_y'] == orig['y'] == wit['canonical_y']\n    # Membership and closest-boundary distance checked with a distinct formulation.\n    hit = lo <= orig['y'] <= hi\n    expected = 0 if hit else min(abs(orig['y'] - lo), abs(orig['y'] - hi))\n    assert result['scalar_compatible'] == hit\n    assert result['scalar_distance_to_interval_px'] == expected\n    if hit:\n        scalar_hits.append(i)\n    sector = next(s for s in wit['sectors'] if ref['source_x'] in range(*s['source_x_range']))\n    assert sector['source_x_range'] == result['centre_source_x_range']\n    assert sector['path_source_y'] == result['native_centre_sample_source_y']\n    if sector['path_source_y'] is None:\n        assert result['native_centre_compatible'] is None\n        assert result['native_centre_distance_to_interval_px'] is None\n    else:\n        inside = lo <= sector['path_source_y'] <= hi\n        assert result['native_centre_compatible'] == inside\n        if inside:\n            native_hits.append(i)\nassert scalar_hits == [4, 7, 12, 18] == readout['summary']['scalar_compatible_indices']\nassert native_hits == [7] == readout['summary']['native_centre_compatible_indices']\nseq = original['completed']['debug_metrics']['sequence_decision_witness']\nmember_rows = [(row, member) for row in seq['rows'] for member in row['members'] if member.get('selected')]\nassert len(member_rows) == 1\nrow, member = member_rows[0]\nassert member['candidate_offset'] == 12 and member['source'] == 'calibrated_high_recall' and member['y'] == 835\nassert row['publishable'] and row['phase_admitted'] and member['tracklet_admitted']\nassert member['y'] == seq['selection']['selected_candidate']['y'] == original['stored_row']['oil_y']\nassert original['current']['raw_oil_air_level_y'] is None\nassert readout['summary']['selected_native_path_available'] is False\nassert lo <= member['y'] <= hi\n# The exact selected control remains the human correspondence source, independent of positional hits.\ncontrols = json.loads((DOC / '2026-10-07-sample4-a2-control-preflight.json').read_text())\ncontrol = next(r for r in controls['rows'] if r['frame'] == 1275)\nassert control['candidate_input_index'] == member['candidate_offset']\nassert control['source'] == member['source'] and control['source_y'] == member['y']\nassert control['target_role'] == 'confirmed_target'\nbase = record['preflight']['base_head']\npaths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', base, '--', 'src', 'sample', 'docs/50-diagnostics/s11/2026-10-10-sample4-center-source-review.json', 'docs/50-diagnostics/s11/2026-10-10-sample4-center-source-review.png'], cwd=ROOT, text=True).splitlines()\npreserved = {}\nfor p in paths:\n    if p.startswith('src/') or p.endswith(('.oilrecipe', '.oiltruth')) or 'sample4-center-source-review' in p:\n        old = subprocess.check_output(['git', 'show', f'{base}:{p}'], cwd=ROOT)\n        assert (ROOT / p).read_bytes() == old\n        preserved[p] = hashlib.sha256(old).hexdigest()\nverification = dict(status='PASS', independent_reader='OpenCV PNG reader and raw candidate/sequence joins; no generator or scorer execution',\n                    input_pins_checked=len(record['preflight']['inputs']),\n                    candidate_rows_checked=len(readout['candidates']), reviewed_pixel_values_checked=27,\n                    all_central_edge_rows=edge_rows, scalar_compatible_indices=scalar_hits,\n                    native_centre_compatible_indices=native_hits, exact_selected_member=member,\n                    preserved_files=preserved, verifier_sha256=digest(Path(__file__)))\n(out / 'verify.py').write_bytes(Path(__file__).read_bytes())\n(out / 'verification.json').write_text(json.dumps(verification, indent=2) + '\\n')\nrecord['verification'] = verification\nrecord['verifier'] = Path(__file__).read_text()\nrecord['verification_sha256'] = digest(out / 'verification.json')\npath.write_text(json.dumps(record, indent=2, ensure_ascii=False) + '\\n')\nprint(json.dumps({k: v for k, v in verification.items() if k != 'preserved_files'}, indent=2))\nprint('Preserved files:', len(preserved))\n",
+  "verification_sha256": "9fb98334608f617f7d844fbf5beb70779afb2a05cefb5be9c5a5ffeb155dbe13"
+}
