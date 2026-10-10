@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** Source-position and one-second cadence choices remain CLOSED. The f1305 reply now identifies guide ② as Oil and ① as Foam-or-glass-pattern opposition, with subtype unresolved. Saved-owner tracing confirms assignment maturity precedence, a failed current-anchor handoff and final exclusion of the reviewed Oil location. The single cost-order-only attribution probe is CLOSED WITHOUT PROMOTION: it fills the two numeric holes but changes 15 Oil rows, retains unreviewed alternatives and selects upper texture at 56s; no physical selector is adopted. Next qualify sample3’s largest numeric gap by source visibility. Its 16-frame uniform inspection shows mixed full-looking/framing/focus contexts; one new A/B question at 75.04/78.04s asks whether the late yellow/brown-to-dark boundary is actual Oil. Hold dependent reappearance attribution for that reply, preserving the old 95/105s unusable labels. No Windows task is required. Preserve all seven recordings, all 13 legacy values and their qualified comparison scope, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
+**Next transition:** Source-position, one-second cadence and sample4 f1305 role choices remain CLOSED. The sample4 cost-order-only probe remains CLOSED WITHOUT PROMOTION. The new red-marked sample3 reply closes A/B (75.04/78.04s) as visible Oil near the marked upper boundary, expressly without exact pixels or a tolerance. Complete 151-row baseline/native replay and 37-frame native capture expose historical-versus-recent direction use at the filled-cap gate. The one recent-basis-only attribution probe is CLOSED WITHOUT PROMOTION: it selects lower opposing structure at A/B and changes 18 Oil values. Next qualify the same internal track's earlier confirmation evidence: C/D at 65.03/67.53s ask whether the marked features were Oil, another structure, or unjudgeable. Hold dependent physical-history attribution for that reply; do not reopen A/B or old 95/105s unusable labels. No Windows task is required. Preserve all seven recordings, all 13 legacy values and their qualified comparison scope, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -228,21 +228,27 @@ reviewed lower Oil-boundary region in agent inspection. This is **CLOSED WITHOUT
 PROMOTION**, not a physical repair or permission to enter O3/O4. Production,
 all six Foam coordinate/confidence fields and canonical truth remain unchanged.
 
-**New sample3 source-role checkpoint OPEN:** the
+**Sample3 A/B source role CLOSED; confirmation-history question OPEN:** the
 [bounded source inspection](../50-diagnostics/s11/2026-10-10-sample3-gap-source.md)
 retains 16 uniform frames across the 34.5345–81.014267s numeric gap and all four
 old S3 annotation frames. All 19 native crops, 16 saved timestamps and four old
 source comparisons verify; 151 saved time/value rows join exactly. Full-looking
 middle views and later framing/focus changes prevent a continuous-miss claim.
-The [A/B image](../50-diagnostics/s11/2026-10-10-sample3-gap-role-review.png) and
-[frozen question](../50-diagnostics/s11/2026-10-10-sample3-gap-role-review.json)
-ask whether the late yellow/brown-to-dark boundary at 75.04/78.04s is visible
-Oil, another feature or too unclear to judge. Both saved rows are FILLED_CAP_VETO,
-with five/three publishable rows before the empty allowed-owner set; those facts
-alone do not establish a harmful veto. Hold dependent physical reappearance
-attribution for the reply. The old 95/105s unusable labels and all earlier source
-questions stay closed. No exact-pixel label, full-video relabeling or Windows
-execution is required.
+The [new reply and red-marked source](../50-diagnostics/s11/2026-10-10-sample3-gap-source-reply.json)
+identify Oil near the upper boundary in both views, explicitly without exact
+pixels or a tolerance. The [causal follow-up](../50-diagnostics/s11/2026-10-10-sample3-reappearance-causality.md)
+reproduces all 151 raw/final rows and captures 37 native frames. Upper-region rows
+are blocked by historical upward confirmation direction, although B's recent
+direction is downward; A's recent direction is stationary. Regional marks do not
+certify all native sectors or earlier physical ownership. A single full-window
+recent-basis-only probe selects lower opposing structure at both A/B, changes
+18 Oil values and preserves all six Foam fields. It is CLOSED WITHOUT PROMOTION.
+The [C/D image](../50-diagnostics/s11/2026-10-10-sample3-confirmation-role-review.png)
+and [frozen role questions](../50-diagnostics/s11/2026-10-10-sample3-confirmation-role-review.json)
+now qualify the actual 65.03/67.53s confirmation-window features before interpreting
+their displacement as motion of the later Oil. Hold dependent attribution for
+that reply. A/B, old 95/105s unusable labels and earlier source questions stay
+closed. No exact-pixel label, full-video relabeling or Windows work is required.
 
 Before another trial, name one distinct physical boundary/role observation,
 the existing measurement owner and a reproducible decision/abstention rule.

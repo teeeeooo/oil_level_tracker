@@ -1,0 +1,93 @@
+{
+  "schema": "s11-reviewed-source-region-role-v1",
+  "base_head": "52598f021f05a380ea7cd3714dde6efae9650000",
+  "authority": "Direct user reply and user-painted source review image",
+  "question_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-sample3-gap-role-review.json",
+    "sha256": "272adecf452814275976ca2495bce5411a9a86786bd1f2858a219cc382548bb0",
+    "original_status": "PENDING_USER_SOURCE_JUDGMENT"
+  },
+  "question_verbatim": "sample3의 A(75.04초)·B(78.04초) 확대 이미지에서, 위쪽 황갈색 영역과 아래쪽 어두운 영역 사이의 경계는 실제 Oil 유면인가요? 각각 Oil 유면 / Foam·무늬 등 다른 경계 / 초점이나 가림 때문에 판단 어려움 중 어떻게 보이는지 알려주세요. 이 판단에 따라 해당 공백을 ‘보이는 Oil을 놓친 경우’로 조사할지 결정합니다. 기존 95·105초 판단이나 정확한 픽셀 위치를 다시 묻는 질문은 아닙니다.",
+  "reply_verbatim": "내가 빨간색으로 점찍어놨어 그 라인이 유면이야. 정확한 픽셀이 여기라는 의미는 아니야. 그 라인 부근이라는거지",
+  "status": "CLOSED",
+  "clean_review_image": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-sample3-gap-role-review.png",
+    "sha256": "565a6d5b375c97df8e3a6d4e7e899c387b1126b26e18493f71a0647913ffa6f2"
+  },
+  "user_marked_image": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-sample3-gap-user-marking.png",
+    "sha256": "6afaba042c834ad3f1b1f36adc13752cc99c5ed6efb3fe7f3409504783583e36",
+    "original_attachment_name": "56556.png",
+    "preservation": "Byte-for-byte copy; no mark extraction, coordinate fitting, smoothing or image edit"
+  },
+  "source_video": {
+    "path": "sample/sample3.mp4",
+    "sha256": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04"
+  },
+  "reviewed_frames": [
+    {
+      "view": "A",
+      "frame_index": 2249,
+      "source_timestamp_sec": 75.04163333333334,
+      "display_rect_xywh": [
+        15,
+        145,
+        720,
+        720
+      ],
+      "original_full_frame": {
+        "path": "sample/output/s11-sample3-gap-source-20261010-001/f002249.png",
+        "sha256": "89d645a3d0880f65a7c1db0f37f91d2d2115dff52d1dbd7a7d69c6a0d727ba0f"
+      },
+      "original_crop": {
+        "path": "sample/output/s11-sample3-gap-source-20261010-001/f002249-context.png",
+        "sha256": "a3856a59d6c9f027ba5e46fc1b63a743552a9809e886fb4f05d63c9a5746f905"
+      }
+    },
+    {
+      "view": "B",
+      "frame_index": 2339,
+      "source_timestamp_sec": 78.04463333333334,
+      "display_rect_xywh": [
+        765,
+        145,
+        720,
+        720
+      ],
+      "original_full_frame": {
+        "path": "sample/output/s11-sample3-gap-source-20261010-001/f002339.png",
+        "sha256": "1a95db29287b5d4420d53217c1322d617b1f7bdf165b40f640ed20b76d1f134f"
+      },
+      "original_crop": {
+        "path": "sample/output/s11-sample3-gap-source-20261010-001/f002339-context.png",
+        "sha256": "f90f9a65035bbcb05e8f15cce85f0f9a6fd261690366e43429aca7c24a160212"
+      }
+    }
+  ],
+  "display_mapping": {
+    "source_crop_xyxy": [
+      655,
+      135,
+      1015,
+      495
+    ],
+    "scale": 2,
+    "resampling": "nearest-neighbour",
+    "meaning": "Source binding only; annotated pixels do not define physical coordinates or a tolerance"
+  },
+  "physical_role": "Oil interface near the red-marked upper yellow/brown-to-dark boundary in both shown frames",
+  "qualification": "REGIONAL_PHYSICAL_ROLE_AND_VISIBILITY_ONLY",
+  "scope_exclusions": [
+    "exact pixel or scalar Y truth",
+    "certified interval or pixel tolerance",
+    "polyline reconstructed from painted dots",
+    "candidate-wide or all-sector identity",
+    "continuity or movement direction between frames",
+    "whole numeric gap continuously visible",
+    "new formal benchmark or holdout"
+  ],
+  "supersedes": "Pending A/B source-role question only. Frozen preparation/image, old S3-03/04 unusable judgments, 13 legacy values and Recipe remain unchanged.",
+  "production_changed": false,
+  "legacy_truth_changed": false,
+  "windows_execution_required": false
+}
