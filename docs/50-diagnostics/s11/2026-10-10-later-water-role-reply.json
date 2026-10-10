@@ -1,0 +1,95 @@
+{
+  "schema": "s11-regional-human-interpretation-v1",
+  "base_head": "7705d2dddb9aa331d262391481878ab4034cb18d",
+  "video": "sample/sample5.mp4",
+  "video_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+  "shown_frames": [
+    1438,
+    1643
+  ],
+  "answered_panels": [
+    "B",
+    "C"
+  ],
+  "reply_verbatim": "거품층 없이 물 표면이 보임",
+  "authority": "direct user physical interpretation",
+  "status": "CLOSED",
+  "response_binding": "The single reply answers the joint B/C question and is applied to both displayed panels, as stated to the user. It does not label the interval between them.",
+  "cases": [
+    {
+      "label": "B",
+      "case_id": "water-f001438",
+      "frame_index": 1438,
+      "nominal_time_sec": 47.98126666666667,
+      "source_raster": {
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png",
+        "sha256": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+        "source_origin_xy": [
+          0,
+          0
+        ],
+        "shape": [
+          1080,
+          1920,
+          3
+        ]
+      },
+      "source_crop_xyxy": [
+        740,
+        250,
+        1160,
+        1080
+      ],
+      "source_crop_sha256": "aa7513b582b9b3fc950a7504ed702a74e87aeb7c09cb2e4d2edd216d4a6f6f59",
+      "interpretation": "Water surface is visible without a Foam layer in the reviewed upper band.",
+      "control_role": "Regional liquid-surface positive and Foam-layer-absence control; no exact contour or numeric height truth."
+    },
+    {
+      "label": "C",
+      "case_id": "water-f001643",
+      "frame_index": 1643,
+      "nominal_time_sec": 54.82143333333333,
+      "source_raster": {
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png",
+        "sha256": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22",
+        "source_origin_xy": [
+          0,
+          0
+        ],
+        "shape": [
+          1080,
+          1920,
+          3
+        ]
+      },
+      "source_crop_xyxy": [
+        740,
+        250,
+        1160,
+        1080
+      ],
+      "source_crop_sha256": "2b978af496759170fbbbfa9295f1ca66873336bef396d0c4830ba246248cf3d2",
+      "interpretation": "Water surface is visible without a Foam layer in the reviewed upper band.",
+      "control_role": "Regional liquid-surface positive and Foam-layer-absence control; no exact contour or numeric height truth."
+    }
+  ],
+  "question_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-temporal-texture-observation.json",
+    "sha256": "3c9b7c75eb93a0fffa0a3bf37afa1d19f27a577aef096cd23f5b5506902209ed",
+    "field": "public_review"
+  },
+  "source_figures": {
+    "docs/50-diagnostics/s11/2026-10-10-later-water-role-review.png": "51cb45e9a2dc86a06f177e9f5e5566df2aecf17f46ab2c579b71e84a9650cba3"
+  },
+  "scope": "Regional role of the narrow upper bright band at the two shown frames only. Isolated submerged bubbles may remain. No exact edge/path, centre Y, thickness, calibrated Glass centre, neighbouring-frame labels or continuous disappearance time is certified.",
+  "supersedes": "The pending B/C regional role question and their unreviewed-role qualification. Frozen source/measurement JSON and native arrays remain unchanged.",
+  "consequence": "A/f1232 is a Foam-layer positive with unclear lower visibility; B/f1438 and C/f1643 are Foam-layer-absence and qualitative water-surface controls. Temporal texture change is not a Foam witness: B retains broad change. C stays truncated for the old symmetric-window readout.",
+  "preserved_replies": {
+    "docs/50-diagnostics/s11/2026-10-10-water-foam-role-reply.json": "57ef93a47183b090258848adea6b756a9d0fa70b2130028a41c5933a267913f1",
+    "docs/50-diagnostics/s11/2026-10-10-water-lower-interface-reply.json": "1d19cc557c4e40fd686aeac056736718fb11fbacc82f40fb57485deeea81731e",
+    "docs/50-diagnostics/s11/2026-10-09-public-water-surface-reply.json": "b720d3f19be9f2ab874428fd6ff229e34a5221dabeec2b3e5ab8fd9a066e4d23"
+  },
+  "production_label_change": false,
+  "new_review_request": false,
+  "windows_execution_required": false
+}

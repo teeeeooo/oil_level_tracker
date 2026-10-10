@@ -16,6 +16,11 @@ local native archive. The [complete readout](2026-10-10-temporal-texture-readout
 retains the original JSON bytes under gzip. Current sequencing and the pending
 human checkpoint belong to the [Work Plan](../../00-project/work-plan.md).
 
+**Subsequent source reply:** the user identifies B and C as water surface
+without a Foam layer. The [bound reply](2026-10-10-later-water-role-reply.json)
+closes their regional-role checkpoint. The source-feature follow-up below
+separates that judgment from the still-unreviewed two nearby features at B.
+
 ## Question, reuse and frozen scope
 
 The earlier [support audit](2026-10-10-water-foam-representation.md) showed
@@ -177,6 +182,52 @@ beer/milk/target-domain controls before challenger evaluation. No successor
 is established here. Existing comparative-filming unavailability and prior
 closed judgments are respected; no new acquisition or Windows request follows.
 
+## Later B/C reply and source-feature follow-up
+
+The user answered **“거품층 없이 물 표면이 보임”** to the joint B/C review.
+As stated to the user, apply that answer to both displayed frames: B/f1438 and
+C/f1643 are now regional **water-surface positives / Foam-layer-absence controls**.
+This does not claim the absence of isolated submerged bubbles, label intervening
+frames, date the disappearance of A's Foam, or provide exact contours/heights.
+A's Foam presence and unclear lower boundary, and f822/beer/milk judgments stay
+closed. The previous machine record and all readouts remain byte-identical;
+their pending fields are superseded by the separate source-bound reply.
+
+The already-measured broad temporal change in B is therefore real-source
+opposition to interpreting renewal as Foam presence. No new classifier or
+success/failure rate is derived from that comparison. C's eight-frame readout
+still lacks the full symmetric temporal window even though its still-image
+regional role is now known. Neither source loses its inventory membership.
+
+Before proposing any numerical surface reference, inspect the **same original
+detail crop** at the existing diagnostic X950, separately from a detector.
+B shows a faint upper bright feature and a stronger lower band. The saved
+Canny column has five rows in that detail (source Y485/488/492/496/500); those
+are observed image edges, not five physical interfaces or candidate truth.
+Thus presence of water surface does not by itself identify the exact reference
+feature, and choosing the strongest/nearest edge would repeat the old oracle
+problem. No numeric reference or tolerance has been assigned.
+
+![B source and two feature locators](2026-10-10-water-surface-feature-review.png)
+
+The [preparation record](2026-10-10-water-surface-feature-review.json) pins the
+source and the original temporal array. Marker 1 points approximately to the
+upper feature and marker 2 to the lower band. Their source XY values are agent
+visual locators, not proposed exact truth. The question is whether they are
+front/back projections of one water surface, whether only one belongs to that
+surface, or whether the distinction is unclear. That answer affects which
+feature may become a location reference; it does not automatically choose a
+numeric height, error tolerance, Foam thickness or calibrated Glass centre.
+This is not a repeat of the closed Foam-presence question or the beer projection
+judgment, and no answer transfers from B to C. If unclear, retain both as
+unresolved geometry rather than forcing a scalar. The fixed-centre product
+choice itself is unchanged.
+
+Both clean review panels equal the pinned native source pixels (the detail is
+an exact 4× nearest-neighbour enlargement), and the whole crop equals the saved
+anchor array. All preparation inputs remain unchanged. No new media replay,
+detector calculation, score fitting or Windows task is required by this review.
+
 ## Verification and preservation
 
 The independent saved-array verifier checks all 97 bound inputs and 221
@@ -203,6 +254,6 @@ acceptance is claimed.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: standalone physical-role inference would be unsound at texture-change interpretation because fixed-pattern optical deformation supplies the same cue; actual production first physical failure remains unknown. No classifier or scalar was executed here.
+- First harmful stage: standalone physical-role inference would be unsound at texture-change interpretation because fixed-pattern optical deformation supplies the same cue. The later B/C reply confirms a real no-Foam control, but does not identify B's individual nearby image edges; reference-feature identity must precede any numerical truth claim. Actual production first physical failure remains unknown. No classifier or scalar was executed here.
 - Logic-map impact: NONE — saved-source observation reuses existing preprocessing, registration and texture owners through one-off evidence runners; runtime callers, Oil/Foam independence and publication remain unchanged.
 - Failure-registry impact: NONE — the retained nuisance and optical counterexamples instantiate the existing temporal/appearance-identity limitations; no accepted mechanism or new runtime gate is introduced.

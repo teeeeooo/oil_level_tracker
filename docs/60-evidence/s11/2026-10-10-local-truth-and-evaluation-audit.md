@@ -138,8 +138,11 @@ The subsequent [visibility reply](../../50-diagnostics/s11/2026-10-10-water-lowe
 closes the lower water–Foam boundary as unclear. A remains a regional Foam
 positive, with lower-coordinate scoring and thickness unavailable; this is not
 physical absence or successful model abstention. Adjacent
-and later f1438/f1643 frames retain their source-context scope. Neither the broad
-early-empty reading nor 41–55 s becomes continuous truth. These source corrections
+frames retain their source-context scope. The subsequent
+[B/C reply](../../50-diagnostics/s11/2026-10-10-later-water-role-reply.json)
+qualifies f1438/f1643 as visible water surface without a Foam layer, at regional
+scope only; individual nearby edges and centre coordinates are not certified.
+Neither the broad early-empty reading nor 41–55 s becomes continuous truth. These source corrections
 preserve this audit's original machine record and all old/new observations; no
 detector result was used to drop cases.
 

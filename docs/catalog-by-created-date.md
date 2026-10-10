@@ -655,3 +655,11 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-10 | [Sample4 all controls](50-diagnostics/s11/2026-10-10-temporal-texture-sample4.png) | 기존 일곱 대조 시점 전체 |
 | 2026-10-10 | [A detailed maps](50-diagnostics/s11/2026-10-10-temporal-texture-A.png) | A의 원본과 변화 영역; 물리적 거품 mask나 경계 정답 아님 |
 | 2026-10-10 | [Later-water role review](50-diagnostics/s11/2026-10-10-later-water-role-review.png) | 미검토 B/C 상단 띠의 거품 유무 판단용 원본 |
+
+## 2026-10-10 later-water reply and source-feature review additions
+
+| 최초 Git 추가일(KST) | 파일 | 역할 |
+|---|---|---|
+| 2026-10-10 | [B/C role reply](50-diagnostics/s11/2026-10-10-later-water-role-reply.json) | 두 장면의 거품층 없는 수면 확인; 개별 윤곽·수치 정답으로 확대하지 않음 |
+| 2026-10-10 | [B source-feature preparation](50-diagnostics/s11/2026-10-10-water-surface-feature-review.json) | 기존 원본·좌표·표식의 출처와 화소 동일성; 수면 위치 기준 전제 확인 |
+| 2026-10-10 | [B clean/marked detail](50-diagnostics/s11/2026-10-10-water-surface-feature-review.png) | 위쪽 약한 부분 1과 아래쪽 굵은 띠 2의 물리적 관계 판단용; 검출·정답 아님 |

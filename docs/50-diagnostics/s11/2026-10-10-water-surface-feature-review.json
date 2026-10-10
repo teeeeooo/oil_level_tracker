@@ -1,0 +1,106 @@
+{
+  "schema": "s11-source-feature-review-record-v1",
+  "preflight": {
+    "schema": "s11-source-review-preparation-v1",
+    "base_head": "7705d2dddb9aa331d262391481878ab4034cb18d",
+    "source_case": {
+      "case_id": "water-f001438",
+      "video": "sample/sample5.mp4",
+      "frame_index": 1438,
+      "crop_xyxy": [
+        740,
+        250,
+        1160,
+        1080
+      ],
+      "source_column_x": 950,
+      "source_raster": {
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png",
+        "sha256": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+        "source_origin_xy": [
+          0,
+          0
+        ],
+        "shape": [
+          1080,
+          1920,
+          3
+        ]
+      },
+      "effective": null,
+      "prior_arrays": "sample/output/s11-water-foam-support-20261010-002/f001438.npz",
+      "prior_stages": "sample/output/s11-water-foam-support-20261010-002/stages/f001438.npz"
+    },
+    "inputs": {
+      "docs/50-diagnostics/s11/2026-10-10-temporal-texture-observation.json": "3c9b7c75eb93a0fffa0a3bf37afa1d19f27a577aef096cd23f5b5506902209ed",
+      "docs/50-diagnostics/s11/2026-10-10-later-water-role-reply.json": "36f7ac8697b952b4ce74eff8ffbd4632281b3f4ba316a145221db33ce8a0b0d8",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+      "sample/output/s11-temporal-texture-20261010-003/water-f001438.npz": "726087cefb954de2930f64d06d407feecfffd6e721e6672d1d80b0cf6a159ee2"
+    },
+    "purpose": "Before proposing a numerical water-surface reference, distinguish two current source features near the existing diagnostic centre. No detector or numeric score is run.",
+    "source_region_xyxy": [
+      740,
+      250,
+      1160,
+      1080
+    ],
+    "detail_xyxy": [
+      840,
+      450,
+      1070,
+      540
+    ],
+    "diagnostic_column_x": 950,
+    "markers": [
+      {
+        "id": "B1",
+        "representative_source_xy": [
+          950,
+          487
+        ],
+        "description": "Upper faint bright feature; physical role unreviewed."
+      },
+      {
+        "id": "B2",
+        "representative_source_xy": [
+          950,
+          498
+        ],
+        "description": "Lower stronger bright band; physical role unreviewed at this subfeature scope."
+      }
+    ],
+    "marker_authority": "Agent visual source locators, not Canny-derived candidates, exact human coordinates or proposed error tolerances.",
+    "review_question": "Are B1 and B2 the rear/front projection of the same water surface, or is one the water surface and the other a reflection/bubble/other feature, or is the distinction unclear?",
+    "decision_dependency": "Determines which observed feature, if any, may become a same-column surface-location reference. Water-surface presence alone does not identify every nearby bright edge.",
+    "closed_roles": "B/C upper band: water surface without a Foam layer; A: Foam layer, lower boundary unclear. Do not ask those roles again or transfer a future B1/B2 answer to C.",
+    "constraints": "No precise Y reference, tolerance, thickness, centre calibration or future numeric adoption is implied by a regional feature reply. Keep both alternatives if unclear; no nearest/strongest-edge choice.",
+    "outcome": "PENDING_HUMAN_FEATURE_REVIEW",
+    "windows_required": false,
+    "production_change": false,
+    "runner_sha256": "06a90f285e1505de6b35a68372779e60ef850064a76940d9b7c40521744a4890"
+  },
+  "preflight_sha256": "36f026f2f47e7e71a80de2ac20f7dc2002ab5522df800d7a70a1290c2d1a2f65",
+  "image": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-water-surface-feature-review.png",
+    "sha256": "d4a88e06d6cd03cb12cd6347daba7dadc09341267d232e915520e637b4220150",
+    "size": [
+      1440,
+      1040
+    ]
+  },
+  "clean_panels_equal_source": true,
+  "saved_anchor_crop_equal": true,
+  "inputs_preserved": true,
+  "old_canny_rows_in_detail": [
+    485,
+    488,
+    492,
+    496,
+    500
+  ],
+  "canny_interpretation": "Saved raw edge locations are retained only as availability context. They do not name either physical feature or determine these visual locators.",
+  "disposition": "PENDING_HUMAN_FEATURE_REVIEW",
+  "physical_decision": "NOT_EVALUATED",
+  "script": "\"\"\"Prepare a source-feature review, never detector outputs or numerical truth.\"\"\"\nfrom pathlib import Path\nimport hashlib\nimport json\nimport subprocess\nimport cv2\nimport numpy as np\nfrom PIL import Image,ImageDraw,ImageFont\n\nROOT=Path.cwd();DOC=ROOT/'docs/50-diagnostics/s11'\nOUT=ROOT/'sample/output/s11-water-surface-localization-20261010-001'\nsha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()\ndef load(p):return json.loads(Path(p).read_text())\ndef save(p,d):Path(p).write_text(json.dumps(d,indent=2,ensure_ascii=False,allow_nan=False)+'\\n')\nassert not OUT.exists();OUT.mkdir(parents=True)\nprior=load(DOC/'2026-10-10-temporal-texture-observation.json')\nreply=load(DOC/'2026-10-10-later-water-role-reply.json')\ncase=next(c for c in prior['attempts'][-1]['preflight']['cases'] if c['case_id']=='water-f001438')\ninputs=[DOC/'2026-10-10-temporal-texture-observation.json',DOC/'2026-10-10-later-water-role-reply.json',\n        ROOT/case['source_raster']['path'],ROOT/'sample/output/s11-temporal-texture-20261010-003/water-f001438.npz']\npre=dict(schema='s11-source-review-preparation-v1',base_head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),\n source_case=case,inputs={str(p.relative_to(ROOT)):sha(p) for p in inputs},\n purpose='Before proposing a numerical water-surface reference, distinguish two current source features near the existing diagnostic centre. No detector or numeric score is run.',\n source_region_xyxy=[740,250,1160,1080],detail_xyxy=[840,450,1070,540],diagnostic_column_x=950,\n markers=[dict(id='B1',representative_source_xy=[950,487],description='Upper faint bright feature; physical role unreviewed.'),\n          dict(id='B2',representative_source_xy=[950,498],description='Lower stronger bright band; physical role unreviewed at this subfeature scope.')],\n marker_authority='Agent visual source locators, not Canny-derived candidates, exact human coordinates or proposed error tolerances.',\n review_question='Are B1 and B2 the rear/front projection of the same water surface, or is one the water surface and the other a reflection/bubble/other feature, or is the distinction unclear?',\n decision_dependency='Determines which observed feature, if any, may become a same-column surface-location reference. Water-surface presence alone does not identify every nearby bright edge.',\n closed_roles='B/C upper band: water surface without a Foam layer; A: Foam layer, lower boundary unclear. Do not ask those roles again or transfer a future B1/B2 answer to C.',\n constraints='No precise Y reference, tolerance, thickness, centre calibration or future numeric adoption is implied by a regional feature reply. Keep both alternatives if unclear; no nearest/strongest-edge choice.',\n outcome='PENDING_HUMAN_FEATURE_REVIEW',windows_required=False,production_change=False,\n runner_sha256=sha(__file__))\nsave(OUT/'preflight.json',pre);(OUT/'run.py').write_bytes(Path(__file__).read_bytes())\noriginal=Image.open(ROOT/case['source_raster']['path']).convert('RGB')\nassert sha(ROOT/case['source_raster']['path'])==case['source_raster']['sha256']\ncrop=original.crop(tuple(pre['source_region_xyxy']));detail=original.crop(tuple(pre['detail_xyxy']))\nwith np.load(inputs[-1],allow_pickle=False) as a:\n    assert np.array_equal(np.array(crop)[:,:,::-1],a['crops'][7])\n    canny_rows=[int(y+250) for y in np.flatnonzero(a['canny'][:,210]) if 450<=y+250<540]\nBG=(17,24,32);FG=(235,240,246);MUTED=(172,187,204)\nfont=lambda n:ImageFont.truetype('/System/Library/Fonts/Supplemental/Arial.ttf',n)\ncanvas=Image.new('RGB',(1440,1040),BG);draw=ImageDraw.Draw(canvas)\ndraw.text((24,20),'B | water surface location: two source features',font=font(29),fill=FG)\ndraw.text((24,60),'f1438 / 47.981 s. Foam-layer absence is already reviewed. Feature 1 / 2 remains unreviewed.',font=font(20),fill=MUTED)\ndraw.text((24,108),'Whole context (native pixels)',font=font(21),fill=FG)\ncanvas.paste(crop,(24,148))\ndraw.text((480,108),'Clean source detail (4x nearest-neighbour)',font=font(21),fill=FG)\nenlarged=detail.resize((920,360),Image.Resampling.NEAREST)\ncanvas.paste(enlarged,(480,148))\ndraw.text((480,553),'Same pixels with two approximate feature locators',font=font(21),fill=FG)\ncanvas.paste(enlarged,(480,598))\n# Markers have deliberately separate clean panels; do not cover source-only proof.\ncolours=[(74,220,244),(255,173,72)]\nfor i,m in enumerate(pre['markers']):\n    sx,sy=m['representative_source_xy'];px=480+(sx-840)*4;py=598+(sy-450)*4\n    colour=colours[i];tx=1272;ty=(695,848)[i]\n    draw.line((tx-12,ty+19,px+11,py),fill=colour,width=3)\n    draw.ellipse((px-8,py-8,px+8,py+8),outline=colour,width=3)\n    draw.rounded_rectangle((tx-2,ty-2,tx+69,ty+44),radius=8,fill=BG,outline=colour,width=2)\n    draw.text((tx+15,ty+2),str(i+1),font=font(30),fill=colour)\ndraw.text((480,979),'Locators are agent annotations, not selected heights or ground truth.',font=font(19),fill=MUTED)\nimage_path=DOC/'2026-10-10-water-surface-feature-review.png';assert not image_path.exists();canvas.save(image_path)\n# Verify the clean source panels exactly; checking overlays against raw would be wrong.\nback=Image.open(image_path).convert('RGB')\nassert np.array_equal(np.array(back.crop((24,148,444,978))),np.array(crop))\nassert np.array_equal(np.array(back.crop((480,148,1400,508))),np.array(enlarged))\nfor p,digest in pre['inputs'].items():assert sha(ROOT/p)==digest,p\nrecord=dict(schema='s11-source-feature-review-record-v1',preflight=pre,preflight_sha256=sha(OUT/'preflight.json'),\n image=dict(path=str(image_path.relative_to(ROOT)),sha256=sha(image_path),size=list(back.size)),\n clean_panels_equal_source=True,saved_anchor_crop_equal=True,inputs_preserved=True,\n old_canny_rows_in_detail=canny_rows,\n canny_interpretation='Saved raw edge locations are retained only as availability context. They do not name either physical feature or determine these visual locators.',\n disposition='PENDING_HUMAN_FEATURE_REVIEW',physical_decision='NOT_EVALUATED',\n script=Path(__file__).read_text(),local_preflight=str((OUT/'preflight.json').relative_to(ROOT)))\nsave(DOC/'2026-10-10-water-surface-feature-review.json',record)\nprint(json.dumps(dict(status='PREPARED_SOURCE_VERIFIED',image=str(image_path.relative_to(ROOT)),canny_rows=canny_rows)))\n",
+  "local_preflight": "sample/output/s11-water-surface-localization-20261010-001/preflight.json"
+}
