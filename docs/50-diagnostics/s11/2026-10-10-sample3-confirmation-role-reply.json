@@ -1,0 +1,127 @@
+{
+  "schema": "s11-reviewed-source-region-role-v1",
+  "base_head": "c4ad1267ac1e1d996cd2b72626c8f8af2261285c",
+  "authority": "Direct user reply to the frozen C/D physical-feature questions",
+  "question_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-sample3-confirmation-role-review.json",
+    "sha256": "297a609d4af7cd25b447b63074dc82a02aa5e8df0b0beaae356eef273708682a",
+    "original_status": "PENDING_USER_SOURCE_JUDGMENT"
+  },
+  "questions_verbatim": [
+    "새 이미지의 C(65.03초)에서 청록색 짧은 표시 부근의 경계는 무엇으로 보이나요? 기존 A·B 유면 판단은 확정했고, 이번에는 검출기가 그보다 앞서 추적을 시작한 대상이 실제 유면이었는지 확인하려고 합니다. 정확한 픽셀 위치를 묻는 것은 아닙니다.",
+    "새 이미지의 D(67.53초)에서 청록색 짧은 표시 부근의 경계는 무엇으로 보이나요? 기존 A·B 유면 판단은 확정했고, 이번에는 검출기가 그보다 앞서 추적을 시작한 대상이 실제 유면이었는지 확인하려고 합니다. 정확한 픽셀 위치를 묻는 것은 아닙니다."
+  ],
+  "reply_verbatim": "c는 glass 외부 프레임 구조물, D는 초점이 나가서 안보임.\n근데 sample3는 중간에 glass의 위치도 바뀌기도하고, 초점도 나가는 구간이 있는데 sample로 삼기에 적절한가?",
+  "status": "CLOSED",
+  "review_image": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-sample3-confirmation-role-review.png",
+    "sha256": "53107df28cc88d50126da2584071d92504c904956f92fcbc58fd475d8e5e5425"
+  },
+  "source_video": {
+    "path": "sample/sample3.mp4",
+    "sha256": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04"
+  },
+  "causal_archive": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-sample3-reappearance-causality.json.gz",
+    "sha256": "3c855f30fe28598252bc366da02cfa8e2ac8123d14a7093bc331fa03c7c63b1d"
+  },
+  "reviewed_relations": [
+    {
+      "view": "C",
+      "frame_index": 1949,
+      "source_timestamp_sec": 65.03163333333333,
+      "source_image": {
+        "path": "sample/output/s11-sample3-reappearance-20261010-001/f001949-source.png",
+        "sha256": "17fb276b68fda618d5b51d7aa2134b63e66ebf39833df7b1c7706d7a5ee0f4b3"
+      },
+      "display_rect_xywh": [
+        15,
+        140,
+        720,
+        720
+      ],
+      "guide_as_shown": {
+        "source": "phase_transition_scan",
+        "source_y": 235.0,
+        "source_tick_xyxy": [
+          825,
+          235.0,
+          845,
+          235.0
+        ]
+      },
+      "physical_role": "Glass external frame structure",
+      "qualification": "QUALIFIED_NON_OIL_STRUCTURE",
+      "oil_absence": "NOT_INFERRED",
+      "exact_y_truth": false,
+      "whole_candidate_or_track_identity": "NOT_CERTIFIED",
+      "saved_candidate_binding": {
+        "artifact": {
+          "path": "sample/output/s11-sample3-reappearance-20261010-001/f001949-native.json",
+          "sha256": "766d1779c0bd989940667a069d5226b7c9b6e0a63875b0bdc5bed1942d02133b"
+        },
+        "index": 21,
+        "source": "phase_transition_scan",
+        "source_y": 235.0,
+        "tracklet_id": "oil-tracklet:000066:0063",
+        "lifecycle": "provisional",
+        "confirmation_profile": "anchor_trajectory",
+        "meaning": "Identity of the diagnostic marker and its stored metadata, not a reviewed scalar truth."
+      }
+    },
+    {
+      "view": "D",
+      "frame_index": 2024,
+      "source_timestamp_sec": 67.53413333333333,
+      "source_image": {
+        "path": "sample/output/s11-sample3-reappearance-20261010-001/f002024-source.png",
+        "sha256": "f87682c838cef9cf23a33659480fa11aefce36821bc79365bdfa92309f7f35a9"
+      },
+      "display_rect_xywh": [
+        765,
+        140,
+        720,
+        720
+      ],
+      "guide_as_shown": {
+        "source": "distributed_sobel_path",
+        "source_y": 216.0,
+        "source_tick_xyxy": [
+          825,
+          216.0,
+          845,
+          216.0
+        ]
+      },
+      "physical_role": "Feature not visible because it is out of focus",
+      "qualification": "UNASSESSABLE_FOCUS_LOSS",
+      "oil_absence": "NOT_INFERRED",
+      "exact_y_truth": false,
+      "whole_candidate_or_track_identity": "NOT_CERTIFIED",
+      "saved_candidate_binding": {
+        "artifact": {
+          "path": "sample/output/s11-sample3-reappearance-20261010-001/f002024-native.json",
+          "sha256": "c3609d88397decc965f2e6ba16d5495e100520af13a0c9b6ce240f7eb07fe4fd"
+        },
+        "index": 6,
+        "source": "distributed_sobel_path",
+        "source_y": 216.0,
+        "tracklet_id": "oil-tracklet:000066:0063",
+        "lifecycle": "confirmed",
+        "confirmation_profile": "anchor_trajectory",
+        "meaning": "Identity of the diagnostic marker and its stored metadata, not a reviewed scalar truth."
+      }
+    }
+  ],
+  "user_reported_input_conditions": [
+    "Glass position changes during the recording",
+    "Some portions lose focus"
+  ],
+  "interpretation": "The earlier confirmation history cannot be certified as physical Oil motion: C locates an external-frame structure and D lacks visible detail. The precise first bad association edge and intervening frame roles remain unproven. Later A/B regional Oil roles remain closed and positive.",
+  "scope": "Regional physical roles of two displayed features only. No new scalar/tolerance/whole-frame label, no physical Oil absence at D, no inherited Oil truth for an entire track, no exact start/end times for position/focus changes.",
+  "supersedes": "Pending C/D role question only; frozen preparation, original images, prior source replies, Recipe and all legacy numerical labels remain unchanged.",
+  "production_changed": false,
+  "legacy_truth_changed": false,
+  "windows_execution_required": false,
+  "new_user_judgment_pending": false
+}

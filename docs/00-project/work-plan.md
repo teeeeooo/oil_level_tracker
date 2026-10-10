@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** Source-position, one-second cadence and sample4 f1305 role choices remain CLOSED. The sample4 cost-order-only probe remains CLOSED WITHOUT PROMOTION. The new red-marked sample3 reply closes A/B (75.04/78.04s) as visible Oil near the marked upper boundary, expressly without exact pixels or a tolerance. Complete 151-row baseline/native replay and 37-frame native capture expose historical-versus-recent direction use at the filled-cap gate. The one recent-basis-only attribution probe is CLOSED WITHOUT PROMOTION: it selects lower opposing structure at A/B and changes 18 Oil values. Next qualify the same internal track's earlier confirmation evidence: C/D at 65.03/67.53s ask whether the marked features were Oil, another structure, or unjudgeable. Hold dependent physical-history attribution for that reply; do not reopen A/B or old 95/105s unusable labels. No Windows task is required. Preserve all seven recordings, all 13 legacy values and their qualified comparison scope, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
+**Next transition:** Sample3 C/D judgment is CLOSED: C is glass external-frame structure; D is unobservable from focus loss. Its historical track cannot be certified as Oil motion. Close this causal branch without a phase repair; the recent-basis-only and sample4 cost-order-only probes remain CLOSED WITHOUT PROMOTION. Retain sample3 for engineering/robustness and source-qualified regional claims, not primary full-window physical accuracy or cadence; A/B remain visible-Oil positives without exact pixels/tolerance. Return O2 discrimination work to qualified water B/C and scoped sample4 positives/opposition, retaining beer/milk visibility/layer controls. Before another experiment, name a distinct physical observation and freeze the complete comparison; do not optimize sample3's long numeric gap. No new user judgment or Windows work is required for this source-scope decision. Preserve all seven recordings, all 13 legacy values and their qualified comparison scope, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -39,7 +39,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Upper projection, four source intervals, one-second cadence and f1305 relation are CLOSED. The owner-causality probe is CLOSED WITHOUT PROMOTION. Sample3 A/B late-gap physical-role review is OPEN before reappearance attribution; no physical selector is adopted. | [A/B/C comparison](../50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.md), [sample4 comparison](../50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md), [selected convention](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--upper-image-projection-selected), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
+| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Source-position/cadence/f1305 and sample3 A/B/C/D roles are CLOSED. Both owner/release attribution probes are CLOSED WITHOUT PROMOTION. Sample3 full-window physical scoring is unqualified; return to qualified water and scoped target-domain controls. No physical selector is adopted. | [A/B/C comparison](../50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.md), [sample4 comparison](../50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md), [sample3 scope](../50-diagnostics/s11/2026-10-10-sample3-evaluation-scope.md), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -228,7 +228,7 @@ reviewed lower Oil-boundary region in agent inspection. This is **CLOSED WITHOUT
 PROMOTION**, not a physical repair or permission to enter O3/O4. Production,
 all six Foam coordinate/confidence fields and canonical truth remain unchanged.
 
-**Sample3 A/B source role CLOSED; confirmation-history question OPEN:** the
+**Sample3 A/B/C/D source roles and evaluation scope CLOSED:** the
 [bounded source inspection](../50-diagnostics/s11/2026-10-10-sample3-gap-source.md)
 retains 16 uniform frames across the 34.5345–81.014267s numeric gap and all four
 old S3 annotation frames. All 19 native crops, 16 saved timestamps and four old
@@ -243,12 +243,17 @@ direction is downward; A's recent direction is stationary. Regional marks do not
 certify all native sectors or earlier physical ownership. A single full-window
 recent-basis-only probe selects lower opposing structure at both A/B, changes
 18 Oil values and preserves all six Foam fields. It is CLOSED WITHOUT PROMOTION.
-The [C/D image](../50-diagnostics/s11/2026-10-10-sample3-confirmation-role-review.png)
-and [frozen role questions](../50-diagnostics/s11/2026-10-10-sample3-confirmation-role-review.json)
-now qualify the actual 65.03/67.53s confirmation-window features before interpreting
-their displacement as motion of the later Oil. Hold dependent attribution for
-that reply. A/B, old 95/105s unusable labels and earlier source questions stay
-closed. No exact-pixel label, full-video relabeling or Windows work is required.
+The [C/D reply](../50-diagnostics/s11/2026-10-10-sample3-confirmation-role-reply.json)
+identifies the 65.03s feature as glass external-frame structure and the 67.53s
+feature as unobservable from focus loss. This history cannot certify Oil motion;
+the exact earliest association error remains unproven. The
+[scope disposition](../50-diagnostics/s11/2026-10-10-sample3-evaluation-scope.md)
+closes this causal branch without a phase repair. Retain full sample3 as
+engineering/robustness context and its reviewed regional claims separately;
+it is not a primary full-window accuracy/cadence benchmark under one fixed
+Recipe. Return to water B/C and scoped sample4 discrimination controls rather
+than optimizing the long gap. A/B, old 95/105s unusable labels and earlier source
+questions stay closed; no further sample3 judgment or Windows task is needed.
 
 Before another trial, name one distinct physical boundary/role observation,
 the existing measurement owner and a reproducible decision/abstention rule.
@@ -735,7 +740,7 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 | Foam geometry | sample4 rim C1 versus Foam-region C2 correspondence known; actual column support differs from bbox relation. Mixed central structures and sample2 reflected features remain unresolved; no blanket veto removal | [Owner audit](../50-diagnostics/s11/2026-10-06-local-oil-foam-owner-audit.md) |
 | Foam front/motion | A/C/D Foam, B mixed; red marks tentative, 14/16 s clicks approximate. Central circular features are structures, but exact front/structure split remains unassigned. Appearance/motion-only selectors rejected | [Front alternatives](../60-evidence/s11/2026-10-06-foam-front-alternatives.md), [residuals](../60-evidence/s11/2026-10-06-boundary-temporal-residuals.md), [selection feasibility](../60-evidence/s11/2026-10-06-foam-edge-selection-feasibility.md) |
 | ROI / paired-pulse controls | Existing ellipse works; human-ROI recipe remains unadopted. Inner/outer clicks retain uncertainty. Oil Y854 confirmed at 14 s; selected Y821 unresolved. Pulse correction failed safety and was restored; diagnostic reason repair accepted. Collision controls and opposition remain required | [Structure/ROI/authority audit](../50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md) |
-| sample3 reappearance | FILLED_CAP_VETO occurs in 87/92 missing rows of the audited long gap; those candidates are not thereby true Oil. Phase repair needs identity and two-sided controls | [Episode audit](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
+| sample3 reappearance | A/B regional Oil is visible; earlier C is external-frame structure and D is unobservable. Historical motion is unqualified; recent-direction probe closed without promotion. Full recording retained as engineering/robustness context, not a full-window physical-accuracy/cadence oracle | [Source-scope closure](../50-diagnostics/s11/2026-10-10-sample3-evaluation-scope.md) |
 
 ## Current authorization boundary
 
