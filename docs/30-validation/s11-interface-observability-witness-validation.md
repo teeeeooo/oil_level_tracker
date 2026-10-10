@@ -1035,12 +1035,21 @@ independent physical positives or a filled Y tolerance interval. Preserve both
 projected branches and the reply's exact scope; the approximate marker points
 are not contour truth. Before a decisive scalar comparison, declare which
 projection is the measurement target and review its actual coordinate/support.
-The [pending convention proposal](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--scalar-convention-pending)
-does not modify current labels or scoring. A future implementation must retain
-physical-target ambiguity, distinguish branch occlusion from interface absence,
-avoid fallback to another projection when its chosen one is unavailable, and
+The [selected upper-projection convention](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--upper-image-projection-selected)
+does not certify existing marker coordinates or modify current labels/scoring.
+A future implementation must allow a clearly identified single upper projection
+without requiring two arcs; retain physical-target ambiguity, distinguish branch
+occlusion from interface absence, avoid fallback to another projection when its chosen one is unavailable, and
 reject an unrelated higher edge. Correct physical identity with an unqualified
 scalar remains two separate outcomes; it is not a successful numeric observation.
+
+The [first reviewed B interval](../50-diagnostics/s11/2026-10-10-upper-projection-interval-reply.json)
+qualifies only the source-position uncertainty at X950. A sector-wide sampling
+row whose X band includes that column can be checked for positional compatibility;
+such agreement does not certify an observed contour, physical identity or a
+successful selected scalar. Preserve the original candidate median separately.
+An interval is not filled target support, and its midpoint is not exact truth.
+Unreviewed A/C proposals remain outside numerical reference use until answered.
 
 Keep every qualified/unqualified case, denominator, missing output and reason
 visible. Do not select only easy frames after results or turn crop-center geometry
@@ -1131,9 +1140,10 @@ complete frozen comparison then triggers the stop rule without promotion.
 The subsequent local-truth audit qualifies source/annotation uses before a
 successor's physical comparison; it preserves original labels, test outputs
 and the failed experiment's disposition.
-The later same-surface reply also separates projected-branch semantics from
-physical identity and reviewed coordinate precision; its proposed scalar
-convention remains unadopted while the user choice is pending.
+The later same-surface reply separates projected-branch semantics from physical
+identity and reviewed coordinate precision. The selected upper image projection
+fixes the measurement target; source-reference precision and selector efficacy
+still require their own evidence.
 H0's support-face intersection loses available partition geometry, while CBR-1
 admits wrong-region appearance despite current geometry. Private first physical
 causes and field effectiveness remain unqualified. F07's Foam front/texture

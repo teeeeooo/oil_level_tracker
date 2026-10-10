@@ -664,3 +664,18 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-10 | [B source-feature preparation](50-diagnostics/s11/2026-10-10-water-surface-feature-review.json) | 기존 원본·좌표·표식의 출처와 화소 동일성; 수면 위치 기준 전제 확인 |
 | 2026-10-10 | [B clean/marked detail](50-diagnostics/s11/2026-10-10-water-surface-feature-review.png) | 위쪽 약한 부분 1과 아래쪽 굵은 띠 2의 물리적 관계 판단용; 검출·정답 아님 |
 | 2026-10-10 | [B same-surface reply](50-diagnostics/s11/2026-10-10-water-surface-feature-reply.json) | 두 부분이 같은 수면의 앞뒤임을 확인; 높이 기준 윤곽·정확한 좌표는 별도 |
+
+## 2026-10-10 upper-projection choice and reference preparation
+
+| 최초 Git 추가일(KST) | 파일 | 역할 |
+|---|---|---|
+| 2026-10-10 | [Upper-projection choice](50-diagnostics/s11/2026-10-10-upper-projection-choice.json) | 고정 중앙 열에서 같은 수면의 위쪽 윤곽을 읽는 기준 채택 |
+| 2026-10-10 | [Reference preparation](50-diagnostics/s11/2026-10-10-upper-projection-reference.md) | 기존 추출기 재사용, 원시 경계와 물리적 정답 구분, B 위치 범위 검토 |
+| 2026-10-10 | [Preparation machine record](50-diagnostics/s11/2026-10-10-upper-projection-reference.json) | 원본·배열·좌표·제안 범위의 출처와 전체 중앙 열 관측 |
+| 2026-10-10 | [B proposed source interval](50-diagnostics/s11/2026-10-10-upper-projection-reference-review.png) | B 검토 당시 원본·표식; 승인 답변은 별도 파일로 보존 |
+| 2026-10-10 | [B interval reply](50-diagnostics/s11/2026-10-10-upper-projection-interval-reply.json) | X950의 B 수면 위치 불확실성 범위를 승인한 사용자 답변 |
+| 2026-10-10 | [B material-path interval audit](50-diagnostics/s11/2026-10-10-b-material-path-interval.md) | 기존 경로 최적화에서 중앙 위치 후보를 잃는 단계 확인 |
+| 2026-10-10 | [B lane machine record](50-diagnostics/s11/2026-10-10-b-material-path-interval.json) | 두 고정 축척의 전체 원래 시드·경로·원인 확인과 재현 스크립트 |
+| 2026-10-10 | [B sampling geometry](50-diagnostics/s11/2026-10-10-b-material-path-interval.png) | 승인 범위와 기존 후보의 실제 섹터 표본 위치 |
+| 2026-10-10 | [A/C source review record](50-diagnostics/s11/2026-10-10-upper-projection-ac-review.json) | A 거품 상단·C 수면의 독립적인 위치 범위 제안; 미검토 |
+| 2026-10-10 | [A/C source review](50-diagnostics/s11/2026-10-10-upper-projection-ac-review.png) | 원본 확대와 두 위치 범위를 묶은 사용자 검토 이미지 |

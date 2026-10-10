@@ -1,0 +1,150 @@
+{
+  "schema": "s11-upper-projection-ac-review-v1",
+  "preflight": {
+    "schema": "s11-upper-projection-ac-source-preparation-v1",
+    "base_head": "f9737d3caa290b6aee80da2f9e4320b6b1f0f535",
+    "inputs": {
+      "docs/50-diagnostics/s11/2026-10-10-water-first-source-qualification.json": "b162167d3d6434b504e0dec01bd2f06df4ee035efda7462d809eca4796417191",
+      "docs/50-diagnostics/s11/2026-10-10-upper-projection-choice.json": "9415a0ba4ef1bf68990d46ffbe6dd8b41c8b33b31e19bb449d865c99723a11d0",
+      "docs/50-diagnostics/s11/2026-10-10-upper-projection-interval-reply.json": "2a0fb9f838c693f80602ef9935606f87f75d0d3f9b6ecaf131b21dd82d95f548",
+      "docs/50-diagnostics/s11/2026-10-10-water-lower-interface-reply.json": "1d19cc557c4e40fd686aeac056736718fb11fbacc82f40fb57485deeea81731e",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22",
+      "docs/50-diagnostics/s11/2026-10-10-water-foam-role-reply.json": "57ef93a47183b090258848adea6b756a9d0fa70b2130028a41c5933a267913f1",
+      "docs/50-diagnostics/s11/2026-10-10-later-water-role-reply.json": "36f7ac8697b952b4ce74eff8ffbd4632281b3f4ba316a145221db33ce8a0b0d8"
+    },
+    "cases": [
+      {
+        "label": "A",
+        "case_id": "water-f001232",
+        "frame_index": 1232,
+        "nominal_time_sec": 41.107733333333336,
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
+          "sha256": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
+          "source_origin_xy": [
+            0,
+            0
+          ],
+          "shape": [
+            1080,
+            1920,
+            3
+          ]
+        },
+        "physical_role": "Foam upper outline",
+        "role_reply": {
+          "path": "docs/50-diagnostics/s11/2026-10-10-water-foam-role-reply.json",
+          "sha256": "57ef93a47183b090258848adea6b756a9d0fa70b2130028a41c5933a267913f1"
+        },
+        "source_x": 950,
+        "proposed_pixel_rows_inclusive": [
+          476,
+          481
+        ],
+        "proposed_y_cell_bounds": [
+          475.5,
+          481.5
+        ],
+        "authority": "agent native-source visual proposal, not reviewed position truth",
+        "status": "PENDING_HUMAN_INTERVAL_REVIEW"
+      },
+      {
+        "label": "C",
+        "case_id": "water-f001643",
+        "frame_index": 1643,
+        "nominal_time_sec": 54.82143333333333,
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png",
+          "sha256": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22",
+          "source_origin_xy": [
+            0,
+            0
+          ],
+          "shape": [
+            1080,
+            1920,
+            3
+          ]
+        },
+        "physical_role": "Water upper surface",
+        "role_reply": {
+          "path": "docs/50-diagnostics/s11/2026-10-10-later-water-role-reply.json",
+          "sha256": "36f7ac8697b952b4ce74eff8ffbd4632281b3f4ba316a145221db33ce8a0b0d8"
+        },
+        "source_x": 950,
+        "proposed_pixel_rows_inclusive": [
+          489,
+          494
+        ],
+        "proposed_y_cell_bounds": [
+          488.5,
+          494.5
+        ],
+        "authority": "agent native-source visual proposal, not reviewed position truth",
+        "status": "PENDING_HUMAN_INTERVAL_REVIEW"
+      }
+    ],
+    "source_video": "sample/sample5.mp4",
+    "source_video_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+    "source_region_xyxy": [
+      740,
+      250,
+      1160,
+      1080
+    ],
+    "display_context_xyxy": [
+      740,
+      310,
+      1160,
+      760
+    ],
+    "detail_xyxy": [
+      840,
+      450,
+      1070,
+      510
+    ],
+    "choice": "fixed-center-upper-image-projection-v1",
+    "geometry": "diagnostic X950 only, no calibrated Glass/zero line/mm",
+    "basis": "Direct clean source inspection at the same pre-existing column, independently for each frame. No new detector outcome, residual or tolerance optimization used. Prior diagnostics already exposed these development sources.",
+    "purpose": "Qualify Foam-upper A independently of its already-unclear lower interface, and water-upper C independently of B. A second water point in the same recording is not recording-level independence or holdout.",
+    "stop_rule": "Do not score or execute a revised selector against these proposed intervals before the human answer. A rejected/unclear interval remains unresolved and is not an absence label. No propagation to other frames.",
+    "runner_sha256": "5abea7b43592d09aba4f254afd559f628e4c2ec54c8a999c925e0c1dda125719",
+    "production_changed": false,
+    "legacy_truth_changed": false,
+    "windows_required": false
+  },
+  "preflight_sha256": "7f1407591cb52a3fc041ee654c2f360836aecce9bf65e3cbc7bef0c51dd68078",
+  "image": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-upper-projection-ac-review.png",
+    "sha256": "6e210e314d99a027ff3e14f8a77280319df3fe0e7295055e4014742d70de809c",
+    "size": [
+      1440,
+      1240
+    ]
+  },
+  "clean_panels_verified": [
+    {
+      "case_id": "water-f001232",
+      "context_equal": true,
+      "detail_equal": true
+    },
+    {
+      "case_id": "water-f001643",
+      "context_equal": true,
+      "detail_equal": true
+    }
+  ],
+  "inputs_preserved": true,
+  "review_question": "A에서는 거품층 윗면, C에서는 수면의 위쪽 윤곽이 청록색 중앙선과 만나는 위치를 표시했습니다. 작은 노란 상자가 각 위치의 가능한 범위를 담고 있다고 봐도 될까요? A의 불명확한 아래 경계는 이번 확인 대상이 아닙니다.",
+  "status": "PENDING_HUMAN_INTERVAL_REVIEW",
+  "script": "from pathlib import Path\nimport hashlib,json\nfrom PIL import Image,ImageDraw,ImageFont\nROOT=Path('/Users/sunjaekim/Developer/oil_level_tracker')\nD=ROOT/'docs/50-diagnostics/s11'\nOUT=ROOT/'sample/output/s11-upper-projection-ac-review-20261010-001'\nOUT.mkdir(exist_ok=False)\nsha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()\ninventory_path=D/'2026-10-10-water-first-source-qualification.json'\ninventory=json.loads(inventory_path.read_text())\nsource_cases={c['frame_index']:c for c in inventory['preflight']['cases']}\ncases=[]\nfor label,frame,role,rows,reply in [\n ('A',1232,'Foam upper outline',[476,481],'2026-10-10-water-foam-role-reply.json'),\n ('C',1643,'Water upper surface',[489,494],'2026-10-10-later-water-role-reply.json')]:\n c=source_cases[frame]\n cases.append({'label':label,'case_id':c['case_id'],'frame_index':frame,'nominal_time_sec':c['nominal_time_sec'],\n               'source_raster':c['source_raster'],'physical_role':role,\n               'role_reply':{'path':str((D/reply).relative_to(ROOT)),'sha256':sha(D/reply)},\n               'source_x':950,'proposed_pixel_rows_inclusive':rows,'proposed_y_cell_bounds':[rows[0]-.5,rows[1]+.5],\n               'authority':'agent native-source visual proposal, not reviewed position truth',\n               'status':'PENDING_HUMAN_INTERVAL_REVIEW'})\ninputs={str(p.relative_to(ROOT)):sha(p) for p in [inventory_path,D/'2026-10-10-upper-projection-choice.json',D/'2026-10-10-upper-projection-interval-reply.json',D/'2026-10-10-water-lower-interface-reply.json',*[ROOT/c['source_raster']['path'] for c in cases],*[ROOT/c['role_reply']['path'] for c in cases]]}\nfor c in cases:assert sha(ROOT/c['source_raster']['path'])==c['source_raster']['sha256']\npreflight={'schema':'s11-upper-projection-ac-source-preparation-v1','base_head':'f9737d3caa290b6aee80da2f9e4320b6b1f0f535',\n 'inputs':inputs,'cases':cases,'source_video':'sample/sample5.mp4','source_video_sha256':'8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79',\n 'source_region_xyxy':[740,250,1160,1080],'display_context_xyxy':[740,310,1160,760],'detail_xyxy':[840,450,1070,510],\n 'choice':'fixed-center-upper-image-projection-v1','geometry':'diagnostic X950 only, no calibrated Glass/zero line/mm',\n 'basis':'Direct clean source inspection at the same pre-existing column, independently for each frame. No new detector outcome, residual or tolerance optimization used. Prior diagnostics already exposed these development sources.',\n 'purpose':'Qualify Foam-upper A independently of its already-unclear lower interface, and water-upper C independently of B. A second water point in the same recording is not recording-level independence or holdout.',\n 'stop_rule':'Do not score or execute a revised selector against these proposed intervals before the human answer. A rejected/unclear interval remains unresolved and is not an absence label. No propagation to other frames.',\n 'runner_sha256':sha(Path(__file__)),'production_changed':False,'legacy_truth_changed':False,'windows_required':False}\n(OUT/'preflight.json').write_text(json.dumps(preflight,indent=2,ensure_ascii=False)+'\\n')\n(OUT/'run.py').write_bytes(Path(__file__).read_bytes())\nfontpath='/System/Library/Fonts/Supplemental/Arial.ttf'\nfont=lambda size:ImageFont.truetype(fontpath,size)\nim=Image.new('RGB',(1440,1240),'#f5f7fb');draw=ImageDraw.Draw(im)\ndraw.text((24,16),'A and C: upper projection at the same diagnostic source column',font=font(26),fill='#15283b')\ndraw.text((24,49),'Source-position review only. Yellow boxes are proposed uncertainty, not thickness or detector output.',font=font(18),fill='#40566b')\nclean_checks=[]\nfor c,base in zip(cases,(110,700)):\n source=Image.open(ROOT/c['source_raster']['path']).convert('RGB')\n context=source.crop(tuple(preflight['display_context_xyxy']))\n detail=source.crop(tuple(preflight['detail_xyxy'])).resize((920,240),Image.Resampling.NEAREST)\n draw.text((24,base-30),f\"{c['label']} / {c['physical_role']} / {c['nominal_time_sec']:.3f} s\",font=font(21),fill='#15283b')\n im.paste(context,(24,base));im.paste(detail,(480,base))\n annotated_y=base+276\n im.paste(detail,(480,annotated_y))\n draw.text((480,annotated_y-26),'Same pixels, with X950 and proposed range',font=font(18),fill='#40566b')\n cx=480+(950-840+.5)*4\n for y in range(annotated_y,annotated_y+240,10):draw.line((cx,y,cx,min(y+5,annotated_y+239)),fill='#00efd8',width=2)\n lo,hi=c['proposed_pixel_rows_inclusive'];top=annotated_y+(lo-450)*4;bottom=annotated_y+(hi+1-450)*4-1\n draw.rectangle((cx-10,top,cx+10,bottom),outline='#ffe74c',width=3)\n draw.line((cx+12,(top+bottom)/2,1050,annotated_y+35),fill='#ffe74c',width=2)\n draw.text((1058,annotated_y+15),f\"{c['label']}: source rows {lo} - {hi}\",font=font(19),fill='#ffe74c')\n draw.text((24,base+465),'Native source context; right detail is 4x nearest.',font=font(16),fill='#40566b')\n clean_checks.append({'case_id':c['case_id'],'context_equal':im.crop((24,base,444,base+450)).tobytes()==context.tobytes(),\n                      'detail_equal':im.crop((480,base,1400,base+240)).tobytes()==detail.tobytes()})\nassert all(c['context_equal'] and c['detail_equal'] for c in clean_checks)\nimage_path=D/'2026-10-10-upper-projection-ac-review.png';im.save(image_path)\nfor name,pin in inputs.items():assert sha(ROOT/name)==pin,name\nrecord={'schema':'s11-upper-projection-ac-review-v1','preflight':preflight,'preflight_sha256':sha(OUT/'preflight.json'),\n 'image':{'path':str(image_path.relative_to(ROOT)),'sha256':sha(image_path),'size':list(im.size)},\n 'clean_panels_verified':clean_checks,'inputs_preserved':True,\n 'review_question':'A에서는 거품층 윗면, C에서는 수면의 위쪽 윤곽이 청록색 중앙선과 만나는 위치를 표시했습니다. 작은 노란 상자가 각 위치의 가능한 범위를 담고 있다고 봐도 될까요? A의 불명확한 아래 경계는 이번 확인 대상이 아닙니다.',\n 'status':'PENDING_HUMAN_INTERVAL_REVIEW','script':(OUT/'run.py').read_text(),\n 'local_artifacts':{str(p.relative_to(ROOT)):sha(p) for p in (OUT/'preflight.json',OUT/'run.py')},\n 'detector_executed':False,'production_changed':False,'new_numeric_truth':False}\n(D/'2026-10-10-upper-projection-ac-review.json').write_text(json.dumps(record,indent=2,ensure_ascii=False)+'\\n')\nprint('AC_SOURCE_PREPARATION_VERIFIED',image_path)\n",
+  "local_artifacts": {
+    "sample/output/s11-upper-projection-ac-review-20261010-001/preflight.json": "7f1407591cb52a3fc041ee654c2f360836aecce9bf65e3cbc7bef0c51dd68078",
+    "sample/output/s11-upper-projection-ac-review-20261010-001/run.py": "5abea7b43592d09aba4f254afd559f628e4c2ec54c8a999c925e0c1dda125719"
+  },
+  "detector_executed": false,
+  "production_changed": false,
+  "new_numeric_truth": false
+}

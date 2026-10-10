@@ -1,0 +1,89 @@
+{
+  "schema": "s11-reviewed-source-position-interval-v1",
+  "base_head": "f9737d3caa290b6aee80da2f9e4320b6b1f0f535",
+  "authority": "direct user review of the displayed source-position uncertainty box",
+  "question_verbatim": "방금 표시한 B 확대 이미지에서, 중앙의 청록색 세로선과 위쪽 수면 ①이 만나는 위치가 작은 노란 상자 안에 있다고 봐도 될까요? 한 픽셀을 정답으로 단정하지 않고, 위치가 들어갈 수 있는 범위를 확인하는 질문입니다.",
+  "reply_verbatim": "표시한 범위로 맞음",
+  "status": "CLOSED",
+  "question_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-upper-projection-reference.json",
+    "sha256": "c1b4a0b25b8577e8af53a489da3cd39929e4c8da001a2acfd4b3f0bb5bd09966",
+    "original_disposition": "PENDING_HUMAN_INTERVAL_REVIEW"
+  },
+  "source_figure": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-upper-projection-reference-review.png",
+    "sha256": "34dd26450f8e908919ba48462aecd24c388d9f2d92525bc5b10d4ee62847cabc",
+    "size": [
+      1440,
+      1040
+    ]
+  },
+  "source_case": {
+    "case_id": "water-f001438",
+    "video": "sample/sample5.mp4",
+    "video_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+    "frame_index": 1438,
+    "nominal_time_sec": 47.98126666666667,
+    "source_raster": {
+      "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png",
+      "sha256": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+      "source_origin_xy": [
+        0,
+        0
+      ],
+      "shape": [
+        1080,
+        1920,
+        3
+      ]
+    }
+  },
+  "source_region_xyxy": [
+    740,
+    250,
+    1160,
+    1080
+  ],
+  "detail_xyxy": [
+    840,
+    450,
+    1070,
+    540
+  ],
+  "rule_id": "fixed-center-upper-image-projection-v1",
+  "rule_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-upper-projection-choice.json",
+    "sha256": "9415a0ba4ef1bf68990d46ffbe6dd8b41c8b33b31e19bb449d865c99723a11d0"
+  },
+  "reviewed_reference": {
+    "diagnostic_source_x": 950,
+    "source_pixel_rows_inclusive": [
+      484,
+      489
+    ],
+    "continuous_row_cell_bounds_y": [
+      483.5,
+      489.5
+    ],
+    "target": "upper image projection of the independently reviewed B water surface at the displayed fixed source column",
+    "meaning": "Uncertainty interval for one intersection. Half-pixel endpoints are pixel-cell boundaries, not subpixel accuracy.",
+    "eligibility": "QUALIFIED_SOURCE_POSITION_INTERVAL_ONLY",
+    "not_authorized": [
+      "exact single Y",
+      "dense contour mask",
+      "six-pixel material layer",
+      "physical thickness",
+      "calibrated Glass geometry",
+      "zero line or millimetre conversion",
+      "identity of all edges inside the interval",
+      "projection to C or neighbouring frames",
+      "automatic detector acceptance"
+    ]
+  },
+  "exposure": "Development source already inspected with raw Canny observations; not blinded annotation or a held-out test.",
+  "supersedes": "The pending interval-review disposition only. Frozen preparation, image, older role replies and legacy labels remain unchanged.",
+  "physical_selector_qualified": false,
+  "production_changed": false,
+  "legacy_truth_changed": false,
+  "windows_execution_required": false
+}

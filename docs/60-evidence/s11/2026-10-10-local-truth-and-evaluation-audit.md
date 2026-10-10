@@ -146,6 +146,12 @@ The later [B feature reply](../../50-diagnostics/s11/2026-10-10-water-surface-fe
 identifies its two marked features as front/back views of one surface. This
 closes their physical relation without establishing a projected-branch scalar
 convention, exact contour/Y, thickness or an acceptable interval between them.
+The subsequent [upper-projection choice](../../50-diagnostics/s11/2026-10-10-upper-projection-choice.json)
+settles the convention for the offline challenger; the
+[first B reference](../../50-diagnostics/s11/2026-10-10-upper-projection-reference.md)
+now has a separately bound user-approved position-uncertainty interval at X950,
+rows 484–489. That one exposed source point does not certify exact Y, calibrated
+height, C, a dense contour or any legacy coordinate. A/C proposals remain pending.
 Neither the broad early-empty reading nor 41–55 s becomes continuous truth. These source corrections
 preserve this audit's original machine record and all old/new observations; no
 detector result was used to drop cases.

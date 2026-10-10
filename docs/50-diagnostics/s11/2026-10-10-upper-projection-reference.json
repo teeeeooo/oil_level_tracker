@@ -1,0 +1,184 @@
+{
+  "schema": "s11-upper-projection-reference-preparation-v1",
+  "preflight": {
+    "schema": "s11-upper-projection-reference-preparation-v1",
+    "base_head": "f9737d3caa290b6aee80da2f9e4320b6b1f0f535",
+    "purpose": "Prepare the first source-bound interval review under the selected upper-image-projection rule. No detector trial or scalar score.",
+    "inputs": {
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+      "sample/output/s11-water-foam-support-20261010-002/f001438.npz": "4588d04d3ff5f5e12101ad5d3f8f344b4a320951a35835e84881d474108f26bf",
+      "sample/output/s11-water-foam-support-20261010-002/stages/f001438.npz": "f82766e1ef35bb573bb236cb46fc7ba2bc2e899657f59fc48c9d5bb3a0cc3c59",
+      "docs/50-diagnostics/s11/2026-10-10-water-surface-feature-reply.json": "10b53b08cd47a962556b45f3e39d4788dbadf88f373be024c22bdf8479bf0399",
+      "docs/50-diagnostics/s11/2026-10-10-upper-projection-choice.json": "9415a0ba4ef1bf68990d46ffbe6dd8b41c8b33b31e19bb449d865c99723a11d0",
+      "docs/50-diagnostics/s11/2026-10-10-water-foam-representation.json": "efdbe145f01f9f6924c31751c4eef952b12e934eb043a5b3cd6848f00ccaa38c"
+    },
+    "source_case": {
+      "case_id": "water-f001438",
+      "video": "sample/sample5.mp4",
+      "video_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+      "frame_index": 1438,
+      "nominal_time_sec": 47.98126666666667,
+      "source_raster": {
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png",
+        "sha256": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+        "source_origin_xy": [
+          0,
+          0
+        ],
+        "shape": [
+          1080,
+          1920,
+          3
+        ]
+      }
+    },
+    "rule_id": "fixed-center-upper-image-projection-v1",
+    "source_region_xyxy": [
+      740,
+      250,
+      1160,
+      1080
+    ],
+    "detail_xyxy": [
+      840,
+      450,
+      1070,
+      540
+    ],
+    "reference_proposal": {
+      "source_x": 950,
+      "source_pixel_rows_inclusive": [
+        484,
+        489
+      ],
+      "source_y_interval": [
+        483.5,
+        489.5
+      ],
+      "semantics": "Uncertainty about one upper-projection coordinate at this column, not a physical layer, a dense contour mask, or acceptance of all other edges in the interval. Half-pixel endpoints are row-cell bounds, not claimed subpixel accuracy.",
+      "authority": "Agent source-visual proposal only; pending human review.",
+      "selection_basis": "Native source inspection at the existing diagnostic X. The previous Canny rows were already exposed; this is not blinded or holdout annotation. No candidate prediction/error or detector success rate determined the interval.",
+      "geometry_status": "DIAGNOSTIC_CROP_CENTER_ONLY",
+      "calibration": "No zero line or mm/px calibration assigned.",
+      "review_status": "PENDING_HUMAN_INTERVAL_REVIEW"
+    },
+    "control_scope": "B/f1438 only. Keep all existing water/beer/milk/target controls and legacy cases at their own scopes; no interval or front/back relation transfers to C or neighbours.",
+    "readout": "Retain all existing Canny centre rows and all existing support-face crossings, including censorship. Interval hits are representation availability only, not chosen physical pixels.",
+    "stop_rule": "Do not install this interval as executable truth or use it for scalar efficacy until the user reviews its source meaning. Unclear leaves it unqualified; no window/threshold repair follows.",
+    "windows_required": false,
+    "production_change": false,
+    "formal_label_change": false,
+    "runner_sha256": "2410761c2a5c42009bf355d5647b379b4ebcf7af64a85baf68f06c9b12b78dde"
+  },
+  "preflight_sha256": "fcc02a1e99f1db63880ce8e58cf4c05c45c98031d91f1daa72783d72f854bdec",
+  "readout": {
+    "all_canny_center_rows": [
+      331,
+      334,
+      485,
+      488,
+      492,
+      496,
+      500,
+      775,
+      779,
+      828,
+      829,
+      834,
+      835,
+      846,
+      847,
+      848,
+      858,
+      864,
+      865,
+      886,
+      891,
+      900,
+      906,
+      910,
+      914,
+      935,
+      936,
+      939,
+      940,
+      945,
+      950,
+      959
+    ],
+    "visible_canny_center_rows": [
+      331,
+      334,
+      485,
+      488,
+      492,
+      496,
+      500,
+      775,
+      779,
+      828,
+      829,
+      834,
+      835,
+      846,
+      847,
+      848,
+      858,
+      864,
+      865,
+      886,
+      891,
+      900,
+      906,
+      910,
+      914,
+      935,
+      936,
+      939,
+      940,
+      945,
+      950,
+      959
+    ],
+    "proposed_interval_canny_rows": [
+      485,
+      488
+    ],
+    "all_retained_appearance_crossings": [
+      {
+        "face_index": 1724,
+        "source_y": 885.5,
+        "inside_label": 15,
+        "outside_label": 0,
+        "status": 0
+      },
+      {
+        "face_index": 1762,
+        "source_y": 890.5,
+        "inside_label": 15,
+        "outside_label": 0,
+        "status": 0
+      }
+    ],
+    "proposed_interval_appearance_crossings": [],
+    "proposed_interval_glare_rows": [],
+    "interpretation": "No interval hit certifies physical correspondence. These are unchanged raw edges and retained appearance faces, not Oil or Foam predictions.",
+    "physical_decision": "NOT_EVALUATED",
+    "numeric_truth_created": false
+  },
+  "image": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-upper-projection-reference-review.png",
+    "sha256": "34dd26450f8e908919ba48462aecd24c388d9f2d92525bc5b10d4ee62847cabc",
+    "size": [
+      1440,
+      1040
+    ]
+  },
+  "clean_panels_equal_source": true,
+  "saved_capture_equal": true,
+  "inputs_preserved": true,
+  "disposition": "PENDING_HUMAN_INTERVAL_REVIEW",
+  "physical_decision": "NOT_EVALUATED",
+  "script": "\"\"\"Prepare a source-only uncertainty proposal; never select a detector output.\"\"\"\nfrom pathlib import Path\nimport hashlib\nimport json\nimport subprocess\n\nimport cv2\nimport numpy as np\nfrom PIL import Image, ImageDraw, ImageFont\n\nROOT = Path.cwd()\nDOC = ROOT / 'docs/50-diagnostics/s11'\nOUT = ROOT / 'sample/output/s11-upper-projection-reference-20261010-001'\nsha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()\nload = lambda p: json.loads(Path(p).read_text())\n\n\ndef save(path, value):\n    Path(path).write_text(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False) + '\\n')\n\n\nassert not OUT.exists()\nOUT.mkdir(parents=True)\nrelation = load(DOC / '2026-10-10-water-surface-feature-reply.json')\nold = load(DOC / '2026-10-10-water-foam-representation.json')\ncapture_path = ROOT / 'sample/output/s11-water-foam-support-20261010-002/f001438.npz'\nstages_path = ROOT / 'sample/output/s11-water-foam-support-20261010-002/stages/f001438.npz'\nsource_path = ROOT / relation['source_raster']['path']\ninputs = [source_path, capture_path, stages_path,\n          DOC / '2026-10-10-water-surface-feature-reply.json',\n          DOC / '2026-10-10-upper-projection-choice.json',\n          DOC / '2026-10-10-water-foam-representation.json']\npre = dict(\n    schema='s11-upper-projection-reference-preparation-v1',\n    base_head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),\n    purpose='Prepare the first source-bound interval review under the selected upper-image-projection rule. No detector trial or scalar score.',\n    inputs={str(p.relative_to(ROOT)): sha(p) for p in inputs},\n    source_case=dict(case_id=relation['case_id'], video=relation['video'],\n                     video_sha256=relation['video_sha256'], frame_index=1438,\n                     nominal_time_sec=1438 * 1001 / 30000,\n                     source_raster=relation['source_raster']),\n    rule_id='fixed-center-upper-image-projection-v1',\n    source_region_xyxy=[740, 250, 1160, 1080],\n    detail_xyxy=[840, 450, 1070, 540],\n    reference_proposal=dict(\n        source_x=950, source_pixel_rows_inclusive=[484, 489],\n        source_y_interval=[483.5, 489.5],\n        semantics='Uncertainty about one upper-projection coordinate at this column, not a physical layer, a dense contour mask, or acceptance of all other edges in the interval. Half-pixel endpoints are row-cell bounds, not claimed subpixel accuracy.',\n        authority='Agent source-visual proposal only; pending human review.',\n        selection_basis='Native source inspection at the existing diagnostic X. The previous Canny rows were already exposed; this is not blinded or holdout annotation. No candidate prediction/error or detector success rate determined the interval.',\n        geometry_status='DIAGNOSTIC_CROP_CENTER_ONLY',\n        calibration='No zero line or mm/px calibration assigned.',\n        review_status='PENDING_HUMAN_INTERVAL_REVIEW'),\n    control_scope='B/f1438 only. Keep all existing water/beer/milk/target controls and legacy cases at their own scopes; no interval or front/back relation transfers to C or neighbours.',\n    readout='Retain all existing Canny centre rows and all existing support-face crossings, including censorship. Interval hits are representation availability only, not chosen physical pixels.',\n    stop_rule='Do not install this interval as executable truth or use it for scalar efficacy until the user reviews its source meaning. Unclear leaves it unqualified; no window/threshold repair follows.',\n    windows_required=False, production_change=False, formal_label_change=False,\n    runner_sha256=sha(__file__))\nsave(OUT / 'preflight.json', pre)\n(OUT / 'run.py').write_bytes(Path(__file__).read_bytes())\nfor p in (capture_path, stages_path):\n    assert sha(p) == old['local_artifacts'][str(p.relative_to(ROOT))]['sha256']\nassert sha(source_path) == relation['source_raster']['sha256']\noriginal = Image.open(source_path).convert('RGB')\nwhole = original.crop(tuple(pre['source_region_xyxy']))\ndetail = original.crop(tuple(pre['detail_xyxy'])).resize((920, 360), Image.Resampling.NEAREST)\nwith np.load(capture_path, allow_pickle=False) as cap, np.load(stages_path, allow_pickle=False) as stages:\n    assert np.array_equal(np.array(whole)[:, :, ::-1], cap['crop'])\n    assert np.array_equal(stages['retained_labels'], cap['labels'])\n    center_x, local_x = 950, 210\n    canny_rows = (np.flatnonzero(stages['canny'][:, local_x]) + 250).tolist()\n    visible_rows = (np.flatnonzero((stages['canny'][:, local_x] != 0) & cap['visible'][:, local_x]) + 250).tolist()\n    start, end = cap['start_xy2'], cap['end_xy2']\n    horizontal = start[:, 1] == end[:, 1]\n    intersects = horizontal & (np.minimum(start[:, 0], end[:, 0]) <= 2 * center_x) & (2 * center_x <= np.maximum(start[:, 0], end[:, 0]))\n    crossings = [dict(face_index=int(i), source_y=float(start[i, 1] / 2),\n                      inside_label=int(cap['inside_label'][i]), outside_label=int(cap['outside_label'][i]),\n                      status=int(cap['status'][i])) for i in np.flatnonzero(intersects)]\n    lo, hi = pre['reference_proposal']['source_y_interval']\n    readout = dict(\n        all_canny_center_rows=canny_rows, visible_canny_center_rows=visible_rows,\n        proposed_interval_canny_rows=[y for y in visible_rows if lo <= y <= hi],\n        all_retained_appearance_crossings=crossings,\n        proposed_interval_appearance_crossings=[r for r in crossings if lo <= r['source_y'] <= hi],\n        proposed_interval_glare_rows=[int(y + 250) for y in np.flatnonzero(stages['glare'][:, local_x]) if lo <= y + 250 <= hi],\n        interpretation='No interval hit certifies physical correspondence. These are unchanged raw edges and retained appearance faces, not Oil or Foam predictions.',\n        physical_decision='NOT_EVALUATED', numeric_truth_created=False)\n\nbg, fg, muted = (17, 24, 32), (235, 240, 246), (172, 187, 204)\nfont = lambda n: ImageFont.truetype('/System/Library/Fonts/Supplemental/Arial.ttf', n)\ncanvas = Image.new('RGB', (1440, 1040), bg)\ndraw = ImageDraw.Draw(canvas)\ndraw.text((24, 20), 'B | upper water projection: reference interval for review', font=font(29), fill=fg)\ndraw.text((24, 60), 'One surface / two projections is reviewed. The upper-projection rule is chosen. Pixel interval is unreviewed.', font=font(20), fill=muted)\ndraw.text((24, 108), 'Whole context (native pixels)', font=font(21), fill=fg)\ncanvas.paste(whole, (24, 148))\ndraw.text((480, 108), 'Clean source detail (4x nearest-neighbour)', font=font(21), fill=fg)\ncanvas.paste(detail, (480, 148))\ndraw.text((480, 553), 'At X950 only: proposed uncertainty in source rows 484-489', font=font(21), fill=fg)\ncanvas.paste(detail, (480, 598))\ncx = 480 + (950 - 840 + 0.5) * 4\ntop, bottom = 598 + (484 - 450) * 4, 598 + (490 - 450) * 4\nyellow, cyan = (255, 211, 83), (74, 220, 244)\nfor y in range(610, 950, 12):\n    if top - 8 <= y <= bottom + 8:\n        continue\n    draw.line((cx, y, cx, y + 4), fill=cyan, width=1)\ndraw.rectangle((cx - 10, top, cx + 10, bottom), outline=yellow, width=2)\ndraw.line((cx + 12, (top + bottom) / 2, 1080, 649), fill=yellow, width=2)\ndraw.rounded_rectangle((1074, 610, 1380, 660), radius=8, fill=bg, outline=yellow, width=2)\ndraw.text((1086, 623), 'Proposed range (unreviewed)', font=font(19), fill=yellow)\ndraw.text((480, 979), 'A source-position uncertainty range, not layer thickness or detector output.', font=font(19), fill=muted)\nimage_path = DOC / '2026-10-10-upper-projection-reference-review.png'\nassert not image_path.exists()\ncanvas.save(image_path)\nback = Image.open(image_path).convert('RGB')\nassert np.array_equal(back.crop((24, 148, 444, 978)), whole)\nassert np.array_equal(back.crop((480, 148, 1400, 508)), detail)\nfor p, h in pre['inputs'].items():\n    assert sha(ROOT / p) == h, p\nrecord = dict(schema='s11-upper-projection-reference-preparation-v1', preflight=pre,\n              preflight_sha256=sha(OUT / 'preflight.json'), readout=readout,\n              image=dict(path=str(image_path.relative_to(ROOT)), sha256=sha(image_path), size=list(back.size)),\n              clean_panels_equal_source=True, saved_capture_equal=True, inputs_preserved=True,\n              disposition='PENDING_HUMAN_INTERVAL_REVIEW', physical_decision='NOT_EVALUATED',\n              script=Path(__file__).read_text(), local_preflight=str((OUT / 'preflight.json').relative_to(ROOT)))\nsave(DOC / '2026-10-10-upper-projection-reference.json', record)\nprint(json.dumps(dict(status='SOURCE_PREPARATION_VERIFIED', canny_count=len(canny_rows),\n                      interval_canny_rows=readout['proposed_interval_canny_rows'], crossings=crossings,\n                      review_status=record['disposition'])))\n",
+  "local_preflight": "sample/output/s11-upper-projection-reference-20261010-001/preflight.json"
+}

@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** B's two marked features are user-confirmed front/back views of one water surface; this relation and B/C's no-Foam roles are CLOSED. A remains a Foam positive with an unclear lower boundary. The next user decision is measurement semantics for one surface with multiple projections: use its upper image outline at the fixed centre (recommended), its camera-facing outline, or defer scalar work and continue qualitative recognition. Fixed X and existing px/mm conversion do not resolve that choice. Pause dependent numerical reference/selector work; no Windows task is pending. The temporal-texture readout stays unpromoted; no numeric truth, threshold change or successor mechanism is established. Existing 13 Oil points retain historical scalar scope. Base f156 stays quarantined; CBR-1/H0/G1 remain CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL remain.
+**Next transition:** Upper image projection at fixed X is selected, and the user has approved B/f1438 at X950 within source rows 484–489. The unchanged first material-path lane loses compatible centre samples during per-seed path optimization at both frozen scales, before top-k; no detector fix is adopted. A/C upper-position review is prepared separately: A Foam upper rows 476–481 and C water upper rows 489–494 at X950 are proposals, not truth. Their physical roles and A's unclear lower interface stay CLOSED. Pause use of these two numerical references for the human interval reply; no Windows work is pending. Preserve all seven recordings, 13 legacy scalar points, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -39,7 +39,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | B's two features are one surface's front/back projections. Physical-role replies are closed; scalar projection convention awaits the user's choice. Temporal-texture cue-only promotion remains rejected; distinct role-measurement design remains open. | [B relation reply](../50-diagnostics/s11/2026-10-10-temporal-texture-observation.md#human-reply-received--one-surface-with-two-projected-branches), [scalar convention proposal](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--scalar-convention-pending), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
+| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Upper projection and B's source interval are CLOSED. The first material-path lane loses compatible support before top-k. A/C upper-position review is pending before those intervals become numerical references; no physical selector is adopted. | [Source qualification](../50-diagnostics/s11/2026-10-10-upper-projection-reference.md), [B lane loss](../50-diagnostics/s11/2026-10-10-b-material-path-interval.md), [selected convention](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--upper-image-projection-selected), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -126,19 +126,40 @@ or treating the Y interval between them as approved truth. The reply does not
 certify exact marker pixels, identify which marker is front, or transfer to C.
 No repeated physical-role or exact-pixel question follows.
 
-**Scalar convention choice OPEN:** the
-[concrete proposal](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--scalar-convention-pending)
-compares an upper image projection (recommended for consistency/simplicity),
-the camera-facing projection, and deferral of scalar work. The chosen fixed
-column does not resolve this within-surface Y ambiguity; neither does the
-product's selection among different physical fluid interfaces or the existing
-px/mm conversion. This is a measurement-target decision, not approval of an
-algorithm or a repeat of the fixed-X choice. Stop dependent numerical-reference
-and branch-selector work for the reply. If scalar work is deferred, continue
-qualitative role/representation development under the existing mechanism-entry
-requirements. Any chosen convention still needs source-bound exact support and
-precision before numerical scoring; no automatic new truth, mask, tolerance or
-calibrated Glass claim follows. No Windows task or comparative filming is needed.
+**Scalar convention choice CLOSED:** the user answered **“권장안으로 가자”**.
+The [bound choice](../50-diagnostics/s11/2026-10-10-upper-projection-choice.json)
+selects the upper image projection at the existing fixed column, after independent
+physical target identification. A clearly identified single projection is allowed;
+two visible arcs are not mandatory. Missing or ambiguous upper support supplies
+no scalar, with no lower-branch fallback, mean, interpolation or shifted column.
+This settles the measurement target, not exact source truth or detector efficacy.
+
+**B scalar-source checkpoint CLOSED:** the user answered **“표시한 범위로 맞음”**.
+The [bound reply](../50-diagnostics/s11/2026-10-10-upper-projection-interval-reply.json)
+qualifies B/f1438 at diagnostic X950 within source rows 484–489 / cell bounds
+Y[483.5,489.5]. This is uncertainty about one upper-projection intersection,
+not an exact Y, thickness, dense contour, calibrated Glass or transferred C truth.
+The frozen preparation remains unchanged. Raw Canny retains rows 485/488 there;
+saved Foam-appearance faces do not, which is not a Foam miss on no-Foam B.
+
+The [unchanged material-path lane audit](../50-diagnostics/s11/2026-10-10-b-material-path-interval.md)
+checks all 33 native / 12 reduced original seed paths, retaining six at each
+scale. No centre sample matches the reviewed interval before or after retention.
+All eight reference profile rows are locally admissible and admit legal
+five-sector paths. Each polarity's score-based path reduction loses them before
+deduplication/top-k. This source-bound representation finding does not establish
+physical identity of alternative paths or full-application failure. No threshold,
+capacity, crop, scale or production setting changes follow.
+
+**A/C upper-position review OPEN:** the
+[source-only preparation](../50-diagnostics/s11/2026-10-10-upper-projection-ac-review.json)
+proposes A/f1232 Foam-upper rows 476–481 and C/f1643 water-upper rows 489–494,
+both at diagnostic X950. Review these two uncertainty ranges before numeric use;
+unclear/rejected locations remain unresolved, not absent. This adds independent
+role-specific reference qualification beyond the single B point, not recording-
+level independence or holdout. A's unclear lower boundary, B's interval and all
+physical-role/convention replies remain closed. No Windows task or new filming
+is required; pause dependent reference scoring at this human source judgment.
 
 Before another trial, name one distinct physical boundary/role observation,
 the existing measurement owner and a reproducible decision/abstention rule.

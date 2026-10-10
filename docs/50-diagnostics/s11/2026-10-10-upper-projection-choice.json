@@ -1,0 +1,36 @@
+{
+  "schema": "s11-fixed-center-upper-projection-choice-v1",
+  "base_head": "f9737d3caa290b6aee80da2f9e4320b6b1f0f535",
+  "source": "direct user response to the upper image projection / camera-facing projection / defer-scalar choice",
+  "verbatim_reply": "권장안으로 가자",
+  "status": "CLOSED",
+  "interpretation": "Adopt the recommended upper image projection of the independently identified physical target at the existing fixed centre column, for the offline challenger.",
+  "rule_id": "fixed-center-upper-image-projection-v1",
+  "proposal_record": {
+    "path": "docs/20-architecture/s11-interface-observability-witness-architecture.md",
+    "at_commit": "f9737d3caa290b6aee80da2f9e4320b6b1f0f535",
+    "sha256": "20bb300ca07e74c140a0ad25c8404dcf0d7c3bd11df976c1f8c620c16c3cfaa9",
+    "heading": "Same-surface projected branches — scalar convention pending"
+  },
+  "rule": {
+    "location": "Keep x=floor(existing GlassGeometry.ellipse.center_x+0.5), with explicit source/ROI conversion. Public crop centres remain diagnostic geometry.",
+    "target": "Establish physical surface/role independently. Among its projected branches, read its upper outline at that column from current observed support.",
+    "single_projection": "A clearly identified single upper projection is allowed; seeing two arcs is not a mandatory gate.",
+    "unavailable": "A missing, occluded, ambiguous or unsupported required upper projection leaves this role without numeric Y. Do not substitute a visible lower projection.",
+    "prohibited": "No highest-raw-edge rule, object/branch identity from Y alone, branch average, filled interval, interpolation, carried coordinate, moved X or side median.",
+    "independence": "Apply to each independently identified role; Oil/Foam identity and availability stay separate.",
+    "conversion": "Reuse GlassGeometry.level_px_from_zero and level_mm_from_zero only after an eligible observed Y exists.",
+    "meaning": "Consistent image-height convention, not a reconstruction of three-dimensional liquid-plane height.",
+    "precision": "This policy does not certify any agent marker, contour pixel, numeric tolerance or scalar accuracy.",
+    "integration": "Offline design/reference qualification first; production and W3 original-candidate-Y semantics remain unchanged until a qualified candidate is integrated."
+  },
+  "preserved_replies": {
+    "docs/50-diagnostics/s11/2026-10-09-fixed-center-choice.json": "bad75bffb01242e85c785aa199aac40149518b9cdec6c9d29ea34e112ca667bc",
+    "docs/50-diagnostics/s11/2026-10-10-water-surface-feature-reply.json": "10b53b08cd47a962556b45f3e39d4788dbadf88f373be024c22bdf8479bf0399",
+    "docs/50-diagnostics/s11/2026-10-10-later-water-role-reply.json": "36f7ac8697b952b4ce74eff8ffbd4632281b3f4ba316a145221db33ce8a0b0d8"
+  },
+  "production_change": false,
+  "formal_label_change": false,
+  "new_user_setting": false,
+  "windows_execution_required": false
+}

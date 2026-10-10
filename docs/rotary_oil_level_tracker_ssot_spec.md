@@ -1165,6 +1165,17 @@ Foam 내부 특징을 Oil 비대상으로 판독했다고 해서 그 특징이 F
 되는 것은 아니다. Foam front의 위치·유효성은 11.7의 별도 정의를 따른다.
 이 명확화 자체는 기존 detector가 이 선택을 구현·검증했다는 의미가 아니다.
 
+S11 후속 오프라인 검출기의 높이 기준 명확화(2026-10-10): 기존 Glass 중심의
+고정 열에서, 같은 수면으로 독립적으로 확인된 앞뒤 윤곽 중 **영상상 위쪽
+윤곽**을 읽는다. 위쪽 윤곽의 관측이 불명확하거나 가려졌으면 하단 윤곽으로
+대체하지 않는다. 하나의 명확한 윤곽만 보이는 경우도 허용하며, 두 윤곽의
+평균·보간이나 모든 후보 중 최상단 선택으로 물리적 수면 판정을 대신하지 않는다.
+Oil/Foam에는 각자의 물리적 대상과 관측 가능성을 독립적으로 적용한다.
+이는 영상상의 높이 기준이며 3차원 실제 수평면 높이를 복원하는 규칙은 아니다.
+[사용자 선택](50-diagnostics/s11/2026-10-10-upper-projection-choice.json)과
+[구체 계약](20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--upper-image-projection-selected)을
+따르며, 현재 운영 검출기나 과거 정답 좌표를 자동으로 변경하지 않는다.
+
 ## 11.7 Foam Front 정의
 
 Foam front는 단순히 ROI 내 가장 높은 기포가 아니다.

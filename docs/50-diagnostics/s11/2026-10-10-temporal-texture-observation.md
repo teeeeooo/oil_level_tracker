@@ -250,7 +250,7 @@ review identifies a surface, and conversion only subtracts an already selected
 Y from a zero line. None declares which of one surface's projections supplies
 the scalar. The target binder explicitly leaves scalar truth untransferred.
 
-The [architecture proposal](../../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--scalar-convention-pending)
+The [architecture convention](../../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--upper-image-projection-selected)
 therefore presents a separate measurement-semantics choice: the upper image
 projection (recommended for the stated simplicity/consistency preference), the
 camera-facing projection, or deferral of the scalar while qualitative work
@@ -259,6 +259,14 @@ edge. Neither projected branch becomes a numeric reference before this choice
 and the independent coordinate/precision requirements are satisfied. There is
 no new detector trial, repeated B relation question, pixel-label request or
 Windows requirement. The Work Plan owns the pending decision and next action.
+
+**Subsequent choice:** the user selected the recommended upper image projection
+with **“권장안으로 가자”**. The [bound choice and first source-reference preparation](2026-10-10-upper-projection-reference.md)
+close the convention decision. The subsequent **“표시한 범위로 맞음”** reply
+qualifies B's source-position interval at X950, rows 484–489, without certifying
+an exact Y or transferring it to C. Separate A/C upper-position proposals still
+need review. Original reply, preparation and temporal measurement JSON remain
+unchanged; the new interval does not promote the temporal cue.
 
 ## Verification and preservation
 
@@ -286,6 +294,6 @@ acceptance is claimed.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: standalone physical-role inference would be unsound at texture-change interpretation because fixed-pattern optical deformation supplies the same cue. B/C supply real no-Foam controls and B's two marked features now belong to one reviewed surface; a projected-branch convention and exact observed coordinates are still missing before a numerical truth claim. Actual production first physical failure remains unknown. No classifier or scalar was executed here.
+- First harmful stage: standalone physical-role inference would be unsound at texture-change interpretation because fixed-pattern optical deformation supplies the same cue. B/C supply real no-Foam controls and B's two marked features belong to one reviewed surface. The later upper-projection choice settles the convention; the separate B reply qualifies one source-position interval without establishing exact contour precision or promoting the temporal cue. Actual production first physical failure remains unknown. No classifier or scalar was executed here.
 - Logic-map impact: NONE — saved-source observation reuses existing preprocessing, registration and texture owners through one-off evidence runners; runtime callers, Oil/Foam independence and publication remain unchanged.
 - Failure-registry impact: NONE — the retained nuisance and optical counterexamples instantiate the existing temporal/appearance-identity limitations; no accepted mechanism or new runtime gate is introduced.

@@ -653,7 +653,7 @@ alternative until a physical selection rule is evaluated. In particular, a
 unique support crossing, outward direction or common component label cannot
 declare the target. Existing native-path candidate medians remain unchanged.
 
-##### Same-surface projected branches — scalar convention pending
+##### Same-surface projected branches — upper image projection selected
 
 The [B source reply](../50-diagnostics/s11/2026-10-10-water-surface-feature-reply.json)
 identifies two displayed features as the front/back of one water surface. The
@@ -664,29 +664,32 @@ reply makes every intervening Y an acceptable answer, measures thickness, nor
 certifies the agent's locator pixels. B's reply does not assign which marker is
 front and does not transfer to C.
 
-The selected fixed-centre rule specifies X but not which projection of a single
-surface supplies Y. The product's uppermost-actual-fluid-boundary rule selects
-among physical interfaces; it does not settle this within-surface convention.
+The original fixed-centre rule specified X without choosing which projection of
+a single surface supplies Y. The user has now [selected the recommended upper
+image projection](../50-diagnostics/s11/2026-10-10-upper-projection-choice.json)
+with **“권장안으로 가자”**. This adds the within-surface measurement convention
+`fixed-center-upper-image-projection-v1`. The product's separate
+uppermost-actual-fluid-boundary rule still selects among physical interfaces.
 `GlassGeometry.level_px_from_zero` only subtracts an already selected Y from
 the zero line, and the target-truth binder intentionally transfers no scalar
 truth. Neither owner resolves the ambiguity downstream.
 
-The following is a **proposal for user choice**, not an adopted selector or
-automatic truth revision:
+After independently establishing the current target surface and its projected
+branches, read its **upper projected outline at the fixed column**. A clearly
+identified single projection is sufficient; two visible arcs are not a required
+shape or a material test. If the required upper projection is hidden, unsupported
+or ambiguous, leave that role's Y unavailable. Do not switch to the visible lower
+projection. Its relative strength, persistence or cleaner appearance cannot
+change the selected measurement target.
 
-| Convention | Concrete consequence |
-|---|---|
-| Upper image projection at the fixed column — recommended for the user's consistency/simplicity preference | After independently establishing the target surface and its branches, use its upper projected outline. This defines an image-height target without another setting or a front/back estimator; it is not a calibrated three-dimensional water-plane height. If the required branch is hidden or its identity is unresolved, leave Y unavailable rather than switching to the lower branch. |
-| Camera-facing/front projection at the fixed column | Bind the observation to the near side of the target surface, even when another projection is higher. This needs source-supported front/back correspondence; B1/B2 Y order alone does not certify it for arbitrary views. |
-| Defer a single scalar | Continue qualitative physical-role/representation work with both branches retained; centre-height error and scalar selection remain unqualified. |
-
-Any adopted convention applies only within an already identified physical
-target and separately to each role where applicable. It cannot select the
-highest raw edge, an unrelated bubble or a glass rim, merge nearby proposals,
-average the two projections, fill the space between them, or relax Oil/Foam
-independence. No reference coordinates, tolerance, production change or Windows
-qualification follows from choosing a convention alone. Current ambiguous
-cases remain unavailable under the existing rule while the choice is pending.
+This defines a consistent image-height target without another setting or a
+front/back estimator, not a reconstructed three-dimensional water-plane height.
+It applies only within an already identified physical target and separately to
+each role. It cannot select the highest raw edge, an unrelated bubble or glass
+rim, merge nearby proposals, average the two projections, fill the space between
+them, or relax Oil/Foam independence. The choice supplies no exact contour/Y or
+tolerance and no production/Windows acceptance. Preserve current runtime and W3
+original-candidate-Y semantics until a qualified offline candidate is integrated.
 
 #### Versioning, migration and implementation boundary
 
@@ -2576,6 +2579,6 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms reviewed: saved BGR versus O1 gray projection, same-support column-side color differences and apparent-transparency limits; unpooled O1 gradient stencils, central-difference aliases and stored-output binding; ordered column-side preservation and joint-marginal collisions; candidate-relative reindexing, whole-inventory O1 novelty and central-gap peak controls; full-height ordered sampling versus finite-band collisions, existing dark-cap/material-profile and registered-motion owners, recorded raw artifact/static/texture evidence and registered-template ownership without replaying their gates, human reference ambiguity versus model abstention, unchanged-score denominator changes, finite-band distinct-raster collision and material/static provenance, fixed-score separate-median reversal, locality ablation gains/regressions, W3 context limitations, W0 profile identity failures and the October partial-path pooling counterexample; multi-family current proposals, material paths and scalar medians, R22-1 candidate-centered bands, R22-2 native paths, broad texture gates, R16/R21 association, reviewed BASE/Accum checkpoints, and rejected R23 polarity-only association. The water/beer same-surface projection replies additionally test the distinction between physical target identity, fixed X and scalar branch semantics; existing geometry conversion and target binding do not choose that branch.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
-- Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated. The projected-branch proposal exposes a measurement-target choice without treating image Y order as material identity, revising truth or installing a selector.
+- Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated. The user-selected upper projected branch defines the measurement target without treating image Y order as material identity, relabeling legacy truth or installing a selector; separately reviewed source intervals retain their uncertainty and scope.
 - Logic-map impact: NONE — the fixed-center contract and implemented CBR-1 offline measurement reuse existing owners without a production consumer; no executing detector route changes. Previously documented Local XY routing remains as mapped.
 - Failure-registry impact: NONE — existing F02/F04/F06/F07 representation, role and coupling limits plus F09/F10 provenance and tuning guards cover the reviewed H0/G1 and CBR-1 results; no new field cause or repair is claimed.
