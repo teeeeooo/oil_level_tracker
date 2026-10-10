@@ -694,3 +694,11 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-10 | [sample4 saved comparison](50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md) | 저장된 후보 20개와 최종 Y835 비교; 단독 프레임 부재와 최종 성공 구분 |
 | 2026-10-10 | [sample4 comparison record](50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.json) | 원본·전체 후보·선택 출처·화소 검산 및 실패 시도 보존 |
 | 2026-10-10 | [Temporal usefulness question](50-diagnostics/s11/2026-10-10-temporal-usefulness-question.json) | 움직이는 유면을 판독하는 데 필요한 관측 간격 제안; 영상의 정답·위치 오차와 분리 |
+
+## 2026-10-10 accepted Oil cadence and saved-output measurement
+
+| 최초 Git 추가일(KST) | 파일 | 역할 |
+|---|---|---|
+| 2026-10-10 | [Temporal usefulness reply](50-diagnostics/s11/2026-10-10-temporal-usefulness-reply.json) | 가시적으로 움직이는 같은 Oil 유면의 관측 간격을 1초 이내 개발 목표로 승인 |
+| 2026-10-10 | [Cadence evidence](60-evidence/s11/2026-10-10-oil-observation-cadence.md) | 기존 네 저장 결과의 실제 관측 간격과 sample4의 확인된 움직임 구간 비교 |
+| 2026-10-10 | [Complete cadence record](50-diagnostics/s11/2026-10-10-oil-cadence-readout.json.gz) | 299개 원본 행·전체 간격·입력 해시·독립 검산·기존 물리 판단 연결 |

@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** The four source-position queries are CLOSED: A Foam-upper rows476–481, B water-upper484–489 and C water-upper489–494 at diagnostic X950; sample4/f1275 Oil rows833–841 at Recipe X595. The saved sample4 join retains correct completed idx12/Y835 inside its reviewed interval despite current-stage ambiguity; its native contour remains unavailable. A support loss, B pre-top-k compression and C scale-dependent retention are distinct findings, not one common repair. Source qualification is sufficient for bounded mechanism development without wholesale relabeling. A new product-expectation question is prepared: the useful Oil inter-observation interval during visible movement, which the current specification leaves as “sufficiently frequent.” Its proposed 1-second target requires user judgment; report-only 2-second bridges do not supply acceptance authority. Hold dependent cadence/acceptance choices for this answer; no selector is established and no Windows work is pending. Preserve all seven recordings, all 13 legacy values and their qualified comparison scope, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
+**Next transition:** The four source-position queries are CLOSED: A Foam-upper rows476–481, B water-upper484–489 and C water-upper489–494 at diagnostic X950; sample4/f1275 Oil rows833–841 at Recipe X595. The saved sample4 join retains correct completed idx12/Y835 inside its reviewed interval despite current-stage ambiguity; its native contour remains unavailable. A support loss, B pre-top-k compression and C scale-dependent retention are distinct findings, not one common repair. Source qualification is sufficient for bounded mechanism development without wholesale relabeling. The user has selected a one-second Oil observation target during separately qualified visible movement. The saved 299-row audit separates numeric cadence from physical coverage; sample4 42.5–44s has two missing outputs followed by an already confirmed wrong target. Continue the bounded first-loss capture for f1290/f1305 with all seven earlier controls and full-window equality preserved. No new physical selector is established and no Windows work is pending. Preserve all seven recordings, all 13 legacy values and their qualified comparison scope, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -182,22 +182,26 @@ gain no physical identity. All twenty candidates and original layers are retaine
 These four source queries are complete; no further blanket source review,
 Windows work or new filming is required before bounded local mechanism work.
 
-**Practical time-resolution checkpoint OPEN:** [product §1.2](../rotary_oil_level_tracker_ssot_spec.md#12-제품-목표)
-requires sufficiently frequent observations of the same physical Oil interface
-to understand movement, but gives no maximum useful inter-observation interval.
-The existing two-second report bridge is a rendering limit, not that requirement.
-The [prepared question](../50-diagnostics/s11/2026-10-10-temporal-usefulness-question.json)
-proposes **at most one second between usable Oil observations during separately
-qualified visible movement**, with two/five seconds as alternatives for the user.
-This asks for practical time resolution before choosing the next experiment's
-temporal scale; no numeric operating point or acceptance threshold is adopted.
-Keep wrong-target, missing, leading/trailing and unassessable intervals separate;
-unverified numeric cadence is not physical coverage. Unobservable source never
-authorizes filling a deadline with a fabricated value. The answer does not
-transfer to Foam timing, stationary intervals, pixel tolerance or a classifier.
-Hold these dependent product/acceptance choices for user judgment. This does not
-reopen the four source questions, require Windows work or prove that further
-prototype measurements are impossible; a distinct mechanism is still needed.
+**Practical time-resolution checkpoint CLOSED:** the user answered **“권장안으로 가자”**.
+The [bound reply](../50-diagnostics/s11/2026-10-10-temporal-usefulness-reply.json)
+selects **at most one second between usable same-interface Oil observations
+during separately qualified visible movement**. Product §1.2 and the validation
+owner now carry this target. Preserve the original question, actual source-time
+measurement, distinct wrong/unverified/missing outcomes and censored endpoints.
+This does not change Foam timing, pixel tolerance, sampling, the report's
+2-second display bridge, a classifier operating point or field acceptance.
+
+The [saved cadence audit](../60-evidence/s11/2026-10-10-oil-observation-cadence.md)
+verifies all 299 rows / four saved streams with 18 focused tool tests and an
+independent time/row join. Numeric maxima are 1.001/0.5/46.479767/2.5 seconds;
+whole-span physical acceptance remains NOT_EVALUATED. In the already qualified
+sample4 42.5–44s moving interval, two missing outputs and the reviewed wrong
+44s selection leave a 1.5s trailing span without supported output. The next
+bounded diagnostic captures f1290/f1305 alongside the seven existing controls
+and checks complete original tracking equality before locating the first loss.
+The earlier native appearance matcher remains closed as a general repair;
+neither its successful seed nor cadence alone supplies physical identity.
+No further source-position question or Windows task is pending.
 
 Before another trial, name one distinct physical boundary/role observation,
 the existing measurement owner and a reproducible decision/abstention rule.

@@ -709,6 +709,26 @@ overrule a supported completed observation. The
 [sample4 readout](../50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md)
 demonstrates this distinction without changing runtime projection.
 
+#### Oil observation cadence — scoped development target
+
+The [user choice](../50-diagnostics/s11/2026-10-10-temporal-usefulness-reply.json)
+sets at most **1.0 source seconds** between usable observations of the same
+physical Oil interface during separately qualified visible movement. This is a
+usefulness target, not an identity test, demonstrated coverage or O2 acceptance.
+The [validation owner](../30-validation/s11-interface-observability-witness-validation.md#oil-observation-cadence--one-second-development-target)
+defines qualified intervals, censoring and unavailable accounting.
+
+The existing W3 evaluator owns identity/local/scalar qualification but its sparse
+candidate packets are not dense time series. The O1 replay harness already owns
+the stored CSV rows. A small offline companion,
+[`s11_observation_cadence.py`](../../tests/diagnostics/s11_observation_cadence.py),
+reads that unchanged saved format and reuses W3's strict JSON, hash, percentile
+and no-overwrite helpers. It measures unverified numeric cadence only; there is
+no new truth format, classifier, replay, UI integration or production consumer.
+Do not reuse the retired trajectory interpolation probe or presentation bridges
+as observations. Future physical evaluation still needs the existing source /
+identity / scalar evidence, not a new numerical-validity shortcut.
+
 #### Versioning, migration and implementation boundary
 
 Use a versioned label/frozen/report contract for the changed meaning, with explicit
@@ -2348,6 +2368,13 @@ sweep, ML or separate dense-contour system follows. Use the
 and Work Plan for execution/acceptance.
 
 ## History Review
+
+2026-10-10 cadence target: reviewed F09/F10, same-frame projection, independent
+Oil validity, W3 scalar qualification, saved O1 replay rows and report-only gap
+bridges. The user's one-second choice adds a scoped development target. The
+read-only companion preserves all input rows, actual timestamps and censored
+ends without treating numeric cadence as physical coverage. No production node,
+failed mechanism or classifier operating point changes.
 
 2026-10-10 local truth qualification: reviewed F09, the original D1 proposal
 ranges, D2 user-ruler translation, later contradictory/regional judgments,

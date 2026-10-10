@@ -1,0 +1,26 @@
+{
+  "schema": "s11-product-temporal-expectation-reply-v1",
+  "base_head": "131dae4c7a4378586caa7bc589dec2f145edc2be",
+  "source": "direct user response to the immediately preceding temporal usefulness question",
+  "verbatim_reply": "권장안으로 가자",
+  "status": "CLOSED",
+  "question": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-temporal-usefulness-question.json",
+    "sha256": "020c0dd768e9497b3468fd073b787b4c765515145f707b6b25f851e06fdcffb1"
+  },
+  "selected_option": "1초 이내를 목표로",
+  "target_seconds": 1.0,
+  "interpretation": "A development/usefulness target of at most one second between usable same-physical-interface Oil observations within separately qualified visible moving intervals.",
+  "scope": {
+    "time": "Use elapsed source timestamps; equality at one second is within the target. Row counts, input FPS and report bridges are not this quantity.",
+    "identity": "Numeric validity alone is not reviewed same-interface correspondence or scalar qualification. Keep wrong-target, unverified and missing observations separate.",
+    "bounds": "Retain leading/trailing and all-unavailable spans separately; no pairs does not mean success. Do not bridge an unqualified scene, role or identity transition.",
+    "source": "Unobservable intervals stay unassessable. A deadline never permits interpolation, carry, branch substitution or a forced number.",
+    "not_transferred": "No automatic Foam episode timing, stationary/obscured-scene requirement, pixel tolerance, classifier operating point, temporal-window or sampling-setting change.",
+    "acceptance": "This product target is not demonstrated observability, an O2 operating point or Windows/field acceptance."
+  },
+  "preserved_question": true,
+  "production_change": false,
+  "formal_label_change": false,
+  "windows_execution_required": false
+}

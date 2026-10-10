@@ -374,6 +374,46 @@ No universal numeric acceptance threshold is invented by this document. The
 first implementation proposal must present measured distributions and a bounded
 operating point for review before O3 behavior work.
 
+### Oil observation cadence — one-second development target
+
+The [user answer](../50-diagnostics/s11/2026-10-10-temporal-usefulness-reply.json)
+adopts at most **1.0 second** between usable, same-physical-interface Oil numeric
+observations within separately qualified visible moving intervals. Exactly 1.0
+is within this target; compare actual source timestamps without inferring time
+from missing-row counts, input FPS or a tracker/report window. This is a product
+usefulness target, not a classifier operating point or an O2/field PASS threshold.
+
+A physical readout must bind source/run/Glass, reviewed visible-moving interval,
+same physical role/entity and usable scalar evidence. Keep wrong-target,
+unverified numeric, missing and unassessable observations separate. Never span
+a scene cut, unobservable interval, role change or unreviewed identity handoff.
+Sparse correct stills do not qualify intervening numerics. Report every interval,
+maximum and distribution, plus separate leading/trailing censored spans and
+all-unavailable intervals. Zero or one usable observation supplies no observed
+pair and cannot pass by an empty denominator. The captured first/last source
+rows bound saved-output analysis; no duration beyond them is invented.
+
+For the existing O1 saved replay format, the offline
+[cadence companion](../../tests/diagnostics/s11_observation_cadence.py) measures
+finite raw Oil Y with explicit `oil_is_valid=True` per Glass, retaining invalid
+numerics and all unavailable rows. Its output is always
+`unverified_numeric_cadence` / `physical_acceptance=NOT_EVALUATED` because the
+CSV supplies neither continuous physical qualification nor visible-motion
+labels. It must reject nonfinite values and duplicate/decreasing frame/time
+identities, preserve input order and hashes, and refuse output overwrite.
+Tests exercise irregular sampling, holes without blank rows, exact one-second
+pairs, all-missing/single-observation cases, independent Glass streams and the
+real CLI from a Unicode non-repository working directory. These prove arithmetic
+and input handling only; no detector replay or Windows run is required for this
+read-only tool. Report helpers and the retired interpolation probe are not used.
+
+Missing source evidence never permits interpolation, carry, alternative-branch
+substitution or a forced scalar to meet the target. No automatic change follows
+to Foam episodes, stationary/obscured intervals, pixel tolerances, sampling rate,
+report bridges or temporal matching windows. A future proposal must freeze its
+own observation/support rule and assess cadence alongside wrong-target outcomes;
+it cannot claim improvement by excluding difficult frames after seeing results.
+
 ### O2 evaluation-tool acceptance
 
 The offline foundation uses `s11-o2-review-packet-v1`, `s11-o2-labels-v2`,

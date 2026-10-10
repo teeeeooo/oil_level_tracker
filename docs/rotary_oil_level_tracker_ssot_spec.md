@@ -66,6 +66,8 @@
 
 Detector의 실용 목표는 개별 frame의 유면 Y를 pixel-perfect하게 맞추는 것보다, 사용자가 최종 graph에서 유면의 하강·상승·정체와 최저점/회복 흐름을 이해할 수 있도록 **충분히 자주, 같은 물리적 유면을 대략적으로 추적하는 numeric observation을 제공하는 것**이다. 따라서 detector 개선에서는 usable numeric coverage와 시간축상 관측 분포/graph movement readability를 pixel-level MAE보다 우선할 수 있다. 다만 glass 구조선·반사·glare 등 유면과 무관한 대상을 지속적으로 따라 graph의 방향이나 수준을 왜곡하는 gross wrong-interface 검출은 허용하지 않는다. 관측 근거가 없는 구간을 numeric으로 합성하는 방식으로 coverage를 높여서도 안 된다.
 
+사용자 선택(2026-10-10)에 따라, **별도로 가시성과 움직임을 확인한 구간에서 같은 물리적 Oil 유면의 사용 가능한 두 수치 관측 사이 간격은 1초 이내를 개발 목표로 한다**. 실제 원본 timestamp의 차이로 측정하며, 잘못된 대상·미확인 수치·누락 및 시작/끝의 미관측 구간을 별도로 보고한다. 경계가 보이지 않는 구간의 값을 보간하거나 이어 붙여 목표를 채우지 않는다. 이 목표는 Foam 시간 기준, 정지·가림 구간, pixel 허용 오차나 검출기 판정 임계값으로 자동 전환하지 않으며, 보고서의 2초 연결 표시와도 별개다. [승인 답변](50-diagnostics/s11/2026-10-10-temporal-usefulness-reply.json)과 [평가 계약](30-validation/s11-interface-observability-witness-validation.md#oil-observation-cadence--one-second-development-target)이 적용 범위를 소유한다.
+
 사용자용 결과 보고서의 목표는 detector 내부 상태를 정리하는 것이 아니라, 원본 sight-glass 영상에서 관측된 유면 흐름을 설명하는 것이다. 보고서는 관측된 최고·최저 유면, Foam 발생·소멸과 주요 변화 시점을 graph에 표시하고 해당 원본 영상 장면을 Glass 중심 캡처로 함께 보여준다. 후보 점수, rejection reason, Spatial sector와 같은 debug 정보는 CSV/Result Review/debug artifact에 분리하며 main report의 정보 구조를 지배해서는 안 된다.
 
 ## 1.3 제품 정체성
