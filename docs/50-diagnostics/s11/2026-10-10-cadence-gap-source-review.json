@@ -1,0 +1,62 @@
+{
+  "schema": "s11-source-feature-review-preparation-v1",
+  "status": "PENDING_USER_SOURCE_JUDGMENT",
+  "base_head": "8941c91527f84581f88fb12b1a3743215a0eae9f",
+  "capture_source_head": "131dae4c7a4378586caa7bc589dec2f145edc2be",
+  "frame_index": 1305,
+  "source_timestamp_sec": 43.5,
+  "source_video_sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+  "source_roi": [
+    543,
+    798,
+    647,
+    902
+  ],
+  "fixed_source_x": 595,
+  "raw_roi_sha256": "0ac77fcf270b6ac291ef68a82bbf24ba69dd0314d1be23bc1888a35f1f09be50",
+  "raw_context_sha256": "6fe3fd01fa476dbff31c976c589a156fc3e350bc7cf4b9e5c9c79c56421dbc6b",
+  "capture_sha256": "849a6d89273680d86821fb0d70b4804f2f7692bc42e0d58b62b928190f0f7a2b",
+  "review_image": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-cadence-gap-source-review.png",
+    "sha256": "5b56c9ab6737af8df23b2416f4e8f640bb5f0fc599bb46530318348f32b7ad43"
+  },
+  "question_verbatim": "새로 연 sample4 43.5초 확대 이미지에서 ①(위쪽 선, Y832)과 ②(아래 좁은 띠, Y835–837)는 같은 실제 Oil 유면을 가리키나요? 다르다면 어느 쪽이 Oil인지 알려주세요. ①만 / ②만 / 둘 다 같은 유면 / 둘 다 아님 / 판단 어려움 중에서 답하셔도 됩니다. 한 픽셀 정답이나 허용 오차를 정하려는 질문은 아닙니다.",
+  "guides": {
+    "1": {
+      "source_y": 832,
+      "candidate_indices": [
+        3
+      ],
+      "source_x_display": [
+        584,
+        605
+      ],
+      "meaning": "Candidate-center marker, not a captured native contour."
+    },
+    "2": {
+      "source_y_values": [
+        835,
+        837
+      ],
+      "display_cell_bounds": [
+        834.5,
+        837.5
+      ],
+      "candidate_indices": [
+        8,
+        16,
+        19
+      ],
+      "source_x_display": [
+        584,
+        605
+      ],
+      "meaning": "Location group: idx8 native center/median Y837; idx16 and idx19 candidate-center Y835. The box is not a truth interval or a reconstructed path."
+    }
+  },
+  "scope": "New source-feature/candidate-location relation at f1305. The earlier f1275 interval, visible temporal continuity, and qualitative orange appearance-chain reply stay CLOSED. No exact scalar truth, tolerance, other candidate or all-sector identity follows.",
+  "decision_relevance": "The Y832 candidate remains CANDIDATE_ONLY before row admission. Y835/Y837 members are admitted/publishable before the allowed-owner filter, then excluded. Determining which location refers to actual Oil selects the relevant first-loss route; opening the owner filter without this distinction could publish a wrong target.",
+  "formal_label_change": false,
+  "production_change": false,
+  "windows_required": false
+}

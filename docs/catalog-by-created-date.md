@@ -702,3 +702,7 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-10 | [Temporal usefulness reply](50-diagnostics/s11/2026-10-10-temporal-usefulness-reply.json) | 가시적으로 움직이는 같은 Oil 유면의 관측 간격을 1초 이내 개발 목표로 승인 |
 | 2026-10-10 | [Cadence evidence](60-evidence/s11/2026-10-10-oil-observation-cadence.md) | 기존 네 저장 결과의 실제 관측 간격과 sample4의 확인된 움직임 구간 비교 |
 | 2026-10-10 | [Complete cadence record](50-diagnostics/s11/2026-10-10-oil-cadence-readout.json.gz) | 299개 원본 행·전체 간격·입력 해시·독립 검산·기존 물리 판단 연결 |
+| 2026-10-10 | [Cadence gap capture](50-diagnostics/s11/2026-10-10-cadence-gap-capture.md) | 기존 출력과 같은 전체 재생에서 43/43.5초 누락의 최종 추적 ID 제한 확인 |
+| 2026-10-10 | [Gap capture record](50-diagnostics/s11/2026-10-10-cadence-gap-capture.json.gz) | 기존 일곱 대조군과 새 두 프레임의 후보·선택 증거·원본·검산 보존 |
+| 2026-10-10 | [43.5s relation question](50-diagnostics/s11/2026-10-10-cadence-gap-source-review.json) | 서로 다른 탈락 단계를 거친 두 후보 위치의 실제 Oil 관계 질문 |
+| 2026-10-10 | [43.5s clean/marked source](50-diagnostics/s11/2026-10-10-cadence-gap-source-review.png) | 원본과 두 표시 비교; 위치 범위나 후보의 물리 정답으로 채택하지 않음 |
