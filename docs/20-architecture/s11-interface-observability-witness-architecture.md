@@ -691,6 +691,15 @@ them, or relax Oil/Foam independence. The choice supplies no exact contour/Y or
 tolerance and no production/Windows acceptance. Preserve current runtime and W3
 original-candidate-Y semantics until a qualified offline candidate is integrated.
 
+The historical 13-case comparator keeps its original scalar definition and
+PASS/FAIL rules. Its JSON and CLI now identify that output as
+`legacy_scalar_agreement`, with `physical_acceptance=NOT_EVALUATED` and a link
+to the [qualification owner](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification).
+This additive diagnostic metadata does not migrate truth, relax a check or
+qualify the new target. Separately reviewed intervals can support scoped
+position comparisons; a pooled sector row matching one interval still does not
+become an observed contour or a physically accepted candidate.
+
 #### Versioning, migration and implementation boundary
 
 Use a versioned label/frozen/report contract for the changed meaning, with explicit

@@ -1016,6 +1016,11 @@ the routing basis, not an all-or-nothing four-video accuracy gate:
 | Legacy scalar agreement | Report the original complete 13-case comparison under its original values and semantics. Preserve its PASS/FAIL; it is not by itself decisive physical acceptance/rejection for a different measurement target or an unresolved reference. |
 
 The current legacy comparator and tests are not weakened by this contract.
+Its additive JSON fields now state `comparison_scope=legacy_scalar_agreement`
+and `physical_acceptance=NOT_EVALUATED`; CLI wording matches. Original numeric
+results, PASS/FAIL, exit codes and alignment/provenance guards remain unchanged.
+The [output qualification checks](../50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.md#legacy-regression-output-now-states-its-actual-scope)
+verify that the interpretation is visible at the actual tool entry point.
 Any future conflict between an old assertion and a newly qualified physical
 target must be reconciled explicitly before runtime adoption; do not hide a
 failing check or preserve a demonstrated wrong behavior solely to satisfy an
@@ -1049,7 +1054,12 @@ row whose X band includes that column can be checked for positional compatibilit
 such agreement does not certify an observed contour, physical identity or a
 successful selected scalar. Preserve the original candidate median separately.
 An interval is not filled target support, and its midpoint is not exact truth.
-Unreviewed A/C proposals remain outside numerical reference use until answered.
+The later [A/C reply](../50-diagnostics/s11/2026-10-10-upper-projection-ac-reply.json)
+separately qualifies A Foam-upper rows476–481 and C water-upper rows489–494 at
+X950, under these same limits. A's lower interface remains unclear. The pending
+[sample4 preparation](../50-diagnostics/s11/2026-10-10-sample4-center-source-review.md)
+is not numeric truth; a new target-domain reference needs its own visible,
+source-bound position judgment even when prior Oil correspondence is closed.
 
 Keep every qualified/unqualified case, denominator, missing output and reason
 visible. Do not select only easy frames after results or turn crop-center geometry

@@ -1,0 +1,83 @@
+{
+  "schema": "s11-source-position-review-v1",
+  "status": "PENDING_HUMAN_POSITION_QUALIFICATION",
+  "preflight": {
+    "schema": "s11-source-position-review-preflight-v1",
+    "base_head": "725d5b1a710e6c587b268577ccf85b1357b9713d",
+    "source": "sample4/f1275 at 42.5 s; prior human-confirmed Oil correspondence and two-side roles",
+    "inputs": {
+      "sample/output/s11-a2-temporal-context-20261007-001/f1275.png": "3191678d203ffd2f453635b8579a12a33fa439b3a37bfb0470a68cb129a44e4b",
+      "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+      "sample/sample4.oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+      "docs/50-diagnostics/s11/2026-10-07-sample4-region-context-preflight.json": "575ee23e57fab879d199f9c94fcdb5682b3d2451245ef617cc72da845089d640",
+      "docs/50-diagnostics/s11/2026-10-07-sample4-a2-control-preflight.json": "5e3d00edcc9bd571a261bbeb2647593f3563a327f4706d0bd13d1dcd712674b4",
+      "docs/50-diagnostics/s11/2026-10-10-upper-projection-choice.json": "9415a0ba4ef1bf68990d46ffbe6dd8b41c8b33b31e19bb449d865c99723a11d0",
+      "sample/output/s11-a2-temporal-context-20261007-001/manifest.json": "249149310ccae2a3e015565d2d9f9f030584670d87e65b1ae4013baf66998981"
+    },
+    "source_crop_xyxy": [
+      543,
+      798,
+      647,
+      902
+    ],
+    "source_raster_origin_xy": [
+      511,
+      766
+    ],
+    "source_raster_size": [
+      168,
+      168
+    ],
+    "source_x": 595,
+    "proposed_rows_inclusive": [
+      833,
+      841
+    ],
+    "proposed_y_cell_bounds": [
+      832.5,
+      841.5
+    ],
+    "selection_basis": "One previously confirmed positive in the compressor sight-glass domain, where all historical fixed-center numeric qualifications remain unestablished. Selected before any new detector result; not a new holdout.",
+    "proposal_authority": "Agent inspection of the clean native source; historical candidate Y835 and prior outputs were already exposed. Not blinded, not an exact Y, and not fitted to a new residual.",
+    "question": "sample4의 42.5초 장면입니다. 청록색 중앙선에서 기포가 많은 위쪽 유체와 기포가 적은 아래쪽 액체의 경계 위치를 노란 범위 안으로 판단할 수 있나요? 흐려서 위치 판단이 어려우면 “불명확”으로 남기겠습니다.",
+    "precision": "Broad transition in a 104-pixel-diameter view; unclear/rejected is a permitted outcome. Only fixed X595; yellow box width is display decoration, not reviewed X support.",
+    "preserved": "No renewed Oil-identity, side-material or continuity question; no correction of any legacy annotation, calibration or neighbouring frame.",
+    "decision_needed_for": "Whether this one target-domain frame can be used for fixed-column interval compatibility, or must remain qualitative-only.",
+    "stop_rule": "No numeric use before this source-position judgment. No compulsory relabel of other legacy cases and no automatic rule follows from a yes.",
+    "runner_sha256": "b53375e35c2afeba1cc1d0856aac02b95fabf971b902093ad2bd783f0bfca43c"
+  },
+  "preflight_sha256": "c8d49d837f86678b02ded0ad4cfb748a6a6b62f78f2331a2ba7ec5d0d8ac4f20",
+  "figure": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-sample4-center-source-review.png",
+    "sha256": "512041fe33820c23523dc849f7372e7501022f487e5cf0e1453c0c833d0c9559",
+    "size": [
+      1440,
+      870
+    ]
+  },
+  "verification": {
+    "source_and_saved_roi_equal": true,
+    "clean_panel_exact_nearest_pixels": true,
+    "inputs_preserved": true,
+    "detector_executed": false
+  },
+  "runner": "from pathlib import Path\nimport hashlib, json, math\nimport numpy as np\nfrom PIL import Image, ImageDraw, ImageFont\n\nROOT = Path('/Users/sunjaekim/Developer/oil_level_tracker')\nD = ROOT/'docs/50-diagnostics/s11'\nOUT = ROOT/'sample/output/s11-sample4-center-review-20261010-002'\nOUT.mkdir(exist_ok=False)\nsha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()\npaths = [ROOT/'sample/output/s11-a2-temporal-context-20261007-001/f1275.png',\n         ROOT/'sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png',\n         ROOT/'sample/sample4.oilrecipe',\n         D/'2026-10-07-sample4-region-context-preflight.json',\n         D/'2026-10-07-sample4-a2-control-preflight.json',\n         D/'2026-10-10-upper-projection-choice.json',\n         ROOT/'sample/output/s11-a2-temporal-context-20261007-001/manifest.json']\nregion = json.loads(paths[3].read_text())\nquery = next(r for r in region['review']['queries'] if r['frame']==1275)\nassert sha(paths[0]) == query['source_png_sha256']\nassert sha(paths[1]) == region['input_preparation']['inputs'][str(paths[1].relative_to(ROOT))]\nrecipe = json.loads(paths[2].read_text())\ncx = math.floor(recipe['glasses'][0]['geometry']['ellipse']['center_x']+.5)\nassert cx == 595\ncontext = json.loads(paths[6].read_text())\nox,oy,width,height = context['source_crop']\nassert sha(paths[0]) == context['files']['f1275.png']\nquestion = 'sample4의 42.5초 장면입니다. 청록색 중앙선에서 기포가 많은 위쪽 유체와 기포가 적은 아래쪽 액체의 경계 위치를 노란 범위 안으로 판단할 수 있나요? 흐려서 위치 판단이 어려우면 “불명확”으로 남기겠습니다.'\npre = dict(schema='s11-source-position-review-preflight-v1',base_head='725d5b1a710e6c587b268577ccf85b1357b9713d',\n           source='sample4/f1275 at 42.5 s; prior human-confirmed Oil correspondence and two-side roles',\n           inputs={str(p.relative_to(ROOT)):sha(p) for p in paths},source_crop_xyxy=[543,798,647,902],\n           source_raster_origin_xy=[ox,oy],source_raster_size=[width,height],\n           source_x=cx,proposed_rows_inclusive=[833,841],proposed_y_cell_bounds=[832.5,841.5],\n           selection_basis='One previously confirmed positive in the compressor sight-glass domain, where all historical fixed-center numeric qualifications remain unestablished. Selected before any new detector result; not a new holdout.',\n           proposal_authority='Agent inspection of the clean native source; historical candidate Y835 and prior outputs were already exposed. Not blinded, not an exact Y, and not fitted to a new residual.',\n           question=question,precision='Broad transition in a 104-pixel-diameter view; unclear/rejected is a permitted outcome. Only fixed X595; yellow box width is display decoration, not reviewed X support.',\n           preserved='No renewed Oil-identity, side-material or continuity question; no correction of any legacy annotation, calibration or neighbouring frame.',\n           decision_needed_for='Whether this one target-domain frame can be used for fixed-column interval compatibility, or must remain qualitative-only.',\n           stop_rule='No numeric use before this source-position judgment. No compulsory relabel of other legacy cases and no automatic rule follows from a yes.',\n           runner_sha256=sha(Path(__file__)))\n(OUT/'preflight.json').write_text(json.dumps(pre,indent=2,ensure_ascii=False)+'\\n')\n(OUT/'build.py').write_bytes(Path(__file__).read_bytes())\nfull = Image.open(paths[0]).convert('RGB')\nassert full.size == (width,height)\na,b,c,d = pre['source_crop_xyxy']\ncrop = full.crop((a-ox,b-oy,c-ox,d-oy))\nassert np.array_equal(np.asarray(crop), np.asarray(Image.open(paths[1]).convert('RGB')))\ndetail = crop.resize((624,624),Image.Resampling.NEAREST)\ncanvas = Image.new('RGB',(1440,870),'#f4f7fc'); draw=ImageDraw.Draw(canvas)\nfontpath='/System/Library/Fonts/Supplemental/Arial.ttf'\nfont=lambda n:ImageFont.truetype(fontpath,n)\ndraw.text((24,18),'sample4 / 42.5 s: can the fixed-column position be qualified?',font=font(28),fill='#15283c')\ndraw.text((24,57),'Source-only review. Existing Oil correspondence and side roles are already confirmed.',font=font(21),fill='#365168')\nleft=(24,133);right=(768,133)\ndraw.text((24,98),'Clean source crop / 6x nearest pixels',font=font(23),fill='#15283c')\ndraw.text((768,98),'Same pixels + proposed uncertainty',font=font(23),fill='#15283c')\ncanvas.paste(detail,left);canvas.paste(detail,right)\nxx=right[0]+(cx-543)*6+2.5\nfor y in range(right[1],right[1]+624,13): draw.line((xx,y,xx,min(y+7,right[1]+623)),fill='#00ffff',width=2)\ntop=right[1]+(833-798)*6;bottom=right[1]+(842-798)*6-1\ndraw.rectangle((xx-11,top,xx+11,bottom),outline='#ffff00',width=2)\ndraw.text((24,775),'104 x 104 original pixels; no sharpening or normalization.',font=font(20),fill='#365168')\ndraw.text((768,775),'X595 / proposed source rows 833-841',font=font(23),fill='#15283c')\ndraw.text((24,820),'The answer may be unclear. This is position uncertainty, not layer thickness or an accepted detector output.',font=font(21),fill='#365168')\nfigure = D/'2026-10-10-sample4-center-source-review.png'; assert not figure.exists(); canvas.save(figure)\nstored=Image.open(figure).convert('RGB')\nassert np.array_equal(np.asarray(stored.crop((24,133,648,757))),np.repeat(np.repeat(np.asarray(crop),6,0),6,1))\nfor p in paths:assert sha(p)==pre['inputs'][str(p.relative_to(ROOT))]\nrecord=dict(schema='s11-source-position-review-v1',status='PENDING_HUMAN_POSITION_QUALIFICATION',\n            preflight=pre,preflight_sha256=sha(OUT/'preflight.json'),figure=dict(path=str(figure.relative_to(ROOT)),sha256=sha(figure),size=list(canvas.size)),\n            verification=dict(source_and_saved_roi_equal=True,clean_panel_exact_nearest_pixels=True,inputs_preserved=True,detector_executed=False),\n            runner=Path(__file__).read_text(),preserved_failed_preparation=dict(path='sample/output/s11-sample4-center-review-20261010-001',reason='Pixel-equality assertion rejected treating a context crop as a full image before any figure was created; source origin is now bound to its existing manifest.'),production_changed=False,legacy_truth_changed=False,\n            new_numeric_truth=None,windows_required=False)\nrecord_path=D/'2026-10-10-sample4-center-source-review.json';assert not record_path.exists()\nrecord_path.write_text(json.dumps(record,indent=2,ensure_ascii=False)+'\\n')\nprint(json.dumps(dict(figure=record['figure'],source_x=cx,source_rows=pre['proposed_rows_inclusive'],verified=True),indent=2))\n",
+  "preserved_failed_preparation": {
+    "path": "sample/output/s11-sample4-center-review-20261010-001",
+    "reason": "Pixel-equality assertion rejected treating a context crop as a full image before any figure was created; source origin is now bound to its existing manifest.",
+    "artifacts": {
+      "sample/output/s11-sample4-center-review-20261010-001/build.py": "ccc7aa74263973121cd4b9fc2f315ca83219aa0ca84c6cf004ce3ba9e8c904f9",
+      "sample/output/s11-sample4-center-review-20261010-001/failure.json": "2588a66d5e5b4eb98e907a8a6340c0c7035bcba23156ca288d7cfd64758ad370",
+      "sample/output/s11-sample4-center-review-20261010-001/preflight.json": "0a13f2729a21315fc44c3a314f8b10136b7aa1e91f9b1a8b3a8fc1befab2e07f"
+    },
+    "failure": {
+      "stage": "Pixel equality before figure creation",
+      "error": "Source context was a 168x168 crop at (511,766), not a full image. Its input hash was correct but the proposed crop mapping failed equality.",
+      "repair": "Read and pin existing context manifest; translate source crop by declared origin; create fresh preparation 002 with unchanged question and proposed range."
+    }
+  },
+  "production_changed": false,
+  "legacy_truth_changed": false,
+  "new_numeric_truth": null,
+  "windows_required": false
+}

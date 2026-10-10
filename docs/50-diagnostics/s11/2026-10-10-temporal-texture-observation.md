@@ -264,9 +264,10 @@ Windows requirement. The Work Plan owns the pending decision and next action.
 with **“권장안으로 가자”**. The [bound choice and first source-reference preparation](2026-10-10-upper-projection-reference.md)
 close the convention decision. The subsequent **“표시한 범위로 맞음”** reply
 qualifies B's source-position interval at X950, rows 484–489, without certifying
-an exact Y or transferring it to C. Separate A/C upper-position proposals still
-need review. Original reply, preparation and temporal measurement JSON remain
-unchanged; the new interval does not promote the temporal cue.
+an exact Y or transferring it to C. The later **“두 범위 모두 맞음”**
+[A/C reply](2026-10-10-upper-projection-ac-reply.json) separately qualifies their
+upper-position intervals. Original reply, preparation and temporal measurement
+JSON remain unchanged; these references do not promote the temporal cue.
 
 ## Verification and preservation
 

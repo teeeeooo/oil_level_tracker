@@ -1,4 +1,8 @@
-"""Compare protected truth cases individually, not just aggregate coverage."""
+"""Compare the 13 historical scalar references, preserving every case's result.
+
+This legacy agreement check does not evaluate physical acceptance of the new
+fixed-center upper-projection target. Its original PASS/FAIL rules still apply.
+"""
 
 from __future__ import annotations
 
@@ -99,12 +103,24 @@ def compare(baseline: dict, candidate: dict) -> dict:
     }
     return {
         "schema": "s11-resolver-casewise-comparison-v1",
+        "comparison_scope": "legacy_scalar_agreement",
+        "physical_acceptance": "NOT_EVALUATED",
+        "qualification_owner": (
+            "docs/30-validation/s11-interface-observability-witness-validation.md"
+            "#local-source-and-truth-qualification"
+        ),
         "case_count": len(rows),
         "regressions": regressions,
         "status": "FAIL" if regressions else "PASS",
         "cases": rows,
         "identical_tracking_fingerprints": fingerprints,
-        "note": "Casewise truth comparison complements, not replaces, safety/temporal tests.",
+        "note": (
+            "PASS/FAIL describes agreement with the unchanged historical scalar "
+            "references. It is not by itself physical acceptance/rejection for "
+            "a different measurement target or an unresolved reference. Preserve "
+            "all cases and reconcile incompatible truth explicitly before runtime "
+            "adoption; safety, provenance and qualified-positive checks still apply."
+        ),
     }
 
 
@@ -119,7 +135,8 @@ def main() -> int:
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
-    print(f"{result['status']}: {result['case_count']} protected truth cases")
+    print(f"{result['status']}: {result['case_count']} legacy scalar agreement cases")
+    print(f"Physical acceptance: {result['physical_acceptance']}")
     return 1 if result["regressions"] else 0
 
 

@@ -679,3 +679,14 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-10 | [B sampling geometry](50-diagnostics/s11/2026-10-10-b-material-path-interval.png) | 승인 범위와 기존 후보의 실제 섹터 표본 위치 |
 | 2026-10-10 | [A/C source review record](50-diagnostics/s11/2026-10-10-upper-projection-ac-review.json) | A 거품 상단·C 수면의 독립적인 위치 범위 제안; 미검토 |
 | 2026-10-10 | [A/C source review](50-diagnostics/s11/2026-10-10-upper-projection-ac-review.png) | 원본 확대와 두 위치 범위를 묶은 사용자 검토 이미지 |
+
+## 2026-10-10 reviewed A/C intervals and evaluation qualification
+
+| 최초 Git 추가일(KST) | 파일 | 역할 |
+|---|---|---|
+| 2026-10-10 | [A/C interval reply](50-diagnostics/s11/2026-10-10-upper-projection-ac-reply.json) | 두 범위 승인 답변; A의 아래 경계 불명확 상태 유지 |
+| 2026-10-10 | [A/B/C comparison](50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.md) | 세 위치 기준과 기존 검출 표현 비교, 13개 과거 좌표 비교의 의미 명시 |
+| 2026-10-10 | [Comparison machine record](50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.json) | 고정 입력·전체 배열 비교·실패 보존·독립 검산·CLI 검증 |
+| 2026-10-10 | [sample4 source qualification](50-diagnostics/s11/2026-10-10-sample4-center-source-review.md) | 기존 실제 Oil 사례 한 장의 중앙 위치 평가 가능성 질문 |
+| 2026-10-10 | [sample4 preparation record](50-diagnostics/s11/2026-10-10-sample4-center-source-review.json) | 원본 crop 좌표·기존 Recipe 중앙 열·제안 범위·질문과 검산 |
+| 2026-10-10 | [sample4 clean/marked source](50-diagnostics/s11/2026-10-10-sample4-center-source-review.png) | 42.5초 원본 6배 확대와 미검토 위치 범위; 검출 출력 아님 |

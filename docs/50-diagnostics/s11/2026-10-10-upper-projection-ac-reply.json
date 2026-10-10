@@ -1,0 +1,118 @@
+{
+  "schema": "s11-reviewed-source-position-intervals-v1",
+  "base_head": "725d5b1a710e6c587b268577ccf85b1357b9713d",
+  "authority": "direct user review of the displayed A/C source-position uncertainty boxes",
+  "question_verbatim": "A에서는 거품층 윗면, C에서는 수면의 위쪽 윤곽이 청록색 중앙선과 만나는 위치를 표시했습니다. 작은 노란 상자가 각 위치의 가능한 범위를 담고 있다고 봐도 될까요? A의 불명확한 아래 경계는 이번 확인 대상이 아닙니다.",
+  "reply_verbatim": "두 범위 모두 맞음",
+  "status": "CLOSED",
+  "question_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-upper-projection-ac-review.json",
+    "sha256": "175e310a925648c19a3a07d7cb6502d219b275146ee2b97ff43bbe202f4529f4",
+    "original_status": "PENDING_HUMAN_INTERVAL_REVIEW"
+  },
+  "source_figure": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-upper-projection-ac-review.png",
+    "sha256": "6e210e314d99a027ff3e14f8a77280319df3fe0e7295055e4014742d70de809c",
+    "size": [
+      1440,
+      1240
+    ]
+  },
+  "source_video": "sample/sample5.mp4",
+  "source_video_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+  "source_region_xyxy": [
+    740,
+    250,
+    1160,
+    1080
+  ],
+  "choice": "fixed-center-upper-image-projection-v1",
+  "choice_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-upper-projection-choice.json",
+    "sha256": "9415a0ba4ef1bf68990d46ffbe6dd8b41c8b33b31e19bb449d865c99723a11d0"
+  },
+  "reviewed_references": [
+    {
+      "label": "A",
+      "case_id": "water-f001232",
+      "frame_index": 1232,
+      "nominal_time_sec": 41.107733333333336,
+      "source_raster": {
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
+        "sha256": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
+        "source_origin_xy": [
+          0,
+          0
+        ],
+        "shape": [
+          1080,
+          1920,
+          3
+        ]
+      },
+      "physical_role": "Foam upper outline",
+      "role_reply": {
+        "path": "docs/50-diagnostics/s11/2026-10-10-water-foam-role-reply.json",
+        "sha256": "57ef93a47183b090258848adea6b756a9d0fa70b2130028a41c5933a267913f1"
+      },
+      "source_x": 950,
+      "reviewed_pixel_rows_inclusive": [
+        476,
+        481
+      ],
+      "reviewed_y_cell_bounds": [
+        475.5,
+        481.5
+      ],
+      "status": "QUALIFIED_SOURCE_POSITION_INTERVAL_ONLY"
+    },
+    {
+      "label": "C",
+      "case_id": "water-f001643",
+      "frame_index": 1643,
+      "nominal_time_sec": 54.82143333333333,
+      "source_raster": {
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png",
+        "sha256": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22",
+        "source_origin_xy": [
+          0,
+          0
+        ],
+        "shape": [
+          1080,
+          1920,
+          3
+        ]
+      },
+      "physical_role": "Water upper surface",
+      "role_reply": {
+        "path": "docs/50-diagnostics/s11/2026-10-10-later-water-role-reply.json",
+        "sha256": "36f7ac8697b952b4ce74eff8ffbd4632281b3f4ba316a145221db33ce8a0b0d8"
+      },
+      "source_x": 950,
+      "reviewed_pixel_rows_inclusive": [
+        489,
+        494
+      ],
+      "reviewed_y_cell_bounds": [
+        488.5,
+        494.5
+      ],
+      "status": "QUALIFIED_SOURCE_POSITION_INTERVAL_ONLY"
+    }
+  ],
+  "interpretation": "Both displayed boxes contain their respective upper-boundary intersections at diagnostic X950. The intervals express one position's uncertainty, not full masks, exact point labels, physical thickness or all-edge membership.",
+  "independent_roles": "A is a Foam-upper positive with its lower liquid interface still unclear. B/C remain no-Foam water-surface positives. No Foam veto or Oil imputation follows.",
+  "preserved_replies": {
+    "docs/50-diagnostics/s11/2026-10-10-upper-projection-interval-reply.json": "2a0fb9f838c693f80602ef9935606f87f75d0d3f9b6ecaf131b21dd82d95f548",
+    "docs/50-diagnostics/s11/2026-10-10-water-lower-interface-reply.json": "1d19cc557c4e40fd686aeac056736718fb11fbacc82f40fb57485deeea81731e"
+  },
+  "geometry": "Diagnostic crop centre only; no calibrated Glass, zero line or mm/px.",
+  "exposure": "Three already exposed stills from one recording, not independent recordings or holdout.",
+  "scope": "No full contour, neighbouring-frame label, exact Y, layer thickness, selected candidate identity, detector correctness or Windows acceptance.",
+  "supersedes": "Pending A/C interval review only; source preparation, figures, old replies and formal labels remain unchanged.",
+  "production_changed": false,
+  "legacy_truth_changed": false,
+  "new_user_judgment_pending": false,
+  "windows_execution_required": false
+}

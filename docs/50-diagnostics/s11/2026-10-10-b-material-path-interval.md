@@ -91,12 +91,13 @@ larger top-k or wider seed band is not adopted. The existing lossless raw-edge
 graph remains available; repeating its closed connectivity/identity experiment
 would not resolve this new scalar contract.
 
-Before a candidate is assessed against further numeric sources, the separate
-[A/C source preparation](2026-10-10-upper-projection-ac-review.json) requests
-upper-position uncertainty review for Foam A and water C. Their existing roles
-and A's unclear lower interface remain closed. B alone cannot establish a
-general measurement fix; the review adds scoped references rather than fitting
-the detector to B or replacing the old corpus.
+The separate [A/C source preparation](2026-10-10-upper-projection-ac-review.json)
+subsequently received **“두 범위 모두 맞음”**. Its
+[bound reply](2026-10-10-upper-projection-ac-reply.json) closes both upper-position
+intervals while A's lower interface stays unclear. The
+[later comparison](2026-10-10-abc-source-interval-comparison.md) finds C native
+compatibility and preserves B's source-specific causal conclusion. These three
+references remain one exposed recording; no general measurement fix follows.
 
 Verification covers pinned inputs/source, capture equality, complete seed
 accounting, exact retention, saved-array coordinate/interval enumeration,

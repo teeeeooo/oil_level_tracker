@@ -1,0 +1,1728 @@
+{
+  "schema": "s11-abc-reviewed-interval-comparison-v1",
+  "base_head": "725d5b1a710e6c587b268577ccf85b1357b9713d",
+  "preflight": {
+    "schema": "s11-abc-reviewed-interval-readout-preflight-v1",
+    "base_head": "725d5b1a710e6c587b268577ccf85b1357b9713d",
+    "inputs": {
+      "docs/50-diagnostics/s11/2026-10-10-upper-projection-ac-reply.json": "360b43529ab23bc4ff9c53aff48d7a10db71398f4aed6604544783802c023c26",
+      "docs/50-diagnostics/s11/2026-10-10-upper-projection-interval-reply.json": "2a0fb9f838c693f80602ef9935606f87f75d0d3f9b6ecaf131b21dd82d95f548",
+      "docs/50-diagnostics/s11/2026-10-10-upper-projection-choice.json": "9415a0ba4ef1bf68990d46ffbe6dd8b41c8b33b31e19bb449d865c99723a11d0",
+      "docs/50-diagnostics/s11/2026-10-10-water-foam-representation.json": "efdbe145f01f9f6924c31751c4eef952b12e934eb043a5b3cd6848f00ccaa38c",
+      "docs/50-diagnostics/s11/2026-10-10-water-foam-support-readout.json.gz": "68c47e9ec4af5ac8570e1df952f36d67451718ecc6cf591bca5bc0fb55727f79",
+      "docs/50-diagnostics/s11/2026-10-09-public-path-representation.json": "63b288cccf54f1aa5fc921604eb603ed5d1d3a95b51150d7513d99ab24d596f8",
+      "docs/50-diagnostics/s11/2026-10-10-b-material-path-interval.json": "b7e3c6b3a32359cd1f3fe7345650d25d22b648e35d70e4dc75a7ae4b47133019",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
+      "sample/output/s11-water-foam-support-20261010-002/f001232.npz": "9bad8442ff89b4af0934a5434d93c0488bc03054e3cf0ff972b47393fc6cac9c",
+      "sample/output/s11-water-foam-support-20261010-002/stages/f001232.npz": "11b3a8a0984ab4a311b63c8c2af6eb27afdedc067e74d2344ed6ecfc37a9f3b9",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+      "sample/output/s11-water-foam-support-20261010-002/f001438.npz": "4588d04d3ff5f5e12101ad5d3f8f344b4a320951a35835e84881d474108f26bf",
+      "sample/output/s11-water-foam-support-20261010-002/stages/f001438.npz": "f82766e1ef35bb573bb236cb46fc7ba2bc2e899657f59fc48c9d5bb3a0cc3c59",
+      "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22",
+      "sample/output/s11-water-foam-support-20261010-002/f001643.npz": "312d815b7971a4599c349f5eec075a6ecaeaaeba7a6467e32d001fbbaaab7bbf",
+      "sample/output/s11-water-foam-support-20261010-002/stages/f001643.npz": "6bde0e381b12b76d4af3cee78d1fc82519d832c9c37ab94e3058ba728221fced",
+      "sample/output/s11-public-path-representation-20261009-001/s5-settled-native.npz": "80d91a36f89d7eaf74a1c8adbbbe91c699e74e65adfb5cad9df03c93cdd7f3ca",
+      "sample/output/s11-public-path-representation-20261009-001/s5-settled-height_200.npz": "d9814899a3bfc547e8db5d8bb0b7ab87a79e4e0614f1834b232615fa6f7e8b09"
+    },
+    "references": [
+      {
+        "label": "A",
+        "frame_index": 1232,
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
+          "sha256": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
+          "source_origin_xy": [
+            0,
+            0
+          ],
+          "shape": [
+            1080,
+            1920,
+            3
+          ]
+        },
+        "role": "Foam upper outline",
+        "source_x": 950,
+        "interval": [
+          475.5,
+          481.5
+        ]
+      },
+      {
+        "label": "B",
+        "frame_index": 1438,
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png",
+          "sha256": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+          "source_origin_xy": [
+            0,
+            0
+          ],
+          "shape": [
+            1080,
+            1920,
+            3
+          ]
+        },
+        "role": "Water upper surface",
+        "source_x": 950,
+        "interval": [
+          483.5,
+          489.5
+        ]
+      },
+      {
+        "label": "C",
+        "frame_index": 1643,
+        "source_raster": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png",
+          "sha256": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22",
+          "source_origin_xy": [
+            0,
+            0
+          ],
+          "shape": [
+            1080,
+            1920,
+            3
+          ]
+        },
+        "role": "Water upper surface",
+        "source_x": 950,
+        "interval": [
+          488.5,
+          494.5
+        ]
+      }
+    ],
+    "runner_sha256": "9946bbfde960ce92a3c5c6131f30aec1b2a2c32cc36c41af0f424daef1470313",
+    "scope": "Join newly reviewed A/C and closed B intervals to existing saved raw/support/path geometry. No image decode, preprocessing, detector call, new seed, threshold or candidate.",
+    "readouts": "All native centre Canny rows, all retained appearance face crossings, per-reference raw/stage support and glare/lightness/texture; source-role-specific interpretation; C full existing first-material-path original seeds and retained centre samples at both prior scales.",
+    "separation": "A is Foam-upper, not lower Oil truth. B/C are water-upper positives and no-Foam controls. Foam appearance perimeters are not liquid paths. Wide sector samples are positional proposals, not exact contours.",
+    "geometry": "Native source X950, exact fixed source intervals, pixel centres/cells retained. No calibrated Glass or mm.",
+    "partition": "Already exposed development sources from one recording. Keep all seven recordings and legacy scalar comparisons at their original scopes.",
+    "stop_rule": "No threshold/top-k/scale/crop change after readout; do not claim physical selection, full-pipeline accuracy or a successful all-abstain model. Closed roles and all three intervals require no repeated review."
+  },
+  "readout": {
+    "schema": "s11-abc-reviewed-interval-readout-v1",
+    "preflight_sha256": "5fb81247f8d797f72163a7875efbde446cf88146f0aa360511f99430ea9e2c31",
+    "references": [
+      {
+        "label": "A",
+        "reference": {
+          "label": "A",
+          "frame_index": 1232,
+          "source_raster": {
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
+            "sha256": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
+            "source_origin_xy": [
+              0,
+              0
+            ],
+            "shape": [
+              1080,
+              1920,
+              3
+            ]
+          },
+          "role": "Foam upper outline",
+          "source_x": 950,
+          "interval": [
+            475.5,
+            481.5
+          ]
+        },
+        "all_canny_center_rows": [
+          331,
+          477,
+          487,
+          490,
+          495,
+          505,
+          508,
+          517,
+          522,
+          526,
+          527,
+          531,
+          532,
+          533,
+          534,
+          535,
+          555,
+          561,
+          562,
+          571,
+          572,
+          579,
+          580,
+          585,
+          588,
+          591,
+          592,
+          595,
+          600,
+          613,
+          614,
+          618,
+          619,
+          622,
+          625,
+          629,
+          632,
+          633,
+          639,
+          640,
+          644,
+          645,
+          653,
+          664,
+          668,
+          677,
+          678,
+          684,
+          690,
+          695,
+          699,
+          702,
+          706,
+          707,
+          708,
+          712,
+          716,
+          719,
+          723,
+          738,
+          742,
+          745,
+          770,
+          773,
+          774,
+          777,
+          797,
+          798,
+          801,
+          828,
+          829,
+          835,
+          846,
+          847,
+          848,
+          852,
+          864,
+          865,
+          886,
+          891,
+          900,
+          905,
+          911,
+          914,
+          935,
+          936,
+          940,
+          946,
+          950,
+          958,
+          959,
+          1008,
+          1010,
+          1064,
+          1074,
+          1076,
+          1077
+        ],
+        "interval_canny_rows": [
+          477
+        ],
+        "all_appearance_crossings": [
+          {
+            "source_y": 886.5,
+            "inside_label": 31,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 889.5,
+            "inside_label": 31,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 678.5,
+            "inside_label": 40,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 684.5,
+            "inside_label": 40,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 571.5,
+            "inside_label": 67,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 579.5,
+            "inside_label": 67,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 711.5,
+            "inside_label": 76,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 714.5,
+            "inside_label": 76,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 653.5,
+            "inside_label": 78,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 664.5,
+            "inside_label": 78,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 555.5,
+            "inside_label": 80,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 563.5,
+            "inside_label": 80,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 698.5,
+            "inside_label": 83,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 706.5,
+            "inside_label": 83,
+            "outside_label": 0,
+            "status": 0
+          }
+        ],
+        "interval_appearance_crossings": [],
+        "reference_stage_samples": [
+          {
+            "source_y": 476,
+            "lightness": 0.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 477,
+            "lightness": 14.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": true,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 478,
+            "lightness": 40.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 479,
+            "lightness": 50.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 480,
+            "lightness": 57.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 481,
+            "lightness": 47.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          }
+        ],
+        "saved_foam_owner_decision": "NOT_EVALUATED",
+        "saved_diagnostic_first_component": [
+          {
+            "label": 74,
+            "local_bbox_xyxy": [
+              252,
+              482,
+              257,
+              488
+            ],
+            "pixel_count": 22,
+            "local_front_y": 482.0,
+            "decision_status": "ambiguous",
+            "score": 0.39490578765277556,
+            "material_phenotype": "none",
+            "predicates": {
+              "glare_exceeded": false,
+              "structural": false,
+              "shape_ok": false,
+              "strong_appearance_ok": false,
+              "moderate_appearance_ok": false,
+              "texture_ok": true,
+              "strong_pass": false,
+              "moderate_pass": false,
+              "ambiguous_pass": true,
+              "bottom_connected": false,
+              "white_ok": false,
+              "chromatic_ok": false,
+              "bottom_chromatic_layer": false,
+              "area_ok": false,
+              "height_ok": false,
+              "thin_horizontal": false,
+              "structural_substrate_present": false,
+              "front_from_lower_edge": false
+            },
+            "values": {
+              "area_ratio": 6.310958118187034e-05,
+              "height_ratio": 0.007228915662650603,
+              "width_ratio": 0.011904761904761904,
+              "fill_ratio": 0.7333333333333333,
+              "whiteness_ratio": 0.18181818181818182,
+              "chromatic_ratio": 0.0,
+              "texture_ratio": 1.0,
+              "glare_ratio": 0.0,
+              "wide_row_fraction": 0.6666666666666666,
+              "row_compactness_median": 1.0
+            },
+            "thresholds": {
+              "min_area": 0.025,
+              "min_whiteness": 0.25,
+              "minimum_score": 0.48,
+              "strong_score": 0.68,
+              "max_glare": 0.25
+            },
+            "diagnostic_id": 1,
+            "selected_component": true
+          }
+        ],
+        "physical_prediction": "NOT_EVALUATED"
+      },
+      {
+        "label": "B",
+        "reference": {
+          "label": "B",
+          "frame_index": 1438,
+          "source_raster": {
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png",
+            "sha256": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+            "source_origin_xy": [
+              0,
+              0
+            ],
+            "shape": [
+              1080,
+              1920,
+              3
+            ]
+          },
+          "role": "Water upper surface",
+          "source_x": 950,
+          "interval": [
+            483.5,
+            489.5
+          ]
+        },
+        "all_canny_center_rows": [
+          331,
+          334,
+          485,
+          488,
+          492,
+          496,
+          500,
+          775,
+          779,
+          828,
+          829,
+          834,
+          835,
+          846,
+          847,
+          848,
+          858,
+          864,
+          865,
+          886,
+          891,
+          900,
+          906,
+          910,
+          914,
+          935,
+          936,
+          939,
+          940,
+          945,
+          950,
+          959
+        ],
+        "interval_canny_rows": [
+          485,
+          488
+        ],
+        "all_appearance_crossings": [
+          {
+            "source_y": 885.5,
+            "inside_label": 15,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 890.5,
+            "inside_label": 15,
+            "outside_label": 0,
+            "status": 0
+          }
+        ],
+        "interval_appearance_crossings": [],
+        "reference_stage_samples": [
+          {
+            "source_y": 484,
+            "lightness": 18.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 485,
+            "lightness": 72.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": true,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 486,
+            "lightness": 148.0,
+            "whiteness": 0.3975983262062073,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": true,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 487,
+            "lightness": 153.0,
+            "whiteness": 0.4386919140815735,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": true,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 488,
+            "lightness": 87.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": true,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 489,
+            "lightness": 82.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          }
+        ],
+        "saved_foam_owner_decision": "NOT_EVALUATED",
+        "saved_diagnostic_first_component": [
+          {
+            "label": 26,
+            "local_bbox_xyxy": [
+              272,
+              691,
+              283,
+              706
+            ],
+            "pixel_count": 122,
+            "local_front_y": 691.0,
+            "decision_status": "weak_rejected",
+            "score": 0.6405532543914926,
+            "material_phenotype": "none",
+            "predicates": {
+              "glare_exceeded": false,
+              "structural": false,
+              "shape_ok": false,
+              "strong_appearance_ok": true,
+              "moderate_appearance_ok": true,
+              "texture_ok": true,
+              "strong_pass": false,
+              "moderate_pass": false,
+              "ambiguous_pass": false,
+              "bottom_connected": true,
+              "white_ok": true,
+              "chromatic_ok": false,
+              "bottom_chromatic_layer": false,
+              "area_ok": false,
+              "height_ok": false,
+              "thin_horizontal": false,
+              "structural_substrate_present": false,
+              "front_from_lower_edge": false
+            },
+            "values": {
+              "area_ratio": 0.0003499713138267355,
+              "height_ratio": 0.018072289156626505,
+              "width_ratio": 0.02619047619047619,
+              "fill_ratio": 0.7393939393939394,
+              "whiteness_ratio": 0.9754098360655737,
+              "chromatic_ratio": 0.0,
+              "texture_ratio": 1.0,
+              "glare_ratio": 0.0,
+              "wide_row_fraction": 0.9333333333333333,
+              "row_compactness_median": 1.0
+            },
+            "thresholds": {
+              "min_area": 0.025,
+              "min_whiteness": 0.25,
+              "minimum_score": 0.48,
+              "strong_score": 0.68,
+              "max_glare": 0.25
+            },
+            "diagnostic_id": 1,
+            "selected_component": true
+          }
+        ],
+        "physical_prediction": "NOT_EVALUATED"
+      },
+      {
+        "label": "C",
+        "reference": {
+          "label": "C",
+          "frame_index": 1643,
+          "source_raster": {
+            "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png",
+            "sha256": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22",
+            "source_origin_xy": [
+              0,
+              0
+            ],
+            "shape": [
+              1080,
+              1920,
+              3
+            ]
+          },
+          "role": "Water upper surface",
+          "source_x": 950,
+          "interval": [
+            488.5,
+            494.5
+          ]
+        },
+        "all_canny_center_rows": [
+          331,
+          335,
+          491,
+          495,
+          736,
+          737,
+          738,
+          739,
+          828,
+          829,
+          834,
+          845,
+          846,
+          847,
+          853,
+          863,
+          864,
+          865,
+          886,
+          891,
+          900,
+          905,
+          910,
+          914,
+          935,
+          936,
+          939,
+          940,
+          945,
+          950,
+          959,
+          960
+        ],
+        "interval_canny_rows": [
+          491
+        ],
+        "all_appearance_crossings": [
+          {
+            "source_y": 886.5,
+            "inside_label": 14,
+            "outside_label": 0,
+            "status": 0
+          },
+          {
+            "source_y": 890.5,
+            "inside_label": 14,
+            "outside_label": 0,
+            "status": 0
+          }
+        ],
+        "interval_appearance_crossings": [],
+        "reference_stage_samples": [
+          {
+            "source_y": 489,
+            "lightness": 6.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 490,
+            "lightness": 10.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 491,
+            "lightness": 26.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": true,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 492,
+            "lightness": 60.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 493,
+            "lightness": 77.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          },
+          {
+            "source_y": 494,
+            "lightness": 46.0,
+            "whiteness": 0.0,
+            "texture": 1.0,
+            "canny": false,
+            "glare": false,
+            "raw_white_support": false,
+            "white_clean": false,
+            "chromatic_support": false,
+            "recovered_droplet_support": false,
+            "support": false,
+            "retained_label": 0
+          }
+        ],
+        "saved_foam_owner_decision": "NOT_EVALUATED",
+        "saved_diagnostic_first_component": [
+          {
+            "label": 34,
+            "local_bbox_xyxy": [
+              272,
+              691,
+              284,
+              706
+            ],
+            "pixel_count": 130,
+            "local_front_y": 691.0,
+            "decision_status": "weak_rejected",
+            "score": 0.6413186157884952,
+            "material_phenotype": "none",
+            "predicates": {
+              "glare_exceeded": false,
+              "structural": false,
+              "shape_ok": false,
+              "strong_appearance_ok": true,
+              "moderate_appearance_ok": true,
+              "texture_ok": true,
+              "strong_pass": false,
+              "moderate_pass": false,
+              "ambiguous_pass": false,
+              "bottom_connected": true,
+              "white_ok": true,
+              "chromatic_ok": false,
+              "bottom_chromatic_layer": false,
+              "area_ok": false,
+              "height_ok": false,
+              "thin_horizontal": false,
+              "structural_substrate_present": false,
+              "front_from_lower_edge": false
+            },
+            "values": {
+              "area_ratio": 0.00037292025243832475,
+              "height_ratio": 0.018072289156626505,
+              "width_ratio": 0.02857142857142857,
+              "fill_ratio": 0.7222222222222222,
+              "whiteness_ratio": 0.9769230769230769,
+              "chromatic_ratio": 0.0,
+              "texture_ratio": 1.0,
+              "glare_ratio": 0.0,
+              "wide_row_fraction": 0.9333333333333333,
+              "row_compactness_median": 1.0
+            },
+            "thresholds": {
+              "min_area": 0.025,
+              "min_whiteness": 0.25,
+              "minimum_score": 0.48,
+              "strong_score": 0.68,
+              "max_glare": 0.25
+            },
+            "diagnostic_id": 1,
+            "selected_component": true
+          }
+        ],
+        "physical_prediction": "NOT_EVALUATED"
+      }
+    ],
+    "c_first_material_path": [
+      {
+        "label": "C",
+        "scale": "native",
+        "all_original_seed_centres": [
+          {
+            "seed": 234,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 490.0,
+                "inside_reviewed_interval": true
+              }
+            ]
+          },
+          {
+            "seed": 253,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 490.0,
+                "inside_reviewed_interval": true
+              }
+            ]
+          },
+          {
+            "seed": 633,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 884.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 645,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 884.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 583,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 834.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 92,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 332.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 712,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 964.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 659,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 893.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 82,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 332.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 100,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 349.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 609,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 883.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 117,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 349.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 598,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 834.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 109,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 349.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 693,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 964.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 728,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 964.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 548,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 818.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 525,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 799.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 475,
+            "path_eligible": false,
+            "center_samples": []
+          },
+          {
+            "seed": 288,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 532.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 455,
+            "path_eligible": false,
+            "center_samples": []
+          },
+          {
+            "seed": 301,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 567.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          }
+        ],
+        "retained_centres": [
+          {
+            "index": 0,
+            "source_median_candidate_y": 962.0,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 964.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "index": 1,
+            "source_median_candidate_y": 489.0,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 490.0,
+                "inside_reviewed_interval": true
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "source_median_candidate_y": 833.0,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 834.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "source_median_candidate_y": 884.0,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 884.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "source_median_candidate_y": 333.0,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 332.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "source_median_candidate_y": 366.0,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  907.5,
+                  991.5
+                ],
+                "source_sample_y": 349.0,
+                "inside_reviewed_interval": false
+              }
+            ]
+          }
+        ],
+        "original_seed_count": 22,
+        "eligible_paths": 20,
+        "compatible_before_retention": 2,
+        "compatible_retained": 1,
+        "measurement_reused": true
+      },
+      {
+        "label": "C",
+        "scale": "height_200",
+        "all_original_seed_centres": [
+          {
+            "seed": 136,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 828.4250000000001,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 54,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 471.525,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 174,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 969.5250000000001,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 62,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 471.525,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 152,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 828.4250000000001,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 158,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 969.5250000000001,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 18,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 342.875,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 29,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 342.875,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 113,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 782.7750000000001,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 81,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 525.475,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 101,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 637.5250000000001,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "seed": 93,
+            "path_eligible": true,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 637.5250000000001,
+                "inside_reviewed_interval": false
+              }
+            ]
+          }
+        ],
+        "retained_centres": [
+          {
+            "index": 0,
+            "source_median_candidate_y": 525.475,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 525.475,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "index": 1,
+            "source_median_candidate_y": 969.5250000000001,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 969.5250000000001,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "source_median_candidate_y": 475.675,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 471.525,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "source_median_candidate_y": 367.775,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 342.875,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "source_median_candidate_y": 828.4250000000001,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 828.4250000000001,
+                "inside_reviewed_interval": false
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "source_median_candidate_y": 782.7750000000001,
+            "center_samples": [
+              {
+                "sector_index": 2,
+                "source_x_cell_band": [
+                  905.8366336633663,
+                  993.1633663366337
+                ],
+                "source_sample_y": 782.7750000000001,
+                "inside_reviewed_interval": false
+              }
+            ]
+          }
+        ],
+        "original_seed_count": 12,
+        "eligible_paths": 12,
+        "compatible_before_retention": 0,
+        "compatible_retained": 0,
+        "measurement_reused": true
+      }
+    ],
+    "inputs_preserved": true,
+    "detector_executed": false,
+    "production_changed": false,
+    "physical_classifier_qualified": false
+  },
+  "verification": {
+    "schema": "s11-abc-interval-independent-verification-v1",
+    "passed": true,
+    "errors": [],
+    "counts": {
+      "references": 3,
+      "stage_pixels": 18,
+      "original_seed_paths": 34,
+      "retained_paths": 12,
+      "unchanged_production_files": 226
+    },
+    "preflight_sha256": "5fb81247f8d797f72163a7875efbde446cf88146f0aa360511f99430ea9e2c31",
+    "readout_sha256": "ac1de0be8253350f4b30cf09148fd3ff3fed53b4777267cc8794767184bc3f77",
+    "verifier_sha256": "a2ac3805d3c73ccda68cefe734e65f9b6920e4b7f92297e07910d29b0f7a3a7e",
+    "method": "Direct label-neighbour enumeration for source-space faces; direct stage-column reads; separate all-seed/path joins; input and production identity."
+  },
+  "runner": "from pathlib import Path\nimport hashlib,json,gzip,sys\nimport numpy as np\nROOT=Path('/Users/sunjaekim/Developer/oil_level_tracker');D=ROOT/'docs/50-diagnostics/s11'\nOUT=ROOT/'sample/output/s11-abc-reviewed-intervals-20261010-003'\nsha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()\nload=lambda name:json.loads((D/name).read_text())\nsave=lambda name,v:(OUT/name).write_text(json.dumps(v,indent=2,ensure_ascii=False)+'\\n')\nac=load('2026-10-10-upper-projection-ac-reply.json');b=load('2026-10-10-upper-projection-interval-reply.json')\nrefs=[dict(label=c['label'],frame_index=c['frame_index'],source_raster=c['source_raster'],role=c['physical_role'],source_x=c['source_x'],interval=c['reviewed_y_cell_bounds']) for c in ac['reviewed_references']]\nrefs.append(dict(label='B',frame_index=1438,source_raster=b['source_case']['source_raster'],role='Water upper surface',source_x=950,interval=b['reviewed_reference']['continuous_row_cell_bounds_y']))\nrefs.sort(key=lambda c:c['label'])\nfoam=load('2026-10-10-water-foam-representation.json')\npaths=load('2026-10-09-public-path-representation.json')\nif sys.argv[1]=='--preflight':\n OUT.mkdir(exist_ok=False)\n names=['2026-10-10-upper-projection-ac-reply.json','2026-10-10-upper-projection-interval-reply.json','2026-10-10-upper-projection-choice.json','2026-10-10-water-foam-representation.json','2026-10-10-water-foam-support-readout.json.gz','2026-10-09-public-path-representation.json','2026-10-10-b-material-path-interval.json']\n inputs={str((D/n).relative_to(ROOT)):sha(D/n) for n in names}\n for c in refs:\n  inputs[c['source_raster']['path']]=c['source_raster']['sha256']\n  for sub in ('','stages/'):\n   name=f\"sample/output/s11-water-foam-support-20261010-002/{sub}f{c['frame_index']:06d}.npz\"\n   inputs[name]=foam['local_artifacts'][name]['sha256']\n for r in paths['readout']['results']:\n  if r['case_id']=='s5-settled':inputs[r['arrays_path']]=r['arrays_sha256']\n for name,pin in inputs.items():assert sha(ROOT/name)==pin,name\n preflight={'schema':'s11-abc-reviewed-interval-readout-preflight-v1','base_head':'725d5b1a710e6c587b268577ccf85b1357b9713d','inputs':inputs,'references':refs,'runner_sha256':sha(Path(__file__)),\n  'scope':'Join newly reviewed A/C and closed B intervals to existing saved raw/support/path geometry. No image decode, preprocessing, detector call, new seed, threshold or candidate.',\n  'readouts':'All native centre Canny rows, all retained appearance face crossings, per-reference raw/stage support and glare/lightness/texture; source-role-specific interpretation; C full existing first-material-path original seeds and retained centre samples at both prior scales.',\n  'separation':'A is Foam-upper, not lower Oil truth. B/C are water-upper positives and no-Foam controls. Foam appearance perimeters are not liquid paths. Wide sector samples are positional proposals, not exact contours.',\n  'geometry':'Native source X950, exact fixed source intervals, pixel centres/cells retained. No calibrated Glass or mm.',\n  'partition':'Already exposed development sources from one recording. Keep all seven recordings and legacy scalar comparisons at their original scopes.',\n  'stop_rule':'No threshold/top-k/scale/crop change after readout; do not claim physical selection, full-pipeline accuracy or a successful all-abstain model. Closed roles and all three intervals require no repeated review.'}\n save('preflight.json',preflight);(OUT/'run.py').write_bytes(Path(__file__).read_bytes());print('FROZEN_PREFLIGHT',sha(OUT/'preflight.json'));sys.exit(0)\nassert sys.argv[1]=='--run'\npreflight=json.loads((OUT/'preflight.json').read_text());assert sha(Path(__file__))==preflight['runner_sha256']\nfor name,pin in preflight['inputs'].items():assert sha(ROOT/name)==pin,name\nassert not (OUT/'readout.json').exists()\nfull=json.loads(gzip.decompress((D/'2026-10-10-water-foam-support-readout.json.gz').read_bytes()))\nresults=[]\nfor c in refs:\n frame=c['frame_index'];lo,hi=c['interval'];x=210\n with np.load(ROOT/f'sample/output/s11-water-foam-support-20261010-002/f{frame:06d}.npz') as z:a={k:z[k].copy() for k in z.files}\n with np.load(ROOT/f'sample/output/s11-water-foam-support-20261010-002/stages/f{frame:06d}.npz') as z:s={k:z[k].copy() for k in z.files}\n crossings=[]\n for i,(p,q) in enumerate(zip(a['start_xy2'],a['end_xy2'])):\n  if int(p[1])==int(q[1]) and min(p[0],q[0])<=2*c['source_x']<max(p[0],q[0]):\n   crossings.append(dict(source_y=float(p[1])/2,inside_label=int(a['inside_label'][i]),outside_label=int(a['outside_label'][i]),status=int(a['status'][i])))\n rows=[250+y for y in range(s['canny'].shape[0]) if s['canny'][y,x]>0]\n sampled=[]\n for y in range(s['canny'].shape[0]):\n  if lo<=250+y<=hi:\n   sampled.append({'source_y':250+y,**{key:float(s[key][y,x]) for key in ('lightness','whiteness','texture')},\n    **{key:bool(s[key][y,x]) for key in ('canny','glare','raw_white_support','white_clean','chromatic_support','recovered_droplet_support','support')},'retained_label':int(a['labels'][y,x])})\n metadata=next(r['owner_component_metadata'] for r in full['results'] if r['frame_index']==frame)\n results.append({'label':c['label'],'reference':c,'all_canny_center_rows':rows,'interval_canny_rows':[y for y in rows if lo<=y<=hi],\n  'all_appearance_crossings':crossings,'interval_appearance_crossings':[f for f in crossings if lo<=f['source_y']<=hi],\n  'reference_stage_samples':sampled,'saved_foam_owner_decision':metadata['decision'],'saved_diagnostic_first_component':[r for r in metadata['components'] if r['selected_component']],\n  'physical_prediction':'NOT_EVALUATED'})\npath_results=[]\nfor r in paths['readout']['results']:\n if r['case_id']!='s5-settled':continue\n c=next(c for c in refs if c['label']=='C');lo,hi=c['interval'];sx,sy=r['source_per_working_pixel_xy']\n def center(path):\n  samples=[]\n  if path is None:return samples\n  for s in path['diagnostic_samples']:\n   xa,xb=740+s['start_x']*sx-.5,740+s['stop_x']*sx-.5\n   if xa<=950<xb:\n    y=250+(s['local_y']+.5)*sy-.5\n    samples.append({'sector_index':s['sector_index'],'source_x_cell_band':[xa,xb],'source_sample_y':y,'inside_reviewed_interval':lo<=y<=hi})\n  return samples\n audit=next(a for a in paths['profile_audit']['audits'] if a['case_id']==r['case_id'] and a['scale']==r['scale'])\n seeds=[{'seed':a['seed'],'path_eligible':a['path'] is not None,'center_samples':center(a['path'])} for a in audit['all_seed_paths']]\n retained=[{'index':i,'source_median_candidate_y':250+(a['candidate']['y']+.5)*sy-.5,'center_samples':center(a['path'])} for i,a in enumerate(r['candidates'])]\n count=lambda rows:sum(any(s['inside_reviewed_interval'] for s in row['center_samples']) for row in rows)\n item={'label':'C','scale':r['scale'],'all_original_seed_centres':seeds,'retained_centres':retained,'original_seed_count':len(seeds),'eligible_paths':sum(s['path_eligible'] for s in seeds),\n  'compatible_before_retention':count(seeds),'compatible_retained':count(retained),'measurement_reused':True}\n path_results.append(item)\nfor name,pin in preflight['inputs'].items():assert sha(ROOT/name)==pin,name\nresult={'schema':'s11-abc-reviewed-interval-readout-v1','preflight_sha256':sha(OUT/'preflight.json'),'references':results,'c_first_material_path':path_results,\n 'inputs_preserved':True,'detector_executed':False,'production_changed':False,'physical_classifier_qualified':False}\nsave('readout.json',result)\nfor r in results:print(r['label'],'raw',r['interval_canny_rows'],'appearance',r['interval_appearance_crossings'],'Foam decision',r['saved_foam_owner_decision'])\nfor r in path_results:print('C',r['scale'],r['original_seed_count'],r['eligible_paths'],r['compatible_before_retention'],r['compatible_retained'])\n",
+  "independent_verifier": "from pathlib import Path\nimport hashlib, json, subprocess, sys\nimport numpy as np\n\nROOT = Path('/Users/sunjaekim/Developer/oil_level_tracker')\nout = ROOT / sys.argv[1]\nsha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()\npre = json.loads((out / 'preflight.json').read_text())\ngot = json.loads((out / 'readout.json').read_text())\nerrors = []\ndef check(ok, message):\n    if not ok:\n        errors.append(message)\n\nfor name, digest in pre['inputs'].items():\n    check(sha(ROOT / name) == digest, 'input hash: ' + name)\ncheck(sha(out / 'run.py') == pre['runner_sha256'], 'runner hash')\ncheck(got['preflight_sha256'] == sha(out / 'preflight.json'), 'preflight hash')\ncounts = dict(references=0, stage_pixels=0, original_seed_paths=0, retained_paths=0)\nfor ref, row in zip(pre['references'], got['references'], strict=True):\n    counts['references'] += 1\n    f = ref['frame_index']; x = ref['source_x'] - 740\n    z = np.load(ROOT / f'sample/output/s11-water-foam-support-20261010-002/f{f:06d}.npz')\n    s = np.load(ROOT / f'sample/output/s11-water-foam-support-20261010-002/stages/f{f:06d}.npz')\n    labels, visible = z['labels'], z['visible']\n    lo, hi = ref['interval']\n    raw_rows = (np.flatnonzero(s['canny'][:, x]) + 250).tolist()\n    check(row['all_canny_center_rows'] == raw_rows, f'{f} raw column')\n    check(row['interval_canny_rows'] == [y for y in raw_rows if lo <= y <= hi], f'{f} interval edges')\n    # Independent pixel-neighbour enumeration, without reading the saved faces.\n    faces = []\n    for y in range(len(labels)):\n        label = int(labels[y, x])\n        if not label or not visible[y, x]:\n            continue\n        for dy in (-1, 1):\n            n = y + dy\n            domain = 0 <= n < len(labels)\n            seen = domain and bool(visible[n, x])\n            outside = int(labels[n, x]) if seen else 0\n            if seen and outside == label:\n                continue\n            status = 3 if not domain else 2 if not seen else 0 if outside == 0 else 1\n            faces.append(dict(source_y=250+y+dy/2, inside_label=label, outside_label=outside, status=status))\n    sort = lambda xs: sorted(xs, key=lambda r:(r['source_y'],r['inside_label'],r['outside_label'],r['status']))\n    check(sort(faces) == sort(row['all_appearance_crossings']), f'{f} source-coordinate face crossings')\n    check(sort([r for r in faces if lo <= r['source_y'] <= hi]) == sort(row['interval_appearance_crossings']), f'{f} interval face crossings')\n    expected_rows = [y for y in range(len(labels)) if lo <= y+250 <= hi]\n    check([r['source_y'] for r in row['reference_stage_samples']] == [y+250 for y in expected_rows], f'{f} stage row coverage')\n    for y, sample in zip(expected_rows, row['reference_stage_samples'], strict=True):\n        counts['stage_pixels'] += 1\n        check(sample['retained_label'] == int(labels[y,x]), f'{f}:{y} label')\n        for name, value in sample.items():\n            if name in ('source_y','retained_label'):\n                continue\n            expected = bool(s[name][y,x]) if isinstance(value,bool) else float(s[name][y,x])\n            check(value == expected, f'{f}:{y} stage {name}')\n    z.close(); s.close()\n\nsource = json.loads((ROOT / 'docs/50-diagnostics/s11/2026-10-09-public-path-representation.json').read_text())\nfor result in got['c_first_material_path']:\n    capture = next(r for r in source['readout']['results'] if r['case_id']=='s5-settled' and r['scale']==result['scale'])\n    audit = next(r for r in source['profile_audit']['audits'] if r['case_id']=='s5-settled' and r['scale']==result['scale'])\n    sx, sy = capture['source_per_working_pixel_xy']\n    def samples(path):\n        answer = []\n        for r in (path or {}).get('diagnostic_samples',[]):\n            left = 739.5+r['start_x']*sx; right = 739.5+r['stop_x']*sx\n            if left <= 950 < right:\n                y = 249.5+(r['local_y']+.5)*sy\n                answer.append(dict(sector_index=r['sector_index'],source_x_cell_band=[left,right],source_sample_y=y,inside_reviewed_interval=488.5<=y<=494.5))\n        return answer\n    expected = [dict(seed=r['seed'],path_eligible=r['path'] is not None,center_samples=samples(r['path'])) for r in audit['all_seed_paths']]\n    check(expected == result['all_original_seed_centres'], result['scale']+' every original seed')\n    retained = [dict(index=i,source_median_candidate_y=249.5+(r['candidate']['y']+.5)*sy,center_samples=samples(r['path'])) for i,r in enumerate(capture['candidates'])]\n    check(retained == result['retained_centres'], result['scale']+' every retained path')\n    counts['original_seed_paths'] += len(expected); counts['retained_paths'] += len(retained)\n    check(result['original_seed_count'] == len(expected), 'seed count')\n    check(result['eligible_paths'] == sum(r['path_eligible'] for r in expected), 'eligible count')\n    for name, rows in [('compatible_before_retention',expected),('compatible_retained',retained)]:\n        check(result[name] == sum(any(s['inside_reviewed_interval'] for s in r['center_samples']) for r in rows), name)\n\nnames = subprocess.check_output(['git','ls-files','src/oil_tracker'],cwd=ROOT,text=True).splitlines()\nfor name in names:\n    original = subprocess.check_output(['git','show',pre['base_head']+':'+name],cwd=ROOT)\n    check((ROOT/name).read_bytes() == original, 'production changed: '+name)\ncounts['unchanged_production_files'] = len(names)\nreport = dict(schema='s11-abc-interval-independent-verification-v1',passed=not errors,errors=errors,counts=counts,\n              preflight_sha256=sha(out/'preflight.json'),readout_sha256=sha(out/'readout.json'),verifier_sha256=sha(Path(__file__)),\n              method='Direct label-neighbour enumeration for source-space faces; direct stage-column reads; separate all-seed/path joins; input and production identity.')\n(out/'verification.json').write_text(json.dumps(report,indent=2)+'\\n')\nprint(json.dumps(report,indent=2))\nsys.exit(bool(errors))\n",
+  "local_artifacts": {
+    "sample/output/s11-abc-reviewed-intervals-20261010-003/preflight.json": "5fb81247f8d797f72163a7875efbde446cf88146f0aa360511f99430ea9e2c31",
+    "sample/output/s11-abc-reviewed-intervals-20261010-003/readout.json": "ac1de0be8253350f4b30cf09148fd3ff3fed53b4777267cc8794767184bc3f77",
+    "sample/output/s11-abc-reviewed-intervals-20261010-003/run.py": "9946bbfde960ce92a3c5c6131f30aec1b2a2c32cc36c41af0f424daef1470313",
+    "sample/output/s11-abc-reviewed-intervals-20261010-003/verification.json": "b86ecb7ef56a100b5d473636153c2caf092b9367411b036f01680b5a5b68184c"
+  },
+  "preserved_failed_attempts": [
+    {
+      "root": "sample/output/s11-abc-reviewed-intervals-20261010-001",
+      "failure": {
+        "stage": "preflight input validation",
+        "error": "Compared SHA256 string with the manifest {sha256,bytes} object; all file digests actually match. No array outcome was read and no model ran.",
+        "repair": "Use the existing sha256 field; preserve this attempt; same inputs/rules."
+      },
+      "artifacts": {
+        "sample/output/s11-abc-reviewed-intervals-20261010-001/failure.json": "9891d35e8c77a71e6c24d1b32ca3953a7eab464ee9b534760ffe5a6ee94ccf52",
+        "sample/output/s11-abc-reviewed-intervals-20261010-001/run.py": "ac3e8c3c896a2b9666c515971c9a99233ec2b756f326dd4ce80d5bbda5bc6f4d"
+      },
+      "disposition": "SUPERSEDED; not used as the published readout"
+    },
+    {
+      "root": "sample/output/s11-abc-reviewed-intervals-20261010-002",
+      "failure": {
+        "stage": "Independent verification before publication",
+        "error": "The array reader treated source-coordinate unit faces as local. All three complete face-column readouts were wrong; interval absence, raw stage reads and C seed/path joins independently matched.",
+        "repair": "Query doubled source X950 and divide source face Y by two without adding the crop origin. Preserve attempt 002 and its failed verification; create a fresh identical-scope 003."
+      },
+      "artifacts": {
+        "sample/output/s11-abc-reviewed-intervals-20261010-002/failure.json": "ab05f4f0b3d273231a588cb594ae80ccdefee3d4a9e12653dfa1556ccb1fc233",
+        "sample/output/s11-abc-reviewed-intervals-20261010-002/preflight.json": "f48dae0f03fab70f8f468c134f5db7b376f25e694431cc0b939bbe7373f488c9",
+        "sample/output/s11-abc-reviewed-intervals-20261010-002/readout.json": "77aebf140313744c0ef0eaa9844289e42ff2a9ba4123f8131acc57c6ba5f86fc",
+        "sample/output/s11-abc-reviewed-intervals-20261010-002/run.py": "d139be2db3ce901cbc4f89cf732268f4d79f275b6c7a9b4cee6b57305e6b5609",
+        "sample/output/s11-abc-reviewed-intervals-20261010-002/verification.json": "793cc2fa700acea79d6ffe2565ccc6c36e286ebcd9388393ee16456ba624539b"
+      },
+      "disposition": "SUPERSEDED; not used as the published readout"
+    }
+  ],
+  "finding": "A native upper-Foam support is lost at the absolute-lightness white predicate; B loses interval-compatible sector samples before retention at both frozen scales; C native retains one compatible sample at source Y490 (median489), while height200 retains none. Position compatibility does not establish physical candidate identity or full-pipeline efficacy.",
+  "production_changed": false,
+  "legacy_truth_changed": false,
+  "physical_prediction": "NOT_EVALUATED",
+  "windows_execution": false,
+  "legacy_comparator_output_qualification": {
+    "schema": "s11-legacy-comparison-scope-verification-v1",
+    "base_head": "725d5b1a710e6c587b268577ccf85b1357b9713d",
+    "source": "tests/diagnostics/s11_resolver_replacement_compare.py",
+    "source_sha256": "7f5fc333a1e5c13fc0aff4cfe714adf5a76f26d87184b0e863c84feb5608ad30",
+    "old_source_sha256": "8975a717ba38ce5b4d85fc76903deb57d204888b2cf4ed6ef600654a1b95dc25",
+    "synthetic_fixture": "tests/test_s11_resolver_replacement_tools.py::_manifest",
+    "scope": "Synthetic JSON comparison and actual CLI only; no detector replay or field efficacy.",
+    "scenarios": [
+      {
+        "scenario": "same",
+        "exit_code": 0,
+        "status": "PASS",
+        "prior_comparison_fields_equal": true,
+        "stdout": "PASS: 13 legacy scalar agreement cases\nPhysical acceptance: NOT_EVALUATED\n"
+      },
+      {
+        "scenario": "perfect",
+        "exit_code": 0,
+        "status": "PASS",
+        "prior_comparison_fields_equal": true,
+        "stdout": "PASS: 13 legacy scalar agreement cases\nPhysical acceptance: NOT_EVALUATED\n"
+      },
+      {
+        "scenario": "one_regression",
+        "exit_code": 1,
+        "status": "FAIL",
+        "prior_comparison_fields_equal": true,
+        "stdout": "FAIL: 13 legacy scalar agreement cases\nPhysical acceptance: NOT_EVALUATED\n"
+      },
+      {
+        "scenario": "missing_previous_numeric",
+        "exit_code": 1,
+        "status": "FAIL",
+        "prior_comparison_fields_equal": true,
+        "stdout": "FAIL: 13 legacy scalar agreement cases\nPhysical acceptance: NOT_EVALUATED\n"
+      }
+    ],
+    "focused_tests": "5 passed",
+    "preserved": "Original 13-case membership, error computation, PASS/FAIL, CLI exit code, alignment/provenance/runtime/row-count guards and fingerprints.",
+    "new_fields": [
+      "comparison_scope",
+      "physical_acceptance",
+      "qualification_owner"
+    ],
+    "output_root": "sample/output/s11-legacy-comparison-scope-20261010-001"
+  }
+}

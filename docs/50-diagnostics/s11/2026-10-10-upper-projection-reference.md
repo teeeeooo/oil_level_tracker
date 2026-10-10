@@ -69,7 +69,7 @@ face nor an uppermost raw pixel implements the newly chosen physical-target rule
 
 ![Clean B source and proposed uncertainty at the diagnostic column](2026-10-10-upper-projection-reference-review.png)
 
-## B review closed; next A/C source qualification
+## B and A/C source reviews closed
 
 The targeted B answer confirms that the upper water-surface intersection at the
 cyan column lies within the small yellow box. It does not reopen Foam presence,
@@ -85,13 +85,16 @@ source context, clean 4× details and the same detail with proposed ranges:
 | A/f1232, 41.108 s | Foam layer; separate lower boundary unclear | Upper Foam outline: rows 476–481 / Y[475.5,481.5] |
 | C/f1643, 54.821 s | Water surface without a Foam layer | Upper water projection: rows 489–494 / Y[488.5,494.5] |
 
-Both ranges come from independent clean-source inspection, without a new
-candidate result or fitted tolerance. They remain **unreviewed**. They extend
+Both ranges came from independent clean-source inspection, without a new
+candidate result or fitted tolerance. The user then answered **“두 범위 모두 맞음”**;
+the [separate reply](2026-10-10-upper-projection-ac-reply.json) closes both reviews
+while preserving the original preparation/image. They extend
 source qualification beyond one B point and distinguish the upper Foam and
 water roles; two stills from one recording are not independent recordings or
-holdouts. An unclear answer leaves that scalar reference unresolved, with no
-absence/abstention success. No answer about A's lower interface, B's existing
-range, physical thickness or adjacent frames is requested again.
+holdouts. A's lower interface stays unclear; B's existing range, physical
+thickness and adjacent frames are outside this reply. The
+[saved-array comparison](2026-10-10-abc-source-interval-comparison.md) now uses
+all three position references within their stated scope.
 
 ![A/C source-position review](2026-10-10-upper-projection-ac-review.png)
 
@@ -109,12 +112,13 @@ The A/C clean context/detail panels also match their pinned source crops and
 exact 4× nearest-neighbour enlargements. No detector executes for their preparation.
 The B reply qualifies one numerical uncertainty interval only; no classifier,
 efficacy metric, physical thickness, new setting or field acceptance is produced.
-The next A/C source judgment is local; no Windows task or new filming is required.
+All A/B/C source-position questions are closed. The later sample4 question is
+separate target-domain qualification; no Windows task or new filming is required.
 
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: scalar qualification would be unsound if the chosen upper-image convention promoted an unreviewed marker or raw/appearance minimum to physical truth. B now has source-bound position uncertainty, while A/C proposals remain unreviewed and an automatic physical selector remains unqualified; this source preparation makes no runtime first-failure claim.
+- First harmful stage: scalar qualification would be unsound if the chosen upper-image convention promoted an unreviewed marker or raw/appearance minimum to physical truth. B and the later A/C replies now qualify separate source-position intervals, while an automatic physical selector remains unqualified; this source preparation makes no runtime first-failure claim.
 - Logic-map impact: NONE — existing saved rasters, support-face geometry and coordinate conversion are reused without a new API or runtime consumer.
 - Failure-registry impact: NONE — the source readout instantiates existing representation/identity/provenance limits; it neither retries a closed selector nor claims a new physical failure.

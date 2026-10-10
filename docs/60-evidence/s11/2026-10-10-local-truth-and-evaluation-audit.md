@@ -151,7 +151,12 @@ settles the convention for the offline challenger; the
 [first B reference](../../50-diagnostics/s11/2026-10-10-upper-projection-reference.md)
 now has a separately bound user-approved position-uncertainty interval at X950,
 rows 484–489. That one exposed source point does not certify exact Y, calibrated
-height, C, a dense contour or any legacy coordinate. A/C proposals remain pending.
+height, C, a dense contour or any legacy coordinate. The later
+[A/C reply](../../50-diagnostics/s11/2026-10-10-upper-projection-ac-reply.json)
+separately closes A Foam-upper rows476–481 and C water-upper rows489–494 at X950.
+The [saved-array readout](../../50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.md)
+keeps their roles and position/identity limits separate. The single pending
+sample4 position review has no numeric authority yet.
 Neither the broad early-empty reading nor 41–55 s becomes continuous truth. These source corrections
 preserve this audit's original machine record and all old/new observations; no
 detector result was used to drop cases.
@@ -171,6 +176,12 @@ even if aggregate error improves. That is an exact **legacy scalar agreement**
 guard, not an uncertainty-aware proof of physical regression. Its implementation,
 PASS/FAIL output and all existing tests are retained; this audit adds the missing
 interpretation/eligibility boundary in the current validation owner.
+
+The subsequent [output qualification](../../50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.md#legacy-regression-output-now-states-its-actual-scope)
+adds explicit legacy-agreement / physical-NOT_EVALUATED labels to the existing
+JSON/CLI. It preserves the original computation, complete case list, guards,
+PASS/FAIL and exit codes. The original audit's source pins and JSON remain
+unchanged; this later tooling change is separately verified and attributed.
 
 Future reports separate engineering compatibility, qualified physical positives,
 unobservable/disputed controls, and legacy scalar agreement. No favorable subset
