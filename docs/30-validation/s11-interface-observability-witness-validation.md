@@ -1030,6 +1030,18 @@ do not derive tolerances from candidate residuals. A label revision retains its
 reason/history and reruns baseline and candidate against the same frozen version.
 Unchanged predictions plus fewer decisive labels are not an accuracy gain.
 
+A reviewed one-surface/front-back relation is an identity relation, not two
+independent physical positives or a filled Y tolerance interval. Preserve both
+projected branches and the reply's exact scope; the approximate marker points
+are not contour truth. Before a decisive scalar comparison, declare which
+projection is the measurement target and review its actual coordinate/support.
+The [pending convention proposal](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--scalar-convention-pending)
+does not modify current labels or scoring. A future implementation must retain
+physical-target ambiguity, distinguish branch occlusion from interface absence,
+avoid fallback to another projection when its chosen one is unavailable, and
+reject an unrelated higher edge. Correct physical identity with an unqualified
+scalar remains two separate outcomes; it is not a successful numeric observation.
+
 Keep every qualified/unqualified case, denominator, missing output and reason
 visible. Do not select only easy frames after results or turn crop-center geometry
 into calibrated Glass geometry. Scope difficult cases by observation/role,
@@ -1119,6 +1131,9 @@ complete frozen comparison then triggers the stop rule without promotion.
 The subsequent local-truth audit qualifies source/annotation uses before a
 successor's physical comparison; it preserves original labels, test outputs
 and the failed experiment's disposition.
+The later same-surface reply also separates projected-branch semantics from
+physical identity and reviewed coordinate precision; its proposed scalar
+convention remains unadopted while the user choice is pending.
 H0's support-face intersection loses available partition geometry, while CBR-1
 admits wrong-region appearance despite current geometry. Private first physical
 causes and field effectiveness remain unqualified. F07's Foam front/texture

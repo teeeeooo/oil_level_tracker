@@ -19,7 +19,10 @@ human checkpoint belong to the [Work Plan](../../00-project/work-plan.md).
 **Subsequent source reply:** the user identifies B and C as water surface
 without a Foam layer. The [bound reply](2026-10-10-later-water-role-reply.json)
 closes their regional-role checkpoint. The source-feature follow-up below
-separates that judgment from the still-unreviewed two nearby features at B.
+separates that judgment from the relation between two nearby features at B.
+The later [B feature reply](2026-10-10-water-surface-feature-reply.json) now closes
+that relation as front/back views of one surface; its consequences are recorded
+below without changing the frozen preparation or original measurements.
 
 ## Question, reuse and frozen scope
 
@@ -228,6 +231,35 @@ an exact 4× nearest-neighbour enlargement), and the whole crop equals the saved
 anchor array. All preparation inputs remain unchanged. No new media replay,
 detector calculation, score fitting or Windows task is required by this review.
 
+## Human reply received — one surface with two projected branches
+
+The user answered **“①·②는 같은 수면의 앞뒤 모습”**. The
+[source-bound reply](2026-10-10-water-surface-feature-reply.json) closes B's
+physical-relation question: both marked features belong to **one water surface**.
+Do not count them as two material interfaces, infer a layer thickness from their
+image separation, or label an unrelated edge between them as correct. This is
+a regional relation at B/f1438, not an exact contour annotation, a front/back
+assignment to each marker, or an answer about C's subfeatures. Both geometries
+remain present. B/C Foam absence and all prior replies remain closed.
+
+The reply completes this source-role qualification but does not choose one
+height. Responsibility discovery followed the selected fixed-centre contract,
+the product's uppermost-physical-interface definition, `GlassGeometry` conversion,
+and the existing target-truth binder. Fixed X identifies a column, physical-role
+review identifies a surface, and conversion only subtracts an already selected
+Y from a zero line. None declares which of one surface's projections supplies
+the scalar. The target binder explicitly leaves scalar truth untransferred.
+
+The [architecture proposal](../../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--scalar-convention-pending)
+therefore presents a separate measurement-semantics choice: the upper image
+projection (recommended for the stated simplicity/consistency preference), the
+camera-facing projection, or deferral of the scalar while qualitative work
+continues. Choosing a physical surface is not a rule to take the highest raw
+edge. Neither projected branch becomes a numeric reference before this choice
+and the independent coordinate/precision requirements are satisfied. There is
+no new detector trial, repeated B relation question, pixel-label request or
+Windows requirement. The Work Plan owns the pending decision and next action.
+
 ## Verification and preservation
 
 The independent saved-array verifier checks all 97 bound inputs and 221
@@ -254,6 +286,6 @@ acceptance is claimed.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: standalone physical-role inference would be unsound at texture-change interpretation because fixed-pattern optical deformation supplies the same cue. The later B/C reply confirms a real no-Foam control, but does not identify B's individual nearby image edges; reference-feature identity must precede any numerical truth claim. Actual production first physical failure remains unknown. No classifier or scalar was executed here.
+- First harmful stage: standalone physical-role inference would be unsound at texture-change interpretation because fixed-pattern optical deformation supplies the same cue. B/C supply real no-Foam controls and B's two marked features now belong to one reviewed surface; a projected-branch convention and exact observed coordinates are still missing before a numerical truth claim. Actual production first physical failure remains unknown. No classifier or scalar was executed here.
 - Logic-map impact: NONE — saved-source observation reuses existing preprocessing, registration and texture owners through one-off evidence runners; runtime callers, Oil/Foam independence and publication remain unchanged.
 - Failure-registry impact: NONE — the retained nuisance and optical counterexamples instantiate the existing temporal/appearance-identity limitations; no accepted mechanism or new runtime gate is introduced.

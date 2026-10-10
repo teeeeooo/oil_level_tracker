@@ -142,6 +142,10 @@ frames retain their source-context scope. The subsequent
 [B/C reply](../../50-diagnostics/s11/2026-10-10-later-water-role-reply.json)
 qualifies f1438/f1643 as visible water surface without a Foam layer, at regional
 scope only; individual nearby edges and centre coordinates are not certified.
+The later [B feature reply](../../50-diagnostics/s11/2026-10-10-water-surface-feature-reply.json)
+identifies its two marked features as front/back views of one surface. This
+closes their physical relation without establishing a projected-branch scalar
+convention, exact contour/Y, thickness or an acceptable interval between them.
 Neither the broad early-empty reading nor 41–55 s becomes continuous truth. These source corrections
 preserve this audit's original machine record and all old/new observations; no
 detector result was used to drop cases.

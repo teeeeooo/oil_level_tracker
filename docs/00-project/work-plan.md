@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** B/f1438 and C/f1643 are user-reviewed water surfaces without a Foam layer; their regional-role checkpoint is CLOSED. A/f1232 remains a Foam positive with an unclear lower boundary. Before assigning any numerical source reference, a new B feature checkpoint distinguishes its upper faint feature (1) and lower strong band (2): one water surface's front/back projections, or different physical features, or unclear. Pause the dependent location-reference assignment for that judgment; no Windows task is pending. The complete temporal-texture readout stays unpromoted; no numeric truth, threshold change or successor mechanism is established. Existing 13 usable Oil points retain historical scalar scope. Base f156 remains quarantined; CBR-1/H0/G1 stay CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL remain.
+**Next transition:** B's two marked features are user-confirmed front/back views of one water surface; this relation and B/C's no-Foam roles are CLOSED. A remains a Foam positive with an unclear lower boundary. The next user decision is measurement semantics for one surface with multiple projections: use its upper image outline at the fixed centre (recommended), its camera-facing outline, or defer scalar work and continue qualitative recognition. Fixed X and existing px/mm conversion do not resolve that choice. Pause dependent numerical reference/selector work; no Windows task is pending. The temporal-texture readout stays unpromoted; no numeric truth, threshold change or successor mechanism is established. Existing 13 Oil points retain historical scalar scope. Base f156 stays quarantined; CBR-1/H0/G1 remain CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL remain.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -39,7 +39,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | B/C water-surface / no-Foam roles are closed. B's two nearby source features need interpretation before a numerical reference can be proposed. Temporal-texture cue-only promotion remains rejected; distinct role-measurement design remains open. | [B/C reply and B feature checkpoint](../50-diagnostics/s11/2026-10-10-temporal-texture-observation.md#later-bc-reply-and-source-feature-follow-up), [Foam replies](../50-diagnostics/s11/2026-10-10-water-foam-representation.md), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
+| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | B's two features are one surface's front/back projections. Physical-role replies are closed; scalar projection convention awaits the user's choice. Temporal-texture cue-only promotion remains rejected; distinct role-measurement design remains open. | [B relation reply](../50-diagnostics/s11/2026-10-10-temporal-texture-observation.md#human-reply-received--one-surface-with-two-projected-branches), [scalar convention proposal](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--scalar-convention-pending), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -117,17 +117,28 @@ label neighbouring/intervening frames, identify every nearby bright edge, or
 provide an exact Y. B's broad measured texture change now supplies real-source
 opposition to a renewal-as-Foam rule; C's prior temporal truncation remains.
 
-**B source-feature checkpoint OPEN:** the
-[clean source and two locators](../50-diagnostics/s11/2026-10-10-water-surface-feature-review.png)
-show an upper faint feature (1) and a lower stronger band (2) near diagnostic
-X950. Their agent-marked XY values are only locators. Determine whether these
-are two projections of one water surface, whether only one is the surface, or
-whether the distinction is unclear before proposing a location reference.
-Five saved Canny rows in the same detail do not answer that physical question.
-No nearest/strongest-edge reference, point tolerance, thickness, numeric metric
-or calibrated Glass-centre claim is assigned. Stop the dependent reference
-assignment for this new judgment; do not repeat the closed B/C Foam question
-or transfer B's answer to C. No Windows task or comparative filming is needed.
+**B source-feature checkpoint CLOSED:** the user answered
+**“①·②는 같은 수면의 앞뒤 모습”**. The
+[bound reply](../50-diagnostics/s11/2026-10-10-water-surface-feature-reply.json)
+identifies the two marked features as one water surface's front/back projections.
+Preserve both geometries without counting two interfaces, inferring thickness,
+or treating the Y interval between them as approved truth. The reply does not
+certify exact marker pixels, identify which marker is front, or transfer to C.
+No repeated physical-role or exact-pixel question follows.
+
+**Scalar convention choice OPEN:** the
+[concrete proposal](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--scalar-convention-pending)
+compares an upper image projection (recommended for consistency/simplicity),
+the camera-facing projection, and deferral of scalar work. The chosen fixed
+column does not resolve this within-surface Y ambiguity; neither does the
+product's selection among different physical fluid interfaces or the existing
+px/mm conversion. This is a measurement-target decision, not approval of an
+algorithm or a repeat of the fixed-X choice. Stop dependent numerical-reference
+and branch-selector work for the reply. If scalar work is deferred, continue
+qualitative role/representation development under the existing mechanism-entry
+requirements. Any chosen convention still needs source-bound exact support and
+precision before numerical scoring; no automatic new truth, mask, tolerance or
+calibrated Glass claim follows. No Windows task or comparative filming is needed.
 
 Before another trial, name one distinct physical boundary/role observation,
 the existing measurement owner and a reproducible decision/abstention rule.

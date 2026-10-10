@@ -663,3 +663,4 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-10 | [B/C role reply](50-diagnostics/s11/2026-10-10-later-water-role-reply.json) | 두 장면의 거품층 없는 수면 확인; 개별 윤곽·수치 정답으로 확대하지 않음 |
 | 2026-10-10 | [B source-feature preparation](50-diagnostics/s11/2026-10-10-water-surface-feature-review.json) | 기존 원본·좌표·표식의 출처와 화소 동일성; 수면 위치 기준 전제 확인 |
 | 2026-10-10 | [B clean/marked detail](50-diagnostics/s11/2026-10-10-water-surface-feature-review.png) | 위쪽 약한 부분 1과 아래쪽 굵은 띠 2의 물리적 관계 판단용; 검출·정답 아님 |
+| 2026-10-10 | [B same-surface reply](50-diagnostics/s11/2026-10-10-water-surface-feature-reply.json) | 두 부분이 같은 수면의 앞뒤임을 확인; 높이 기준 윤곽·정확한 좌표는 별도 |

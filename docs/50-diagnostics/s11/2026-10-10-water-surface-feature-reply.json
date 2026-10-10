@@ -1,0 +1,80 @@
+{
+  "schema": "s11-regional-human-interpretation-v1",
+  "base_head": "5f60e111e82050615fa83c20bd50374acdb5c637",
+  "case_id": "water-f001438",
+  "video": "sample/sample5.mp4",
+  "video_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+  "shown_frames": [
+    1438
+  ],
+  "answered_features": [
+    "B1",
+    "B2"
+  ],
+  "reply_verbatim": "①·②는 같은 수면의 앞뒤 모습",
+  "authority": "direct user physical interpretation",
+  "status": "CLOSED",
+  "source_raster": {
+    "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001438.png",
+    "sha256": "8768ffaa85f63c956dec36423ce246ffbafa5f09637d2ccb1f8bee389582937a",
+    "source_origin_xy": [
+      0,
+      0
+    ],
+    "shape": [
+      1080,
+      1920,
+      3
+    ]
+  },
+  "source_region_xyxy": [
+    740,
+    250,
+    1160,
+    1080
+  ],
+  "detail_xyxy": [
+    840,
+    450,
+    1070,
+    540
+  ],
+  "diagnostic_column_x": 950,
+  "agent_locators": [
+    {
+      "id": "B1",
+      "representative_source_xy": [
+        950,
+        487
+      ]
+    },
+    {
+      "id": "B2",
+      "representative_source_xy": [
+        950,
+        498
+      ]
+    }
+  ],
+  "locator_authority": "Approximate source pointers inherited from the displayed review, not reviewed exact contour pixels or tolerance bounds.",
+  "question_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-water-surface-feature-review.json",
+    "sha256": "3214f1af8e801e7feac8581bc7857cd617b01802cf19633bc4a28fd872ce4d1c"
+  },
+  "source_figures": {
+    "docs/50-diagnostics/s11/2026-10-10-water-surface-feature-review.png": "d4a88e06d6cd03cb12cd6347daba7dadc09341267d232e915520e637b4220150"
+  },
+  "interpretation": "The two marked B features are front/back projections of one water surface. They are not two separately identified physical interfaces.",
+  "projection_assignment": "The reply does not explicitly assign B1 or B2 to the near/front versus far/rear branch.",
+  "scope": "Approximate marked features in B/f1438 only. No exact contour, selected scalar branch, Y, tolerance, physical thickness, calibrated Glass centre, C subfeature relation or neighbouring-frame label is certified.",
+  "control_role": "Preserve both visible projections as a one-surface relation; oppose equating projected-edge count with interface count or projected separation with layer thickness.",
+  "scalar_status": "NOT_QUALIFIED: fixed X and physical surface identity do not yet bind one projected branch, exact observed Y or reviewed precision.",
+  "preserved_replies": {
+    "docs/50-diagnostics/s11/2026-10-10-later-water-role-reply.json": "36f7ac8697b952b4ce74eff8ffbd4632281b3f4ba316a145221db33ce8a0b0d8",
+    "docs/50-diagnostics/s11/2026-10-09-public-beer-layer-reply.json": "2e35458317f5415311ec611f310331432378bd2f9db2533015d26da028fa74d0"
+  },
+  "supersedes": "Pending B1/B2 physical-relation question only. Frozen preparation and previous measurement artifacts remain unchanged.",
+  "production_label_change": false,
+  "new_review_request": false,
+  "windows_execution_required": false
+}
