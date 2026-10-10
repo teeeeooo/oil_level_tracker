@@ -9,6 +9,7 @@ import subprocess
 import sys
 
 from tests.diagnostics import s11_report_observability_replay as replay
+from tests.diagnostics.s11_corpus_access import require_corpus_access
 from tests.diagnostics.s11_observation_replay_audit import (
     provisional_audit,
     sequence_audit,
@@ -32,6 +33,7 @@ def spawn_worker(
     verify_fingerprints: bool,
     expected_runtime_fingerprint: str | None = None,
 ) -> Path:
+    require_corpus_access((sample,))
     sample_output = (output_root / sample).resolve()
     command = [
         sys.executable,
@@ -67,6 +69,7 @@ def run_isolated_replay(
     assert_contract: ReplayContract,
     expected_runtime_fingerprint: str | None = None,
 ) -> dict[str, object]:
+    corpus_access = require_corpus_access(tuple(replay.QUALIFICATION_WINDOWS))
     output_root = output_root.resolve()
     output_root.mkdir(parents=True, exist_ok=True)
     worker_manifests = [
@@ -110,6 +113,7 @@ def run_isolated_replay(
         }
     manifest = {
         "schema": manifest_schema,
+        "corpus_access": corpus_access,
         "sampling_fps": replay.SAMPLING_FPS,
         "qualification_windows": replay.QUALIFICATION_WINDOWS,
         "accepted_count_check_enabled": verify_fingerprints,

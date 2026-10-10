@@ -166,6 +166,9 @@ def _load_cases(root: Path) -> tuple[ProbeCase, ...]:
 
 
 def _decode(case: ProbeCase) -> np.ndarray:
+    from tests.diagnostics.s11_corpus_access import require_corpus_access
+
+    require_corpus_access((case.sample, case.video_path.stem))
     capture = cv2.VideoCapture(str(case.video_path))
     try:
         capture.set(cv2.CAP_PROP_POS_FRAMES, case.frame_index)

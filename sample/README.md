@@ -2,6 +2,44 @@
 
 These local videos support S6 engineering qualification. They are not canonical detector truth and do not substitute for user-confirmed `.oiltruth`. `base_sample_1.mp4` owns the completed S6-A qualification; sample2/3/4 are the bounded S6-B intake set.
 
+## Sample3 use restriction
+
+**sample3 is retired from routine development and logically quarantined.** Its
+original MP4 stays at `sample/sample3.mp4` with the identity below so old evidence
+remains reproducible. Do not delete, re-encode, cut new clips, mine more usable
+intervals, relabel it or tune a detector to close its numeric gaps. This is an
+evaluation-input restriction; the production detector contains no sample-name rule.
+
+Reuse the frozen [A/B Oil-region reply and marked image](../docs/50-diagnostics/s11/2026-10-10-sample3-gap-source-reply.json),
+[C/D reply](../docs/50-diagnostics/s11/2026-10-10-sample3-confirmation-role-reply.json)
+and [scope disposition](../docs/50-diagnostics/s11/2026-10-10-sample3-evaluation-scope.md).
+A/B are approximate regional Oil positives, C is external-frame structure and
+D is unassessable from blur. No continuous usable clip, exact pixel tolerance
+or new physical accuracy/cadence benchmark is certified between these frames.
+New discrimination work starts from the qualified water and scoped sample4
+controls routed by the [Work Plan](../docs/00-project/work-plan.md).
+
+The shared diagnostic corpus/session/input loaders and full replay entry points
+reject sample3 by default. Corpus-dependent pytest checks explicitly report
+`SKIPPED` with `QUARANTINED`; that is not a completed legacy regression PASS.
+For a specifically needed existing regression, scope permission to one command:
+
+```bash
+python -m tests.diagnostics.s11_corpus_access --purpose legacy-regression -- \
+  python -m pytest <required-test-paths>
+```
+
+For an existing decode/provenance/output or deterministic behavior check, use
+`--purpose engineering-replay` with the required replay command. The wrapper
+preserves child arguments/exit status and passes permission to its workers only.
+Do not export `OIL_TRACKER_SAMPLE3_PURPOSE` in a shell profile, CI global environment
+or test-wide fixture. Manifests retain the explicit purpose and
+`physical_acceptance=NOT_EVALUATED` separately from runtime/tracking fingerprints.
+The original four-video windows and complete 13-case legacy comparator remain
+unchanged: never omit sample3 and label the remaining subset as full PASS.
+Purpose selection does not reopen sample3 research; new source qualification
+would require a separate change to the current Work Plan.
+
 ## Exact identity
 
 | Item | Value |
@@ -86,13 +124,13 @@ The initial S6-A run found a reproducible CLI lifecycle-progress formatting defe
 
 ## S6-B additional local samples
 
-| Video | Exact identity | Sequential usable boundary | Accepted fixed-geometry window | Recipe |
+| Video | Exact identity | Sequential decode boundary | Historical engineering replay window | Recipe |
 |---|---|---|---|---|
 | `sample2.mp4` | `1,970,224 B`; `73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f` | frames `0–285`; last `9.500000 s` | `0.0–2.0 s` | `sample2.oilrecipe` |
 | `sample3.mp4` | `10,001,682 B`; `c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04` | frames `0–4198`; last `140.073267 s` | `30.03–105.0 s`; fresh drain `75.08–105.0 s` | `sample3.oilrecipe` |
 | `sample4.mp4` | `16,224,936 B`; `ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892` | frames `0–1681`; last `56.033333 s` | `0.0–56.0 s` | `sample4.oilrecipe` |
 
-All three show compressor sight glasses with reviewable phase evidence. sample2 has handheld reframing and a strong fluorescent reflection; sample3 includes fill, agitation, drain, blur and late reframing; sample4 keeps static framing around a small sight glass. The Recipe ellipses use only the stated stable windows. No exclusion hides an in-glass reflection, line, Foam-like region or difficult detector evidence.
+All three show compressor sight glasses. sample2 has handheld reframing and a strong fluorescent reflection; sample3 includes fill, agitation, blur and glass-position changes; sample4 keeps static framing around a small sight glass. These are preserved historical execution windows, not certified continuously visible interfaces or stable geometry. In particular, sample3's 30.03–105s and fresh-start 75.08–105s windows are not usable physical-accuracy clips under the fixed Recipe. Follow the sample3 restriction above; no new exclusions or Recipe corrections are implied.
 
 The Recipes use deterministic IDs/timestamps, `AUTO`, `mm_per_pixel=null`, margin `0.08`, no exclusions and production-default detector settings. Their SHA-256 values are:
 
@@ -164,4 +202,4 @@ video hashes. Historical intake artifacts and generated-image paths are preserve
 
 All MP4 files remain ignored by `sample/*.mp4` and are never added by qualification work. Generated evidence under `sample/output/` also remains ignored. Only the four exact deterministic Recipes are allowlisted from the Recipe ignore rule. The provisional JSON artifacts and four product `.oiltruth` files are tracked normally, remain semantically distinct, and no truth file is stored inside a result bundle. No MP4 or output allowlist exists.
 
-S11 corpus-dependent canonical tests treat those ignored videos as optional local evidence with mandatory identity when present. The checked-in S11-A evidence manifest owns the four MP4 SHA-256 values: a complete matching local corpus runs normally; missing required MP4s make only corpus-dependent tests `SKIPPED / NOT AVAILABLE`; any present wrong-hash file is a hard identity failure even when another video is missing; and a hash-correct file that cannot be decoded is a hard decode failure. Tests never form a partial 13-row S11 aggregate, and this policy does not redistribute or track the MP4 bytes.
+S11 corpus-dependent canonical tests treat those ignored videos as optional local evidence with mandatory identity when present. The checked-in S11-A evidence manifest owns the four MP4 SHA-256 values: a complete matching local corpus runs with the explicit purpose above; otherwise corpus-dependent tests report `SKIPPED / QUARANTINED`. Missing required MP4s remain `SKIPPED / NOT AVAILABLE`; any present wrong-hash file is a hard identity failure even when another video is missing or permission is absent; and an admitted hash-correct file that cannot be decoded is a hard decode failure. Tests never form a partial 13-row S11 aggregate, and this policy does not redistribute or track the MP4 bytes.

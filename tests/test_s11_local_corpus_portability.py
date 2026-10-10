@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pytest
 
+from tests.diagnostics.s11_corpus_access import SAMPLE3_PURPOSE_ENV
+
 from oil_tracker.domain.recipe import InspectionRecipe
 from tests.diagnostics.s11_evidence_probe import (
     CORPUS_MANIFEST_RELATIVE_PATH,
@@ -58,7 +60,8 @@ def test_wrong_identity_fails_before_missing_corpus_can_skip(tmp_path: Path) -> 
     assert "expected=" in str(exc.value)
 
 
-def test_all_correct_corpus_identities_are_accepted(tmp_path: Path) -> None:
+def test_all_correct_corpus_identities_are_accepted(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv(SAMPLE3_PURPOSE_ENV, "legacy-regression")
     expected = {sample: f"expected-{sample}".encode() for sample in CORPUS_STEMS}
     _write_manifest(tmp_path, expected)
     for sample, data in expected.items():
@@ -66,7 +69,8 @@ def test_all_correct_corpus_identities_are_accepted(tmp_path: Path) -> None:
     validate_local_corpus(tmp_path)
 
 
-def test_correct_identity_decode_failure_remains_hard_failure(tmp_path: Path) -> None:
+def test_correct_identity_decode_failure_remains_hard_failure(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv(SAMPLE3_PURPOSE_ENV, "legacy-regression")
     expected = {sample: f"invalid-video-{sample}".encode() for sample in CORPUS_STEMS}
     _write_manifest(tmp_path, expected)
     paths = {

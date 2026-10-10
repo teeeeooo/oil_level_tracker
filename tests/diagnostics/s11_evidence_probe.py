@@ -42,6 +42,11 @@ from oil_tracker.adapters.vision.preprocessing import preprocess
 from oil_tracker.adapters.vision.row_features import masked_band_intensity_profiles, masked_row_mean
 from oil_tracker.domain.recipe import GlassInspectionConfig
 
+from tests.diagnostics.s11_corpus_access import (
+    RestrictedCorpusUseError,
+    require_corpus_access,
+)
+
 
 BASELINE_MAIN_SHA = "0fd8ca0d423a1f632ad9a026d8f396686870d633"
 CORPUS_STEMS = ("base_sample_1", "sample2", "sample3", "sample4")
@@ -168,6 +173,7 @@ def validate_local_corpus(root: Path) -> None:
         raise LocalCorpusUnavailableError(
             "S11 local corpus NOT AVAILABLE; missing required MP4: " + ", ".join(missing)
         )
+    require_corpus_access(CORPUS_STEMS)
 
 
 def load_cases(root: Path) -> tuple[ProbeCase, ...]:
@@ -204,6 +210,7 @@ def load_cases(root: Path) -> tuple[ProbeCase, ...]:
 
 
 def decode_frame(case: ProbeCase) -> np.ndarray:
+    require_corpus_access((case.sample, case.video_path.stem))
     capture = cv2.VideoCapture(str(case.video_path))
     capture.set(cv2.CAP_PROP_POS_FRAMES, case.frame_index)
     ok, frame = capture.read()
@@ -635,6 +642,7 @@ def build_manifest(results: tuple[ProbeResult, ...], root: Path | None = None) -
         }
     return {
         "schema": "s11-a-evidence-probe-v1",
+        "corpus_access": require_corpus_access(CORPUS_STEMS),
         "baseline_main_sha": BASELINE_MAIN_SHA,
         "inputs": inputs,
         "transforms": [asdict(item) for item in TRANSFORMS],
@@ -651,7 +659,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         results = run_experiment()
-    except LocalCorpusUnavailableError as exc:
+    except (LocalCorpusUnavailableError, RestrictedCorpusUseError) as exc:
         print(f"NOT AVAILABLE: {exc}", file=sys.stderr)
         return 2
     manifest = build_manifest(results)

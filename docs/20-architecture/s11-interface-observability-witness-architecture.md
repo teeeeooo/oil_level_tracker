@@ -2367,7 +2367,42 @@ sweep, ML or separate dense-contour system follows. Use the
 [Local XY controls](../30-validation/s11-interface-observability-witness-validation.md#local-xy-measurement-exclusion-controls)
 and Work Plan for execution/acceptance.
 
+### Retired local source admission
+
+Evaluation source eligibility is owned by the offline input boundary, outside
+the production detector. `tests/diagnostics/s11_corpus_access.py` supplies one
+small guard shared by the existing corpus loader, replay provenance/session
+loader and process-isolated orchestrators. It is separate from hash validation:
+matching bytes do not establish suitability for a physical claim.
+
+sample3 is logically quarantined at its original path. Default replay access
+fails before analysis; corpus-dependent tests expose a restricted-source skip.
+The per-command wrapper accepts only `legacy-regression` or `engineering-replay`,
+propagates that purpose to child workers and leaves the calling environment
+unchanged. Input and replay manifests record purpose outside the existing
+runtime/tracking fingerprints. Identity mismatch remains a hard error, including
+when permission is absent. Full historical windows, row counts, truth fixtures
+and the complete 13-case comparator are retained; no partial PASS is introduced.
+
+This guard is a development workflow boundary, not a filesystem access control
+or physical validator. The generic application can still open arbitrary files;
+new ad-hoc evidence readers must reuse the guard, not bypass it with raw OpenCV
+or a renamed source. Opt-in permits the stated existing compatibility task only,
+not new sample3 tuning, interval mining, label changes or clip qualification.
+Retain the already frozen A/B/C/D regional evidence. Future research eligibility
+requires a separate current-plan decision and source qualification before scores.
+See [usage](../../sample/README.md#sample3-use-restriction) and
+[acceptance checks](../30-validation/s11-interface-observability-witness-validation.md#retired-source-execution-checks).
+
 ## History Review
+
+2026-10-10 sample3 admission: reviewed F09/F10, the C/D role closure, fixed-Recipe
+geometry limitations, old four-video orchestration and 13-case input ownership.
+The prior README's stable-window wording could reopen unqualified physical
+scoring. Explicit offline source admission replaces that default without deleting
+data, selecting easy clips, changing a detector or weakening the old comparison.
+Frozen human judgments remain scoped; purpose metadata never enters numerical
+identity or physical acceptance. No production node or failure mechanism changes.
 
 2026-10-10 cadence target: reviewed F09/F10, same-frame projection, independent
 Oil validity, W3 scalar qualification, saved O1 replay rows and report-only gap

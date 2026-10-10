@@ -24,6 +24,7 @@ from tests.diagnostics.s11_evidence_probe import (
     authoritative_input_hashes,
     repository_root,
 )
+from tests.diagnostics.s11_corpus_access import require_corpus_access
 from tests.diagnostics.s11_replay_provenance import (
     capture_runtime_provenance,
     classify_exact_reproducibility,
@@ -69,6 +70,7 @@ def _session(
     run_label: str,
     run_note: str,
 ) -> tuple[InspectionRecipe, AnalysisSession]:
+    require_corpus_access((sample, video_path.stem))
     recipe = JsonRecipeRepository().load(video_path.with_suffix(".oilrecipe"))
     reader = OpenCvVideoReader(video_path)
     try:
@@ -209,6 +211,7 @@ def run_replay(
         else Path(output_root)
     )
     samples = tuple(QUALIFICATION_WINDOWS)
+    corpus_access = require_corpus_access(samples)
     inputs = validate_frozen_inputs(
         root=root,
         expected_inputs=authoritative_input_hashes(root),
@@ -292,6 +295,7 @@ def run_replay(
 
     manifest = {
         "schema": manifest_schema,
+        "corpus_access": corpus_access,
         "sampling_fps": SAMPLING_FPS,
         "qualification_windows": QUALIFICATION_WINDOWS,
         "accepted_count_check_enabled": verify_accepted_counts,

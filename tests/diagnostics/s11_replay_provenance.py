@@ -12,6 +12,8 @@ import sys
 import cv2
 import numpy as np
 
+from tests.diagnostics.s11_corpus_access import require_corpus_access
+
 
 RUNTIME_PROVENANCE_SCHEMA = "s11-replay-runtime-provenance-v1"
 
@@ -72,6 +74,7 @@ def _video_backend_name(video_path: Path) -> str:
 
 
 def capture_runtime_provenance(video_path: Path) -> dict[str, object]:
+    corpus_access = require_corpus_access((Path(video_path).stem,))
     build_information = cv2.getBuildInformation()
     signature = {
         "python_implementation": platform.python_implementation(),
@@ -94,6 +97,7 @@ def capture_runtime_provenance(video_path: Path) -> dict[str, object]:
     }
     return {
         "schema": RUNTIME_PROVENANCE_SCHEMA,
+        "corpus_access": corpus_access,
         "runtime_fingerprint_sha256": _canonical_sha256(signature),
         **signature,
     }
@@ -209,4 +213,5 @@ def validate_frozen_inputs(
         raise ReplayInputUnavailableError(
             "S11 replay input NOT AVAILABLE: " + ", ".join(missing)
         )
+    require_corpus_access(samples)
     return actual_inputs

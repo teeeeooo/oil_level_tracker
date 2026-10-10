@@ -22,6 +22,7 @@ from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
 from tests.diagnostics import s11_interface_shadow_evaluation as o2
 from tests.diagnostics import s11_review_records as records
 from tests.diagnostics import s11_spatial_context_probe as probe
+from tests.diagnostics.s11_corpus_access import require_corpus_access
 
 SCHEMA = 's11-o2-spatial-context-v1'
 
@@ -126,6 +127,7 @@ def render_profile(profile, points):
 
 def run(label_paths, output, *, bundle_path, video_path, expected_revisions):
     output, video_path = Path(output).resolve(), Path(video_path).resolve()
+    require_corpus_access((video_path.stem,))
     paths = [Path(p).resolve() for p in label_paths]
     o2.require(not output.exists(), 'output directory already exists; choose a new name')
     o2.require(1 <= len(paths) <= 2 and len(set(paths)) == len(paths), 'one or two unique reviews required')

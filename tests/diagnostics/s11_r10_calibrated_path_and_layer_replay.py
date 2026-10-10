@@ -90,6 +90,7 @@ def run_r10_replay(
         if output_root is None
         else Path(output_root)
     ).resolve()
+    corpus_access = replay.require_corpus_access(tuple(replay.QUALIFICATION_WINDOWS))
     output_root.mkdir(parents=True, exist_ok=True)
     worker_manifests = [
         _spawn_worker(
@@ -118,6 +119,7 @@ def run_r10_replay(
         }
     contract = _assert_contract(audits=audits, rows_by_sample=rows_by_sample)
     manifest = {
+        "corpus_access": corpus_access,
         "schema": "s11-r10-calibrated-path-and-layer-isolated-replay-v1",
         "sampling_fps": replay.SAMPLING_FPS,
         "qualification_windows": replay.QUALIFICATION_WINDOWS,

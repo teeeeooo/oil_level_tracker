@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** Sample3 C/D judgment is CLOSED: C is glass external-frame structure; D is unobservable from focus loss. Its historical track cannot be certified as Oil motion. Close this causal branch without a phase repair; the recent-basis-only and sample4 cost-order-only probes remain CLOSED WITHOUT PROMOTION. Retain sample3 for engineering/robustness and source-qualified regional claims, not primary full-window physical accuracy or cadence; A/B remain visible-Oil positives without exact pixels/tolerance. Return O2 discrimination work to qualified water B/C and scoped sample4 positives/opposition, retaining beer/milk visibility/layer controls. Before another experiment, name a distinct physical observation and freeze the complete comparison; do not optimize sample3's long numeric gap. No new user judgment or Windows work is required for this source-scope decision. Preserve all seven recordings, all 13 legacy values and their qualified comparison scope, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
+**Next transition:** Sample3 is retired from routine development and logically quarantined. The shared diagnostic entry points require an explicit legacy-regression or engineering-replay purpose; use the [per-command wrapper](../../sample/README.md#sample3-use-restriction) only when that existing check is needed. Preserve the original video, complete four-video/13-case comparison and frozen A/B/C/D evidence. Do not restart sample3 source review, mine clips, tune its numeric gaps or reinterpret restricted skips as PASS. The recent-basis-only and sample4 cost-order-only probes remain CLOSED WITHOUT PROMOTION. At resume, return O2 discrimination work to qualified water B/C and scoped sample4 positives/opposition, retaining beer/milk visibility/layer controls; first name a distinct physical observation and freeze the complete comparison. No pending user judgment or Windows task. Preserve base f156 quarantine, CBR-1/H0/G1 closure, Local XY OFF and O2 OPEN / FIELD FAIL.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -254,6 +254,16 @@ it is not a primary full-window accuracy/cadence benchmark under one fixed
 Recipe. Return to water B/C and scoped sample4 discrimination controls rather
 than optimizing the long gap. A/B, old 95/105s unusable labels and earlier source
 questions stay closed; no further sample3 judgment or Windows task is needed.
+
+**Sample3 admission checkpoint:** the user selected preservation plus execution
+restriction and requested handoff. The original source path/hash and all frozen
+replies are retained; no clip extraction or new detector experiment follows.
+Shared loaders, complete replay parents/workers and corpus-dependent tests now
+enforce the [explicit purpose boundary](../../sample/README.md#sample3-use-restriction).
+The default corpus skip is not a legacy-gate PASS. Reuse saved results before
+invoking any engineering replay; the exception is not permission to reopen this
+closed causal branch. New research eligibility requires its own source-qualified
+current-plan decision.
 
 Before another trial, name one distinct physical boundary/role observation,
 the existing measurement owner and a reproducible decision/abstention rule.

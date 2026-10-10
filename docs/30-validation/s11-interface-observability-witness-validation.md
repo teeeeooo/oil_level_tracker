@@ -1122,6 +1122,25 @@ a disputed legacy claim remains quarantined; formal relabeling or a decisive
 numeric accuracy claim needs its specific missing review, not repeated review
 of all prior questions.
 
+### Retired-source execution checks
+
+sample3 is retained for specifically invoked legacy/engineering reproduction,
+but excluded from routine development through the
+[offline admission boundary](../20-architecture/s11-interface-observability-witness-architecture.md#retired-local-source-admission).
+The existing V4 all-four-video equality obligation is unchanged. When that gate
+or a corpus-dependent canonical test is actually needed, use the per-command
+[purpose wrapper](../../sample/README.md#sample3-use-restriction). A restricted-source
+skip is NOT_EVALUATED, never proof of the full corpus gate; do not drop sample3
+or lower the original 13-case denominator to manufacture PASS.
+
+Verify absent/invalid purpose rejection before full-replay decoding or worker
+startup, both admitted purposes, explicit restricted pytest reporting, preserved
+four-video/13-case inventory, mandatory hash/decode failures, and worker permission
+without leaking into the calling environment. Purpose metadata must not alter
+runtime/tracking fingerprints or promote `physical_acceptance=NOT_EVALUATED`.
+Keep original files and frozen A/B/C/D replies unchanged. No new whole-video
+replay, clip generation, relabeling or Windows run is required to test admission.
+
 ## CBR-1 offline comparison entry
 
 This is the validation boundary for the
