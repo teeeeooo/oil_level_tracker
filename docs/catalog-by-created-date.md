@@ -639,3 +639,19 @@ No new physical contour labels or detector behavior are adopted.
 | 2026-10-10 | [Fixed source contexts](50-diagnostics/s11/2026-10-10-water-foam-context-support.png) | 미리 고른 다섯 장면의 동일 영역 비교 |
 | 2026-10-10 | [A central stages](50-diagnostics/s11/2026-10-10-water-foam-center-stages.png) | 기존 밝기 조건 이전의 윤곽과 단계별 중앙 지지 보존 여부 |
 | 2026-10-10 | [Lower-interface visibility reply](50-diagnostics/s11/2026-10-10-water-lower-interface-reply.json) | A의 아래 물–거품 경계 불명확; 거품 존재와 아래 좌표 평가 자격을 구분 |
+
+## 2026-10-10 ordered temporal-texture observation additions
+
+Frozen source-bound investigation; current sequencing remains in Work Plan.
+Native arrays and the verified archive remain local and are indexed by the machine record.
+
+| 최초 Git 추가일(KST) | 파일 | 역할 |
+|---|---|---|
+| 2026-10-10 | [Temporal observation](50-diagnostics/s11/2026-10-10-temporal-texture-observation.md) | 17개 고정 사례의 시간순 무늬 변화, 광학 반례와 비채택 근거 |
+| 2026-10-10 | [Machine record](50-diagnostics/s11/2026-10-10-temporal-texture-observation.json) | 네 실행의 preflight·실패·코드, 60개 native 파일과 독립 검산 |
+| 2026-10-10 | [Complete readout](50-diagnostics/s11/2026-10-10-temporal-texture-readout.json.gz) | 235개 프레임 질의와 전체 1,754개 경계 주변 비교 |
+| 2026-10-10 | [Water first five](50-diagnostics/s11/2026-10-10-temporal-texture-water-1.png) | f0/205/815/822/829 원본과 네 고정 변화 지도 |
+| 2026-10-10 | [Water last five](50-diagnostics/s11/2026-10-10-temporal-texture-water-2.png) | f1225/1232/1239/1438/1643; 시간 누락 포함 |
+| 2026-10-10 | [Sample4 all controls](50-diagnostics/s11/2026-10-10-temporal-texture-sample4.png) | 기존 일곱 대조 시점 전체 |
+| 2026-10-10 | [A detailed maps](50-diagnostics/s11/2026-10-10-temporal-texture-A.png) | A의 원본과 변화 영역; 물리적 거품 mask나 경계 정답 아님 |
+| 2026-10-10 | [Later-water role review](50-diagnostics/s11/2026-10-10-later-water-role-review.png) | 미검토 B/C 상단 띠의 거품 유무 판단용 원본 |

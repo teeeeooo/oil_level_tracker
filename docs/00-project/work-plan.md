@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** Water source qualification is complete at the reviewed scope: A/f1232 contains a Foam layer, while its lower water–Foam boundary is unclear. Both A questions are CLOSED. Keep A as a regional Foam positive and lower-interface unavailability control; use the existing f822 judgment only as qualitative liquid-surface context. Next establish one distinct boundary/role observation with positive, structure and unresolved controls before freezing a successor comparison. No new numeric truth, threshold change or successor mechanism is established; no user judgment or Windows task is currently pending. Existing 13 usable Oil points retain historical scalar scope. Base f156 remains quarantined; CBR-1/H0/G1 stay CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL remain.
+**Next transition:** The 17-case ordered temporal-texture readout is complete and independently verified; cue-only promotion is rejected because fixed-pattern optical deformation also produces one-sided renewal. A/f1232 remains a regional Foam positive with an unclear lower boundary; both A questions are CLOSED. The new human checkpoint is the regional role of the narrow upper band in later B/f1438 and C/f1643: remaining Foam, water surface without a Foam layer, or unclear. Do not infer either label from lower activity or A. Pause the dependent source-role comparison for that judgment; no Windows task is pending. No new numeric truth, threshold change or successor mechanism is established. Existing 13 usable Oil points retain historical scalar scope. Base f156 remains quarantined; CBR-1/H0/G1 stay CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL remain.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -39,7 +39,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Source qualification and ten-frame support/stage readout complete. A is Foam-positive with an unclear lower boundary; no numeric lower truth. Distinct role-measurement design remains open, without threshold fitting or runtime promotion. | [Foam replies and causal readout](../50-diagnostics/s11/2026-10-10-water-foam-representation.md), [truth audit](../60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.md), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
+| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Temporal-texture readout complete; cue-only promotion rejected. A's Foam/lower-visibility replies remain closed. Later B/C regional roles await human judgment before their use as positive/opposing controls; distinct role-measurement design remains open. | [Temporal readout and B/C checkpoint](../50-diagnostics/s11/2026-10-10-temporal-texture-observation.md), [Foam replies](../50-diagnostics/s11/2026-10-10-water-foam-representation.md), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -90,7 +90,8 @@ keeps Foam presence positive while making the separate lower-interface location
 unavailable for scoring. Do not infer a missing physical layer, a successful
 all-abstain detector, exact upper coordinates or thickness. All ten frames remain;
 no labels transfer to neighbouring/later views. Both A questions and the f822,
-beer and milk replies are closed. No human checkpoint or Windows task is pending.
+beer and milk replies are closed. The new B/C checkpoint below concerns other
+unreviewed source frames; no Windows task is pending.
 
 The next design step uses the qualified roles independently: f822 supplies
 qualitative inclined-liquid context; A supplies Foam-presence and unclear-lower
@@ -98,6 +99,26 @@ context; same-scene glass supplies structural opposition. Existing beer front/
 back/cropped-top, milk lower-unavailability and target-domain controls remain
 required at their actual scope. These are development controls, not exact contour
 labels or untouched holdouts.
+
+The [ordered temporal-texture readout](../50-diagnostics/s11/2026-10-10-temporal-texture-observation.md)
+now verifies all 17 fixed cases / 235 native frame queries / 1,754 side queries.
+Chronological code changes preserve information discarded by static histograms,
+but fixed-pattern optical deformation also creates the proposed one-sided cue.
+Broad real change regions and multiple central alternatives establish no physical
+selector. Preserve the affine-exposure counterexample and all three truncated
+windows; do not tune a window/threshold or treat missing support as rejection.
+
+**Human source-role checkpoint OPEN:** in the
+[clean later-water source sheet](../50-diagnostics/s11/2026-10-10-later-water-role-review.png),
+B/f1438 (47.981 s) and C/f1643 (54.821 s) retain a narrow bright band at the
+liquid's upper edge. Each needs a regional judgment: Foam layer remains,
+water surface without a Foam layer, or unclear. The reply determines whether
+these sources are thin/settled-Foam positives or Foam-absence/surface controls;
+an unclear reply leaves them unresolved. No exact Y, thickness or neighbour
+label follows. A's replies cannot answer this, and less temporal activity does
+not establish disappearance. Stop dependent role assignment at this user
+checkpoint. Any answer leaves this cue-only promotion rejected; no Windows
+task, new filming request or repeat A/f822/beer/milk question is needed.
 
 Before another trial, name one distinct physical boundary/role observation,
 the existing measurement owner and a reproducible decision/abstention rule.
