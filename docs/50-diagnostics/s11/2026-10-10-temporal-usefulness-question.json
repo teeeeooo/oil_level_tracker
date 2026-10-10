@@ -1,0 +1,35 @@
+{
+  "schema": "s11-product-temporal-expectation-question-v1",
+  "status": "PENDING_USER_EXPECTATION",
+  "base_head": "26458324860b5ddfe5c838b65276a4910d329632",
+  "authority_gap": "Product SSOT §1.2 prioritizes same-interface movement readability and sufficiently frequent numeric observations over pixel-perfect Y, but specifies no maximum useful inter-observation interval. §22.3 leaves accuracy thresholds for later evidence-based choice. Existing report two-second bridges are presentation only, not detector acceptance.",
+  "owners": {
+    "docs/rotary_oil_level_tracker_ssot_spec.md": "2dd979569aff861cd790dd314c4659296d1fe0121e69d1646e0b4507be2d1205",
+    "docs/30-validation/s11-interface-observability-witness-validation.md": "9bca8db33f725200e4973588d8b357f2e3bd509d8e23b661ddf3f44fa730483a",
+    "src/oil_tracker/application/services/graph_series.py": "298637bb466882c849b4e49e2871cd79e633202e8bb406af4b7570657340b8e9"
+  },
+  "closed_source_reviews": [
+    "docs/50-diagnostics/s11/2026-10-10-upper-projection-ac-reply.json",
+    "docs/50-diagnostics/s11/2026-10-10-upper-projection-interval-reply.json",
+    "docs/50-diagnostics/s11/2026-10-10-sample4-center-source-reply.json"
+  ],
+  "question_verbatim": "유면이 움직이는 구간에서, 실제 Oil 높이가 관측되는 두 점 사이의 목표 간격을 어느 정도로 잡을까요? 명세에는 “충분히 자주”만 정해져 있어 다음 실험의 시간 해상도를 정하려는 질문입니다. 경계가 안 보이는 장면의 값을 보간하거나 만들어 채우지는 않습니다.",
+  "options": [
+    "1초 이내를 목표로",
+    "2초 이내면 충분",
+    "5초 정도도 허용"
+  ],
+  "recommended_option": "1초 이내를 목표로",
+  "recommendation_basis": "Conservative development target for resolving changes within a few seconds; existing local official sampling is 2 FPS. This is a proposed user-facing time-resolution target, not demonstrated sufficiency, a fitted operating point or a source-derived label.",
+  "proposed_interpretation": {
+    "applies_to": "Oil only, within separately qualified visible moving intervals; no automatic transfer to Foam episode timing or stationary/obscured intervals.",
+    "quantity": "Elapsed source timestamp between two usable, same-physical-interface numeric observations; not the count of blank rows, rendered bridge length, tracker history or video FPS.",
+    "reporting": "Report physical wrong-target observations separately, retain all missing/unassessable cases, and preserve leading/trailing missing intervals. Numerics with unverified identity do not certify useful cadence.",
+    "unobservable": "No numeric deadline authorizes interpolation, carry, an alternate target or a forced scalar. Insufficient source visibility remains unassessable for physical cadence.",
+    "not_yet_adopted": "No new PASS/FAIL, runtime sampling, temporal window, threshold, old-reference tolerance, product requirement or Windows procedure is changed by this preparation."
+  },
+  "decision_needed_for": "Freeze a useful observation-cadence target before selecting the next experiment’s temporal scale and usefulness criteria. Measurement and prototype work are not inherently forbidden by the pending question; dependent product/acceptance choices remain unset.",
+  "scope": "A new use-expectation question, not another source-position/role review. A numerical answer is not a classifier, an O2 acceptance operating point or proof of observability.",
+  "no_hypothesis_promoted": true,
+  "windows_required": false
+}
