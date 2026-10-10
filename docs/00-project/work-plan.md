@@ -7,6 +7,8 @@
 **Next transition:** Sample3 is retired from routine development and logically quarantined. The shared diagnostic entry points require an explicit legacy-regression or engineering-replay purpose; use the [per-command wrapper](../../sample/README.md#sample3-use-restriction) only when that existing check is needed. Preserve the original video, complete four-video/13-case comparison and frozen A/B/C/D evidence. Do not restart sample3 source review, mine clips, tune its numeric gaps or reinterpret restricted skips as PASS. The recent-basis-only and sample4 cost-order-only probes remain CLOSED WITHOUT PROMOTION. At resume, return O2 discrimination work to qualified water B/C and scoped sample4 positives/opposition, retaining beer/milk visibility/layer controls; first name a distinct physical observation and freeze the complete comparison. No pending user judgment or Windows task. Preserve base f156 quarantine, CBR-1/H0/G1 closure, Local XY OFF and O2 OPEN / FIELD FAIL.
 
 This is the sole current state, authorization, unknowns and next-action owner.
+The [October 10 sample3 handoff](../60-evidence/s11/2026-10-10-sample3-retirement-handoff.md)
+pins the implemented default restriction, checks, closed judgments and next-session entry.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
 records the fixed-center checkpoint, local-only evidence and a bounded resume path.
 The [October 8 supplied specification](../70-reference/s11-next-work-2026-10-08/S11-next-work-spec-2026-10-08.md)

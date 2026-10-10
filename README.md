@@ -119,6 +119,17 @@ for tests that share the single pytest-qt `QApplication`; it is not additional
 canonical coverage. Headless subprocess checks use the source tree directly and do
 not inherit the GUI platform environment.
 
+Local S11 corpus checks require matching ignored media and explicit sample3 use.
+The default suite reports those checks as `SKIPPED / QUARANTINED`, which does not
+satisfy the complete legacy corpus gate. When that gate is required, run:
+
+```bat
+python -m tests.diagnostics.s11_corpus_access --purpose legacy-regression -- python -m pytest
+```
+
+See [source-use restrictions](sample/README.md#sample3-use-restriction) for the
+limited purpose and preservation of all four videos and 13 legacy cases.
+
 The test suite covers coordinate conversion, mask/margin/exclusion behavior, Recipe round-trip/versioning, validation, judgment, event debounce, candidate penalties, FillState behavior, foam connectivity, timestamp scheduling, synthetic detector fixtures, full analysis/reporting, multi-Glass decode behavior, cancellation and GUI smoke/routing.
 
 Geometry drag/resize and Windows DPI behavior also require the [manual GUI and Windows checklist](docs/40-operations/manual-gui-windows-checklist.md).

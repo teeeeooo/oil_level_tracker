@@ -706,3 +706,9 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-10 | [Gap capture record](50-diagnostics/s11/2026-10-10-cadence-gap-capture.json.gz) | 기존 일곱 대조군과 새 두 프레임의 후보·선택 증거·원본·검산 보존 |
 | 2026-10-10 | [43.5s relation question](50-diagnostics/s11/2026-10-10-cadence-gap-source-review.json) | 서로 다른 탈락 단계를 거친 두 후보 위치의 실제 Oil 관계 질문 |
 | 2026-10-10 | [43.5s clean/marked source](50-diagnostics/s11/2026-10-10-cadence-gap-source-review.png) | 원본과 두 표시 비교; 위치 범위나 후보의 물리 정답으로 채택하지 않음 |
+
+## 2026-10-10 sample3 retirement handoff
+
+| 최초 Git 등록일 | 문서 | 역할 |
+|---|---|---|
+| 2026-10-10 | [sample3 retirement handoff](60-evidence/s11/2026-10-10-sample3-retirement-handoff.md) | 기본 실행 제한·37개 검사·보존 범위·재개 순서를 묶은 인수인계 체크포인트 |
