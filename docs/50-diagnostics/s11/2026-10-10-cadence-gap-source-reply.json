@@ -1,0 +1,82 @@
+{
+  "schema": "s11-reviewed-source-feature-relation-v1",
+  "base_head": "78eb52170ab6b9e61addab02068b31195fbd1f3a",
+  "authority": "direct user reply to the frozen f1305 source-feature review",
+  "question_record": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-cadence-gap-source-review.json",
+    "sha256": "ea115b472e4fc0ae767177d602a0ba354466ea397e5e5018dc62792a28596d92",
+    "original_status": "PENDING_USER_SOURCE_JUDGMENT"
+  },
+  "question_verbatim": "새로 연 sample4 43.5초 확대 이미지에서 ①(위쪽 선, Y832)과 ②(아래 좁은 띠, Y835–837)는 같은 실제 Oil 유면을 가리키나요? 다르다면 어느 쪽이 Oil인지 알려주세요. ①만 / ②만 / 둘 다 같은 유면 / 둘 다 아님 / 판단 어려움 중에서 답하셔도 됩니다. 한 픽셀 정답이나 허용 오차를 정하려는 질문은 아닙니다.",
+  "reply_verbatim": "2가 oil이 1은 foam이나 glass 표면의 무늬로 보임",
+  "status": "CLOSED",
+  "review_image": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-cadence-gap-source-review.png",
+    "sha256": "5b56c9ab6737af8df23b2416f4e8f640bb5f0fc599bb46530318348f32b7ad43"
+  },
+  "source_video": "sample/sample4.mp4",
+  "source_video_sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+  "frame_index": 1305,
+  "source_timestamp_sec": 43.5,
+  "source_roi": [
+    543,
+    798,
+    647,
+    902
+  ],
+  "fixed_source_x": 595,
+  "raw_roi_sha256": "0ac77fcf270b6ac291ef68a82bbf24ba69dd0314d1be23bc1888a35f1f09be50",
+  "capture_sha256": "849a6d89273680d86821fb0d70b4804f2f7692bc42e0d58b62b928190f0f7a2b",
+  "reviewed_relations": [
+    {
+      "guide": "2",
+      "guides_as_shown": {
+        "source_y_values": [
+          835,
+          837
+        ],
+        "display_cell_bounds": [
+          834.5,
+          837.5
+        ],
+        "candidate_indices": [
+          8,
+          16,
+          19
+        ],
+        "source_x_display": [
+          584,
+          605
+        ],
+        "meaning": "Location group: idx8 native center/median Y837; idx16 and idx19 candidate-center Y835. The box is not a truth interval or a reconstructed path."
+      },
+      "physical_role": "Oil interface at the displayed location",
+      "status": "QUALIFIED_SOURCE_LOCATION_ROLE_ONLY"
+    },
+    {
+      "guide": "1",
+      "guides_as_shown": {
+        "source_y": 832,
+        "candidate_indices": [
+          3
+        ],
+        "source_x_display": [
+          584,
+          605
+        ],
+        "meaning": "Candidate-center marker, not a captured native contour."
+      },
+      "physical_role": "looks like Foam or glass-surface pattern rather than Oil",
+      "status": "QUALIFIED_NON_OIL_OPPOSITION_WITH_UNRESOLVED_SUBTYPE",
+      "subtype": "UNRESOLVED_FOAM_OR_GLASS_PATTERN"
+    }
+  ],
+  "interpretation": "The displayed groups are not interchangeable Oil observations. The Oil location in guide 2 follows the publishable-row then allowed-owner-exclusion route; guide 1 is opposing context with an unresolved Foam-versus-glass subtype.",
+  "scope": "Not exact scalar truth, a pixel tolerance or certified interval, full candidate/all-sector identity, all candidates inside the marker, neighbouring-frame truth, whole-track identity, a Foam-front coordinate or classifier/Windows acceptance.",
+  "exposure": "Previously exposed development/regression frame. Not blind or a holdout.",
+  "supersedes": "The pending f1305 source-feature relation question only. Original preparation, image, previous replies and canonical legacy annotations are unchanged.",
+  "production_changed": false,
+  "legacy_truth_changed": false,
+  "new_user_judgment_pending": false,
+  "windows_execution_required": false
+}

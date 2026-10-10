@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** The four source-position queries are CLOSED: A Foam-upper rows476–481, B water-upper484–489 and C water-upper489–494 at diagnostic X950; sample4/f1275 Oil rows833–841 at Recipe X595. The saved sample4 join retains correct completed idx12/Y835 inside its reviewed interval despite current-stage ambiguity; its native contour remains unavailable. A support loss, B pre-top-k compression and C scale-dependent retention are distinct findings, not one common repair. Source qualification is sufficient for bounded mechanism development without wholesale relabeling. The user has selected a one-second Oil observation target during separately qualified visible movement. The saved 299-row audit separates numeric cadence from physical coverage; sample4 42.5–44s has two missing outputs followed by an already confirmed wrong target. The nine-frame gap capture is complete with the original full-window fingerprint: both missing rows have retained publishable alternatives but none belongs to the allowed final owner. One new bounded f1305 physical-relation question compares Y832 with Y835–837 to distinguish authority loss from owner-filter exclusion of actual Oil. Pause that dependent repair attribution for the user’s source judgment; no new physical selector or Windows task is established. Preserve all seven recordings, all 13 legacy values and their qualified comparison scope, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
+**Next transition:** Source-position and one-second cadence choices remain CLOSED. The f1305 reply now identifies guide ② as Oil and ① as Foam-or-glass-pattern opposition, with subtype unresolved. Saved-owner tracing confirms assignment maturity precedence, a failed current-anchor handoff and final exclusion of the reviewed Oil location. The single cost-order-only attribution probe is CLOSED WITHOUT PROMOTION: it fills the two numeric holes but changes 15 Oil rows, retains unreviewed alternatives and selects upper texture at 56s; no physical selector is adopted. Next qualify sample3’s largest numeric gap by source visibility. Its 16-frame uniform inspection shows mixed full-looking/framing/focus contexts; one new A/B question at 75.04/78.04s asks whether the late yellow/brown-to-dark boundary is actual Oil. Hold dependent reappearance attribution for that reply, preserving the old 95/105s unusable labels. No Windows task is required. Preserve all seven recordings, all 13 legacy values and their qualified comparison scope, base f156 quarantine, CBR-1/H0/G1 CLOSED WITHOUT PROMOTION, Local XY OFF and O2 OPEN / FIELD FAIL.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 9 handoff](../60-evidence/s11/2026-10-09-fixed-center-handoff.md)
@@ -39,7 +39,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Upper projection, four source intervals and one-second cadence choice are CLOSED. The gap capture confirms empty allowed-owner membership at 43/43.5s; a new bounded f1305 relation review separates correct-boundary authority loss from excluded alternatives. No physical selector is adopted. | [A/B/C comparison](../50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.md), [sample4 comparison](../50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md), [selected convention](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--upper-image-projection-selected), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
+| W4 / O2 challenger | OPEN; Local XY, H0/G1 and CBR-1 fixed experiments CLOSED WITHOUT PROMOTION | Upper projection, four source intervals, one-second cadence and f1305 relation are CLOSED. The owner-causality probe is CLOSED WITHOUT PROMOTION. Sample3 A/B late-gap physical-role review is OPEN before reappearance attribution; no physical selector is adopted. | [A/B/C comparison](../50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.md), [sample4 comparison](../50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.md), [selected convention](../20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--upper-image-projection-selected), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -204,17 +204,45 @@ missing frames contain two publishable row hypotheses before owner restriction,
 but none matches the lifecycle’s allowed ID. This establishes the empty-selection
 mechanism, not physical correctness of the excluded alternatives.
 
-**New bounded candidate-relation checkpoint OPEN:** at f1305/43.5s, Y832 remains
-CANDIDATE_ONLY while the Y835/Y837 group is publishable before the final owner
-restriction. The [clean/marked source](../50-diagnostics/s11/2026-10-10-cadence-gap-source-review.png)
-and [frozen question](../50-diagnostics/s11/2026-10-10-cadence-gap-source-review.json)
-ask whether they refer to the same actual Oil surface, or which refers to Oil.
-Their physical relation decides which loss route warrants investigation; this
-is not another question about the already closed f1275 interval or orange chain.
-Hold dependent physical-loss attribution for this answer. No exact-pixel
-requirement, blanket relabeling or Windows task follows. The earlier native
-appearance matcher remains closed as a general repair; neither its successful
-seed, matching Y nor cadence alone supplies physical identity.
+**f1305 candidate-relation checkpoint CLOSED:** the user answered **“2가 oil이 1은 foam이나 glass 표면의 무늬로 보임”**.
+The [bound reply](../50-diagnostics/s11/2026-10-10-cadence-gap-source-reply.json)
+identifies ② as the Oil location and ① as opposing Foam-or-glass-pattern context;
+the subtype remains unresolved. Frozen preparation/image and earlier f1275,
+projection, position and appearance-chain replies remain unchanged. No exact Y,
+all-sector candidate identity, whole-track label or blanket review follows.
+
+The [saved owner-causality investigation](../50-diagnostics/s11/2026-10-10-cadence-owner-causality.md)
+reproduces all 113 complete baseline detections. At 43s, established status gives
+the only Y836 row to the older track despite match costs 0.850825 versus 0.010200.
+The retained filling owner then lacks a current row. Its alternate-anchor route
+fails the excluded row’s motion-only confirmation profile; at 43.5s a later,
+short-circuited material-path-anchor check would also fail. Final owner restriction
+excludes the source-qualified Oil location. The first historical physical track
+error remains unqualified; a smooth or mature ID is not physical truth.
+
+One predeclared cost-order-only attribution probe closes the two numeric holes
+but changes 15 Oil rows and 19 phase values. Four protected exact candidates stay
+selected and three known wrong candidates disappear, but replacements remain
+unreviewed and the 56s selection moves to upper texture outside the previously
+reviewed lower Oil-boundary region in agent inspection. This is **CLOSED WITHOUT
+PROMOTION**, not a physical repair or permission to enter O3/O4. Production,
+all six Foam coordinate/confidence fields and canonical truth remain unchanged.
+
+**New sample3 source-role checkpoint OPEN:** the
+[bounded source inspection](../50-diagnostics/s11/2026-10-10-sample3-gap-source.md)
+retains 16 uniform frames across the 34.5345–81.014267s numeric gap and all four
+old S3 annotation frames. All 19 native crops, 16 saved timestamps and four old
+source comparisons verify; 151 saved time/value rows join exactly. Full-looking
+middle views and later framing/focus changes prevent a continuous-miss claim.
+The [A/B image](../50-diagnostics/s11/2026-10-10-sample3-gap-role-review.png) and
+[frozen question](../50-diagnostics/s11/2026-10-10-sample3-gap-role-review.json)
+ask whether the late yellow/brown-to-dark boundary at 75.04/78.04s is visible
+Oil, another feature or too unclear to judge. Both saved rows are FILLED_CAP_VETO,
+with five/three publishable rows before the empty allowed-owner set; those facts
+alone do not establish a harmful veto. Hold dependent physical reappearance
+attribution for the reply. The old 95/105s unusable labels and all earlier source
+questions stay closed. No exact-pixel label, full-video relabeling or Windows
+execution is required.
 
 Before another trial, name one distinct physical boundary/role observation,
 the existing measurement owner and a reproducible decision/abstention rule.

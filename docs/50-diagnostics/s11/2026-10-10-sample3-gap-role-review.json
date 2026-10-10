@@ -1,0 +1,72 @@
+{
+  "schema": "s11-source-role-review-preparation-v1",
+  "status": "PENDING_USER_SOURCE_JUDGMENT",
+  "base_head": "78eb52170ab6b9e61addab02068b31195fbd1f3a",
+  "question_verbatim": "sample3의 새로 연 A(75.04초)·B(78.04초) 원본 확대에서, 위쪽 황갈색 영역과 아래쪽 어두운 영역 사이의 경계는 실제 Oil 유면인가요? 각각 Oil 유면 / Foam·무늬 등 다른 경계 / 초점이나 가림 때문에 판단 어려움 중 어떻게 보이는지 알려주세요. 95·105초의 기존 초점 불량 판단과는 별도이며, 정확한 픽셀 위치를 묻는 질문은 아닙니다.",
+  "review_image": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-sample3-gap-role-review.png",
+    "sha256": "565a6d5b375c97df8e3a6d4e7e899c387b1126b26e18493f71a0647913ffa6f2"
+  },
+  "source_video": "sample/sample3.mp4",
+  "source_video_sha256": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+  "preflight_sha256": "12986d8f73a2aca12aa8141f13eae0a396e3547897055c1126a69e8372e2577e",
+  "original_gap": {
+    "start_frame": 1035,
+    "end_frame": 2428,
+    "start_sec": 34.5345,
+    "end_sec": 81.01426666666667,
+    "elapsed_sec": 46.47976666666667,
+    "intervening_unavailable_rows": 92
+  },
+  "source_frames": [
+    {
+      "label": "A",
+      "frame_index": 2249,
+      "source_timestamp_sec": 75.04163333333334,
+      "full_path": "sample/output/s11-sample3-gap-source-20261010-001/f002249.png",
+      "full_sha256": "89d645a3d0880f65a7c1db0f37f91d2d2115dff52d1dbd7a7d69c6a0d727ba0f",
+      "crop_path": "sample/output/s11-sample3-gap-source-20261010-001/f002249-context.png",
+      "crop_sha256": "a3856a59d6c9f027ba5e46fc1b63a743552a9809e886fb4f05d63c9a5746f905",
+      "crop_source_xyxy": [
+        655,
+        135,
+        1015,
+        495
+      ],
+      "display_xywh": [
+        15,
+        145,
+        720,
+        720
+      ]
+    },
+    {
+      "label": "B",
+      "frame_index": 2339,
+      "source_timestamp_sec": 78.04463333333334,
+      "full_path": "sample/output/s11-sample3-gap-source-20261010-001/f002339.png",
+      "full_sha256": "1a95db29287b5d4420d53217c1322d617b1f7bdf165b40f640ed20b76d1f134f",
+      "crop_path": "sample/output/s11-sample3-gap-source-20261010-001/f002339-context.png",
+      "crop_sha256": "f90f9a65035bbcb05e8f15cce85f0f9a6fd261690366e43429aca7c24a160212",
+      "crop_source_xyxy": [
+        655,
+        135,
+        1015,
+        495
+      ],
+      "display_xywh": [
+        765,
+        145,
+        720,
+        720
+      ]
+    }
+  ],
+  "source_selection": "The first two uniform contact-sheet samples after the reframed soft-focus transition that show an upper yellow/brown versus lower dark partition in agent inspection. Adaptive source-role qualification, not unbiased efficacy sampling.",
+  "agent_interpretation": "A late reappearance-like partition is visible, but whether its physical role is Oil is unresolved. Earlier full-looking views and camera/focus changes mean the full 46.48-second numeric gap is not a certified continuous miss.",
+  "decision_relevance": "If these are visible Oil boundaries, absence at these exact times warrants a separate reappearance/phase investigation before the 81.014s numeric return; otherwise do not treat these missing scalars as missed visible Oil. Unclear images stay unscorable.",
+  "scope": "Only these two displayed native frames/regions; no continuous interval, candidate identity, exact Y, tolerance, dense contour, calibrated Glass geometry, new initial-state label, or whole-video precision. Existing S3-01/02 and unusable S3-03/04 remain unchanged.",
+  "production_change": false,
+  "legacy_truth_changed": false,
+  "windows_required": false
+}
