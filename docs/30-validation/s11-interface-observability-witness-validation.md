@@ -1323,6 +1323,37 @@ wrong-target reduction and explicit unresolved coverage; all-UNKNOWN is not
 efficacy. Passing these checks alone still leaves the existing V3/V4/V5 and O2
 acceptance requirements in force before O3 behavior entry.
 
+### P2-S1 fixed feasibility comparison
+
+The [regional-support contract](../20-architecture/s11-interface-observability-witness-architecture.md#p2-s1-frozen-regional-support-pilot--2026-10-11)
+is frozen before real costs. Keep all seven candidate-bound Oil positives and
+three rejected targets, with exact input index/source/Y joins. The f1275 positive
+is initialization and cannot count as continuation. Three existing internal
+Foam-texture guides and the agent-observed f450 lower-rim CBR failure remain
+separate controls; f1620 is texture initialization. Do not turn tentative or
+unresolved wrong-target subtypes into new non-interface truth.
+
+Before real measurement, verify direct-residual arithmetic, all-role common
+support, equal search domains, stationary and translated positives, duplicated
+roles/copied distractors, coherent-warp ambiguity, missing/partially observed
+support and the joint-part constraint. A numerical role preference never grants
+physical identity. Masks and center hints are not semantic pixel truth.
+
+Progression requires interface preference at **all six** non-initial confirmed
+Oil contexts, measured structure/texture preference at **all three** rejected
+targets, and at least one fewer rejected-target interface preference than the
+center-only ablation, without losing a positive. An unresolved or unavailable
+negative is not a successful rejection. Fractional neighborhoods must agree.
+This is a necessary regional pilot condition, not candidate-level efficacy or
+O2 acceptance. The public-source items remain explicitly incomparable in this
+frozen set; they cannot disappear from the coverage report.
+
+If the condition fails, close P2-S1 without changing its crop, samples,
+references, weights, thresholds or transform freedom. Preserve every result and
+independently reconstruct common domains and residuals from pinned saved inputs.
+A new operation needs a distinct preflight; do not carry the failed pilot into
+association, phase or Foam episode code. No Windows rerun is implied.
+
 For future report comparison, annotate errors as context-reversing (A),
 context-erasing (B), local residual (C), or unobservable/unqualified (U). This is
 an evaluation vocabulary, not a replacement PASS rule or permission to exclude a

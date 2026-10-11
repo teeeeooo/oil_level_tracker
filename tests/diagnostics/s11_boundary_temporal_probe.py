@@ -360,6 +360,107 @@ def match_reference_constellation(anchor, current, points, anchor_visible,
                 best_shifts_xy=best, minimizer_count=len(best))
 
 
+SHARED_ROLE_SPEC = {
+    'id': 'shared-current-support-role-comparison-v1',
+    'roles': ['interface', 'structure', 'texture'],
+    'radius': 2,
+    'translation_radius': 2,
+    'max_points': 75,
+    'appearance_weight': 0.75,
+    'geometry_weight': 0.25,
+    'maximum_cost': 0.05,
+    'minimum_margin': 0.01,
+    'tie_atol': 1e-12,
+    'authority': 'regional appearance preference only; physical identity UNRESOLVED',
+}
+
+
+def compare_shared_support_roles(current, visible, edges, points, references):
+    """Compare three regional exemplars on exactly the same current samples.
+
+    Each reference is an equally sized (BGR, visible, Canny) crop, already
+    centered by the caller's declared approximate input hint. A single integer
+    translation moves all parts together. Every role uses the intersection of
+    fully observed translations; neither a missing role nor extra search
+    placements can become a role advantage. This never selects a physical front.
+    """
+    if set(references) != set(SHARED_ROLE_SPEC['roles']):
+        raise ValueError('exact interface, structure and texture reference slots required')
+    if (not isinstance(current, np.ndarray) or current.dtype != np.uint8
+            or current.ndim != 3 or current.shape[2] != 3
+            or not current.size or current.shape[0]*current.shape[1] > MAX_PIXELS):
+        raise ValueError('bounded uint8 BGR current required')
+    h, w = current.shape[:2]
+    for mask in (visible, edges):
+        if not isinstance(mask, np.ndarray) or mask.dtype != bool or mask.shape != (h,w):
+            raise ValueError('same-shape boolean visibility and edges required')
+    if (not isinstance(points, np.ndarray) or points.ndim != 2 or points.shape[1] != 2
+            or points.dtype.kind not in 'iu' or len(points) > SHARED_ROLE_SPEC['max_points']):
+        raise ValueError('bounded integer current XY support required')
+    if np.any(points < 0) or np.any(points[:,0] >= w) or np.any(points[:,1] >= h):
+        raise ValueError('current support outside crop')
+    if len(points) and not edges[points[:,1],points[:,0]].all():
+        raise ValueError('support must consist of current observed Canny pixels')
+    base = dict(spec_id=SHARED_ROLE_SPEC['id'], status='UNAVAILABLE', reason=None,
+                physical_identity='UNRESOLVED', selected_front=None,
+                appearance_preference=None, roles={}, common_shifts_xy=[])
+    if not len(points):
+        return dict(base, reason='no_current_edge_support')
+    points = np.unique(points.astype(np.int64), axis=0)
+    measured = {}
+    shift_domains = []
+    radius = SHARED_ROLE_SPEC['translation_radius']
+    for role in SHARED_ROLE_SPEC['roles']:
+        ref = references[role]
+        if ref is None:
+            return dict(base, reason='missing_'+role+'_reference')
+        if not isinstance(ref, tuple) or len(ref) != 3:
+            raise ValueError('each reference requires BGR, visibility and Canny')
+        image, mask, ref_edges = ref
+        if (not isinstance(ref_edges, np.ndarray) or ref_edges.dtype != bool
+                or ref_edges.shape != (h,w)):
+            raise ValueError('same-shape boolean reference edges required')
+        match = match_reference_constellation(current, image, points, visible, mask,
+                                             radius=SHARED_ROLE_SPEC['radius'])
+        if match['status'] != 'MEASURED':
+            return dict(base, reason=role+':'+match['reason'])
+        indices = {tuple(map(int, shift)): i for i, shift in enumerate(match['shifts_xy'])
+                   if np.max(np.abs(shift)) <= radius}
+        measured[role] = (match, indices, ref_edges)
+        shift_domains.append(set(indices))
+    common = sorted(set.intersection(*shift_domains))
+    if not common:
+        return dict(base, reason='no_common_visible_translation')
+    roles = {}
+    px, py = points.T
+    sample_xy = measured['interface'][0]['sample_xy'].tolist()
+    denominator = measured['interface'][0]['cost_denominator']
+    for role in SHARED_ROLE_SPEC['roles']:
+        match, indices, ref_edges = measured[role]
+        assert match['sample_xy'].tolist() == sample_xy
+        assert match['cost_denominator'] == denominator
+        costs, appearance, geometry = [], [], []
+        for dx, dy in common:
+            a = float(match['cost_numerators'][indices[(dx,dy)]] / denominator)
+            g = float(np.mean(~ref_edges[py+dy,px+dx]))
+            appearance.append(a); geometry.append(g)
+            costs.append(SHARED_ROLE_SPEC['appearance_weight']*a
+                         + SHARED_ROLE_SPEC['geometry_weight']*g)
+        best = min(costs)
+        roles[role] = dict(costs=costs, appearance_costs=appearance,
+                           geometry_costs=geometry, best_cost=best,
+                           best_shifts_xy=[list(s) for s,c in zip(common,costs,strict=True)
+                                           if abs(c-best) <= SHARED_ROLE_SPEC['tie_atol']])
+    ranked = sorted((v['best_cost'],k) for k,v in roles.items())
+    margin = ranked[1][0]-ranked[0][0]
+    preference = (ranked[0][1] if ranked[0][0] <= SHARED_ROLE_SPEC['maximum_cost']
+                  and margin >= SHARED_ROLE_SPEC['minimum_margin'] else None)
+    return dict(base, status='MEASURED', reason=None, roles=roles,
+                common_shifts_xy=[list(s) for s in common], sample_xy=sample_xy,
+                edge_points_xy=points.tolist(), appearance_denominator=denominator,
+                best_role_margin=margin, appearance_preference=preference)
+
+
 CURRENT_BOUNDARY_SPEC = {
     'id': 'current-boundary-reference-comparison-v1',
     'geometry_basis': 'observed_canny_pixel_centers',

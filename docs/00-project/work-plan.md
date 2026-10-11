@@ -804,8 +804,11 @@ The October 11 intake request covered review and placement of both supplied
 packages, local integration of eligible worktree changes, deletion of redundant
 worktrees and artifacts after verified preservation, and a follow-on plan. The
 follow-up authorizes necessary Work Plan and related-document updates, commits
-and pushing the integrated changes to `origin/main`. This scope does not
-authorize P2 production wiring or change any acceptance gate.
+and pushing the integrated changes to `origin/main`. The subsequent continuation
+request authorizes the bounded P2 offline preflight, implementation and fixed
+comparison, with autonomous commits/pushes; stop when user judgment or Windows
+work is necessary. This scope does not authorize P2 production wiring or change
+any acceptance gate.
 
 The user also authorizes assistant image interpretation first, with targeted
 questions for ambiguous features. Keep those readings distinct from human truth.

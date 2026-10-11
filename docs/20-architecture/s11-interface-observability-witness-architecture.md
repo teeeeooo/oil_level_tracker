@@ -1698,6 +1698,51 @@ reviewed initialization remains an offline input, not a new mandatory product
 setting or evidence of automatic-detector improvement. Current authority has no
 P2 consumer; O2/O3 and separate Foam/phase gates remain unchanged.
 
+#### P2-S1 frozen regional-support pilot — 2026-10-11
+
+The October 11 continuation authorizes one offline preflight/comparison. The
+[frozen manifest and runner](../50-diagnostics/s11/2026-10-11-p2-shared-support/preflight.json)
+reuse the existing constellation owner through `compare_shared_support_roles`.
+This is a regional feasibility test: candidate-bound neighborhoods are not
+candidate-owned dense paths, exact contour truth or full-candidate identity.
+The extra comparison information is actual competing rim/texture exemplars on
+identical current support. It does not cure observational equivalence.
+
+Use the previously reviewed sample4 Oil vicinity at f1275/X595/Y835, rim seed
+at f450/X561/Y861 and internal-texture guide at f1620/X595/Y833. A 25×25 native
+context around each is an approximate exemplar, not a newly reviewed material
+mask. Every current candidate context uses its existing scalar and Recipe X595;
+fractional Y retains both floor/ceil neighborhoods without synthesizing pixels.
+The 15×5 central core retains all observed Canny centers in three five-column
+parts. Missing a part is unavailable; no snapping, contour invention, resizing,
+mask relaxation or search driven by source truth is permitted.
+
+One integer translation in ±2 pixels moves all parts together. Sample the unique
+±2 vertical stencil pixels at those current edge centers. Every role uses the
+same current pixels and the intersection of fully observed translations, with
+one additive BGR offset for the entire sample set. The joint residual is
+`0.75 * normalized centered BGR MSE + 0.25 * missing reference-edge fraction`;
+the latter reads reference Canny at those same translated current centers.
+Weights correspond to three normalized color channels and one edge channel,
+not independent evidence votes. Costs ≤0.05 and a role margin ≥0.01 yield only
+an **appearance preference**. Other outcomes remain unresolved. These are
+predeclared pilot constants, not calibrated operating points for production.
+
+The single structural ablation removes the outer two current parts. It keeps
+the same role set, ±2 transform capacity, residual, cutoff and margin. Its
+absolute residuals have different support and are not directly comparable to
+the joint residuals; only outcomes on the fixed case ledger are compared.
+The implementation retains common shifts and complete per-role costs so the
+arithmetic can be checked independently. Existing 128-point/4,096-sample and
+25-million-value constellation limits apply to each of three roles; this entry
+further caps supplied current centers at 75.
+
+Water B/C/A, inclined water, beer and milk retain their qualified roles in the
+manifest but lack a qualified same-scene three-role exemplar set for this
+Oil-specific sample4 pilot. They are explicitly unavailable, not negatives or
+removed cases. No cross-recording template transfer is presumed. A favorable
+sample4 result would still need their separate comparison before any adoption.
+
 ### CBR-1 current-boundary reference comparison — proposed offline contract
 
 The [cc17924 intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md)
@@ -2458,6 +2503,15 @@ baseline separately from current source/runner and input hashes. Missing history
 fails closed. The source byte/AST prefix check remains against the original owner.
 
 ## History Review
+
+2026-10-11 P2-S1: reviewed CBR-1's absent structure support, the fixed-pattern
+and common-geometry failures, exact candidate-bound A2 controls and the closed
+Foam texture/rim replies. F02/F04/F07/F09/F10 remain applicable. The existing
+offline matcher now compares all roles on identical current support and equal
+transform capacity; this supplies a finite opposing measurement, not a physical
+certificate. Logic-map and failure-registry impact are NONE: no runtime owner
+or field cause changes. Copied targets and coherent optical deformation remain
+unresolved even when the calculation is exact.
 
 2026-10-11 intake: P1 is integrated as an offline API; baseline verification is
 pinned to the historical Git object so merging cannot turn it into self-comparison.

@@ -815,3 +815,11 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-11 | [70-reference/s11-program-review-2026-10-10/s11-handoff-2026-10-10.md](70-reference/s11-program-review-2026-10-10/s11-handoff-2026-10-10.md) | 첨부 원문 bytes 보존 |
 | 2026-10-11 | [70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md](70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md) | 첨부 원문 bytes 보존 |
 | 2026-10-11 | [70-reference/s11-program-review-2026-10-10/s11-work-packages-2026-10-10.json](70-reference/s11-program-review-2026-10-10/s11-work-packages-2026-10-10.json) | 첨부 원문 bytes 보존 |
+
+## 2026-10-11 P2 shared-support pilot
+
+| 최초 Git 등록일 | 문서 | 역할 |
+|---|---|---|
+| 2026-10-11 | [P2-S1 investigation](50-diagnostics/s11/2026-10-11-p2-shared-support.md) | 공통 관측 영역에서의 역할 참조 비교와 제한 |
+| 2026-10-11 | [Frozen preflight](50-diagnostics/s11/2026-10-11-p2-shared-support/preflight.json) | 원본·후보·참조·수치 조건·중단 기준 고정 |
+| 2026-10-11 | [Saved-raster runner](50-diagnostics/s11/2026-10-11-p2-shared-support/run.py) | 고정 입력 확인 후 오프라인 비교 재현 |
