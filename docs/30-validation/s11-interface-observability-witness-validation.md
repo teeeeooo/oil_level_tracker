@@ -1365,6 +1365,26 @@ retroactively satisfy that entry gate. Independent Foam raw-front work follows
 its existing parent acceptance; consuming typed Witness decisions also invokes
 O2/O3. No Windows execution is useful until the relevant eligible candidate exists.
 
+### P5-S3 staged extremal-region checks
+
+Follow the [frozen S3 operation](../20-architecture/s11-interface-observability-witness-architecture.md#p5-s3-threshold-integrated-enclosed-regions--frozen-feasibility)
+and machine preflight. Independently flood synthetic threshold components and
+check integrated/peak area arithmetic, polarity/copy collisions, input immutability,
+clipped/masked unavailability and resource rejection. The actual strong positive
+must reach upper-like appearance; weak contrast must separate the integration
+from the ablation before real pixels are scored.
+
+Next retain every center-edge query from the four fixed representative rasters.
+Apply the existing qualified intervals only after measurement. Both Foam uppers
+must be represented and upper-like; B/C water must be measured opposition, not
+unavailable/ambiguous. Preserve the exact f1620 internal guide as unassessed when
+it has no observed center edge. A failed representative gate closes S3 before the
+42-raster comparison; all unexecuted broader cases remain listed as NOT_RUN.
+Cross-check the complete eligible-area spectrum on each qualified positive and
+opposing query with an independent four-neighbour flood, plus source hashes,
+coordinates, all-edge conservation and production-file equality. A passing stage
+only authorizes the next diagnostic stage, never behavior or field acceptance.
+
 <a id="p0-support-and-story-contract--scope-decision-draft"></a>
 
 ### P0 scene-based evaluation contract

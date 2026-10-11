@@ -1933,6 +1933,67 @@ not successful physical opposition, and the ablation does not become a replaceme
 selector. Default-path linkage is independently verified; it supplies no missing
 role discriminator or permission for a production/episode intervention.
 
+#### P5-S3 threshold-integrated enclosed regions — frozen feasibility
+
+Test an additional intensity observation: the area of complete extremal regions
+integrated across **all 255 integer grayscale cuts**. Unlike the closed nominal
+connectivity oracle and single-Canny side partition, this measures how much
+contrast supports an enclosed region in the original pixels. Unlike S2, it uses
+whole connected regions rather than four derivative pairs. The physical hypothesis
+is limited: resolved bubble interiors may supply enclosed bright/dark regions
+below a Foam upper boundary, with less such support above it. Glass markings,
+reflections and printed cells can supply the same observation; this pilot cannot
+independently establish material or scalar authority.
+
+Extend the existing offline `s11_side_texture_probe`, leaving its older operations
+unchanged. Use the same S2 candidate list, column, side rectangles and b rule,
+but measure original pixels inside each rectangle, not S2's derivative stencil.
+This is not a same-support S2 efficacy comparison. Do not pad or shrink a clipped
+rectangle. A side is AVAILABLE only when the entire requested rectangle is inside
+the raster and visible; otherwise its value is unavailable, never zero. This
+conservative scope is specific to the pilot and is not a production admission gate.
+
+For each cut `t=1..255`, four-connect `gray<t` and `gray>=t` separately. Retain
+components of at least four pixels, spanning at least two rows and two columns,
+that do not touch the side-rectangle border. Let `A(t)` be their combined area
+and N the rectangle area. The two polarities partition the pixels, so
+`0 <= A(t) <= N`. Define `p=sum_t A(t)/(255*N)`; its range is [0,1]. The one
+ablation removes contrast duration: `q=max_t A(t)/N`, on identical pixels,
+cuts and components. Thus `0 <= p <= q <= 1`. This is a new fixed diagnostic,
+not an implementation or efficacy claim for the related
+[extremal-region literature](https://cmp.felk.cvut.cz/~matas/papers/matas-bmvc02.pdf).
+
+For either variant let u/l be upper/lower support. Declare an upper-like
+appearance when `l >= 0.02` and `u <= l/2`; internal-like when both are at least
+0.02 and `1/2 <= u/l <= 2`; low-support when both are below 0.02. Other values
+are AMBIGUOUS; unavailable sides are UNAVAILABLE. The upper-like rule takes
+precedence at the shared equality boundary. These are descriptive appearances,
+not physical labels. The fixed 0.02 contrast-area floor is an exploratory
+operating point, not calibrated truth; no fitting or sweep follows. Strong
+enclosed cells below uniform upper support attain the positive region. The same
+geometry with one-gray-level contrast can retain q while p stays below the floor;
+this is the predeclared useful ablation contrast, not a post-result invention.
+
+The [S3 preflight](../50-diagnostics/s11/2026-10-12-p5-extremal-regions/preflight.json)
+pins synthetic controls, the four-raster representative gate, the complete prior
+42-raster inventory and production hashes. First require measured strong stationary
+and inclined positives, polarity/copy equality, weak-contrast opposition added
+by integration, and explicit missing/cropped support. Then measure every existing
+center edge in sample4 f1620 and native water A/B/C. The two qualified Foam upper
+intervals must contain upper-like observations; both water intervals must contain
+measured low-support or internal-like opposition at every compatible observation.
+Missing/ambiguous/absent queries do not pass. The internal f1620 guide retains its
+exact-coordinate scope; no snapping creates a control that did not exist.
+
+Stop at a failed synthetic or representative gate, retaining all fixed-stage
+results. Only a passing representative gate opens the complete 42-raster readout;
+that remains appearance evidence, with physical structure competition and the
+parent acceptance still required before P5-b. No tolerated error budget or source
+exclusion is introduced. Bound inputs to 4,194,304 pixels, dimension 4,096 and 256
+observed center queries per raster; reject a resource overflow rather than prune.
+Each side is at most 32 by 65 pixels; no video decode, new edge generation,
+parameter search, production, Oil or episode change is part of this experiment.
+
 ### CBR-1 current-boundary reference comparison — proposed offline contract
 
 The [cc17924 intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md)
@@ -2693,6 +2754,14 @@ baseline separately from current source/runner and input hashes. Missing history
 fails closed. The source byte/AST prefix check remains against the original owner.
 
 ## History Review
+
+2026-10-12 P5-S3 preflight: reviewed F02 raw-edge separation and nominal
+connectivity, F07 side texture/paired-gap/correspondence limits, and F09/F10
+provenance and exposed-control tuning. Intensity-integrated complete regions
+add contrast duration to connectivity; the same-pixel peak-coverage ablation
+tests that addition. The existing offline side-texture owner is extended only
+for this bounded appearance pilot. No production node, physical identity or
+field acceptance is inferred from enclosure or copy equality.
 
 2026-10-12 scene-based evaluation adoption: reused the 13 source-audit strata,
 later water/source corrections, candidate bindings and canonical Windows stories.

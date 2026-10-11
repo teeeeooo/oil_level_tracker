@@ -921,6 +921,12 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/verification.json](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/verification.json) | P5 고정 비교 결과/검증 |
 
 
+### 2026-10-12 P5-S3 staged intensity-region pilot
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p5-extremal-regions/preflight.json](50-diagnostics/s11/2026-10-12-p5-extremal-regions/preflight.json) | 밝기별 닫힌 영역 가설의 사전 고정 명세 |
+
 ### 2026-10-12 scene-based evaluation routing
 
 | 최초 Git 추가일 | 문서 | 구분 |

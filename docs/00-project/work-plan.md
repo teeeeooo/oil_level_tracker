@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
-**Next transition:** the user adopted [scene-based evaluation](../30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract); the material-domain A/B choice is suspended. P0 role mapping covers all seven local recordings and nine Windows stories, with [pinned source routing and saved-baseline findings](../50-diagnostics/s11/2026-10-12-scene-evaluation-roster.json). Next prepare one eligible P2 or P5-a operation with a predeclared capability/positive/opposition demonstration and bounded residual rules where needed. Neither path has an eligible new role operation yet. Positive reachability precedes large comparisons; all broader failures remain reported by claim and impact. Typed Witness consumption requires O2/V5 Windows shadow, then separate O3; integrated field qualification remains later. P2-S1/P5-S2 remain CLOSED WITHOUT PROMOTION. Local XY OFF / O2 OPEN / FIELD FAIL remain; no source re-judgment or unchanged-detector Windows run is requested.
+**Next transition:** the user adopted [scene-based evaluation](../30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract); the material-domain A/B choice is suspended. P0 role mapping covers all seven local recordings and nine Windows stories, with [pinned source routing and saved-baseline findings](../50-diagnostics/s11/2026-10-12-scene-evaluation-roster.json). Next execute the frozen P5-S3 intensity-integrated enclosed-region pilot, starting with synthetic positive reachability and then four fixed representative rasters. This is an appearance hypothesis, not established role evidence; P2 has no new eligible operation yet. Positive reachability precedes large comparisons; all broader failures remain reported by claim and impact. Typed Witness consumption requires O2/V5 Windows shadow, then separate O3; integrated field qualification remains later. P2-S1/P5-S2 remain CLOSED WITHOUT PROMOTION. Local XY OFF / O2 OPEN / FIELD FAIL remain; no source re-judgment or unchanged-detector Windows run is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -131,6 +131,11 @@ Y833 and the out-of-interval global top Y808. Water A loses dark support earlier
 All seven sample4 frames, native A/B/C and 25 graph controls keep their scope;
 f1635 stays unreviewed. No source question, another edge generator, episode
 relaxation or unchanged-detector Windows run follows from this intake.
+
+The [P5-S3 preflight](../50-diagnostics/s11/2026-10-12-p5-extremal-regions/preflight.json)
+now freezes one additional intensity/connectivity observation and its ablation.
+Execute synthetic then representative gates; stop that fixed model at failure.
+Do not alter production or reopen S1/S2 from this pilot.
 
 ### Source and truth qualification before the next experiment
 
