@@ -829,3 +829,6 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-11 | [P5 source-position review](50-diagnostics/s11/2026-10-11-foam-upper-position-review.md) | 거품 상단 중앙 위치의 한정된 검토 근거 |
 | 2026-10-11 | [P5 review source record](50-diagnostics/s11/2026-10-11-foam-upper-position-review.json) | 제안 범위·원본 hash·렌더러·검증과 질문 보존 |
 | 2026-10-11 | [P5 native-pixel review figure](50-diagnostics/s11/2026-10-11-foam-upper-position-review.png) | 54초 원본과 중앙 위치 범위 제안 |
+| 2026-10-11 | [P5 qualified position reply](50-diagnostics/s11/2026-10-11-foam-upper-position-reply.json) | X595·Y812–816 한정 사용자 판단과 원본 연결 |
+| 2026-10-11 | [P5 saved-position comparison](50-diagnostics/s11/2026-10-11-foam-upper-position-comparison.json) | 원시 경계·지지 영역·후보·episode 단계 대조와 검증 |
+| 2026-10-11 | [P5 saved-position reproducer](50-diagnostics/s11/2026-10-11-foam-upper-position-comparison.py) | 기존 배열의 경계·원본·검증값을 독립 재구성 |

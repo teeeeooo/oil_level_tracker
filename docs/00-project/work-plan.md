@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** P1 remains integrated for explicit offline use. The frozen P2-S1 regional shared-support comparison is CLOSED WITHOUT PROMOTION; its wrong-target/positive cost overlap and missing parts do not support O3 integration or parameter tuning. Continue the program's independent P5 raw-Foam-front prerequisite with episode logic fixed. A source-position checkpoint now awaits the user's judgment of sample4 f1620/54 s at Recipe X595, proposed rows 812–816; no numeric use before the reply. Then join the qualified scope to existing saved raw/front evidence while retaining water A, real-front/rim/internal-texture and beer/milk visibility controls. No Windows task is pending. Sample3/base-f156 quarantine, closed Local XY/CBR-1/H0/G1 and cost-order/recent-basis experiments, Local XY OFF and O2 OPEN / FIELD FAIL remain.
+**Next transition:** P1 remains integrated for explicit offline use. P2-S1 is CLOSED WITHOUT PROMOTION; no O3 wiring or parameter/reference rescue follows. P5's source-position and saved-representation prerequisite is CLOSED: the user qualified sample4 f1620/54 s, X595, rows812–816. Existing raw/graph/gradient observations retain Y813, while raw component reduction supplies internal-texture Y833; a global-upper substitution gives Y808 and also misses. Water A separately loses dark upper support before component retention. The next bounded P5 design must supply a distinct material/structural role observation for these existing boundaries, retaining real-front/rim/internal-texture, water B/C and beer/milk visibility controls. No new edge generator or episode relaxation addresses these findings. No user judgment or Windows task is pending. Sample3/base-f156 quarantine, closed Local XY/CBR-1/H0/G1 and cost-order/recent-basis experiments, Local XY OFF and O2 OPEN / FIELD FAIL remain.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -50,7 +50,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | P3 / D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | P4 / D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
-| Foam front / episode | Three texture negatives confirmed; P5 source-position checkpoint PENDING | Await the 54 s fixed-column upper-front interval judgment, then inspect saved raw representation. Keep episode fixed and existing positive/rim/texture controls. No Oil-gate bypass. | [Source-position checkpoint](../50-diagnostics/s11/2026-10-11-foam-upper-position-review.md), [Responsibility architecture](../20-architecture/s11-detector-responsibility-architecture.md) |
+| Foam front / episode | P5 source-position and saved-representation prerequisite CLOSED; physical selection OPEN | Reuse existing observed alternatives. Establish distinct boundary-local material/structural role evidence; no component-extreme substitution, brightness-only proposal gate or episode change. Keep all positive/opposition/visibility controls. | [Qualified position and causal join](../50-diagnostics/s11/2026-10-11-foam-upper-position-review.md#qualified-interval-joined-to-saved-observations), [Responsibility architecture](../20-architecture/s11-detector-responsibility-architecture.md) |
 | W7 / O5 field qualification | PENDING integrated candidate | P6 / D6: exact runtime, all nine canonical segments, existing report and target resources | [Field gate](../30-validation/s11-interface-observability-witness-validation.md#field-qualification) |
 | Report adjuncts | Source context and episode-source review ADOPTED | Reuse existing report; comprehension and numerical identity remain separate unresolved outcomes | [Source context](../60-evidence/s11/2026-10-07-report-source-context-validation.md), [episode review](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
 | D0 planning intake | Initial, 18885d2, Local XY, cc17924 and October 10/11 program packages preserved/reviewed | Planning baseline only; no detector or field acceptance. Current proposal and qualifications are in the existing design/validation owners. | [Initial intake](../60-evidence/s11/2026-10-08-next-work-intake.md), [18885d2 intake](../60-evidence/s11/2026-10-08-spec-18885d2-intake.md), [cc17924 intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md) |
@@ -78,16 +78,28 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
    Do not tune this variant or connect it to production. A successor must first
    supply a distinct role-discriminating observation and suitable current support;
    existing current geometry and a better appearance minimum are insufficient.
-3. **P5 first source-position checkpoint — awaiting user.** The
-   [prepared native-source question](../50-diagnostics/s11/2026-10-11-foam-upper-position-review.md)
-   asks only whether the true upper Foam at f1620/54 s and X595 is within source
-   rows 812–816. Foam presence/visibility, internal texture Y833 and the adjacent
-   glass feature are already closed. If qualified, bind only this interval and
-   inspect all existing raw/candidate support without selecting by truth. If
-   unclear, retain qualitative-only use. No neighboring-frame or dense contour
-   labels, repeated role questions or episode changes follow. This independent
-   raw-front prerequisite need not wait for Oil association; final adoption has
-   its own positive/opposition and field validation.
+3. **P5 source position and saved-representation join — CLOSED.** The user
+   answered **“범위 맞음”** for f1620/54 s, X595, rows812–816; the
+   [bound reply and verified join](../50-diagnostics/s11/2026-10-11-foam-upper-position-review.md#qualified-interval-joined-to-saved-observations)
+   locate Y813 before candidate reduction and internal-texture Y833 afterward.
+   Both original gradient radii retain Y813; no larger window or new extractor
+   is needed for this column. Global C1 top Y808 also fails the interval.
+   Current smoothed Y813 is not a same-frame selected candidate. The raw candidate
+   is already wrong before episode rejection, so keep episode behavior fixed.
+   A's separate dark-upper support loss rules out relying only on white support
+   perimeters. Seven sample4 frames, native A/B/C and all 25 prior graph controls
+   remain pinned; there is no new neighboring-frame or dense contour truth.
+
+   **Next design entry:** reuse current edge/side-support owners and define a
+   distinct physical role observation, with structure and internal-texture
+   opposition on the same current support and positive retention in both A and
+   sample4. Its discriminating evidence is not yet established. Before another
+   real trial, state how it differs from closed P2-S1, support-entry, polarity,
+   relative-motion and common-reference comparisons, and freeze its controls and
+   stop rule. Do not replace the S1 reference with Y813, add a mandatory adjacent
+   glass anchor, select the lower gap member or tune support thresholds. This
+   independent P5 design need not wait for Oil association; production adoption
+   still needs its own validation. No human or Windows checkpoint is pending.
 4. **Later gates stay sequential.** P3/D4a connects qualified same-frame role
    evidence to association only after O2 and a separate O3 plan. P4/D4b repairs one
    evidence-backed phase transition with full-window changed-row checks. P5/D5
@@ -812,7 +824,8 @@ and pushing the integrated changes to `origin/main`. The subsequent continuation
 request authorizes the bounded P2 offline preflight, implementation and fixed
 comparison and the program's independent P5 saved-source prerequisite, with
 autonomous commits/pushes; stop when user judgment or Windows work is necessary.
-The P5 source-position question is now pending. This scope does not authorize
+The P5 source-position reply is bound and its saved-evidence audit is complete.
+Continue bounded local P5 design under the existing contracts. This scope does not authorize
 P2 production wiring or change any acceptance gate.
 
 The user also authorizes assistant image interpretation first, with targeted
