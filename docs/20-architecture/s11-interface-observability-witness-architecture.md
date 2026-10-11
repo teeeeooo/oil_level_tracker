@@ -2394,7 +2394,42 @@ requires a separate current-plan decision and source qualification before scores
 See [usage](../../sample/README.md#sample3-use-restriction) and
 [acceptance checks](../30-validation/s11-interface-observability-witness-validation.md#retired-source-execution-checks).
 
+## Offline centre-conditioned material paths — isolated P1 candidate (2026-10-11)
+
+`oil_material_path.diagnose_center_path_alternatives` is an explicit offline API,
+not a generator, debug-projector or resolver consumer. It retains one best raw
+path per original `(seed, polarity, central-sector row)`. The original seed
+lattice, seed-centred band, local predicates, available-profile adjacency and
+jump bound are unchanged. Central sector 2 means the original sector, never the
+middle surviving profile. A missing centre returns `UNAVAILABLE`.
+
+The objective is lexicographic `(sector count, sum of original local values)`;
+a bounded forward DP retains the centre condition in its state and exact
+left-to-right accumulation. Path tuples (at most five nodes) are backtraces.
+This avoids reordering floating-point additions in a backward-combination
+implementation. Deterministic endpoint tie behaviour is retained. Existing
+median-strength/polarity postchecks are reported separately, not optimized.
+Optics, border, authority and publication checks are NOT thereby satisfied.
+
+Immutable `CenterPathDiagnostics` / `CenterPathAlternative` records expose raw
+rows, original profile indices/X bands, strengths, signed contrast, channel,
+scale, objective and availability. No scalar, selected candidate or physical
+role is emitted. Source/frame binding and pixel-centre mapping belong to the
+frozen caller manifest. A pooled central sample is not a fixed-X contour.
+
+Default limits are 5 profiles, height 2160, 16,384 records and 50,000,000 bounded
+predecessor comparisons. Exceeding a complete-capture budget returns unavailable
+without a favourable partial prefix. No seed widening, deduplication, top-k or
+production runtime identity changes are included. Runtime wiring requires a
+separate review; the current isolated comparison is not O2/O3 acceptance.
+
 ## History Review
+
+2026-10-11 P1: reviewed F02's seed/global-band and pre-selection compression
+failures, the actual length-then-sum objective, and non-additive median checks.
+P1 preserves alternatives without turning connectivity into identity. Existing
+ordered-patch/constellation implementations remain the P2 reuse point; another
+matcher alone is not a new role discriminator. Production call graph is unchanged.
 
 2026-10-10 sample3 admission: reviewed F09/F10, the C/D role closure, fixed-Recipe
 geometry limitations, old four-video orchestration and 13-case input ownership.

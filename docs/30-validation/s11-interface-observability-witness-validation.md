@@ -1265,3 +1265,30 @@ all seven reviewed positives and three reviewed wrong targets to the unchanged
 selection baseline. Report unreviewed supports separately without creating truth.
 Any protected-positive loss prevents adoption even if all wrong targets abstain.
 Scalar/contour, independent recording generalization and field remain unevaluated.
+
+
+## Offline centre-path extension validation (2026-10-11)
+
+The isolated P1 API is validated independently of O1 runtime serialization and
+O2 physical-role qualification. It has no production caller. Required checks:
+
+- Exhaustively enumerate all legal paths in small graphs for every central
+  sector and polarity; compare optimum sector count and original accumulated
+  score. Exercise ties, missing centre, disconnected paths, float32 support
+  boundaries, nonfinite profiles, unavailable channel metadata and budgets.
+- Preserve original seeds and seed bands. The ideal inclined/no-seed control
+  must remain seed-starved; this extension cannot claim to fix upstream recall.
+- Keep median postcheck failures explicit. A raw optimal path is not the optimum
+  over all paths subject to non-additive postchecks or physical authority.
+- Reconstruct saved profiles exactly before the real comparison. Freeze all 18
+  existing public raster conditions plus A/B at both established scales and the
+  source-qualified sample4/f1275 crop. No sample3 or private Windows execution.
+- Verify every returned path's nodes, jumps, score, X support and source mapping;
+  preserve default candidate fields and input hashes. Evaluate reviewed intervals
+  only after extraction, never as search seeds, clipping windows or labels.
+- Report empty-vessel alternatives, allocation measurements and capture cost
+  alongside recovered position alternatives. Neither is physical accuracy.
+
+Execution and limitations: [isolated P1 evidence](../60-evidence/s11/2026-10-11-center-path-implementation.md).
+No production adoption, O2 acceptance, Windows qualification or report-efficacy
+claim follows from these checks alone.

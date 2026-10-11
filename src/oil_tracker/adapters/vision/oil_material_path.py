@@ -693,3 +693,181 @@ def _unit(value: float) -> float:
     if not math.isfinite(float(value)):
         return 0.0
     return min(1.0, max(0.0, float(value)))
+
+
+@dataclass(frozen=True)
+class CenterPathAlternative:
+    """One pooled-sector hypothesis, not a contour or a publishable candidate."""
+
+    seed: int
+    polarity: int
+    center_row: int
+    status: str
+    objective_score: float | None = None
+    rows: tuple[int, ...] = ()
+    profile_indices: tuple[int, ...] = ()
+    samples: tuple[MaterialPathSample, ...] = ()
+    passes_path_median_checks: bool | None = None
+
+
+@dataclass(frozen=True)
+class CenterPathDiagnostics:
+    """Complete bounded offline capture; unavailable never means a negative."""
+
+    status: str
+    reason: str
+    center_sector_index: int
+    seeds: tuple[int, ...] = ()
+    maximum_jump: int = 0
+    transition_bound: int = 0
+    peak_live_states: int = 0
+    alternatives: tuple[CenterPathAlternative, ...] = ()
+
+
+def diagnose_center_path_alternatives(
+    profiles: list[_SectorProfile],
+    *,
+    center_sector_index: int = 2,
+    maximum_jump: int | None = None,
+    max_records: int = 16384,
+    max_transitions: int = 50_000_000,
+) -> CenterPathDiagnostics:
+    """Preserve each original seed/polarity's best path through each centre row.
+
+    The DP state includes the centre row so different centre alternatives never
+    compete before role analysis. Objective: sector count, then the existing
+    sum(strength + .08 * min(1, abs(signed)/.20)). Median postchecks are reported
+    separately, not optimized or relaxed. No production caller consumes this.
+    Limits apply to the complete capture: no favourable partial prefix escapes.
+    """
+    if not 0 <= center_sector_index < 5:
+        raise ValueError("The centre must name one of the original five sectors.")
+    if max_records < 1 or max_transitions < 1:
+        raise ValueError("Diagnostic budgets must be positive.")
+    if not profiles:
+        return CenterPathDiagnostics("UNAVAILABLE", "no_profiles", center_sector_index)
+    height = profiles[0].score.size
+    if len(profiles) > 5 or height > 2160:
+        return CenterPathDiagnostics("UNAVAILABLE", "input_budget", center_sector_index)
+    _validate_center_profiles(profiles, height)
+    jump = max(5, min(24, int(round(height * .075)))) if maximum_jump is None else maximum_jump
+    if not isinstance(jump, int) or not 1 <= jump <= 24:
+        raise ValueError("maximum_jump must be an integer in [1, 24].")
+    indices = [p.sector_index for p in profiles]
+    if len(profiles) < 3 or center_sector_index not in indices:
+        return CenterPathDiagnostics("UNAVAILABLE", "missing_center_or_sectors", center_sector_index)
+    center_index = indices.index(center_sector_index)
+    seeds = _seed_rows(profiles)
+    widths = [min(height, seed + jump + 1) - max(0, seed - jump) for seed in seeds]
+    record_bound = 2 * sum(widths)
+    # Before centre: W states; after centre: at most W*W states, each with W predecessors.
+    transition_bound = 2 * sum(
+        (center_index + 1) * w * w + (len(profiles) - center_index - 1) * w ** 3
+        for w in widths
+    )
+    if record_bound > max_records or transition_bound > max_transitions:
+        return CenterPathDiagnostics("UNAVAILABLE", "work_or_record_budget", center_sector_index,
+                                     seeds, jump, transition_bound)
+    alternatives: list[CenterPathAlternative] = []
+    peak = 0
+    for seed in seeds:
+        for polarity in (-1, 1):
+            best, live = _center_conditioned_paths(seed, profiles, center_index, polarity, jump)
+            peak = max(peak, live)
+            for row in range(max(0, seed - jump), min(height, seed + jump + 1)):
+                state = best.get(row)
+                status = "PATH" if state is not None else (
+                    "CENTER_INELIGIBLE" if not _center_node_ok(profiles[center_index], row, polarity)
+                    else "NO_THREE_SECTOR_PATH")
+                alternatives.append(_center_alternative(seed, polarity, row, status, state, profiles))
+    return CenterPathDiagnostics("COMPLETE", "", center_sector_index, seeds, jump,
+                                 transition_bound, peak, tuple(alternatives))
+
+
+def _validate_center_profiles(profiles: list[_SectorProfile], height: int) -> None:
+    if height < 1:
+        raise ValueError("Profiles must have nonempty one-dimensional arrays.")
+    indices = [p.sector_index for p in profiles]
+    if indices != sorted(set(indices)) or any(i not in range(5) for i in indices):
+        raise ValueError("Profiles must preserve unique original sector order.")
+    for i, p in enumerate(profiles):
+        arrays = (p.score, p.signed, p.support)
+        if any(a.shape != (height,) or not np.all(np.isfinite(a)) for a in arrays):
+            raise ValueError("Profile arrays must share a finite one-dimensional shape.")
+        if np.any((p.score < 0) | (p.score > 1) | (p.support < 0) | (p.support > 1)):
+            raise ValueError("Profile score and support must be in [0, 1].")
+        if p.start_x < 0 or p.stop_x <= p.start_x or (i and p.start_x < profiles[i-1].stop_x):
+            raise ValueError("Original sector X bands must be ordered and nonoverlapping.")
+        if (p.contrast_channel is None) != (p.contrast_scale is None):
+            raise ValueError("Channel and scale provenance must be available together.")
+        if p.contrast_channel is not None:
+            if (p.contrast_channel.shape != (height,) or p.contrast_scale.shape != (height,)
+                    or not np.all(np.isin(p.contrast_channel, (0, 1, 2)))
+                    or not np.all(np.isin(p.contrast_scale, (0, 3, 6, 10)))):
+                raise ValueError("Invalid channel/scale provenance.")
+
+
+def _center_node_ok(profile: _SectorProfile, row: int, polarity: int) -> bool:
+    return (float(profile.score[row]) >= .09 and profile.support[row] >= .42
+            and polarity * float(profile.signed[row]) >= .025)
+
+
+def _center_conditioned_paths(
+    seed: int, profiles: list[_SectorProfile], center_index: int, polarity: int, jump: int,
+) -> tuple[dict[int, _PathState], int]:
+    # Each group retains its centre condition; tuples are bounded backtraces (<=5 nodes).
+    prior: dict[int | None, dict[int, _PathState]] = {}
+    best: dict[int, _PathState] = {}
+    peak = 0
+    for index, profile in enumerate(profiles):
+        current: dict[int | None, dict[int, _PathState]] = {}
+        start, stop = max(0, seed-jump), min(profile.score.size, seed+jump+1)
+        for row in range(start, stop):
+            if not _center_node_ok(profile, row, polarity):
+                continue
+            strength, signed = float(profile.score[row]), float(profile.signed[row])
+            local = strength + .08 * min(1., abs(signed)/.20)
+            groups = [(None, prior.get(None, {}))] if index <= center_index else prior.items()
+            for center, states in groups:
+                previous = max(
+                    (state for y, state in states.items() if abs(row-y) <= jump),
+                    key=lambda state: (len(state[1]), state[0], -abs(row-state[1][-1])),
+                    default=None,
+                )
+                if previous is None and index > center_index:
+                    continue  # A restart to the right would not contain the centre.
+                if previous is None:
+                    value = (local, (row,), (strength,), (signed,), (index,))
+                else:
+                    value = (previous[0]+local, (*previous[1], row), (*previous[2], strength),
+                             (*previous[3], signed), (*previous[4], index))
+                key = row if index == center_index else center
+                current.setdefault(key, {})[row] = value
+                if key is not None and len(value[1]) >= 3:
+                    old = best.get(key)
+                    if old is None or (len(value[1]), value[0]) > (len(old[1]), old[0]):
+                        best[key] = value
+        peak = max(peak, sum(map(len, prior.values())) + sum(map(len, current.values())) + len(best))
+        prior = current
+    return best, peak
+
+
+def _center_alternative(
+    seed: int, polarity: int, row: int, status: str,
+    state: _PathState | None, profiles: list[_SectorProfile],
+) -> CenterPathAlternative:
+    if state is None:
+        return CenterPathAlternative(seed, polarity, row, status)
+    score, rows, strengths, signed, indices = state
+    samples = []
+    for i, y, strength, contrast in zip(indices, rows, strengths, signed):
+        p = profiles[i]
+        channel = int(p.contrast_channel[y]) if p.contrast_channel is not None else 0
+        scale = int(p.contrast_scale[y]) if p.contrast_scale is not None else 0
+        samples.append(MaterialPathSample(
+            p.sector_index, p.start_x, p.stop_x, y, strength, contrast,
+            {0: "unavailable", 1: "blurred_gray_dynamic_range", 2: "raw_combined_material"}[channel], scale))
+    passed = (float(np.median(np.asarray(strengths, np.float32))) >= .105
+              and abs(float(np.median(np.asarray(signed, np.float32)))) >= .035)
+    return CenterPathAlternative(seed, polarity, row, status, score, rows, indices,
+                                 tuple(samples), passed)

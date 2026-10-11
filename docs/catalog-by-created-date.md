@@ -712,3 +712,12 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 최초 Git 등록일 | 문서 | 역할 |
 |---|---|---|
 | 2026-10-10 | [sample3 retirement handoff](60-evidence/s11/2026-10-10-sample3-retirement-handoff.md) | 기본 실행 제한·37개 검사·보존 범위·재개 순서를 묶은 인수인계 체크포인트 |
+
+
+## 2026-10-11 isolated P1 implementation — Git 미등록
+
+| 최초 Git 등록일 | 문서 | 역할 |
+|---|---|---|
+| 미등록; 작성 2026-10-11 | [P1 frozen preflight](50-diagnostics/s11/2026-10-11-center-path-preflight.json) | 기존 23조건·입력 해시·원래 그래프·예산 고정; source admission guard 사용 |
+| 미등록; 작성 2026-10-11 | [P1 complete readout](50-diagnostics/s11/2026-10-11-center-path-trial.json) | 중앙 위치 대안 보존과 기존 출력 불변성; 물리 identity·field 효능 아님 |
+| 미등록; 작성 2026-10-11 | [P1 implementation evidence](60-evidence/s11/2026-10-11-center-path-implementation.md) | 구현·oracle·실사·자원 검증과 직접 승격 기각; 현행 작업 권한 변경 없음 |
