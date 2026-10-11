@@ -823,3 +823,9 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-11 | [P2-S1 investigation](50-diagnostics/s11/2026-10-11-p2-shared-support.md) | 공통 관측 영역에서의 역할 참조 비교와 제한 |
 | 2026-10-11 | [Frozen preflight](50-diagnostics/s11/2026-10-11-p2-shared-support/preflight.json) | 원본·후보·참조·수치 조건·중단 기준 고정 |
 | 2026-10-11 | [Saved-raster runner](50-diagnostics/s11/2026-10-11-p2-shared-support/run.py) | 고정 입력 확인 후 오프라인 비교 재현 |
+| 2026-10-11 | [Complete P2-S1 readout](50-diagnostics/s11/2026-10-11-p2-shared-support/readout.json) | 14개 query·15개 문맥의 joint/ablation 결과 전부 보존 |
+| 2026-10-11 | [Independent verifier](50-diagnostics/s11/2026-10-11-p2-shared-support/verify.py) | 원본 픽셀에서 공통 영역과 비용을 직접 재구성 |
+| 2026-10-11 | [Verification receipt](50-diagnostics/s11/2026-10-11-p2-shared-support/verification.json) | 1,650개 비용·입력·소스 불변성 검증 |
+| 2026-10-11 | [P5 source-position review](50-diagnostics/s11/2026-10-11-foam-upper-position-review.md) | 거품 상단 중앙 위치의 한정된 검토 근거 |
+| 2026-10-11 | [P5 review source record](50-diagnostics/s11/2026-10-11-foam-upper-position-review.json) | 제안 범위·원본 hash·렌더러·검증과 질문 보존 |
+| 2026-10-11 | [P5 native-pixel review figure](50-diagnostics/s11/2026-10-11-foam-upper-position-review.png) | 54초 원본과 중앙 위치 범위 제안 |

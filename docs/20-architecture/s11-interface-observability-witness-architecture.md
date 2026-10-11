@@ -1743,6 +1743,15 @@ Oil-specific sample4 pilot. They are explicitly unavailable, not negatives or
 removed cases. No cross-recording template transfer is presumed. A favorable
 sample4 result would still need their separate comparison before any adoption.
 
+The [frozen P2-S1 comparison](../50-diagnostics/s11/2026-10-11-p2-shared-support.md)
+fails its progression condition: 0/6 non-initial positive contexts retain
+interface preference, and no rejected target receives measured opposition.
+Two positive contexts lose a required current part. A measured wrong target
+has both lower interface cost and greater role margin than a measured positive;
+the fixed max-cost/min-margin family cannot separate that pair. P2-S1 closes
+without promotion or parameter/reference/transform tuning. This limits the
+regional pilot, not every possible shared-support design.
+
 ### CBR-1 current-boundary reference comparison — proposed offline contract
 
 The [cc17924 intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md)

@@ -116,7 +116,7 @@ push 미실행 표시는 그 시점의 기록이다. 이후 문서 마감·commi
 ```
 
 즉시 다음 산출물은 P2 preflight이며 실제 순서는
-[Work Plan](../../00-project/work-plan.md#adopted-program-and-immediate-p2-preparation),
+[Work Plan](../../00-project/work-plan.md#adopted-program-and-immediate-p5-source-checkpoint),
 설계와 수용 조건은 기존 [architecture](../../20-architecture/s11-interface-observability-witness-architecture.md#p2-shared-support-role-comparison--proposal-entry)와
 [validation](../../30-validation/s11-interface-observability-witness-validation.md#p2-shared-support-proposal-entry-and-program-evaluation)에 반영했다.
 Roadmap의 milestone 상태·순서 및 retained commitments는 바뀌지 않는다.
