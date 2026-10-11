@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** freeze one P5-a boundary-local role operation and one structural ablation before real outcomes, using the October 11 audit refinements below. Its concrete discriminating operation is still UNSELECTED; no new classifier or production wiring is adopted. P1 remains integrated offline; P2-S1 and the P5 source-position/saved-representation prerequisite remain closed. Preserve sample3/base-f156 quarantine, Local XY OFF, closed Local XY/CBR-1/H0/G1 and cost-order/recent-basis experiments. No user judgment or Windows task is pending. O2 OPEN / FIELD FAIL remain.
+**Next transition:** execute the frozen P5-S2 signed spatial conjunction comparison and its one same-support ablation over all 42 retained rasters, then record continue/close. The controlled default NONE/FULL linkage is VERIFIED; physical selection and P5-b remain OPEN. P1 stays offline, P2-S1 and prior failed variants stay closed, Local XY stays OFF. No user judgment or Windows task is pending at this preflight. O2 OPEN / FIELD FAIL remain.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -56,7 +56,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | P3 / D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | P4 / D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
-| Foam front / episode | P5 source-position/saved-representation prerequisite CLOSED; P5-a operation UNSELECTED; physical selection OPEN | Freeze a distinct boundary-local role operation and one ablation. P5-b requires demonstrated role evidence, default-run linkage and its own behavior acceptance; P5-c opens only for a remaining downstream loss. | [Qualified position and causal join](../50-diagnostics/s11/2026-10-11-foam-upper-position-review.md#qualified-interval-joined-to-saved-observations), [P5-a design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption) |
+| Foam front / episode | P5 source-position and default-path linkage VERIFIED; P5-S2 preflight FROZEN; physical selection OPEN | Run the frozen signed-conjunction comparison and one ablation. P5-b requires demonstrated role evidence, default-run linkage and its own behavior acceptance; P5-c opens only for a remaining downstream loss. | [Qualified position and causal join](../50-diagnostics/s11/2026-10-11-foam-upper-position-review.md#qualified-interval-joined-to-saved-observations), [P5-a design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption) |
 | W7 / O5 field qualification | PENDING integrated candidate | P6 / D6: exact runtime, all nine canonical segments, existing report and target resources | [Field gate](../30-validation/s11-interface-observability-witness-validation.md#field-qualification) |
 | Report adjuncts | Source context and episode-source review ADOPTED | Reuse existing report; comprehension and numerical identity remain separate unresolved outcomes | [Source context](../60-evidence/s11/2026-10-07-report-source-context-validation.md), [episode review](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
 | D0 planning intake | Initial, 18885d2, Local XY, cc17924 and October 10/11 packages including the current-main program audit preserved/reviewed | Planning baseline only; no detector or field acceptance. Current proposal and qualifications are in the existing design/validation owners. | [Latest audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md), [P1 program integration](../60-evidence/s11/2026-10-11-program-intake.md), earlier intakes above |
@@ -70,6 +70,8 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
 ## Next transition
 
 ### Adopted program and immediate P5 source checkpoint
+
+**Immediate frozen trial.** [P5-S2](../50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md) tests signed four-way spatial agreement with one same-support ablation; its 27 focused tests pass. Execute the pinned comparison once, then continue/close without retuning. The [default-path linkage](../50-diagnostics/s11/2026-10-11-p5-default-linkage.md) verifies all 113 NONE/FULL rows and 2,611 candidates, retaining the component-to-front finding in the controlled default UNKNOWN session.
 
 **Reuse closed inputs.** P0/P1's 23-condition matrix, oracle and raw captures
 remain the offline representation baseline. [P2-S1](../50-diagnostics/s11/2026-10-11-p2-shared-support.md)
@@ -95,8 +97,8 @@ has 101/113 valid Oil numerics but puts the maximum Oil event at the reviewed
 wrong target at 44 s. Preserve that event/interpretation risk alongside numeric
 coverage. Its NONE output is not the scoped/FULL raw-stage trace: the latter's
 causal finding must not automatically become the former's measured first loss.
-The next default-stage check resolves this specific gap; it does not reopen the
-closed source-position judgment or repeat P2/P5 arithmetic.
+The linked default-stage check now closes this specific gap; it does not reopen
+the source-position judgment, repeat P2/P5 arithmetic or establish role evidence.
 
 Use the existing [validation owner](../30-validation/s11-interface-observability-witness-validation.md#boundary-local-role-feasibility-and-default-run-linkage).
 A/B/C/U describes effect on the physical story; a single wrong point that changes
@@ -809,11 +811,12 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 
 ## Current authorization boundary
 
-The latest October 11 request authorizes this audit-package intake, inspection
-and preservation of other local worktrees if present, necessary integration,
-verified duplicate cleanup, specification review and follow-up planning, with
-autonomous commits/pushes. This intake stops at that requested deliverable;
-the staged plan does not by itself adopt a classifier or relax behavior/field gates.
+The latest October 11 continuation authorizes stepwise implementation and
+verification of the adopted plan, necessary evidence/owner updates and autonomous
+commits/pushes. Continue until a material user judgment or Windows task is
+required, then stop and report that checkpoint. The audit-package intake and
+verified duplicate cleanup are complete. This grant does not adopt a classifier
+without its evidence or relax behavior/field gates.
 
 The October 11 intake request covered review and placement of both supplied
 packages, local integration of eligible worktree changes, deletion of redundant

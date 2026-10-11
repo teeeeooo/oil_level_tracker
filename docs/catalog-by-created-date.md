@@ -903,3 +903,15 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f000532.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f000532.png) | 로컬 감사 원본 bytes 보존 |
 | 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f001063.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f001063.png) | 로컬 감사 원본 bytes 보존 |
 | 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
+
+### 2026-10-11 P5 default linkage and signed-conjunction preflight
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-default-linkage.md](50-diagnostics/s11/2026-10-11-p5-default-linkage.md) | P5 진단/동결 비교 |
+| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md) | P5 진단/동결 비교 |
+| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-default-linkage/preflight.json](50-diagnostics/s11/2026-10-11-p5-default-linkage/preflight.json) | P5 진단/동결 비교 |
+| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-default-linkage/readout.json](50-diagnostics/s11/2026-10-11-p5-default-linkage/readout.json) | P5 진단/동결 비교 |
+| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-default-linkage/verify.py](50-diagnostics/s11/2026-10-11-p5-default-linkage/verify.py) | P5 진단/동결 비교 |
+| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/preflight.json](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/preflight.json) | P5 진단/동결 비교 |
+| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/run.py](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/run.py) | P5 진단/동결 비교 |

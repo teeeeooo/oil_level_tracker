@@ -1796,6 +1796,95 @@ owner and public fields under the same default configuration, checking diagnosti
 equality. Do not transfer the stored causal assignment automatically or reopen
 the qualified source interval. Formal stage gates remain unchanged.
 
+#### Default-path linkage preflight — October 11
+
+Resolve that causal gap independently of selecting a new role mechanism. Reuse
+`s11_local_xy_replay`'s existing recorder and the real `AnalysisPipeline` with
+variant `off`, one fresh process each for NONE then FULL. The existing sample4
+0–56 s / 2 Hz session confirms UNKNOWN, uses its unchanged Recipe and keeps
+Local XY OFF. This is the audit's controlled default detector configuration,
+not a claim about unconfirmed AUTO operator setup. Freeze source, input and
+harness hashes in the [preflight](../50-diagnostics/s11/2026-10-11-p5-default-linkage/preflight.json).
+No detector, setting, initial-state, episode, truth or candidate intervention is
+made. Reuse the recorded full window; do not start a new episode at 54 s.
+
+Compare every raw and completed detection, tracking row and report record with
+run identity removed by the existing recorder; join CSV/events back to the NONE
+bundle and compare the prior audit's 113 raw/completed hashes separately. Use the
+FULL trace only after diagnostic equality is demonstrated. The seven existing
+Foam source frames and the seven reviewed Oil checkpoints remain in the readout;
+only f1620/X595 has the qualified Foam-upper interval. Join its native pixels,
+raw edge/support, selected component, exact candidate input index/source/Y,
+episode decision and public fields without selecting a replacement candidate.
+
+Limit execution to two serial 113-row runs on the existing recording, with no
+alternate settings or extra detector variant. Preserve actual wall time, RSS,
+trace size, input hashes and any failed equality. A failed linkage is a result,
+not permission to infer the stage from equal final values. Successful linkage
+closes an evidence prerequisite only; P5-a role feasibility and P5-b behavior
+acceptance remain separate.
+
+#### P5-S2 signed spatial conjunction — frozen feasibility
+
+Test one additional same-frame arrangement, not a new independent sensor or
+physical identity certificate. Existing raw uint8 grayscale, Canny and visibility
+are the only raster inputs. At each pixel q, take central differences (no
+smoothing) at q+(2,0), q-(2,0), q+(0,2), q-(0,2). Orient the four derivatives
+outward as E, W, S, N, each divided by 510. Their joint radial contrast is
+`R=max(0,min(E,W,S,N),min(-E,-W,-S,-N))`. Define opposing-axis contrasts
+`X=max(0,min(E,W),min(-E,-W))`, similarly Y, and `P=max(X,Y)`.
+The one structural ablation uses `R0=(X+Y)/2`, removing the shared four-way
+polarity/center conjunction while preserving every pixel and derivative sample.
+No parameter, reference, radius or sign sweep follows this comparison.
+
+This differs from the closed global cellular tensor rank: nonzero gradients in
+two directions do not imply that four spatially separated signed derivatives
+converge on the same center. It also differs from Canny T contacts, which require
+an exact connected local arm graph. No edge closure, gap filling, connected
+component, fitted curve, template transform, white mask or motion is required.
+The opposite failure is explicit: a printed/copy-transformed cellular pattern
+can satisfy the same conjunction. It must remain a competing structural
+explanation; radial contrast alone never proves Foam.
+
+For every visible existing Canny pixel at the frozen central column, use two
+rectangles of half-width b, depth b, separated from that row by two pixels,
+where `b=min(32,max(4,round(min(H,W)*0.06)))` reuses the side-texture scale rule.
+Read integer pixels without interpolation or moving a candidate. Derivatives
+require all eight actual samples visible and in bounds; report support loss.
+Each side needs at least 16 available centers. At a side, `r=sum(R)/sum(P)`;
+fully measured zero contrast has r=0, unlike missing support. Compare three
+zero-parameter appearance explanations on the identical two side observations:
+upper cellular front `(0,1)`, internal cellular texture `(1,1)`, noncellular
+appearance `(0,0)`, using mean squared residual. A unique best cost <=0.125 and
+runner-up margin >=0.05 expresses an appearance preference; ties/weak costs are
+AMBIGUOUS. A physical structure may share any of these appearances. Without
+separate structure opposition, physical role and scalar eligibility stay
+UNRESOLVED/false. Do not rename noncellular appearance as proven glass.
+
+The fixed [input manifest](../50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/preflight.json)
+retains all 25 prior graph controls, the complete ten-frame water inventory and
+the seven reviewed Oil checkpoints, including overlap and unavailable labels.
+Inference receives no frame/sample names, target coordinates or role labels.
+Every current center edge is retained; interval compatibility is evaluator-only.
+Native and reduced rasters are separate, correlated observations, not extra
+votes. Reduced working-grid centers do not acquire native fixed-X truth.
+
+Bound inputs at 4,194,304 pixels, dimension 4,096, 4,096 center queries per
+raster, four derivative channels and one radius; no temporal window, transform
+search or candidate prefix truncation. Synthetic exact arithmetic, stationary/
+inclined boundaries, polarity reversal, copied cells, optical deformation,
+missing/partial support and the ablation precede real measurement. The helper
+extends the existing offline `s11_side_texture_probe`; no production owner changes.
+
+Necessary continuation: retain upper-front appearance at the qualified native
+sample4 and A intervals, do not prefer it at B/C water intervals or the three
+reviewed internal textures, and demonstrate added discrimination over the
+ablation without losing positives. Empty/rim/beer/milk/unknown cases remain in
+the complete readout. Missing support or undecidable structure is not a negative
+success. A copied/warped structural collision prevents generic adoption even
+if a local appearance contrast is useful. After one fixed readout, record
+continue/close; P5-b requires actual role evidence beyond this appearance pilot.
+
 ### CBR-1 current-boundary reference comparison — proposed offline contract
 
 The [cc17924 intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md)
@@ -2556,6 +2645,15 @@ baseline separately from current source/runner and input hashes. Missing history
 fails closed. The source byte/AST prefix check remains against the original owner.
 
 ## History Review
+
+2026-10-11 default linkage and P5-S2: reviewed the default replay owner, closed
+component-extreme loss, four-band LBP, cellular tensor ranking, T-contact and
+P2-S1 comparisons. S2 tests four spatially separated signed derivative agreement,
+with a same-support ablation, rather than their activity totals or a template
+residual. Copy/warp ambiguity remains explicit opposition to physical promotion.
+F02/F04/F07/F09/F10 and the existing History Review contracts below apply.
+Logic-map/failure-registry impact is NONE: only offline measurement is added;
+no source detector, physical role, episode gate or field state changes.
 
 2026-10-11 current-main audit intake: reviewed the component-to-front source,
 qualified sample4 upper interval and water A support loss, P2-S1's dominated
