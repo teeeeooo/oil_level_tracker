@@ -800,10 +800,12 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 
 ## Current authorization boundary
 
-The October 11 request authorizes review and placement of both supplied packages,
-local integration of eligible worktree changes, deletion of redundant worktrees
-and artifacts after verified preservation, and a follow-on plan. This intake
-does not authorize P2 production wiring or change any acceptance gate.
+The October 11 intake request covered review and placement of both supplied
+packages, local integration of eligible worktree changes, deletion of redundant
+worktrees and artifacts after verified preservation, and a follow-on plan. The
+follow-up authorizes necessary Work Plan and related-document updates, commits
+and pushing the integrated changes to `origin/main`. This scope does not
+authorize P2 production wiring or change any acceptance gate.
 
 The user also authorizes assistant image interpretation first, with targeted
 questions for ambiguous features. Keep those readings distinct from human truth.

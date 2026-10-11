@@ -103,7 +103,9 @@ report 효능 검증은 수행하지 않았다. 명시적 offline API와 runner 
 
 원본 미디어·Recipe·truth와 이 실험의 upstream crop/NPZ는 기존 main 경로에 유지한다.
 원시 실행 증거는 이제 tracked reference 자료이지만, 모든 입력·환경을 담은 독립 실행
-bundle은 아니다. 로컬 commit만 수행하며 원격 push는 이 작업에 포함하지 않는다.
+bundle은 아니다. 최초 인수·정리 단계는 로컬 commit으로 마쳤고, 기계 기록의
+push 미실행 표시는 그 시점의 기록이다. 이후 문서 마감·commit·원격 push 요청은
+[현재 권한](../../00-project/work-plan.md#current-authorization-boundary)에 반영했다.
 
 통합 후 재현은 저장소의 Python 환경에서 다음을 사용한다. `$OUT`은 존재하지 않는
 새 출력 경로여야 하며 완료된 historical 결과를 덮어쓰지 않는다.
