@@ -1,0 +1,96 @@
+{
+  "schema": "s11-program-audit-intake-verification-v1",
+  "date": "2026-10-11",
+  "starting_head": "4d84f70c5026d92330628bbae7650ac6288a8e12",
+  "status": "PASS",
+  "scope": "Fresh preservation and saved-record consistency checks; no detector, P2/P5 inference, video decoding or pytest rerun.",
+  "preservation": {
+    "supplied_files": 9,
+    "native_files": 61,
+    "native_regular_files": 57,
+    "native_unique_files_added": 52,
+    "native_duplicate_files_reused": 5,
+    "transport_containers": 4,
+    "native_source_bytes": 12334316
+  },
+  "source_ledger_git_objects_verified": 27,
+  "production_source_hashes_verified": 221,
+  "replay_input_hashes_verified": 3,
+  "harness_hash_verified": true,
+  "default_sample4": {
+    "rows": 113,
+    "checkpoints_verified": 12,
+    "events_verified": 3,
+    "fingerprint": "e447626b5717fb5d92f4a895be783658c1b4694eb80eb6f380d032e655a35db1",
+    "numeric_counts": {
+      "oil": {
+        "valid_numeric": 101,
+        "unverified_max_gap_seconds": 2.5
+      },
+      "foam": {
+        "valid_numeric": 26,
+        "unverified_max_gap_seconds": 1.0
+      }
+    },
+    "physical_acceptance": "NOT_EVALUATED"
+  },
+  "p2_original_input_and_verifier_identity_verified": true,
+  "p2_dominated_pair_inequalities_verified": true,
+  "p2_cost_reconstruction_rerun": false,
+  "p5_summary_exact_subset_of_native": true,
+  "p5_input_hashes_verified": 322,
+  "p5_stage_recomputation_rerun": false,
+  "source_media_hashes_verified": 6,
+  "recorded_frame_count": 37,
+  "saved_full_frame_pixel_hashes_verified": 9,
+  "png_files_decoded_and_verified": 43,
+  "contact_sheets_visually_inspected": 6,
+  "prior_junit_verified": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "263",
+    "time": "42.114",
+    "timestamp": "2026-10-11T21:33:22.027411+09:00",
+    "hostname": "gimseonjaeui-iMac.local",
+    "fresh_in_this_intake": false
+  },
+  "worktrees": {
+    "registered": [
+      "main"
+    ],
+    "git_worktree_metadata_present": false,
+    "managed_codex_oil_worktrees_found": 0,
+    "sibling_oil_checkouts_found": 0,
+    "merge_required": false,
+    "scope": "This Mac repository registration, .git/worktrees, ~/.codex/worktrees/*/*/.git and related Developer siblings; no remote-machine filesystem claim."
+  },
+  "remote_at_intake": {
+    "origin_main": "4d84f70c5026d92330628bbae7650ac6288a8e12",
+    "fetch_completed": true,
+    "ahead": 0,
+    "behind": 0
+  },
+  "cleanup": {
+    "status": "PENDING after final preservation verification",
+    "source_root": "sample/output/s11-program-audit-20261011-001",
+    "planned_file_count": 61,
+    "user_attachment_removed": false
+  },
+  "acceptance": {
+    "S11": "ACTIVE",
+    "O2": "OPEN",
+    "field": "FIELD FAIL"
+  },
+  "document_checks": {
+    "status": "PASS",
+    "new_local_links_checked": 93,
+    "new_files_cataloged": 64,
+    "errors": [],
+    "governance": "PASS against starting_head with staged/worktree contents",
+    "diff_check": "PASS including byte-preserved supplied/native text",
+    "runtime_recipe_truth_changes": false,
+    "active_path_consumers_of_old_audit_directory": 0
+  }
+}

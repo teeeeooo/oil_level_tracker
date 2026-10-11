@@ -1323,6 +1323,53 @@ wrong-target reduction and explicit unresolved coverage; all-UNKNOWN is not
 efficacy. Passing these checks alone still leaves the existing V3/V4/V5 and O2
 acceptance requirements in force before O3 behavior entry.
 
+### Boundary-local role feasibility and default-run linkage
+
+The [October 11 design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption)
+requires an actual frozen operation, not only a list of desired cues. Before real
+comparison, pin the full input/control inventory, source/configuration identity,
+support pixels and transforms, numerical rule, ambiguity/unavailable handling,
+resource bound and one structural ablation. If the model is equivalent to a
+closed operation, do not reopen it under a new name. After the fixed variant and
+ablation, record continue/close; do not tune the failed controls in a parameter chain.
+
+Retain the previously scoped positive, wrong-target and unknown cases. In
+particular, report sample4 front and internal-texture/rim outcomes, dark Foam A,
+no-Foam water B/C, inclined and stationary surfaces, beer front/back and cropped
+upper, milk unclear lower, copied distractors and optical warp. Unreviewed f1635
+remains unreviewed; a same-scene reference gap remains unavailable. No interval
+or known case selects the inference alternative. Losing all positives, mistaking
+B/C for Foam, or leaving generic controls unassessed prevents generic adoption.
+Any bounded positive result still needs the existing calibration/holdout gates.
+
+Before P5-b production changes, bind the proposed seam to the actual default
+application path: identical source, Recipe, time array, initial state, Local XY
+OFF and runtime; current raw alternative/component/candidate, sequence selection,
+independent validity and CSV/event fields. Verify diagnostic ON/OFF equality
+separately from experimental-scope equality. A scoped/FULL saved trace cannot
+by itself establish the default/NONE first harmful stage. Preserve the failed
+join if linkage is unavailable; do not invent it from equal final values.
+
+P5-b needs a separate behavior plan under the
+[parent acceptance contract](s11-physical-interface-evidence-repair-validation.md)
+and independent Foam ownership. Any typed Witness consumer remains subject to
+O2/O3. First hold episode behavior fixed and measure raw-front retention plus
+final effect, debug equality, Oil invariance, source-Y provenance and resources.
+Raw improvement with all final observations rejected is not completed functional
+improvement. Open P5-c only when an independent downstream loss of a correct raw
+front is demonstrated; keep its change and regression evidence separate.
+
+For eventual product review, freeze protected episodes and permissible local
+residuals before the comparison. Count event/extremum changes, wrong-owner runs,
+direction/reversal loss, leading/trailing gaps and unassessed regions alongside
+numeric coverage. A single false point can distort a major event; A/B/C/U labels
+cannot be reassigned after results to waive an existing gate. Use the actual
+retained report and a reviewer who has not seen the candidate's expected answers;
+developer self-reading and a receipt whose temporary report was deleted do not
+establish independent comprehension. Keep the scoped one-second Oil target,
+all nine canonical Windows segments, shadow versus field distinction and the
+current formal acceptance requirements. No new UI or smoothing requirement follows.
+
 ### P2-S1 fixed feasibility comparison
 
 The [regional-support contract](../20-architecture/s11-interface-observability-witness-architecture.md#p2-s1-frozen-regional-support-pilot--2026-10-11)

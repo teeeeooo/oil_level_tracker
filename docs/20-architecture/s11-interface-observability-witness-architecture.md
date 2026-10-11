@@ -1752,6 +1752,50 @@ the fixed max-cost/min-margin family cannot separate that pair. P2-S1 closes
 without promotion or parameter/reference/transform tuning. This limits the
 regional pilot, not every possible shared-support design.
 
+### Boundary-local role feasibility — October 11 audit adoption
+
+The [current-main audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md)
+refines the next design entry after P2-S1. It does not select or implement the
+next operation. A boundary-local comparison must preserve current observed
+edge/path identity, two-side support and censoring, competing material/structure/
+internal-texture explanations, and separately qualified fixed-X eligibility.
+Reuse existing edge graphs, signed/unsigned alternatives, P1 diagnostics and
+side/reference measurement owners where applicable. P1's pooled central-sector
+row remains distinct from an actual fixed-X contour intersection.
+
+Before real outcomes, specify the exact pixels, equation or executable function,
+normalization, equal transform freedom, missing/tie rules, initial operating
+point, resource bounds and one structural ablation. Identify the information
+absent from closed four-band, plane/step/ribbon, cellular rank, support-entry,
+polarity, relative-motion, CBR-1 and P2-S1 comparisons. A renamed descriptor,
+larger patch or changed weight/reference is not that difference. If no distinct
+operation is justified, record the design limit instead of running a renamed
+failed model. The preflight remains the next deliverable, not an accepted model.
+
+Keep material presence, upper-front visibility, same-frame fixed-X scalar and
+episode identity separate. A zero white mask must not by itself erase an observed
+boundary in the proposed measurement; conversely, a surviving raw edge supplies
+no automatic Foam role. Neither complete perimeter closure, an adjacent glass
+anchor, global component extrema, lower-gap membership nor absence of a structure
+reference establishes the target. No fitting, snapping or interval-guided
+selection creates a missing center observation. Human role/position labels and
+case/time identity belong to evaluation, not inference control flow.
+
+First measure without a production consumer and with episode behavior fixed.
+P5-b may be designed independently of Oil association, but requires its own
+raw-front behavior acceptance under the existing responsibility and parent
+physical-interface contracts. Consuming typed Witness decisions still requires
+O2/O3; neither route inherits acceptance from the other. P5-c is conditional on
+independent evidence that a correct raw front is lost downstream. Preserve
+single composition, independent Oil/Foam authority and bounded resources.
+
+The saved scoped/FULL f1620 reduction and the default/NONE final miss have
+different evidence scope. Before a production intervention, use the existing
+application replay/capture owners to join current candidates, selected component,
+owner and public fields under the same default configuration, checking diagnostic
+equality. Do not transfer the stored causal assignment automatically or reopen
+the qualified source interval. Formal stage gates remain unchanged.
+
 ### CBR-1 current-boundary reference comparison — proposed offline contract
 
 The [cc17924 intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md)
@@ -2512,6 +2556,15 @@ baseline separately from current source/runner and input hashes. Missing history
 fails closed. The source byte/AST prefix check remains against the original owner.
 
 ## History Review
+
+2026-10-11 current-main audit intake: reviewed the component-to-front source,
+qualified sample4 upper interval and water A support loss, P2-S1's dominated
+pair, existing role/lineage owners and default receipt. The adopted change is a
+bounded successor-design entry and a default-stage linkage requirement, with no
+new operation, runtime consumer or classifier acceptance. F02/F07/F09/F10 cover
+the retained representation, identity, provenance and tuning risks. Logic-map
+and failure-registry impact are NONE because executing owners and known causal
+mechanisms are unchanged; report/event impact does not authorize downstream repair.
 
 2026-10-11 P2-S1: reviewed CBR-1's absent structure support, the fixed-pattern
 and common-geometry failures, exact candidate-bound A2 controls and the closed

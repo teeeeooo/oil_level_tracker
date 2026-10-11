@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "readout_sha256": "ca0d66acff96c01dbf209d625b58b6ceced4105bb74e46e33da1657a9e713ba4",
+  "preflight_sha256": "43f0e438be8ae4e2c79914639a6a61f822802b0c54d49acda5d7f6c737118525",
+  "verifier_sha256": "f327ef5136bbbe6aa03105d9f7fa8cad0c52705dcfd6712b148b1788c445e52d",
+  "execution_head": "0914820f7c6bbe9b194c0abaa3a930df681896fa",
+  "input_pins_checked": 60,
+  "production_sources_unchanged": 221,
+  "measured_variant_modes": 22,
+  "unavailable_variant_modes": 8,
+  "role_shift_costs_reconstructed": 1650,
+  "bgr_value_comparisons": 199800,
+  "existing_helper_ast_preserved": true,
+  "all_ten_candidate_controls_retained": true,
+  "public_unavailable_groups_retained": 6,
+  "cutoff_margin_dominance_witness": {
+    "positive": "s4-f1320-idx9",
+    "negative": "s4-f1260-idx15",
+    "positive_cost": 0.15610670289205006,
+    "negative_cost": 0.15358812764321414,
+    "positive_margin": 0.05133207979836818,
+    "negative_margin": 0.053265980776624366
+  },
+  "focused_tests": {
+    "passed": 80,
+    "failures": 0,
+    "command": ".venv/bin/python -m pytest -q -p no:cacheprovider tests/unit/test_s11_shared_support_roles.py tests/unit/test_s11_reference_constellation.py tests/unit/test_s11_current_boundary_reference.py tests/unit/test_s11_boundary_temporal_probe.py tests/unit/test_s11_ordered_patch_correspondence.py",
+    "scope": "pre-run test execution; frozen implementation has not changed"
+  },
+  "physical_identity": "NOT_EVALUATED",
+  "runtime_behavior_change": false
+}

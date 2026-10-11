@@ -206,10 +206,21 @@ import manifests inventory native receipts, JUnit/logs and the complete 23 raw
 captures; repeated captures and transport containers were verified before cleanup.
 The [intake and integration record](60-evidence/s11/2026-10-11-program-intake.md)
 owns the local merge, replay-baseline correction, validity review and relocation
-details. P1 is an available offline helper without production consumers. P2 is a
-shared-support role/opposition proposal requiring preflight; P0–P7 map into the
+details. P1 is an available offline helper without production consumers. That
+intake supplied the shared-support P2 proposal; P0–P7 map into the
 existing Work Plan ledger. Historical source wording and absolute worktree paths
 remain provenance, while the manifests and intake route to retained files.
+
+The later [October 11 current-main program audit](70-reference/s11-program-audit-2026-10-11/README.md)
+is preserved byte-for-byte with its six JSONs and checksum file. Its
+[manifest](70-reference/s11-program-audit-2026-10-11/import-manifest.json) maps all
+61 native audit artifacts, including the full default replay, full P5 readout,
+37 crops, six contact sheets and recorded tests; identical JSONs and transport
+encodings reuse preserved bytes. The [intake review](60-evidence/s11/2026-10-11-program-audit-intake.md)
+qualifies the boundary-local successor and report/event checks without reopening
+P1, P2-S1 or source-position judgments. The supplied proposal is not an accepted
+classifier. Witness Architecture/Validation own adopted design and acceptance
+conditions; only Work Plan owns sequencing and current state.
 
 ## Supporting collection indexes
 

@@ -1,0 +1,97 @@
+{
+  "schema": "s11-qualified-foam-upper-position-comparison-v1",
+  "base_head": "4d84f70c5026d92330628bbae7650ac6288a8e12",
+  "operation": "Post-qualification join to already exposed saved evidence. No new inference or outcome-conditioned generator.",
+  "qualified_sample4_comparison": {
+    "reference": {
+      "case_id": "sample4-f001620",
+      "frame_index": 1620,
+      "nominal_time_sec": 54.0,
+      "source": {
+        "video": "sample/sample4.mp4",
+        "frame_index": 1620,
+        "time_sec": 54.0,
+        "raster": "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001620_523615198887/original_roi_512ed6ab.png",
+        "raster_sha256": "e00d97a5f265f5e6353d27014a46b6aca692112efb3b1c29fc170b171ba0462b",
+        "crop_origin_xy": [
+          543,
+          798
+        ],
+        "crop_shape": [
+          104,
+          104
+        ],
+        "source_x": 595
+      },
+      "role": "Visible physical Foam upper front",
+      "source_x": 595,
+      "source_rows_inclusive": [
+        812,
+        816
+      ],
+      "source_y_cell_bounds": [
+        811.5,
+        816.5
+      ],
+      "position_authority": "Human-qualified uncertainty interval; not an exact point"
+    },
+    "raw_canny_compatible_rows": [
+      813
+    ],
+    "scalar_candidates": [
+      {
+        "candidate_input_index": 22,
+        "source_y": 833.0,
+        "compatible": false
+      }
+    ],
+    "selected_component_global_top": 808,
+    "global_top_compatible": false,
+    "selected_component_global_bottom": 833,
+    "raw_candidate_min_distance_to_interval": 16.5,
+    "compatible_peaks": [
+      {
+        "diagnostic_id": 1,
+        "radius_px": 4,
+        "source_y_range": [
+          813,
+          814
+        ],
+        "vertical_magnitude": 0.10980392156862745
+      },
+      {
+        "diagnostic_id": 1,
+        "radius_px": 8,
+        "source_y_range": [
+          813,
+          814
+        ],
+        "vertical_magnitude": 0.10980392156862745
+      }
+    ],
+    "current_smoothed_value_is_not_a_same_frame_front": true,
+    "prediction": "NOT_EVALUATED",
+    "selected_front": null
+  },
+  "verification": {
+    "passed": true,
+    "sample4_frames": 7,
+    "native_water_frames": 3,
+    "saved_graphs_hash_verified": 25,
+    "direct_byte_peaks": 66,
+    "direct_byte_gap_pairs": 19,
+    "production_files_hash_verified": 221,
+    "all_input_hashes_preserved": true,
+    "original_equals_saved_gray": true,
+    "all_center_graph_vertices_equal_saved_visible_canny": true,
+    "method": "Direct byte differences and plateau/corridor enumeration without importing the probe; native masks, graph centers, stage arrays and all retained face crossings independently rejoined."
+  },
+  "limits": "Only f1620/X595 is newly position-qualified. Other sample4 rows keep regional/qualitative roles; f1635 is unreviewed. A is Foam-upper; B/C are no-Foam water-upper. Beer and milk retain rear/front projection, cropped-upper and unclear-lower limits. All are exposed development evidence, not independent holdouts. No exact-Y error, physical classifier, full contour or accepted episode is established.",
+  "production_changed": false,
+  "detector_executed": false,
+  "video_decoded": false,
+  "episode_changed": false,
+  "legacy_truth_changed": false,
+  "selected_front": null,
+  "field_disposition": "FIELD FAIL"
+}
