@@ -1220,6 +1220,10 @@ The later same-surface reply separates projected-branch semantics from physical
 identity and reviewed coordinate precision. The selected upper image projection
 fixes the measurement target; source-reference precision and selector efficacy
 still require their own evidence.
+The October 12 scene-based contract adopts purpose/claim routing and bounded
+local-error acceptance in principle, with original truth and closed results
+preserved. The new roster supplies references, not inference inputs or new labels;
+existing uncertainty and cadence evaluators remain the owners.
 H0's support-face intersection loses available partition geometry, while CBR-1
 admits wrong-region appearance despite current geometry. Private first physical
 causes and field effectiveness remain unqualified. F07's Foam front/texture
@@ -1361,102 +1365,128 @@ retroactively satisfy that entry gate. Independent Foam raw-front work follows
 its existing parent acceptance; consuming typed Witness decisions also invokes
 O2/O3. No Windows execution is useful until the relevant eligible candidate exists.
 
-### P0 support and story contract — scope decision draft
+<a id="p0-support-and-story-contract--scope-decision-draft"></a>
 
-**Decision draft, not an adopted acceptance change.** The starting contract is
-[product §1.2](../rotary_oil_level_tracker_ssot_spec.md#12-제품-목표): useful automatic
-observations of the same physical interface in recorded compressor sight-glass
-tests. Existing qualified controls remain required until the scope choice below
-is explicitly adopted in the product and validation owners. This draft does not
-certify any currently supported subset or make a successor implementation-ready.
+### P0 scene-based evaluation contract
 
-#### Support and evidence denominators
+The user's October 12 continuation adopts evaluation by **scene, claim and task
+impact**, following the discussion of sample suitability and partial failures.
+The previous compressor-versus-water/beer/milk A/B choice is suspended; neither
+option was adopted. Material/source category alone neither grants precise truth
+nor demotes a useful positive. This contract implements the product's reading
+assistance goal; it supplies no accepted detector or new numerical error budget.
 
-Declare intended acquisition domain, source/Recipe identity, Glass geometry and
-visibility before model outcomes. Source names, favorable costs and successful
-frames cannot define support. Darkness, inclination, stationary surfaces and
-thin Foam alone are not exclusions. In-domain visible failures remain failures.
-Assess Oil and Foam separately: a visible upper Foam boundary does not supply a
-hidden lower interface, and missing numeric output does not establish absence.
+The [pinned scene roster](../50-diagnostics/s11/2026-10-12-scene-evaluation-roster.json)
+routes 16 local groups covering all 13 prior audit strata across seven recordings,
+plus all nine canonical Windows segments. It links the original qualified replies
+and corrections without copying them into a new truth schema. Groups can overlap
+and have several roles; 25 groups are not 25 independent samples. All local
+recordings and SPL#1 remain exposed. No new holdout or source review is implied.
 
-| Evidence role | Fixed input / qualified scope | Denominator and permitted claim |
+#### Three evaluation roles
+
+| Role | Question and evidence | What constitutes progress |
 |---|---|---|
-| Target-domain field stories | All nine [canonical Windows segments](windows_sample1_heating_coldstart.reviewed-truth.json) | All nine remain mandatory. Preserve per-series sampled times, actual observations, runs and unassessed portions. Source fingerprint/operator provenance is still required; linked reviewed labels are not invalidated by that pending identity work. |
-| Local Oil identity controls | [P2 preflight](../50-diagnostics/s11/2026-10-11-p2-shared-support/preflight.json), sourced from the existing human bindings | Retain seven confirmed candidate contexts and three rejected targets; f1275 is an exposed initial reference, leaving six non-initial positive comparisons. Exact candidate/source identity is not pixel-perfect scalar truth. Incomparable support remains in the denominator as unavailable. |
-| Local moving Oil story | [Cadence review](../60-evidence/s11/2026-10-10-oil-observation-cadence.md), [f1305 source reply](../50-diagnostics/s11/2026-10-10-cadence-gap-source-reply.json) | Protect the confirmed 42.5–44 s movement, with wrong targets excluded from usable observations. The f1305 location reply does not certify every candidate in its guide or a numeric interval. |
-| Local Foam upper / opposition | [f1620 position reply](../50-diagnostics/s11/2026-10-11-foam-upper-position-reply.json) and [source join](../50-diagnostics/s11/2026-10-11-foam-upper-position-review.md#qualified-interval-joined-to-saved-observations) | Source X595, rows812–816 / cell bounds[811.5,816.5] is one frame's qualified upper position. Internal Y833 and global top Y808 are not recovered positives. Keep the other reviewed source roles at their actual scope; f1635 remains unreviewed. |
-| Auxiliary water / beer / milk | [Water A/C](../50-diagnostics/s11/2026-10-10-upper-projection-ac-reply.json), [water B](../50-diagnostics/s11/2026-10-10-upper-projection-interval-reply.json), [inclined water](../50-diagnostics/s11/2026-10-09-public-water-surface-reply.json), [beer](../50-diagnostics/s11/2026-10-09-public-beer-layer-reply.json), [milk](../50-diagnostics/s11/2026-10-09-public-milk-interface-reply.json) | A has a qualified Foam upper, B/C have qualified water upper projections and no Foam layer. Inclined water and beer have regional/qualitative role evidence, not exact scalar labels; milk's lower interface is unresolved. No Oil-label transfer. Their positive-recovery gate role is the decision below. |
-| Appearance and structural challenges | Existing [S2 input inventory](../50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/preflight.json), [executed synthetic cases](../50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/readout.json) and original graph inventory | Retain all 42 raster views and nine executed synthetic cases in a successor's coverage mapping. These are correlated views/challenges, not 51 independent truths or holdouts. Copy/warp, rim, texture, empty and unavailable outcomes remain explicit. No new pixel run is claimed here. |
-| Engineering / historical evidence | Existing source qualification, sample3 restriction and partition locks | Prior scalar agreement is compatibility only. Retired sample3 remains quarantined; no new clip mining or relabeling. Mac recordings and SPL#1 remain exposed regression, not untouched validation. |
+| Principle | Can the operation distinguish a source-qualified boundary from a competing structure/texture on comparable support? | An attainable positive region, actual synthetic positive, then a predeclared real positive/opposition demonstration. Report role, position and support separately; a good water result alone does not certify Oil output. |
+| Failure response | What happens with glare/rim, mixed entry, crop loss, blur, unknown truth or incompatible geometry? | Preserve uncertainty and per-series availability; record unsupported numeric output where evidence can establish it. Abstention on a known visible positive is a miss; abstention on unresolved truth is unassessed, not correct identity. |
+| Workflow | Do observations preserve the reviewed level/Foam story? | Sufficient same-interface observations to explain direction, extrema, reversal/recovery and Foam events, with gaps/errors and their consequences reported. Every canonical segment remains in the report; every frame need not be correct. |
 
-Every evaluated claim needs a truth scope (physical role, position, motion or
-absence), support/visibility status, and result: correct observation, wrong
-identity, missing, or unassessed. Count qualified positives, qualified opposition,
-unresolved truth and unavailable measurement separately. Show all scheduled
-frames and source duration, then usable same-interface numeric coverage and its
-gaps; do not average Oil/Foam or source domains into a pass. The same frame can
-support one claim and leave another unassessed. Model abstention is a positive
-miss where truth/support are qualified, not proof of physical unobservability.
+Engineering compatibility and the original 13-point scalar comparison remain
+separate checks. Keep their exact legacy scores and PASS/FAIL, but do not treat
+an old scalar discrepancy as proof of physical regression under incompatible or
+unresolved truth. Reuse W3 target/uncertainty evaluation and the existing cadence
+companion when their input contracts fit; this roster is not another evaluator.
 
-#### Protected stories and residuals
+#### Scene eligibility and denominators
 
-| Protected story | Required reading and known precision |
+Freeze the source, claim, geometry, visibility, truth precision and intended role
+before successor outcomes. Model success, filename and user-approved decimal
+storage do not establish a usable physical label. Darkness, inclination,
+stationarity and thin Foam alone are not exclusions. Preserve all known controls
+and every unavailable/unresolved result; no favorable subset becomes a full pass.
+
+| Scene group | Eligible use | Important boundary |
+|---|---|---|
+| Base sample1 weak boundary / overlay | Failure response and historical agreement | Broad uncertain Oil position; f156 Foam conflict is quarantined. No exact fixed-center accuracy claim. |
+| Sample2 early 0–2 s / later reframing | Early qualitative roles; later geometry/input stress | Ruler conversion is not pixel truth. The early Recipe does not certify later reframed accuracy. |
+| Sample3 retained source replies | Existing blur/geometry/opposition evidence and necessary legacy reproduction | Quarantine stays in force: no new replay, clip mining, relabeling or continuous-accuracy use. Frozen A/B are regional, C is structure and D is unassessable. |
+| Sample4 Oil identity / motion | Seven confirmed candidate contexts, three rejected targets, reviewed 42.5–44 s movement | f1275 is an exposed initial reference, leaving six non-initial positive comparisons. Candidate identity is not exact center truth or full-video coverage. |
+| Sample4 Foam upper / texture | Qualified f1620/X595 upper position and reviewed upper-visibility/internal-texture opposition | One position is not a continuous episode; f1635 stays unreviewed. Y833 internal texture and global top Y808 cannot substitute for the reviewed upper. |
+| Water f0 / f205 | Same-scene structure context / mixed entry response | f0 is agent-provisional empty-looking context. The corrected f205 already contains entry; it is not an empty negative. |
+| Water inclined f822 | Qualitative real-surface deformation | Neighbor frames provide context, not extra contour/scalar/correspondence truth. |
+| Water Foam A / later water B,C | A's qualified Foam upper; B/C upper projections and no-Foam opposition | Keep dark A as a positive. Lower A remains unclear; reviewed intervals do not label neighboring frames or make water into Oil. |
+| Beer forming / cropped upper | One thin layer's front/back geometry; independent upper availability | Two projected arcs are not two material interfaces. An out-of-image upper must not be replaced by a visible lower boundary. |
+| Milk empty / white bulk and froth | Structure/white-appearance challenges and unresolved lower visibility | Upper outline is agent-observed context, not certified exact truth. An unclear lower interface is not absence. |
+| All nine Windows segments | Canonical task stories and rejection obligations | Keep original IDs, approximate transition precision and pending source identity. No new private execution or source-availability question. |
+
+The roster pins the relevant original authorities, including later water and
+sample4 corrections; the old audit's broad group names never override them.
+Every claim has its own outcome: correct observation, wrong identity, missing or
+unassessed. Show qualified positives, qualified opposition, unresolved truth and
+unavailable measurements separately, including all scheduled source times and
+leading/trailing gaps. A scene can supply useful role evidence and no scalar
+truth. Do not average Oil/Foam, unresolved cases or different evaluation roles
+into one accuracy percentage. Native/reduced views and the existing 42 S2 rasters /
+nine executed synthetic cases retain their original dependence and scope.
+
+#### Protected stories and permissible failures
+
+Protect the canonical Base FULL-prefix/drain/rapid-refill/FULL-suffix and Accum
+empty/entry-splash/layered-Foam/post-Foam/drain stories. Preserve lower Oil and upper
+Foam independently, no-interface periods, top disappearance, rise/reversal,
+recovery and residue opposition. Approximate source times remain approximate.
+For local sample4, retain the wrong-target 42 s/44 s report extrema, the reviewed
+42.5–44 s motion and the qualified visible Foam upper as specific failure checks.
+
+| Impact | Acceptance treatment |
 |---|---|
-| Sample4 extrema / rapid Oil motion | The old 42 s minimum and 44 s maximum are wrong targets. Their removal alone is not useful motion recovery. Report true observed direction and time coverage through the separately reviewed 42.5–44 s interval; one isolated correct point cannot establish cadence. |
-| Base FULL prefix and suffix | Preserve both canonical FULL segments with absent Oil boundary and absent Foam. Do not create numeric boundaries from material presence, rim or glare. |
-| Base drain and rapid refill | Preserve falling Oil, rapid rising Oil and top disappearance, including the roughly 662–663.6 s refill. Report actual samples and leading/trailing gaps; approximate transition times are not exact frame labels. |
-| Accum empty and entry/splash | Preserve the empty interval, Oil entry and rising boundary; splash/wall wetting cannot become the Oil owner or fabricated Foam. |
-| Accum layered Foam, post-Foam and drain | Preserve upper Foam and lower Oil independently, then Foam absence, Oil rise/reversal and drain. Keep all three canonical segments and residue opposition; upper/lower geometric order alone is not identity. |
-| Sample4 visible Foam upper | Demonstrate the qualified upper before judging raw-front or episode retention. A correct single position is not a continuous Foam track or proof of onset/disappearance timing. |
+| Context-distorting (A) | A wrong owner creates a false extremum, direction/reversal/recovery or Foam event. It is blocking for that workflow claim, even if caused by a single point. More numeric coverage cannot compensate. |
+| Context-erasing (B) | Missing/censored observations erase an important reviewed motion or event. The corresponding usefulness claim is not established. A full episode or critical transition cannot be waived as a small gap. |
+| Local residual (C) | A bounded miss, location error or isolated wrong point may be accepted when evidence shows that the protected physical interpretation and events are preserved. Keep it counted as an error; freeze its applicable window and bounds before the candidate comparison. |
+| Unobservable / unqualified (U) | Truth, geometry or visibility cannot support the proposed claim. Report unassessed with the reason. This is neither a successful abstention nor a freely discardable failure. |
 
-The approved one-second Oil development target applies only to separately
-qualified visible moving Oil and actual source timestamps. Preserve inter-point
-gaps and leading/trailing unobserved durations separately. No automatic transfer
-to every Windows sample or to stationary/occluded Oil is justified by a segment's
-qualitative motion label alone.
+Partial failure is permitted in principle, including on visible scenes; zero
+pointwise error is not the product goal. A C classification needs evidence of
+limited impact, not merely low error count or short duration. No existing example
+is newly accepted as C by this reorganization, and no percentage, pixel allowance
+or blanket time budget is invented. If the impact cannot be resolved, retain
+unassessed impact; a confirmed point miss still remains a miss.
 
-Foam onset, last observed front and physical disappearance are different events.
-Foam timing tolerance and the canonical automatic transition tolerance remain
-unset. Show observed brackets, missing/wrong runs and unresolved timing; do not
-invent one-second Foam or two-second report-bridge acceptance. Freeze any needed
-numerical tolerance in the separate behavior/field plan before its comparison.
-The existing role-feasibility preflight does not need that timing choice yet.
+The approved one-second Oil development target remains scoped to separately
+qualified visible moving Oil and actual source timestamps, with inter-point and
+leading/trailing gaps separate. It is not a universal Foam or Windows tolerance.
+Foam onset, last observed front and physical disappearance remain distinct;
+Foam timing and the canonical automatic transition tolerance remain unset.
+Freeze any needed numerical bounds in the relevant behavior/field plan before
+comparison. A principle experiment can proceed without inventing those bounds.
 
-No specific class-C residual budget is adopted. A local discrepancy can only be
-proposed as noncritical if it preserves physical owner, extrema, direction,
-reversal/recovery and Foam event interpretation; record its size/duration and
-source uncertainty before acceptance. A/B/C/U describes impact, never waives a
-failed gate. Source pictures and developer self-reading cannot satisfy the
-independent report-comprehension requirement.
+#### Progression and existing acceptance boundaries
 
-#### Product-scope choice before successor selection
+<a id="product-scope-choice-before-successor-selection"></a>
 
-This choice concerns **the positive-recovery acceptance role of auxiliary
-water/beer/milk recordings**, not whether to remove them or change their truth.
-"Auxiliary" refers to acquisition outside the compressor sight-glass use case;
-public availability alone does not exclude a compressor recording.
+For each successor, declare the capability being tested and its smallest useful
+positive/opposition demonstration from the roster before running it. Initial
+references do not count as continuation success. A failure of that demonstration
+closes that fixed capability hypothesis; an inability to judge it is unassessed.
+Keep the complete broader control readout, with failures limiting the claims that
+can follow. One easy positive is not generic adoption, and no material group is
+automatically relegated to optional stress.
 
-| Choice | Concrete change for a future preflight | Tradeoff |
-|---|---|---|
-| **A — target-domain positives mandatory; auxiliary positives reported as stress (recommended)** | Keep qualified compressor Oil/Foam positives, all nine Windows stories and all physical-opposition/provenance gates mandatory. Retain every auxiliary case and report its role/position outcomes, but a missed auxiliary positive alone no longer blocks a target-domain claim. This includes dark water A's Foam-upper recovery; it is not removed or relabeled. | Focuses delivery on the stated product domain. Auxiliary recovery failures remain a transfer risk and prohibit claiming general water/beer/milk effectiveness. Success is still unproven even within the target domain. |
-| **B — retain the current cross-domain positive requirements** | Keep qualified auxiliary positive preservation, including dark water A, as a prerequisite alongside target-domain positives. Evaluate qualitative-only cases at role scope rather than inventing scalar truth. | Preserves the broader generalization requirement; a target-domain improvement can remain unpromotable because auxiliary positive recovery fails. |
+This replaces the unadopted A/B draft. P2-S1/P5-S2's frozen all-positive progression
+rules and closed results remain intact; do not rescore them or automatically
+turn them into a requirement that every point of every future video be correct.
+The new qualitative residual policy does not waive a specifically required
+capability or grant an automatic workflow pass. Apply it to a separately frozen
+successor/behavior plan and compare baseline and candidate under the same rules.
+No accuracy gain follows from fewer eligible labels or unchanged predictions.
 
-Both choices retain no-Foam B/C, empty/rim/internal-texture opposition,
-copied/warped structural ambiguity guards, missing/unknown distinctions, one
-generic implementation, independent Oil/Foam and current-frame provenance.
-An inability to evaluate retained opposition is not rejection or a pass. A single
-source-ID, Glass, time or Y-specific runtime branch is not authorized by either
-choice. No already-frozen experiment is rescored; P2-S1 and P5-S2 remain closed
-without promotion.
-
-For A, adoption must explicitly supersede the auxiliary-positive progression
-clauses in this owner's role-feasibility section and the corresponding design
-entry, with product §1.2 defining the domain claim. B needs a recorded decision
-but no gate weakening. Neither choice changes V3/V4/V5, O2/O3 or field acceptance.
-No untouched source has become available: existing holdout obligations remain
-open and cannot be satisfied by renaming exposed data. Resolve that acceptance
-limitation explicitly before promotion, without repeating the already-closed
-source-availability question. The Work Plan owns the pending choice and resume point.
+Retain V2/V3 operating-point/holdout requirements, V4 equality/resources and V5
+Windows shadow before O2 promotion, then separate O3 and later field acceptance.
+Existing holdout limitations remain open. Independent Foam raw-front work keeps
+its parent acceptance and invokes O2/O3 if it consumes typed Witness decisions.
+Use the actual retained report for independent comprehension; developer reading
+alone cannot close it. No source-ID/Glass/time/Y-specific runtime branch,
+interpolation, carry or report-side repair follows from partial-error acceptance.
 
 ### Boundary-local role feasibility and default-run linkage
 

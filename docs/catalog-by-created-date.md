@@ -921,6 +921,12 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/verification.json](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/verification.json) | P5 고정 비교 결과/검증 |
 
 
+### 2026-10-12 scene-based evaluation routing
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-scene-evaluation-roster.json](50-diagnostics/s11/2026-10-12-scene-evaluation-roster.json) | 기존 근거의 장면·검증 목적 연결표 및 저장 baseline 해석; 새 truth 아님 |
+
 ### 2026-10-12 direction-decision intake
 
 첨부 작성 기준은 2026-10-11이며, 아래 최초 Git 추가일과 구별한다.

@@ -1780,14 +1780,17 @@ typed Witness decisions. Final integrated field qualification remains later.
 Support-domain exclusions or replacement acceptance rules remain proposals for
 the product/validation owners, not consequences of this procedural refinement.
 
-Use the [P0 scope/story draft](../30-validation/s11-interface-observability-witness-validation.md#p0-support-and-story-contract--scope-decision-draft)
-to bind evidence roles before selecting a successor. Its domain choice changes
-only the proposed acceptance role of auxiliary positive recovery; it supplies no
-new role observation and does not authorize runtime dispatch by source/domain.
-Until explicitly adopted, retain the existing cross-domain control obligations.
-The scoped Oil cadence, single-frame Foam position and qualitative Windows
-stories are different evidence contracts, not interchangeable labels. Keep
-both candidate paths open without treating a scope decision as algorithm proof.
+Use the adopted [P0 scene-based evaluation contract](../30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract)
+to bind principle, failure-response and workflow evidence before selecting a
+successor. The compressor-versus-public A/B proposal is suspended. Source category
+does not determine whether a claim is mandatory, precise or merely diagnostic.
+The roster retains original truth and source qualification; it is not a runtime
+input or a second scoring engine. Partial point failures can be evaluated by
+their task impact under a predeclared comparison, without authorizing fabricated
+observations, broad abstention or a source-specific rule. The scoped Oil cadence,
+single-frame Foam position and qualitative Windows stories remain different
+contracts. Neither a revised evaluation role nor relaxed pointwise perfection
+supplies new physical evidence or reopens a closed operation.
 
 ### Boundary-local role feasibility — October 11 audit adoption
 
@@ -2690,6 +2693,16 @@ baseline separately from current source/runner and input hashes. Missing history
 fails closed. The source byte/AST prefix check remains against the original owner.
 
 ## History Review
+
+2026-10-12 scene-based evaluation adoption: reused the 13 source-audit strata,
+later water/source corrections, candidate bindings and canonical Windows stories.
+The user selected evaluation by scene/claim and useful task outcome after
+questioning the material-domain A/B split. The adopted policy permits bounded
+local errors with predeclared impact evidence; it preserves frozen failures,
+current provenance, independent Oil/Foam and stage gates. No new physical label,
+operation, consumer or runtime branch is introduced. F02/F04/F07/F09/F10 remain
+applicable; logic-map/failure-registry impact is NONE because execution and known
+causes are unchanged. Existing uncertainty/cadence owners are reused.
 
 2026-10-12 P0 preparation: reused the canonical nine Windows stories, candidate
 bindings, scoped Oil cadence and reviewed local/public Foam roles. The draft

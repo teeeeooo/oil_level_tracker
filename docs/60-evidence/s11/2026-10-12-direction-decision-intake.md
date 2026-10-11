@@ -107,6 +107,9 @@ truth·FIELD PASS를 만들지 않았다. governance, 신규 링크/앵커 49개
 
 ## P0 계약 초안 구체화 — 후속 진행
 
+이 절은 `353684e` 당시의 준비 기록이다. 아래의 A/B 대기점은 다음 절의
+사용자 논의와 장면별 평가 채택으로 대체되었으며 다시 질문할 항목이 아니다.
+
 사용자의 후속 진행 지시에 따라 clean `fe3f70a`에서 기존 자료를 대조하고
 [P0 지원·story 계약 초안](../../30-validation/s11-interface-observability-witness-validation.md#p0-support-and-story-contract--scope-decision-draft)을
 기존 validation owner에 작성했다. 별도 truth 파일이나 평가기를 추가하지 않았다.
@@ -129,10 +132,55 @@ runtime·제품 명세·truth·동결 산출물 등 네 문서 이외 tracked �
 대해 detector 재실행, 신규 효능시험 또는 Windows 검증을 했다는 뜻이 아니다.
 위 intake JSON은 원래 인수·정리 receipt이며 이 후속의 별도 실행 기록이 아니다.
 
+## 장면별 평가 채택과 기존 결과 적용
+
+사용자는 압축기 자료만 목표로 했을 때도 실패했다는 점과 sample1–4의 자료
+적합성을 지적하고, 모든 지점의 정답 대신 일부 실패를 수용하는 방향을 제안했다.
+이후 “그래 그럼 진행해보자”라는 답변으로 장면·검증 목적별 재편을 진행하도록 했다.
+따라서 물질군 A/B안은 보류하고, 원리 확인·실패 대응·업무 유용성을 구분하는
+[평가 계약](../../30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract)을
+제품·설계·현재 계획에 반영했다. 수치 허용치나 검출 효능의 승인은 아니다.
+
+새 [장면별 근거 연결표](../../50-diagnostics/s11/2026-10-12-scene-evaluation-roster.json)는
+시작 HEAD `353684e`에서 **22개 원본 JSON의 hash와 참조 위치**를 묶는다.
+기존 감사의 13개 자료 분류를 빠짐없이 덮는 로컬 16묶음과 canonical Windows
+9구간을 연결했다. 묶음은 겹칠 수 있으며 독립 영상 수나 정답 개수가 아니다.
+원본 라벨을 복사한 새 truth, 새 평가기 또는 runtime 설정은 만들지 않았다.
+
+sample1의 Foam 충돌, sample2의 구도 변화, sample3 제한을 유지했다.
+water f205를 빈 잔 음성으로 오인하지 않고, dark A의 확인된 Foam 양성,
+B/C의 수면·Foam 부재, beer 투영/잘림, milk 하단 불확실성을 각각 보존했다.
+공개영상 전체를 선택적인 보조 자료로 낮추지 않았으며, 불확실한 구간에서
+출력이 없다는 이유만으로 정답 처리하지 않는다.
+
+저장 default receipt의 production source hash **221개가 현재 파일과 일치**함을
+확인하고, 그 저장 결과에 새 평가 구분을 적용했다. 소스 일치는 현재 환경에서
+새로 실행한 결과라는 뜻이 아니다.
+
+| 저장 근거 | 새 평가 구분에서의 해석 |
+|---|---|
+| Oil 101/113, Foam 26/113 numeric | 수치 출력 개수. 물리적으로 올바른 관측률이나 업무 유용성으로 환산하지 않음 |
+| 42 s 최저 −18 px / 44 s 최고 +28 px | 기존에 잘못된 대상으로 확인된 선택이 실제 보고서 극값을 구성함. 해석을 왜곡하는 중대한 오류이며 허용 잔여로 바꿀 수 없음 |
+| f1620 상단 구간 내 raw edge Y813, 대응 raw front 0개 | 확인된 단일-frame front 누락. 연속 Foam 사건의 시작·종료·지속시간 손실 정도는 이 한 점으로 판정하지 않음 |
+| 불확실한 옛 좌표 / blur / crop | 적용할 수 없는 정밀도·가시성 주장만 미평가로 남김. 영상 전체 실패를 지우거나 정답 수를 늘리지 않음 |
+
+이번 재편으로 새로 수용한 국소 잔여 오류 사례는 **0개**다. 허용 원칙을 정했지만
+현재 결과를 통과시키기 위해 허용치를 정하지 않았다. 기존 S1/S2 판정은 재채점하지
+않았고, media decode·detector replay·sample3 실행·Windows 검증도 하지 않았다.
+원본 truth와 동결 결과, runtime은 그대로다. 이후 한 가설의 사전 계획에서
+입증할 능력과 필수 양성·대립 사례, 적용 가능한 잔여 범위를 먼저 정한다.
+새 역할 연산은 아직 확보되지 않았고 Local XY OFF / O2 OPEN / FIELD FAIL이 유지된다.
+
+문서 검증은 governance와 `git diff --check`, 추가 로컬 링크/앵커 15개,
+원본 JSON 22개 hash 및 JSON 참조 54곳, 13개 기존 분류/9개 Windows ID의
+누락 여부를 확인했다. 두 극값의 저장 event·출력·기존 거절 대상 연결과
+Foam 위치 연결을 재확인했으며, 원본 보존 매핑 20건도 일치한다.
+변경은 제품·설계·검증·계획·자료 안내와 연결표 등 문서 9개에 한정된다.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F07`, `S11-F09`, `S11-F10`.
 - First harmful stage: the existing default linkage supports component-to-front loss of the qualified sample4 upper alternative; water A separately loses dark support at the lightness predicate. The added algebra explains the rejected offline S2 decision region, not a new private-Windows cause or a repair.
-- Logic-map impact: NONE — only reference preservation, successor preflight, the unadopted P0 scope/story draft and planning are changed; current runtime ownership, consumers and publication remain unchanged.
+- Logic-map impact: NONE — reference preservation, successor preflight and the later adopted scene/claim evaluation policy change planning and evidence interpretation; current runtime ownership, consumers and publication remain unchanged.
 - Failure-registry impact: NONE — existing representation, identity, Foam-front, provenance and tuning failures cover this intake; no new mechanism or field acceptance is established.

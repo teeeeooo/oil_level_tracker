@@ -191,7 +191,13 @@ The [intake assessment](../docs/50-diagnostics/s11/2026-10-09-public-video-intak
 and its machine record retain hashes, metadata, inspected frames, exposure and
 limitations. All three are development-intake exposures, not untouched holdout,
 canonical truth or field acceptance. The truth audit above qualifies use of both
-old and new recordings by observation/role. Existing Recipes and historical
+old and new recordings by observation/role. The adopted
+[scene-based evaluation contract](../docs/30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract)
+and [pinned role roster](../docs/50-diagnostics/s11/2026-10-12-scene-evaluation-roster.json)
+route principle, failure-response and workflow claims across all seven sources.
+The original four recordings are not a uniformly precise oracle, and the three
+public recordings are not automatically optional stress. Later source corrections
+and the sample3 restriction remain authoritative at their scope. Existing Recipes and historical
 four-video scalar comparisons retain their original identities. No MP4 or
 generated-image tracking is added.
 The [rename receipt](../docs/50-diagnostics/s11/2026-10-09-public-video-rename.json)
