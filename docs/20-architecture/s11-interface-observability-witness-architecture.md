@@ -1752,6 +1752,34 @@ the fixed max-cost/min-margin family cannot separate that pair. P2-S1 closes
 without promotion or parameter/reference/transform tuning. This limits the
 regional pilot, not every possible shared-support design.
 
+### Successor positive reachability and independent paths
+
+The [direction-decision intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md)
+adds a preflight obligation to both P2 and P5-a successors. Before large raster
+verification or replay, derive the attainable feature range and decision region,
+including normalization, cost, margin, ties and unavailable support. Show that
+an explicitly intended synthetic positive reaches that region through the actual
+measurement operation; a hand-written feature vector alone is insufficient.
+Keep the structural ablation's own range and intended outcome explicit. A failed
+synthetic decision closes that fixed model before a large real-data comparison.
+Then require the predeclared representative real positive and physical opposition
+on equal support. Numerical reachability is necessary, never physical identity.
+
+The S2 audit explains the closed model; it does not authorize prototype/threshold
+rescue. The successor must still identify an observation or measurement absent
+from the rejected mechanisms, its physical rationale and a competing structural
+explanation. Missing information cannot become an implementation-ready contract.
+Reuse the existing observation owners and retain one hypothesis/one ablation.
+
+Oil/P2 and Foam/P5-a have separate feasibility paths. Foam research is not a
+prerequisite for Oil role research, nor does Oil association gate Foam research.
+Each consumer keeps its own acceptance: typed Witness consumption requires O2,
+including V5 Windows shadow, and a separate O3 behavior plan. Independent raw-front
+work retains its parent/Foam acceptance; it does not bypass O2/O3 if it consumes
+typed Witness decisions. Final integrated field qualification remains later.
+Support-domain exclusions or replacement acceptance rules remain proposals for
+the product/validation owners, not consequences of this procedural refinement.
+
 ### Boundary-local role feasibility — October 11 audit adoption
 
 The [current-main audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md)
@@ -2653,6 +2681,14 @@ baseline separately from current source/runner and input hashes. Missing history
 fails closed. The source byte/AST prefix check remains against the original owner.
 
 ## History Review
+
+2026-10-12 direction intake: reviewed S2's exact cost differences and ablation
+range, P2-S1's dominated pair, current default linkage and the O2/V5/O3 boundary.
+The change requires positive reachability before expensive successor comparisons
+and separates research dependencies without accepting a model or narrowing the
+product. F02/F04/F07/F09/F10 and the completed block below remain applicable.
+Logic-map/failure-registry impact is NONE: no executing owner or causal mechanism
+changes. Synthetic appearance success and physical discrimination stay distinct.
 
 2026-10-11 default linkage and P5-S2: reviewed the default replay owner, closed
 component-extreme loss, four-band LBP, cellular tensor ranking, T-contact and

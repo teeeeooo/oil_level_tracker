@@ -1323,6 +1323,44 @@ wrong-target reduction and explicit unresolved coverage; all-UNKNOWN is not
 efficacy. Passing these checks alone still leaves the existing V3/V4/V5 and O2
 acceptance requirements in force before O3 behavior entry.
 
+### Successor reachability and story preflight
+
+Apply the [successor design preflight](../20-architecture/s11-interface-observability-witness-architecture.md#successor-positive-reachability-and-independent-paths)
+before a new P2/P5-a comparison. Record (1) the attainable feature domain and
+positive decision inequalities, (2) an intended synthetic positive measured by
+the actual operation, (3) a fixed representative real-positive/opposition subset,
+and (4) the complete frozen control inventory. State the expected ablation outcome
+and its range separately. Stop the fixed model at its first failed progression
+condition; retain that result without tuning or dropping cases. A diagnostic-only
+continuation must be identified as such and cannot promote the failed model.
+
+The [S2 algebra](../70-reference/s11-direction-decision-2026-10-11/evidence/s2-decision-geometry.json)
+is a worked failure explanation, not a new benchmark or classifier. Reaching a
+positive numerical region does not prove material identity, exact contour truth,
+production behavior or a calibrated operating point.
+
+Before story-impact comparison, the P0 record must bind support/visibility rules,
+source-qualified protected episodes, critical extrema/reversals/recovery, physical
+versus scalar/time truth, per-series denominators and permissible residuals.
+State the scoped Oil cadence separately from Foam onset/last-observed/physical
+disappearance and any still-unset Foam tolerance. Unknown truth is unassessed;
+all-UNKNOWN, report bridges and source pictures are not useful numeric coverage.
+Keep development exposure and actual untouched holdout availability explicit.
+
+The supplied [nine-segment worksheet](../70-reference/s11-direction-decision-2026-10-11/STORY_ACCEPTANCE_TEMPLATE.json)
+is an optional unexecuted reference. The canonical truth's required per-series
+runs, actual time/frame coverage, runtime/Recipe/source identity, owner/phase
+transitions and evidence still govern the report. Its nulls or support-scope field
+cannot waive a segment. Product exclusions, changed copied-distractor acceptance
+or new closure rules need an explicit adopted owner diff; none follows from this
+intake. Existing visible sample4/Accum Foam obligations and dark-A controls remain.
+
+Keep V5 Windows shadow before O2 promotion and a separate O3 plan before typed
+Witness behavior consumption. A later nine-segment integrated field run does not
+retroactively satisfy that entry gate. Independent Foam raw-front work follows
+its existing parent acceptance; consuming typed Witness decisions also invokes
+O2/O3. No Windows execution is useful until the relevant eligible candidate exists.
+
 ### Boundary-local role feasibility and default-run linkage
 
 The [October 11 design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption)

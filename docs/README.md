@@ -95,6 +95,13 @@ R18–R20 predecessor architecture/validation and earlier diagnostics remain his
 
 ## S11 audit specifications and execution routing
 
+The [October 11 direction package](70-reference/s11-direction-decision-2026-10-11/README.md)
+is preserved with its [October 12 intake and artifact mapping](60-evidence/s11/2026-10-12-direction-decision-intake.md).
+It adds an independently reproduced S2 decision-region audit and a proposed
+support/story direction. Successor reachability is routed into the existing
+design/validation owners; product exclusions and gate changes are not adopted.
+Work Plan owns the decision checkpoint and the separate O2-shadow/field sequence.
+
 The supplemental specifications form a sequence of design rationale and
 follow-up audits, not competing current authorities:
 

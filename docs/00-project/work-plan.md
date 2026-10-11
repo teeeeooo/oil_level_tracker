@@ -3,10 +3,16 @@
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery` / `ACTIVE`.
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
-**Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The October 8 specification intakes adopt no new detector behavior.
-**Next transition:** user direction checkpoint after the fixed P5-S2 feasibility failed (0/2 qualified Foam uppers; no role evidence for P5-b). Decide whether to retain the full automatic target as further research requiring a distinct new observation, or explicitly narrow the intended Foam automation scope. Neither option is adopted automatically. The controlled default linkage is VERIFIED; S2 and P2-S1 are CLOSED WITHOUT PROMOTION. No new source judgment or Windows run is requested. Local XY OFF / O2 OPEN / FIELD FAIL remain.
+**Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
+**Next transition:** prepare the P0 support/story contract for a direction decision, using the [October 12 intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md). Recommend explicit observable support and useful automatic motion-context measurement under the current gates; no domain exclusion or reduced Foam obligation is adopted. Oil/P2 and Foam/P5-a have independent successor research paths, each still lacking an eligible new role operation. Positive reachability precedes large comparisons. Typed Witness consumption requires O2/V5 Windows shadow, then separate O3; integrated field qualification remains later. P2-S1/P5-S2 remain CLOSED WITHOUT PROMOTION. Local XY OFF / O2 OPEN / FIELD FAIL remain; no source re-judgment or unchanged-detector Windows run is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
+
+The [direction-decision intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md)
+preserves all supplied files and native audit outputs, verifies S2's algebra and
+the original reproduction wrapper, and qualifies the proposed delivery direction.
+Support-scope/closure changes remain proposals; only successor preflight and
+planning are refined in the existing owners.
 
 The [October 11 current-main audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md)
 preserves the supplied specification and all unique native audit artifacts,
@@ -56,10 +62,10 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | P3 / D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | P4 / D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
-| Foam front / episode | P5 source-position/default linkage VERIFIED; P5-S2 CLOSED WITHOUT PROMOTION; physical selection OPEN | Direction checkpoint after the failed fixed comparison; P5-b requires demonstrated role evidence, default-run linkage and its own behavior acceptance; P5-c opens only for a remaining downstream loss. | [Qualified position and causal join](../50-diagnostics/s11/2026-10-11-foam-upper-position-review.md#qualified-interval-joined-to-saved-observations), [P5-a design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption) |
+| Foam front / episode | P5 source-position/default linkage VERIFIED; P5-S2 CLOSED WITHOUT PROMOTION; physical selection OPEN | P0 direction checkpoint; P5-a role feasibility is independent of Oil/P2. P5-b requires demonstrated role evidence, default linkage and its own behavior acceptance; P5-c opens only for a correct raw front lost downstream. | [Qualified position and causal join](../50-diagnostics/s11/2026-10-11-foam-upper-position-review.md#qualified-interval-joined-to-saved-observations), [P5-a design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption) |
 | W7 / O5 field qualification | PENDING integrated candidate | P6 / D6: exact runtime, all nine canonical segments, existing report and target resources | [Field gate](../30-validation/s11-interface-observability-witness-validation.md#field-qualification) |
 | Report adjuncts | Source context and episode-source review ADOPTED | Reuse existing report; comprehension and numerical identity remain separate unresolved outcomes | [Source context](../60-evidence/s11/2026-10-07-report-source-context-validation.md), [episode review](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
-| D0 planning intake | Initial, 18885d2, Local XY, cc17924 and October 10/11 packages including the current-main program audit preserved/reviewed | Planning baseline only; no detector or field acceptance. Current proposal and qualifications are in the existing design/validation owners. | [Latest audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md), [P1 program integration](../60-evidence/s11/2026-10-11-program-intake.md), earlier intakes above |
+| D0 planning intake | Prior packages and the October 11 direction-decision package preserved/reviewed | Planning baseline only; no detector or field acceptance. Current proposal and qualifications are in the existing design/validation owners. | [Direction intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md), [prior audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md), [P1 program integration](../60-evidence/s11/2026-10-11-program-intake.md), earlier intakes above |
 
 W4-R0–R5 remain internal continuation labels: R0 correction and R3 inventory are
 complete; R1 is closed without promotion; its censored comparison remains
@@ -69,51 +75,58 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
 
 ## Next transition
 
-### Adopted program and immediate P5 source checkpoint
+<a id="adopted-program-and-immediate-p5-source-checkpoint"></a>
 
-**Bounded comparison complete; direction judgment required.** [P5-S2](../50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md) freezes one signed spatial conjunction and one ablation at `f185a225782d9154a2d843b9ba19f5eec678ffd4`. Its 27 focused tests pass; the complete 42-raster / 1,322-query comparison fails both qualified Foam positives. All sums/costs/decisions were independently checked over 2,718,514 side centers. Three internal-texture guides have no exact observed center edge and remain unassessed. Close S2 without tuning or promotion. This does not prove every non-learned approach impossible.
+### Direction decision and staged follow-up
 
-The next choice changes the delivery expectation: retain fully automatic physical-front identification as open research (a new, distinct supported hypothesis is still needed), or authorize a separately specified reduction of Foam automation scope. Do not silently replace that decision with all-UNKNOWN success, manual intervention, new training/filming requirements or relaxed gates. Existing method/data constraints remain until the user changes them. Stop here under the user's judgment-checkpoint instruction; the evidence does not justify P5-b, an episode repair or a Windows candidate run.
+**Direction proposal reviewed; scope decision remains open.** Recommend automatic
+measurement over explicitly observable, predeclared support, judged by useful
+same-interface observations and preserved extrema/reversal/recovery/Foam story.
+This follows the product's existing reading-assistance goal. It is not a claim
+that the present detector works in a certified subset, or authorization to exclude
+visible failures, accept all-UNKNOWN, add manual rescue/ML/filming, or waive a gate.
+The concrete [P0 draft requirements](../60-evidence/s11/2026-10-12-direction-decision-intake.md#후속-계획에-반영한-범위)
+make the next decision reviewable; product-scope or closure changes need an
+explicit adopted owner diff before dependent implementation.
 
-The [default-path linkage](../50-diagnostics/s11/2026-10-11-p5-default-linkage.md) verifies all 113 NONE/FULL rows and 2,611 candidates, retaining the component-to-front finding in the controlled default UNKNOWN session. Its four identical raw/final/tracking/report file pairs were deduplicated after byte verification while preserving both replay paths.
+Oil's wrong targets at the controlled default report's **42 s minimum and 44 s
+maximum** remain high-impact delivery failures despite 101/113 numeric rows.
+Foam's visible upper loss remains separately important. Neither pathway must
+wait for the other's research success; progress requires its own evidence and
+consumer gate. The current task completes intake, review and planning, not a
+new detector experiment.
+
+| Sequence | Concrete next output / owner | Entry, completion and stop condition |
+|---|---|---|
+| P0 — support and story contract | Product/validation draft defining input support, protected episodes, positive/negative/unresolved denominators, permissible residuals and evidence roles | Keep sample4 visible upper, Accum layered and current dark-A/opposition controls. Existing one-second Oil target stays scoped. Foam time tolerance, support exclusions and untouched-holdout availability must be stated rather than invented. Any changed product/gate clause needs explicit adoption; no post-result exclusions. |
+| P2 Oil successor and P5-a Foam successor — independent research paths | One eligible operation per path in the [existing design owner](../20-architecture/s11-interface-observability-witness-architecture.md#successor-positive-reachability-and-independent-paths), with pinned controls and one structural ablation | First identify information absent from closed models, physical rationale, competing explanation, exact support/equation, normalization, missing/tie policy, operating point and bounds. Prove attainable positive region and measured synthetic positive, then fixed real positives/opposition. If none is supportable, record the design limit; do not claim implementation readiness or tune S1/S2. |
+| Full fixed comparison / O2 qualification | Complete frozen readout, including failures/unavailable; V2/V3 controls/holdouts and V4 equality/resources | Stop at the first failed progression condition. A local result is not O2. For typed Witness, an eligible shadow candidate next requires **V5 Windows shadow review before O2 promotion**, with user/Windows checkpoint; do not defer this to P6. |
+| P3/O3 then P4/O4 — Oil | Separate typed authority/association plan after O2, then one supported phase repair | Preserve full-window positives, wrong-owner runs and FULL/EMPTY/refill/drain controls. No cost-first/nearest-Y switch, stale ID copying or speculative phase relaxation. |
+| P5-b then conditional P5-c — Foam | Separate raw-front behavior plan under the parent/Foam acceptance owner; current observed boundary/role/fixed-X/selected-candidate lineage | Role evidence first; verified default linkage is reusable. Keep episode fixed during raw-front evaluation and measure final usefulness, Oil invariance and debug equality. P5-c opens only for independently demonstrated loss of a correct raw front. A typed Witness consumer also requires O2/O3. |
+| P6/O5 then P7 | Exact integrated candidate regression/resources, nine canonical Windows segments and independent existing-report review; final explicit disposition | Shadow and field acceptance stay distinct. Report directions, extrema, reversals, events, gaps and independent Foam story. No segment waiver or inferred FIELD PASS from local tests. |
+
+Use the [successor/story validation preflight](../30-validation/s11-interface-observability-witness-validation.md#successor-reachability-and-story-preflight).
+The supplied nine-segment template is unexecuted reference material; canonical
+truth and required report fields govern. A/B/C/U describes impact, not a new PASS
+rule. Freeze protected episodes/permissible residuals before outcomes, retain
+truth uncertainty and exposure, and do not count report bridges as observations.
+Independent comprehension remains open; developer self-reading cannot close it.
 
 **Reuse closed inputs.** P0/P1's 23-condition matrix, oracle and raw captures
 remain the offline representation baseline. [P2-S1](../50-diagnostics/s11/2026-10-11-p2-shared-support.md)
-remains CLOSED WITHOUT PROMOTION: a wrong target dominates a true target in
-both cost and margin. No patch/reference/transform/threshold rescue follows.
-The [P5 reply and saved join](../50-diagnostics/s11/2026-10-11-foam-upper-position-review.md#qualified-interval-joined-to-saved-observations)
-remain closed: f1620/X595 rows812–816 include raw Y813; saved scoped/FULL
-component reduction chooses internal Y833, while global top Y808 also misses.
-Water A loses dark upper support earlier. These are distinct losses; neither
-episode relaxation nor another edge generator addresses both. All seven sample4
-frames, native A/B/C and 25 graph controls retain their scope; f1635 is unreviewed.
+and [P5-S2](../50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md) remain
+CLOSED WITHOUT PROMOTION; no reference/transform/threshold/radius rescue follows.
+S2's new [decision-region audit](../50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md#decision-region-audit-added-in-the-direction-review)
+explains the two failed positives without proving all non-learned methods impossible.
 
-| Sequence | Next concrete output | Entry / completion / stop condition |
-|---|---|---|
-| P5-a / P2 successor preflight — S2 complete | One operation in the existing [design owner](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption), pinned control manifest and one ablation | Define actual pixel support, equation/function, equal comparison domain, unavailable/tie rules, operating point and resource bounds before real outcomes. Demonstrate information absent from the closed models. If no distinct operation can be stated, record that design limit; do not rename an old experiment. |
-| P5-a bounded feasibility — S2 closed | Complete readout and failed-variant disposition preserved; next direction awaits user judgment | Preserve real fronts, dark A, no-Foam B/C, internal texture/rim, stationary/inclined, beer/milk visibility and synthetic copied/warp controls. One frozen variant plus one ablation; no threshold chain. Local success is not O2 or behavior acceptance. |
-| P5-b raw-front behavior; P5-c conditional | Separate raw-front integration design, same-default candidate/owner join, paired application raw/final results | Establish default/NONE versus diagnostic equality and the actual intervention boundary before production changes. Keep episode fixed while evaluating raw-front selection. P5-c opens only if a correct front is independently lost downstream. Foam has its own acceptance; no Oil promotion follows. |
-| P3/O3 then P4/O4 | Typed current role evidence into bounded authority/association; then one proven phase repair | O2 and separate O3 plan first. Keep full-window protected rows, wrong-owner runs, phase/Foam changes and FULL/EMPTY controls. No global cost-first switch, stale ID copying or simultaneous phase relaxation. |
-| P6/O5 then P7 | Exact integrated regression/resources, nine Windows segments and independent existing-report review; explicit disposition | Shadow and integrated field gates stay distinct. Report directions, reversals, extrema/events, gaps and independent Foam story. Accept only under current gates; otherwise record limited scope or failed variant without changing FIELD FAIL. |
-
-The [audit's full default receipt](../70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-current-default.json)
-has 101/113 valid Oil numerics but puts the maximum Oil event at the reviewed
-wrong target at 44 s. Preserve that event/interpretation risk alongside numeric
-coverage. Its NONE output is not the scoped/FULL raw-stage trace: the latter's
-causal finding must not automatically become the former's measured first loss.
-The linked default-stage check now closes this specific gap; it does not reopen
-the source-position judgment, repeat P2/P5 arithmetic or establish role evidence.
-
-Use the existing [validation owner](../30-validation/s11-interface-observability-witness-validation.md#boundary-local-role-feasibility-and-default-run-linkage).
-A/B/C/U describes effect on the physical story; a single wrong point that changes
-an extremum can be A/B. Freeze protected episodes and permissible residuals before
-comparison, retaining unknowns and the scoped one-second Oil target. No result
-reclassification, holdout substitution, all-UNKNOWN success or field-gate waiver.
-The source's 0.5–1 / 2–4 / 2–3 / 3–5 development-day timeboxes are planning
-estimates, not committed dates or permission to skip acceptance. Each fixed
-comparison ends in a continue/close decision. The original intake had no pending
-judgment. The completed S2 comparison now requires the direction choice above;
-no Windows execution is useful at this point.
+The [default linkage](../50-diagnostics/s11/2026-10-11-p5-default-linkage.md)
+closes NONE/FULL equality and the candidate/owner/public join over the controlled
+UNKNOWN session. The [qualified source join](../50-diagnostics/s11/2026-10-11-foam-upper-position-review.md#qualified-interval-joined-to-saved-observations)
+retains f1620/X595 rows812–816 including raw Y813, component-selected internal
+Y833 and the out-of-interval global top Y808. Water A loses dark support earlier.
+All seven sample4 frames, native A/B/C and 25 graph controls keep their scope;
+f1635 stays unreviewed. No source question, another edge generator, episode
+relaxation or unchanged-detector Windows run follows from this intake.
 
 ### Source and truth qualification before the next experiment
 
@@ -815,6 +828,13 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 | sample3 reappearance | A/B regional Oil is visible; earlier C is external-frame structure and D is unobservable. Historical motion is unqualified; recent-direction probe closed without promotion. Full recording retained as engineering/robustness context, not a full-window physical-accuracy/cadence oracle | [Source-scope closure](../50-diagnostics/s11/2026-10-10-sample3-evaluation-scope.md) |
 
 ## Current authorization boundary
+
+The October 12 request authorizes complete attachment/worktree inspection,
+placement and eligible integration, verified duplicate cleanup, specification
+review and a follow-on plan, with autonomous commits/pushes. This intake adds
+successor preflight requirements and a concrete direction proposal; it does not
+supply the pending product-scope decision, a new role hypothesis or field acceptance.
+The direction checkpoint above continues to constrain later implementation.
 
 The latest October 11 continuation authorizes stepwise implementation and
 verification of the adopted plan, necessary evidence/owner updates and autonomous

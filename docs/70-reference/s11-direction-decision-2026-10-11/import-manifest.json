@@ -1,0 +1,141 @@
+{
+  "schema": "s11-direction-decision-import-v1",
+  "starting_head": "5c53aefe3bb3c5d1447b29ccb2f78d1adc5459c6",
+  "supplied_zip_sha256": "cf62d1b95e9fae2883dd739989359907c2826466a4b2a729342b6d888267e18c",
+  "supplied_archive_prefix": "s11-direction-review-5c53aef/",
+  "original_files": [
+    {
+      "source": "HANDOFF.md",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/HANDOFF.md",
+      "bytes": 3680,
+      "sha256": "248e0e3ff5757b3d87c80f24ee22061cd4e76360673246392d543ecbb1fde21e"
+    },
+    {
+      "source": "MANIFEST.sha256",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/MANIFEST.sha256",
+      "bytes": 933,
+      "sha256": "ce9a57dbd3ca75af83aca7345aaf2e2584cb501df2655472af68687726da084c"
+    },
+    {
+      "source": "README.md",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/README.md",
+      "bytes": 2801,
+      "sha256": "e244dea57f594dcc06a3eda2482361d995a3251621b81653eeed250218ea409a"
+    },
+    {
+      "source": "S11_PROGRAM_DECISION_AND_WORK_SPEC.md",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/S11_PROGRAM_DECISION_AND_WORK_SPEC.md",
+      "bytes": 54295,
+      "sha256": "b19a6106991f4cabad4a5f37e218f0615f33a79a43d26024b36a797ff33b0ef0"
+    },
+    {
+      "source": "STORY_ACCEPTANCE_TEMPLATE.json",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/STORY_ACCEPTANCE_TEMPLATE.json",
+      "bytes": 7945,
+      "sha256": "67cea64c3441d1e47a93b8f26a7eeddc5529f043c18d8e3f04cbb5932d451a4f"
+    },
+    {
+      "source": "evidence/focused-tests.log",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/evidence/focused-tests.log",
+      "bytes": 261,
+      "sha256": "60e2d142beced4ae7fb1c7141b68f21084c09ffee6ddfefebce7172cd84a61bf"
+    },
+    {
+      "source": "evidence/s2-decision-geometry.json",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/evidence/s2-decision-geometry.json",
+      "bytes": 4113,
+      "sha256": "454f750b156147716913ad92e7493ce749c6d0df5e2e7d724f421e5585a75bb7"
+    },
+    {
+      "source": "evidence/session-audit-summary.json",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/evidence/session-audit-summary.json",
+      "bytes": 3065,
+      "sha256": "fed561f3bb3b87c04002094d26d32191e025179e672c0710b51351c81099b87d"
+    },
+    {
+      "source": "evidence/verifier-stdout.json",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/evidence/verifier-stdout.json",
+      "bytes": 2522,
+      "sha256": "9fa9f34a6e78d6a4524602bea3506aade358607bc781555e9ab67fcf39da6023"
+    },
+    {
+      "source": "tools/audit_s2_decision_geometry.py",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/tools/audit_s2_decision_geometry.py",
+      "bytes": 4190,
+      "sha256": "c0732d7d2ad046b0fef593d81867421c1490e3eaa50a90d1916e5975b14be838"
+    },
+    {
+      "source": "tools/reproduce.sh",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/tools/reproduce.sh",
+      "bytes": 2612,
+      "sha256": "4b5111af1fe843806080930a526d2ab4051e9baa404a9d2501e92eba9da64141"
+    }
+  ],
+  "native_files": [
+    {
+      "source": "sample/output/s11-direction-decision-5c53aef-001/audit_s2_decision_geometry.py",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/tools/audit_s2_decision_geometry.py",
+      "bytes": 4190,
+      "sha256": "c0732d7d2ad046b0fef593d81867421c1490e3eaa50a90d1916e5975b14be838",
+      "disposition": "REUSED_BYTE_IDENTICAL"
+    },
+    {
+      "source": "sample/output/s11-direction-decision-5c53aef-001/default-reverification.json",
+      "preserved_at": "docs/50-diagnostics/s11/2026-10-11-p5-default-linkage/readout.json",
+      "bytes": 234170,
+      "sha256": "e90b1d5d90af2c561c6357b9fa86e3a10074ff6252947398ff9300e9c4513e51",
+      "disposition": "REUSED_BYTE_IDENTICAL"
+    },
+    {
+      "source": "sample/output/s11-direction-decision-5c53aef-001/default-reverification.log",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/native-evidence/default-reverification.log",
+      "bytes": 300,
+      "sha256": "435818dca609f0f625185f994c4370f86e77416404b66d2f4c6e591606a3794f",
+      "disposition": "UNIQUE_NATIVE_PRESERVED"
+    },
+    {
+      "source": "sample/output/s11-direction-decision-5c53aef-001/focused-tests.log",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/evidence/focused-tests.log",
+      "bytes": 261,
+      "sha256": "60e2d142beced4ae7fb1c7141b68f21084c09ffee6ddfefebce7172cd84a61bf",
+      "disposition": "REUSED_BYTE_IDENTICAL"
+    },
+    {
+      "source": "sample/output/s11-direction-decision-5c53aef-001/p2-reverification.json",
+      "preserved_at": "docs/50-diagnostics/s11/2026-10-11-p2-shared-support/verification.json",
+      "bytes": 1502,
+      "sha256": "4a14bcc205ca78639f8169c7154a6971b1ea55b6b2cae6841b0e4295d271c7bc",
+      "disposition": "REUSED_BYTE_IDENTICAL"
+    },
+    {
+      "source": "sample/output/s11-direction-decision-5c53aef-001/p2-reverification.log",
+      "preserved_at": "docs/50-diagnostics/s11/2026-10-11-p2-shared-support/verification.json",
+      "bytes": 1502,
+      "sha256": "4a14bcc205ca78639f8169c7154a6971b1ea55b6b2cae6841b0e4295d271c7bc",
+      "disposition": "REUSED_BYTE_IDENTICAL"
+    },
+    {
+      "source": "sample/output/s11-direction-decision-5c53aef-001/s2-decision-geometry.json",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/evidence/s2-decision-geometry.json",
+      "bytes": 4113,
+      "sha256": "454f750b156147716913ad92e7493ce749c6d0df5e2e7d724f421e5585a75bb7",
+      "disposition": "REUSED_BYTE_IDENTICAL"
+    },
+    {
+      "source": "sample/output/s11-direction-decision-5c53aef-001/s2-reverification.json",
+      "preserved_at": "docs/50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/verification.json",
+      "bytes": 56335,
+      "sha256": "e6f4db217e89a3ebb352b2c95a618677a318d2e9e2e9090f90198afdb937c90f",
+      "disposition": "REUSED_BYTE_IDENTICAL"
+    },
+    {
+      "source": "sample/output/s11-direction-decision-5c53aef-001/s2-reverification.log",
+      "preserved_at": "docs/70-reference/s11-direction-decision-2026-10-11/native-evidence/s2-reverification.log",
+      "bytes": 386,
+      "sha256": "b6d5215cf43bd247b7cd401a0dd415be42920a5aa40a5098211133d0d2ada4f6",
+      "disposition": "UNIQUE_NATIVE_PRESERVED"
+    }
+  ],
+  "recovery": "Paths are repository-relative. Restore any former native path by copying preserved_at and verifying sha256; upstream replay/raster inputs are separate and retained.",
+  "execution_boundary": "Original tools are pinned research reproduction assets, not production entry points. reproduce.sh intentionally requires clean HEAD 5c53aefe3bb3c5d1447b29ccb2f78d1adc5459c6."
+}

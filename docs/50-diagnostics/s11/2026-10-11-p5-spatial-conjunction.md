@@ -51,6 +51,24 @@ front to fix. No Windows replay of an unchanged detector would resolve this
 failed local hypothesis. The Work Plan owns the next scope/direction judgment;
 FIELD FAIL and O2 OPEN remain unchanged.
 
+## Decision-region audit added in the direction review
+
+The [October 12 intake](../../60-evidence/s11/2026-10-12-direction-decision-intake.md)
+preserves and reproduces the supplied [algebra audit](../../70-reference/s11-direction-decision-2026-10-11/evidence/s2-decision-geometry.json).
+For upper/lower ratios a/b, `C_U−C_N=0.5−b` and `C_U−C_I=a−0.5`.
+Upper-cellular can uniquely win only at `a<0.5, b>0.5`; margin 0.05 further
+requires `a≤0.45, b≥0.55`, with the cost gate separate. The two qualified
+Foam positives have b≈0.123/0.157, so loosening cost/margin cannot make U win.
+All 2,556 available variant cost triples reproduce these equations.
+
+For the ablation, nonnegative axis contributions imply `0.5≤r0≤1` whenever
+the denominator is positive. All 2,592 contrast-positive saved sides satisfy
+this bound; an upper side with contrast cannot give U a strict advantage over I.
+Zero upper contrast is a distinct case: the frozen synthetic ablation accepts
+the intended cellular examples and their printed copies. Neither result proves
+general non-learned discrimination impossible. The original preflight, readout,
+verification and CLOSED WITHOUT PROMOTION disposition are unchanged.
+
 ## Preserved pre-result contract
 
 The [operation and one ablation](../../20-architecture/s11-interface-observability-witness-architecture.md#p5-s2-signed-spatial-conjunction--frozen-feasibility)
