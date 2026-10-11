@@ -222,9 +222,17 @@
     "behind": 0
   },
   "cleanup": {
-    "status": "PENDING_PRESERVATION_COMMIT",
+    "status": "COMPLETE",
     "source_root": "sample/output/s11-direction-decision-5c53aef-001",
-    "planned_files": 9,
+    "removed_files": 9,
+    "removed_source_bytes": 302759,
+    "unique_files_relocated": 2,
+    "duplicate_files_reused": 7,
+    "preservation_commit": "9db5d2685e864ee766d1b97a8f898561ed600a9f",
+    "all_destination_bytes_verified_in_commit_before_removal": true,
+    "source_directory_absent": true,
+    "user_attachment_removed": false,
+    "upstream_inputs_removed": false,
     "worktrees_removed": 0,
     "branches_removed": 0
   },

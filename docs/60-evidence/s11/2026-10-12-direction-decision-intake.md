@@ -92,8 +92,9 @@ Developer의 관련 sibling checkout을 확인했다. **이 Mac에는 main 한 �
 기록했다. 과거 미채택 실험·S12/legacy branch는 worktree 중복이 아니며,
 고유 역사 근거를 삭제하거나 detector 코드로 병합하지 않았다.
 
-로컬 감사 폴더 9파일/302,759 bytes의 모든 보존본을 확인했다. 보존 커밋을 만든
-후 해당 원본 중복과 빈 폴더만 제거하며, 최종 결과는 receipt의 `cleanup`에 기록한다.
+보존 커밋 `9db5d26`의 Git blob까지 검증한 뒤 로컬 감사 폴더
+9파일/302,759 bytes와 빈 폴더를 정리했다. 고유 2개는 repo로 이동했고
+중복 7개는 기존 보존본을 재사용한다. 완료 결과는 receipt의 `cleanup`에 있다.
 사용자 첨부, 기존 원본 media·실험 입력, 다른 출력 폴더는 유지한다.
 
 이번 검증은 저장 증거·산술·문서 계약의 정합성이다. 새 영상 decode, detector

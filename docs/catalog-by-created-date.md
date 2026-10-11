@@ -924,44 +924,45 @@ Native arrays and the verified archive remain local and are indexed by the machi
 ### 2026-10-12 direction-decision intake
 
 첨부 작성 기준은 2026-10-11이며, 아래 최초 Git 추가일과 구별한다.
+최초 추가 커밋 `9db5d26`의 author 날짜(KST)로 16파일을 확정했다.
 
 #### `docs/60-evidence/s11/`
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| Git 미등록 | [60-evidence/s11/2026-10-12-direction-decision-intake.json](60-evidence/s11/2026-10-12-direction-decision-intake.json) | 이번 인수·검증 기록; 작성 2026-10-12 |
-| Git 미등록 | [60-evidence/s11/2026-10-12-direction-decision-intake.md](60-evidence/s11/2026-10-12-direction-decision-intake.md) | 이번 인수·검증 기록; 작성 2026-10-12 |
+| 2026-10-12 | [60-evidence/s11/2026-10-12-direction-decision-intake.json](60-evidence/s11/2026-10-12-direction-decision-intake.json) | 이번 인수·검증 기록; 작성 2026-10-12 |
+| 2026-10-12 | [60-evidence/s11/2026-10-12-direction-decision-intake.md](60-evidence/s11/2026-10-12-direction-decision-intake.md) | 이번 인수·검증 기록; 작성 2026-10-12 |
 
 #### `docs/70-reference/s11-direction-decision-2026-10-11/`
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/HANDOFF.md](70-reference/s11-direction-decision-2026-10-11/HANDOFF.md) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/MANIFEST.sha256](70-reference/s11-direction-decision-2026-10-11/MANIFEST.sha256) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/README.md](70-reference/s11-direction-decision-2026-10-11/README.md) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/S11_PROGRAM_DECISION_AND_WORK_SPEC.md](70-reference/s11-direction-decision-2026-10-11/S11_PROGRAM_DECISION_AND_WORK_SPEC.md) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/STORY_ACCEPTANCE_TEMPLATE.json](70-reference/s11-direction-decision-2026-10-11/STORY_ACCEPTANCE_TEMPLATE.json) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/import-manifest.json](70-reference/s11-direction-decision-2026-10-11/import-manifest.json) | 원본/중복 보존 매핑; 작성 2026-10-12 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/HANDOFF.md](70-reference/s11-direction-decision-2026-10-11/HANDOFF.md) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/MANIFEST.sha256](70-reference/s11-direction-decision-2026-10-11/MANIFEST.sha256) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/README.md](70-reference/s11-direction-decision-2026-10-11/README.md) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/S11_PROGRAM_DECISION_AND_WORK_SPEC.md](70-reference/s11-direction-decision-2026-10-11/S11_PROGRAM_DECISION_AND_WORK_SPEC.md) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/STORY_ACCEPTANCE_TEMPLATE.json](70-reference/s11-direction-decision-2026-10-11/STORY_ACCEPTANCE_TEMPLATE.json) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/import-manifest.json](70-reference/s11-direction-decision-2026-10-11/import-manifest.json) | 원본/중복 보존 매핑; 작성 2026-10-12 |
 
 #### `docs/70-reference/s11-direction-decision-2026-10-11/evidence/`
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/evidence/focused-tests.log](70-reference/s11-direction-decision-2026-10-11/evidence/focused-tests.log) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/evidence/s2-decision-geometry.json](70-reference/s11-direction-decision-2026-10-11/evidence/s2-decision-geometry.json) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/evidence/session-audit-summary.json](70-reference/s11-direction-decision-2026-10-11/evidence/session-audit-summary.json) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/evidence/verifier-stdout.json](70-reference/s11-direction-decision-2026-10-11/evidence/verifier-stdout.json) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/evidence/focused-tests.log](70-reference/s11-direction-decision-2026-10-11/evidence/focused-tests.log) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/evidence/s2-decision-geometry.json](70-reference/s11-direction-decision-2026-10-11/evidence/s2-decision-geometry.json) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/evidence/session-audit-summary.json](70-reference/s11-direction-decision-2026-10-11/evidence/session-audit-summary.json) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/evidence/verifier-stdout.json](70-reference/s11-direction-decision-2026-10-11/evidence/verifier-stdout.json) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
 
 #### `docs/70-reference/s11-direction-decision-2026-10-11/native-evidence/`
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/native-evidence/default-reverification.log](70-reference/s11-direction-decision-2026-10-11/native-evidence/default-reverification.log) | 로컬 감사 고유 로그 bytes 보존 |
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/native-evidence/s2-reverification.log](70-reference/s11-direction-decision-2026-10-11/native-evidence/s2-reverification.log) | 로컬 감사 고유 로그 bytes 보존 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/native-evidence/default-reverification.log](70-reference/s11-direction-decision-2026-10-11/native-evidence/default-reverification.log) | 로컬 감사 고유 로그 bytes 보존 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/native-evidence/s2-reverification.log](70-reference/s11-direction-decision-2026-10-11/native-evidence/s2-reverification.log) | 로컬 감사 고유 로그 bytes 보존 |
 
 #### `docs/70-reference/s11-direction-decision-2026-10-11/tools/`
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/tools/audit_s2_decision_geometry.py](70-reference/s11-direction-decision-2026-10-11/tools/audit_s2_decision_geometry.py) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
-| Git 미등록 | [70-reference/s11-direction-decision-2026-10-11/tools/reproduce.sh](70-reference/s11-direction-decision-2026-10-11/tools/reproduce.sh) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/tools/audit_s2_decision_geometry.py](70-reference/s11-direction-decision-2026-10-11/tools/audit_s2_decision_geometry.py) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+| 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/tools/reproduce.sh](70-reference/s11-direction-decision-2026-10-11/tools/reproduce.sh) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
