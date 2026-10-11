@@ -73,10 +73,20 @@
     "behind": 0
   },
   "cleanup": {
-    "status": "PENDING after final preservation verification",
+    "status": "COMPLETE",
     "source_root": "sample/output/s11-program-audit-20261011-001",
-    "planned_file_count": 61,
-    "user_attachment_removed": false
+    "removed_files": 61,
+    "removed_source_bytes": 12334316,
+    "unique_files_relocated": 52,
+    "duplicate_json_copies_removed": 5,
+    "redundant_transport_containers_removed": 4,
+    "preservation_commit": "1841f87aa82046101e5a946264df8203edd17aee",
+    "all_destination_bytes_verified_in_commit_before_removal": true,
+    "source_directory_absent": true,
+    "user_attachment_removed": false,
+    "upstream_inputs_removed": false,
+    "worktrees_removed": 0,
+    "branches_removed": 0
   },
   "acceptance": {
     "S11": "ACTIVE",
@@ -92,5 +102,6 @@
     "diff_check": "PASS including byte-preserved supplied/native text",
     "runtime_recipe_truth_changes": false,
     "active_path_consumers_of_old_audit_directory": 0
-  }
+  },
+  "publication_scope": "Artifact and plan commit plus verified cleanup/catalog closeout; publication head is recorded by Git, not a self-referential document hash."
 }

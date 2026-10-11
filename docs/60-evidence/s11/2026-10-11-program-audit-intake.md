@@ -76,6 +76,9 @@ Roadmap의 순서·상태와 retained commitments는 바꾸지 않았다.
 - 과거 JUnit이 13개 파일의 263 passed / 실패·오류·skip 0을 담는지 확인했다.
   문서 인수이므로 pytest·detector·Windows·report 이해도 평가를 반복하지 않았다.
 
+추가·변경한 로컬 링크/앵커 93개와 신규 카탈로그 64파일, S11 governance 및
+전체 변경의 `git diff --check`를 통과했다. 제공 원문의 공백도 변경하지 않았다.
+
 기본 출력의 수치·event 일치는 보존 및 계산 검증이다. 주요 움직임의 실제 개선,
 새 classifier, full canonical suite, 독립 holdout 또는 field PASS를 뜻하지 않는다.
 
@@ -85,14 +88,16 @@ Roadmap의 순서·상태와 retained commitments는 바꾸지 않았다.
 Developer의 관련 sibling checkout을 확인했다. 이 Mac에는 현재 main 하나만
 있으며 병합할 활성 worktree 변경은 없다. 이전 P1 worktree 정리는
 [앞선 통합 기록](2026-10-11-program-intake.md#정리-범위와-재현)에서 완료됐다.
-남은 과거 실험 브랜치는 활성 worktree가 아니고 미채택 고유 변경을 포함하므로
-중복으로 간주해 삭제하거나 main으로 병합하지 않았다. 다른 기계의 디스크까지
+과거 실험 브랜치 ref를 중복 worktree로 세지 않았으며, 기존 미채택 실험 코드를
+정리 명목으로 삭제하거나 main으로 병합하지 않았다. 다른 기계의 디스크까지
 확인했다는 주장은 하지 않는다.
 
-보존본 확인 후 `sample/output/s11-program-audit-20261011-001/`의 61개 파일을
-정리한다. 고유 52개는 repo에 이동되고, 같은 JSON 5개와 전달 컨테이너 4개는
+보존 커밋 `1841f87`의 모든 목적지 bytes까지 확인한 뒤
+`sample/output/s11-program-audit-20261011-001/`의 61개 파일과 빈 폴더를 정리했다.
+고유 52개는 repo에 이동되고, 같은 JSON 5개와 전달 컨테이너 4개는
 보존본을 재사용한다. 원본 미디어·upstream 실험 입력·사용자 첨부 ZIP은 유지한다.
-실제 완료 여부와 삭제 전후 수치는 [receipt](2026-10-11-program-audit-intake.json)의
+정리한 원래 파일 크기는 12,334,316 bytes이며, 완료 결과와 삭제 전후 수치는
+[receipt](2026-10-11-program-audit-intake.json)의
 `cleanup`이 기록한다. 원문이 과거 출력 경로를 적었다는 이유로 중복 폴더를
 유지하지 않고 manifest로 복구 위치를 제공한다.
 

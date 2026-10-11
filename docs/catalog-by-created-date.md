@@ -835,71 +835,71 @@ Native arrays and the verified archive remain local and are indexed by the machi
 
 ## 2026-10-11 current-main program audit intake
 
-이번 인수 범위의 64파일을 추가한다. 최초 Git 추가일은 등록 후 author 날짜(KST)로 확정한다.
+이번 인수 범위의 64파일. 최초 Git 추가일은 `1841f87`의 author 날짜(KST, 2026-10-11)로 확인했다.
 
 | 최초 Git 등록일 | 문서/산출물 | 역할 |
 |---|---|---|
-| 미등록 (작성 2026-10-11) | [60-evidence/s11/2026-10-11-program-audit-intake.json](60-evidence/s11/2026-10-11-program-audit-intake.json) | 이번 인수 검토·검증·중복 정리 |
-| 미등록 (작성 2026-10-11) | [60-evidence/s11/2026-10-11-program-audit-intake.md](60-evidence/s11/2026-10-11-program-audit-intake.md) | 이번 인수 검토·검증·중복 정리 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/README.md](70-reference/s11-program-audit-2026-10-11/README.md) | 첨부 원문 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/S11-program-audit-and-detector-work-spec.md](70-reference/s11-program-audit-2026-10-11/S11-program-audit-and-detector-work-spec.md) | 첨부 원문 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/SHA256SUMS.txt](70-reference/s11-program-audit-2026-10-11/SHA256SUMS.txt) | 첨부 원문 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/evidence/audit-record.json](70-reference/s11-program-audit-2026-10-11/evidence/audit-record.json) | 첨부 원문 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/evidence/p2-independent-verification.json](70-reference/s11-program-audit-2026-10-11/evidence/p2-independent-verification.json) | 첨부 원문 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/evidence/p5-verification-summary.json](70-reference/s11-program-audit-2026-10-11/evidence/p5-verification-summary.json) | 첨부 원문 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/evidence/sample4-current-default-checkpoints.json](70-reference/s11-program-audit-2026-10-11/evidence/sample4-current-default-checkpoints.json) | 첨부 원문 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/evidence/source-frame-audit.json](70-reference/s11-program-audit-2026-10-11/evidence/source-frame-audit.json) | 첨부 원문 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/evidence/source-ledger.json](70-reference/s11-program-audit-2026-10-11/evidence/source-ledger.json) | 첨부 원문 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/import-manifest.json](70-reference/s11-program-audit-2026-10-11/import-manifest.json) | 원본·native·중복·컨테이너 보존 매핑 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000150.png](70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000150.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000151.png](70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000151.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000240.png](70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000240.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/collect_audit.py](70-reference/s11-program-audit-2026-10-11/native-evidence/collect_audit.py) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/focused-tests.log](70-reference/s11-program-audit-2026-10-11/native-evidence/focused-tests.log) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/focused-tests.xml](70-reference/s11-program-audit-2026-10-11/native-evidence/focused-tests.xml) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/inspect_media.py](70-reference/s11-program-audit-2026-10-11/native-evidence/inspect_media.py) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/p5-independent-verification.json](70-reference/s11-program-audit-2026-10-11/native-evidence/p5-independent-verification.json) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000000.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000000.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000030.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000030.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000060.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000060.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-checkpoint-summary.json](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-checkpoint-summary.json) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-current-default.json](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-current-default.json) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-current-default.log](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-current-default.log) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-default-summary.json](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-default-summary.json) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000420.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000420.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000450.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000450.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000480.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000480.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001200.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001200.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001260.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001260.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001275.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001275.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001290.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001290.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001305.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001305.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001320.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001320.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001485.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001485.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001560.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001560.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001620.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001620.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001635.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001635.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001665.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001665.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001680.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001680.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000000.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000000.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000205.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000205.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000815.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000815.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000822.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000822.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000829.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000829.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001225.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001225.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001232.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001232.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001239.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001239.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001438.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001438.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001643.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001643.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000000.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000000.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000146.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000146.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000436.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000436.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f000000.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f000000.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f000532.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f000532.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f001063.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f001063.png) | 로컬 감사 원본 bytes 보존 |
-| 미등록 (작성 2026-10-11) | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [60-evidence/s11/2026-10-11-program-audit-intake.json](60-evidence/s11/2026-10-11-program-audit-intake.json) | 이번 인수 검토·검증·중복 정리 |
+| 2026-10-11 | [60-evidence/s11/2026-10-11-program-audit-intake.md](60-evidence/s11/2026-10-11-program-audit-intake.md) | 이번 인수 검토·검증·중복 정리 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/README.md](70-reference/s11-program-audit-2026-10-11/README.md) | 첨부 원문 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/S11-program-audit-and-detector-work-spec.md](70-reference/s11-program-audit-2026-10-11/S11-program-audit-and-detector-work-spec.md) | 첨부 원문 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/SHA256SUMS.txt](70-reference/s11-program-audit-2026-10-11/SHA256SUMS.txt) | 첨부 원문 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/evidence/audit-record.json](70-reference/s11-program-audit-2026-10-11/evidence/audit-record.json) | 첨부 원문 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/evidence/p2-independent-verification.json](70-reference/s11-program-audit-2026-10-11/evidence/p2-independent-verification.json) | 첨부 원문 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/evidence/p5-verification-summary.json](70-reference/s11-program-audit-2026-10-11/evidence/p5-verification-summary.json) | 첨부 원문 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/evidence/sample4-current-default-checkpoints.json](70-reference/s11-program-audit-2026-10-11/evidence/sample4-current-default-checkpoints.json) | 첨부 원문 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/evidence/source-frame-audit.json](70-reference/s11-program-audit-2026-10-11/evidence/source-frame-audit.json) | 첨부 원문 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/evidence/source-ledger.json](70-reference/s11-program-audit-2026-10-11/evidence/source-ledger.json) | 첨부 원문 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/import-manifest.json](70-reference/s11-program-audit-2026-10-11/import-manifest.json) | 원본·native·중복·컨테이너 보존 매핑 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000150.png](70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000150.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000151.png](70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000151.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000240.png](70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-f000240.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/base_sample_1-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/collect_audit.py](70-reference/s11-program-audit-2026-10-11/native-evidence/collect_audit.py) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/focused-tests.log](70-reference/s11-program-audit-2026-10-11/native-evidence/focused-tests.log) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/focused-tests.xml](70-reference/s11-program-audit-2026-10-11/native-evidence/focused-tests.xml) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/inspect_media.py](70-reference/s11-program-audit-2026-10-11/native-evidence/inspect_media.py) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/p5-independent-verification.json](70-reference/s11-program-audit-2026-10-11/native-evidence/p5-independent-verification.json) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000000.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000000.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000030.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000030.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000060.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-f000060.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample2-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-checkpoint-summary.json](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-checkpoint-summary.json) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-current-default.json](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-current-default.json) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-current-default.log](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-current-default.log) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-default-summary.json](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-default-summary.json) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000420.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000420.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000450.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000450.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000480.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f000480.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001200.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001200.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001260.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001260.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001275.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001275.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001290.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001290.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001305.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001305.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001320.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001320.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001485.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001485.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001560.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001560.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001620.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001620.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001635.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001635.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001665.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001665.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001680.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-f001680.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample4-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000000.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000000.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000205.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000205.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000815.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000815.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000822.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000822.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000829.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f000829.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001225.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001225.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001232.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001232.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001239.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001239.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001438.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001438.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001643.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-f001643.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample5-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000000.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000000.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000146.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000146.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000436.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-f000436.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample6-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f000000.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f000000.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f000532.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f000532.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f001063.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-f001063.png) | 로컬 감사 원본 bytes 보존 |
+| 2026-10-11 | [70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-source-sheet.png](70-reference/s11-program-audit-2026-10-11/native-evidence/sample7-source-sheet.png) | 로컬 감사 원본 bytes 보존 |
