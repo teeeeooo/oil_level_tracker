@@ -1,0 +1,66 @@
+{
+  "schema": "s11-supplied-intake-v1",
+  "intake_date": "2026-10-11",
+  "base_head": "8fea93f2cfa27c455114d0921bbeacb9f697ad13",
+  "source_archive": {
+    "name": "1-s11-program-review-2026-10-10.zip",
+    "sha256": "d4d0b80c7b72c1fefc681452a7609deeeff075b7d0f09dfb469b040e11071c8e",
+    "bytes": 32675
+  },
+  "supplied_files": {
+    "README.md": {
+      "sha256": "b85f9685d7a82446f2da64962b9d1930dd72b03def8313d3cbb402c1bba5dfe4",
+      "bytes": 1592
+    },
+    "SHA256SUMS.txt": {
+      "sha256": "f4ea3c6f5cc3bad41756ac20518a278f7e03f8b7e7458ea56b9561167246447a",
+      "bytes": 493
+    },
+    "s11-execution-summary-2026-10-10.json": {
+      "sha256": "34710cb5d2b207de95e636c96fc7da0004d7647ea0b700c10effefb52b47cda9",
+      "bytes": 7555
+    },
+    "s11-handoff-2026-10-10.md": {
+      "sha256": "e02f127568c0ff830bfd9da1b9ff72f057182c2aae9f3d8d38e44c0332ae3a58",
+      "bytes": 2729
+    },
+    "s11-program-audit-and-detector-work-spec-2026-10-10.md": {
+      "sha256": "4ccea2aac4bf5cabb0e06a7eb5c033b2ed7c039db7c455b4fd54175ea9b85e23",
+      "bytes": 61659
+    },
+    "s11-work-packages-2026-10-10.json": {
+      "sha256": "8e6307998a644e090da0dc393b2c04ef245ca493b0fb0568af712a852d5e5961",
+      "bytes": 2770
+    }
+  },
+  "native_files": [
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-program-review-20261010-001/SESSION_SUMMARY.md",
+      "sha256": "4c95d7530b0785750d3ca8ee3fb77b4a919c8814d928e32409c520a4481ad393",
+      "bytes": 1924,
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-10/native-evidence/audit/SESSION_SUMMARY.md"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-program-review-20261010-001/audit_identity.json",
+      "sha256": "8e6c78695e47895058e3e913b9eed75b4a0ffa75bce9168e1d3c2d246222ee76",
+      "bytes": 214870,
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-10/native-evidence/audit/audit_identity.json"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-program-review-20261010-001/audit_readonly.py",
+      "sha256": "f22aae28c65e96d9ba00f12deebb61a89ad3d5f9570b4ea71b327441af6563fc",
+      "bytes": 4043,
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-10/native-evidence/audit/audit_readonly.py"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-program-review-20261010-001/inspect_media.unexecuted.txt",
+      "sha256": "e2011ac962937a96fd46199fd3196f7ddf66e606def03d0cfc215c316e28e896",
+      "bytes": 1511,
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-10/native-evidence/audit/inspect_media.unexecuted.txt"
+    }
+  ],
+  "discardable_transports": [],
+  "authority": "docs/60-evidence/s11/2026-10-11-program-intake.md",
+  "current_plan": "docs/00-project/work-plan.md",
+  "scope": "Original supplied bytes and local execution provenance; not current authority or field acceptance. Upstream videos and raster inputs remain local at their existing paths."
+}

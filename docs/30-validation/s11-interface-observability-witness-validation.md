@@ -1292,3 +1292,41 @@ O2 physical-role qualification. It has no production caller. Required checks:
 Execution and limitations: [isolated P1 evidence](../60-evidence/s11/2026-10-11-center-path-implementation.md).
 No production adoption, O2 acceptance, Windows qualification or report-efficacy
 claim follows from these checks alone.
+
+After repository integration, reproduce from the main checkout and an unused
+output directory. The runner must load the original source from the pinned Git
+object rather than the now-extended evidence checkout. Verify the historical
+digest, candidate byte/AST prefix, current runner/input pins, non-repository-cwd
+entry, unavailable Git history and stale-manifest rejection. Preserve old
+preflight/readout bytes; a fresh manifest identifies the integrated runner.
+
+## P2 shared-support proposal entry and program evaluation
+
+The [adopted proposal boundary](../20-architecture/s11-interface-observability-witness-architecture.md#p2-shared-support-role-comparison--proposal-entry)
+is not an operating point or an O2 result. Before inference, the preflight must
+name a source-bound comparison domain for each role, identical current support,
+transform capacity, normalized residual, availability and tie rules, fixed
+numeric operating point, resource bound and one predeclared structural ablation.
+Missing references remain unavailable at their actual scope. Do not invent exact
+contours from regional replies or use the reviewed interval to generate a path.
+
+Keep all seven reviewed sample4 positives and three rejected targets in the
+ledger, including incomparable items; unavailable coverage is not rejection.
+Retain qualified water B/C, A upper/lower visibility distinctions, beer/milk,
+inclined/stationary surfaces and rim/texture opposition. Synthetic ambiguity and
+real-source outcomes have separate denominators. The exposed recordings are
+development controls; random frame splits cannot satisfy untouched holdouts.
+
+One frozen prototype and its one ablation may establish a bounded development
+result or close without promotion. Require positive preservation together with
+wrong-target reduction and explicit unresolved coverage; all-UNKNOWN is not
+efficacy. Passing these checks alone still leaves the existing V3/V4/V5 and O2
+acceptance requirements in force before O3 behavior entry.
+
+For future report comparison, annotate errors as context-reversing (A),
+context-erasing (B), local residual (C), or unobservable/unqualified (U). This is
+an evaluation vocabulary, not a replacement PASS rule or permission to exclude a
+failing canonical segment. Retain the qualified one-second Oil cadence scope,
+exact-runtime nine-segment Windows qualification and explicit final acceptance.
+The specifications' proposed purpose-based S11 closure does not relax holdouts,
+current field gates or the retained FULL/EMPTY and independent Oil/Foam contracts.

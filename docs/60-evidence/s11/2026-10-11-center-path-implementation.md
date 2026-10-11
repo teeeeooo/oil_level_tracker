@@ -5,6 +5,12 @@
 **Branch:** `work/s11-center-alternatives-20261011`; no commit/push/merge.
 **Authority:** current work plan remains unchanged; O2 OPEN / FIELD FAIL.
 
+**Subsequent preservation:** the statements above describe the original isolated
+execution. The [October 11 intake](2026-10-11-program-intake.md) records later
+main integration and replaces the retired local paths below with a byte-verified
+[artifact relocation manifest](../../70-reference/s11-center-path-closeout-2026-10-11/import-manifest.json).
+The supplied original of this record remains byte-identical in that package.
+
 ## Implementation
 
 Implemented the attached 2026-10-10 program review's P1 in the existing material

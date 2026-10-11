@@ -1,0 +1,1023 @@
+{
+  "schema": "s11-supplied-intake-v1",
+  "intake_date": "2026-10-11",
+  "base_head": "8fea93f2cfa27c455114d0921bbeacb9f697ad13",
+  "source_archive": {
+    "name": "2-s11-center-path-closeout-2026-10-11.zip",
+    "sha256": "71eba60a86a11ce416138f45fd196b7b50253c7efa9bc54a649f5a73173bd8aa",
+    "bytes": 60865
+  },
+  "supplied_files": {
+    "README.md": {
+      "sha256": "c85e0b3b4e5c8d8799b6f68da88030fc50f191241138b4e5ea83e795086bd682",
+      "bytes": 1551
+    },
+    "SHA256SUMS.txt": {
+      "sha256": "a293f2c9d3ef2bc849e66a9a370d67387f61158af9984f0c411c02bf6071c9a6",
+      "bytes": 1451
+    },
+    "candidate-files/docs/50-diagnostics/s11/2026-10-11-center-path-preflight.json": {
+      "sha256": "64bc27b3687dc587628d178ae640511a1eedc3dc757d97b48f6a9da090f4a5ae",
+      "bytes": 11813
+    },
+    "candidate-files/docs/50-diagnostics/s11/2026-10-11-center-path-trial.json": {
+      "sha256": "cb3111a5315f8e73659daeb2c03a280352e2e85f331d5863201edfc4e8c570e2",
+      "bytes": 35095
+    },
+    "candidate-files/docs/60-evidence/s11/2026-10-11-center-path-implementation.md": {
+      "sha256": "491bb40201c9e46d4e34eae624d830809f5a212648f62e99506f7f0c226fc779",
+      "bytes": 6305
+    },
+    "candidate-files/scripts/s11_center_path_trial.py": {
+      "sha256": "17865e48bcb999dfea6882bd1eeddcdbcce77f9f91f9411fa8c5fe3fc6fd5f2f",
+      "bytes": 13016
+    },
+    "candidate-files/tests/test_center_path_diagnostics.py": {
+      "sha256": "eea236164dc002a0a1d41adf334933580b41993cff6ba84a3ad0cf38d1376f72",
+      "bytes": 8659
+    },
+    "governance.log": {
+      "sha256": "5054252290d7f2a5f8913daf1f690a541c7a6f4f2f04082fd264770893528818",
+      "bytes": 32
+    },
+    "implementation.patch": {
+      "sha256": "dac5f084b472249a2e60c009b49d0954dc2baf463927520192b1f976403059f0",
+      "bytes": 94970
+    },
+    "prior-execution-summary.json": {
+      "sha256": "d9b0b262894340f17ff3063e406f6bb24454e519c9f3defc5f1593e3d6144180",
+      "bytes": 2978
+    },
+    "pytest.log": {
+      "sha256": "399c7461aaa07942047d13a92626bd57a1c064bbaf9b409572f2b560db705600",
+      "bytes": 501
+    },
+    "replay.log": {
+      "sha256": "3498aabb9694a4240c8c12ae4e1e9dea36a22953afc2b0c52230ce55279815fc",
+      "bytes": 1567
+    },
+    "resume-verification.json": {
+      "sha256": "816ba63734787c5292384e63d676c9c05d9f46624fda77a814c36833d4d8d631",
+      "bytes": 10090
+    },
+    "s11-resume-closeout-and-follow-on-spec-2026-10-11.md": {
+      "sha256": "2a8a65aa0faaa2a3772fa233871529b3db01f16a20ef5678fb76254ac0c657e5",
+      "bytes": 25545
+    },
+    "verify_delivery.py": {
+      "sha256": "c12291eb28dad9933d4ee22e8aca963ddbd6f28cc09e8e722eb19d1cf0a9119b",
+      "bytes": 1002
+    }
+  },
+  "native_files": [
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/CLOSEOUT.md",
+      "sha256": "efaf68e566885110275ff26ef6029dba29f829e74205ed0fb21ad71cacf8c940",
+      "bytes": 1771,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/CLOSEOUT.md"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/before.json",
+      "sha256": "5aa905a4c11112b7be659d13b96cd7e465dba6d33fa9efdd8ca0af3705b5ac8d",
+      "bytes": 1261,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/before.json"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/diff-check.log"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/governance.log",
+      "sha256": "5054252290d7f2a5f8913daf1f690a541c7a6f4f2f04082fd264770893528818",
+      "bytes": 32,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/governance.log"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/package_verified.py",
+      "sha256": "8f2c6eeb78e50db446d3bc7ccb39022c7d84b708e34aaf8d92c67f6bce2a520d",
+      "bytes": 1628,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/package_verified.py"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/patch-apply-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/patch-apply-check.log"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/prepare.log",
+      "sha256": "b59f58b6b7e3b1f67149aa54b7ec24b76ea5f581f31cacfe819cb675da3a40e6",
+      "bytes": 95,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/prepare.log"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/pytest.log",
+      "sha256": "399c7461aaa07942047d13a92626bd57a1c064bbaf9b409572f2b560db705600",
+      "bytes": 501,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/pytest.log"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/pytest.xml",
+      "sha256": "be5a87bad42cc0e9cf777eb101f06d7eb731eba8e30eb81cb80b53fd8837c906",
+      "bytes": 57329,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/pytest.xml"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/00-s5-empty-native.json.gz",
+      "sha256": "584a4bacbb49ee4e533ab129b2139cbdc163f93c8ea2c2dc1ccc7fe4e44bbe5b",
+      "bytes": 39407,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/00-s5-empty-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/01-s5-empty-height_200.json.gz",
+      "sha256": "bab64c067afd31dd0d3d82dd615cb4dc313884ea9eeea47cd0cc8c54a62101f1",
+      "bytes": 12073,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/01-s5-empty-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/02-s5-inclined-native.json.gz",
+      "sha256": "c1e2d799620f7ef23b8ad19cc9f5657e6d2fbb210bd035fa7aebca9b7a1c02ab",
+      "bytes": 141892,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/02-s5-inclined-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/03-s5-inclined-height_200.json.gz",
+      "sha256": "c91e131b1ee6fbcb3dbb58828eb9880fd7c072bb34aad914ca054d3c02f4eb9f",
+      "bytes": 35018,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/03-s5-inclined-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/04-s5-settled-native.json.gz",
+      "sha256": "7145c2d6a95b491640dd63701f2497d0a697a260da7bfc28489b6a704e5f2b10",
+      "bytes": 52245,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/04-s5-settled-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/05-s5-settled-height_200.json.gz",
+      "sha256": "1ee4c068604736669cf1947c1cc2e07045dd26a2d74d36f1c1ea08087979406b",
+      "bytes": 16043,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/05-s5-settled-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/06-s6-empty-native.json.gz",
+      "sha256": "00546cd9779902dacaf9f0953c5caf56eb08d1a3f9abcc2bb293c15699d4c584",
+      "bytes": 53780,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/06-s6-empty-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/07-s6-empty-height_200.json.gz",
+      "sha256": "7fe97b90c0285630b840f5b1ece5b369477859e5d765a5352f5aee02f8d27499",
+      "bytes": 13595,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/07-s6-empty-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/08-s6-forming-native.json.gz",
+      "sha256": "17a818700edcd4d6d6724b0828cab279a5b1bec000357aab8bac7e37f1eede84",
+      "bytes": 14937,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/08-s6-forming-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/09-s6-forming-height_200.json.gz",
+      "sha256": "fbe208667ec8821b115488eb5154ea2ea2e1d4e36d46de3f65cd5d3605fd8e8b",
+      "bytes": 12281,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/09-s6-forming-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/10-s6-layer-native.json.gz",
+      "sha256": "52020a6aa336f3c7aad530cc0197579d2586d35a1820a60c17f8e7be3934a0e8",
+      "bytes": 15869,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/10-s6-layer-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/11-s6-layer-height_200.json.gz",
+      "sha256": "4a35a43781333f07d86f91867cfb44538ca354206f13096473d77d48a34cb574",
+      "bytes": 7681,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/11-s6-layer-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/12-s7-empty-native.json.gz",
+      "sha256": "ece01bc9a22dad09036e93278ddfde44346ec52ccbddfb0aa025ac8f5f86169b",
+      "bytes": 43659,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/12-s7-empty-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/13-s7-empty-height_200.json.gz",
+      "sha256": "361e5dec5a6959433321ba44619a5834cfa4a0233384b306a7a459b6581db152",
+      "bytes": 15233,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/13-s7-empty-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/14-s7-pouring-native.json.gz",
+      "sha256": "a3ba8c8b78052540c0817d77cf6365ca2a3f4efc9a2744d86ab79aaaeecfe70a",
+      "bytes": 39190,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/14-s7-pouring-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/15-s7-pouring-height_200.json.gz",
+      "sha256": "7918a0955a3abdd8e120e268f0b362b6bf034fccc5dc20ab8178d9e8105f0f5f",
+      "bytes": 10829,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/15-s7-pouring-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/16-s7-settled-native.json.gz",
+      "sha256": "9b293ccf539cdda5e264690db8454fcbb8a3d49189af8b7a3faac1d8eca4deae",
+      "bytes": 40201,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/16-s7-settled-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/17-s7-settled-height_200.json.gz",
+      "sha256": "c376b38da3eaca1eb00c7ae89ad439fbb9cc6ae64101a463f9298e326e36b41c",
+      "bytes": 14001,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/17-s7-settled-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/18-water-B-native.json.gz",
+      "sha256": "d2156cc5eaad759e079537b5448ddc0db22ece03b563e82ded70b8658c8724ba",
+      "bytes": 84632,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/18-water-B-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/19-water-B-height_200.json.gz",
+      "sha256": "c57f4209d5d73ad22b563ed2760ce44c19b4ebb540ac69476a381166f98b627c",
+      "bytes": 21740,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/19-water-B-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/20-water-A-native.json.gz",
+      "sha256": "914aca37d2b985d13b313144f9cb2f5e3b11e2cdf0113884e9c5303b00e26737",
+      "bytes": 117205,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/20-water-A-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/21-water-A-height_200.json.gz",
+      "sha256": "37293bbb75a1da0ad4d66dbf5e3ed276f64bc719f791ff0b6276fb95979b8ca9",
+      "bytes": 27053,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/21-water-A-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/22-sample4-f1275-native.json.gz",
+      "sha256": "0e477406e58ee2e26eb6e409e816ab7ce052755de6e1b9fac084aa8fe9bf905e",
+      "bytes": 4952,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/22-sample4-f1275-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/preflight.json",
+      "sha256": "64bc27b3687dc587628d178ae640511a1eedc3dc757d97b48f6a9da090f4a5ae",
+      "bytes": 11813,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/preflight.json"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay/readout.json",
+      "sha256": "97198b8da81373e92188dd83af9b338dd09015082ee24322e98921a3086275ba",
+      "bytes": 35096,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/readout.json"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/replay.log",
+      "sha256": "3498aabb9694a4240c8c12ae4e1e9dea36a22953afc2b0c52230ce55279815fc",
+      "bytes": 1567,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay.log"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/resume-verification.json",
+      "sha256": "816ba63734787c5292384e63d676c9c05d9f46624fda77a814c36833d4d8d631",
+      "bytes": 10090,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/resume-verification.json"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/resume_verify.py",
+      "sha256": "8369259df7ac75be8c180cbcaa6c55035ccc56ac4b679e76cc5cd9e9ba5577e5",
+      "bytes": 5313,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/resume_verify.py"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/00-s5-empty-native.json.gz",
+      "sha256": "584a4bacbb49ee4e533ab129b2139cbdc163f93c8ea2c2dc1ccc7fe4e44bbe5b",
+      "bytes": 39407,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/00-s5-empty-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/01-s5-empty-height_200.json.gz",
+      "sha256": "bab64c067afd31dd0d3d82dd615cb4dc313884ea9eeea47cd0cc8c54a62101f1",
+      "bytes": 12073,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/01-s5-empty-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/02-s5-inclined-native.json.gz",
+      "sha256": "c1e2d799620f7ef23b8ad19cc9f5657e6d2fbb210bd035fa7aebca9b7a1c02ab",
+      "bytes": 141892,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/02-s5-inclined-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/03-s5-inclined-height_200.json.gz",
+      "sha256": "c91e131b1ee6fbcb3dbb58828eb9880fd7c072bb34aad914ca054d3c02f4eb9f",
+      "bytes": 35018,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/03-s5-inclined-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/04-s5-settled-native.json.gz",
+      "sha256": "7145c2d6a95b491640dd63701f2497d0a697a260da7bfc28489b6a704e5f2b10",
+      "bytes": 52245,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/04-s5-settled-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/05-s5-settled-height_200.json.gz",
+      "sha256": "1ee4c068604736669cf1947c1cc2e07045dd26a2d74d36f1c1ea08087979406b",
+      "bytes": 16043,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/05-s5-settled-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/06-s6-empty-native.json.gz",
+      "sha256": "00546cd9779902dacaf9f0953c5caf56eb08d1a3f9abcc2bb293c15699d4c584",
+      "bytes": 53780,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/06-s6-empty-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/07-s6-empty-height_200.json.gz",
+      "sha256": "7fe97b90c0285630b840f5b1ece5b369477859e5d765a5352f5aee02f8d27499",
+      "bytes": 13595,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/07-s6-empty-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/08-s6-forming-native.json.gz",
+      "sha256": "17a818700edcd4d6d6724b0828cab279a5b1bec000357aab8bac7e37f1eede84",
+      "bytes": 14937,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/08-s6-forming-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/09-s6-forming-height_200.json.gz",
+      "sha256": "fbe208667ec8821b115488eb5154ea2ea2e1d4e36d46de3f65cd5d3605fd8e8b",
+      "bytes": 12281,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/09-s6-forming-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/10-s6-layer-native.json.gz",
+      "sha256": "52020a6aa336f3c7aad530cc0197579d2586d35a1820a60c17f8e7be3934a0e8",
+      "bytes": 15869,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/10-s6-layer-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/11-s6-layer-height_200.json.gz",
+      "sha256": "4a35a43781333f07d86f91867cfb44538ca354206f13096473d77d48a34cb574",
+      "bytes": 7681,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/11-s6-layer-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/12-s7-empty-native.json.gz",
+      "sha256": "ece01bc9a22dad09036e93278ddfde44346ec52ccbddfb0aa025ac8f5f86169b",
+      "bytes": 43659,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/12-s7-empty-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/13-s7-empty-height_200.json.gz",
+      "sha256": "361e5dec5a6959433321ba44619a5834cfa4a0233384b306a7a459b6581db152",
+      "bytes": 15233,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/13-s7-empty-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/14-s7-pouring-native.json.gz",
+      "sha256": "a3ba8c8b78052540c0817d77cf6365ca2a3f4efc9a2744d86ab79aaaeecfe70a",
+      "bytes": 39190,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/14-s7-pouring-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/15-s7-pouring-height_200.json.gz",
+      "sha256": "7918a0955a3abdd8e120e268f0b362b6bf034fccc5dc20ab8178d9e8105f0f5f",
+      "bytes": 10829,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/15-s7-pouring-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/16-s7-settled-native.json.gz",
+      "sha256": "9b293ccf539cdda5e264690db8454fcbb8a3d49189af8b7a3faac1d8eca4deae",
+      "bytes": 40201,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/16-s7-settled-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/17-s7-settled-height_200.json.gz",
+      "sha256": "c376b38da3eaca1eb00c7ae89ad439fbb9cc6ae64101a463f9298e326e36b41c",
+      "bytes": 14001,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/17-s7-settled-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/18-water-B-native.json.gz",
+      "sha256": "d2156cc5eaad759e079537b5448ddc0db22ece03b563e82ded70b8658c8724ba",
+      "bytes": 84632,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/18-water-B-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/19-water-B-height_200.json.gz",
+      "sha256": "c57f4209d5d73ad22b563ed2760ce44c19b4ebb540ac69476a381166f98b627c",
+      "bytes": 21740,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/19-water-B-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/20-water-A-native.json.gz",
+      "sha256": "914aca37d2b985d13b313144f9cb2f5e3b11e2cdf0113884e9c5303b00e26737",
+      "bytes": 117205,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/20-water-A-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/21-water-A-height_200.json.gz",
+      "sha256": "37293bbb75a1da0ad4d66dbf5e3ed276f64bc719f791ff0b6276fb95979b8ca9",
+      "bytes": 27053,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/21-water-A-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/22-sample4-f1275-native.json.gz",
+      "sha256": "0e477406e58ee2e26eb6e409e816ab7ce052755de6e1b9fac084aa8fe9bf905e",
+      "bytes": 4952,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/22-sample4-f1275-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/preflight.json",
+      "sha256": "2bc9ee8de3586e200274ee77f077d576c2b3c30e4cc65f62cf2f3b1f2374bae4",
+      "bytes": 11568,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/initial/preflight.json"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/pytest.log",
+      "sha256": "6f67aa2ea25904c90706914c0bd726fdda900a3437cd02d2ff214c87a87befe1",
+      "bytes": 501,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/initial/pytest.log"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/pytest.xml",
+      "sha256": "7109a2307f7e22b90c3e84d79aacc517dd83d8d27cf21c2e241ca13df1680800",
+      "bytes": 56812,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/initial/pytest.xml"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/readout.json",
+      "sha256": "ceecaf32c12f98811ac1012e18af4576b5c9c1212a21d9c7402dc30a03da7058",
+      "bytes": 33808,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/initial/readout.json"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/resource.json",
+      "sha256": "89be4cae655079823ad56f0ce9ebdf117f62ba94b06eb2576342fcb9c5c0f73b",
+      "bytes": 431,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/initial/resource.json"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/resource_probe.py",
+      "sha256": "7b209c0172c4c64a9a2517cfd6d2104430c18c92d2d2cd27e4503b20233da64e",
+      "bytes": 1484,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/initial/resource_probe.py"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-001/run.py",
+      "sha256": "c653a00b64e24dec54f7dc94786b672836cabc200b7db4ebb70a061c82be75e7",
+      "bytes": 12119,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/initial/run.py"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/00-s5-empty-native.json.gz",
+      "sha256": "584a4bacbb49ee4e533ab129b2139cbdc163f93c8ea2c2dc1ccc7fe4e44bbe5b",
+      "bytes": 39407,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/00-s5-empty-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/01-s5-empty-height_200.json.gz",
+      "sha256": "bab64c067afd31dd0d3d82dd615cb4dc313884ea9eeea47cd0cc8c54a62101f1",
+      "bytes": 12073,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/01-s5-empty-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/02-s5-inclined-native.json.gz",
+      "sha256": "c1e2d799620f7ef23b8ad19cc9f5657e6d2fbb210bd035fa7aebca9b7a1c02ab",
+      "bytes": 141892,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/02-s5-inclined-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/03-s5-inclined-height_200.json.gz",
+      "sha256": "c91e131b1ee6fbcb3dbb58828eb9880fd7c072bb34aad914ca054d3c02f4eb9f",
+      "bytes": 35018,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/03-s5-inclined-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/04-s5-settled-native.json.gz",
+      "sha256": "7145c2d6a95b491640dd63701f2497d0a697a260da7bfc28489b6a704e5f2b10",
+      "bytes": 52245,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/04-s5-settled-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/05-s5-settled-height_200.json.gz",
+      "sha256": "1ee4c068604736669cf1947c1cc2e07045dd26a2d74d36f1c1ea08087979406b",
+      "bytes": 16043,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/05-s5-settled-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/06-s6-empty-native.json.gz",
+      "sha256": "00546cd9779902dacaf9f0953c5caf56eb08d1a3f9abcc2bb293c15699d4c584",
+      "bytes": 53780,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/06-s6-empty-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/07-s6-empty-height_200.json.gz",
+      "sha256": "7fe97b90c0285630b840f5b1ece5b369477859e5d765a5352f5aee02f8d27499",
+      "bytes": 13595,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/07-s6-empty-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/08-s6-forming-native.json.gz",
+      "sha256": "17a818700edcd4d6d6724b0828cab279a5b1bec000357aab8bac7e37f1eede84",
+      "bytes": 14937,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/08-s6-forming-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/09-s6-forming-height_200.json.gz",
+      "sha256": "fbe208667ec8821b115488eb5154ea2ea2e1d4e36d46de3f65cd5d3605fd8e8b",
+      "bytes": 12281,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/09-s6-forming-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/10-s6-layer-native.json.gz",
+      "sha256": "52020a6aa336f3c7aad530cc0197579d2586d35a1820a60c17f8e7be3934a0e8",
+      "bytes": 15869,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/10-s6-layer-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/11-s6-layer-height_200.json.gz",
+      "sha256": "4a35a43781333f07d86f91867cfb44538ca354206f13096473d77d48a34cb574",
+      "bytes": 7681,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/11-s6-layer-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/12-s7-empty-native.json.gz",
+      "sha256": "ece01bc9a22dad09036e93278ddfde44346ec52ccbddfb0aa025ac8f5f86169b",
+      "bytes": 43659,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/12-s7-empty-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/13-s7-empty-height_200.json.gz",
+      "sha256": "361e5dec5a6959433321ba44619a5834cfa4a0233384b306a7a459b6581db152",
+      "bytes": 15233,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/13-s7-empty-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/14-s7-pouring-native.json.gz",
+      "sha256": "a3ba8c8b78052540c0817d77cf6365ca2a3f4efc9a2744d86ab79aaaeecfe70a",
+      "bytes": 39190,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/14-s7-pouring-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/15-s7-pouring-height_200.json.gz",
+      "sha256": "7918a0955a3abdd8e120e268f0b362b6bf034fccc5dc20ab8178d9e8105f0f5f",
+      "bytes": 10829,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/15-s7-pouring-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/16-s7-settled-native.json.gz",
+      "sha256": "9b293ccf539cdda5e264690db8454fcbb8a3d49189af8b7a3faac1d8eca4deae",
+      "bytes": 40201,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/16-s7-settled-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/17-s7-settled-height_200.json.gz",
+      "sha256": "c376b38da3eaca1eb00c7ae89ad439fbb9cc6ae64101a463f9298e326e36b41c",
+      "bytes": 14001,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/17-s7-settled-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/18-water-B-native.json.gz",
+      "sha256": "d2156cc5eaad759e079537b5448ddc0db22ece03b563e82ded70b8658c8724ba",
+      "bytes": 84632,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/18-water-B-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/19-water-B-height_200.json.gz",
+      "sha256": "c57f4209d5d73ad22b563ed2760ce44c19b4ebb540ac69476a381166f98b627c",
+      "bytes": 21740,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/19-water-B-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/20-water-A-native.json.gz",
+      "sha256": "914aca37d2b985d13b313144f9cb2f5e3b11e2cdf0113884e9c5303b00e26737",
+      "bytes": 117205,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/20-water-A-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/21-water-A-height_200.json.gz",
+      "sha256": "37293bbb75a1da0ad4d66dbf5e3ed276f64bc719f791ff0b6276fb95979b8ca9",
+      "bytes": 27053,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/21-water-A-height_200.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/22-sample4-f1275-native.json.gz",
+      "sha256": "0e477406e58ee2e26eb6e409e816ab7ce052755de6e1b9fac084aa8fe9bf905e",
+      "bytes": 4952,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/22-sample4-f1275-native.json.gz"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/execution-summary.json",
+      "sha256": "d9b0b262894340f17ff3063e406f6bb24454e519c9f3defc5f1593e3d6144180",
+      "bytes": 2978,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/prior-execution-summary.json"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/finalize.py",
+      "sha256": "cede88867360f061c78e139fee210fb5fbaba4d3a1b5aa1e5ca18744cc0d5741",
+      "bytes": 6902,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation/finalize.py"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/governance.log",
+      "sha256": "5054252290d7f2a5f8913daf1f690a541c7a6f4f2f04082fd264770893528818",
+      "bytes": 32,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/governance.log"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/implementation.patch",
+      "sha256": "dac5f084b472249a2e60c009b49d0954dc2baf463927520192b1f976403059f0",
+      "bytes": 94970,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/implementation.patch"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/preflight.json",
+      "sha256": "64bc27b3687dc587628d178ae640511a1eedc3dc757d97b48f6a9da090f4a5ae",
+      "bytes": 11813,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/preflight.json"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/pytest.log",
+      "sha256": "0ea94a0fab29b12d75b79a0f2213dba75296722cad5932035d20249f8a544c2e",
+      "bytes": 501,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation/pytest.log"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/pytest.xml",
+      "sha256": "95d03e0cf0e1bf262a9ee823935c12439fb7dbcdd7d65b3289f82b4e5746a580",
+      "bytes": 57329,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation/pytest.xml"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/readout.json",
+      "sha256": "cb3111a5315f8e73659daeb2c03a280352e2e85f331d5863201edfc4e8c570e2",
+      "bytes": 35095,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/candidate-files/docs/50-diagnostics/s11/2026-10-11-center-path-trial.json"
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/replay-comparison.json",
+      "sha256": "845518fd58d6a867631f3f0e6c3bb43e306a37c30224a6cd715e9f5c9cbc5578",
+      "bytes": 6807,
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation/replay-comparison.json"
+    }
+  ],
+  "discardable_transports": [
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/delivery-core.b64",
+      "sha256": "a05dea3f8b9c1ed3dbddc2215ec295070a7cde8476b7dff46fc85bf5c25dc0b3",
+      "bytes": 29602,
+      "decoded_sha256": "e79bcf7a45f22b6007bb72237b4044c330cc181002d11448f5396d520022c27b",
+      "duplicates": [
+        "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/delivery-core.tar.xz"
+      ],
+      "disposition": "Redundant transport encoding/container; all decoded members preserved and byte-verified."
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/delivery-core.tar.xz",
+      "sha256": "e79bcf7a45f22b6007bb72237b4044c330cc181002d11448f5396d520022c27b",
+      "bytes": 21980,
+      "members": [
+        {
+          "member": "governance.log",
+          "sha256": "5054252290d7f2a5f8913daf1f690a541c7a6f4f2f04082fd264770893528818",
+          "bytes": 32,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/governance.log"
+        },
+        {
+          "member": "implementation.patch",
+          "sha256": "dac5f084b472249a2e60c009b49d0954dc2baf463927520192b1f976403059f0",
+          "bytes": 94970,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/implementation.patch"
+        },
+        {
+          "member": "prior-execution-summary.json",
+          "sha256": "d9b0b262894340f17ff3063e406f6bb24454e519c9f3defc5f1593e3d6144180",
+          "bytes": 2978,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/prior-execution-summary.json"
+        },
+        {
+          "member": "pytest.log",
+          "sha256": "399c7461aaa07942047d13a92626bd57a1c064bbaf9b409572f2b560db705600",
+          "bytes": 501,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/pytest.log"
+        },
+        {
+          "member": "replay.log",
+          "sha256": "3498aabb9694a4240c8c12ae4e1e9dea36a22953afc2b0c52230ce55279815fc",
+          "bytes": 1567,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay.log"
+        },
+        {
+          "member": "resume-verification.json",
+          "sha256": "816ba63734787c5292384e63d676c9c05d9f46624fda77a814c36833d4d8d631",
+          "bytes": 10090,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/resume-verification.json"
+        }
+      ],
+      "disposition": "Redundant transport encoding/container; all decoded members preserved and byte-verified."
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/verified-delivery.b64",
+      "sha256": "5e97989b5647a00ecec2468f7f8b9745523219cf736bb5897319a10fbb02dbf0",
+      "bytes": 46279,
+      "decoded_sha256": "a5107fc3dae1c411a927bcee97c9f252fee16c492e361a251de4ab425eefb706",
+      "duplicates": [
+        "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/verified-delivery.tar.xz"
+      ],
+      "disposition": "Redundant transport encoding/container; all decoded members preserved and byte-verified."
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-resume-20261011-001/verified-delivery.tar.xz",
+      "sha256": "a5107fc3dae1c411a927bcee97c9f252fee16c492e361a251de4ab425eefb706",
+      "bytes": 34364,
+      "members": [
+        {
+          "member": "PAYLOAD-SHA256SUMS.txt",
+          "sha256": "c4017838959edd56d87310bae46d9266b971676b00f052084f66d4007723772b",
+          "bytes": 1260,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume-delivery/PAYLOAD-SHA256SUMS.txt"
+        },
+        {
+          "member": "before.json",
+          "sha256": "5aa905a4c11112b7be659d13b96cd7e465dba6d33fa9efdd8ca0af3705b5ac8d",
+          "bytes": 1261,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/before.json"
+        },
+        {
+          "member": "diff-check.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/patch-apply-check.log"
+        },
+        {
+          "member": "governance.log",
+          "sha256": "5054252290d7f2a5f8913daf1f690a541c7a6f4f2f04082fd264770893528818",
+          "bytes": 32,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/governance.log"
+        },
+        {
+          "member": "implementation-evidence.md",
+          "sha256": "491bb40201c9e46d4e34eae624d830809f5a212648f62e99506f7f0c226fc779",
+          "bytes": 6305,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/candidate-files/docs/60-evidence/s11/2026-10-11-center-path-implementation.md"
+        },
+        {
+          "member": "implementation.patch",
+          "sha256": "dac5f084b472249a2e60c009b49d0954dc2baf463927520192b1f976403059f0",
+          "bytes": 94970,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/implementation.patch"
+        },
+        {
+          "member": "patch-apply-check.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/patch-apply-check.log"
+        },
+        {
+          "member": "prepare.log",
+          "sha256": "b59f58b6b7e3b1f67149aa54b7ec24b76ea5f581f31cacfe819cb675da3a40e6",
+          "bytes": 95,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/prepare.log"
+        },
+        {
+          "member": "prior-execution-summary.json",
+          "sha256": "d9b0b262894340f17ff3063e406f6bb24454e519c9f3defc5f1593e3d6144180",
+          "bytes": 2978,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/prior-execution-summary.json"
+        },
+        {
+          "member": "pytest.log",
+          "sha256": "399c7461aaa07942047d13a92626bd57a1c064bbaf9b409572f2b560db705600",
+          "bytes": 501,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/pytest.log"
+        },
+        {
+          "member": "pytest.xml",
+          "sha256": "be5a87bad42cc0e9cf777eb101f06d7eb731eba8e30eb81cb80b53fd8837c906",
+          "bytes": 57329,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/pytest.xml"
+        },
+        {
+          "member": "replay-preflight.json",
+          "sha256": "64bc27b3687dc587628d178ae640511a1eedc3dc757d97b48f6a9da090f4a5ae",
+          "bytes": 11813,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/preflight.json"
+        },
+        {
+          "member": "replay-readout.json",
+          "sha256": "97198b8da81373e92188dd83af9b338dd09015082ee24322e98921a3086275ba",
+          "bytes": 35096,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/readout.json"
+        },
+        {
+          "member": "replay.log",
+          "sha256": "3498aabb9694a4240c8c12ae4e1e9dea36a22953afc2b0c52230ce55279815fc",
+          "bytes": 1567,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay.log"
+        },
+        {
+          "member": "resume-verification.json",
+          "sha256": "816ba63734787c5292384e63d676c9c05d9f46624fda77a814c36833d4d8d631",
+          "bytes": 10090,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/resume-verification.json"
+        },
+        {
+          "member": "resume-verify.py",
+          "sha256": "8369259df7ac75be8c180cbcaa6c55035ccc56ac4b679e76cc5cd9e9ba5577e5",
+          "bytes": 5313,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/resume_verify.py"
+        }
+      ],
+      "disposition": "Redundant transport encoding/container; all decoded members preserved and byte-verified."
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/delivery-payload.tar.b64",
+      "sha256": "3efe98c617705028b8a7732d92542870bcc950e223686b57d08de23327458d4d",
+      "bytes": 36172,
+      "decoded_sha256": "d05ce58bffc765a3da4f7c191395453b7bd25b5da9d40c7eb28419d04d9707f6",
+      "duplicates": [
+        "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/delivery-payload.tar.xz"
+      ],
+      "disposition": "Redundant transport encoding/container; all decoded members preserved and byte-verified."
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/delivery-payload.tar.xz",
+      "sha256": "d05ce58bffc765a3da4f7c191395453b7bd25b5da9d40c7eb28419d04d9707f6",
+      "bytes": 27128,
+      "members": [
+        {
+          "member": "execution-summary.json",
+          "sha256": "d9b0b262894340f17ff3063e406f6bb24454e519c9f3defc5f1593e3d6144180",
+          "bytes": 2978,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/prior-execution-summary.json"
+        },
+        {
+          "member": "finalize.py",
+          "sha256": "cede88867360f061c78e139fee210fb5fbaba4d3a1b5aa1e5ca18744cc0d5741",
+          "bytes": 6902,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation/finalize.py"
+        },
+        {
+          "member": "governance.log",
+          "sha256": "5054252290d7f2a5f8913daf1f690a541c7a6f4f2f04082fd264770893528818",
+          "bytes": 32,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/governance.log"
+        },
+        {
+          "member": "implementation-evidence.md",
+          "sha256": "491bb40201c9e46d4e34eae624d830809f5a212648f62e99506f7f0c226fc779",
+          "bytes": 6305,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/candidate-files/docs/60-evidence/s11/2026-10-11-center-path-implementation.md"
+        },
+        {
+          "member": "implementation.patch",
+          "sha256": "dac5f084b472249a2e60c009b49d0954dc2baf463927520192b1f976403059f0",
+          "bytes": 94970,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/implementation.patch"
+        },
+        {
+          "member": "preflight.json",
+          "sha256": "64bc27b3687dc587628d178ae640511a1eedc3dc757d97b48f6a9da090f4a5ae",
+          "bytes": 11813,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/preflight.json"
+        },
+        {
+          "member": "pytest.log",
+          "sha256": "0ea94a0fab29b12d75b79a0f2213dba75296722cad5932035d20249f8a544c2e",
+          "bytes": 501,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation/pytest.log"
+        },
+        {
+          "member": "readout.json",
+          "sha256": "cb3111a5315f8e73659daeb2c03a280352e2e85f331d5863201edfc4e8c570e2",
+          "bytes": 35095,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/candidate-files/docs/50-diagnostics/s11/2026-10-11-center-path-trial.json"
+        },
+        {
+          "member": "replay-comparison.json",
+          "sha256": "845518fd58d6a867631f3f0e6c3bb43e306a37c30224a6cd715e9f5c9cbc5578",
+          "bytes": 6807,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation/replay-comparison.json"
+        },
+        {
+          "member": "resource.json",
+          "sha256": "89be4cae655079823ad56f0ce9ebdf117f62ba94b06eb2576342fcb9c5c0f73b",
+          "bytes": 431,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/initial/resource.json"
+        },
+        {
+          "member": "s11_center_path_trial.py",
+          "sha256": "17865e48bcb999dfea6882bd1eeddcdbcce77f9f91f9411fa8c5fe3fc6fd5f2f",
+          "bytes": 13016,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/candidate-files/scripts/s11_center_path_trial.py"
+        },
+        {
+          "member": "test_center_path_diagnostics.py",
+          "sha256": "eea236164dc002a0a1d41adf334933580b41993cff6ba84a3ad0cf38d1376f72",
+          "bytes": 8659,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/candidate-files/tests/test_center_path_diagnostics.py"
+        },
+        {
+          "member": "PAYLOAD-SHA256SUMS.txt",
+          "sha256": "4c525c2eca30c1355ce8d18c4529c73dfcfe08a940839d90110251eb020a1976",
+          "bytes": 1023,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation-delivery/PAYLOAD-SHA256SUMS.txt"
+        }
+      ],
+      "disposition": "Redundant transport encoding/container; all decoded members preserved and byte-verified."
+    },
+    {
+      "source": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011/sample/output/s11-center-path-20261011-002/delivery-payload.zip",
+      "sha256": "bdd6c5e126fdd1a3690b6ea7aa677a0d60e38391e2e4d99ef4ffa1127d5cb56a",
+      "bytes": 48708,
+      "members": [
+        {
+          "member": "execution-summary.json",
+          "sha256": "d9b0b262894340f17ff3063e406f6bb24454e519c9f3defc5f1593e3d6144180",
+          "bytes": 2978,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/prior-execution-summary.json"
+        },
+        {
+          "member": "finalize.py",
+          "sha256": "cede88867360f061c78e139fee210fb5fbaba4d3a1b5aa1e5ca18744cc0d5741",
+          "bytes": 6902,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation/finalize.py"
+        },
+        {
+          "member": "governance.log",
+          "sha256": "5054252290d7f2a5f8913daf1f690a541c7a6f4f2f04082fd264770893528818",
+          "bytes": 32,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/governance.log"
+        },
+        {
+          "member": "implementation-evidence.md",
+          "sha256": "491bb40201c9e46d4e34eae624d830809f5a212648f62e99506f7f0c226fc779",
+          "bytes": 6305,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/candidate-files/docs/60-evidence/s11/2026-10-11-center-path-implementation.md"
+        },
+        {
+          "member": "implementation.patch",
+          "sha256": "dac5f084b472249a2e60c009b49d0954dc2baf463927520192b1f976403059f0",
+          "bytes": 94970,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/implementation.patch"
+        },
+        {
+          "member": "preflight.json",
+          "sha256": "64bc27b3687dc587628d178ae640511a1eedc3dc757d97b48f6a9da090f4a5ae",
+          "bytes": 11813,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/preflight.json"
+        },
+        {
+          "member": "pytest.log",
+          "sha256": "0ea94a0fab29b12d75b79a0f2213dba75296722cad5932035d20249f8a544c2e",
+          "bytes": 501,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation/pytest.log"
+        },
+        {
+          "member": "readout.json",
+          "sha256": "cb3111a5315f8e73659daeb2c03a280352e2e85f331d5863201edfc4e8c570e2",
+          "bytes": 35095,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/candidate-files/docs/50-diagnostics/s11/2026-10-11-center-path-trial.json"
+        },
+        {
+          "member": "replay-comparison.json",
+          "sha256": "845518fd58d6a867631f3f0e6c3bb43e306a37c30224a6cd715e9f5c9cbc5578",
+          "bytes": 6807,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation/replay-comparison.json"
+        },
+        {
+          "member": "resource.json",
+          "sha256": "89be4cae655079823ad56f0ce9ebdf117f62ba94b06eb2576342fcb9c5c0f73b",
+          "bytes": 431,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/initial/resource.json"
+        },
+        {
+          "member": "s11_center_path_trial.py",
+          "sha256": "17865e48bcb999dfea6882bd1eeddcdbcce77f9f91f9411fa8c5fe3fc6fd5f2f",
+          "bytes": 13016,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/candidate-files/scripts/s11_center_path_trial.py"
+        },
+        {
+          "member": "test_center_path_diagnostics.py",
+          "sha256": "eea236164dc002a0a1d41adf334933580b41993cff6ba84a3ad0cf38d1376f72",
+          "bytes": 8659,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/candidate-files/tests/test_center_path_diagnostics.py"
+        },
+        {
+          "member": "PAYLOAD-SHA256SUMS.txt",
+          "sha256": "4c525c2eca30c1355ce8d18c4529c73dfcfe08a940839d90110251eb020a1976",
+          "bytes": 1023,
+          "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/implementation-delivery/PAYLOAD-SHA256SUMS.txt"
+        }
+      ],
+      "disposition": "Redundant transport encoding/container; all decoded members preserved and byte-verified."
+    }
+  ],
+  "authority": "docs/60-evidence/s11/2026-10-11-program-intake.md",
+  "current_plan": "docs/00-project/work-plan.md",
+  "scope": "Original supplied bytes and local execution provenance; not current authority or field acceptance. Upstream videos and raster inputs remain local at their existing paths."
+}

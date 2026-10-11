@@ -1,0 +1,23 @@
+s5-empty native COMPLETE 600 paths [] -> [] 0.692 sec
+s5-empty height_200 COMPLETE 192 paths [] -> [] 0.149 sec
+s5-inclined native COMPLETE 2180 paths [] -> [] 1.854 sec
+s5-inclined height_200 COMPLETE 514 paths [] -> [] 0.356 sec
+s5-settled native COMPLETE 790 paths [490.0] -> [489.0, 490.0, 491.0, 492.0, 493.0, 494.0] 0.876 sec
+s5-settled height_200 COMPLETE 247 paths [] -> [492.27500000000003] 0.187 sec
+s6-empty native COMPLETE 771 paths [] -> [] 0.455 sec
+s6-empty height_200 COMPLETE 204 paths [] -> [] 0.148 sec
+s6-forming native COMPLETE 171 paths [] -> [] 0.132 sec
+s6-forming height_200 COMPLETE 177 paths [] -> [] 0.108 sec
+s6-layer native COMPLETE 204 paths [] -> [] 0.234 sec
+s6-layer height_200 COMPLETE 107 paths [] -> [] 0.079 sec
+s7-empty native COMPLETE 654 paths [] -> [] 0.521 sec
+s7-empty height_200 COMPLETE 223 paths [] -> [] 0.119 sec
+s7-pouring native COMPLETE 556 paths [] -> [] 0.485 sec
+s7-pouring height_200 COMPLETE 145 paths [] -> [] 0.115 sec
+s7-settled native COMPLETE 604 paths [] -> [] 0.472 sec
+s7-settled height_200 COMPLETE 207 paths [] -> [] 0.152 sec
+water-B native COMPLETE 1307 paths [] -> [484.0, 485.0, 486.0, 487.0, 488.0, 489.0] 1.353 sec
+water-B height_200 COMPLETE 329 paths [] -> [483.975, 488.125] 0.222 sec
+water-A native COMPLETE 1833 paths [476.0] -> [476.0, 477.0, 478.0, 479.0, 480.0, 481.0] 1.838 sec
+water-A height_200 COMPLETE 397 paths [] -> [475.675, 479.82500000000005] 0.275 sec
+sample4-f1275 native COMPLETE 65 paths [836.0] -> [833.0, 834.0, 835.0, 836.0, 837.0, 838.0, 839.0, 840.0, 841.0] 0.04 sec

@@ -1,0 +1,15 @@
+{
+  "base": "8fea93f2cfa27c455114d0921bbeacb9f697ad13",
+  "candidate_files": {
+    "docs/20-architecture/s11-interface-observability-witness-architecture.md": "b96c4340ca5d9eaf50b56de16e206e54f8791c3ab326913dde2a4078d9ebe24e",
+    "docs/30-validation/s11-interface-observability-witness-validation.md": "cb7ee04e60be39aeac22fc1114294823f8ce3cf8f1ea0d4bbfd6656e4e39f4a1",
+    "docs/50-diagnostics/s11/2026-10-11-center-path-preflight.json": "64bc27b3687dc587628d178ae640511a1eedc3dc757d97b48f6a9da090f4a5ae",
+    "docs/50-diagnostics/s11/2026-10-11-center-path-trial.json": "cb3111a5315f8e73659daeb2c03a280352e2e85f331d5863201edfc4e8c570e2",
+    "docs/60-evidence/s11/2026-10-11-center-path-implementation.md": "491bb40201c9e46d4e34eae624d830809f5a212648f62e99506f7f0c226fc779",
+    "docs/catalog-by-created-date.md": "8dd9cbbc4874243adee6b08dff4965a8b97f953830c214bab5fbb47c540e3cf7",
+    "scripts/s11_center_path_trial.py": "17865e48bcb999dfea6882bd1eeddcdbcce77f9f91f9411fa8c5fe3fc6fd5f2f",
+    "src/oil_tracker/adapters/vision/oil_material_path.py": "04178a2e222f46b31e81db876f87fc980a11096adb485109cf2961e5b92ee3bc",
+    "tests/test_center_path_diagnostics.py": "eea236164dc002a0a1d41adf334933580b41993cff6ba84a3ad0cf38d1376f72"
+  },
+  "main_clean": true
+}

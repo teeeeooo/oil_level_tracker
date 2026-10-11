@@ -1,6 +1,6 @@
 """Frozen, offline P1 comparison. No video decode or production selection."""
 from __future__ import annotations
-import argparse, ast, dataclasses, gzip, hashlib, importlib.util, json, platform, sys, time
+import argparse, ast, dataclasses, gzip, hashlib, importlib.util, json, platform, subprocess, sys, time
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -15,13 +15,29 @@ from oil_tracker.domain.recipe import DetectorSettings
 
 BASE = "8fea93f2cfa27c455114d0921bbeacb9f697ad13"
 SOURCE = "src/oil_tracker/adapters/vision/oil_material_path.py"
+BASE_SOURCE_SHA256 = "0ccc85e54f0084e6b42eca602986625835275b37fe6b3f25fba8ed405e02f66e"
 PUBLIC = "docs/50-diagnostics/s11/2026-10-09-public-path-representation.json"
 B_RECORD = "docs/50-diagnostics/s11/2026-10-10-b-material-path-interval.json"
 ABC = "docs/50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.json"
 S4 = "docs/50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.json"
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
-def load(path): return json.loads(path.read_text())
-def save(path, data): path.write_text(json.dumps(data, indent=2, allow_nan=False)+"\n")
+def load(path): return json.loads(path.read_text(encoding="utf-8"))
+def save(path, data): path.write_text(json.dumps(data, indent=2, allow_nan=False)+"\n", encoding="utf-8")
+
+
+def baseline_source():
+    """Read the frozen pre-P1 owner, independently of the evidence checkout."""
+    try:
+        result = subprocess.run(
+            ["git", "show", f"{BASE}:{SOURCE}"], cwd=ROOT,
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            check=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise RuntimeError(f"P1 requires the historical Git object {BASE}:{SOURCE}") from exc
+    if hashlib.sha256(result.stdout).hexdigest() != BASE_SOURCE_SHA256:
+        raise ValueError("Historical P1 baseline source hash mismatch")
+    return result.stdout
 
 
 def prepare(evidence, out):
@@ -53,10 +69,12 @@ def prepare(evidence, out):
                   "mask":mask,"recipe":recipe,"origin":[543,798]})
     for p, digest in pins.items():
         assert sha(evidence/p) == digest, p
+    original = baseline_source()
     out.mkdir(parents=True,exist_ok=False)
     preflight = {"schema":"s11-center-path-preflight-v1", "base_head":BASE,
                  "cases":cases,"samples":samples,"corpus_access":admission,
                  "inputs":pins,"candidate_source_sha256":sha(ROOT/SOURCE),
+                 "baseline_source_sha256":hashlib.sha256(original).hexdigest(),
                  "runner_sha256":sha(Path(__file__)),"max_records":16384,"max_transitions":50_000_000,
                  "rule":"Original seed graph; best sector-count then sum per central row and polarity. Median checks separately. No physical selector.",
                  "stop":"No after-result thresholds, crop, scale, seed or budget changes. No production promotion.",
@@ -138,7 +156,9 @@ def run(evidence,out):
     assert sha(ROOT/SOURCE)==frozen["candidate_source_sha256"]
     assert sha(Path(__file__))==frozen["runner_sha256"]
     for p,digest in frozen["inputs"].items(): assert sha(evidence/p)==digest,p
-    original=(evidence/SOURCE).read_bytes(); current=(ROOT/SOURCE).read_bytes()
+    original=baseline_source(); current=(ROOT/SOURCE).read_bytes()
+    if frozen.get("baseline_source_sha256") != hashlib.sha256(original).hexdigest():
+        raise ValueError("Frozen P1 baseline source hash mismatch; prepare a new output directory")
     assert current.startswith(original), "Existing production source changed"
     prior=ast.parse(original).body; now=ast.parse(current).body
     assert [ast.dump(x) for x in prior]==[ast.dump(x) for x in now[:len(prior)]]
@@ -197,6 +217,7 @@ def run(evidence,out):
     for p,digest in frozen["inputs"].items(): assert sha(evidence/p)==digest,p
     data={"schema":"s11-center-path-trial-v1","base_head":BASE,
           "preflight_sha256":sha(out/"preflight.json"),"candidate_source_sha256":sha(ROOT/SOURCE),
+          "baseline_source_sha256":hashlib.sha256(original).hexdigest(),
           "runtime":{"python":platform.python_version(),"numpy":np.__version__,"opencv":cv2.__version__},
           "original_source_prefix_and_AST_unchanged":True,"input_pins_preserved":len(frozen["inputs"]),
           "cases":summaries,"windows_execution":False,"video_decode":False,

@@ -1,0 +1,2537 @@
+diff --git a/docs/20-architecture/s11-interface-observability-witness-architecture.md b/docs/20-architecture/s11-interface-observability-witness-architecture.md
+index a283121..53f0868 100644
+--- a/docs/20-architecture/s11-interface-observability-witness-architecture.md
++++ b/docs/20-architecture/s11-interface-observability-witness-architecture.md
+@@ -2394,8 +2394,43 @@ requires a separate current-plan decision and source qualification before scores
+ See [usage](../../sample/README.md#sample3-use-restriction) and
+ [acceptance checks](../30-validation/s11-interface-observability-witness-validation.md#retired-source-execution-checks).
+ 
++## Offline centre-conditioned material paths — isolated P1 candidate (2026-10-11)
++
++`oil_material_path.diagnose_center_path_alternatives` is an explicit offline API,
++not a generator, debug-projector or resolver consumer. It retains one best raw
++path per original `(seed, polarity, central-sector row)`. The original seed
++lattice, seed-centred band, local predicates, available-profile adjacency and
++jump bound are unchanged. Central sector 2 means the original sector, never the
++middle surviving profile. A missing centre returns `UNAVAILABLE`.
++
++The objective is lexicographic `(sector count, sum of original local values)`;
++a bounded forward DP retains the centre condition in its state and exact
++left-to-right accumulation. Path tuples (at most five nodes) are backtraces.
++This avoids reordering floating-point additions in a backward-combination
++implementation. Deterministic endpoint tie behaviour is retained. Existing
++median-strength/polarity postchecks are reported separately, not optimized.
++Optics, border, authority and publication checks are NOT thereby satisfied.
++
++Immutable `CenterPathDiagnostics` / `CenterPathAlternative` records expose raw
++rows, original profile indices/X bands, strengths, signed contrast, channel,
++scale, objective and availability. No scalar, selected candidate or physical
++role is emitted. Source/frame binding and pixel-centre mapping belong to the
++frozen caller manifest. A pooled central sample is not a fixed-X contour.
++
++Default limits are 5 profiles, height 2160, 16,384 records and 50,000,000 bounded
++predecessor comparisons. Exceeding a complete-capture budget returns unavailable
++without a favourable partial prefix. No seed widening, deduplication, top-k or
++production runtime identity changes are included. Runtime wiring requires a
++separate review; the current isolated comparison is not O2/O3 acceptance.
++
+ ## History Review
+ 
++2026-10-11 P1: reviewed F02's seed/global-band and pre-selection compression
++failures, the actual length-then-sum objective, and non-additive median checks.
++P1 preserves alternatives without turning connectivity into identity. Existing
++ordered-patch/constellation implementations remain the P2 reuse point; another
++matcher alone is not a new role discriminator. Production call graph is unchanged.
++
+ 2026-10-10 sample3 admission: reviewed F09/F10, the C/D role closure, fixed-Recipe
+ geometry limitations, old four-video orchestration and 13-case input ownership.
+ The prior README's stable-window wording could reopen unqualified physical
+diff --git a/docs/30-validation/s11-interface-observability-witness-validation.md b/docs/30-validation/s11-interface-observability-witness-validation.md
+index 565fdbb..d680ed6 100644
+--- a/docs/30-validation/s11-interface-observability-witness-validation.md
++++ b/docs/30-validation/s11-interface-observability-witness-validation.md
+@@ -1265,3 +1265,30 @@ all seven reviewed positives and three reviewed wrong targets to the unchanged
+ selection baseline. Report unreviewed supports separately without creating truth.
+ Any protected-positive loss prevents adoption even if all wrong targets abstain.
+ Scalar/contour, independent recording generalization and field remain unevaluated.
++
++
++## Offline centre-path extension validation (2026-10-11)
++
++The isolated P1 API is validated independently of O1 runtime serialization and
++O2 physical-role qualification. It has no production caller. Required checks:
++
++- Exhaustively enumerate all legal paths in small graphs for every central
++  sector and polarity; compare optimum sector count and original accumulated
++  score. Exercise ties, missing centre, disconnected paths, float32 support
++  boundaries, nonfinite profiles, unavailable channel metadata and budgets.
++- Preserve original seeds and seed bands. The ideal inclined/no-seed control
++  must remain seed-starved; this extension cannot claim to fix upstream recall.
++- Keep median postcheck failures explicit. A raw optimal path is not the optimum
++  over all paths subject to non-additive postchecks or physical authority.
++- Reconstruct saved profiles exactly before the real comparison. Freeze all 18
++  existing public raster conditions plus A/B at both established scales and the
++  source-qualified sample4/f1275 crop. No sample3 or private Windows execution.
++- Verify every returned path's nodes, jumps, score, X support and source mapping;
++  preserve default candidate fields and input hashes. Evaluate reviewed intervals
++  only after extraction, never as search seeds, clipping windows or labels.
++- Report empty-vessel alternatives, allocation measurements and capture cost
++  alongside recovered position alternatives. Neither is physical accuracy.
++
++Execution and limitations: [isolated P1 evidence](../60-evidence/s11/2026-10-11-center-path-implementation.md).
++No production adoption, O2 acceptance, Windows qualification or report-efficacy
++claim follows from these checks alone.
+diff --git a/docs/catalog-by-created-date.md b/docs/catalog-by-created-date.md
+index 8b80336..05860a4 100644
+--- a/docs/catalog-by-created-date.md
++++ b/docs/catalog-by-created-date.md
+@@ -712,3 +712,12 @@ Native arrays and the verified archive remain local and are indexed by the machi
+ | 최초 Git 등록일 | 문서 | 역할 |
+ |---|---|---|
+ | 2026-10-10 | [sample3 retirement handoff](60-evidence/s11/2026-10-10-sample3-retirement-handoff.md) | 기본 실행 제한·37개 검사·보존 범위·재개 순서를 묶은 인수인계 체크포인트 |
++
++
++## 2026-10-11 isolated P1 implementation — Git 미등록
++
++| 최초 Git 등록일 | 문서 | 역할 |
++|---|---|---|
++| 미등록; 작성 2026-10-11 | [P1 frozen preflight](50-diagnostics/s11/2026-10-11-center-path-preflight.json) | 기존 23조건·입력 해시·원래 그래프·예산 고정; source admission guard 사용 |
++| 미등록; 작성 2026-10-11 | [P1 complete readout](50-diagnostics/s11/2026-10-11-center-path-trial.json) | 중앙 위치 대안 보존과 기존 출력 불변성; 물리 identity·field 효능 아님 |
++| 미등록; 작성 2026-10-11 | [P1 implementation evidence](60-evidence/s11/2026-10-11-center-path-implementation.md) | 구현·oracle·실사·자원 검증과 직접 승격 기각; 현행 작업 권한 변경 없음 |
+diff --git a/src/oil_tracker/adapters/vision/oil_material_path.py b/src/oil_tracker/adapters/vision/oil_material_path.py
+index 1e7f773..30588ec 100644
+--- a/src/oil_tracker/adapters/vision/oil_material_path.py
++++ b/src/oil_tracker/adapters/vision/oil_material_path.py
+@@ -693,3 +693,181 @@ def _unit(value: float) -> float:
+     if not math.isfinite(float(value)):
+         return 0.0
+     return min(1.0, max(0.0, float(value)))
++
++
++@dataclass(frozen=True)
++class CenterPathAlternative:
++    """One pooled-sector hypothesis, not a contour or a publishable candidate."""
++
++    seed: int
++    polarity: int
++    center_row: int
++    status: str
++    objective_score: float | None = None
++    rows: tuple[int, ...] = ()
++    profile_indices: tuple[int, ...] = ()
++    samples: tuple[MaterialPathSample, ...] = ()
++    passes_path_median_checks: bool | None = None
++
++
++@dataclass(frozen=True)
++class CenterPathDiagnostics:
++    """Complete bounded offline capture; unavailable never means a negative."""
++
++    status: str
++    reason: str
++    center_sector_index: int
++    seeds: tuple[int, ...] = ()
++    maximum_jump: int = 0
++    transition_bound: int = 0
++    peak_live_states: int = 0
++    alternatives: tuple[CenterPathAlternative, ...] = ()
++
++
++def diagnose_center_path_alternatives(
++    profiles: list[_SectorProfile],
++    *,
++    center_sector_index: int = 2,
++    maximum_jump: int | None = None,
++    max_records: int = 16384,
++    max_transitions: int = 50_000_000,
++) -> CenterPathDiagnostics:
++    """Preserve each original seed/polarity's best path through each centre row.
++
++    The DP state includes the centre row so different centre alternatives never
++    compete before role analysis. Objective: sector count, then the existing
++    sum(strength + .08 * min(1, abs(signed)/.20)). Median postchecks are reported
++    separately, not optimized or relaxed. No production caller consumes this.
++    Limits apply to the complete capture: no favourable partial prefix escapes.
++    """
++    if not 0 <= center_sector_index < 5:
++        raise ValueError("The centre must name one of the original five sectors.")
++    if max_records < 1 or max_transitions < 1:
++        raise ValueError("Diagnostic budgets must be positive.")
++    if not profiles:
++        return CenterPathDiagnostics("UNAVAILABLE", "no_profiles", center_sector_index)
++    height = profiles[0].score.size
++    if len(profiles) > 5 or height > 2160:
++        return CenterPathDiagnostics("UNAVAILABLE", "input_budget", center_sector_index)
++    _validate_center_profiles(profiles, height)
++    jump = max(5, min(24, int(round(height * .075)))) if maximum_jump is None else maximum_jump
++    if not isinstance(jump, int) or not 1 <= jump <= 24:
++        raise ValueError("maximum_jump must be an integer in [1, 24].")
++    indices = [p.sector_index for p in profiles]
++    if len(profiles) < 3 or center_sector_index not in indices:
++        return CenterPathDiagnostics("UNAVAILABLE", "missing_center_or_sectors", center_sector_index)
++    center_index = indices.index(center_sector_index)
++    seeds = _seed_rows(profiles)
++    widths = [min(height, seed + jump + 1) - max(0, seed - jump) for seed in seeds]
++    record_bound = 2 * sum(widths)
++    # Before centre: W states; after centre: at most W*W states, each with W predecessors.
++    transition_bound = 2 * sum(
++        (center_index + 1) * w * w + (len(profiles) - center_index - 1) * w ** 3
++        for w in widths
++    )
++    if record_bound > max_records or transition_bound > max_transitions:
++        return CenterPathDiagnostics("UNAVAILABLE", "work_or_record_budget", center_sector_index,
++                                     seeds, jump, transition_bound)
++    alternatives: list[CenterPathAlternative] = []
++    peak = 0
++    for seed in seeds:
++        for polarity in (-1, 1):
++            best, live = _center_conditioned_paths(seed, profiles, center_index, polarity, jump)
++            peak = max(peak, live)
++            for row in range(max(0, seed - jump), min(height, seed + jump + 1)):
++                state = best.get(row)
++                status = "PATH" if state is not None else (
++                    "CENTER_INELIGIBLE" if not _center_node_ok(profiles[center_index], row, polarity)
++                    else "NO_THREE_SECTOR_PATH")
++                alternatives.append(_center_alternative(seed, polarity, row, status, state, profiles))
++    return CenterPathDiagnostics("COMPLETE", "", center_sector_index, seeds, jump,
++                                 transition_bound, peak, tuple(alternatives))
++
++
++def _validate_center_profiles(profiles: list[_SectorProfile], height: int) -> None:
++    if height < 1:
++        raise ValueError("Profiles must have nonempty one-dimensional arrays.")
++    indices = [p.sector_index for p in profiles]
++    if indices != sorted(set(indices)) or any(i not in range(5) for i in indices):
++        raise ValueError("Profiles must preserve unique original sector order.")
++    for i, p in enumerate(profiles):
++        arrays = (p.score, p.signed, p.support)
++        if any(a.shape != (height,) or not np.all(np.isfinite(a)) for a in arrays):
++            raise ValueError("Profile arrays must share a finite one-dimensional shape.")
++        if np.any((p.score < 0) | (p.score > 1) | (p.support < 0) | (p.support > 1)):
++            raise ValueError("Profile score and support must be in [0, 1].")
++        if p.start_x < 0 or p.stop_x <= p.start_x or (i and p.start_x < profiles[i-1].stop_x):
++            raise ValueError("Original sector X bands must be ordered and nonoverlapping.")
++        if (p.contrast_channel is None) != (p.contrast_scale is None):
++            raise ValueError("Channel and scale provenance must be available together.")
++        if p.contrast_channel is not None:
++            if (p.contrast_channel.shape != (height,) or p.contrast_scale.shape != (height,)
++                    or not np.all(np.isin(p.contrast_channel, (0, 1, 2)))
++                    or not np.all(np.isin(p.contrast_scale, (0, 3, 6, 10)))):
++                raise ValueError("Invalid channel/scale provenance.")
++
++
++def _center_node_ok(profile: _SectorProfile, row: int, polarity: int) -> bool:
++    return (float(profile.score[row]) >= .09 and profile.support[row] >= .42
++            and polarity * float(profile.signed[row]) >= .025)
++
++
++def _center_conditioned_paths(
++    seed: int, profiles: list[_SectorProfile], center_index: int, polarity: int, jump: int,
++) -> tuple[dict[int, _PathState], int]:
++    # Each group retains its centre condition; tuples are bounded backtraces (<=5 nodes).
++    prior: dict[int | None, dict[int, _PathState]] = {}
++    best: dict[int, _PathState] = {}
++    peak = 0
++    for index, profile in enumerate(profiles):
++        current: dict[int | None, dict[int, _PathState]] = {}
++        start, stop = max(0, seed-jump), min(profile.score.size, seed+jump+1)
++        for row in range(start, stop):
++            if not _center_node_ok(profile, row, polarity):
++                continue
++            strength, signed = float(profile.score[row]), float(profile.signed[row])
++            local = strength + .08 * min(1., abs(signed)/.20)
++            groups = [(None, prior.get(None, {}))] if index <= center_index else prior.items()
++            for center, states in groups:
++                previous = max(
++                    (state for y, state in states.items() if abs(row-y) <= jump),
++                    key=lambda state: (len(state[1]), state[0], -abs(row-state[1][-1])),
++                    default=None,
++                )
++                if previous is None and index > center_index:
++                    continue  # A restart to the right would not contain the centre.
++                if previous is None:
++                    value = (local, (row,), (strength,), (signed,), (index,))
++                else:
++                    value = (previous[0]+local, (*previous[1], row), (*previous[2], strength),
++                             (*previous[3], signed), (*previous[4], index))
++                key = row if index == center_index else center
++                current.setdefault(key, {})[row] = value
++                if key is not None and len(value[1]) >= 3:
++                    old = best.get(key)
++                    if old is None or (len(value[1]), value[0]) > (len(old[1]), old[0]):
++                        best[key] = value
++        peak = max(peak, sum(map(len, prior.values())) + sum(map(len, current.values())) + len(best))
++        prior = current
++    return best, peak
++
++
++def _center_alternative(
++    seed: int, polarity: int, row: int, status: str,
++    state: _PathState | None, profiles: list[_SectorProfile],
++) -> CenterPathAlternative:
++    if state is None:
++        return CenterPathAlternative(seed, polarity, row, status)
++    score, rows, strengths, signed, indices = state
++    samples = []
++    for i, y, strength, contrast in zip(indices, rows, strengths, signed):
++        p = profiles[i]
++        channel = int(p.contrast_channel[y]) if p.contrast_channel is not None else 0
++        scale = int(p.contrast_scale[y]) if p.contrast_scale is not None else 0
++        samples.append(MaterialPathSample(
++            p.sector_index, p.start_x, p.stop_x, y, strength, contrast,
++            {0: "unavailable", 1: "blurred_gray_dynamic_range", 2: "raw_combined_material"}[channel], scale))
++    passed = (float(np.median(np.asarray(strengths, np.float32))) >= .105
++              and abs(float(np.median(np.asarray(signed, np.float32)))) >= .035)
++    return CenterPathAlternative(seed, polarity, row, status, score, rows, indices,
++                                 tuple(samples), passed)
+diff --git a/docs/50-diagnostics/s11/2026-10-11-center-path-preflight.json b/docs/50-diagnostics/s11/2026-10-11-center-path-preflight.json
+new file mode 100644
+index 0000000..a1253c5
+--- /dev/null
++++ b/docs/50-diagnostics/s11/2026-10-11-center-path-preflight.json
+@@ -0,0 +1,357 @@
++{
++  "schema": "s11-center-path-preflight-v1",
++  "base_head": "8fea93f2cfa27c455114d0921bbeacb9f697ad13",
++  "cases": [
++    {
++      "id": "s5-empty",
++      "scale": "native",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-empty-native.npz",
++      "origin": [
++        740,
++        250
++      ],
++      "scale_xy": [
++        1.0,
++        1.0
++      ]
++    },
++    {
++      "id": "s5-empty",
++      "scale": "height_200",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-empty-height_200.npz",
++      "origin": [
++        740,
++        250
++      ],
++      "scale_xy": [
++        4.158415841584159,
++        4.15
++      ]
++    },
++    {
++      "id": "s5-inclined",
++      "scale": "native",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-inclined-native.npz",
++      "origin": [
++        740,
++        250
++      ],
++      "scale_xy": [
++        1.0,
++        1.0
++      ]
++    },
++    {
++      "id": "s5-inclined",
++      "scale": "height_200",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-inclined-height_200.npz",
++      "origin": [
++        740,
++        250
++      ],
++      "scale_xy": [
++        4.158415841584159,
++        4.15
++      ]
++    },
++    {
++      "id": "s5-settled",
++      "scale": "native",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-settled-native.npz",
++      "origin": [
++        740,
++        250
++      ],
++      "scale_xy": [
++        1.0,
++        1.0
++      ]
++    },
++    {
++      "id": "s5-settled",
++      "scale": "height_200",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-settled-height_200.npz",
++      "origin": [
++        740,
++        250
++      ],
++      "scale_xy": [
++        4.158415841584159,
++        4.15
++      ]
++    },
++    {
++      "id": "s6-empty",
++      "scale": "native",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-empty-native.npz",
++      "origin": [
++        200,
++        0
++      ],
++      "scale_xy": [
++        1.0,
++        1.0
++      ]
++    },
++    {
++      "id": "s6-empty",
++      "scale": "height_200",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-empty-height_200.npz",
++      "origin": [
++        200,
++        0
++      ],
++      "scale_xy": [
++        7.210031347962382,
++        7.2
++      ]
++    },
++    {
++      "id": "s6-forming",
++      "scale": "native",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-forming-native.npz",
++      "origin": [
++        200,
++        0
++      ],
++      "scale_xy": [
++        1.0,
++        1.0
++      ]
++    },
++    {
++      "id": "s6-forming",
++      "scale": "height_200",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-forming-height_200.npz",
++      "origin": [
++        200,
++        0
++      ],
++      "scale_xy": [
++        7.210031347962382,
++        7.2
++      ]
++    },
++    {
++      "id": "s6-layer",
++      "scale": "native",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-layer-native.npz",
++      "origin": [
++        200,
++        0
++      ],
++      "scale_xy": [
++        1.0,
++        1.0
++      ]
++    },
++    {
++      "id": "s6-layer",
++      "scale": "height_200",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-layer-height_200.npz",
++      "origin": [
++        200,
++        0
++      ],
++      "scale_xy": [
++        7.210031347962382,
++        7.2
++      ]
++    },
++    {
++      "id": "s7-empty",
++      "scale": "native",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-empty-native.npz",
++      "origin": [
++        760,
++        240
++      ],
++      "scale_xy": [
++        1.0,
++        1.0
++      ]
++    },
++    {
++      "id": "s7-empty",
++      "scale": "height_200",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-empty-height_200.npz",
++      "origin": [
++        760,
++        240
++      ],
++      "scale_xy": [
++        4.090909090909091,
++        4.1
++      ]
++    },
++    {
++      "id": "s7-pouring",
++      "scale": "native",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-pouring-native.npz",
++      "origin": [
++        760,
++        240
++      ],
++      "scale_xy": [
++        1.0,
++        1.0
++      ]
++    },
++    {
++      "id": "s7-pouring",
++      "scale": "height_200",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-pouring-height_200.npz",
++      "origin": [
++        760,
++        240
++      ],
++      "scale_xy": [
++        4.090909090909091,
++        4.1
++      ]
++    },
++    {
++      "id": "s7-settled",
++      "scale": "native",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-settled-native.npz",
++      "origin": [
++        760,
++        240
++      ],
++      "scale_xy": [
++        1.0,
++        1.0
++      ]
++    },
++    {
++      "id": "s7-settled",
++      "scale": "height_200",
++      "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-settled-height_200.npz",
++      "origin": [
++        760,
++        240
++      ],
++      "scale_xy": [
++        4.090909090909091,
++        4.1
++      ]
++    },
++    {
++      "id": "water-B",
++      "scale": "native",
++      "arrays": "sample/output/s11-b-material-path-interval-20261010-001/native.npz",
++      "origin": [
++        740,
++        250
++      ],
++      "scale_xy": [
++        1.0,
++        1.0
++      ]
++    },
++    {
++      "id": "water-B",
++      "scale": "height_200",
++      "arrays": "sample/output/s11-b-material-path-interval-20261010-001/height_200.npz",
++      "origin": [
++        740,
++        250
++      ],
++      "scale_xy": [
++        4.158415841584159,
++        4.15
++      ]
++    },
++    {
++      "id": "water-A",
++      "scale": "native",
++      "image": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
++      "crop": [
++        740,
++        250,
++        1160,
++        1080
++      ],
++      "origin": [
++        740,
++        250
++      ]
++    },
++    {
++      "id": "water-A",
++      "scale": "height_200",
++      "image": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
++      "crop": [
++        740,
++        250,
++        1160,
++        1080
++      ],
++      "origin": [
++        740,
++        250
++      ]
++    },
++    {
++      "id": "sample4-f1275",
++      "scale": "native",
++      "image": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png",
++      "mask": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-effective_mask.png",
++      "recipe": "sample/sample4.oilrecipe",
++      "origin": [
++        543,
++        798
++      ]
++    }
++  ],
++  "samples": [
++    "sample4",
++    "sample5",
++    "sample6",
++    "sample7"
++  ],
++  "corpus_access": {
++    "schema": "s11-corpus-access-v1",
++    "restricted_samples": [],
++    "sample3_purpose": null,
++    "physical_acceptance": "NOT_EVALUATED"
++  },
++  "inputs": {
++    "docs/50-diagnostics/s11/2026-10-09-public-path-representation.json": "63b288cccf54f1aa5fc921604eb603ed5d1d3a95b51150d7513d99ab24d596f8",
++    "docs/50-diagnostics/s11/2026-10-10-b-material-path-interval.json": "b7e3c6b3a32359cd1f3fe7345650d25d22b648e35d70e4dc75a7ae4b47133019",
++    "docs/50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.json": "38522a0b9f83662a0e94d1eaaa6ef48ab592cf730a808b676f7ae24e0b1f6be7",
++    "docs/50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.json": "6f9eb8e4a6000eb55295d26d86aac66f944a7123da4a41ed28294c9cc7a95c0f",
++    "src/oil_tracker/adapters/vision/oil_material_path.py": "0ccc85e54f0084e6b42eca602986625835275b37fe6b3f25fba8ed405e02f66e",
++    "sample/output/s11-public-path-representation-20261009-001/s5-empty-native.npz": "03e25c9f3abbe58fba1c6adf3ed16ba6cfb575584510b53ad217b8f5f262ed76",
++    "sample/output/s11-public-path-representation-20261009-001/s5-empty-height_200.npz": "5bc65e013e6b460018aca17d16bafa6ad762b2dcbbcb99ba646e662e8cc4361d",
++    "sample/output/s11-public-path-representation-20261009-001/s5-inclined-native.npz": "782079e46e8e550f339d9953436d7952718637bb4b3f17d3af9a89614be5529c",
++    "sample/output/s11-public-path-representation-20261009-001/s5-inclined-height_200.npz": "4fe0b765d7b11a89d134df1a9782946709cabd3a248835daa18b6cd990259595",
++    "sample/output/s11-public-path-representation-20261009-001/s5-settled-native.npz": "80d91a36f89d7eaf74a1c8adbbbe91c699e74e65adfb5cad9df03c93cdd7f3ca",
++    "sample/output/s11-public-path-representation-20261009-001/s5-settled-height_200.npz": "d9814899a3bfc547e8db5d8bb0b7ab87a79e4e0614f1834b232615fa6f7e8b09",
++    "sample/output/s11-public-path-representation-20261009-001/s6-empty-native.npz": "0de5aa05ea5271f14ee9350364acf5dfb8527951fe08c54f410237dddb25c113",
++    "sample/output/s11-public-path-representation-20261009-001/s6-empty-height_200.npz": "9fb4f888cce4382fb97d0efc51a7b4417d94c377cca1526b3ad237930fe4cb97",
++    "sample/output/s11-public-path-representation-20261009-001/s6-forming-native.npz": "4b0e5ee575aad057828290475a3ea7a77a7a16ea39b43c294b2b58a0952a5b98",
++    "sample/output/s11-public-path-representation-20261009-001/s6-forming-height_200.npz": "252b9b5e2ad01bcbde854807dd7d87c1f6b2110c74ecab582238e0287bbcfcec",
++    "sample/output/s11-public-path-representation-20261009-001/s6-layer-native.npz": "dac4dedbcf851d5306184e49385da6695cb3ffb3cb5006b1c7587e5b62914c6a",
++    "sample/output/s11-public-path-representation-20261009-001/s6-layer-height_200.npz": "869676f69c279c55718d92bdc636278dd56a1944cf6201561dc4009ce28d9395",
++    "sample/output/s11-public-path-representation-20261009-001/s7-empty-native.npz": "4b19e5c327515fb4a68b54c900181395018ae60f12ddd12c8bede1de7144f6a7",
++    "sample/output/s11-public-path-representation-20261009-001/s7-empty-height_200.npz": "5f7f4115f094676cf97f71b664e17169e14f65474404a15f147dadbe17a25282",
++    "sample/output/s11-public-path-representation-20261009-001/s7-pouring-native.npz": "c23b82729ac1fcb0371ef4b0025be049876cf585abac6d9abe8c38ca7dad19e2",
++    "sample/output/s11-public-path-representation-20261009-001/s7-pouring-height_200.npz": "477e0670b0d1b97110286027ec6570fddfc238906b2b8b279d59e8aed45e7e7b",
++    "sample/output/s11-public-path-representation-20261009-001/s7-settled-native.npz": "84751c51dafb5c0a737e688258521d2970f666197b1ab8dd81716b524a666fb0",
++    "sample/output/s11-public-path-representation-20261009-001/s7-settled-height_200.npz": "57ca602f7a8a0c907e9acb4237a6ac6b124b5b4c02cb970a63cc30f372bd7e63",
++    "sample/output/s11-b-material-path-interval-20261010-001/native.npz": "de812eb08c4ba27d8a806e73d256e71f64ae2519a0036cfcc96efd98e49b8661",
++    "sample/output/s11-b-material-path-interval-20261010-001/height_200.npz": "61ac698e475c5746b53348d75ae47902a684deff53d49388fc41164d01c9c77d",
++    "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
++    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
++    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-effective_mask.png": "e423ec7ce467646807f0078f5e2df5d9840009d6a4a2a19dbf0fa8a020fcce03",
++    "sample/sample4.oilrecipe": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849"
++  },
++  "candidate_source_sha256": "04178a2e222f46b31e81db876f87fc980a11096adb485109cf2961e5b92ee3bc",
++  "runner_sha256": "17865e48bcb999dfea6882bd1eeddcdbcce77f9f91f9411fa8c5fe3fc6fd5f2f",
++  "max_records": 16384,
++  "max_transitions": 50000000,
++  "rule": "Original seed graph; best sector-count then sum per central row and polarity. Median checks separately. No physical selector.",
++  "stop": "No after-result thresholds, crop, scale, seed or budget changes. No production promotion.",
++  "partition": "exposed development; sample3 not executed; Windows not executed"
++}
+diff --git a/docs/50-diagnostics/s11/2026-10-11-center-path-trial.json b/docs/50-diagnostics/s11/2026-10-11-center-path-trial.json
+new file mode 100644
+index 0000000..bb7a520
+--- /dev/null
++++ b/docs/50-diagnostics/s11/2026-10-11-center-path-trial.json
+@@ -0,0 +1,1356 @@
++{
++  "schema": "s11-center-path-trial-v1",
++  "base_head": "8fea93f2cfa27c455114d0921bbeacb9f697ad13",
++  "preflight_sha256": "64bc27b3687dc587628d178ae640511a1eedc3dc757d97b48f6a9da090f4a5ae",
++  "candidate_source_sha256": "04178a2e222f46b31e81db876f87fc980a11096adb485109cf2961e5b92ee3bc",
++  "runtime": {
++    "python": "3.14.4",
++    "numpy": "2.5.1",
++    "opencv": "4.14.0"
++  },
++  "original_source_prefix_and_AST_unchanged": true,
++  "input_pins_preserved": 29,
++  "cases": [
++    {
++      "id": "s5-empty",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        830,
++        420
++      ],
++      "seeds": 15,
++      "records": 1470,
++      "paths_verified": 600,
++      "median_pass_paths": 600,
++      "unique_center_rows": 245,
++      "original_all_seed_center_rows": [
++        84,
++        95,
++        537,
++        575,
++        584,
++        633,
++        663,
++        706,
++        728
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s5-empty",
++        "scale": "native",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-empty-native.npz",
++        "origin": [
++          740,
++          250
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 0.7106034159660339,
++      "transition_bound": 7275030,
++      "peak_live_states": 2593,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "00-s5-empty-native.json.gz",
++      "detail_sha256": "584a4bacbb49ee4e533ab129b2139cbdc163f93c8ea2c2dc1ccc7fe4e44bbe5b",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s5-empty",
++      "scale": "height_200",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        200,
++        101
++      ],
++      "seeds": 7,
++      "records": 434,
++      "paths_verified": 192,
++      "median_pass_paths": 192,
++      "unique_center_rows": 91,
++      "original_all_seed_center_rows": [
++        30,
++        135,
++        136,
++        152,
++        177
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s5-empty",
++        "scale": "height_200",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-empty-height_200.npz",
++        "origin": [
++          740,
++          250
++        ],
++        "scale_xy": [
++          4.158415841584159,
++          4.15
++        ]
++      },
++      "seconds": 0.1548106669797562,
++      "transition_bound": 874510,
++      "peak_live_states": 1034,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "01-s5-empty-height_200.json.gz",
++      "detail_sha256": "bab64c067afd31dd0d3d82dd615cb4dc313884ea9eeea47cd0cc8c54a62101f1",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s5-inclined",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        830,
++        420
++      ],
++      "seeds": 53,
++      "records": 5194,
++      "paths_verified": 2180,
++      "median_pass_paths": 2180,
++      "unique_center_rows": 601,
++      "original_all_seed_center_rows": [
++        80,
++        99,
++        100,
++        208,
++        218,
++        245,
++        288,
++        312,
++        345,
++        362,
++        363,
++        402,
++        415,
++        460,
++        464,
++        465,
++        502,
++        546,
++        594,
++        607,
++        611,
++        634,
++        635,
++        640,
++        699,
++        714,
++        744,
++        768
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s5-inclined",
++        "scale": "native",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-inclined-native.npz",
++        "origin": [
++          740,
++          250
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 1.778823458997067,
++      "transition_bound": 25705106,
++      "peak_live_states": 1698,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "02-s5-inclined-native.json.gz",
++      "detail_sha256": "c1e2d799620f7ef23b8ad19cc9f5657e6d2fbb210bd035fa7aebca9b7a1c02ab",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s5-inclined",
++      "scale": "height_200",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        200,
++        101
++      ],
++      "seeds": 18,
++      "records": 1106,
++      "paths_verified": 514,
++      "median_pass_paths": 514,
++      "unique_center_rows": 173,
++      "original_all_seed_center_rows": [
++        26,
++        37,
++        76,
++        97,
++        105,
++        132,
++        152,
++        159,
++        165,
++        179
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s5-inclined",
++        "scale": "height_200",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-inclined-height_200.npz",
++        "origin": [
++          740,
++          250
++        ],
++        "scale_xy": [
++          4.158415841584159,
++          4.15
++        ]
++      },
++      "seconds": 0.3513399580260739,
++      "transition_bound": 2198170,
++      "peak_live_states": 1174,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "03-s5-inclined-height_200.json.gz",
++      "detail_sha256": "c91e131b1ee6fbcb3dbb58828eb9880fd7c072bb34aad914ca054d3c02f4eb9f",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s5-settled",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        830,
++        420
++      ],
++      "seeds": 22,
++      "records": 2156,
++      "paths_verified": 790,
++      "median_pass_paths": 762,
++      "unique_center_rows": 341,
++      "original_all_seed_center_rows": [
++        82,
++        99,
++        240,
++        282,
++        317,
++        549,
++        568,
++        584,
++        633,
++        634,
++        643,
++        714
++      ],
++      "position_comparison_status": "QUALIFIED_INTERVAL_ONLY",
++      "reviewed_interval": [
++        488.5,
++        494.5
++      ],
++      "old_seed_compatible_source_rows": [
++        490.0
++      ],
++      "old_retained_compatible_source_rows": [
++        490.0
++      ],
++      "new_compatible_source_rows": [
++        489.0,
++        490.0,
++        491.0,
++        492.0,
++        493.0,
++        494.0
++      ],
++      "source_mapping": {
++        "id": "s5-settled",
++        "scale": "native",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-settled-native.npz",
++        "origin": [
++          740,
++          250
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 0.9663277920335531,
++      "transition_bound": 10670044,
++      "peak_live_states": 2918,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "04-s5-settled-native.json.gz",
++      "detail_sha256": "7145c2d6a95b491640dd63701f2497d0a697a260da7bfc28489b6a704e5f2b10",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s5-settled",
++      "scale": "height_200",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        200,
++        101
++      ],
++      "seeds": 12,
++      "records": 744,
++      "paths_verified": 247,
++      "median_pass_paths": 247,
++      "unique_center_rows": 128,
++      "original_all_seed_center_rows": [
++        22,
++        53,
++        66,
++        93,
++        128,
++        139,
++        173
++      ],
++      "position_comparison_status": "QUALIFIED_INTERVAL_ONLY",
++      "reviewed_interval": [
++        488.5,
++        494.5
++      ],
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [
++        492.27500000000003
++      ],
++      "source_mapping": {
++        "id": "s5-settled",
++        "scale": "height_200",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s5-settled-height_200.npz",
++        "origin": [
++          740,
++          250
++        ],
++        "scale_xy": [
++          4.158415841584159,
++          4.15
++        ]
++      },
++      "seconds": 0.08712300000479445,
++      "transition_bound": 1499160,
++      "peak_live_states": 927,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "05-s5-settled-height_200.json.gz",
++      "detail_sha256": "1ee4c068604736669cf1947c1cc2e07045dd26a2d74d36f1c1ea08087979406b",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s6-empty",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        1440,
++        2300
++      ],
++      "seeds": 26,
++      "records": 2548,
++      "paths_verified": 771,
++      "median_pass_paths": 764,
++      "unique_center_rows": 301,
++      "original_all_seed_center_rows": [
++        722,
++        724,
++        762,
++        765,
++        810,
++        827,
++        868,
++        901,
++        917,
++        959,
++        1004,
++        1009,
++        1156,
++        1164,
++        1178
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s6-empty",
++        "scale": "native",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-empty-native.npz",
++        "origin": [
++          200,
++          0
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 0.4415217919740826,
++      "transition_bound": 12610052,
++      "peak_live_states": 1881,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "06-s6-empty-native.json.gz",
++      "detail_sha256": "00546cd9779902dacaf9f0953c5caf56eb08d1a3f9abcc2bb293c15699d4c584",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s6-empty",
++      "scale": "height_200",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        200,
++        319
++      ],
++      "seeds": 8,
++      "records": 490,
++      "paths_verified": 204,
++      "median_pass_paths": 204,
++      "unique_center_rows": 107,
++      "original_all_seed_center_rows": [
++        98,
++        105,
++        120,
++        139,
++        165,
++        172
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s6-empty",
++        "scale": "height_200",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-empty-height_200.npz",
++        "origin": [
++          200,
++          0
++        ],
++        "scale_xy": [
++          7.210031347962382,
++          7.2
++        ]
++      },
++      "seconds": 0.1519640840124339,
++      "transition_bound": 967022,
++      "peak_live_states": 901,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "07-s6-empty-height_200.json.gz",
++      "detail_sha256": "7fe97b90c0285630b840f5b1ece5b369477859e5d765a5352f5aee02f8d27499",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s6-forming",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        1440,
++        2300
++      ],
++      "seeds": 13,
++      "records": 1274,
++      "paths_verified": 171,
++      "median_pass_paths": 168,
++      "unique_center_rows": 132,
++      "original_all_seed_center_rows": [
++        389,
++        394,
++        662,
++        994,
++        1005,
++        1076,
++        1157,
++        1159
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s6-forming",
++        "scale": "native",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-forming-native.npz",
++        "origin": [
++          200,
++          0
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 0.12967175000812858,
++      "transition_bound": 6305026,
++      "peak_live_states": 1680,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "08-s6-forming-native.json.gz",
++      "detail_sha256": "17a818700edcd4d6d6724b0828cab279a5b1bec000357aab8bac7e37f1eede84",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s6-forming",
++      "scale": "height_200",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        200,
++        319
++      ],
++      "seeds": 7,
++      "records": 434,
++      "paths_verified": 177,
++      "median_pass_paths": 174,
++      "unique_center_rows": 110,
++      "original_all_seed_center_rows": [
++        53,
++        54,
++        99,
++        138,
++        141,
++        182
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s6-forming",
++        "scale": "height_200",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-forming-height_200.npz",
++        "origin": [
++          200,
++          0
++        ],
++        "scale_xy": [
++          7.210031347962382,
++          7.2
++        ]
++      },
++      "seconds": 0.11449266597628593,
++      "transition_bound": 874510,
++      "peak_live_states": 780,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "09-s6-forming-height_200.json.gz",
++      "detail_sha256": "fbe208667ec8821b115488eb5154ea2ea2e1d4e36d46de3f65cd5d3605fd8e8b",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s6-layer",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        1440,
++        2300
++      ],
++      "seeds": 12,
++      "records": 1176,
++      "paths_verified": 204,
++      "median_pass_paths": 204,
++      "unique_center_rows": 113,
++      "original_all_seed_center_rows": [
++        940,
++        966,
++        1002,
++        1013,
++        1074,
++        1163,
++        1165
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s6-layer",
++        "scale": "native",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-layer-native.npz",
++        "origin": [
++          200,
++          0
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 0.23385720798978582,
++      "transition_bound": 5820024,
++      "peak_live_states": 2009,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "10-s6-layer-native.json.gz",
++      "detail_sha256": "52020a6aa336f3c7aad530cc0197579d2586d35a1820a60c17f8e7be3934a0e8",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s6-layer",
++      "scale": "height_200",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        200,
++        319
++      ],
++      "seeds": 6,
++      "records": 364,
++      "paths_verified": 107,
++      "median_pass_paths": 107,
++      "unique_center_rows": 80,
++      "original_all_seed_center_rows": [
++        11,
++        138,
++        164
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s6-layer",
++        "scale": "height_200",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s6-layer-height_200.npz",
++        "origin": [
++          200,
++          0
++        ],
++        "scale_xy": [
++          7.210031347962382,
++          7.2
++        ]
++      },
++      "seconds": 0.08318441698793322,
++      "transition_bound": 707756,
++      "peak_live_states": 623,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "11-s6-layer-height_200.json.gz",
++      "detail_sha256": "4a35a43781333f07d86f91867cfb44538ca354206f13096473d77d48a34cb574",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s7-empty",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        820,
++        720
++      ],
++      "seeds": 17,
++      "records": 1666,
++      "paths_verified": 654,
++      "median_pass_paths": 654,
++      "unique_center_rows": 265,
++      "original_all_seed_center_rows": [
++        50,
++        130,
++        563,
++        580,
++        590,
++        616,
++        656,
++        676,
++        704,
++        713,
++        729,
++        778
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s7-empty",
++        "scale": "native",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-empty-native.npz",
++        "origin": [
++          760,
++          240
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 0.5278562079765834,
++      "transition_bound": 8245034,
++      "peak_live_states": 1613,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "12-s7-empty-native.json.gz",
++      "detail_sha256": "ece01bc9a22dad09036e93278ddfde44346ec52ccbddfb0aa025ac8f5f86169b",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s7-empty",
++      "scale": "height_200",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        200,
++        176
++      ],
++      "seeds": 9,
++      "records": 546,
++      "paths_verified": 223,
++      "median_pass_paths": 223,
++      "unique_center_rows": 95,
++      "original_all_seed_center_rows": [
++        23,
++        31,
++        137,
++        157,
++        164,
++        172,
++        173
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s7-empty",
++        "scale": "height_200",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-empty-height_200.npz",
++        "origin": [
++          760,
++          240
++        ],
++        "scale_xy": [
++          4.090909090909091,
++          4.1
++        ]
++      },
++      "seconds": 0.12419604195747524,
++      "transition_bound": 1059534,
++      "peak_live_states": 596,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "13-s7-empty-height_200.json.gz",
++      "detail_sha256": "361e5dec5a6959433321ba44619a5834cfa4a0233384b306a7a459b6581db152",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s7-pouring",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        820,
++        720
++      ],
++      "seeds": 21,
++      "records": 2058,
++      "paths_verified": 556,
++      "median_pass_paths": 556,
++      "unique_center_rows": 240,
++      "original_all_seed_center_rows": [
++        52,
++        123,
++        145,
++        150,
++        388,
++        411,
++        468,
++        664,
++        684,
++        707,
++        722,
++        764,
++        773,
++        774
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s7-pouring",
++        "scale": "native",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-pouring-native.npz",
++        "origin": [
++          760,
++          240
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 0.508300916000735,
++      "transition_bound": 10185042,
++      "peak_live_states": 2807,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "14-s7-pouring-native.json.gz",
++      "detail_sha256": "a3ba8c8b78052540c0817d77cf6365ca2a3f4efc9a2744d86ab79aaaeecfe70a",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s7-pouring",
++      "scale": "height_200",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        200,
++        176
++      ],
++      "seeds": 8,
++      "records": 484,
++      "paths_verified": 145,
++      "median_pass_paths": 145,
++      "unique_center_rows": 99,
++      "original_all_seed_center_rows": [
++        19,
++        39,
++        90,
++        98,
++        159,
++        174
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s7-pouring",
++        "scale": "height_200",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-pouring-height_200.npz",
++        "origin": [
++          760,
++          240
++        ],
++        "scale_xy": [
++          4.090909090909091,
++          4.1
++        ]
++      },
++      "seconds": 0.1194712920114398,
++      "transition_bound": 934604,
++      "peak_live_states": 1080,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "15-s7-pouring-height_200.json.gz",
++      "detail_sha256": "7918a0955a3abdd8e120e268f0b362b6bf034fccc5dc20ab8178d9e8105f0f5f",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s7-settled",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        820,
++        720
++      ],
++      "seeds": 19,
++      "records": 1862,
++      "paths_verified": 604,
++      "median_pass_paths": 599,
++      "unique_center_rows": 246,
++      "original_all_seed_center_rows": [
++        55,
++        145,
++        294,
++        360,
++        401,
++        644,
++        653,
++        665,
++        686,
++        731,
++        772
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s7-settled",
++        "scale": "native",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-settled-native.npz",
++        "origin": [
++          760,
++          240
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 0.4907891250331886,
++      "transition_bound": 9215038,
++      "peak_live_states": 1919,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "16-s7-settled-native.json.gz",
++      "detail_sha256": "9b293ccf539cdda5e264690db8454fcbb8a3d49189af8b7a3faac1d8eca4deae",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "s7-settled",
++      "scale": "height_200",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        200,
++        176
++      ],
++      "seeds": 8,
++      "records": 482,
++      "paths_verified": 207,
++      "median_pass_paths": 207,
++      "unique_center_rows": 133,
++      "original_all_seed_center_rows": [
++        25,
++        36,
++        72,
++        80,
++        160,
++        173
++      ],
++      "position_comparison_status": "NOT_EVALUATED",
++      "reviewed_interval": null,
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [],
++      "source_mapping": {
++        "id": "s7-settled",
++        "scale": "height_200",
++        "arrays": "sample/output/s11-public-path-representation-20261009-001/s7-settled-height_200.npz",
++        "origin": [
++          760,
++          240
++        ],
++        "scale_xy": [
++          4.090909090909091,
++          4.1
++        ]
++      },
++      "seconds": 0.15512212499743327,
++      "transition_bound": 925198,
++      "peak_live_states": 1358,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "17-s7-settled-height_200.json.gz",
++      "detail_sha256": "c376b38da3eaca1eb00c7ae89ad439fbb9cc6ae64101a463f9298e326e36b41c",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "water-B",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        830,
++        420
++      ],
++      "seeds": 33,
++      "records": 3234,
++      "paths_verified": 1307,
++      "median_pass_paths": 1291,
++      "unique_center_rows": 496,
++      "original_all_seed_center_rows": [
++        81,
++        99,
++        245,
++        251,
++        254,
++        296,
++        297,
++        333,
++        334,
++        337,
++        384,
++        406,
++        438,
++        455,
++        458,
++        501,
++        571,
++        584,
++        634,
++        714
++      ],
++      "position_comparison_status": "QUALIFIED_INTERVAL_ONLY",
++      "reviewed_interval": [
++        483.5,
++        489.5
++      ],
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [
++        484.0,
++        485.0,
++        486.0,
++        487.0,
++        488.0,
++        489.0
++      ],
++      "source_mapping": {
++        "id": "water-B",
++        "scale": "native",
++        "arrays": "sample/output/s11-b-material-path-interval-20261010-001/native.npz",
++        "origin": [
++          740,
++          250
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 1.3573264579754323,
++      "transition_bound": 16005066,
++      "peak_live_states": 3456,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "18-water-B-native.json.gz",
++      "detail_sha256": "d2156cc5eaad759e079537b5448ddc0db22ece03b563e82ded70b8658c8724ba",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "water-B",
++      "scale": "height_200",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        200,
++        101
++      ],
++      "seeds": 12,
++      "records": 744,
++      "paths_verified": 329,
++      "median_pass_paths": 329,
++      "unique_center_rows": 158,
++      "original_all_seed_center_rows": [
++        22,
++        54,
++        64,
++        102,
++        124,
++        131,
++        138,
++        173
++      ],
++      "position_comparison_status": "QUALIFIED_INTERVAL_ONLY",
++      "reviewed_interval": [
++        483.5,
++        489.5
++      ],
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [
++        483.975,
++        488.125
++      ],
++      "source_mapping": {
++        "id": "water-B",
++        "scale": "height_200",
++        "arrays": "sample/output/s11-b-material-path-interval-20261010-001/height_200.npz",
++        "origin": [
++          740,
++          250
++        ],
++        "scale_xy": [
++          4.158415841584159,
++          4.15
++        ]
++      },
++      "seconds": 0.22358854196500033,
++      "transition_bound": 1499160,
++      "peak_live_states": 1015,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "19-water-B-height_200.json.gz",
++      "detail_sha256": "c57f4209d5d73ad22b563ed2760ce44c19b4ebb540ac69476a381166f98b627c",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "water-A",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        830,
++        420
++      ],
++      "seeds": 43,
++      "records": 4214,
++      "paths_verified": 1833,
++      "median_pass_paths": 1832,
++      "unique_center_rows": 587,
++      "original_all_seed_center_rows": [
++        75,
++        76,
++        84,
++        98,
++        226,
++        268,
++        296,
++        313,
++        370,
++        375,
++        404,
++        438,
++        456,
++        475,
++        544,
++        554,
++        578,
++        584,
++        634,
++        635,
++        641,
++        714,
++        728,
++        737,
++        787
++      ],
++      "position_comparison_status": "QUALIFIED_INTERVAL_ONLY",
++      "reviewed_interval": [
++        475.5,
++        481.5
++      ],
++      "old_seed_compatible_source_rows": [
++        476.0
++      ],
++      "old_retained_compatible_source_rows": [
++        476.0
++      ],
++      "new_compatible_source_rows": [
++        476.0,
++        477.0,
++        478.0,
++        479.0,
++        480.0,
++        481.0
++      ],
++      "source_mapping": {
++        "id": "water-A",
++        "scale": "native",
++        "image": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
++        "crop": [
++          740,
++          250,
++          1160,
++          1080
++        ],
++        "origin": [
++          740,
++          250
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 1.8407707500155084,
++      "transition_bound": 20855086,
++      "peak_live_states": 2589,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "20-water-A-native.json.gz",
++      "detail_sha256": "914aca37d2b985d13b313144f9cb2f5e3b11e2cdf0113884e9c5303b00e26737",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "water-A",
++      "scale": "height_200",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        200,
++        101
++      ],
++      "seeds": 14,
++      "records": 858,
++      "paths_verified": 397,
++      "median_pass_paths": 397,
++      "unique_center_rows": 172,
++      "original_all_seed_center_rows": [
++        18,
++        52,
++        64,
++        81,
++        87,
++        118,
++        139,
++        172,
++        173,
++        174
++      ],
++      "position_comparison_status": "QUALIFIED_INTERVAL_ONLY",
++      "reviewed_interval": [
++        475.5,
++        481.5
++      ],
++      "old_seed_compatible_source_rows": [],
++      "old_retained_compatible_source_rows": [],
++      "new_compatible_source_rows": [
++        475.675,
++        479.82500000000005
++      ],
++      "source_mapping": {
++        "id": "water-A",
++        "scale": "height_200",
++        "image": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
++        "crop": [
++          740,
++          250,
++          1160,
++          1080
++        ],
++        "origin": [
++          740,
++          250
++        ],
++        "scale_xy": [
++          4.158415841584159,
++          4.15
++        ]
++      },
++      "seconds": 0.2991997920325957,
++      "transition_bound": 1698450,
++      "peak_live_states": 1090,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "21-water-A-height_200.json.gz",
++      "detail_sha256": "37293bbb75a1da0ad4d66dbf5e3ed276f64bc719f791ff0b6276fb95979b8ca9",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    },
++    {
++      "id": "sample4-f1275",
++      "scale": "native",
++      "status": "COMPLETE",
++      "reason": "",
++      "shape": [
++        104,
++        104
++      ],
++      "seeds": 4,
++      "records": 136,
++      "paths_verified": 65,
++      "median_pass_paths": 65,
++      "unique_center_rows": 61,
++      "original_all_seed_center_rows": [
++        25,
++        38,
++        69,
++        89
++      ],
++      "position_comparison_status": "QUALIFIED_INTERVAL_ONLY",
++      "reviewed_interval": [
++        832.5,
++        841.5
++      ],
++      "old_seed_compatible_source_rows": [
++        836.0
++      ],
++      "old_retained_compatible_source_rows": [
++        836.0
++      ],
++      "new_compatible_source_rows": [
++        833.0,
++        834.0,
++        835.0,
++        836.0,
++        837.0,
++        838.0,
++        839.0,
++        840.0,
++        841.0
++      ],
++      "source_mapping": {
++        "id": "sample4-f1275",
++        "scale": "native",
++        "image": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png",
++        "mask": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-effective_mask.png",
++        "recipe": "sample/sample4.oilrecipe",
++        "origin": [
++          543,
++          798
++        ],
++        "scale_xy": [
++          1.0,
++          1.0
++        ]
++      },
++      "seconds": 0.03569304198026657,
++      "transition_bound": 85544,
++      "peak_live_states": 434,
++      "default_candidates_unchanged": true,
++      "profile_arrays_unchanged": true,
++      "detail_file": "22-sample4-f1275-native.json.gz",
++      "detail_sha256": "0e477406e58ee2e26eb6e409e816ab7ce052755de6e1b9fac084aa8fe9bf905e",
++      "physical_identity": "NOT_EVALUATED",
++      "production_selection_changed": false
++    }
++  ],
++  "windows_execution": false,
++  "video_decode": false,
++  "report_efficacy": "NOT_TESTED",
++  "promotion": "NONE"
++}
+diff --git a/docs/60-evidence/s11/2026-10-11-center-path-implementation.md b/docs/60-evidence/s11/2026-10-11-center-path-implementation.md
+new file mode 100644
+index 0000000..c6d95ab
+--- /dev/null
++++ b/docs/60-evidence/s11/2026-10-11-center-path-implementation.md
+@@ -0,0 +1,103 @@
++# S11 centre-conditioned path implementation — 2026-10-11
++
++**Status:** local offline implementation verified; NOT adopted into runtime.
++**Base:** `8fea93f2cfa27c455114d0921bbeacb9f697ad13`.
++**Branch:** `work/s11-center-alternatives-20261011`; no commit/push/merge.
++**Authority:** current work plan remains unchanged; O2 OPEN / FIELD FAIL.
++
++## Implementation
++
++Implemented the attached 2026-10-10 program review's P1 in the existing material
++path owner. The new immutable records and explicit offline function retain each
++original seed/polarity's optimal path through each original central-sector row.
++The optimum is sector count then the original additive local score, not median
++quality, smallest Y, physical role or publication eligibility. Raw median-check
++failures remain visible. No old function body or production caller changed.
++
++The original source is an exact byte prefix and identical AST prefix of the
++candidate. Default generation is tested to never call the extension. This is
++not a new live O1 trace namespace, a resolver beam expansion or a release.
++
++## Frozen experiment and execution
++
++`scripts/s11_center_path_trial.py` freezes 23 conditions and 29 input hashes
++before extraction, then reconstructs the existing saved profile arrays exactly.
++The conditions comprise all 18 prior public water/beer/milk rasters/scales,
++water A/B at both established scales, and the source-qualified sample4/f1275
++native crop. These are 12 native source frames from four recordings, not 23
++independent videos or an untouched holdout. Source videos were not decoded.
++No sample3 or Windows pixels were executed or transferred.
++
++All 23 captures completed: 33,674 status records, including 12,477 locally
++admissible paths whose nodes, jumps, accumulated scores and lineage were checked.
++These counts are not true positives. All default candidate fields and 29 input
++pins were preserved. The 40 random small graphs cover 400 centre/polarity oracle
++comparisons. The final focused and owner-regression suite completed with 396 PASS,
++zero failures and zero skips, including 58 new tests in the centre-path file.
++The admission-guard replay produced exactly matching raw-capture hashes in all
++23 conditions. This is a repeatability check, not 23 additional independent cases.
++
++## Position representation outcomes
++
++The following are pooled central-sector sample positions after raw median
++checks, not measured contours, selected Oil/Foam heights or physical accuracy.
++Intervals are used only for readout, never extraction. Fractional source values
++are resize-grid mappings, not subpixel accuracy.
++
++| Condition | Existing retained compatible samples | New preserved compatible samples |
++|---|---|---|
++| B native | none | source rows 484–489 |
++| B height 200 | none | approximately 484.0, 488.1 |
++| C native | 490 | source rows 489–494; old 490 retained |
++| C height 200 | none | approximately 492.3 |
++| A native, Foam upper role | 476 | source rows 476–481 |
++| A height 200, Foam upper role | none | approximately 475.7, 479.8 |
++| Sample4/f1275 native | 836 | source rows 833–841; old 836 retained |
++
++A is not lower Oil truth. Its appearance-based Foam-support failure is not
++repaired by this path experiment. Sample4's selected Oil scalar is likewise not
++the central-sector row in this table. No public selected scalar changed.
++
++## Counter-evidence, resources and disposition
++
++Empty water/beer/milk vessels still retain respectively 245/301/265 distinct
++native central rows passing the raw median checks. These are geometric
++alternatives, not 811 reported false detections. Directly promoting this capture
++to Oil authority is rejected. The ideal inclined no-seed synthetic remains
++unrepaired; unknown inclined real contours were not relabelled from geometry.
++
++The first real run took 0.034–1.788 seconds per diagnostic call, 10.449 seconds
++across 23 calls. The largest output had 5,194 records. A separate allocation
++probe on that case measured 4,027,188 peak traced bytes (about 3.84 MiB), excluding
++preprocessing and serialization; this is not process RSS or a worst-case proof.
++The observed maximum live-state count across cases was 3,456. Instrumented timing
++was 10.329 seconds and must not be confused with ordinary capture timing.
++
++Use only offline/on-demand. Do not turn this on for every frame in live reports.
++P1's pre-selection compression question is locally answered; further parameter
++sweeps are not warranted. P2 must add actual comparable physical opposition on
++shared current support. Existing constellation/ordered-patch code should be
++reused, not presented as a newly discovered discriminator. O3 association, O4
++phase and Foam front authority remain separately gated. Report efficacy remains
++NOT TESTED; S11 stays ACTIVE and O2 OPEN / FIELD FAIL.
++
++Machine evidence is retained under `sample/output/s11-center-path-20261011-001/`
++and its admission-guard replay `sample/output/s11-center-path-20261011-002/`.
++The first runner is preserved before entry-point hardening; the second uses the
++shared source-admission guard and prevents overwriting completed evidence. No
++detector predicates, graph, score, budget, frame or reviewed interval changed.
++
++Reproduction uses the candidate checkout and the original checkout's retained
++assets; run `scripts/s11_center_path_trial.py prepare` and then `run`, supplying
++`--evidence-root` and a NEW `--out` directory. No source-video export is required.
++The machine [readout](../../50-diagnostics/s11/2026-10-11-center-path-trial.json)
++and [preflight](../../50-diagnostics/s11/2026-10-11-center-path-preflight.json)
++preserve per-case scopes and artifact hashes. Detailed gzip records stay local.
++
++## Detector Governance
++
++- Logic-map nodes: `OIL-CANDIDATE`, `TRACE-PUBLICATION`.
++- Failure-registry entries: `S11-F02`.
++- First harmful stage: original per-seed winner compression loses position-compatible raw alternatives before deduplication/top-k; this is not physical target identity or the cause of all missing outputs.
++- Logic-map impact: NONE — the new explicit offline API has no production consumer and all existing generator bodies and selected outputs remain unchanged.
++- Failure-registry impact: NONE — this diagnoses and repairs one representation facet of existing F02 without claiming a new field mechanism, classifier, or Windows repair.
+diff --git a/scripts/s11_center_path_trial.py b/scripts/s11_center_path_trial.py
+new file mode 100644
+index 0000000..e281fdf
+--- /dev/null
++++ b/scripts/s11_center_path_trial.py
+@@ -0,0 +1,213 @@
++"""Frozen, offline P1 comparison. No video decode or production selection."""
++from __future__ import annotations
++import argparse, ast, dataclasses, gzip, hashlib, importlib.util, json, platform, sys, time
++from pathlib import Path
++ROOT = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(ROOT))
++sys.path.insert(0, str(ROOT / "src"))
++from tests.diagnostics.s11_corpus_access import require_corpus_access
++import cv2
++import numpy as np
++from oil_tracker.adapters.vision import oil_material_path as owner
++from oil_tracker.adapters.vision.preprocessing import preprocess
++from oil_tracker.adapters.vision.foam_front_detector import detect_bottom_connected_foam
++from oil_tracker.domain.recipe import DetectorSettings
++
++BASE = "8fea93f2cfa27c455114d0921bbeacb9f697ad13"
++SOURCE = "src/oil_tracker/adapters/vision/oil_material_path.py"
++PUBLIC = "docs/50-diagnostics/s11/2026-10-09-public-path-representation.json"
++B_RECORD = "docs/50-diagnostics/s11/2026-10-10-b-material-path-interval.json"
++ABC = "docs/50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.json"
++S4 = "docs/50-diagnostics/s11/2026-10-10-sample4-center-interval-comparison.json"
++def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
++def load(path): return json.loads(path.read_text())
++def save(path, data): path.write_text(json.dumps(data, indent=2, allow_nan=False)+"\n")
++
++
++def prepare(evidence, out):
++    public, b, abc, s4 = [load(evidence/p) for p in (PUBLIC,B_RECORD,ABC,S4)]
++    samples=tuple(sorted({Path(c["video"]).stem for c in public["preflight"]["cases"]} | {"sample4","sample5"}))
++    admission=require_corpus_access(samples)
++    if samples != ("sample4","sample5","sample6","sample7"):
++        raise ValueError("The frozen P1 matrix must not be expanded or repurposed.")
++    pins = {p:sha(evidence/p) for p in (PUBLIC,B_RECORD,ABC,S4,SOURCE)}
++    cases = []
++    for r in public["readout"]["results"]:
++        cases.append({"id":r["case_id"], "scale":r["scale"], "arrays":r["arrays_path"],
++                      "origin":r["crop_xyxy"][:2], "scale_xy":r["source_per_working_pixel_xy"]})
++        pins[r["arrays_path"]] = r["arrays_sha256"]
++    for r in b["readout"]["results"]:
++        cases.append({"id":"water-B", "scale":r["scale"], "arrays":r["arrays_path"],
++                      "origin":[740,250], "scale_xy":r["source_per_working_pixel_xy"]})
++        pins[r["arrays_path"]] = r["arrays_sha256"]
++    a = abc["preflight"]["references"][0]["source_raster"]
++    pins[a["path"]] = a["sha256"]
++    for scale in ("native", "height_200"):
++        cases.append({"id":"water-A", "scale":scale, "image":a["path"],
++                      "crop":[740,250,1160,1080], "origin":[740,250]})
++    s = s4["readout"]["reference"]["source_raster"]
++    mask = "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-effective_mask.png"
++    recipe = "sample/sample4.oilrecipe"
++    for p in (s["path"],mask,recipe): pins[p] = s4["preflight"]["inputs"][p]
++    cases.append({"id":"sample4-f1275","scale":"native","image":s["path"],
++                  "mask":mask,"recipe":recipe,"origin":[543,798]})
++    for p, digest in pins.items():
++        assert sha(evidence/p) == digest, p
++    out.mkdir(parents=True,exist_ok=False)
++    preflight = {"schema":"s11-center-path-preflight-v1", "base_head":BASE,
++                 "cases":cases,"samples":samples,"corpus_access":admission,
++                 "inputs":pins,"candidate_source_sha256":sha(ROOT/SOURCE),
++                 "runner_sha256":sha(Path(__file__)),"max_records":16384,"max_transitions":50_000_000,
++                 "rule":"Original seed graph; best sector-count then sum per central row and polarity. Median checks separately. No physical selector.",
++                 "stop":"No after-result thresholds, crop, scale, seed or budget changes. No production promotion.",
++                 "partition":"exposed development; sample3 not executed; Windows not executed"}
++    save(out/"preflight.json",preflight)
++    print("FROZEN",len(cases),"cases",len(pins),"input pins",sha(out/"preflight.json"))
++
++
++def read_case(evidence, case, settings):
++    if "arrays" in case:
++        with np.load(evidence/case["arrays"],allow_pickle=False) as z:
++            arrays = {k:z[k].copy() for k in z.files}
++        crop = arrays["crop"]
++        mask = np.full(crop.shape[:2],255,np.uint8)
++    else:
++        crop = cv2.imread(str(evidence/case["image"]))
++        if crop is None: raise ValueError("Missing source raster")
++        if "crop" in case:
++            x0,y0,x1,y1=case["crop"]; crop=crop[y0:y1,x0:x1].copy()
++        native_h,native_w=crop.shape[:2]
++        if case["scale"] == "height_200":
++            crop=cv2.resize(crop,(round(native_w*200/native_h),200),interpolation=cv2.INTER_AREA)
++        mask=cv2.imread(str(evidence/case["mask"]),0) if "mask" in case else np.full(crop.shape[:2],255,np.uint8)
++        if "recipe" in case:
++            settings=DetectorSettings(**load(evidence/case["recipe"])["glasses"][0]["detector_settings"])
++        arrays={}
++        case = {**case,"scale_xy":[native_w/crop.shape[1],native_h/crop.shape[0]]}
++    pre=preprocess(crop,mask,settings)
++    material=arrays.get("material")
++    if material is None:
++        material=detect_bottom_connected_foam(crop,pre.gray,pre.canny,pre.glare_mask,mask,settings).combined_evidence_map
++    visible=(mask>0)&~(pre.glare_mask>0)
++    _,xx=np.where(mask>0); x0,x1=int(xx.min()),int(xx.max())+1
++    ps=[]
++    for i in range(5):
++        start=x0+round((x1-x0)*i/5); stop=x0+round((x1-x0)*(i+1)/5)
++        fresh=owner._sector_profile(pre.blurred,visible,start,stop,material_evidence_map=material,
++                                   sector_index=i,capture_diagnostics=True)
++        if f"s{i}_score" in arrays:
++            p=owner._SectorProfile(start,stop,*(arrays[f"s{i}_{k}"] for k in
++                 ("score","signed","support")),i,arrays[f"s{i}_contrast_channel"],arrays[f"s{i}_contrast_scale"])
++            assert fresh is not None
++            for k in ("score","signed","support","contrast_channel","contrast_scale"):
++                assert np.array_equal(getattr(p,k),getattr(fresh,k)),(case["id"],case["scale"],i,k)
++        else: p=fresh
++        if p is not None: ps.append(p)
++    return case,pre,mask,material,ps
++
++
++def verify_paths(result, ps):
++    checked=0
++    for r in result.alternatives:
++        if r.status != "PATH": continue
++        score=0.
++        assert len(r.rows)>=3 and r.rows[r.profile_indices.index(
++            next(i for i,p in enumerate(ps) if p.sector_index==result.center_sector_index))]==r.center_row
++        assert list(r.profile_indices)==list(range(r.profile_indices[0],r.profile_indices[-1]+1))
++        for index,y,s in zip(r.profile_indices,r.rows,r.samples):
++            p=ps[index]
++            assert abs(y-r.seed)<=result.maximum_jump and float(p.score[y])>=.09
++            assert p.support[y]>=.42 and r.polarity*float(p.signed[y])>=.025
++            assert s.local_y==y and s.sector_index==p.sector_index
++            assert (s.start_x,s.stop_x)==(p.start_x,p.stop_x)
++            assert s.strength==float(p.score[y]) and s.signed_contrast==float(p.signed[y])
++            score+=float(p.score[y])+.08*min(1.,abs(float(p.signed[y]))/.20)
++        assert abs(score-r.objective_score)<1e-12
++        assert all(abs(a-b)<=result.maximum_jump for a,b in zip(r.rows,r.rows[1:]))
++        checked+=1
++    return checked
++
++
++def run(evidence,out):
++    if (out/"readout.json").exists():
++        raise FileExistsError("Use a new output directory; completed evidence is immutable.")
++    frozen=load(out/"preflight.json")
++    if tuple(frozen["samples"]) != ("sample4","sample5","sample6","sample7"):
++        raise ValueError("Unexpected source set in frozen P1 matrix.")
++    require_corpus_access(tuple(frozen["samples"]))
++    assert sha(ROOT/SOURCE)==frozen["candidate_source_sha256"]
++    assert sha(Path(__file__))==frozen["runner_sha256"]
++    for p,digest in frozen["inputs"].items(): assert sha(evidence/p)==digest,p
++    original=(evidence/SOURCE).read_bytes(); current=(ROOT/SOURCE).read_bytes()
++    assert current.startswith(original), "Existing production source changed"
++    prior=ast.parse(original).body; now=ast.parse(current).body
++    assert [ast.dump(x) for x in prior]==[ast.dump(x) for x in now[:len(prior)]]
++    refs={"water-A":(475.5,481.5),"water-B":(483.5,489.5),
++          "s5-settled":(488.5,494.5),"sample4-f1275":(832.5,841.5)}
++    summaries=[]
++    for index, case in enumerate(frozen["cases"]):
++        case,pre,mask,material,ps=read_case(evidence,case,DetectorSettings())
++        base_paths={}
++        before=[dataclasses.asdict(c) for c in owner.generate_material_path_candidates(
++            pre,mask,None,crop_origin_y=0.,top_k=6,material_evidence_map=material,diagnostic_paths=base_paths)]
++        retained_centers=[s.local_y for p in base_paths.values() for s in p.diagnostic_samples if s.sector_index==2]
++        snapshots=[(p.score.tobytes(),p.signed.tobytes(),p.support.tobytes()) for p in ps]
++        start=time.perf_counter()
++        result=owner.diagnose_center_path_alternatives(ps,max_records=frozen["max_records"],
++                                                      max_transitions=frozen["max_transitions"])
++        seconds=time.perf_counter()-start
++        checked=verify_paths(result,ps)
++        after=[dataclasses.asdict(c) for c in owner.generate_material_path_candidates(
++            pre,mask,None,crop_origin_y=0.,top_k=6,material_evidence_map=material)]
++        assert before==after
++        assert snapshots==[(p.score.tobytes(),p.signed.tobytes(),p.support.tobytes()) for p in ps]
++        old_centers=[]
++        for seed in result.seeds:
++            path=owner._path_for_seed(seed,ps,(mask>0)&~(pre.glare_mask>0),pre.glare_mask,None,
++                material_row_profile=owner._material_row_profile(material,(mask>0)&~(pre.glare_mask>0)),
++                maximum_jump=result.maximum_jump,capture_diagnostics=True)
++            if path is not None:
++                old_centers.extend(s.local_y for s in path.diagnostic_samples if s.sector_index==2)
++        paths=[r for r in result.alternatives if r.status=="PATH"]
++        passed=[r for r in paths if r.passes_path_median_checks]
++        ys=sorted({r.center_row for r in passed})
++        origin_y=case["origin"][1]; sy=case["scale_xy"][1]
++        source=lambda y: origin_y+(y+.5)*sy-.5
++        ref=refs.get(case["id"])
++        compatible=lambda values: sorted({source(y) for y in values if ref and ref[0]<=source(y)<=ref[1]})
++        name=f'{index:02d}-{case["id"]}-{case["scale"]}'
++        details=json.dumps(dataclasses.asdict(result),allow_nan=False,separators=(",",":")).encode()
++        detail_path=out/f"{name}.json.gz"
++        detail_path.write_bytes(gzip.compress(details,mtime=0))
++        item={"id":case["id"],"scale":case["scale"],"status":result.status,"reason":result.reason,
++              "shape":list(pre.gray.shape),"seeds":len(result.seeds),"records":len(result.alternatives),
++              "paths_verified":checked,"median_pass_paths":len(passed),"unique_center_rows":len(ys),
++              "original_all_seed_center_rows":sorted(set(old_centers)),
++              "position_comparison_status":"QUALIFIED_INTERVAL_ONLY" if ref else "NOT_EVALUATED",
++              "reviewed_interval":ref,"old_seed_compatible_source_rows":compatible(old_centers),
++              "old_retained_compatible_source_rows":compatible(retained_centers),
++              "new_compatible_source_rows":compatible(ys),"source_mapping":case,
++              "seconds":seconds,"transition_bound":result.transition_bound,"peak_live_states":result.peak_live_states,
++              "default_candidates_unchanged":True,"profile_arrays_unchanged":True,
++              "detail_file":detail_path.name,"detail_sha256":sha(detail_path),
++              "physical_identity":"NOT_EVALUATED","production_selection_changed":False}
++        summaries.append(item)
++        print(case["id"],case["scale"],result.status,checked,"paths",compatible(old_centers),"->",compatible(ys),
++              round(seconds,3),"sec",flush=True)
++    for p,digest in frozen["inputs"].items(): assert sha(evidence/p)==digest,p
++    data={"schema":"s11-center-path-trial-v1","base_head":BASE,
++          "preflight_sha256":sha(out/"preflight.json"),"candidate_source_sha256":sha(ROOT/SOURCE),
++          "runtime":{"python":platform.python_version(),"numpy":np.__version__,"opencv":cv2.__version__},
++          "original_source_prefix_and_AST_unchanged":True,"input_pins_preserved":len(frozen["inputs"]),
++          "cases":summaries,"windows_execution":False,"video_decode":False,
++          "report_efficacy":"NOT_TESTED","promotion":"NONE"}
++    save(out/"readout.json",data)
++
++
++if __name__=="__main__":
++    parser=argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("action",choices=("prepare","run"))
++    parser.add_argument("--evidence-root",required=True,type=Path)
++    parser.add_argument("--out",required=True,type=Path)
++    args=parser.parse_args()
++    (prepare if args.action=="prepare" else run)(args.evidence_root.resolve(),args.out.resolve())
+diff --git a/tests/test_center_path_diagnostics.py b/tests/test_center_path_diagnostics.py
+new file mode 100644
+index 0000000..94c2cc9
+--- /dev/null
++++ b/tests/test_center_path_diagnostics.py
+@@ -0,0 +1,192 @@
++"""Independent enumeration oracle for the offline centre-conditioned sidecar."""
++from dataclasses import asdict, replace
++from itertools import product
++import math
++import numpy as np
++import pytest
++from oil_tracker.adapters.vision import oil_material_path as m
++
++
++def profiles(seed=0, height=7):
++    rng = np.random.default_rng(seed)
++    result = []
++    for i in range(5):
++        score = rng.choice([0., .1, .3, .8], height).astype(np.float32)
++        signed = rng.choice([-.2, -.04, .0, .04, .2], height).astype(np.float32)
++        support = rng.choice([.3, .42, 1.], height).astype(np.float32)
++        result.append(m._SectorProfile(i*4, (i+1)*4, score, signed, support, i))
++    return result
++
++
++def enumerate_paths(ps, seed, polarity, jump, center_index):
++    """Enumerate every legal contiguous path, independently of DP recurrence."""
++    best = {}
++    rows = range(max(0, seed-jump), min(ps[0].score.size, seed+jump+1))
++    for start in range(center_index+1):
++        for stop in range(max(center_index+1, start+3), len(ps)+1):
++            choices = [[y for y in rows if float(p.score[y]) >= .09
++                        and p.support[y] >= .42 and polarity*float(p.signed[y]) >= .025]
++                       for p in ps[start:stop]]
++            for path in product(*choices):
++                if any(abs(a-b) > jump for a,b in zip(path, path[1:])):
++                    continue
++                score = 0.
++                for p,y in zip(ps[start:stop], path):
++                    score += float(p.score[y]) + .08*min(1., abs(float(p.signed[y]))/.20)
++                key = path[center_index-start]
++                value = (len(path), score)
++                if key not in best or value > best[key]:
++                    best[key] = value
++    return best
++
++
++@pytest.mark.parametrize("case", range(40))
++def test_dp_matches_complete_enumeration(case):
++    ps = profiles(case)
++    for ci in range(5):
++        for polarity in (-1, 1):
++            best, _ = m._center_conditioned_paths(3, ps, ci, polarity, 2)
++            expected = enumerate_paths(ps, 3, polarity, 2, ci)
++            assert set(best) == set(expected)
++            for y, state in best.items():
++                assert len(state[1]) == expected[y][0]
++                assert state[0] == pytest.approx(expected[y][1], rel=0, abs=1e-14)
++                assert state[1][state[4].index(ci)] == y
++                assert all(abs(a-b) <= 2 for a,b in zip(state[1],state[1][1:]))
++
++
++def flat_profiles():
++    return [m._SectorProfile(i*4,(i+1)*4,np.full(7,.4,np.float32),
++            np.full(7,.2,np.float32),np.ones(7,np.float32),i) for i in range(5)]
++
++
++def test_complete_capture_deterministic_nonmutating_and_provenance():
++    ps = flat_profiles()
++    before = [(p.score.tobytes(),p.signed.tobytes(),p.support.tobytes()) for p in ps]
++    a = m.diagnose_center_path_alternatives(ps)
++    assert a.status == "COMPLETE" and a.alternatives
++    assert asdict(a) == asdict(m.diagnose_center_path_alternatives(ps))
++    assert before == [(p.score.tobytes(),p.signed.tobytes(),p.support.tobytes()) for p in ps]
++    for r in a.alternatives:
++        if r.status == "PATH":
++            assert len(r.rows) == 5 and r.polarity == 1
++            assert r.rows[2] == r.center_row
++            assert r.passes_path_median_checks
++            assert all(s.contrast_channel == "unavailable" for s in r.samples)
++        else:
++            assert r.status == "CENTER_INELIGIBLE" and r.polarity == -1
++
++
++def test_preserves_float32_support_boundary_semantics():
++    ps = [replace(p,support=np.full(7,.42,np.float32)) for p in flat_profiles()]
++    old = m._polarity_path_for_seed(3,ps,polarity=1,maximum_jump=2,capture_diagnostics=True)
++    best, _ = m._center_conditioned_paths(3,ps,2,1,2)
++    assert old is not None and best
++
++
++@pytest.mark.parametrize("budget", [{"max_records":1}, {"max_transitions":1}])
++def test_budget_returns_no_partial_success(budget):
++    a = m.diagnose_center_path_alternatives(flat_profiles(),**budget)
++    assert a.status == "UNAVAILABLE" and not a.alternatives
++
++
++def test_missing_center_does_not_shift_to_neighbor():
++    ps = [p for p in flat_profiles() if p.sector_index != 2]
++    a = m.diagnose_center_path_alternatives(ps)
++    assert a.status == "UNAVAILABLE" and "missing_center" in a.reason
++
++
++def test_local_center_can_be_eligible_but_unreachable():
++    ps = flat_profiles()
++    for i in (1,3):
++        ps[i] = replace(ps[i], signed=np.full(7,-.2,np.float32))
++    best, _ = m._center_conditioned_paths(3,ps,2,1,2)
++    assert not best and m._center_node_ok(ps[2],3,1)
++
++
++def test_median_failure_is_not_silently_dropped():
++    ps = [replace(p,score=np.full(7,.10,np.float32)) for p in flat_profiles()]
++    best, _ = m._center_conditioned_paths(3,ps,2,1,2)
++    r = m._center_alternative(3,1,3,"PATH",best[3],ps)
++    assert r.status == "PATH" and r.passes_path_median_checks is False
++
++
++@pytest.mark.parametrize("value", [np.nan, np.inf, -np.inf])
++def test_nonfinite_profile_is_invalid_not_negative(value):
++    ps = flat_profiles(); ps[0].signed[0] = value
++    with pytest.raises(ValueError,match="finite"):
++        m.diagnose_center_path_alternatives(ps)
++
++
++def test_seed_starvation_is_not_falsely_repaired():
++    ps = []
++    for i,y in enumerate([120,100,80,60,40]):
++        score=np.zeros(160,np.float32); signed=score.copy(); score[y]=1.; signed[y]=.2
++        ps.append(m._SectorProfile(i*4,(i+1)*4,score,signed,np.ones(160,np.float32),i))
++    a = m.diagnose_center_path_alternatives(ps)
++    assert a.status == "COMPLETE" and a.seeds == () and a.alternatives == ()
++
++
++def test_scalar_and_production_candidate_authority_are_absent():
++    a = m.diagnose_center_path_alternatives(flat_profiles())
++    assert not hasattr(a,"selected")
++    assert all(not hasattr(r,"candidate_y") and not hasattr(r,"selected") for r in a.alternatives)
++
++
++def test_provenance_channels_and_scales_are_exact():
++    ps = [replace(p,contrast_channel=np.ones(7,np.uint8),
++                  contrast_scale=np.full(7,6,np.uint8)) for p in flat_profiles()]
++    a = m.diagnose_center_path_alternatives(ps)
++    for r in a.alternatives:
++        for s in r.samples:
++            assert s.start_x == 4*s.sector_index and s.stop_x == 4*(s.sector_index+1)
++            assert s.strength == float(ps[s.sector_index].score[s.local_y])
++            assert (s.contrast_channel,s.contrast_scale_px) == ("blurred_gray_dynamic_range",6)
++
++
++def test_default_generator_never_calls_offline_extension(monkeypatch):
++    from oil_tracker.adapters.vision.preprocessing import preprocess
++    from oil_tracker.domain.recipe import DetectorSettings
++    def forbidden(*args, **kwargs):
++        raise AssertionError("Offline diagnostic entered production generation")
++    monkeypatch.setattr(m,"diagnose_center_path_alternatives",forbidden)
++    frame=np.full((120,120,3),145,np.uint8); frame[60:]=70
++    mask=np.full((120,120),255,np.uint8)
++    pre=preprocess(frame,mask,DetectorSettings())
++    assert m.generate_material_path_candidates(pre,mask,None,crop_origin_y=0,diagnostic_paths={})
++
++
++def test_trial_cannot_overwrite_completed_evidence(tmp_path):
++    from scripts import s11_center_path_trial as trial
++    path=tmp_path/"readout.json"; path.write_text("preserve")
++    with pytest.raises(FileExistsError): trial.run(tmp_path,tmp_path)
++    assert path.read_text()=="preserve"
++
++
++def test_trial_rejects_repurposed_source_set_before_loading(tmp_path):
++    from scripts import s11_center_path_trial as trial
++    trial.save(tmp_path/"preflight.json",{"samples":["sample3"]})
++    with pytest.raises(ValueError,match="Unexpected source set"):
++        trial.run(tmp_path,tmp_path)
++
++
++def test_trial_calls_existing_admission_guard(tmp_path,monkeypatch):
++    from scripts import s11_center_path_trial as trial
++    samples=("sample4","sample5","sample6","sample7")
++    trial.save(tmp_path/"preflight.json",{"samples":samples})
++    def guard(actual):
++        assert actual==samples
++        raise RuntimeError("admission checked before raster work")
++    monkeypatch.setattr(trial,"require_corpus_access",guard)
++    with pytest.raises(RuntimeError,match="admission checked"):
++        trial.run(tmp_path,tmp_path)
++
++
++def test_preparation_blocks_retired_source_via_shared_guard(tmp_path,monkeypatch):
++    from scripts import s11_center_path_trial as trial
++    from tests.diagnostics.s11_corpus_access import RestrictedCorpusUseError
++    monkeypatch.delenv("OIL_TRACKER_SAMPLE3_PURPOSE",raising=False)
++    monkeypatch.setattr(trial,"load",lambda path:{"preflight":{"cases":[{"video":"sample/sample3.mp4"}]}})
++    with pytest.raises(RestrictedCorpusUseError,match="QUARANTINED"):
++        trial.prepare(tmp_path,tmp_path/"must-not-exist")
++    assert not (tmp_path/"must-not-exist").exists()

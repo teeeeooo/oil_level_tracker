@@ -1,0 +1,357 @@
+{
+  "schema": "s11-program-intake-verification-v1",
+  "date": "2026-10-11",
+  "starting_head": "8fea93f2cfa27c455114d0921bbeacb9f697ad13",
+  "original_candidate_commit": "e9bef67a09649f01ecfa579468b46c5d1040b214",
+  "original_candidate_file_hashes_verified": {
+    "docs/20-architecture/s11-interface-observability-witness-architecture.md": "b96c4340ca5d9eaf50b56de16e206e54f8791c3ab326913dde2a4078d9ebe24e",
+    "docs/30-validation/s11-interface-observability-witness-validation.md": "cb7ee04e60be39aeac22fc1114294823f8ce3cf8f1ea0d4bbfd6656e4e39f4a1",
+    "docs/50-diagnostics/s11/2026-10-11-center-path-preflight.json": "64bc27b3687dc587628d178ae640511a1eedc3dc757d97b48f6a9da090f4a5ae",
+    "docs/50-diagnostics/s11/2026-10-11-center-path-trial.json": "cb3111a5315f8e73659daeb2c03a280352e2e85f331d5863201edfc4e8c570e2",
+    "docs/60-evidence/s11/2026-10-11-center-path-implementation.md": "491bb40201c9e46d4e34eae624d830809f5a212648f62e99506f7f0c226fc779",
+    "docs/catalog-by-created-date.md": "8dd9cbbc4874243adee6b08dff4965a8b97f953830c214bab5fbb47c540e3cf7",
+    "scripts/s11_center_path_trial.py": "17865e48bcb999dfea6882bd1eeddcdbcce77f9f91f9411fa8c5fe3fc6fd5f2f",
+    "src/oil_tracker/adapters/vision/oil_material_path.py": "04178a2e222f46b31e81db876f87fc980a11096adb485109cf2961e5b92ee3bc",
+    "tests/test_center_path_diagnostics.py": "eea236164dc002a0a1d41adf334933580b41993cff6ba84a3ad0cf38d1376f72"
+  },
+  "preservation": {
+    "s11-program-review-2026-10-10": {
+      "supplied": 6,
+      "native": 4,
+      "redundant_transports": 0,
+      "manifest_sha256": "e00850a2169bfa34815016d8b9e20a50ba7ee4cb73f20f94dba17695447f1d59"
+    },
+    "s11-center-path-closeout-2026-10-11": {
+      "supplied": 15,
+      "native": 99,
+      "redundant_transports": 7,
+      "manifest_sha256": "049d15fd7e10b83cff122d5788b7c1957d7a6036ea93c6449687b71da0edf6b4"
+    }
+  },
+  "fresh_candidate_tests": {
+    "tests": 396,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "fresh_integrated_tests": {
+    "tests": 400,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "commands": [
+    {
+      "label": "integrated-pytest",
+      "command": [
+        "/Users/sunjaekim/Developer/oil_level_tracker/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_center_path_diagnostics.py",
+        "tests/test_detector_governance.py",
+        "tests/test_foam_component_diagnostics.py",
+        "tests/test_oil_material_path.py",
+        "tests/test_oil_pipeline_module_boundaries.py",
+        "tests/test_oil_resolver_decomposition.py",
+        "tests/test_phase_detector_facade_decomposition.py",
+        "tests/unit/test_foam_episode_resolver.py",
+        "tests/unit/test_oil_candidate_authority.py",
+        "tests/unit/test_oil_interface_diagnostics.py",
+        "tests/unit/test_oil_interface_tracklets.py",
+        "tests/unit/test_oil_interface_witness.py",
+        "tests/unit/test_oil_measurement_lineage.py",
+        "tests/unit/test_oil_measurement_scope.py",
+        "tests/unit/test_oil_observation_resolver.py",
+        "tests/unit/test_oil_phase_lifecycle.py",
+        "--junitxml",
+        "/tmp/s11-intake-20261011/integrated-pytest.xml"
+      ],
+      "cwd": "/Users/sunjaekim/Developer/oil_level_tracker",
+      "exit_code": 0,
+      "seconds": 20.60019591700984
+    },
+    {
+      "label": "prepare",
+      "command": [
+        "/Users/sunjaekim/Developer/oil_level_tracker/.venv/bin/python",
+        "/Users/sunjaekim/Developer/oil_level_tracker/scripts/s11_center_path_trial.py",
+        "prepare",
+        "--evidence-root",
+        "/Users/sunjaekim/Developer/oil_level_tracker",
+        "--out",
+        "/tmp/s11-intake-20261011/integrated-replay"
+      ],
+      "cwd": "/tmp/s11-intake-20261011",
+      "exit_code": 0,
+      "seconds": 0.2527145839994773
+    },
+    {
+      "label": "replay",
+      "command": [
+        "/Users/sunjaekim/Developer/oil_level_tracker/.venv/bin/python",
+        "/Users/sunjaekim/Developer/oil_level_tracker/scripts/s11_center_path_trial.py",
+        "run",
+        "--evidence-root",
+        "/Users/sunjaekim/Developer/oil_level_tracker",
+        "--out",
+        "/tmp/s11-intake-20261011/integrated-replay"
+      ],
+      "cwd": "/tmp/s11-intake-20261011",
+      "exit_code": 0,
+      "seconds": 6.451053375029005
+    }
+  ],
+  "verified_source_files": {
+    "src/oil_tracker/adapters/vision/oil_material_path.py": "04178a2e222f46b31e81db876f87fc980a11096adb485109cf2961e5b92ee3bc",
+    "scripts/s11_center_path_trial.py": "2c93e6071f744e786d9be779494cd2ba4f32ed263f4d136463c896b7f522454f",
+    "tests/test_center_path_diagnostics.py": "298d1ec9d963f67de834f46d43cb44160f42228338797d28948737d999b79688"
+  },
+  "baseline_source_sha256": "0ccc85e54f0084e6b42eca602986625835275b37fe6b3f25fba8ed405e02f66e",
+  "original_source_byte_and_AST_prefix_preserved": true,
+  "no_original_definition_overrides": true,
+  "premerge_historical_input_pins_matched": 29,
+  "fresh_input_pins_matched": 29,
+  "changed_input_pin_paths": [
+    "src/oil_tracker/adapters/vision/oil_material_path.py"
+  ],
+  "raw_capture_matches": [
+    {
+      "id": "s5-empty",
+      "scale": "native",
+      "sha256": "584a4bacbb49ee4e533ab129b2139cbdc163f93c8ea2c2dc1ccc7fe4e44bbe5b",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/00-s5-empty-native.json.gz"
+    },
+    {
+      "id": "s5-empty",
+      "scale": "height_200",
+      "sha256": "bab64c067afd31dd0d3d82dd615cb4dc313884ea9eeea47cd0cc8c54a62101f1",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/01-s5-empty-height_200.json.gz"
+    },
+    {
+      "id": "s5-inclined",
+      "scale": "native",
+      "sha256": "c1e2d799620f7ef23b8ad19cc9f5657e6d2fbb210bd035fa7aebca9b7a1c02ab",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/02-s5-inclined-native.json.gz"
+    },
+    {
+      "id": "s5-inclined",
+      "scale": "height_200",
+      "sha256": "c91e131b1ee6fbcb3dbb58828eb9880fd7c072bb34aad914ca054d3c02f4eb9f",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/03-s5-inclined-height_200.json.gz"
+    },
+    {
+      "id": "s5-settled",
+      "scale": "native",
+      "sha256": "7145c2d6a95b491640dd63701f2497d0a697a260da7bfc28489b6a704e5f2b10",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/04-s5-settled-native.json.gz"
+    },
+    {
+      "id": "s5-settled",
+      "scale": "height_200",
+      "sha256": "1ee4c068604736669cf1947c1cc2e07045dd26a2d74d36f1c1ea08087979406b",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/05-s5-settled-height_200.json.gz"
+    },
+    {
+      "id": "s6-empty",
+      "scale": "native",
+      "sha256": "00546cd9779902dacaf9f0953c5caf56eb08d1a3f9abcc2bb293c15699d4c584",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/06-s6-empty-native.json.gz"
+    },
+    {
+      "id": "s6-empty",
+      "scale": "height_200",
+      "sha256": "7fe97b90c0285630b840f5b1ece5b369477859e5d765a5352f5aee02f8d27499",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/07-s6-empty-height_200.json.gz"
+    },
+    {
+      "id": "s6-forming",
+      "scale": "native",
+      "sha256": "17a818700edcd4d6d6724b0828cab279a5b1bec000357aab8bac7e37f1eede84",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/08-s6-forming-native.json.gz"
+    },
+    {
+      "id": "s6-forming",
+      "scale": "height_200",
+      "sha256": "fbe208667ec8821b115488eb5154ea2ea2e1d4e36d46de3f65cd5d3605fd8e8b",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/09-s6-forming-height_200.json.gz"
+    },
+    {
+      "id": "s6-layer",
+      "scale": "native",
+      "sha256": "52020a6aa336f3c7aad530cc0197579d2586d35a1820a60c17f8e7be3934a0e8",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/10-s6-layer-native.json.gz"
+    },
+    {
+      "id": "s6-layer",
+      "scale": "height_200",
+      "sha256": "4a35a43781333f07d86f91867cfb44538ca354206f13096473d77d48a34cb574",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/11-s6-layer-height_200.json.gz"
+    },
+    {
+      "id": "s7-empty",
+      "scale": "native",
+      "sha256": "ece01bc9a22dad09036e93278ddfde44346ec52ccbddfb0aa025ac8f5f86169b",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/12-s7-empty-native.json.gz"
+    },
+    {
+      "id": "s7-empty",
+      "scale": "height_200",
+      "sha256": "361e5dec5a6959433321ba44619a5834cfa4a0233384b306a7a459b6581db152",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/13-s7-empty-height_200.json.gz"
+    },
+    {
+      "id": "s7-pouring",
+      "scale": "native",
+      "sha256": "a3ba8c8b78052540c0817d77cf6365ca2a3f4efc9a2744d86ab79aaaeecfe70a",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/14-s7-pouring-native.json.gz"
+    },
+    {
+      "id": "s7-pouring",
+      "scale": "height_200",
+      "sha256": "7918a0955a3abdd8e120e268f0b362b6bf034fccc5dc20ab8178d9e8105f0f5f",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/15-s7-pouring-height_200.json.gz"
+    },
+    {
+      "id": "s7-settled",
+      "scale": "native",
+      "sha256": "9b293ccf539cdda5e264690db8454fcbb8a3d49189af8b7a3faac1d8eca4deae",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/16-s7-settled-native.json.gz"
+    },
+    {
+      "id": "s7-settled",
+      "scale": "height_200",
+      "sha256": "c376b38da3eaca1eb00c7ae89ad439fbb9cc6ae64101a463f9298e326e36b41c",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/17-s7-settled-height_200.json.gz"
+    },
+    {
+      "id": "water-B",
+      "scale": "native",
+      "sha256": "d2156cc5eaad759e079537b5448ddc0db22ece03b563e82ded70b8658c8724ba",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/18-water-B-native.json.gz"
+    },
+    {
+      "id": "water-B",
+      "scale": "height_200",
+      "sha256": "c57f4209d5d73ad22b563ed2760ce44c19b4ebb540ac69476a381166f98b627c",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/19-water-B-height_200.json.gz"
+    },
+    {
+      "id": "water-A",
+      "scale": "native",
+      "sha256": "914aca37d2b985d13b313144f9cb2f5e3b11e2cdf0113884e9c5303b00e26737",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/20-water-A-native.json.gz"
+    },
+    {
+      "id": "water-A",
+      "scale": "height_200",
+      "sha256": "37293bbb75a1da0ad4d66dbf5e3ed276f64bc719f791ff0b6276fb95979b8ca9",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/21-water-A-height_200.json.gz"
+    },
+    {
+      "id": "sample4-f1275",
+      "scale": "native",
+      "sha256": "0e477406e58ee2e26eb6e409e816ab7ce052755de6e1b9fac084aa8fe9bf905e",
+      "preserved_at": "docs/70-reference/s11-center-path-closeout-2026-10-11/native-evidence/resume/replay/22-sample4-f1275-native.json.gz"
+    }
+  ],
+  "raw_status_records": 33674,
+  "raw_paths_verified": 12477,
+  "default_generator_invariance_cases": 23,
+  "fresh_artifacts": {
+    "docs/60-evidence/s11/2026-10-11-program-intake/candidate-pytest.log.txt": {
+      "sha256": "bfcc7d54e35ae51403088bd12a59f9988b1f4c82f71d8747e76bb0c82a51729b",
+      "bytes": 501
+    },
+    "docs/60-evidence/s11/2026-10-11-program-intake/candidate-pytest.xml": {
+      "sha256": "d51a09e743f83992f29e970cb77d732d8341fa9e5b4ed465a708f96891d98506",
+      "bytes": 57329
+    },
+    "docs/60-evidence/s11/2026-10-11-program-intake/integrated-pytest.log.txt": {
+      "sha256": "452aa36f13c3df28b307c3a961042f631656654048fe2018ffa008ee6f79cc5d",
+      "bytes": 501
+    },
+    "docs/60-evidence/s11/2026-10-11-program-intake/integrated-pytest.xml": {
+      "sha256": "2a4835f0fdcb8aef3c1c71695296e813eab90beefc47d804bf14ac12e760cd0e",
+      "bytes": 57844
+    },
+    "docs/60-evidence/s11/2026-10-11-program-intake/preflight.json": {
+      "sha256": "1677c0915b4bc54b8e214aad178ca46bbb166c969fac0cd24b0acba6be81d187",
+      "bytes": 11909
+    },
+    "docs/60-evidence/s11/2026-10-11-program-intake/prepare.log.txt": {
+      "sha256": "a3b0092cd72c589d73eb581ded3d74ecc046ec00710d7922dd8a6e3d8841115f",
+      "bytes": 95
+    },
+    "docs/60-evidence/s11/2026-10-11-program-intake/readout.json": {
+      "sha256": "8a2aeb26c0d3841df624e66e506ffc339bdcdf18e2e213b6cb62d34e4886e026",
+      "bytes": 35214
+    },
+    "docs/60-evidence/s11/2026-10-11-program-intake/replay.log.txt": {
+      "sha256": "5f463586485bc4b0583af730a4e93402119adbd0255d98bcd80c3e9965e1d904",
+      "bytes": 1565
+    }
+  },
+  "cleanup": {
+    "status": "PRESERVATION_VERIFIED_PENDING_REMOVAL"
+  },
+  "not_executed": [
+    "P2 physical-role trial",
+    "full sequence replay",
+    "source-video decode",
+    "Windows qualification",
+    "report efficacy",
+    "full canonical/Qt suites",
+    "remote push"
+  ],
+  "disposition": "OFFLINE_P1_INTEGRATED; P2_PROPOSAL; O2_OPEN; FIELD_FAIL",
+  "documentation_checks": {
+    "added_local_links_checked": 128,
+    "new_catalog_files_checked": 87,
+    "errors": [],
+    "scope": "Added links in active changed documents and all scoped new catalog artifacts; byte-preserved historical references are not rewritten."
+  },
+  "governance": {
+    "status": "PASS",
+    "command": "python3 scripts/check_detector_governance.py --base-ref 8fea93f2cfa27c455114d0921bbeacb9f697ad13 --include-worktree"
+  },
+  "whitespace_check": {
+    "authored_active_scope": "PASS",
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "--",
+      ".",
+      ":(exclude)docs/70-reference/s11-program-review-2026-10-10",
+      ":(exclude)docs/70-reference/s11-center-path-closeout-2026-10-11"
+    ],
+    "whole_change_exit_code": 2,
+    "preserved_original_warnings": [
+      "docs/70-reference/s11-center-path-closeout-2026-10-11/implementation.patch:8: trailing whitespace.",
+      "docs/70-reference/s11-center-path-closeout-2026-10-11/implementation.patch:39: trailing whitespace.",
+      "docs/70-reference/s11-center-path-closeout-2026-10-11/s11-resume-closeout-and-follow-on-spec-2026-10-11.md:3: trailing whitespace.",
+      "docs/70-reference/s11-center-path-closeout-2026-10-11/s11-resume-closeout-and-follow-on-spec-2026-10-11.md:4: trailing whitespace.",
+      "docs/70-reference/s11-center-path-closeout-2026-10-11/s11-resume-closeout-and-follow-on-spec-2026-10-11.md:52: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/README.md:3: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:3: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:4: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:5: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:49: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:139: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:235: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:236: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:237: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:276: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:277: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:282: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:337: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:352: trailing whitespace.",
+      "docs/70-reference/s11-program-review-2026-10-10/s11-program-audit-and-detector-work-spec-2026-10-10.md:371: trailing whitespace."
+    ],
+    "disposition": "All 20 warnings are unchanged supplied Markdown hard breaks or patch context. Preserve original bytes; no checker or policy changes."
+  }
+}

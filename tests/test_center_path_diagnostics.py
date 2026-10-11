@@ -190,3 +190,40 @@ def test_preparation_blocks_retired_source_via_shared_guard(tmp_path,monkeypatch
     with pytest.raises(RestrictedCorpusUseError,match="QUARANTINED"):
         trial.prepare(tmp_path,tmp_path/"must-not-exist")
     assert not (tmp_path/"must-not-exist").exists()
+
+
+def test_trial_baseline_is_pre_extension_from_non_repo_cwd(tmp_path, monkeypatch):
+    from scripts import s11_center_path_trial as trial
+    monkeypatch.chdir(tmp_path)
+    original = trial.baseline_source()
+    current = (trial.ROOT / trial.SOURCE).read_bytes()
+    assert current.startswith(original)
+    assert len(original) < len(current)
+    assert b"def diagnose_center_path_alternatives(" not in original
+
+
+def test_trial_missing_historical_object_fails_closed(tmp_path, monkeypatch):
+    from scripts import s11_center_path_trial as trial
+    monkeypatch.setattr(trial, "ROOT", tmp_path)
+    with pytest.raises(RuntimeError, match="historical Git object"):
+        trial.baseline_source()
+
+
+def test_trial_rejects_baseline_digest_drift(monkeypatch):
+    from scripts import s11_center_path_trial as trial
+    monkeypatch.setattr(trial, "BASE_SOURCE_SHA256", "0" * 64)
+    with pytest.raises(ValueError, match="baseline source hash mismatch"):
+        trial.baseline_source()
+
+
+def test_trial_checks_frozen_baseline_before_raster_work(tmp_path):
+    from scripts import s11_center_path_trial as trial
+    from pathlib import Path
+    trial.save(tmp_path / "preflight.json", {
+        "samples": ["sample4", "sample5", "sample6", "sample7"],
+        "candidate_source_sha256": trial.sha(trial.ROOT / trial.SOURCE),
+        "runner_sha256": trial.sha(Path(trial.__file__)),
+        "inputs": {}, "baseline_source_sha256": "0" * 64,
+    })
+    with pytest.raises(ValueError, match="Frozen P1 baseline"):
+        trial.run(tmp_path, tmp_path)

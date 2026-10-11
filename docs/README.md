@@ -199,6 +199,18 @@ in Witness Architecture/Validation, and the next D2–D6 sequence lives only in
 Work Plan. The original specification and historical runners are not rewritten
 or placed in production/test discovery.
 
+The [October 10 program review](70-reference/s11-program-review-2026-10-10/README.md)
+and [October 11 P1 closeout](70-reference/s11-center-path-closeout-2026-10-11/README.md)
+are preserved as supplied, including the full patch and checksum files. Their
+import manifests inventory native receipts, JUnit/logs and the complete 23 raw
+captures; repeated captures and transport containers were verified before cleanup.
+The [intake and integration record](60-evidence/s11/2026-10-11-program-intake.md)
+owns the local merge, replay-baseline correction, validity review and relocation
+details. P1 is an available offline helper without production consumers. P2 is a
+shared-support role/opposition proposal requiring preflight; P0–P7 map into the
+existing Work Plan ledger. Historical source wording and absolute worktree paths
+remain provenance, while the manifests and intake route to retained files.
+
 ## Supporting collection indexes
 
 - S11 diagnostics — [`50-diagnostics/s11/`](50-diagnostics/s11/)

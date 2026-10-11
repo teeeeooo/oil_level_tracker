@@ -1671,6 +1671,33 @@ The immediate question is whether a target-bound positive and a relevant
 non-target have candidate-local support/opposition that justifies a **distinct**
 mechanism after the closed appearance and temporal experiments.
 
+### P2 shared-support role comparison — proposal entry
+
+The [program intake](../60-evidence/s11/2026-10-11-program-intake.md) adopts the
+October 10/11 specifications as a bounded successor design question, not a frozen
+classifier. Reuse `match_reference_constellation` and `match_ordered_patch` in
+[`tests/diagnostics/s11_boundary_temporal_probe.py`](../../tests/diagnostics/s11_boundary_temporal_probe.py).
+The supplied program's `scripts/s11_boundary_temporal_probe.py` path is incorrect.
+These helpers already preserve joint spatial/ordered appearance information;
+calling them again does not itself supply new physical-role discrimination.
+
+Before a real trial, bind positive, structure and internal-texture references to
+their existing review scope and the same current observed support. Freeze parts,
+one bounded transform, residual normalization, common-support requirements,
+ambiguity/missingness rules, resource limits, operating point and one structural
+ablation. Different sample counts, crops or transform capacities must not become
+an apparent role advantage. Pooled P1 rows do not supply exact fixed-X contours
+or new reference labels. Unavailable opposition is incomparable, never a win.
+
+The proposal must explain the information added beyond closed CBR-1, independent
+strip matching and common-geometry experiments. Keep copied distractor, coherent
+optical warp, stationary real interface, inclined water, rim/internal texture
+and cropped-front controls. Preserve tied/observationally equivalent explanations
+as unresolved; a unique appearance minimum is not physical identity. Optional
+reviewed initialization remains an offline input, not a new mandatory product
+setting or evidence of automatic-detector improvement. Current authority has no
+P2 consumer; O2/O3 and separate Foam/phase gates remain unchanged.
+
 ### CBR-1 current-boundary reference comparison — proposed offline contract
 
 The [cc17924 intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md)
@@ -2394,7 +2421,7 @@ requires a separate current-plan decision and source qualification before scores
 See [usage](../../sample/README.md#sample3-use-restriction) and
 [acceptance checks](../30-validation/s11-interface-observability-witness-validation.md#retired-source-execution-checks).
 
-## Offline centre-conditioned material paths — isolated P1 candidate (2026-10-11)
+## Offline centre-conditioned material paths — P1 implementation (2026-10-11)
 
 `oil_material_path.diagnose_center_path_alternatives` is an explicit offline API,
 not a generator, debug-projector or resolver consumer. It retains one best raw
@@ -2423,7 +2450,21 @@ without a favourable partial prefix. No seed widening, deduplication, top-k or
 production runtime identity changes are included. Runtime wiring requires a
 separate review; the current isolated comparison is not O2/O3 acceptance.
 
+The replay runner binds the pre-extension source to Git object
+`8fea93f2cfa27c455114d0921bbeacb9f697ad13` and its recorded byte digest.
+After checkout integration, the evidence root may contain the extended source;
+it must not silently become its own baseline. New manifests pin the historical
+baseline separately from current source/runner and input hashes. Missing history
+fails closed. The source byte/AST prefix check remains against the original owner.
+
 ## History Review
+
+2026-10-11 intake: P1 is integrated as an offline API; baseline verification is
+pinned to the historical Git object so merging cannot turn it into self-comparison.
+P2 reuses the actual existing matcher owner while requiring comparable opposition,
+shared support and a frozen operation before execution. F02/F04/F09/F10 retain
+representation/identity/provenance/tuning boundaries. No runtime caller, physical
+label, acceptance gate or failed-experiment disposition changes.
 
 2026-10-11 P1: reviewed F02's seed/global-band and pre-selection compression
 failures, the actual length-then-sum objective, and non-additive median checks.

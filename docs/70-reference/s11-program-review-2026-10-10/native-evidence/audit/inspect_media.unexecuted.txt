@@ -1,0 +1,30 @@
+"""Bounded native-frame review; never decodes sample3 or executes a detector."""
+from pathlib import Path
+import hashlib, json, math, sys
+import cv2
+from PIL import Image, ImageDraw
+ROOT=Path('/Users/sunjaekim/Developer/oil_level_tracker')
+OUT=Path(__file__).resolve().parent
+sys.path.insert(0,str(ROOT))
+from tests.diagnostics.s11_corpus_access import require_corpus_access
+plans={
+ 'base_sample_1':([0,90,210,330,420],None),
+ 'sample2':([0,15,30,45,60],None),
+ 'sample4':([0,420,450,480,840,1140,1200,1260,1275,1290,1305,1320,1485,1560,1620,1665,1680],[543,798,647,902]),
+ 'sample5':([0,205,815,822,829,1225,1232,1239,1438,1643],[740,250,1160,1080]),
+ 'sample6':([0,146,436],None),
+ 'sample7':([0,532,1063],None),
+}
+require_corpus_access(tuple(plans))
+receipt={'scope':'native frame inspection, not full playback or classifier evaluation','sample3_decoded':False,'plans':plans,'frames':[],'media':{}}
+for name,(indices,crop) in plans.items():
+    cap=cv2.VideoCapture(str(ROOT/'sample'/f'{name}.mp4'))
+    if not cap.isOpened(): raise RuntimeError(name)
+    fps=cap.get(cv2.CAP_PROP_FPS); count=int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    receipt['media'][name]={'fps':fps,'frame_count':count,'size':[int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))]}
+    tiles=[]
+    for index in indices:
+        if index>=count: raise ValueError((name,index,count))
+        cap.set(cv2.CAP_PROP_POS_FRAMES,index)
+        ok,frame=cap.read()
+        if not ok: raise RuntimeError((name,index))
