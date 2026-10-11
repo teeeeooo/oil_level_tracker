@@ -1885,6 +1885,14 @@ success. A copied/warped structural collision prevents generic adoption even
 if a local appearance contrast is useful. After one fixed readout, record
 continue/close; P5-b requires actual role evidence beyond this appearance pilot.
 
+The [fixed S2 readout](../50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md)
+failed these necessary conditions: both qualified Foam uppers receive noncellular
+appearance, and the three internal-texture guides lack exact Canny-center queries.
+S2 closes without changing this frozen operation. Its global noncellular count is
+not successful physical opposition, and the ablation does not become a replacement
+selector. Default-path linkage is independently verified; it supplies no missing
+role discriminator or permission for a production/episode intervention.
+
 ### CBR-1 current-boundary reference comparison — proposed offline contract
 
 The [cc17924 intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md)

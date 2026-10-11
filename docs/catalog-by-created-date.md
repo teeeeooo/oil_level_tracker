@@ -908,10 +908,14 @@ Native arrays and the verified archive remain local and are indexed by the machi
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-default-linkage.md](50-diagnostics/s11/2026-10-11-p5-default-linkage.md) | P5 진단/동결 비교 |
-| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md) | P5 진단/동결 비교 |
-| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-default-linkage/preflight.json](50-diagnostics/s11/2026-10-11-p5-default-linkage/preflight.json) | P5 진단/동결 비교 |
-| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-default-linkage/readout.json](50-diagnostics/s11/2026-10-11-p5-default-linkage/readout.json) | P5 진단/동결 비교 |
-| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-default-linkage/verify.py](50-diagnostics/s11/2026-10-11-p5-default-linkage/verify.py) | P5 진단/동결 비교 |
-| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/preflight.json](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/preflight.json) | P5 진단/동결 비교 |
-| Git 미등록 (작성 2026-10-11) | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/run.py](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/run.py) | P5 진단/동결 비교 |
+| 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-default-linkage.md](50-diagnostics/s11/2026-10-11-p5-default-linkage.md) | P5 진단/동결 비교 |
+| 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md) | P5 진단/동결 비교 |
+| 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-default-linkage/preflight.json](50-diagnostics/s11/2026-10-11-p5-default-linkage/preflight.json) | P5 진단/동결 비교 |
+| 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-default-linkage/readout.json](50-diagnostics/s11/2026-10-11-p5-default-linkage/readout.json) | P5 진단/동결 비교 |
+| 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-default-linkage/verify.py](50-diagnostics/s11/2026-10-11-p5-default-linkage/verify.py) | P5 진단/동결 비교 |
+| 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/preflight.json](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/preflight.json) | P5 진단/동결 비교 |
+| 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/run.py](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/run.py) | P5 진단/동결 비교 |
+| 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-default-linkage/duplicate-cleanup.json](50-diagnostics/s11/2026-10-11-p5-default-linkage/duplicate-cleanup.json) | P5 고정 비교 결과/검증 |
+| 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/readout.json](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/readout.json) | P5 고정 비교 결과/검증 |
+| 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/verify.py](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/verify.py) | P5 고정 비교 결과/검증 |
+| 2026-10-11 | [50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/verification.json](50-diagnostics/s11/2026-10-11-p5-spatial-conjunction/verification.json) | P5 고정 비교 결과/검증 |

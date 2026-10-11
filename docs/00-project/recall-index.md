@@ -69,6 +69,7 @@ Do not scan revision history or all S11 diagnostics by default.
 | Target-Windows qualification | `../../.agents/skills/windows-qualification/SKILL.md` | `../40-operations/s11-current-windows-field-qualification.md` |
 | Retained but non-current work | `retained-commitments.md` | linked design/validation owner |
 | Milestone sequencing | `roadmap.md` | work plan for exact current gate |
+| Default Foam linkage / signed spatial conjunction | [Default causal join](../50-diagnostics/s11/2026-10-11-p5-default-linkage.md), [P5-S2 result](../50-diagnostics/s11/2026-10-11-p5-spatial-conjunction.md) | 113 NONE/FULL rows and 2,611 candidates equal; controlled default run loses Y813 before raw candidate assembly by choosing internal Y833, then episode rejects it. S2 four-way sign conjunction loses both qualified Foam uppers across 42 rasters/1,322 queries; three texture guides lack exact Canny-center support. Same-support ablation does not repair it; copied/warped cells remain indistinguishable. 27 tests and all 2,718,514 real side-center sums pass. CLOSED WITHOUT PROMOTION; no radius/sign/cost rescue or episode relaxation. |
 
 ## Memory write rule
 

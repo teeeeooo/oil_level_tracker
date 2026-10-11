@@ -1,0 +1,36 @@
+{
+  "schema": "s11-p5-owned-output-dedup-v1",
+  "entries": [
+    {
+      "retained": "sample/output/s11-p5-default-linkage-20261011-001/none/raw.json",
+      "coalesced": "sample/output/s11-p5-default-linkage-20261011-001/full/raw.json",
+      "bytes": 9484635,
+      "sha256": "399ca8a5d19c2fa26f01c4f24fd72870acd84f22747201d8006616265cc5936f",
+      "method": "byte-identical independent run outputs verified before atomic hardlink coalescence"
+    },
+    {
+      "retained": "sample/output/s11-p5-default-linkage-20261011-001/none/completed.json",
+      "coalesced": "sample/output/s11-p5-default-linkage-20261011-001/full/completed.json",
+      "bytes": 16924717,
+      "sha256": "f5b403ce9a061fca3bd4933a44bfdbcf83df0c95811222981a7105aa259870ca",
+      "method": "byte-identical independent run outputs verified before atomic hardlink coalescence"
+    },
+    {
+      "retained": "sample/output/s11-p5-default-linkage-20261011-001/none/tracking.json",
+      "coalesced": "sample/output/s11-p5-default-linkage-20261011-001/full/tracking.json",
+      "bytes": 114613,
+      "sha256": "251995c8c26bf8d71e348c89ba28a2be90c4990ec129c23abda7446b9a40ba3a",
+      "method": "byte-identical independent run outputs verified before atomic hardlink coalescence"
+    },
+    {
+      "retained": "sample/output/s11-p5-default-linkage-20261011-001/none/report.json",
+      "coalesced": "sample/output/s11-p5-default-linkage-20261011-001/full/report.json",
+      "bytes": 22216,
+      "sha256": "52a25494427f29f3aa2d69b66e2481d3e730d48954f14ccd45070ee2f5311af4",
+      "method": "byte-identical independent run outputs verified before atomic hardlink coalescence"
+    }
+  ],
+  "duplicate_logical_bytes": 26546181,
+  "unique_outputs_removed": false,
+  "limits": "No claim about physical APFS free space. Both original replay paths remain usable; source/truth/media and unique trace/report assets are unchanged."
+}

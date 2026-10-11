@@ -58,6 +58,11 @@ directories. Run the verifier with `--root <repo> --runs <two-run-parent>
 --output <new-json>`. It refuses to overwrite a result and rechecks source/input
 hashes. Current sequencing and remaining gates belong to the Work Plan.
 
+After the independent runs and equality checks, four byte-identical output pairs
+were [coalesced with verified hard links](2026-10-11-p5-default-linkage/duplicate-cleanup.json).
+Both replay paths remain usable; 26,546,181 logical duplicate bytes share storage.
+No unique trace/report asset was removed, and this does not measure APFS free space.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`, `TRACE-PUBLICATION`, `RESULT-PRESENTATION`
