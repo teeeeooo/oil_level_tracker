@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
-**Next transition:** prepare the P0 support/story contract for a direction decision, using the [October 12 intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md). Recommend explicit observable support and useful automatic motion-context measurement under the current gates; no domain exclusion or reduced Foam obligation is adopted. Oil/P2 and Foam/P5-a have independent successor research paths, each still lacking an eligible new role operation. Positive reachability precedes large comparisons. Typed Witness consumption requires O2/V5 Windows shadow, then separate O3; integrated field qualification remains later. P2-S1/P5-S2 remain CLOSED WITHOUT PROMOTION. Local XY OFF / O2 OPEN / FIELD FAIL remain; no source re-judgment or unchanged-detector Windows run is requested.
+**Next transition:** user scope choice on the prepared [P0 support/story draft](../30-validation/s11-interface-observability-witness-validation.md#p0-support-and-story-contract--scope-decision-draft): A keeps compressor-domain positive recovery mandatory and reports auxiliary water/beer/milk positive recovery as stress (recommended); B retains current cross-domain positive requirements. Neither option is adopted yet. All nine Windows stories, target-domain Foam, physical-opposition/provenance and existing acceptance gates remain. Oil/P2 and Foam/P5-a have independent successor research paths, each still lacking an eligible new role operation. Positive reachability precedes large comparisons. Typed Witness consumption requires O2/V5 Windows shadow, then separate O3; integrated field qualification remains later. P2-S1/P5-S2 remain CLOSED WITHOUT PROMOTION. Local XY OFF / O2 OPEN / FIELD FAIL remain; no source re-judgment or unchanged-detector Windows run is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -85,20 +85,23 @@ same-interface observations and preserved extrema/reversal/recovery/Foam story.
 This follows the product's existing reading-assistance goal. It is not a claim
 that the present detector works in a certified subset, or authorization to exclude
 visible failures, accept all-UNKNOWN, add manual rescue/ML/filming, or waive a gate.
-The concrete [P0 draft requirements](../60-evidence/s11/2026-10-12-direction-decision-intake.md#후속-계획에-반영한-범위)
-make the next decision reviewable; product-scope or closure changes need an
-explicit adopted owner diff before dependent implementation.
+The prepared [P0 contract and A/B comparison](../30-validation/s11-interface-observability-witness-validation.md#p0-support-and-story-contract--scope-decision-draft)
+bind known truth, denominators, protected stories and unset tolerances. The user
+has authorized continued local work and autonomous commits/pushes, stopping for
+needed judgment or Windows work. Pause at the auxiliary-positive scope choice:
+it changes an existing acceptance obligation and cannot be inferred from general
+permission to proceed. Adopt the selected owner diff before dependent selection.
 
 Oil's wrong targets at the controlled default report's **42 s minimum and 44 s
 maximum** remain high-impact delivery failures despite 101/113 numeric rows.
 Foam's visible upper loss remains separately important. Neither pathway must
 wait for the other's research success; progress requires its own evidence and
-consumer gate. The current task completes intake, review and planning, not a
-new detector experiment.
+consumer gate. P0 preparation is complete to this decision point; no new detector
+experiment has run. Approval of scope alone will not supply a feasible operation.
 
 | Sequence | Concrete next output / owner | Entry, completion and stop condition |
 |---|---|---|
-| P0 — support and story contract | Product/validation draft defining input support, protected episodes, positive/negative/unresolved denominators, permissible residuals and evidence roles | Keep sample4 visible upper, Accum layered and current dark-A/opposition controls. Existing one-second Oil target stays scoped. Foam time tolerance, support exclusions and untouched-holdout availability must be stated rather than invented. Any changed product/gate clause needs explicit adoption; no post-result exclusions. |
+| P0 — support and story contract | Draft PREPARED; awaiting A/B auxiliary-positive scope choice in the validation owner | Nine Windows stories, seven local Oil candidate positives / three rejected targets, reviewed Foam upper and auxiliary truth retain their precision. Existing Oil target stays scoped. Foam timing/residual budgets remain unset until the relevant behavior plan; no new holdout is available. A would change only future auxiliary-positive progression clauses; B preserves current requirements. No post-result exclusions. |
 | P2 Oil successor and P5-a Foam successor — independent research paths | One eligible operation per path in the [existing design owner](../20-architecture/s11-interface-observability-witness-architecture.md#successor-positive-reachability-and-independent-paths), with pinned controls and one structural ablation | First identify information absent from closed models, physical rationale, competing explanation, exact support/equation, normalization, missing/tie policy, operating point and bounds. Prove attainable positive region and measured synthetic positive, then fixed real positives/opposition. If none is supportable, record the design limit; do not claim implementation readiness or tune S1/S2. |
 | Full fixed comparison / O2 qualification | Complete frozen readout, including failures/unavailable; V2/V3 controls/holdouts and V4 equality/resources | Stop at the first failed progression condition. A local result is not O2. For typed Witness, an eligible shadow candidate next requires **V5 Windows shadow review before O2 promotion**, with user/Windows checkpoint; do not defer this to P6. |
 | P3/O3 then P4/O4 — Oil | Separate typed authority/association plan after O2, then one supported phase repair | Preserve full-window positives, wrong-owner runs and FULL/EMPTY/refill/drain controls. No cost-first/nearest-Y switch, stale ID copying or speculative phase relaxation. |
@@ -937,12 +940,12 @@ remain the design/acceptance owners. CBR-1's frozen operation and acceptance
 conditions live in those owners; its verified offline implementation failed the
 progression gate, as recorded in the linked diagnostic. The supplied original
 does not replace current contracts. P1 now closes the bounded pre-selection representation question offline.
-P2-S1 shared-support competition is closed without promotion. The next preflight
-is the [boundary-local P5-a role operation](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption),
-whose distinct measurement, comparison domain and numeric rule remain unselected.
-Use the qualified water/scoped
-sample4 controls above, with historical scalar agreement distinct from physical
-acceptance; the integrated path helper supplies no new physical authority.
+P2-S1 and P5-S2 are closed without promotion. After the P0 scope choice, the
+[independent P2/P5-a successor preflight](../20-architecture/s11-interface-observability-witness-architecture.md#successor-positive-reachability-and-independent-paths)
+requires a distinct measurement, comparison domain and numerical rule; none is
+selected. Reuse the qualified controls at their actual truth scope and the
+explicitly adopted acceptance role, with historical scalar agreement distinct
+from physical acceptance; the integrated path helper supplies no new physical authority.
 Independent support, association, committed handoff and initial-FULL observation
 remain separate later gates. Failed descriptors do not prove physical unobservability.
 

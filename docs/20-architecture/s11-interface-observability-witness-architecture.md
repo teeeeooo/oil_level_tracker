@@ -1780,6 +1780,15 @@ typed Witness decisions. Final integrated field qualification remains later.
 Support-domain exclusions or replacement acceptance rules remain proposals for
 the product/validation owners, not consequences of this procedural refinement.
 
+Use the [P0 scope/story draft](../30-validation/s11-interface-observability-witness-validation.md#p0-support-and-story-contract--scope-decision-draft)
+to bind evidence roles before selecting a successor. Its domain choice changes
+only the proposed acceptance role of auxiliary positive recovery; it supplies no
+new role observation and does not authorize runtime dispatch by source/domain.
+Until explicitly adopted, retain the existing cross-domain control obligations.
+The scoped Oil cadence, single-frame Foam position and qualitative Windows
+stories are different evidence contracts, not interchangeable labels. Keep
+both candidate paths open without treating a scope decision as algorithm proof.
+
 ### Boundary-local role feasibility — October 11 audit adoption
 
 The [current-main audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md)
@@ -2681,6 +2690,14 @@ baseline separately from current source/runner and input hashes. Missing history
 fails closed. The source byte/AST prefix check remains against the original owner.
 
 ## History Review
+
+2026-10-12 P0 preparation: reused the canonical nine Windows stories, candidate
+bindings, scoped Oil cadence and reviewed local/public Foam roles. The draft
+separates known truth precision and evaluation denominators from the unadopted
+auxiliary-positive scope choice. No new model, runtime branch, acceptance waiver
+or retuning is introduced. F02/F04/F07/F09/F10 and the completed block below apply;
+logic-map/failure-registry impact is NONE because executing owners and causal
+findings are unchanged.
 
 2026-10-12 direction intake: reviewed S2's exact cost differences and ablation
 range, P2-S1's dominated pair, current default linkage and the O2/V5/O3 boundary.

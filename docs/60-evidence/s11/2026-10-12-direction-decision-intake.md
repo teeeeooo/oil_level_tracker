@@ -105,10 +105,34 @@ truth·FIELD PASS를 만들지 않았다. governance, 신규 링크/앵커 49개
 명세 3–5행의 Markdown hard break 공백 3건만 보고한다. 원문 hash 보존을 위해
 고치지 않았으며, 해당 원본 이외 모든 변경은 통과했다. 상세 결과는 receipt에 있다.
 
+## P0 계약 초안 구체화 — 후속 진행
+
+사용자의 후속 진행 지시에 따라 clean `fe3f70a`에서 기존 자료를 대조하고
+[P0 지원·story 계약 초안](../../30-validation/s11-interface-observability-witness-validation.md#p0-support-and-story-contract--scope-decision-draft)을
+기존 validation owner에 작성했다. 별도 truth 파일이나 평가기를 추가하지 않았다.
+Windows 9구간, Oil 후보 양성 7개/거절 3개, 1초 목표의 실제 적용 범위,
+Foam 상단 위치와 보조영상의 서로 다른 truth 정밀도를 연결했다.
+관측 수·정체성·시간 분포, 미관측/미확정 분모와 아직 정하지 않은 Foam 시간
+허용치를 구분했다. 기존 42 raster와 9개 합성 사례는 독립 holdout 수가 아니다.
+
+남은 첫 판단은 **보조 물·맥주·우유 영상의 양성 회복을 필수 성공 조건으로
+유지할지**다. A는 압축기 영역의 양성을 필수로 두고 보조영상 양성 회복을
+결과가 모두 남는 stress 검증으로 전환하는 권고안이며, B는 현행 의무를 유지한다.
+A도 오검출·구조물 대조, target-domain Foam, Windows 9구간과 기존 gate를
+유지한다. 제품 수용 범위가 달라지므로 일반 진행 허가만으로 채택하지 않았다.
+이미 실패한 S1/S2를 재채점하지 않으며, 선택 뒤에도 새 연산의 타당성 입증이 필요하다.
+
+이번 후속은 문서 변경이다. governance, 추가 로컬 링크/앵커 19개, 위 분모 대조와
+`git diff --check`를 통과했다. 기존 보존 매핑 20건의 bytes/hash를 재확인했고,
+runtime·제품 명세·truth·동결 산출물 등 네 문서 이외 tracked 파일은 변경하지 않았다.
+앞 절의 162 tests 및 원본 재현은 인수 단계의 증거로만 유지한다. 이번 초안에
+대해 detector 재실행, 신규 효능시험 또는 Windows 검증을 했다는 뜻이 아니다.
+위 intake JSON은 원래 인수·정리 receipt이며 이 후속의 별도 실행 기록이 아니다.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F07`, `S11-F09`, `S11-F10`.
 - First harmful stage: the existing default linkage supports component-to-front loss of the qualified sample4 upper alternative; water A separately loses dark support at the lightness predicate. The added algebra explains the rejected offline S2 decision region, not a new private-Windows cause or a repair.
-- Logic-map impact: NONE — only reference preservation, successor preflight and planning are changed; current runtime ownership, consumers and publication remain unchanged.
+- Logic-map impact: NONE — only reference preservation, successor preflight, the unadopted P0 scope/story draft and planning are changed; current runtime ownership, consumers and publication remain unchanged.
 - Failure-registry impact: NONE — existing representation, identity, Foam-front, provenance and tuning failures cover this intake; no new mechanism or field acceptance is established.
