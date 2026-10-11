@@ -1,0 +1,17 @@
+{
+  "schema": "s11-public-source-artifact-check-v1",
+  "status": "PASS",
+  "checks": {
+    "source_bytes": 13480200,
+    "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+    "input_pins_verified": 7,
+    "selected_frames": 12,
+    "selected_timestamps_within_one_source_frame_of_request": true,
+    "native_png_matches_decoder_bgr": true,
+    "contact_sheet_hash_shape": true,
+    "production_or_detector_execution": false
+  },
+  "native_review_sha256": "4af16c8cf8d615a7f745a7f74f2f0a878ab1390716e6269067ead1e9e146ac14",
+  "physical_accuracy": "NOT_EVALUATED",
+  "scope": "Artifact/pin integrity; no independent physical or continuous-story qualification."
+}

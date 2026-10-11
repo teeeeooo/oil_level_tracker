@@ -926,6 +926,27 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-p5-extremal-regions/preflight.json](50-diagnostics/s11/2026-10-12-p5-extremal-regions/preflight.json) | 밝기별 닫힌 영역 가설의 사전 고정 명세 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p5-extremal-regions.md](50-diagnostics/s11/2026-10-12-p5-extremal-regions.md) | P5-S3 실제 양성 실패 및 단계 종료 근거 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p5-extremal-regions/run.py](50-diagnostics/s11/2026-10-12-p5-extremal-regions/run.py) | P5-S3 고정 실행·검증 산출물 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p5-extremal-regions/readout.json](50-diagnostics/s11/2026-10-12-p5-extremal-regions/readout.json) | P5-S3 고정 실행·검증 산출물 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p5-extremal-regions/verify.py](50-diagnostics/s11/2026-10-12-p5-extremal-regions/verify.py) | P5-S3 고정 실행·검증 산출물 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p5-extremal-regions/verification.json](50-diagnostics/s11/2026-10-12-p5-extremal-regions/verification.json) | P5-S3 고정 실행·검증 산출물 |
+
+### 2026-10-12 public compressor source intake
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source.md](50-diagnostics/s11/2026-10-12-public-compressor-source.md) | 새 공개 압축기 영상의 출처·용도·지역적 Foam 상단 확인 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/artifact-verification.json](50-diagnostics/s11/2026-10-12-public-compressor-source/artifact-verification.json) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/lower-role-review.json](50-diagnostics/s11/2026-10-12-public-compressor-source/lower-role-review.json) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/native-at-50.png](50-diagnostics/s11/2026-10-12-public-compressor-source/native-at-50.png) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/native-review-plan.json](50-diagnostics/s11/2026-10-12-public-compressor-source/native-review-plan.json) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/native-review.json](50-diagnostics/s11/2026-10-12-public-compressor-source/native-review.json) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/provenance.json](50-diagnostics/s11/2026-10-12-public-compressor-source/provenance.json) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/render.py](50-diagnostics/s11/2026-10-12-public-compressor-source/render.py) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/screen-preflight.json](50-diagnostics/s11/2026-10-12-public-compressor-source/screen-preflight.json) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/source-contact-sheet.jpg](50-diagnostics/s11/2026-10-12-public-compressor-source/source-contact-sheet.jpg) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/upper-role-reply.json](50-diagnostics/s11/2026-10-12-public-compressor-source/upper-role-reply.json) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
 
 ### 2026-10-12 scene-based evaluation routing
 

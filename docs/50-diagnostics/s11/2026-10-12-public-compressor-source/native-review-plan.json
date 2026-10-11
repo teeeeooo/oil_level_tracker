@@ -1,0 +1,24 @@
+{
+  "schema": "s11-public-source-native-review-plan-v1",
+  "partition": "EXPOSED_DEVELOPMENT_INTAKE",
+  "prior_exposure": "Browser views near 25, 50 and 75 s; native frame near 50 s inspected before this sampling plan. Not a blind selection.",
+  "requested_seconds": [
+    25,
+    40,
+    45,
+    48,
+    49,
+    50,
+    51,
+    52,
+    55,
+    60,
+    65,
+    70
+  ],
+  "main_requested_second": 50,
+  "reader": "src/oil_tracker/adapters/vision/opencv_video_reader.py",
+  "sampling": "Independent timestamp seeks via existing reader, recording returned frame indices and timestamps; no claim of sequential full-video coverage.",
+  "purpose": "Check framing, source context, image detail and scene cuts; retain regional human role separately. No detector execution or exact pixel truth.",
+  "retention": "One lossless native main frame; all selected native pixel hashes and a half-size context contact sheet. Other selected native arrays are transient."
+}

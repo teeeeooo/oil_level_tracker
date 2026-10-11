@@ -2,6 +2,17 @@
 
 These local videos support S6 engineering qualification. They are not canonical detector truth and do not substitute for user-confirmed `.oiltruth`. `base_sample_1.mp4` owns the completed S6-A qualification; sample2/3/4 are the bounded S6-B intake set.
 
+## Additional public compressor intake — 2026-10-12
+
+`public_miso_mHOS1-1ck60.mp4` is a separately acquired, ignored local source from
+[미소냉동](https://www.youtube.com/watch?v=mHOS1-1ck60). Its bytes and bounded
+source review are pinned in the [intake record](../docs/50-diagnostics/s11/2026-10-12-public-compressor-source.md).
+The user confirms only the bright layer's upper boundary near 50 s as a regional
+Foam upper. It has no product Recipe, exact pixel truth, continuous-story
+qualification, detector result or holdout status. It is not silently added to
+the historical four-video regression or seven-source P0 denominator. The
+[Work Plan](../docs/00-project/work-plan.md) owns further qualification and use.
+
 ## Sample3 use restriction
 
 **sample3 is retired from routine development and logically quarantined.** Its

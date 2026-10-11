@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "inputs_verified": 16,
+  "production_files_unchanged": 221,
+  "queries_verified": 171,
+  "side_records_verified": 342,
+  "available_side_records": 322,
+  "qualified_side_spectra_independently_flooded": 10,
+  "thresholds_per_spectrum": 255,
+  "broad_inventory_count": 42,
+  "readout_sha256": "87f82650d288fdb1223324c48f617f260b2661fbb3830cf023dc826c839d4853",
+  "verifier_sha256": "c20b6eaa3a370e04143f5079366c8339e7519c03872caaaec396e3cb6c02fa66",
+  "frozen_preflight_sha256": "535967a2cc8bb1bbb745fbe1c630cc9fc1e05dea4a9242d8c98cd166f576da87",
+  "production_or_field_acceptance": false
+}

@@ -109,6 +109,98 @@ def measure_spatial_conjunction(gray, edges, visible, *, column):
     return dict(spec_id=spec['id'], shape=[h, w], band_width=b, column=column,
                 rows=rows, physical_decision='UNRESOLVED', selected_scalar=None)
 
+EXTREMAL_REGION_SPEC = {
+    'id': 'threshold-integrated-enclosed-regions-v1',
+    'max_pixels': 4_194_304,
+    'max_dimension': 4096,
+    'max_queries': 256,
+    'support_floor': 0.02,
+}
+
+
+def _extremal_side(patch):
+    """Exact integer-cut area integral, evaluated once per distinct level set."""
+    h, w = patch.shape
+    starts = sorted({1, 256} | {int(v)+1 for v in np.unique(patch) if v < 255})
+    runs = []
+    for start, stop in zip(starts[:-1], starts[1:], strict=True):
+        area = 0
+        for mask in (patch < start, patch >= start):
+            _, labels, stats, _ = cv2.connectedComponentsWithStats(
+                mask.astype(np.uint8), connectivity=4)
+            eligible = ((stats[:, cv2.CC_STAT_AREA] >= 4)
+                        & (stats[:, cv2.CC_STAT_WIDTH] >= 2)
+                        & (stats[:, cv2.CC_STAT_HEIGHT] >= 2))
+            eligible[0] = False
+            for border in (labels[0], labels[-1], labels[:, 0], labels[:, -1]):
+                eligible[border] = False
+            area += int(stats[eligible, cv2.CC_STAT_AREA].sum())
+        if runs and runs[-1][2] == area:
+            runs[-1][1] = stop
+        else:
+            runs.append([start, stop, area])
+    mass = sum((stop-start)*area for start, stop, area in runs)
+    peak = max(area for _, _, area in runs)
+    return dict(threshold_area_runs=runs, integrated_area=mass, peak_area=peak,
+                integrated=mass/(255*h*w), ablated=peak/(h*w))
+
+
+def measure_extremal_regions(gray, edges, visible, *, column):
+    """Frozen P5-S3 appearance pilot; no physical identity or runtime consumer.
+
+    The evaluator may join results to truth only after this function returns.
+    Every actual center edge is retained, including unavailable side support.
+    """
+    spec = EXTREMAL_REGION_SPEC
+    if (not isinstance(gray, np.ndarray) or gray.ndim != 2 or gray.dtype != np.uint8
+            or not gray.size or gray.size > spec['max_pixels']
+            or max(gray.shape) > spec['max_dimension']):
+        raise ValueError('bounded nonempty uint8 grayscale required')
+    for value in (edges, visible):
+        if not isinstance(value, np.ndarray) or value.dtype != bool or value.shape != gray.shape:
+            raise ValueError('same-shape boolean edge and visibility rasters required')
+    h, w = gray.shape
+    if type(column) is not int or not 0 <= column < w:
+        raise ValueError('an observed integer column is required')
+    rows = np.flatnonzero(edges[:, column] & visible[:, column])
+    if len(rows) > spec['max_queries']:
+        raise ValueError('center-query resource bound exceeded; no truncation')
+    b = min(32, max(4, round(min(h, w)*0.06)))
+
+    def side(y0, y1):
+        x0, x1 = column-b, column+b+1
+        result = dict(bounds_xyxy=[x0, y0, x1, y1], requested_pixels=(y1-y0)*(x1-x0))
+        if x0 < 0 or y0 < 0 or x1 > w or y1 > h:
+            return dict(result, status='UNAVAILABLE', reason='CROPPED_RECTANGLE')
+        if not visible[y0:y1, x0:x1].all():
+            return dict(result, status='UNAVAILABLE', reason='MASKED_RECTANGLE')
+        return dict(result, status='AVAILABLE', **_extremal_side(gray[y0:y1, x0:x1]))
+
+    def appearance(upper, lower, key):
+        if upper['status'] != 'AVAILABLE' or lower['status'] != 'AVAILABLE':
+            return 'UNAVAILABLE'
+        u, l = upper[key], lower[key]
+        floor = spec['support_floor']
+        if l >= floor and u <= l/2:
+            return 'upper_like'
+        if u >= floor and l >= floor and .5 <= u/l <= 2:
+            return 'internal_like'
+        if max(u, l) < floor:
+            return 'low_support'
+        return 'AMBIGUOUS'
+
+    result = []
+    for row in rows:
+        row = int(row)
+        upper, lower = side(row-2-b, row-2), side(row+3, row+3+b)
+        result.append(dict(row=row, column=column, upper=upper, lower=lower,
+                           integrated=appearance(upper, lower, 'integrated'),
+                           ablated=appearance(upper, lower, 'ablated'),
+                           physical_role='UNRESOLVED', scalar_eligible=False))
+    return dict(spec_id=spec['id'], shape=[h, w], band_width=b, column=column,
+                rows=result, physical_decision='UNRESOLVED', selected_scalar=None)
+
+
 SPEC = {
     "id": "side-texture-persistence-lbp-v1",
     "radii": [1, 2], "neighbors": 8, "histogram_bins_per_radius": 10,

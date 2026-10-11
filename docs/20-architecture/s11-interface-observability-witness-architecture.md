@@ -1994,6 +1994,12 @@ observed center queries per raster; reject a resource overflow rather than prune
 Each side is at most 32 by 65 pixels; no video decode, new edge generation,
 parameter search, production, Oil or episode change is part of this experiment.
 
+The [fixed S3 result](../50-diagnostics/s11/2026-10-12-p5-extremal-regions.md)
+fails the representative gate despite measured synthetic positive reachability.
+This operation closes without promotion; neither its floor nor the input set may
+be changed to recast that result. A separately qualified source can support a new
+predeclared investigation, not a repair of this frozen comparison.
+
 ### CBR-1 current-boundary reference comparison — proposed offline contract
 
 The [cc17924 intake](../60-evidence/s11/2026-10-10-cc17924-handoff-intake.md)

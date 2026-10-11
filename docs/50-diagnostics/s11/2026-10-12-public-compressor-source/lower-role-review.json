@@ -1,0 +1,15 @@
+{
+  "schema": "s11-public-source-lower-role-review-v1",
+  "status": "PENDING_USER_JUDGMENT",
+  "source_url": "https://www.youtube.com/watch?v=mHOS1-1ck60&t=50s",
+  "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+  "question": "같은 미소냉동 영상 0:50에서 밝은 층과 그 아래 어두운 부분 사이의 아랫경계는 실제 Oil 상단으로 보이나요? 이 장면을 Oil/Foam 구분용 자료로도 쓸 수 있는지 확인하려는 질문입니다. 윗경계가 Foam 상단이라는 답변은 이미 기록했으며, 정확한 픽셀 지정은 필요 없습니다.",
+  "options": [
+    "아랫경계는 판단하기 어려움",
+    "실제 Oil 상단으로 보임",
+    "Oil 상단이 아닌 다른 경계로 보임"
+  ],
+  "answer_verbatim": null,
+  "dependent_action": "Do not assign the lower boundary to Oil or a physical opposition class before the reply. This does not reopen or withhold the closed upper-role judgment.",
+  "scope": "Regional role only, no exact pixel/timing/adjacent-frame truth."
+}

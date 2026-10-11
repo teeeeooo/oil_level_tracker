@@ -1,0 +1,204 @@
+{
+  "schema": "s11-public-source-native-review-v1",
+  "source": {
+    "id": "mHOS1-1ck60",
+    "title": "압축기 오일포밍(Oil Foaming)현상과 대책_냉동기초 실무",
+    "uploader": "미소냉동",
+    "upload_date": "20200310",
+    "duration": 250,
+    "width": 1280,
+    "height": 720,
+    "fps": 30,
+    "format_id": "136",
+    "vcodec": "avc1.64001F",
+    "acodec": "none",
+    "schema": "s11-public-source-provenance-v1",
+    "url": "https://www.youtube.com/watch?v=mHOS1-1ck60",
+    "local_path": "sample/public_miso_mHOS1-1ck60.mp4",
+    "sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+    "bytes": 13480200,
+    "acquisition": "Public unauthenticated video-only MP4, yt-dlp 2026.8.19, format 136, TLS verified using /etc/ssl/cert.pem. No project dependency added.",
+    "storage": "Original download bytes moved once to an existing ignored media path; no re-encode, cut, audio or repository video upload.",
+    "independence": "New exposed source candidate; not a reserved holdout. Whole-source independence is not certified by distinct file bytes.",
+    "metadata_scope": "Curated public metadata only; temporary signed media URLs and full downloader metadata are not committed."
+  },
+  "metadata": {
+    "path": "sample/public_miso_mHOS1-1ck60.mp4",
+    "width": 1280,
+    "height": 720,
+    "fps": 29.97002997002997,
+    "duration_sec": 250.11653333333334,
+    "frame_count": 7496,
+    "codec": "h264",
+    "timestamp_reliability_warning": "OpenCV timestamp seeking is backend/keyframe dependent; actual decoded timestamps are recorded."
+  },
+  "corpus_access": {
+    "schema": "s11-corpus-access-v1",
+    "restricted_samples": [],
+    "sample3_purpose": null,
+    "physical_acceptance": "NOT_EVALUATED"
+  },
+  "versions": {
+    "python": "3.14.4",
+    "opencv": "4.14.0",
+    "numpy": "2.5.1"
+  },
+  "inputs": {
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/render.py": "82bf6e2ec4cdc87e6f6e798cab50bb700bc999f451f10dc80354418c64a88198",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/provenance.json": "1ca4403db55124fda3801799f36076dacd7f60ea3b0d123f679883241e4b8e3b",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/native-review-plan.json": "3ae263b44536e7fe107e8d403c51f789279cdd7466e793e1edb5ef6085d2ac8a",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/screen-preflight.json": "ee76e29e68b726155ec16505a3582134df1ca60ee2e5b59528eb88d15face370",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/upper-role-reply.json": "0b1b2fc8fee51dec65efb06875a1ca9697a5bdf525eb4909df35e297ddddf75c",
+    "src/oil_tracker/adapters/vision/opencv_video_reader.py": "b4d3304d37890570b57101418e69546133b9a8317ce18766d52b7ab221b34686",
+    "tests/diagnostics/s11_corpus_access.py": "6c4c5b5f27404158473d4afacdec3ed0ac7dc73ccbe12f13bed609267a6eb800"
+  },
+  "frames": [
+    {
+      "requested_sec": 25,
+      "frame_index": 749,
+      "actual_sec": 24.991633333333336,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "b98c38ac5634f6a6f05a47a21e4994003a9d878fecf370593af20022df8316da"
+    },
+    {
+      "requested_sec": 40,
+      "frame_index": 1199,
+      "actual_sec": 40.00663333333333,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "5e49e85cfa5bde8f57052cfd3d6e00dec72775a136cc460e88c1d98ae3e22662"
+    },
+    {
+      "requested_sec": 45,
+      "frame_index": 1349,
+      "actual_sec": 45.011633333333336,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "47e198d3c7566a91139247a9819a530661bf6f898ce1f3040ec53b18b15bdffc"
+    },
+    {
+      "requested_sec": 48,
+      "frame_index": 1439,
+      "actual_sec": 48.014633333333336,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "1412de9d4bd0bab68c90d519ac4d0ce1cad61c05606fec121dd32b8024bf9f70"
+    },
+    {
+      "requested_sec": 49,
+      "frame_index": 1469,
+      "actual_sec": 49.015633333333334,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "251129126193ad4d76cb1491528ed18d39e102a1c645aa57b057e73788d89cad"
+    },
+    {
+      "requested_sec": 50,
+      "frame_index": 1499,
+      "actual_sec": 50.01663333333334,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "0375cc8b855e2628d76fe985da3f94d3bec500debf96b6b6530671b66a06cdd8",
+      "retained_image": "native-at-50.png",
+      "image_sha256": "280b7869a81edfde722fafc85017fdf45dd6e799978cb6c46b7b9769249a635b"
+    },
+    {
+      "requested_sec": 51,
+      "frame_index": 1528,
+      "actual_sec": 50.98426666666667,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "ccc72ada4326a9a83b9e6f587da23985d20fe6df4785c35c4e0f0291b35e6889"
+    },
+    {
+      "requested_sec": 52,
+      "frame_index": 1558,
+      "actual_sec": 51.98526666666667,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "14d014843ddd57d33ff6b35fe3d94a7a2736578fe787ab9e6eb99acfdb1f6814"
+    },
+    {
+      "requested_sec": 55,
+      "frame_index": 1648,
+      "actual_sec": 54.98826666666667,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "58ce4f19ec29ff5e7560f05afb6f843c54da29777ac505b76ae5362e4e6ab3f6"
+    },
+    {
+      "requested_sec": 60,
+      "frame_index": 1798,
+      "actual_sec": 59.99326666666667,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "3fc5d12e50b19a87189b874c5c8ef3e204ca1dad39bbc916dbb31cdc0137738c"
+    },
+    {
+      "requested_sec": 65,
+      "frame_index": 1948,
+      "actual_sec": 64.99826666666667,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "cc7679e28f9c0f8e010d40b0987a3d9d5f26e0e86ecfc6166edd4a68abe070ec"
+    },
+    {
+      "requested_sec": 70,
+      "frame_index": 2098,
+      "actual_sec": 70.00326666666668,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "e81fa136ff076cc2943950b89994377ab8f01acc3f3f3a80827ce7485293baeb"
+    }
+  ],
+  "contact_sheet": {
+    "path": "source-contact-sheet.jpg",
+    "sha256": "2c72f994d6fa372a1f84362bad3d02e8b0312666aab5f1ebb7eb797ad0157214",
+    "shape": [
+      1560,
+      1920,
+      3
+    ],
+    "scale": 0.5,
+    "purpose": "Visual source context only; not a pixel scorer."
+  },
+  "source_unchanged_after": true,
+  "physical_accuracy": "NOT_EVALUATED"
+}
