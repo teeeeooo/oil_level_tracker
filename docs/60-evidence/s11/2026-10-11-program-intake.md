@@ -5,7 +5,8 @@
 **시작 기준:** `main`과 `work/s11-center-alternatives-20261011` 모두
 `8fea93f2cfa27c455114d0921bbeacb9f697ad13`; main clean, 후보에 9개 미커밋 변경.
 **통합:** 원본 9개 파일을 `e9bef67a09649f01ecfa579468b46c5d1040b214`로 커밋하고
-main에 fast-forward 병합했다. 이후 재현 도구의 baseline 확인만 보완했다.
+main에 fast-forward 병합했다. 이후 재현 도구의 baseline 확인을 보완하고
+명세·증거·계획을 `5631f1aa77f00d408b40f0327d3d0ba168af317c`에 보존했다.
 **판정:** P1은 오프라인 표현 보존 도구로 통합 가능하다. 물리 판별·기본 실행
 경로에는 채택하지 않았다. S11 ACTIVE / O2 OPEN / FIELD FAIL, Local XY OFF 유지.
 
@@ -94,8 +95,10 @@ report 효능 검증은 수행하지 않았다. 명시적 offline API와 runner 
 
 두 개의 등록 worktree 중 추가 P1 worktree의 모든 변경을 병합했다. 보존 manifest로
 일반 산출물과 컨테이너 내부 파일을 다시 확인한 뒤 해당 worktree·병합 완료 브랜치와
-원래 main의 중복 `s11-program-review-20261010-001` 폴더를 정리한다. 실제 완료 여부와
-최종 worktree 목록은 [기계 receipt](2026-10-11-program-intake.json)의 `cleanup`에 기록한다.
+원래 main의 중복 `s11-program-review-20261010-001` 폴더를 삭제했다. 001/002의
+반복 raw capture 46개, 전달 컨테이너 7개와 cache 147개가 정리됐고, 필요한 모든
+증거의 보존을 확인했다. 등록 worktree는 main 하나다. 삭제 경로와 수치는
+[기계 receipt](2026-10-11-program-intake.json)의 `cleanup`에 기록했다.
 다른 과거 실험 브랜치는 worktree가 아니며 채택되지 않은 코드가 있어 병합하지 않는다.
 
 원본 미디어·Recipe·truth와 이 실험의 upstream crop/NPZ는 기존 main 경로에 유지한다.

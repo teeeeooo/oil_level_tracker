@@ -295,7 +295,22 @@
     }
   },
   "cleanup": {
-    "status": "PRESERVATION_VERIFIED_PENDING_REMOVAL"
+    "status": "COMPLETE",
+    "preservation_commit": "5631f1aa77f00d408b40f0327d3d0ba168af317c",
+    "removed_worktree": "/Users/sunjaekim/Developer/oil_level_tracker-s11-center-20261011",
+    "removed_merged_branch": "work/s11-center-alternatives-20261011",
+    "removed_worktree_native_files": 106,
+    "removed_worktree_native_bytes": 3204427,
+    "removed_worktree_cache_files": 147,
+    "deduplicated_raw_capture_files": 46,
+    "removed_redundant_transport_files": 7,
+    "removed_main_duplicate_output": "/Users/sunjaekim/Developer/oil_level_tracker/sample/output/s11-program-review-20261010-001",
+    "removed_main_duplicate_files": 4,
+    "remaining_worktrees": [
+      "/Users/sunjaekim/Developer/oil_level_tracker"
+    ],
+    "retained": "All supplied originals, unique native evidence, canonical 23 raw captures and packaging checksum members are committed. Upstream source videos, Recipe/truth, crop/NPZ and unrelated historical outputs/branches remain in place.",
+    "remote_push": false
   },
   "not_executed": [
     "P2 physical-role trial",
