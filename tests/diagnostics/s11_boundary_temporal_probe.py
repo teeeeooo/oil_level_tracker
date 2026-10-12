@@ -476,6 +476,94 @@ CURRENT_BOUNDARY_SPEC = {
 }
 
 
+ROW_DISTRIBUTION_SPEC = {
+    'id': 'ordered-row-distribution-roles-v1',
+    'roles': ['interface', 'structure', 'texture'],
+    'shape': [25, 25, 3],
+    'rows': list(range(11)) + list(range(14, 25)),
+    'minimum_columns_per_row': 8,
+    'normalizer': 510.0,
+    'maximum_cost': 0.05,
+    'minimum_margin': 0.01,
+    'tie_atol': 1e-12,
+    'authority': 'regional appearance preference only; physical identity UNRESOLVED',
+}
+
+
+def compare_row_distribution_roles(current, visible, references):
+    """Compare ordered row-wise color populations on common visible support.
+
+    Horizontal rank matching removes grain placement, not row/side ordering.
+    One BGR offset per complete context removes additive illumination. The
+    mean-only ablation uses precisely the same pixels and centering. No search,
+    edge snapping, dense label, classifier training or runtime consumer exists.
+    References use the existing (BGR, visible, Canny) regional capture schema;
+    Canny is deliberately not an input to this distributional operation.
+    """
+    spec = ROW_DISTRIBUTION_SPEC
+    if set(references) != set(spec['roles']):
+        raise ValueError('exact interface, structure and texture reference slots required')
+
+    def check(image, mask):
+        if (not isinstance(image, np.ndarray) or image.dtype != np.uint8
+                or list(image.shape) != spec['shape']):
+            raise ValueError('25x25 uint8 BGR context required')
+        if (not isinstance(mask, np.ndarray) or mask.dtype != bool
+                or mask.shape != (25, 25)):
+            raise ValueError('25x25 boolean visibility required')
+
+    check(current, visible)
+    base = dict(spec_id=spec['id'], status='UNAVAILABLE', reason=None,
+                physical_identity='UNRESOLVED', selected_front=None, modes={},
+                row_indices=spec['rows'].copy(), common_columns_by_row=[])
+    common = visible.copy()
+    images = {'current': current}
+    for role in spec['roles']:
+        ref = references[role]
+        if ref is None:
+            return dict(base, reason='missing_'+role+'_reference')
+        if not isinstance(ref, tuple) or len(ref) != 3:
+            raise ValueError('regional BGR, visibility and Canny capture required')
+        check(ref[0], ref[1])
+        images[role] = ref[0]
+        common &= ref[1]
+    columns = [np.flatnonzero(common[y]) for y in spec['rows']]
+    base['common_columns_by_row'] = [xs.tolist() for xs in columns]
+    if any(len(xs) < spec['minimum_columns_per_row'] for xs in columns):
+        return dict(base, reason='insufficient_common_row_support')
+    samples = {name: [image[y, xs].astype(np.float64)
+                      for y, xs in zip(spec['rows'], columns, strict=True)]
+               for name, image in images.items()}
+    # Equal row weights keep a wider visible row from silently changing the
+    # vertical model. Within a row, all common pixels and three channels count.
+    centers = {name: np.mean([row.mean(axis=0) for row in values], axis=0)
+               for name, values in samples.items()}
+    centered = {name: [row-centers[name] for row in values]
+                for name, values in samples.items()}
+    modes = {}
+    for mode in ('distribution', 'row_mean'):
+        roles = {}
+        for role in spec['roles']:
+            costs = []
+            for query, reference in zip(centered['current'], centered[role], strict=True):
+                if mode == 'distribution':
+                    delta = np.sort(query, axis=0) - np.sort(reference, axis=0)
+                else:
+                    delta = query.mean(axis=0) - reference.mean(axis=0)
+                costs.append(float(np.mean(np.abs(delta)) / spec['normalizer']))
+            roles[role] = dict(row_costs=costs, cost=float(np.mean(costs)))
+        ordered = sorted((v['cost'], role) for role, v in roles.items())
+        margin = ordered[1][0] - ordered[0][0]
+        best = [role for cost, role in ordered if abs(cost-ordered[0][0]) <= spec['tie_atol']]
+        preference = (best[0] if len(best) == 1
+                      and ordered[0][0] <= spec['maximum_cost']
+                      and margin >= spec['minimum_margin'] else None)
+        modes[mode] = dict(roles=roles, best_roles=best, margin=margin,
+                           appearance_preference=preference)
+    return dict(base, status='MEASURED', reason=None, modes=modes,
+                centering_bgr={k: v.tolist() for k, v in centers.items()})
+
+
 def _current_boundary_reference(image, visible, points, origin):
     """Return frozen source-column pairs; never infer pure material labels."""
     if (not isinstance(points, np.ndarray) or points.ndim != 2 or points.shape[1] != 2

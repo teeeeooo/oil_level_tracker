@@ -1027,3 +1027,12 @@ Native arrays and the verified archive remain local and are indexed by the machi
 |---|---|---|
 | 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/tools/audit_s2_decision_geometry.py](70-reference/s11-direction-decision-2026-10-11/tools/audit_s2_decision_geometry.py) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
 | 2026-10-12 | [70-reference/s11-direction-decision-2026-10-11/tools/reproduce.sh](70-reference/s11-direction-decision-2026-10-11/tools/reproduce.sh) | 첨부 원본 bytes 보존; 제공일 기준 2026-10-11 |
+
+### 2026-10-12 P2 ordered row distributions
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions.md](50-diagnostics/s11/2026-10-12-p2-row-distributions.md) | 행별 색 분포의 Oil 역할 비교: 사전 고정·수치 도달성·실행 및 검증 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/preflight.json](50-diagnostics/s11/2026-10-12-p2-row-distributions/preflight.json) | 행별 색 분포의 Oil 역할 비교: 사전 고정·수치 도달성·실행 및 검증 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/run.py](50-diagnostics/s11/2026-10-12-p2-row-distributions/run.py) | 행별 색 분포의 Oil 역할 비교: 사전 고정·수치 도달성·실행 및 검증 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/synthetic-readout.json](50-diagnostics/s11/2026-10-12-p2-row-distributions/synthetic-readout.json) | 행별 색 분포의 Oil 역할 비교: 사전 고정·수치 도달성·실행 및 검증 |

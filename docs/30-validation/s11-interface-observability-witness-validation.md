@@ -1365,6 +1365,25 @@ retroactively satisfy that entry gate. Independent Foam raw-front work follows
 its existing parent acceptance; consuming typed Witness decisions also invokes
 O2/O3. No Windows execution is useful until the relevant eligible candidate exists.
 
+### Ordered row-distribution pilot controls
+
+The [P2 frozen comparison](../50-diagnostics/s11/2026-10-12-p2-row-distributions.md)
+requires actual positive reachability under horizontal grain permutations and
+one unclipped BGR offset, with mean-only ambiguity on the same pixels. Verify
+rank-distance costs independently as empirical-CDF integrals, including unequal
+row counts. Preserve vertical side order, all common-mask coordinates, copied
+opponent ties, masked values, missing roles and resource limits.
+
+The fixed first real stage is f1320's candidate-bound Oil positive and reviewed
+wrong target. Both need the declared regional preference, and the row-mean
+ablation must fail at least one, before the other twelve existing queries run.
+If this specific capability is not shown, retain the failure and NOT_RUN rows;
+no reference/scale/threshold search follows. Broader results retain errors and
+unknowns without inventing a global zero-error requirement or residual budget.
+Regional reference success is not automatic inference, exact contour truth,
+workflow acceptance or O2. Public controls without comparable reference inputs
+remain unavailable, never successful abstentions; no new human review is implied.
+
 ### P5-S3 staged extremal-region checks
 
 Follow the [frozen S3 operation](../20-architecture/s11-interface-observability-witness-architecture.md#p5-s3-threshold-integrated-enclosed-regions--frozen-feasibility)

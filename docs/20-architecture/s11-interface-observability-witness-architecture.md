@@ -1792,6 +1792,25 @@ single-frame Foam position and qualitative Windows stories remain different
 contracts. Neither a revised evaluation role nor relaxed pointwise perfection
 supplies new physical evidence or reopens a closed operation.
 
+### Ordered row-distribution reference pilot — October 12
+
+The [frozen P2 population pilot](../50-diagnostics/s11/2026-10-12-p2-row-distributions.md)
+extends the existing offline regional comparison owner with empirical BGR channel
+distributions per horizontal row. It retains ordered sides while marginalizing
+within-row grain placement; one whole-context additive offset preserves side
+contrast. This differs from S1's pointwise/edge residual, pooled LBP codes and
+color means. Horizontal arrangement and joint color dependence are lost, so
+optical/copy alternatives remain unresolved physical identity.
+
+Reuse S1's exact three reference contexts, native crop size, original masks and
+candidate bindings, with no translation or search. One common visible support
+and equal row/channel weights apply to every role and the row-mean ablation.
+The existing optional-reference choice authorizes this offline feasibility test;
+it does not introduce required setup or a production classifier. Synthetic
+reachability precedes the fixed same-frame positive/opposition pair; first-stage
+failure closes the operation without rescue tuning. No P2 consumer, Foam change
+or relaxed O2/V5/O3 boundary follows from appearance preference.
+
 ### Boundary-local role feasibility — October 11 audit adoption
 
 The [current-main audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md)
@@ -2760,6 +2779,15 @@ baseline separately from current source/runner and input hashes. Missing history
 fails closed. The source byte/AST prefix check remains against the original owner.
 
 ## History Review
+
+2026-10-12 ordered row-distribution pilot: reviewed F01/F03/F06/F09/F10, the
+new public-source wrong anchor, closed S1 regional matching, LBP side persistence
+and BGR mean-only measurements. The distinct operation retains row-wise raw
+color populations with horizontal grain exchange, using fixed regional references
+and one same-support mean ablation. It does not retune old masks, references,
+thresholds or motion authority. Existing physical uncertainty, current-frame
+provenance, independent Oil/Foam and field gates remain. Logic-map and failure-
+registry impact is NONE: only the existing offline helper gains an unused operation.
 
 2026-10-12 P5-S3 preflight: reviewed F02 raw-edge separation and nominal
 connectivity, F07 side texture/paired-gap/correspondence limits, and F09/F10
