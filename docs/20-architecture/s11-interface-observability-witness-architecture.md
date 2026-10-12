@@ -1819,8 +1819,11 @@ or physical acceptance follows. The original stop rule/result remains intact. Th
 interface preference for 4/6 non-initial Oil contexts, opposition for 2/3 wrong
 targets and 2/2 internal-texture contexts, with the rest unresolved. This is a
 conditional reference lead, not a candidate selector or accepted successor.
-The next comparison must include competing same-frame proposals and retain
-unreviewed identities as unassessed before any consumer can be proposed.
+The separately frozen complete-candidate diagnostic includes all 160 proposals
+from seven original captures and the four retained non-candidate controls. It
+changes only inventory, keeping the measured operation and every original result.
+Unreviewed identities remain unassessed, and even a unique appearance match
+cannot promote a physical candidate or authorize a consumer.
 
 ### Boundary-local role feasibility — October 11 audit adoption
 

@@ -1384,6 +1384,16 @@ Regional reference success is not automatic inference, exact contour truth,
 workflow acceptance or O2. Public controls without comparable reference inputs
 remain unavailable, never successful abstentions; no new human review is implied.
 
+The unchanged-mean diagnostic may be inspected on the complete frozen saved
+candidate inventory after the distribution model closes. Conserve all 160
+proposals, ten previously scored candidate controls and four other controls;
+reuse the 14 existing records exactly. Verify source/index/Y bindings, all
+floor/ceil crops, unavailable rows and distinct-coordinate summaries. Unreviewed
+proposals, equal-Y duplicates and source-kind hints are not new truth or
+independent observations. The unchanged CDF verification may adapt its expected
+inventory explicitly; its pixel and input-hash checks stay intact. This bounded
+readout supplies neither a physical winner nor a new acceptance operating point.
+
 ### P5-S3 staged extremal-region checks
 
 Follow the [frozen S3 operation](../20-architecture/s11-interface-observability-witness-architecture.md#p5-s3-threshold-integrated-enclosed-regions--frozen-feasibility)

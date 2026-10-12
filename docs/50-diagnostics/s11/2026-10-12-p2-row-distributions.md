@@ -160,6 +160,32 @@ Reproduce/verify from any working directory with absolute script/input paths:
 .venv/bin/python docs/50-diagnostics/s11/2026-10-12-p2-row-distributions/run.py verify --manifest docs/50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-preflight.json --readout docs/50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-readout.json --output /tmp/s11-row-verification.json
 ```
 
+## Frozen complete-candidate diagnostic
+
+The [candidate preflight](2026-10-12-p2-row-distributions/candidates-preflight.json)
+and [inventory adapter](2026-10-12-p2-row-distributions/candidates.py) retain all
+**160 proposals in seven original saved captures**, plus the four non-candidate
+controls, for 164 query records. The ten known candidate contexts and four other
+controls reuse their exact previous records; 150 additional proposals are new
+measurements with **UNREVIEWED** physical identity. The descriptor, references,
+visibility, centering, cost limits and fractional-Y rule remain unchanged.
+
+This answers whether selected query locations hid competing regional matches.
+For each frame report all preferences, unavailability and distinct source-Y
+values receiving interface preference. Equal-Y proposals share a regional crop;
+they are not independent evidence. A candidate's recorded Y projected at X595 is
+not a qualified dense contour or an exact fixed-X observation. Neither source
+kind nor proximity to known Oil transfers a physical label. No lowest-cost
+winner, automatic selector or product success is computed.
+
+The old CDF verifier is reused unchanged through an explicit inventory adapter:
+rebuild all queries from pinned capture JSON, compare that inventory to the
+preflight, and pass only the expanded query list into its completeness check.
+Pixel, mask, cost and hash verification remain unchanged. Additional checks bind
+floor/ceil coordinates, folded preferences, original records and frame summaries.
+The fixed diagnostic ends after this inventory regardless of outcome; the failed
+distribution operation remains closed and all unavailable source groups stay.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`
