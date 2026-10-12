@@ -1811,6 +1811,12 @@ reachability precedes the fixed same-frame positive/opposition pair; first-stage
 failure closes the operation without rescue tuning. No P2 consumer, Foam change
 or relaxed O2/V5/O3 boundary follows from appearance preference.
 
+The frozen primary trial closes the distribution operation without promotion:
+positive retained, wrong target unresolved. Its unchanged mean ablation passes
+that pair; a separately frozen, exposed diagnostic-only follow-up checks the
+remaining existing cases. No threshold change, reopening, new production consumer
+or physical acceptance follows. The original stop rule/result remains intact.
+
 ### Boundary-local role feasibility — October 11 audit adoption
 
 The [current-main audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md)

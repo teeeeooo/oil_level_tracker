@@ -1,6 +1,6 @@
 # P2 — ordered row-distribution feasibility
 
-**Preflight:** frozen before real comparison; no production consumer.
+**Result:** CLOSED WITHOUT PROMOTION. The primary Oil context retains interface preference, but the wrong target remains unresolved. No production consumer.
 The product problem is false Oil anchor admission despite retained lower
 observations. This pilot tests a distinct optional-reference capability before
 changing that authority: can a regional descriptor tolerate rearranged grains
@@ -84,10 +84,37 @@ pilot still needs broader controls, workflow-impact acceptance, and the existing
 O2/V5/O3 boundaries before any typed evidence can affect production. Foam research
 remains independent. No source decoder, application replay or Windows run occurs.
 
+## Primary result and unchanged-ablation follow-up
+
+The [readout](2026-10-12-p2-row-distributions/readout.json) ran at frozen
+`9118714`. The confirmed Oil context has distribution costs interface0.017143,
+structure0.095460, texture0.045511 and correctly retains interface preference.
+The wrong target has interface0.112903, structure0.068434, texture0.080337;
+its best cost exceeds0.05 and therefore stays unresolved. The required opposition
+result fails. The twelve remaining queries are NOT_RUN in this closed pilot;
+no cutoff or descriptor adjustment follows. This does not prove that every
+threshold would fail; no post-result threshold search was authorized or performed.
+
+The [CDF verification](2026-10-12-p2-row-distributions/verification.json)
+reconstructs396 channel/row/role integrals on exact common pixels, all286 input
+pins and221 unchanged production sources. Execution took0.136 s /90,357,760 bytes
+peak RSS. The failure concerns the proposed operation, not an arithmetic defect.
+
+The unchanged **row-mean ablation** retains interface preference on the positive
+(cost0.016015) and structure preference on the wrong target (cost0.037415).
+Its success on this one pair is exposed, exploratory evidence. The separately
+[frozen follow-up](2026-10-12-p2-row-distributions/followup-preflight.json) and
+[adapter](2026-10-12-p2-row-distributions/followup.py) reuse those two outputs and
+measure the other twelve saved cases with unchanged references, support, offsets,
+costs and cutoffs. This is a diagnostic-only continuation under the existing
+successor preflight allowance, **not promotion or a new name for the failed model**.
+The original stop/result stays intact. Incidental distribution fields from the
+shared helper cannot reopen it. All14 cases and unavailable sources remain visible.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`
 - Failure-registry entries: `S11-F01`, `S11-F03`, `S11-F06`, `S11-F09`, `S11-F10`
-- First harmful stage: current public-source evidence locates wrong completed Oil anchor admission; whether this separate regional population operation can distinguish existing Oil/opposition contexts is unmeasured before the frozen real trial.
+- First harmful stage: current public-source evidence locates wrong completed Oil anchor admission; the frozen distribution operation leaves the primary wrong target unresolved despite retaining the positive. Mean-only success on that pair motivates only a separately frozen diagnostic readout, not a remedy.
 - Logic-map impact: NONE — extends only the existing offline regional-comparison helper; no runtime caller, coordinate, material gate or selection changes.
 - Failure-registry impact: NONE — existing identity, cross-material and tuning failures govern this finite hypothesis; no new field cause or remedy is asserted.
