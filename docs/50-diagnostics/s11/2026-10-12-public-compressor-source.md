@@ -288,9 +288,34 @@ The renderer refuses to overwrite an existing output directory. A future downloa
 is not assumed to reproduce the same platform encoding; verify the pinned SHA-256
 before decoding. The full downloader metadata remains temporary and untracked.
 
+## Bounded application-pipeline linkage — preflight
+
+The prior detector checks reinitialized each frame and did not run the application
+pipeline. The [frozen preflight](2026-10-12-public-compressor-source/pipeline-preflight.json)
+closes that entry gap using the existing `AnalysisPipeline`, replay `Recorder`,
+CSV exporter and report-presentation owner. The [adapter](2026-10-12-public-compressor-source/replay_pipeline.py)
+only supplies the new-source fixture because the existing replay CLI binds old
+numbered-source recipes/windows.
+
+The already retained 49.516–50.517 s window yields three default-2Hz targets:
+f1484/f1499/f1514. Two fresh processes use NONE/FULL tracing with unchanged
+production code and detector defaults. Static learning uses the same three
+representative frames; raw/completed candidates, tracking, CSV and report model
+are retained. The geometry is the prior native fixture, now explicitly extended
+to this short diagnostic window, not adopted as a continuous-video Recipe.
+
+The controlled start is UNKNOWN_REVIEW because the application requires an
+explicit initial state. The earlier isolated call used AUTO, so this is not a
+single-variable temporal ablation. HOLD_BELOW_ZERO allows downstream assembly
+without asserting a compressor start; the zero line and operational verdict are
+unqualified fixture values. Only the reviewed f1499/X578 intervals can be scored.
+No whole-episode, source success rate, HTML/UI, or Windows acceptance follows.
+The frame schedule, geometry and settings are fixed before execution; no rescue
+retuning or window expansion is permitted after the outcome.
+
 ## Detector Governance
 
-- Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `OIL-CANDIDATE`
+- Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `CSV-PUBLICATION`, `TRACE-PUBLICATION`, `RESULT-PRESENTATION`
 - Failure-registry entries: `S11-F02`, `S11-F07`, `S11-F09`, `S11-F10`
 - First harmful stage: native current-frame Oil selects Y321 outside reviewed Oil rows421–435 despite retained lower observations. The selected Foam appearance component crosses reviewed rows323–338 but reduces to front Y317 before temporal publication. These are interval incompatibilities, not exact contour labels or completed-window results; native lower-hypothesis ambiguity and half-resolution non-selection remain distinct. Fresh Foam persistence pending is not a demonstrated episode failure.
 - Logic-map impact: NONE — reuses the existing video reader for bounded evidence preparation; no production route, geometry policy or selection change.
