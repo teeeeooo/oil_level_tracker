@@ -122,11 +122,12 @@ repair or new scalar labeling is adopted.
 
 ## Preservation and reproduction limits
 
-All 165 native files remain in their original ignored directory and in a verified
-local ZIP; every archive entry matches its inventoried hash. Selected native
-text/runners and overview figures are additionally copied into the reference
-package for Git preservation. Full raw traces and HTML assets are indexed by the
-receipt and retained locally; the local archive is not an off-machine backup.
+At intake, all 165 native files were verified in their ignored directory and a
+local ZIP. The October 12 [value review](2026-10-12-pre-cr1-cleanup-checkpoint.md)
+subsequently retired that complete corpus and the ZIPs. Selected native
+text/runners, readouts and overview figures remain in the tracked reference
+package; current-purpose PNGs remain at their pinned paths. The receipt preserves
+the original verification, not current full native replay availability.
 
 The supplied specification has one extra blank line at EOF. Preserve its original
 hash rather than normalize it; whitespace verification excludes that one imported

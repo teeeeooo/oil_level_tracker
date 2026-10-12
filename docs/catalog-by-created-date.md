@@ -1137,3 +1137,13 @@ author 시각을 Asia/Seoul로 환산한 2026-10-12로 확정했습니다.
 | 2026-10-12 | [40-operations/experiment-artifact-lifecycle.md](40-operations/experiment-artifact-lifecycle.md) | 새 로컬 연구 출력의 생성·예산·보존·정리 및 push 전 검사 절차 |
 | 2026-10-12 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/compressed-files.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/compressed-files.json) | 원본 5개와 gzip 4개/기존 ZIP object 1개 사이의 추가 보존 매핑 |
 | 2026-10-12 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/compression-receipt.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/compression-receipt.json) | 마지막 압축·삭제 후 복원·입력 보호 검증 및 관리 도구 검증 |
+
+### 2026-10-12 retention-value review
+
+아래 파일의 작성일은 2026-10-12이며, 아직 Git 미등록 상태입니다.
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 미등록 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention-receipt.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention-receipt.json) | 실제 폐기·용량·생존 입력 및 복구 범위 검증 |
+| 미등록 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention.json) | 의사결정별 보존 심사와 현재 생존/폐기 경로 |
+| 미등록 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/temporal-affine-counterexample.npz](60-evidence/s11/2026-10-12-pre-cr1-cleanup/temporal-affine-counterexample.npz) | 폐기 ZIP에서 선별한 작은 합성 실패 반례 |

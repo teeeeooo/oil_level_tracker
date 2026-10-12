@@ -35,8 +35,12 @@ An explicit keep/reuse selection promotes only necessary evidence. The local too
 rejects duplicate retained payloads and removes only its own unselected intermediates.
 The existing pre-push hook checks managed runs without deleting files. The operational
 document owns the procedure; AGENTS and the existing S11 Skill route to it. Historical
-records keep their bytes and verdicts, with additive compression/recovery maps when
-their live storage changes. This gate checks storage, not scientific sufficiency,
+machine records keep their bytes and verdicts. Local payloads undergo a value review:
+concrete decision use, information loss, reproduction cost, smallest sufficient form
+and a reassessment event. A reference or old verifier is not a retention warrant.
+The tool requires the review record but cannot establish its substantive validity.
+Additive retention maps explicitly retire obsolete payloads, and recovery rejects
+retired or mixed selections instead of implying complete byte recovery. This gate checks storage, not scientific sufficiency,
 detector acceptance or Windows field qualification.
 
 ## Optional derived code-topology pilot

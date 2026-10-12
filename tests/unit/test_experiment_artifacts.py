@@ -37,7 +37,37 @@ def repository(tmp_path):
 def selection(*paths, reuse=()):
     return dict(verdict="CLOSED WITHOUT PROMOTION: retain the counterexample",
                 keep=[dict(path=p, reason="Required comparison evidence") for p in paths],
-                reuse=list(reuse), discard_reason="Recomputable intermediate files")
+                reuse=list(reuse), discard_reason="Recomputable intermediate files",
+                retention_review=dict(
+                    decision_use="Prevent retrying the rejected hypothesis without a new mechanism",
+                    loss_if_removed="The frozen negative comparison would be lost",
+                    reproduction="Source exists; rerunning is unnecessary for this small evidence",
+                    minimality="Keep the comparison summary; discard dense intermediates",
+                    review_when="Reassess when a successor replaces this counterexample"))
+
+
+def test_value_review_required_before_delete_and_checked_on_closed_runs(repository):
+    repo, plan = repository
+    name = "sample/output/value-review"
+    work = Path(start(repo, name, plan)["work"])
+    (work / "summary.json").write_bytes(b'{"negative":true}\n')
+    (work / "scratch.txt").write_bytes(b"still needed until reviewed")
+    chosen = selection("summary.json")
+    chosen.pop("retention_review")
+    with pytest.raises(ValueError, match="decision_use"):
+        finish(repo, name, chosen)
+    assert (work / "scratch.txt").exists()
+    chosen = selection("summary.json")
+    chosen["retention_review"]["minimality"] = " "
+    with pytest.raises(ValueError, match="minimality"):
+        finish(repo, name, chosen)
+    assert (work / "scratch.txt").exists()
+    finish(repo, name, selection("summary.json"))
+    marker = repo / name / MARKER
+    data = json.loads(marker.read_text(encoding="utf-8"))
+    data.pop("retention_review")
+    marker.write_text(json.dumps(data), encoding="utf-8")
+    assert "Retention value review" in check(repo)["errors"][0]
 
 
 def test_cli_from_other_cwd_closes_run_and_removes_only_owned_intermediates(repository, tmp_path):

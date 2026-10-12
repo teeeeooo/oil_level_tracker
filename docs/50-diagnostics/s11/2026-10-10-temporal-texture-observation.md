@@ -17,12 +17,14 @@ retains the original JSON bytes under gzip. Current sequencing and the pending
 human checkpoint belong to the [Work Plan](../../00-project/work-plan.md).
 
 **October 12 storage update:** the [pre-CR-1 cleanup checkpoint](../../60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md)
-removes 59 expanded duplicates after verifying all 60 members of the existing
-local archive. The ZIP and this frozen machine record retain their original
-bytes. `water-f001438.npz` stays at its original path because the separate
-water-surface feature review consumes it. Other historical native paths can be
-restored from the checkpoint's archive/member mapping when needed; this storage
-change does not rerun or revise the diagnostic or its source judgments.
+first removed expanded duplicates, then explicitly retired the 205 MB ZIP and
+`water-f001438.npz` after the source-feature follow-up closed. Full saved-array
+replay is no longer available. This frozen machine record, exact runners,
+complete readout and tracked review figures survive. The unique 14,031-byte
+[affine counterexample](../../60-evidence/s11/2026-10-12-pre-cr1-cleanup/temporal-affine-counterexample.npz)
+was extracted and hash-verified before disposal; the optical-warp control result
+remains in the complete readout. This changes availability, not the diagnostic
+or source judgments. Old archive/input paths in the machine record are historical.
 
 **Subsequent source reply:** the user identifies B and C as water surface
 without a Foam layer. The [bound reply](2026-10-10-later-water-role-reply.json)

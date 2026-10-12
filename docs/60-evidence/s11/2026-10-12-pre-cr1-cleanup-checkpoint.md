@@ -1,6 +1,6 @@
 # CR-1 착수 전 저장소 정리 체크포인트 — 2026-10-12
 
-**결과: 캐시·중복 정리, 산출물 통합, 마지막 추가 압축과 예방 절차 적용 완료. CR-1 미착수.**
+**결과: 보존 가치 심사와 실제 폐기까지 완료. CR-1 미착수.**
 사용자가 이 체크포인트를 확인한 뒤 진행 여부를 알려주기로 했다. 현재 실행 권한과
 다음 행동은 [Work Plan](../../00-project/work-plan.md#repository-cleanup-and-isolated-cr-1-sequence)이 소유한다.
 기존 문서 표의 3번에 섞여 있던 WP1 조건 확정은 대화에서 확인한 범위대로 4번으로
@@ -10,12 +10,91 @@
 미커밋 변경은 없었다. 등록 worktree는 현재 저장소 하나였으며 제거할 다른 worktree는
 없었다. 이 문서가 추가된 체크포인트 커밋은 해당 파일의 Git 이력으로 확인한다.
 
-## 마지막 압축과 관리 절차 적용
+## 보존 가치 재심사와 실제 폐기
+
+사용자가 링크·기존 test의 참조만으로는 보존 명분이 약하다고 지적하고 진행을
+승인했다. clean `f474bc3415fe5ace5c8e6e83e0c9afe8d34af339`에서, 전체 복구를
+우선하던 이전 정책을 **현재 의사결정에 필요한 최소 증거 보존**으로 바꿨다.
+단순 압축·이전이나 다른 위치의 백업이 아니라 로컬 payload의 실제 폐기다.
+
+| 측정 (`du -sk`) | 이번 정리 전 | 이번 정리 후 |
+|---|---:|---:|
+| `sample/output` 실제 할당량 | 2.578 GB | 0.172 GB |
+| 로컬 산출물 파일 수 | 3,326 | 252 |
+| 프로젝트 전체 | 4.432 GB | 약 2.03 GB |
+| 기존 `.venv` | 1.529 GB | 1.529 GB |
+
+**추가 회수량 2,406,248,448 bytes, 약 2.41 GB.** 3,074개 파일과 빈 디렉터리
+1,242개를 제거했다. 전체 수치는 새 Git 객체 반영 전이며, 남은 출력의 논리적
+크기는 171,066,303 bytes다. 이전 ZIP에 든 경로까지 포함하면 원래 25,755개
+논리 항목 중 25,503개의 전체 바이트 복구를 종료했다.
+
+### 무엇을 남겼는가
+
+- 현재 sample4 후보 160개의 바인딩과 Oil/Foam 반례를 가진 캡처 입력 45개.
+- 기존 42개 S2 raster view의 원래 crop·mask·graph 자료. 후속 비교의 양성·대조군
+  기반을 유지한다. 전체 trace나 닫힌 S2 실험의 완전 재실행을 보장하지 않는다.
+- water/beer/milk의 선택한 native source 16장, base/sample2/3/4의 원래 검토
+  geometry와 reader 불확실성, 재실행이 제한된 sample3의 판단 자료 8개.
+- 현재 peer attribution에 필요한 raw/completed/summary 3개와 독립 보고서
+  이해도 검토에 쓸 실제 HTML bundle 한 벌. 과거 보고서 모음은 폐기했다.
+
+범주가 겹치는 경로를 합쳐 **252개**다. 각 목적·삭제 시 정보 손실·최소 형태·재심사
+시점은 [보존 심사와 현재 목록](2026-10-12-pre-cr1-cleanup/retention.json)에 기록했다.
+원본 영상 8개, 추적 중인 truth·최종 비교·실패 기록·제공 명세와 Git source 이력은
+유지했다. 이전 보호 pin 293개에는 제품 소스 221개가 포함되며, 이를 모두 별도의
+필수 산출물로 세지 않는다. 후속 입력 계약이 확정되면 남긴 캡처도 다시 심사한다.
+
+### 무엇을 폐기했고 무엇으로 설명할 수 있는가
+
+1. 1.207 GB 통합 ZIP, 과거 FULL trace·중간 배열·반복 이미지·source checkout
+   사본과 전달용 ZIP을 폐기했다. 닫힌 실험의 결론·조건·완전한 비교 readout과
+   핵심 실패는 기존 Git 기록에서 확인한다. 전체 과거 실행의 native 자료를
+   다시 검증할 수 있다는 주장은 종료한다.
+2. 205 MB temporal-texture ZIP과 후속 검토가 끝난 `water-f001438.npz`를 폐기했다.
+   네 attempt의 runner·입력·실패, 전체 수치와 검토 그림은 기존 Git 파일에 있다.
+   유일한 작은 [affine 반례 배열](2026-10-12-pre-cr1-cleanup/temporal-affine-counterexample.npz)
+   14,031 bytes만 추가로 꺼내 hash를 확인했다. optical-warp 반례 결과도 원래
+   complete readout에 있으며, 성공/실패 분모를 유리하게 줄이지 않았다.
+3. Local XY의 165파일 전체 native corpus와 전달 ZIP은 폐기했다. 제공 원문,
+   실행 요약·검증 기록·overview는 Git에 있고, 다음 판단에 쓰는 원본 PNG만 남겼다.
+   과거 전체 verifier는 이미 source pin 차이로 실패했으며 이제 입력도 폐기됐다.
+4. 2,072개가 모두 통과한 과거 test XML은 commit·기존 검증 owner와 집계값으로
+   대체했다. 이 사례의 test/failure/error/skip 수와 원본 hash는 심사 기록에 있다.
+   개별 통과 test의 이름·실행 시간은 보존 목적이 없어 제거했다.
+
+**현재 상태는 `retention.json`이 우선한다.** `consolidation.json.gz`,
+`compressed-files.json` 및 아래 이전 receipt는 당시 보존 증거이며 현재 전체 복구
+약속이 아니다. 폐기 자료를 요청하거나 남은 파일과 섞어 요청하면 복원 도구는
+`Intentionally retired` 오류를 반환하고 목적지를 만들지 않는다. 복구해야 할 때는
+현재 목록의 개별 경로를 선택한다. 원본 매체가 있다고 옛 환경·출력을 정확히
+재현할 수 있다고 가정하지 않으며 sample3/Windows 새 실행 권한도 생기지 않는다.
+
+### 검증과 관리 적용
+
+[폐기 receipt](2026-10-12-pre-cr1-cleanup/retention-receipt.json)에 실제 용량·파일 수와
+검증 결과를 남겼다. 삭제 전 모든 대상이 이전 inventory/압축 map의 hash와 같음을
+확인했고, 삭제 후 252개 생존 파일·293개 기존 pin·원본 영상 8개의 hash를 확인했다.
+현재 peer 비교는 영상 decode 없이 116프레임·2,618 candidate join·1,892 support
+일치·불일치 0으로 재현했다. 로컬 검증은 field acceptance를 뜻하지 않는다.
+실제 CLI로 생존 JSON/PNG를 복원해 bytes·mode·mtime를 확인했고, 폐기 경로와
+혼합 선택은 목적지 생성 없이 거부됐다. 남긴 보고서의 local 참조 34개도 확인했다.
+peer 전체 readout은 HEAD metadata를 제외하고 기존 Git 보존본과 같다.
+
+관리 도구의 `finish`와 `check`는 보존 자료가 있을 때 **용도·손실 정보·재생성·
+최소 형태·재심사 시점** 5항목을 요구한다. 테스트 20개가 통과했다. 훅은 기록과
+파일 상태를 검사할 뿐 문장으로 적힌 가치가 타당하다고 판정하지 않는다.
+[관리 owner](../../40-operations/experiment-artifact-lifecycle.md)가 실제 판단과
+사용 목적 종료 시 정리를 소유한다. 새 Skill·훅·주기적 보관 ZIP은 만들지 않았다.
+CR-1 WP1 동결·설치·다운로드·추론은 수행하지 않았다.
+
+## 이전 단계: 추가 압축과 관리 절차 적용
 
 사용자 요청에 따라 clean `1073c67666477af2d88c76615458070d82413de8`에서
 마지막 압축 대상과 앞으로의 관리 방법을 적용했다. 아래의 이전 정리 수치는
-각 단계 당시 기록이다. **현재 저장 위치는 기존 통합 manifest와 추가 압축
-매핑을 함께 사용**한다. 역사 receipt·제공 원문의 bytes와 당시 판정을 덮어쓰지 않았다.
+각 단계 당시 기록이다. 당시에는 기존 통합 manifest와 추가 압축 매핑으로
+전부 복구할 수 있었다. 이후 폐기 여부는 위 `retention.json`이 우선한다.
+역사 receipt·제공 원문의 bytes와 당시 판정을 덮어쓰지 않았다.
 
 | 이번 대상 | 원본 논리 크기 | 최종 추가 저장 |
 |---|---:|---:|
@@ -117,33 +196,30 @@ frozen 역사 폴더에는 자동 삭제를 적용하지 않으며 훅 자체는
 - 새 영상 decode, frame detector, CR-1 모델 설치·실행, Windows 실행은 하지 않았다.
   S11 acceptance와 FIELD FAIL/O2 OPEN/Local XY OFF는 바뀌지 않는다.
 
-### 필요한 자료만 복원
+### 현재 보존 자료의 선택 복원
 
-아래 예시는 보고서 실행 하나를 새 폴더에 복원한다. destination의 부모는 존재하고
-destination 자체는 없어야 한다. 원래 저장소 파일을 덮어쓰지 않는다.
+아래 예시는 현재 보존된 기준 결과 요약을 새 폴더에 복원한다. destination의 부모는
+존재하고 destination 자체는 없어야 한다. 원래 저장소 파일을 덮어쓰지 않는다.
+이전 `s11-report-r1` 전체 보고서 등은 폐기했으므로 복구 대상으로 사용하지 않는다.
 
 ```bash
 python3 scripts/restore_s11_outputs.py \
-  --prefix sample/output/s11-report-r1 \
+  --prefix sample/output/s11-p5-default-linkage-20261011-001/none/summary.json \
   --destination /tmp/oil-s11-report-recovery
 ```
 
 단일 파일 경로도 `--prefix`에 넣을 수 있다. 출력 아래에 원래의
-`sample/output/...` 경로가 재현된다. 현재 도구는 기본 manifest 옆의
-`compressed-files.json`을 자동으로 읽어 마지막 압축 파일도 같은 명령으로
-복원한다. 기존 manifest pin과 압축 파일/ZIP hash를 확인하며 과거 manifest를
-재작성하지 않는다. 링크가 포함된 과거 소스 사본은 명시적으로
-`--include-symlinks`를 붙여야 하며, 링크는 현재 repo의 `sample` 트리 안으로만
-연결한다. Windows 링크 생성 권한/실행은 이번에 검증하지 않았다. 기존 절대 경로를
-소비하는 역사 runner를 재사용할 때는 복원한 자료와 pinned source를 먼저 확인하고,
-정말 필요한 경로만 기존 파일과 충돌 없이 원위치로 옮긴다. 검토 후 임시 복원본은
-제거하여 같은 전개 사본이 다시 누적되지 않게 한다.
+`sample/output/...` 경로가 재현된다. 도구는 manifest 옆 `retention.json`을 확인해
+폐기 경로를 먼저 거부한다. 이전 `compressed-files.json` 형식도 읽을 수 있지만
+이번 목록의 5개 압축 대상은 모두 폐기했으므로 더 이상 복구할 수 없다.
+현재 남은 경로는 로컬 원본의 hash를 확인해 복사한다. 과거 symlink 17개도
+폐기 대상이며 `--include-symlinks`로 폐기를 우회할 수 없다. 검토 후 임시 복원본은
+제거하여 같은 사본이 다시 누적되지 않게 한다.
 
 ZIP/gzip은 Git 제외 로컬 자료이며 **원격 백업이 아니다**. manifest·receipt·복구 도구는
 커밋되지만 새 clone에 과거 native 데이터가 자동으로 생기지 않는다. 기존 작은
-복구 ZIP들만으로 전체 native 자료를 복원할 수 있다고 가정하지 않는다.
-ZIP에 `index.json`과 SHA-256 이름의 `objects/`가 있어 경로 대응은 보관본
-자체에도 남는다. 새 작업의 보존 원칙은 [문서 라우터](../../README.md#로컬-실험-산출물-보존)를 따른다.
+복구 ZIP이나 과거 hash 목록만으로 폐기 자료를 복원할 수 있다고 가정하지 않는다.
+새 작업의 보존 원칙은 [문서 라우터](../../README.md#로컬-실험-산출물-보존)를 따른다.
 
 ## 1차 정리 결과
 
@@ -230,5 +306,5 @@ temporal-texture의 과거 native 경로가 필요한 경우, 삭제 매핑의 Z
 - Logic-map nodes: `FRAME-EVIDENCE`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F09`
 - First harmful stage: no new detector investigation; this checkpoint verifies storage, selected recovery and current saved-input consumption. It does not change or resolve role/authority failures.
-- Logic-map impact: NONE — verified cache removal and reversible native-output consolidation change storage only; production owners, source coordinates and publication behavior are unchanged.
-- Failure-registry impact: NONE — original failure evidence, source bindings and verdicts remain byte-preserved at live paths or in the mapped archive; no new mechanism, physical label or field acceptance is claimed.
+- Logic-map impact: NONE — storage consolidation followed by explicit value-based retirement changes availability only; production owners, source coordinates and publication behavior are unchanged.
+- Failure-registry impact: NONE — tracked failure verdicts, conditions, complete comparison readouts and selected counterexamples survive. Retired native payloads are explicitly unavailable; the old hash inventory is not a backup. No new mechanism, physical label or field acceptance is claimed.

@@ -165,3 +165,38 @@ def test_additive_map_reuses_existing_archive_object_without_another_copy(preser
     overlay.write_text(json.dumps(mapping), encoding="utf-8")
     with pytest.raises(ValueError, match="Invalid existing ZIP mapping"):
         restore(manifest, tmp_path / "bad", "sample/output/kept.json", repo=repo)
+
+
+def test_retirement_precedes_missing_archive_and_rejects_partial_restore(preservation, tmp_path):
+    repo, manifest, archive, payload, data = preservation
+    review = dict(schema="s11-output-retention-v1", default_disposition="retired",
+                  base_manifest_sha256=hashlib.sha256(manifest.read_bytes()).hexdigest(),
+                  retained=[data["entries"][-1]])
+    manifest.with_name("retention.json").write_text(json.dumps(review), encoding="utf-8")
+    archive.unlink()  # Deliberate disposal, not an accidental missing archive.
+    for prefix in ("sample/output/run/a.json", "sample/output"):
+        destination = tmp_path / "must-not-exist"
+        with pytest.raises(ValueError, match="Intentionally retired"):
+            restore(manifest, destination, prefix, repo=repo)
+        assert not destination.exists()
+    destination = tmp_path / "retained"
+    restore(manifest, destination, "sample/output/kept.json", repo=repo)
+    assert (destination / "sample/output/kept.json").read_bytes() == payload
+
+
+def test_retention_review_cannot_change_pins_or_select_unknown_paths(preservation, tmp_path):
+    repo, manifest, _, _, data = preservation
+    overlay = manifest.with_name("retention.json")
+    review = dict(schema="s11-output-retention-v1", default_disposition="retired",
+                  base_manifest_sha256="wrong", retained=[])
+    overlay.write_text(json.dumps(review), encoding="utf-8")
+    with pytest.raises(ValueError, match="does not match"):
+        restore(manifest, tmp_path / "bad", "sample/output/kept.json", repo=repo)
+    review["base_manifest_sha256"] = hashlib.sha256(manifest.read_bytes()).hexdigest()
+    for entry in ({**data["entries"][-1], "bytes": 0},
+                  {**data["entries"][-1], "path": "sample/output/unknown.json"}):
+        review["retained"] = [entry]
+        overlay.write_text(json.dumps(review), encoding="utf-8")
+        with pytest.raises(ValueError, match="Invalid retained-file"):
+            restore(manifest, tmp_path / "bad", "sample/output/kept.json", repo=repo)
+    assert not (tmp_path / "bad").exists()

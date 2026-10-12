@@ -172,6 +172,16 @@ def other_kept(repo: Path, current: str) -> dict[str, str]:
     return result
 
 
+def retention_review(data: dict, *, has_payload: bool) -> dict:
+    """Require a review record, not an automated judgment of scientific value."""
+    review = data.get("retention_review", {})
+    if has_payload:
+        for field in ("decision_use", "loss_if_removed", "reproduction", "minimality", "review_when"):
+            if not isinstance(review, dict) or not isinstance(review.get(field), str) or not review[field].strip():
+                raise ValueError(f"Retention value review requires {field}")
+    return review
+
+
 def finish(repo: Path, value: str, selection: dict | None = None) -> dict:
     run, data = load(repo, value)
     if data["state"] == "closed":
@@ -183,6 +193,7 @@ def finish(repo: Path, value: str, selection: dict | None = None) -> dict:
             raise ValueError("A verdict (including failed/rejected/aborted) is required")
         if not str(selection.get("discard_reason", "")).strip():
             raise ValueError("Explain why the unselected intermediates can be discarded")
+        review = retention_review(selection, has_payload=bool(selection.get("keep") or selection.get("reuse")))
         files = inventory(run / "work")
         kept = {}
         known = other_kept(repo, value)
@@ -217,6 +228,7 @@ def finish(repo: Path, value: str, selection: dict | None = None) -> dict:
             kept[path] = {**files[path], "reason": item["reason"]}
         discarded = {p: item for p, item in files.items() if p not in kept}
         data.update(state="closing", kept=kept, reuse=reuse,
+                    retention_review=review,
                     verdict=selection["verdict"], discard_reason=selection["discard_reason"],
                     discarded_files=len(discarded),
                     discarded_bytes=sum(item["bytes"] for item in discarded.values()),
@@ -272,6 +284,7 @@ def check(repo: Path, *, allow_open: bool = False) -> dict:
         try:
             run, data = load(repo, value)
             if data["state"] == "closed":
+                retention_review(data, has_payload=bool(data["kept"] or data["reuse"]))
                 if (run / "work").exists():
                     raise ValueError("Scratch remains after closeout")
                 files = inventory(run / "evidence")

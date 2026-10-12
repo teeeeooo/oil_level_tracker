@@ -114,10 +114,13 @@ CLI/UI는 임의 영상을 열 수 있다. 새 임시 스크립트로 raw OpenCV
 ## 로컬 자료와 새 clone
 
 원본 일곱 MP4와 `sample/output/`는 계속 Git에서 제외된다. 새 clone에 있다고
-가정하지 않는다. 다음 자료는 체크포인트 작성 시 존재를 확인했으며 삭제하지 않는다.
+가정하지 않는다. 아래 native 전체 자료는 이 체크포인트 작성 당시 보존됐으나,
+10월 12일 [가치 심사](2026-10-12-pre-cr1-cleanup-checkpoint.md)에서 폐기했다.
+현재 남은 자료와 복구 불가 범위는 그 `retention.json`이 소유한다.
 
-- `sample/output/s11-sample3-reappearance-20261010-001/`: 기존 전체 replay와 native 자료.
-- `sample/output/s11-episode-texture-20261008-001/`: 기존 detection/resolution 보존 자료.
+- `sample/output/s11-sample3-reappearance-20261010-001/`: 전체 replay는 폐기했고,
+  사용자 판단에 묶인 source/native 4개만 남겼다. 별도 gap source/context 4개도 남아 있다.
+- `sample/output/s11-episode-texture-20261008-001/`: 기존 detection/resolution 묶음 폐기.
 - 추적 중인 [sample3 causal archive](../../50-diagnostics/s11/2026-10-10-sample3-reappearance-causality.json.gz):
   10,042,881 bytes, 기존 전체 행·probe·검증 소스. 이 파일의 존재가 새 replay 실행을 뜻하지 않는다.
 - 추적 중인 [water 비교 기록](../../50-diagnostics/s11/2026-10-10-abc-source-interval-comparison.json)과

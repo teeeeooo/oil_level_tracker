@@ -86,8 +86,9 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
 
 The October 12 follow-up selects the isolated experiment. The next instruction
 authorizes only user-facing steps 1–3 and asks to review the checkpoint before
-CR-1 starts. The later request adds consolidation of accumulated outputs; both
-passes are now [verified](../60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md).
+CR-1 starts. Later requests authorize consolidation and then decision-value
+review with actual disposal of unnecessary outputs; these are now
+[verified](../60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md).
 The numbering below follows the clarified conversation: step 3 is preservation
 verification; WP1 freezing and setup belong to step 4 and have not started.
 The [CR-1 lifecycle contract](../20-architecture/s11-contextual-role-observation-design.md#local-footprint-and-removal-contract)
@@ -96,22 +97,22 @@ owns the checks. These steps refine WP1–WP3, not a second milestone ledger.
 
 | Order | Work | Completion / stop condition |
 |---|---|---|
-| 1. Inventory and protect — VERIFIED | Starting HEAD/worktree/disk inventory and path-level retention/archive mapping are preserved in the checkpoint. | One registered main worktree; current pins, direct tracked file references, complete Local XY corpus and retained HTML assets remain live. |
-| 2. Clean — VERIFIED | After the initial cache/duplicate pass, consolidated 22,429 expanded entries into one local ZIP with deduplicated payloads; 3,326 original files remain live. | Additional net reduction about 2.46 GB; no original source-media, environment or evidence-byte loss. Partial historical folders require selected restoration for a full run. |
-| 3. Verify and checkpoint — VERIFIED; user review pending | All archived payloads and live hashes verified; source/report recovery, five recovery-tool tests and current peer reproduction pass. The legacy Local XY verifier's pre-existing source-pin mismatch is recorded separately. | Stop here. No CR-1 WP1 freeze, setup, installation, model download or inference. |
+| 1. Inventory and protect — VERIFIED | Historical inventory remains; the current `retention.json` selects evidence by concrete decision use and information loss. | One registered main worktree; original media, reviewed truth, current candidate/control captures, peer baseline and one report remain. Links and old verifiers alone do not warrant preservation. |
+| 2. Clean — VERIFIED | After reversible consolidation, retired obsolete native runs, full traces and bulk archives. 252 output files remain, about 172 MB allocated. | This value review reclaimed another 2.41 GB. Complete historical native replay is intentionally unavailable; frozen tracked verdicts/readouts and selected counterexamples survive. |
+| 3. Verify and checkpoint — VERIFIED; user review pending | Surviving inputs/media hashes, retained-file recovery, retired-path rejection, 20 tool tests and the current peer comparison pass. | Stop here. No CR-1 WP1 freeze, setup, installation, model download or inference. |
 | 4. Freeze WP1 and establish isolated readiness — NOT STARTED | After user review, bind source/candidate/reference roster, one model/bank, full/local geometry and missing/tie/progression rules; pin dependencies, weights, CPU limits and removal mapping. Then use the single ignored root for minimal installation and offline smoke/resource checks. | Concrete preflight before scored execution; at most 3 GB additional footprint, no main-environment/product dependency change or runtime network fallback. Record cold/warm timing, peak RSS and output growth. Missing role bindings stay unassessed; a limit/isolation failure stops comparison. |
 | 5. Run the fixed comparison | Verify encoder-through-pixel reachability, then real positive/opposition pairs, then the full candidate/control comparison only if eligible. Keep complete score denominators and bounded review images. | Stop at the first failed progression condition; no model/reference/threshold/case tuning. Compare usefulness and Mac review/resource burden separately; local results do not qualify Windows. |
 | 6. Decide and remove or retain | Preserve settings, hashes, complete score summaries, judgment-bearing evidence and the result. If rejected, remove experiment-owned environment/model/cache/intermediates and retire its optional adapter. | Verify recovered space, surviving evidence and unchanged application dependency/entry paths. If useful, retain one pinned experiment set within the cap and propose the separate Windows/package/acceptance work. |
 
 Protection starts with the [45 ignored capture inputs](../60-evidence/s11/2026-10-12-boundary-feasibility-handoff.md#보존-자료와-재현-범위),
-original source media, reviewed truth, byte-preserved supplied packages, frozen
+original source media, reviewed truth, tracked supplied specifications, frozen
 manifests/readouts and the [program-review reproduction inputs](../60-evidence/s11/2026-10-12-program-review-intake.md).
-That list is a starting set, not permission to delete everything else. In
-particular, required Local XY PNGs and the P5 `none` baseline retain their exact
-paths; that does not require every historical FULL trace to stay expanded. Other
-evidence remains recoverable through the consolidation manifest and selective
-restore tool. Missing links alone do not establish disposability. Reuse valid
-archives, remove temporary restored copies after review, and follow the
+Required Local XY PNGs and the P5 `none` baseline retain their exact paths.
+The obsolete full Local XY corpus, bulk archives and full traces were retired
+after an explicit value review; no blanket byte-recovery promise remains.
+The current retention map overrides old storage maps without rewriting their
+historical verdicts. Future selection must reassess the remaining captures when
+their concrete comparison purpose ends. Remove temporary copies and follow the
 [local-output preservation rules](../README.md#로컬-실험-산출물-보존). Do not purge
 shared package caches or rewrite Git history for this cleanup.
 The checkpoint confirms only the main worktree; recheck if that state changes.

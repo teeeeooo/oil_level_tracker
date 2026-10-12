@@ -65,6 +65,29 @@ def compressed_sources(manifest_path: Path, manifest: dict) -> dict:
     return sources
 
 
+def retained_paths(manifest_path: Path, manifest: dict) -> set[str] | None:
+    """Apply a later value review without changing the historical inventory."""
+    review_path = manifest_path.with_name("retention.json")
+    if not review_path.exists():
+        return None  # Older, independently supplied preservation manifests.
+    review = json.loads(review_path.read_text(encoding="utf-8"))
+    if (review["schema"] != "s11-output-retention-v1"
+            or review["base_manifest_sha256"] != digest(manifest_path)
+            or review["default_disposition"] != "retired"):
+        raise ValueError("Retention review does not match preservation manifest")
+    entries = {entry["path"]: entry for entry in manifest["entries"]}
+    retained = set()
+    for item in review["retained"]:
+        path = item["path"]
+        output_path(path)
+        original = entries.get(path)
+        if (path in retained or not original or original["kind"] != "file"
+                or any(item[k] != original[k] for k in ("bytes", "sha256"))):
+            raise ValueError("Invalid retained-file mapping")
+        retained.add(path)
+    return retained
+
+
 def restore(
     manifest_path: Path,
     destination: Path,
@@ -78,7 +101,9 @@ def restore(
     Kept files come from their pinned repository paths or an additive gzip map;
     archived files come from a self-contained ZIP object store. Each logical path
     gets an independent file.
-    Historical absolute links require opt-in and are rebound inside this repo.
+    A later retention review can retire paths; mixed selections fail explicitly
+    rather than quietly returning an incomplete experiment. Historical absolute
+    links require opt-in and are rebound inside this repo.
     """
     prefix_path = output_path(prefix)
     manifest = json.loads(gzip.decompress(manifest_path.read_bytes()))
@@ -95,6 +120,15 @@ def restore(
     ]
     if not selected:
         raise ValueError(f"No preserved paths match {prefix}")
+    retained = retained_paths(manifest_path, manifest)
+    if retained is not None:
+        retired = [entry["path"] for entry in selected if entry["path"] not in retained]
+        if retired:
+            raise ValueError(
+                f"Intentionally retired: {len(retired)} of {len(selected)} selected paths; "
+                f"no complete byte recovery is available. See {manifest_path.with_name('retention.json')}. "
+                "Select an individual retained path instead."
+            )
     if destination.exists() or destination.is_symlink():
         raise FileExistsError(f"Destination must not exist: {destination}")
     paths = [entry["path"] for entry in selected]
