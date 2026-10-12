@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
-**Next transition:** The user resumed CR-1 with autonomous local work and commit/push authority, stopping at a material user judgment. The [WP1 reference-readiness audit](../50-diagnostics/s11/2026-10-12-cr1-reference-preflight.md) verifies surviving inputs and candidate bindings but leaves the reference/support scope unresolved. **Await the user's choice: explicitly bounded candidate-centred regional-context comparison, or a small native-support review for the contour-strip comparison.** WP1 is partial; no model setup, download or inference has occurred, and no model failure is claimed. Keep the one-experiment / 3 GB limit, then freeze the [qualified preflight](../20-architecture/s11-contextual-role-observation-design.md#wp1-preflight-decisions) before following the [sequence below](#repository-cleanup-and-isolated-cr-1-sequence). Independent Foam/P5-a research retains its own entry. The row-distribution/mean and prior pilots remain closed, all source questions stay CLOSED, and no threshold/reference/candidate-exclusion rescue follows. Typed consumption still requires O2/V5 Windows shadow then separate O3. Local XY OFF / O2 OPEN / FIELD FAIL remain; no Windows run is requested.
+**Next transition:** The [CR-1 complete-candidate review](../50-diagnostics/s11/2026-10-12-cr1-context-comparison.md) is COMPLETE with SCOPE_LIMITED_USEFULNESS, not production promotion. Full context retains 4/6 nonself reviewed Oil contexts and opposes 3/3 reviewed wrong targets; local retains 6/6 but still prefers the wrong 44 s target. That wrong target and the true 49.5/52 s targets share the same full/local category pair, so a categorical combination cannot resolve this conflict. Unreviewed alternatives and exposure limits remain. A separate operating-policy design with suitable calibration/evaluation evidence is needed before any consumer or sequential efficacy run; no threshold/model/reference search or automatic OR/AND rule follows from these results. Preserve the first-trial failure and all 164 outcomes. Keep environment, weights and caches until the user explicitly requests cleanup, within 3 GB. Autonomous commits/pushes remain authorized. O2 OPEN / FIELD FAIL / Local XY OFF remain; no Windows run is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -63,7 +63,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; P1 offline representation VERIFIED; P2-S1 and row-distribution model CLOSED WITHOUT PROMOTION; mean diagnostic complete without consumer | Cleanup VERIFIED; CR-1 resumed and WP1 input bindings VERIFIED. Await the reference/support scope decision in the [readiness audit](../50-diagnostics/s11/2026-10-12-cr1-reference-preflight.md); no scored model trial. No eligible operation or role result is claimed; no threshold/reference/transform retuning of S1. Local XY, H0/G1, CBR-1 and cost-order/recent-basis probes remain closed. | [P2-S1 result](../50-diagnostics/s11/2026-10-11-p2-shared-support.md), [P2 entry](../20-architecture/s11-interface-observability-witness-architecture.md#p2-shared-support-role-comparison--proposal-entry), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
+| W4 / O2 challenger | OPEN; P1 offline representation VERIFIED; P2-S1 and row-distribution model CLOSED WITHOUT PROMOTION; mean diagnostic complete without consumer | CR-1 usefulness review COMPLETE: scope-limited information with conflicting full/local outcomes and unreviewed competitors. [Complete readout](../50-diagnostics/s11/2026-10-12-cr1-context-comparison.md) retains all 164 records and original exposure groups; no physical selector or operating policy is accepted. Environment cleanup requires an explicit user request. No threshold/reference/transform retuning of S1. Local XY, H0/G1, CBR-1 and cost-order/recent-basis probes remain closed. | [P2-S1 result](../50-diagnostics/s11/2026-10-11-p2-shared-support.md), [P2 entry](../20-architecture/s11-interface-observability-witness-architecture.md#p2-shared-support-role-comparison--proposal-entry), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | P3 / D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | P4 / D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -84,17 +84,14 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
 
 ### Repository cleanup and isolated CR-1 sequence
 
-The October 12 follow-up selects the isolated experiment. The next instruction
-authorizes only user-facing steps 1–3 and asks to review the checkpoint before
-CR-1 starts. Later requests authorize consolidation and then decision-value
-review with actual disposal of unnecessary outputs; these are now
-[verified](../60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md). The user has
-subsequently resumed autonomous work and commits/pushes, with a stop for material
-judgment. The [WP1 audit](../50-diagnostics/s11/2026-10-12-cr1-reference-preflight.md)
-now identifies a reference/support scope choice before installation or inference.
-The numbering below follows the clarified conversation: step 3 is preservation
-verification; step 4 has begun with input/reference auditing, while the complete
-WP1 freeze and model setup remain pending.
+The October 12 cleanup and preservation checkpoint is verified. The user selected
+candidate-centred regional context, authorized autonomous local work and commits/
+pushes, and then adopted a complete-candidate usefulness follow-up after both
+representations passed the first real pair. That first trial's unmet ablation
+gate remains recorded. The follow-up changes the review question and exposure
+reporting explicitly; it keeps the model, bank and measurement fixed. The latest
+instruction preserves the environment, weights and caches until user-requested
+cleanup, regardless of the result.
 The [CR-1 lifecycle contract](../20-architecture/s11-contextual-role-observation-design.md#local-footprint-and-removal-contract)
 owns storage/isolation/removal rules; the [validation entry](../30-validation/s11-interface-observability-witness-validation.md#contextual-role-experiment-preflight)
 owns the checks. These steps refine WP1–WP3, not a second milestone ledger.
@@ -104,9 +101,9 @@ owns the checks. These steps refine WP1–WP3, not a second milestone ledger.
 | 1. Inventory and protect — VERIFIED | Historical inventory remains; the current `retention.json` selects evidence by concrete decision use and information loss. | One registered main worktree; original media, reviewed truth, current candidate/control captures, peer baseline and one report remain. Links and old verifiers alone do not warrant preservation. |
 | 2. Clean — VERIFIED | After reversible consolidation, retired obsolete native runs, full traces and bulk archives. 252 output files remain, about 172 MB allocated. | This value review reclaimed another 2.41 GB. Complete historical native replay is intentionally unavailable; frozen tracked verdicts/readouts and selected counterexamples survive. |
 | 3. Verify and checkpoint — VERIFIED; continuation authorized | Prior recovery/tool/peer checks remain recorded. WP1 rechecks 252 retained files, 293 pins and eight media hashes. | The cleanup review stop is satisfied by the user's explicit continuation. No need to repeat cleanup or closed tool/peer runs. |
-| 4. Freeze WP1 and establish isolated readiness — PARTIAL; user judgment pending | Input preservation and all 160 saved candidates + four context controls verified. Existing role/candidate reviews do not yet bind the proposed contour strips. Choose the comparison scope in the [audit](../50-diagnostics/s11/2026-10-12-cr1-reference-preflight.md), then freeze references, geometry, source/episode exclusions, progression, backend/dependencies/weights and CPU limits. | Stop before model setup/download/inference for this scope choice. No empirical CR-1 failure. Keep the isolated root and 3 GB total cap; smoke/write/removal and cold/warm/RSS checks remain required after an executable preflight exists. |
-| 5. Run the fixed comparison | Verify encoder-through-pixel reachability, then real positive/opposition pairs, then the full candidate/control comparison only if eligible. Keep complete score denominators and bounded review images. | Stop at the first failed progression condition; no model/reference/threshold/case tuning. Compare usefulness and Mac review/resource burden separately; local results do not qualify Windows. |
-| 6. Decide and remove or retain | Preserve settings, hashes, complete score summaries, judgment-bearing evidence and the result. If rejected, remove experiment-owned environment/model/cache/intermediates and retire its optional adapter. | Verify recovered space, surviving evidence and unchanged application dependency/entry paths. If useful, retain one pinned experiment set within the cap and propose the separate Windows/package/acceptance work. |
+| 4. Freeze WP1 and establish isolated readiness — VERIFIED | Candidate-centred scope adopted; source/candidate pins, DINOv2 revision/weights/dependencies, equal-scale support and CPU limits frozen. Actual encoder synthetic and arithmetic controls pass. | First real pair passes in both full/local modes, so the first trial's required local failure is unmet. Preserve its result without retrospective PASS. |
+| 5. Complete the adopted usefulness review — COMPLETE | All 164 records retained: 132 measured, 32 unavailable; 91 outside-reference-episode, 71 neighbor diagnostics and two self-support records. Original two scores reused. [Result](../50-diagnostics/s11/2026-10-12-cr1-context-comparison.md): SCOPE_LIMITED_USEFULNESS. | Local recovers two reviewed targets missed by mean/full; full opposes the wrong 44 s target missed by local. Their identical category-pair collision and competing unreviewed coordinates preclude a simple categorical consumer. No workflow/field improvement claimed. |
+| 6. Record disposition and retain the environment | Compact first/follow-up records, source/weight pins, prepared inputs and one review image preserved. Keep the existing environment/models/caches until explicit user cleanup request. | [Retention receipt](../50-diagnostics/s11/2026-10-12-cr1-context-comparison/retention.json) records managed-run closure and the sub-3 GB footprint. Further operating-policy, consumer, Foam and Windows acceptance retain their own entry. |
 
 Protection starts with the [45 ignored capture inputs](../60-evidence/s11/2026-10-12-boundary-feasibility-handoff.md#보존-자료와-재현-범위),
 original source media, reviewed truth, tracked supplied specifications, frozen
@@ -146,8 +143,8 @@ or successful new classifier follows from reorganizing evaluation.
 | Sequence / October 12 alias | Concrete next output / owner | Entry, completion and stop condition |
 |---|---|---|
 | P0 / WP0 — evaluation and causal baseline | Existing scene roster ADOPTED; peer attribution VERIFIED in the [intake](../60-evidence/s11/2026-10-12-program-review-intake.md) | Reuse sixteen local groups, all nine Windows stories and closed source judgments. Known wrong continuation and correct zero-support controls supplement the false-anchor counterexample; no detector improvement is claimed. |
-| P2/P5-a / WP1 — next planning checkpoint | Resumed; input/reference audit complete, support scope decision pending before [CR-1 preflight](../20-architecture/s11-contextual-role-observation-design.md#wp1-preflight-decisions) freeze | Bind references at their actual truth precision; freeze source/episode exposure, token geometry, equal-scale ablation, operating rules, controls and resources. Missing bindings remain unassessed. The 3 GB footprint, isolated dependencies/cache and removal checks apply before execution. |
-| P2 / WP2 and P5-a / WP3 — independent role research | One encoder/bank, full/local representations for CR-1; separate Foam presence/upper observation scope | Measured reachability, then fixed real-positive/opposition screen, then full candidate/control readout. Stop at the first failed condition; no post-result model/reference/threshold rescue. WP3 raw-front behavior is P5-b and needs separate acceptance, not automatic promotion from research. |
+| P2/P5-a / WP1 — planning checkpoint | CR-1 candidate-centred preflight and isolated readiness VERIFIED; user adopted [usefulness continuation](../20-architecture/s11-contextual-role-observation-design.md#adopted-usefulness-follow-up-and-review-completion) | Preserve both frozen trials, their unchanged measurement operation and separated exposure. Retain environment/model/cache until user-requested cleanup, within 3 GB. |
+| P2 / WP2 and P5-a / WP3 — independent role research | CR-1 diagnostic review COMPLETE / SCOPE_LIMITED_USEFULNESS; independent Foam upper/presence remains unassessed by this bank | Preserve first-trial ablation failure and complete follow-up. Next needs a separate operating-policy design that addresses category collisions and unreviewed alternatives. No automatic fusion/tuning; WP3 behavior remains separate P5-b acceptance. |
 | O2 / WP4 then WP5 — typed shadow and acceptance | Versioned Witness delta, frozen operating policy, V2/V3 controls/holdouts and V4 equality/resources; then **V5 Windows shadow before O2** | Candidate must first be eligible. No production behavior during shadow. Keep user/Windows checkpoint here; a later integrated field run cannot replace this gate. |
 | P3/O3 / WP6 then P4/O4 / WP7 — Oil consumption | Separate support/contradiction consumer plan, then physical owner/handoff/continuation plan | Test anchor and continuation, real UNASSESSED fallback, all-UNKNOWN loss and full-window movement. Preserve FULL/EMPTY/refill/drain controls; no cost-first/nearest-Y or stale-ID shortcut. |
 | P5-b / WP3 integration; P5-c / WP8 only if needed | Raw-front behavior acceptance, then conditional episode repair | Independent correct current native upper and role evidence first, with Oil invariance and debug equality. Typed decisions need O2/O3. P5-c opens only for proved loss of a correct raw front; presence-only episodes require a separate semantics contract. |
@@ -935,9 +932,10 @@ through the checkpoint only, with the user reviewing it before CR-1 begins.
 The later request also authorizes additional consolidation of accumulated
 outputs, now verified at the same checkpoint. The user has now explicitly resumed
 autonomous work and commits/pushes, stopping when user judgment is needed. This
-authorizes WP1 and the eligible bounded local experiment; the current stop is the
-reference/support scope choice found in the WP1 audit, not the completed cleanup
-review. Production adoption and Windows work retain their separate entry conditions.
+authorizes WP1 and the bounded local experiment. Later decisions adopt candidate-centred
+regional context and the complete-candidate usefulness review with preserved first-trial
+results. Keep the environment/model/cache until the user requests cleanup. Production
+adoption and Windows work retain their separate entry conditions.
 
 The latest October 11 continuation authorizes stepwise implementation and
 verification of the adopted plan, necessary evidence/owner updates and autonomous
@@ -975,8 +973,8 @@ ask only when a specific unresolved judgment becomes necessary to proceed.
 
 **Method scope:** the October 12 decision reopens the prior ML exclusion only for
 CR-1's isolated local readiness and fixed offline comparison. Repository cleanup
-and its user continuation checkpoint are complete; the current WP1 support-scope
-judgment remains pending. Use one frozen DINOv2 ViT-S/14
+and its user continuation checkpoint are complete; candidate-centred scope and the
+unchanged-operation usefulness continuation are adopted. Use one frozen DINOv2 ViT-S/14
 encoder, one reference bank and full/local
 representations under the linked lifecycle/preflight contracts. Training,
 fine-tuning, open-ended model search and default product/package adoption remain

@@ -1,0 +1,94 @@
+{
+  "schema": "s11-cr1-usefulness-disposition-v1",
+  "status": "REVIEW_COMPLETE",
+  "disposition": "SCOPE_LIMITED_USEFULNESS",
+  "first_trial": "Unchanged CLOSED_WITHOUT_PROMOTION for its declared two-case full-over-local condition.",
+  "evidence": {
+    "full": {
+      "nonself_target_interface": 4,
+      "nonself_targets": 6,
+      "wrong_opposition": 3,
+      "wrong_interface": 0,
+      "wrong_unresolved": 0,
+      "wrong_targets": 3
+    },
+    "local": {
+      "nonself_target_interface": 6,
+      "nonself_targets": 6,
+      "wrong_opposition": 2,
+      "wrong_interface": 1,
+      "wrong_unresolved": 0,
+      "wrong_targets": 3
+    },
+    "mean": {
+      "nonself_target_interface": 4,
+      "nonself_targets": 6,
+      "wrong_opposition": 2,
+      "wrong_interface": 0,
+      "wrong_unresolved": 1,
+      "wrong_targets": 3
+    }
+  },
+  "exposure_limit": "Counts include two nonself confirmed targets and two rejected targets in the reference episode; they are exposed diagnostics. Outside the reference episode there are only four confirmed targets and one rejected target, from the same source.",
+  "source_bindings": "Actual inference remains regional-context preference; no dense role truth, selector, new labels or public-source transfer.",
+  "findings": [
+    "Local preserves all six nonself reviewed target contexts, including 49.5s and 52s missed by full and the old mean diagnostic.",
+    "Full opposes all three reviewed wrong targets, but misses those two protected target contexts; 44s texture preference has margin only 0.0027177911518383446.",
+    "Local still gives interface preference to the known wrong 44s target.",
+    "Full and local retain multiple distinct unreviewed interface coordinates in most frames; full has only unreviewed alternatives at 49.5s and 52s. Those are not successful replacements.",
+    "No frozen single mode demonstrates the joint wrong-target opposition and protected-target preservation needed for a physical selection claim."
+  ],
+  "unavailable_variants": {
+    "crop_outside": 14,
+    "insufficient_common_mask": 18
+  },
+  "next_boundary": "A separate operating-policy design must explain how to use these competing signals while preserving unassessed alternatives and normal observations; no threshold/OR/AND combination is adopted from these results. No new model/reference/scale/label search is authorized by this review.",
+  "not_evaluated": [
+    "Continuous motion/cadence or graph/report improvement",
+    "Physical scalar or contour accuracy",
+    "Foam-upper/presence/disappearance efficacy",
+    "Independent-source or untouched-holdout generalization",
+    "Windows resources, O2/O3 and field acceptance"
+  ],
+  "environment_retention": "User explicitly retains environment, weights and caches until a future cleanup request.",
+  "review_image": "primary-pair-and-references.png; visual check complete, all eight panels and original-anchor labels legible; no new physical labeling",
+  "categorical_pair_collision": {
+    "pair": [
+      "texture",
+      "interface"
+    ],
+    "rows": [
+      {
+        "id": "s4-f1320-idx21",
+        "frame": 1320,
+        "y": 822.0,
+        "label": "rejected_target",
+        "exposure": "reference_episode_diagnostic",
+        "full": "texture",
+        "local": "interface",
+        "mean": "structure"
+      },
+      {
+        "id": "s4-f1485-idx19",
+        "frame": 1485,
+        "y": 836.0,
+        "label": "confirmed_target",
+        "exposure": "outside_reference_episode_development",
+        "full": "texture",
+        "local": "interface",
+        "mean": null
+      },
+      {
+        "id": "s4-f1560-idx20",
+        "frame": 1560,
+        "y": 833.0,
+        "label": "confirmed_target",
+        "exposure": "outside_reference_episode_development",
+        "full": "texture",
+        "local": "interface",
+        "mean": null
+      }
+    ],
+    "consequence": "A deterministic consumer using only the two categorical preferences cannot oppose the known wrong 44s candidate while preserving both known 49.5s/52s targets. Continuous-score policies remain unassessed; this is not a general impossibility result."
+  }
+}

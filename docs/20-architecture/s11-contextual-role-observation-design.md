@@ -43,6 +43,29 @@ Reuse the current owners rather than building a second detector:
 
 ## CR-1 operation to freeze before execution
 
+### Adopted candidate-centred context scope
+
+After the [reference audit](../50-diagnostics/s11/2026-10-12-cr1-reference-preflight.md),
+the user selected its recommended regional-context comparison. CR-1 may therefore
+sample around the original candidate scalar or previously reviewed context marker
+even when no candidate-owned contour exists. These are **sampling anchors**, not
+generated horizontal boundaries or new position truth. Keep the original scalar,
+fractional floor/ceil alternatives, source index and actual review precision.
+Do not snap an anchor to an edge, fill a reviewed interval, or label its surrounding
+pixels as pure material. The output is `regional_context_preference`; it does not
+certify a contour role, target localization, continuity or production support.
+
+Reuse the existing S1 Oil-vicinity, rim-seed and internal-texture contexts as one
+fixed three-exemplar bank at their existing precision. They are not pure masks
+and none is a qualified Foam-upper prototype. Keep Foam upper/presence and public
+interval-only cases explicitly unassessed where this bank cannot support that
+claim. Freeze common relative strip support, full/local geometry, source/episode
+exclusion and the real positive/opposition screen before any model scores. This
+limited scope does not require new source labeling and does not change the later
+native-support/physical-role acceptance requirements.
+
+### Fixed encoder and descriptor
+
 Test one fixed DINOv2 ViT-S/14 encoder, no training/fine-tuning, one reference bank,
 and full-context versus local-context representations. Use candidate-conditioned
 upper/lower strip vectors rather than one global vector shared by every candidate:
@@ -68,7 +91,7 @@ filled with guessed labels, model performance or product tolerances in this inta
 | Decision | Required record and completion condition |
 |---|---|
 | Input scope | Existing P0 roster plus separately identified public-compressor development evidence; source/Recipe/frame/PTS/reader/masks and all candidate bindings; sample3 remains skipped |
-| Reference validity | One qualified prototype per enabled role; identify actual native support and the precision of its human review. A regional Oil/Foam reply alone is not an exact contour annotation. Disable an unbindable role and state the missing evidence |
+| Reference validity | One prototype per enabled regional-context class under the adopted scope above; identify actual sampling support and human-review precision. A regional Oil/Foam reply alone is not an exact contour annotation. Disable unbindable physical roles and state the missing evidence |
 | Exposure/splits | Freeze initialization, development and evaluation groups by source/episode. Exclude each query and its declared neighboring episode from its reference bank; report source overlap. Existing sources and Windows stories are exposed development/qualification material, not untouched holdouts |
 | Token geometry | Pin canvas, aspect-preserving transform, padding/mask, normalization, interpolation, strip offsets/widths and common X support. Map strip pixels to token supports and measure upper/lower and competing-candidate token overlap; interpolation adds no native localization precision |
 | Ablation fairness | Use the same encoder, native scale, canvas/token lattice, candidate geometry, strip support and reference identities. Define one local-context intervention and its padding/mask effects. Do not resize each local crop to fill the canvas and attribute changed resolution to context alone. Compute references separately through each representation |
@@ -138,6 +161,13 @@ the final path inventory, reclaimed bytes, application entry/dependency invarian
 and surviving evidence. A useful result may retain one pinned set within the cap;
 production integration still follows the separate acceptance sequence.
 
+**User retention override (October 12):** keep the current CR-1 environment,
+weights and caches regardless of the research verdict. Remove them only when
+the user explicitly requests environment cleanup. This overrides the automatic
+removal clause above for this experiment, without raising the 3 GB cap or
+authorizing additional model/environment copies. Close completed managed runs
+with explicit evidence retention; run closure is distinct from environment removal.
+
 ## Progression and stop conditions
 
 1. Verify the preceding repository cleanup, freeze WP1, and satisfy footprint/
@@ -160,6 +190,45 @@ The initial budget is one encoder/bank and two representations. The source's
 or permission to tune until a gate passes. Close CR-1 at the frozen limit if it
 fails; partial-role usefulness and unassessable roles stay separate. Do not change
 the bank, thresholds, cases or model after seeing results under the same trial.
+
+### Adopted usefulness follow-up and review completion
+
+The user subsequently adopted a complete-candidate usefulness review after the
+first frozen trial stopped: its full and local representations both passed the
+two real candidate preferences, so its required local-ablation failure did not
+occur. Preserve that first preflight, readout and failed progression result.
+They answer the narrow context-benefit screen, not the utility of all pretrained
+representations. The separately frozen follow-up is diagnostic continuation,
+not retrospective promotion or a tuned replacement for that trial.
+
+Reuse the same encoder, weights, bank, support, normalization and preference
+operation. Reuse the two measured results and verified synthetic controls;
+complete the 164-record inventory once. Full/local differences remain explanatory
+evidence, not a requirement that the local representation fail. Compare known
+target preservation, known wrong-target preferences and competing unreviewed
+alternatives with the saved application selections and unchanged mean diagnostic.
+Their scores/operating rules differ; this is an outcome comparison on common
+candidate identities, not a controlled feature-only comparison or a shared cutoff.
+
+Keep reference-self, reference-neighbor and outside-reference-episode groups
+separate. Explicitly tagged development-only scoring may include the excluded
+42/44 s errors; it cannot enter the first trial's evaluation denominator or
+establish generalization. Report all candidates, missing/censored results,
+duplicate coordinates and unreviewed alternatives. Never count an unreviewed
+alternative as correct merely because a known wrong target loses preference.
+
+Review completion requires the complete planned readout/control results, preserved
+first-trial verdict, source/role limitations, bounded resource measurements and
+an explained disposition: worth further validation, useful only within a stated
+scope, no demonstrated utility, or insufficient evidence to decide. Preferential
+scores alone cannot close O2 or grant a physical selector. If the readout reveals
+a decision-bearing remaining ambiguity, state the smallest additional evidence
+needed rather than tuning the fixed model. A partial result can justify a bounded
+next study without becoming a product PASS.
+
+Sequential consumer behavior, independent Foam-upper observation, Windows shadow
+and final nine-segment/report acceptance remain later stages. The CR-1 review
+neither requires them to finish this diagnostic nor claims them through it.
 
 ## Independent Foam path and future consumption
 

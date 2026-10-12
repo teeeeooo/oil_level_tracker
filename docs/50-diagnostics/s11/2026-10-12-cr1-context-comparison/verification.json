@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "roster_rows": 164,
+  "untouched_not_run": 162,
+  "compared_candidates": 2,
+  "score_rank_checks": 6,
+  "weight_mass_overlap_checks": 12,
+  "preserved_input_source_pins": 273,
+  "production_source_pins": 221,
+  "precision": "saved-result consistency, not independent model replication"
+}

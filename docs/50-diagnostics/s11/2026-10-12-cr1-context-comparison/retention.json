@@ -1,0 +1,101 @@
+{
+  "schema": "s11-cr1-retention-v1",
+  "environment_policy": "Retain environment/weights/cache until explicit user cleanup request; no automatic removal after a negative or partial research verdict.",
+  "environment_cleanup_performed": false,
+  "workspace": {
+    "cache": {
+      "regular_files": 31,
+      "logical_bytes": 3010517,
+      "allocated_bytes": 3080192
+    },
+    "models": {
+      "regular_files": 159,
+      "logical_bytes": 89088284,
+      "allocated_bytes": 102916096
+    },
+    "env": {
+      "regular_files": 16722,
+      "logical_bytes": 598961223,
+      "allocated_bytes": 640548864
+    },
+    "runs": {
+      "regular_files": 9,
+      "logical_bytes": 127578,
+      "allocated_bytes": 151552
+    }
+  },
+  "tracked_diagnostic_before_receipt": {
+    "regular_files": 15,
+    "logical_bytes": 522685,
+    "allocated_bytes": 565248
+  },
+  "conservative_whole_changed_document_allocated_bytes": 282624,
+  "total_allocated_before_receipt_bytes": 747544576,
+  "additional_receipt_reserve_bytes": 1000000,
+  "total_with_receipt_reserve_bytes": 748544576,
+  "cap_bytes": 3000000000,
+  "within_cap": true,
+  "unchanged_readiness_file_pins": 172,
+  "managed_runs": {
+    "context-comparison-20261012-001": {
+      "state": "closed",
+      "kept_files": 0,
+      "discarded_files": 0,
+      "verdict": "FIRST TRIAL CLOSED WITHOUT PROMOTION: required full-over-local improvement absent; usefulness review separately authorized"
+    },
+    "readiness-20261012-001": {
+      "state": "closed",
+      "kept_files": 5,
+      "discarded_files": 0,
+      "verdict": "READINESS VERIFIED; all setup receipts and prepared inputs retained, environment/model/cache preserved by user instruction"
+    },
+    "reference-preflight-20261012-001": {
+      "state": "closed",
+      "kept_files": 0,
+      "discarded_files": 1,
+      "verdict": "PAUSED AT WP1 REFERENCE SUPPORT/SCOPE DECISION; no model trial and no promotion"
+    },
+    "usefulness-20261012-001": {
+      "state": "closed",
+      "kept_files": 0,
+      "discarded_files": 0,
+      "verdict": "REVIEW COMPLETE / SCOPE_LIMITED_USEFULNESS; no physical selector or production promotion"
+    }
+  },
+  "environment_paths_still_present": {
+    "env": true,
+    "models": true,
+    "cache": true
+  },
+  "prepared_inputs": "sample/output/s11-cr1-workspace/runs/readiness-20261012-001/evidence/",
+  "source_and_model_relocations": "Only prepared work files became closed evidence; exact bytes verified against readiness. Model/env/cache paths unchanged.",
+  "temporary_command_input_copies_removed": [
+    {
+      "path": "/tmp/oil-cr1-setup-plan.json",
+      "bytes": 1126
+    },
+    {
+      "path": "/tmp/oil-cr1-comparison-plan.json",
+      "bytes": 1474
+    },
+    {
+      "path": "/tmp/oil-cr1-first-keep.json",
+      "bytes": 1388
+    },
+    {
+      "path": "/tmp/oil-cr1-readiness-keep.json",
+      "bytes": 1826
+    },
+    {
+      "path": "/tmp/oil-cr1-usefulness-plan.json",
+      "bytes": 1441
+    },
+    {
+      "path": "/tmp/oil-cr1-usefulness-keep.json",
+      "bytes": 2034
+    }
+  ],
+  "models_not_committed": true,
+  "retained_token_maps": 0,
+  "limitations": "Snapshot allocation plus conservative write reserve, not an instrumented installer high-water mark. Earlier install/download reservations are in readiness. Shared pre-existing Python interpreter and application environment were not installed into or copied."
+}

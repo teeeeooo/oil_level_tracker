@@ -1379,6 +1379,37 @@ mapping, common strip support, norm/missing/tie rules, and resource/stop budgets
 A sparse regional judgment is not exact native contour truth; fewer than two
 assessable roles or a missing reference cannot manufacture a physical winner.
 
+The user-selected [candidate-centred scope](../20-architecture/s11-contextual-role-observation-design.md#adopted-candidate-centred-context-scope)
+allows the original candidate scalar or reviewed context marker to anchor a
+regional-context descriptor without inventing a contour. Verify original indices,
+floor/ceil alternatives and sampling masks. Report preference only at this scope;
+keep physical role/localization and unbound Foam-upper claims NOT_EVALUATED.
+Initialization/self-reproduction and excluded neighboring episodes cannot satisfy
+the real positive/opposition screen. A same-source development result is never an
+independent-source or untouched-holdout result. The later contour/typed acceptance
+requirements remain in force.
+
+For the user-adopted [usefulness follow-up](../20-architecture/s11-contextual-role-observation-design.md#adopted-usefulness-follow-up-and-review-completion),
+retain the first two-candidate trial and its unmet ablation gate unchanged.
+Freeze a separate continuation before further scores, reusing the same model,
+reference bank and measurement operation. Complete the 164-record roster even
+when both representations give the expected preferences. Separate reference-self,
+reference-neighbor development diagnostics and the original episode-eligible
+group. Scoring excluded neighbors does not qualify them for independent acceptance.
+Compare reviewed target preservation, reviewed wrong-target outcomes and competing
+unreviewed alternatives with saved baseline selections; report outcome differences
+from the old mean diagnostic without treating incomparable scores as probabilities.
+No reviewed labels are created for the other candidates. Check duplicate support,
+floor/ceil ambiguity, origin/canvas mapping, missing/tie controls and resource bounds.
+Conclude usefulness and limitations after the complete planned diagnostic, rather
+than treating local-ablation success as a utility failure. Review completion is
+distinct from model adoption, O2/O3, independent Foam or field acceptance.
+
+The user's later retention instruction keeps the one existing environment/model/
+cache set until explicit cleanup is requested, independent of the research verdict.
+Maintain the 3 GB bound and managed-run closeout; do not apply automatic environment
+removal when reporting this comparison complete.
+
 Check the [local footprint/removal contract](../20-architecture/s11-contextual-role-observation-design.md#local-footprint-and-removal-contract)
 before the scored run: at most 3 GB additional allocated space including temporary
 files and all owned caches/copies; one isolated environment/model set; no product
