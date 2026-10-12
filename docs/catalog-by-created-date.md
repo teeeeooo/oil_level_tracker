@@ -1110,3 +1110,14 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-12 | [70-reference/s11-program-review-2026-10-12/scripts/check_delivery.py](70-reference/s11-program-review-2026-10-12/scripts/check_delivery.py) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
 | 2026-10-12 | [70-reference/s11-program-review-2026-10-12/scripts/peer_probe.py](70-reference/s11-program-review-2026-10-12/scripts/peer_probe.py) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
 | 2026-10-12 | [70-reference/s11-program-review-2026-10-12/scripts/test_story_contract.py](70-reference/s11-program-review-2026-10-12/scripts/test_story_contract.py) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+
+### 2026-10-12 pre-CR-1 cleanup checkpoint
+
+아래 파일의 작성일은 2026-10-12이며, 최초 Git 등록 뒤 추가일을 확정합니다.
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md](60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md) | 저장소 정리·보존 검증 및 CR-1 미착수 체크포인트 |
+| Git 미등록 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/inventory.json.gz](60-evidence/s11/2026-10-12-pre-cr1-cleanup/inventory.json.gz) | 정리 전 경로·해시·용량 목록 |
+| Git 미등록 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/receipt.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/receipt.json) | 정리 전후 용량·입력 보존·체크포인트 검증 |
+| Git 미등록 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/removal-manifest.json.gz](60-evidence/s11/2026-10-12-pre-cr1-cleanup/removal-manifest.json.gz) | 삭제 사유·기존 ZIP 복구 매핑·캐시 재생성 경계 |

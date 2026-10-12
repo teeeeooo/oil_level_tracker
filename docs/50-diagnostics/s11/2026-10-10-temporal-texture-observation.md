@@ -16,6 +16,14 @@ local native archive. The [complete readout](2026-10-10-temporal-texture-readout
 retains the original JSON bytes under gzip. Current sequencing and the pending
 human checkpoint belong to the [Work Plan](../../00-project/work-plan.md).
 
+**October 12 storage update:** the [pre-CR-1 cleanup checkpoint](../../60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md)
+removes 59 expanded duplicates after verifying all 60 members of the existing
+local archive. The ZIP and this frozen machine record retain their original
+bytes. `water-f001438.npz` stays at its original path because the separate
+water-surface feature review consumes it. Other historical native paths can be
+restored from the checkpoint's archive/member mapping when needed; this storage
+change does not rerun or revise the diagnostic or its source judgments.
+
 **Subsequent source reply:** the user identifies B and C as water surface
 without a Foam layer. The [bound reply](2026-10-10-later-water-role-reply.json)
 closes their regional-role checkpoint. The source-feature follow-up below
