@@ -1044,3 +1044,7 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-verification.json](50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-verification.json) | 변경 없는 행 평균 비교의 14맥락 전체 진단과 독립 수치 검증 |
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates-preflight.json](50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates-preflight.json) | 변경 없는 평균 비교의 기존 160개 전체 후보 진단 사전 고정 |
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates.py](50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates.py) | 변경 없는 평균 비교의 기존 160개 전체 후보 진단 사전 고정 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates-readout.json](50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates-readout.json) | 전체 후보 비교에서 드러난 평균 외관 비교의 선택 한계 및 검증 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates-verification.json](50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates-verification.json) | 전체 후보 비교에서 드러난 평균 외관 비교의 선택 한계 및 검증 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/candidate-competition.png](50-diagnostics/s11/2026-10-12-p2-row-distributions/candidate-competition.png) | 전체 후보 비교에서 드러난 평균 외관 비교의 선택 한계 및 검증 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/plot-candidates.py](50-diagnostics/s11/2026-10-12-p2-row-distributions/plot-candidates.py) | 전체 후보 비교에서 드러난 평균 외관 비교의 선택 한계 및 검증 |

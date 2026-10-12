@@ -1,6 +1,6 @@
 # P2 — ordered row-distribution feasibility
 
-**Result:** CLOSED WITHOUT PROMOTION. The primary Oil context retains interface preference, but the wrong target remains unresolved. No production consumer.
+**Result:** The distribution pilot is CLOSED WITHOUT PROMOTION. Its unchanged mean ablation remains DIAGNOSTIC_ONLY_NO_PROMOTION: the complete saved-candidate comparison exposes separate lower matches and misses two reviewed Oil contexts. No physical selector or production consumer is supported.
 The product problem is false Oil anchor admission despite retained lower
 observations. This pilot tests a distinct optional-reference capability before
 changing that authority: can a regional descriptor tolerate rearranged grains
@@ -186,10 +186,70 @@ floor/ceil coordinates, folded preferences, original records and frame summaries
 The fixed diagnostic ends after this inventory regardless of outcome; the failed
 distribution operation remains closed and all unavailable source groups stay.
 
+## Complete-candidate result and disposition
+
+The [readout](2026-10-12-p2-row-distributions/candidates-readout.json) ran at
+frozen `35d0015`. All 160 saved proposals and four other controls are present;
+all 14 prior records are unchanged. The 150 additional proposal identities stay
+UNREVIEWED. No source, crop, reference, threshold or candidate was replaced.
+
+| Frame | Proposals | Unavailable | Reviewed Oil candidate Y / mean preference | All distinct Y values with interface preference |
+|---|---:|---:|---|---|
+| 1140 | 24 | 5 | 844 / interface | 840, 843, 844, 882 |
+| 1200 | 22 | 4 | 841 / interface | 838, 840, 841 |
+| 1260 | 23 | 4 | 839 / interface | 835, 837, 838, 839, 882 |
+| 1275 (initialization) | 21 | 4 | 835 / interface | 833, 835, 836, 882, 884 |
+| 1320 | 25 | 6 | 844 / interface | 842, 844, 845, 882, 883 |
+| 1485 | 22 | 3 | 836 / unresolved | 880, 882 |
+| 1560 | 23 | 5 | 833 / unresolved | 880, 881, 886 |
+
+![Candidate competition](2026-10-12-p2-row-distributions/candidate-competition.png)
+
+The first four non-initial reviewed positives keep their earlier preference,
+but separate lower contexts also qualify in f1140, f1260 and f1320. At f1485 and
+f1560 the reviewed Oil candidate is unresolved while only lower proposals receive
+interface preference. Their exact physical identities have not been reviewed;
+these are observed coordinate/appearance alternatives, not newly labeled false
+positives. An attractive regional match therefore does not supply the missing
+same-interface identity or a safe automatic winner. Counting only preselected
+positive/negative queries concealed this selection problem.
+
+Across the seven captures, 33 proposals receive interface preference, often
+sharing exact source Y. Those are not 33 independent observations or successes.
+There are 31 unavailable records (14 out-of-crop and 17 insufficient-support
+neighborhoods), all retained. The four old non-candidate controls are still in
+the machine readout. Initialization and every other unavailable source group
+retain their earlier scope; no general-accuracy or full-video claim follows.
+
+The [verification](2026-10-12-p2-row-distributions/candidates-verification.json)
+checks 164 exact query bindings, all floor/ceil folds, original-record equality,
+complete capture inventories, frame summaries and 26,928 independent CDF
+integrals. All 293 input pins and 221 production files are unchanged. Measurement
+took 0.367 s / 107,151,360 bytes peak RSS. The
+[plot script](2026-10-12-p2-row-distributions/plot-candidates.py) uses only this
+verified readout; the plotted points are not an interpolated level trajectory.
+
+**Decision:** end this fixed mean-only diagnostic without a consumer. It remains
+a measurement of appearance, but is not an implementation-ready Oil discriminator.
+Do not tune its cost/margin, replace references, choose the nearest reviewed Y,
+or exclude lower candidates to rescue it. This result does not prove that every
+reference-based method is impossible, nor require perfect detection of every
+frame. A new P2 hypothesis still needs information that can discriminate these
+alternatives; P5-a remains independent. No such next operation is established by
+this record. All source questions remain closed and no Windows run is useful yet.
+
+Reproduce the complete inventory using the same interpreter with absolute paths
+when running outside the repository:
+
+```sh
+.venv/bin/python docs/50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates.py run --output /tmp/s11-row-candidates.json
+.venv/bin/python docs/50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates.py verify --readout /tmp/s11-row-candidates.json --output /tmp/s11-row-candidates-verified.json
+```
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`
 - Failure-registry entries: `S11-F01`, `S11-F03`, `S11-F06`, `S11-F09`, `S11-F10`
-- First harmful stage: current public-source evidence locates wrong completed Oil anchor admission; the frozen distribution operation leaves the primary wrong target unresolved despite retaining the positive. Mean-only success on that pair motivates only a separately frozen diagnostic readout, not a remedy.
+- First harmful stage: current public-source evidence locates wrong completed Oil anchor admission; the frozen distribution operation leaves the primary wrong target unresolved despite retaining the positive. The unchanged mean-only diagnostic exposes separate lower matches in the complete candidate inventory and misses two reviewed Oil contexts; it supplies no physical selector or remedy.
 - Logic-map impact: NONE — extends only the existing offline regional-comparison helper; no runtime caller, coordinate, material gate or selection changes.
 - Failure-registry impact: NONE — existing identity, cross-material and tuning failures govern this finite hypothesis; no new field cause or remedy is asserted.

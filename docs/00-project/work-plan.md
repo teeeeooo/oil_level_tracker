@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
-**Next transition:** The [row-distribution pilot and unchanged-mean diagnostic](../50-diagnostics/s11/2026-10-12-p2-row-distributions.md) are complete. The distribution hypothesis is CLOSED WITHOUT PROMOTION. Its unchanged mean ablation retains 4/6 non-initial Oil contexts and opposes 2/3 reviewed wrong targets plus 2/2 internal-texture contexts; other results remain unresolved. This is a conditional regional-reference lead, not a candidate selector or runtime improvement. Execute the separately frozen 160-proposal diagnostic, preserving all 14 original records, unreviewed identities and prior controls; no appearance winner becomes a consumer. P5-a remains independent and all source questions stay CLOSED. Typed consumption still requires O2/V5 Windows shadow then separate O3. Local XY OFF / O2 OPEN / FIELD FAIL remain; no Windows run is requested.
+**Next transition:** The [row-distribution and complete-candidate diagnostics](../50-diagnostics/s11/2026-10-12-p2-row-distributions.md) are complete without a production candidate. The distribution model is closed; unchanged means preserve 4/6 known Oil contexts but also accept separate lower proposals, and at the two missed positives only lower proposals qualify. All 160 proposals and prior controls are retained; unreviewed identities remain unassessed. Return to the distinct-observation design entry for P2 and independent P5-a; no next operation is yet established, and no threshold/reference/candidate exclusion rescue is justified. All source questions stay CLOSED. Typed consumption still requires O2/V5 Windows shadow then separate O3. Local XY OFF / O2 OPEN / FIELD FAIL remain; no Windows run is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -59,7 +59,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; P1 offline representation VERIFIED; P2-S1 CLOSED WITHOUT PROMOTION | Any P2 successor needs a distinct role observation and suitable current support; no threshold/reference/transform retuning of S1. Local XY, H0/G1, CBR-1 and cost-order/recent-basis probes remain closed. | [P2-S1 result](../50-diagnostics/s11/2026-10-11-p2-shared-support.md), [P2 entry](../20-architecture/s11-interface-observability-witness-architecture.md#p2-shared-support-role-comparison--proposal-entry), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
+| W4 / O2 challenger | OPEN; P1 offline representation VERIFIED; P2-S1 and row-distribution model CLOSED WITHOUT PROMOTION; mean diagnostic complete without consumer | Any P2 successor needs a distinct role observation and suitable current support; no threshold/reference/transform retuning of S1. Local XY, H0/G1, CBR-1 and cost-order/recent-basis probes remain closed. | [P2-S1 result](../50-diagnostics/s11/2026-10-11-p2-shared-support.md), [P2 entry](../20-architecture/s11-interface-observability-witness-architecture.md#p2-shared-support-role-comparison--proposal-entry), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | P3 / D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | P4 / D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
@@ -167,20 +167,15 @@ ready. No continuous-episode, operational-judgment, HTML/UI, O2 or field accepta
 follows. Local work remains authorized; neither another source answer nor a
 Windows run is needed at this checkpoint.
 
-The [ordered row-distribution experiment](../50-diagnostics/s11/2026-10-12-p2-row-distributions.md)
-tested whether horizontal grain exchange could preserve ordered material context.
-Its intended synthetic positive and 32 focused tests pass, but the fixed real
-positive/opposition pair fails the proposed distribution rule. That hypothesis
-is closed; no settings were retuned. A separately frozen, diagnostic-only check
-of its **unchanged row-mean ablation** covers all 14 original contexts, with
-initialization excluded from success counts. It retains 4/6 Oil contexts and
-opposes 2/3 reviewed wrong targets plus 2/2 internal textures, leaving the others
-unresolved. All 221 production files remain unchanged. This supplies a limited
-reference-conditioned lead, not detection efficacy or automatic scope coverage.
-Before behavior work, compare the unchanged descriptor against all existing
-same-frame candidates; known query locations must not hide competing hypotheses.
-All unreviewed candidate identities remain unassessed, and no new source label,
-setup requirement or Windows execution is currently needed.
+The [ordered row-distribution experiment and complete-candidate follow-up](../50-diagnostics/s11/2026-10-12-p2-row-distributions.md)
+are complete. The distribution hypothesis fails its fixed real pair. The unchanged
+mean ablation retains 4/6 known Oil contexts, but the full 160-proposal inventory
+exposes additional lower matches and misses both later reviewed positives. Its
+14 original control records and all 221 production files are unchanged. Focused
+math tests and independent readout verification pass; detector efficacy is not
+established. This diagnostic ends without a consumer or parameter rescue. The
+next design needs discriminating information beyond these regional appearance
+preferences; no new operation, manual setup or Windows execution is ready.
 
 ### Source and truth qualification before the next experiment
 

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "cdf_integrals": 26928,
+  "queries": 164,
+  "input_count": 293,
+  "production_files_unchanged": 221,
+  "readout_sha256": "3747a3076461dffaa052251bcab64c66720dcbcf423e031cd67c2f3c055e32f5",
+  "verifier_sha256": "820dc3a45c36a23538a71d54039cbd3c53239de8286ed7c7028776c06acf4778",
+  "no_decoder_or_detector": true,
+  "method": "empirical CDF integral, equal-row normalization and direct visibility intersection"
+}
