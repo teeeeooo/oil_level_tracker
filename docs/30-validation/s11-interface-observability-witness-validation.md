@@ -1367,14 +1367,29 @@ O2/O3. No Windows execution is useful until the relevant eligible candidate exis
 
 ### Contextual-role experiment preflight
 
-The [CR-1 proposal](../20-architecture/s11-contextual-role-observation-design.md)
-qualifies the October 12 supplied specification. Method-scope authorization in
-Work Plan precedes learned-model readiness/execution. Once authorized, WP1 must
+The [CR-1 experiment contract](../20-architecture/s11-contextual-role-observation-design.md)
+qualifies the October 12 supplied specification. Work Plan owns authorization and
+the cleanup-before-readiness sequence. Before installation or inference, verify
+the cleanup receipt: protected hashes, required saved-input paths, retained
+archive recovery and actual before/after disk usage. Unresolved preservation
+obligations must remain intact. WP1 must
 freeze source/Recipe/frame/reader/candidate and reference bindings, role-label
 precision, exposure and split rules, backend/weight/dependency pins, pixel-to-token
 mapping, common strip support, norm/missing/tie rules, and resource/stop budgets.
 A sparse regional judgment is not exact native contour truth; fewer than two
 assessable roles or a missing reference cannot manufacture a physical winner.
+
+Check the [local footprint/removal contract](../20-architecture/s11-contextual-role-observation-design.md#local-footprint-and-removal-contract)
+before the scored run: at most 3 GB additional allocated space including temporary
+files and all owned caches/copies; one isolated environment/model set; no product
+dependency or packaging change; offline inference with missing weights failing
+explicitly. Record cold/warm CPU time, peak RSS, candidate/token bounds and output
+growth against frozen limits. Verify smoke-run write locations and the removal
+manifest. Preserve complete candidate denominators when limiting saved images or
+discarding token maps; insufficient evidence space is a stop, not a case waiver.
+On closure, check retained evidence, removed owned paths, recovered bytes and
+unchanged application entry/dependency paths. A Mac result does not close Windows
+resource or package qualification.
 
 Verify the actual encoder-to-strip operation, as well as feature arithmetic,
 before the representative real-positive/opposition screen and full frozen

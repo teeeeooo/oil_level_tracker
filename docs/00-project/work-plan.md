@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
-**Next transition:** The [October 12 program review intake](../60-evidence/s11/2026-10-12-program-review-intake.md) reproduces the peer-support findings and selects contextual role observation as a proposed research direction. Resolve the existing learned-method exclusion before CR-1 WP1 readiness/execution; if reopened, freeze the [qualified preflight](../20-architecture/s11-contextual-role-observation-design.md#wp1-preflight-decisions), then one bounded offline comparison. Independent Foam/P5-a research retains its own entry. The row-distribution/mean and prior pilots remain closed, all source questions stay CLOSED, and no threshold/reference/candidate-exclusion rescue follows. Typed consumption still requires O2/V5 Windows shadow then separate O3. Local XY OFF / O2 OPEN / FIELD FAIL remain; no Windows run is requested.
+**Next transition:** The user selects one isolated CR-1 local experiment with a maximum 3 GB additional footprint and cleanup before model work. Complete the [repository cleanup sequence](#repository-cleanup-and-isolated-cr-1-sequence), freeze the [qualified preflight](../20-architecture/s11-contextual-role-observation-design.md#wp1-preflight-decisions), then execute one bounded offline comparison. The learned-method exclusion is reopened only for this experiment; cleanup, installation and inference are not yet performed. Independent Foam/P5-a research retains its own entry. The row-distribution/mean and prior pilots remain closed, all source questions stay CLOSED, and no threshold/reference/candidate-exclusion rescue follows. Typed consumption still requires O2/V5 Windows shadow then separate O3. Local XY OFF / O2 OPEN / FIELD FAIL remain; no Windows run is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -63,14 +63,14 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; P1 offline representation VERIFIED; P2-S1 and row-distribution model CLOSED WITHOUT PROMOTION; mean diagnostic complete without consumer | CR-1 is a proposed next observation, conditional on reopening learned-method scope and completing WP1. No eligible operation or role result is claimed; no threshold/reference/transform retuning of S1. Local XY, H0/G1, CBR-1 and cost-order/recent-basis probes remain closed. | [P2-S1 result](../50-diagnostics/s11/2026-10-11-p2-shared-support.md), [P2 entry](../20-architecture/s11-interface-observability-witness-architecture.md#p2-shared-support-role-comparison--proposal-entry), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
+| W4 / O2 challenger | OPEN; P1 offline representation VERIFIED; P2-S1 and row-distribution model CLOSED WITHOUT PROMOTION; mean diagnostic complete without consumer | CR-1 local experiment selected; repository cleanup and WP1 precede execution. No eligible operation or role result is claimed; no threshold/reference/transform retuning of S1. Local XY, H0/G1, CBR-1 and cost-order/recent-basis probes remain closed. | [P2-S1 result](../50-diagnostics/s11/2026-10-11-p2-shared-support.md), [P2 entry](../20-architecture/s11-interface-observability-witness-architecture.md#p2-shared-support-role-comparison--proposal-entry), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | P3 / D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | P4 / D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
 | Foam front / episode | P5 source-position/default linkage VERIFIED; P5-S2/S3 CLOSED WITHOUT PROMOTION; physical selection OPEN | P0 scene-role mapping adopted; P5-a role feasibility is independent of Oil/P2. New public-source upper Foam/lower Oil roles are closed regionally; current-frame representation and reviewed-range joins verified; all source questions closed. Oil lower observations survive but completed anchor admission promotes an upper candidate; Foam component front misses before temporal publication. Verified bounded application linkage supplies the next counterexample. P5-b requires demonstrated role evidence, default linkage and its own behavior acceptance; P5-c opens only for a correct raw front lost downstream. | [S3 result](../50-diagnostics/s11/2026-10-12-p5-extremal-regions.md), [public-source intake](../50-diagnostics/s11/2026-10-12-public-compressor-source.md), [P5-a design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption) |
 | W7 / O5 field qualification | PENDING integrated candidate | P6 / D6: exact runtime, all nine canonical segments, existing report and target resources | [Field gate](../30-validation/s11-interface-observability-witness-validation.md#field-qualification) |
 | Report adjuncts | Source context and episode-source review ADOPTED | Reuse existing report; comprehension and numerical identity remain separate unresolved outcomes | [Source context](../60-evidence/s11/2026-10-07-report-source-context-validation.md), [episode review](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
-| D0 planning intake / WP0 | October 12 program review preserved; current-function peer diagnostic reproduced | Proposed partial role-layer redesign and conditional CR-1 preflight; no detector or field acceptance. | [Program review intake](../60-evidence/s11/2026-10-12-program-review-intake.md), [Direction intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md), [prior audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md), [P1 program integration](../60-evidence/s11/2026-10-11-program-intake.md), earlier intakes above |
+| D0 planning intake / WP0 | October 12 program review preserved; current-function peer diagnostic reproduced | Isolated CR-1 experiment selected with cleanup first; no detector or field acceptance. | [Program review intake](../60-evidence/s11/2026-10-12-program-review-intake.md), [Direction intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md), [prior audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md), [P1 program integration](../60-evidence/s11/2026-10-11-program-intake.md), earlier intakes above |
 
 W4-R0–R5 remain internal continuation labels: R0 correction and R3 inventory are
 complete; R1 is closed without promotion; its censored comparison remains
@@ -81,6 +81,34 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
 ## Next transition
 
 <a id="adopted-program-and-immediate-p5-source-checkpoint"></a>
+
+### Repository cleanup and isolated CR-1 sequence
+
+The October 12 follow-up selects the isolated experiment and requests this plan.
+Complete cleanup and verify preservation before model installation or execution.
+This planning update records the decision; the stages below remain unexecuted.
+The [CR-1 lifecycle contract](../20-architecture/s11-contextual-role-observation-design.md#local-footprint-and-removal-contract)
+owns storage/isolation/removal rules; the [validation entry](../30-validation/s11-interface-observability-witness-validation.md#contextual-role-experiment-preflight)
+owns the checks. These steps refine WP1–WP3, not a second milestone ledger.
+
+| Order | Work | Completion / stop condition |
+|---|---|---|
+| 1. Inventory and protect | Record starting HEAD, local changes, worktrees and disk usage; classify `sample/output` by current input obligations, unique evidence, verified duplicates and disposable generated data. | A path-level keep/remove manifest identifies owner, size, hash and retained copy or reproducible origin for every removal candidate. Unclear obligations stay protected. |
+| 2. Clean and verify | Remove verified redundant copies and disposable outputs; preserve active inputs and unique evidence. Reconcile affected references before moving anything; remove a worktree only after its distinct changes and ignored inputs are preserved. | Before/after hashes, archive member recovery and required input lookups pass; record actual reclaimed bytes and retained exceptions in one cleanup receipt. No guessed reclamation target or whole-directory deletion by age/size. |
+| 3. Freeze WP1 | Bind the existing source/candidate/reference roster and one model/bank, full/local representations, geometry, missing/tie rules and progression controls. Pin environment, weights, CPU resource limits and the removal manifest. | Cleanup is verified; all scored-run inputs and rules are concrete. A missing role binding remains unassessed; no relabeling or bank replacement to create a winner. |
+| 4. Establish isolated readiness | Use the single ignored experiment root; install only required dependencies, acquire/hash pinned weights, then run offline CPU smoke/resource checks. Check the planned removal set and all written paths. | At most 3 GB additional experiment footprint, no main-environment/product dependency change or runtime network fallback; cold/warm timing, peak RSS and output growth recorded. If a frozen limit or isolation check fails, stop before comparison. |
+| 5. Run the fixed comparison | Verify encoder-through-pixel reachability, then real positive/opposition pairs, then the full candidate/control comparison only if eligible. Keep complete score denominators and bounded review images. | Stop at the first failed progression condition; no model/reference/threshold/case tuning. Compare usefulness and Mac review/resource burden separately; local results do not qualify Windows. |
+| 6. Decide and remove or retain | Preserve settings, hashes, complete score summaries, judgment-bearing evidence and the result. If rejected, remove experiment-owned environment/model/cache/intermediates and retire its optional adapter. | Verify recovered space, surviving evidence and unchanged application dependency/entry paths. If useful, retain one pinned experiment set within the cap and propose the separate Windows/package/acceptance work. |
+
+Protection starts with the [45 ignored capture inputs](../60-evidence/s11/2026-10-12-boundary-feasibility-handoff.md#보존-자료와-재현-범위),
+original source media, reviewed truth, byte-preserved supplied packages, frozen
+manifests/readouts and the [program-review reproduction inputs](../60-evidence/s11/2026-10-12-program-review-intake.md).
+That list is a starting set, not permission to delete everything else. In
+particular, the large Local XY directory contains required PNGs, and the P5
+default-linkage captures remain peer-audit inputs. Missing links alone do not
+establish disposability. Reuse valid archives rather than creating another full
+copy; do not purge shared package caches or rewrite Git history for this cleanup.
+The initial inspection finds only the main worktree; recheck at execution time.
 
 ### Direction decision and staged follow-up
 
@@ -107,7 +135,7 @@ or successful new classifier follows from reorganizing evaluation.
 | Sequence / October 12 alias | Concrete next output / owner | Entry, completion and stop condition |
 |---|---|---|
 | P0 / WP0 — evaluation and causal baseline | Existing scene roster ADOPTED; peer attribution VERIFIED in the [intake](../60-evidence/s11/2026-10-12-program-review-intake.md) | Reuse sixteen local groups, all nine Windows stories and closed source judgments. Known wrong continuation and correct zero-support controls supplement the false-anchor counterexample; no detector improvement is claimed. |
-| P2/P5-a / WP1 — next planning checkpoint | Resolve learned-method scope, then freeze [CR-1 preflight](../20-architecture/s11-contextual-role-observation-design.md#wp1-preflight-decisions) if authorized | Bind references at their actual truth precision; freeze source/episode exposure, token geometry, equal-scale ablation, operating rules, controls and resources. Missing bindings remain unassessed. If ML exclusion remains, CR-1 stays deferred; a different operation needs its own distinct evidence. |
+| P2/P5-a / WP1 — next planning checkpoint | Verify repository cleanup, then freeze [CR-1 preflight](../20-architecture/s11-contextual-role-observation-design.md#wp1-preflight-decisions) under the selected isolated-experiment scope | Bind references at their actual truth precision; freeze source/episode exposure, token geometry, equal-scale ablation, operating rules, controls and resources. Missing bindings remain unassessed. The 3 GB footprint, isolated dependencies/cache and removal checks apply before execution. |
 | P2 / WP2 and P5-a / WP3 — independent role research | One encoder/bank, full/local representations for CR-1; separate Foam presence/upper observation scope | Measured reachability, then fixed real-positive/opposition screen, then full candidate/control readout. Stop at the first failed condition; no post-result model/reference/threshold rescue. WP3 raw-front behavior is P5-b and needs separate acceptance, not automatic promotion from research. |
 | O2 / WP4 then WP5 — typed shadow and acceptance | Versioned Witness delta, frozen operating policy, V2/V3 controls/holdouts and V4 equality/resources; then **V5 Windows shadow before O2** | Candidate must first be eligible. No production behavior during shadow. Keep user/Windows checkpoint here; a later integrated field run cannot replace this gate. |
 | P3/O3 / WP6 then P4/O4 / WP7 — Oil consumption | Separate support/contradiction consumer plan, then physical owner/handoff/continuation plan | Test anchor and continuation, real UNASSESSED fallback, all-UNKNOWN loss and full-window movement. Preserve FULL/EMPTY/refill/drain controls; no cost-first/nearest-Y or stale-ID shortcut. |
@@ -885,14 +913,16 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 
 ## Current authorization boundary
 
-The latest October 12 request authorizes attachment/native-output/worktree
+The October 12 intake request authorizes attachment/native-output/worktree
 inspection, placement and eligible integration, verified duplicate cleanup,
 specification review and a follow-on plan, with autonomous commits/pushes.
-The intake is documentation and reproducibility work; it does not implement CR-1.
-The supplied learned-model proposal conflicts with the existing method exclusion
-below. A scope question is pending; no answer is inferred from elapsed time or
-from supplying a document for review. The conditional plan is concrete without
-starting model readiness, download, inference, training or production adoption.
+The later explicit decision adopts the isolated CR-1 experiment, including a
+maximum 3 GB additional footprint and clean removal if not adopted, and requires
+repository cleanup first. This resolves the learned-method scope question only
+for one bounded local experiment. The current request is to record the plan;
+it does not claim cleanup, model installation or execution has occurred. Existing
+commit/push authority continues; production adoption and Windows work retain
+their separate entry conditions.
 
 The latest October 11 continuation authorizes stepwise implementation and
 verification of the adopted plan, necessary evidence/owner updates and autonomous
@@ -928,11 +958,13 @@ Unresolved claims may remain quarantined during development. Formal replacement
 physical labels are not inferred from this grant or from agent image readings;
 ask only when a specific unresolved judgment becomes necessary to proceed.
 
-**Method scope:** the user excludes machine learning for now because it is
-excessive for the purpose. Do not pursue learned-challenger readiness, training,
-or pretrained-model adoption in the current work. This is a product-scope choice,
-not a claim that learning cannot work or that a non-learned solution is proven.
-Reconsider only if the user explicitly reopens this option.
+**Method scope:** the October 12 decision reopens the prior ML exclusion only for
+CR-1's isolated local readiness and fixed offline comparison, after repository
+cleanup. Use one frozen DINOv2 ViT-S/14 encoder, one reference bank and full/local
+representations under the linked lifecycle/preflight contracts. Training,
+fine-tuning, open-ended model search and default product/package adoption remain
+excluded. A useful experiment still needs the existing shadow, behavior and
+Windows acceptance gates; it does not prove a learned solution is necessary.
 
 **Security-PC boundary:** private videos/images and transfer ZIPs cannot be
 exported from Windows to Mac. The user can manually relay result reports/text.
@@ -999,8 +1031,8 @@ P2-S1 and P5-S2 are closed without promotion. With P0 scene roles adopted, the
 [independent P2/P5-a successor preflight](../20-architecture/s11-interface-observability-witness-architecture.md#successor-positive-reachability-and-independent-paths)
 requires a distinct measurement, comparison domain and numerical rule. The
 [CR-1 supplement](../20-architecture/s11-contextual-role-observation-design.md)
-is the proposed new representation; learned-method scope and its concrete
-preflight are unresolved, so it is not yet an executable challenger. Reuse the
+is the selected offline experiment; repository cleanup and its concrete
+preflight remain unexecuted, so no eligible challenger is claimed. Reuse the
 qualified controls at their actual truth scope and the
 scene/claim-specific acceptance role, with historical scalar agreement distinct
 from physical acceptance; the integrated path helper supplies no new physical authority.

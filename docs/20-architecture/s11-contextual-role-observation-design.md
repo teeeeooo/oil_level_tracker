@@ -1,11 +1,10 @@
-# S11 Contextual Role Observation — CR-1 Proposal
+# S11 Contextual Role Observation — CR-1 Offline Experiment
 
 **Scope:** bounded offline research supplement to the [Witness Architecture](s11-interface-observability-witness-architecture.md#successor-positive-reachability-and-independent-paths).
-**Design status:** proposed experiment, with the preflight qualifications below;
-no model execution, typed schema migration or production consumer is accepted.
-The existing exclusion of learned methods must be explicitly reopened by the
-user before CR-1 readiness work or execution; reviewing this proposal does not
-by itself remove that scope restriction.
+**Design boundary:** isolated offline experiment with the preflight and lifecycle
+qualifications below; typed schema migration and production consumption require
+separate acceptance. Execution authorization and completion state live only in
+Work Plan. This contract does not establish model usefulness or field acceptance.
 The [Work Plan](../00-project/work-plan.md) owns sequencing and current state;
 the [Witness Validation](../30-validation/s11-interface-observability-witness-validation.md#contextual-role-experiment-preflight)
 owns acceptance. The [supplied specification](../70-reference/s11-program-review-2026-10-12/S11-program-review-and-work-spec-2026-10-12.md)
@@ -75,7 +74,7 @@ filled with guessed labels, model performance or product tolerances in this inta
 | Ablation fairness | Use the same encoder, native scale, canvas/token lattice, candidate geometry, strip support and reference identities. Define one local-context intervention and its padding/mask effects. Do not resize each local crop to fill the canvas and attribute changed resolution to context alone. Compute references separately through each representation |
 | Degenerate descriptors | Specify norm epsilon, zero `u-v`, nonfinite values, missing sides, tie and fewer-than-two-supported-role handling before outcomes. Never let missing reference classes produce an automatic physical winner |
 | Capability and controls | Declare encoder-through-pixel synthetic fixtures, representative real positive/opposition pairs, the complete candidate population and geometry transforms. Feature-vector arithmetic alone does not satisfy measured reachability |
-| Operational budget | Isolated local environment, offline weights, cold/warm CPU timing, decoder-inclusive cost, per-frame and per-candidate work, peak RSS and artifact size. Declare bounded candidate/token limits and failure behavior; no runtime download/API fallback |
+| Operational budget | Apply the local footprint/removal contract below; freeze CPU time/RSS and candidate/token limits before scored execution. Measure cold/warm CPU timing, decoder-inclusive cost, per-frame/per-candidate work and artifact growth. No runtime download/API fallback |
 
 Token overlap is a risk to measure, not a claim that the model cannot distinguish
 nearby boundaries. If the chosen support cannot represent a requested comparison,
@@ -88,10 +87,63 @@ self-reproduction from candidate competition and source transfer. A one-prototyp
 feasibility result is not calibration, a generalization estimate or an operating
 point. Similar descriptors from the same pixels remain one evidence lineage.
 
+## Local footprint and removal contract
+
+Use one ignored root, `sample/output/s11-cr1-workspace/`, with experiment-owned
+`env/`, `models/`, `cache/` and `runs/` directories. Keep a manifest of every owned
+path, dependency/model version and source hash. Direct installer and model caches
+to this root; avoid global installs, shared-cache mutation and duplicated
+environments/data per worktree. Reuse existing source captures by reference.
+The optional diagnostic adapter is the only inference entry: application imports,
+default dependencies and packaging remain unchanged. Install the minimum needed
+dependencies instead of copying the entire GUI environment. No training,
+fine-tuning, automatic model updates or runtime downloads are part of CR-1.
+
+The additional local experiment footprint has a **3,000,000,000-byte maximum**.
+Plan up to 2 GB for environment, weights and download/temporary caches and up to
+1 GB for run artifacts. Measure allocated disk usage, also record logical bytes,
+and include every CR-1-owned copy outside the root in the total; moving files or
+using a shared cache does not evade the cap. Check space before installation,
+downloads and result writes, with a conservative bound for temporary/unpacked
+files. If the next operation cannot stay within the budget, stop and record the
+limitation rather than silently raising it. The cap is a constraint, not a
+verified installation-size estimate. Future Windows packages need separate
+measurement and are not created during this local experiment.
+
+Stream features through inference and discard full token maps after scoring by
+default. Retain the complete candidate/role score table, unavailable reasons,
+input/configuration/model hashes and the evidence needed to assess the conclusion.
+Bound image capture by a declared review roster; report all failures and ambiguous
+cases in the tables even when their full image dumps are omitted. If necessary
+evidence cannot fit, stop rather than dropping cases or truncating denominators.
+Keep one pinned model/environment set; do not accumulate per-run model copies,
+full-frame dumps, feature histories or obsolete packages. Recalculation cost is
+an explicit tradeoff for not retaining large intermediate arrays.
+
+Use CPU as the recorded baseline on Mac. Measure cold/warm wall time, peak RSS,
+per-frame/per-candidate cost, saved-input versus decoder-inclusive cost and disk
+growth. Any later MPS trial is a separately identified acceleration comparison;
+it neither replaces CPU evidence nor predicts Windows CPU performance. A fixed
+report layout should expose changed, failed and ambiguous cases without requiring
+manual review of a fresh full image dump on every run.
+
+Before the full comparison, verify that a smoke run writes only to declared paths
+and that the removal set contains no shared environment, source media or retained
+evidence. On rejection/closure, preserve the compact complete readout, settings,
+versions/hashes and judgment-bearing evidence in the existing evidence/diagnostic
+owners, then remove the experiment-owned environment, weights, caches and
+reproducible intermediates. Retire or revert the optional adapter where unused;
+keep deliberate Git decision history without committing model binaries. Verify
+the final path inventory, reclaimed bytes, application entry/dependency invariance
+and surviving evidence. A useful result may retain one pinned set within the cap;
+production integration still follows the separate acceptance sequence.
+
 ## Progression and stop conditions
 
-1. Complete WP1 or record exactly why a role cannot yet be evaluated. Reuse closed
-   source judgments; do not start a new source-label collection by default.
+1. Verify the preceding repository cleanup, freeze WP1, and satisfy footprint/
+   isolation readiness before the scored comparison, or record exactly why a
+   role cannot yet be evaluated. Reuse closed source judgments; do not start a
+   new source-label collection by default.
 2. Verify arithmetic and measured encoder/geometry reachability, including actual
    missing/tie cases. Then run the frozen positive/opposition screen; stop at the
    first failed progression condition, preserving outputs and the reason.
@@ -130,7 +182,7 @@ semantics and require a separate design, not a persistence-threshold adjustment.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
 - Prior mechanisms reviewed: current max-peer support and authority source; zero-support continuation counterexamples; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
 - Prior mechanisms rejected: threshold/peer-distance rescue, anchor-only fix, cost/maturity-based identity, appearance matching as physical authority, component-extreme Foam replacement and episode relaxation without a correct raw front.
-- Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation.
+- Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies, a bounded local footprint and preservation before removal keep the experiment reversible.
 - Difference from prior failures: CR-1 proposes a fixed pretrained contextual representation with explicit reference exposure, token-resolution and ablation controls; no new optical information or physical success is asserted. Geometry and future consumption retain existing owners.
-- Logic-map impact: NONE — this is an offline research proposal; no executing owner, schema or production behavior changes.
+- Logic-map impact: NONE — this contract adds offline experiment isolation, resource and removal boundaries; no executing owner, schema or production behavior changes.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.
