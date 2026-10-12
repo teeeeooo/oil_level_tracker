@@ -211,6 +211,36 @@ pairs. It ran from outside the repository with an explicit root. Half-resolution
 physical accuracy remains NOT_EVALUATED because its center is X578.5; native
 interval truth is not transferred to the different sampled column.
 
+## Bounded temporal-detail feasibility screen
+
+The next source-only check asks whether individual-cell disappearance or merging
+can supply information beyond the closed static appearance and texture-renewal
+probes. It does not select a new model. [Myagotin et al. (2012)](https://journals.iucr.org/s/issues/2012/04/00/mo5028/)
+use forward/backward optical-flow inconsistency to locate discontinuous changes
+in foam radiographs. Their interpretation depends on separating event and other
+motion timescales; they explicitly describe competing rapid changes. This is
+evidence for a possible observable, not validation on compressor sight-glass video.
+Neither the paper's radiographic results nor its operating settings transfer here.
+
+The existing [consecutive-frame correspondence audit](2026-10-09-reference-correspondence.md#consecutive-frame-appearance-tracking)
+already records forward/backward errors, and [ordered texture renewal](2026-10-10-temporal-texture-observation.md)
+also responds to optical deformation. Merely reversing an error inequality or
+substituting dense flow would not add independently supported role information.
+A distinct continuation would need a resolved local change in cell relationships,
+with maintained neighbouring support and explicit optical/occlusion alternatives.
+It would still be a possible Foam-presence witness, not automatically the upper
+boundary, Oil identity or a universal detector for stationary Foam.
+
+The [frozen source-detail plan](2026-10-12-public-compressor-source/temporal-detail-preflight.json)
+therefore first retains exactly frames1484–1514, spanning one second around the
+reviewed anchor, through the existing `OpenCvVideoReader`. The
+[adapter](2026-10-12-public-compressor-source/review_temporal_detail.py) saves all
+31 unchanged crops, full-frame hashes and five preselected display views. It
+verifies the central full frame against the retained native PNG. No registration,
+optical flow, threshold, segmentation or detector runs. The review cannot transfer
+frame1499 interval truth to neighbours or label every small grain as a bubble.
+Do not widen the time/crop search after viewing to seek a desired event.
+
 ## Verification and reproduction
 
 [Artifact verification](2026-10-12-public-compressor-source/artifact-verification.json)
