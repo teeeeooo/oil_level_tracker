@@ -1129,10 +1129,11 @@ author 시각을 Asia/Seoul로 환산한 2026-10-12로 확정했습니다.
 
 ### 2026-10-12 experiment artifact lifecycle and final compression
 
-아래 파일의 작성일은 2026-10-12이며 최초 Git 추가일은 커밋 후 확인합니다.
+아래 파일의 작성일과 최초 Git 추가일은 2026-10-12입니다. 최초 추가 커밋
+`c46e5e3`의 author 시각을 Asia/Seoul로 환산하여 확인했습니다.
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| 미커밋 | [40-operations/experiment-artifact-lifecycle.md](40-operations/experiment-artifact-lifecycle.md) | 새 로컬 연구 출력의 생성·예산·보존·정리 및 push 전 검사 절차 |
-| 미커밋 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/compressed-files.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/compressed-files.json) | 원본 5개와 gzip 4개/기존 ZIP object 1개 사이의 추가 보존 매핑 |
-| 미커밋 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/compression-receipt.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/compression-receipt.json) | 마지막 압축·삭제 후 복원·입력 보호 검증 및 관리 도구 검증 |
+| 2026-10-12 | [40-operations/experiment-artifact-lifecycle.md](40-operations/experiment-artifact-lifecycle.md) | 새 로컬 연구 출력의 생성·예산·보존·정리 및 push 전 검사 절차 |
+| 2026-10-12 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/compressed-files.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/compressed-files.json) | 원본 5개와 gzip 4개/기존 ZIP object 1개 사이의 추가 보존 매핑 |
+| 2026-10-12 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/compression-receipt.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/compression-receipt.json) | 마지막 압축·삭제 후 복원·입력 보호 검증 및 관리 도구 검증 |
