@@ -291,10 +291,11 @@ Local XY의 큰 결과 폴더에는 현재 입력 캡처가 있고, P5 default-l
 - [검증 receipt](2026-10-12-pre-cr1-cleanup/receipt.json): 사전/사후 용량, 보호 입력,
   보존 결과와 CR-1 미착수 확인. 위 두 압축 목록의 해시도 포함한다.
 
-temporal-texture의 과거 native 경로가 필요한 경우, 삭제 매핑의 ZIP/member를 새 빈
-임시 폴더에 풀고 길이·SHA-256을 확인한다. 원래 경로를 요구하는 과거 runner는 그때
-필요한 파일만 원래 위치에 복원한 뒤 사용한다. 기존 파일을 덮어쓰거나 과거 실험을
-새 영상 decode로 대체하지 않는다. 캐시는 필요할 때 Python/pytest 또는
+이 절의 ZIP/member 복원 매핑은 1차 정리 당시 기록이다. 이후 가치 심사에서
+temporal-texture ZIP을 포함한 보관 묶음을 폐기했으므로 현재 복원 안내로 사용하지
+않는다. 현재 생존 자료는 위 `retention.json`과
+[현재 보존 자료의 선택 복원](#현재-보존-자료의-선택-복원)을 따른다. 폐기된 과거
+실행을 새 영상 decode로 대체하지 않는다. 캐시는 필요할 때 Python/pytest 또는
 `scripts/update_graphify_s11.sh`가 재생성할 수 있다.
 
 다음 단계는 사용자 체크포인트 확인 후의 **4번: WP1 조건 확정과 격리 환경 준비**다.
