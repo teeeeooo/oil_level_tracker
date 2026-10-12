@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
-**Next transition:** Repository cleanup and preservation verification are complete at the [pre-CR-1 checkpoint](../60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md). **Stop for the user's checkpoint review before CR-1 WP1, environment setup, download or execution.** The selected experiment remains one isolated local comparison with a maximum 3 GB additional footprint. After the user resumes it, freeze the [qualified preflight](../20-architecture/s11-contextual-role-observation-design.md#wp1-preflight-decisions) and follow the [sequence below](#repository-cleanup-and-isolated-cr-1-sequence). Independent Foam/P5-a research retains its own entry. The row-distribution/mean and prior pilots remain closed, all source questions stay CLOSED, and no threshold/reference/candidate-exclusion rescue follows. Typed consumption still requires O2/V5 Windows shadow then separate O3. Local XY OFF / O2 OPEN / FIELD FAIL remain; no Windows run is requested.
+**Next transition:** Repository cleanup, additional historical-output consolidation and preservation verification are complete at the [pre-CR-1 checkpoint](../60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md). **Stop for the user's checkpoint review before CR-1 WP1, environment setup, download or execution.** The selected experiment remains one isolated local comparison with a maximum 3 GB additional footprint. After the user resumes it, freeze the [qualified preflight](../20-architecture/s11-contextual-role-observation-design.md#wp1-preflight-decisions) and follow the [sequence below](#repository-cleanup-and-isolated-cr-1-sequence). Independent Foam/P5-a research retains its own entry. The row-distribution/mean and prior pilots remain closed, all source questions stay CLOSED, and no threshold/reference/candidate-exclusion rescue follows. Typed consumption still requires O2/V5 Windows shadow then separate O3. Local XY OFF / O2 OPEN / FIELD FAIL remain; no Windows run is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -86,7 +86,8 @@ and [R3 inventory](../60-evidence/s11/s11-o2-w4-r3-existing-evidence-feasibility
 
 The October 12 follow-up selects the isolated experiment. The next instruction
 authorizes only user-facing steps 1–3 and asks to review the checkpoint before
-CR-1 starts. Those steps are now [verified](../60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md).
+CR-1 starts. The later request adds consolidation of accumulated outputs; both
+passes are now [verified](../60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md).
 The numbering below follows the clarified conversation: step 3 is preservation
 verification; WP1 freezing and setup belong to step 4 and have not started.
 The [CR-1 lifecycle contract](../20-architecture/s11-contextual-role-observation-design.md#local-footprint-and-removal-contract)
@@ -95,9 +96,9 @@ owns the checks. These steps refine WP1–WP3, not a second milestone ledger.
 
 | Order | Work | Completion / stop condition |
 |---|---|---|
-| 1. Inventory and protect — VERIFIED | Starting HEAD/worktree/disk inventory and path-level keep/remove mapping are preserved in the checkpoint. | One registered main worktree; current input obligations, unique evidence and unresolved dependencies are protected. |
-| 2. Clean — VERIFIED | Removed 59 archive-backed expanded copies, 741 Python/pytest cache files and 235 Graphify-derived files; existing source media, environment and preservation archives remain. | Only manifest-listed files and their empty directories removed; actual deletion footprint and retained exceptions recorded. |
-| 3. Verify and checkpoint — VERIFIED; user review pending | Retained file/link hashes, archive member recovery and required saved-input lookups pass; checkpoint evidence is retained. | Stop here. No CR-1 WP1 freeze, setup, installation, model download or inference. |
+| 1. Inventory and protect — VERIFIED | Starting HEAD/worktree/disk inventory and path-level retention/archive mapping are preserved in the checkpoint. | One registered main worktree; current pins, direct tracked file references, complete Local XY corpus and retained HTML assets remain live. |
+| 2. Clean — VERIFIED | After the initial cache/duplicate pass, consolidated 22,429 expanded entries into one local ZIP with deduplicated payloads; 3,326 original files remain live. | Additional net reduction about 2.46 GB; no original source-media, environment or evidence-byte loss. Partial historical folders require selected restoration for a full run. |
+| 3. Verify and checkpoint — VERIFIED; user review pending | All archived payloads and live hashes verified; source/report recovery, five recovery-tool tests and current peer reproduction pass. The legacy Local XY verifier's pre-existing source-pin mismatch is recorded separately. | Stop here. No CR-1 WP1 freeze, setup, installation, model download or inference. |
 | 4. Freeze WP1 and establish isolated readiness — NOT STARTED | After user review, bind source/candidate/reference roster, one model/bank, full/local geometry and missing/tie/progression rules; pin dependencies, weights, CPU limits and removal mapping. Then use the single ignored root for minimal installation and offline smoke/resource checks. | Concrete preflight before scored execution; at most 3 GB additional footprint, no main-environment/product dependency change or runtime network fallback. Record cold/warm timing, peak RSS and output growth. Missing role bindings stay unassessed; a limit/isolation failure stops comparison. |
 | 5. Run the fixed comparison | Verify encoder-through-pixel reachability, then real positive/opposition pairs, then the full candidate/control comparison only if eligible. Keep complete score denominators and bounded review images. | Stop at the first failed progression condition; no model/reference/threshold/case tuning. Compare usefulness and Mac review/resource burden separately; local results do not qualify Windows. |
 | 6. Decide and remove or retain | Preserve settings, hashes, complete score summaries, judgment-bearing evidence and the result. If rejected, remove experiment-owned environment/model/cache/intermediates and retire its optional adapter. | Verify recovered space, surviving evidence and unchanged application dependency/entry paths. If useful, retain one pinned experiment set within the cap and propose the separate Windows/package/acceptance work. |
@@ -106,10 +107,13 @@ Protection starts with the [45 ignored capture inputs](../60-evidence/s11/2026-1
 original source media, reviewed truth, byte-preserved supplied packages, frozen
 manifests/readouts and the [program-review reproduction inputs](../60-evidence/s11/2026-10-12-program-review-intake.md).
 That list is a starting set, not permission to delete everything else. In
-particular, the large Local XY directory contains required PNGs, and the P5
-default-linkage captures remain peer-audit inputs. Missing links alone do not
-establish disposability. Reuse valid archives rather than creating another full
-copy; do not purge shared package caches or rewrite Git history for this cleanup.
+particular, required Local XY PNGs and the P5 `none` baseline retain their exact
+paths; that does not require every historical FULL trace to stay expanded. Other
+evidence remains recoverable through the consolidation manifest and selective
+restore tool. Missing links alone do not establish disposability. Reuse valid
+archives, remove temporary restored copies after review, and follow the
+[local-output preservation rules](../README.md#로컬-실험-산출물-보존). Do not purge
+shared package caches or rewrite Git history for this cleanup.
 The checkpoint confirms only the main worktree; recheck if that state changes.
 
 ### Direction decision and staged follow-up
@@ -923,7 +927,8 @@ maximum 3 GB additional footprint and clean removal if not adopted, and requires
 repository cleanup first. This resolves the learned-method scope question only
 for one bounded local experiment. The subsequent instruction authorizes cleanup
 through the checkpoint only, with the user reviewing it before CR-1 begins.
-Cleanup is now verified; stop before WP1 condition freezing, environment setup,
+The later request also authorizes additional consolidation of accumulated
+outputs, now verified at the same checkpoint. Stop before WP1 condition freezing, environment setup,
 model download, installation or inference until the user resumes CR-1. Existing
 commit/push authority covers this checkpoint; production adoption and Windows
 work retain their separate entry conditions.

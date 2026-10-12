@@ -132,8 +132,8 @@ context. The [report adoption record](60-evidence/s11/2026-10-07-report-context-
 identifies the subset subsequently implemented, including the static report
 two-second display cap and bounded gap scenes. Result Review retains its existing
 connectivity; current report and detector acceptance owners remain authoritative. Recovery ZIPs preserve all
-three inspected worktrees' unadopted source changes; full local snapshots and
-native evidence are located by the checkpoint and its preservation receipt. Their
+three inspected worktrees' unadopted source changes; the [output consolidation checkpoint](60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md)
+and its manifest locate full local snapshots/native evidence and selective recovery. Their
 historical “main unchanged” statements remain true of the audit, while the Work
 Plan owns current adoption and next work. Rejected experimental scripts stay in
 the preserved ZIP, outside production and test discovery.
@@ -295,6 +295,28 @@ conditions; only Work Plan owns sequencing and current state.
 - 목적지는 `90-archive/<원래 분류>/<최초 Git 등록 연도>/<기존 basename>`입니다. 기존 아카이브를 재이동하거나 폴더마다 `old/archive`를 추가하지 않습니다.
 - 이동 기록은 원본/목적지, 최초 추가 커밋·날짜, 원문/결과 hash, 사유, successor/절, 유입 참조, 링크 교정과 복구 방법을 보존합니다. 링크 교정과 의미 변경을 구분합니다.
 - 역사 증거의 수치·당시 판정은 덮어쓰지 않습니다. `CLOSED WITHOUT PROMOTION`, `FIELD FAIL`, unknown, deferred를 DONE으로 바꾸지 않습니다.
+
+### 로컬 실험 산출물 보존
+
+`sample/output/`의 native 자료는 Git 밖의 로컬 증거다. 현재 필요한 입력은
+소비자가 요구하는 경로·bytes로 유지하고, 종료된 실행은 판정·요약·입력 hash와
+필요한 전체 증거를 연결한다. 압축 보관은 증거 폐기나 acceptance 변경이 아니다.
+
+- Git에 있는 소스·문서를 새 실행마다 통째로 복제하지 않는다. 기준 commit과
+  필요한 patch·고유 파일을 우선 사용하며, 기존 snapshot의 고유 bytes는 보존한다.
+- 과거 실행의 전체 trace를 계속 전개해 두지 않는다. 현재 참조와 실제 소비 경로를
+  확인한 뒤 원래 경로→보관 member→hash 매핑과 복원 검증을 갖춰 통합한다.
+- FULL trace는 해당 비교가 요구할 때 생성한다. 결과 요약만으로 대체할 수 없는
+  증거는 압축 보존하고, 검토용 임시 복원본은 확인 후 제거한다.
+- frozen 실행 경로를 새 결과로 덮어쓰지 않는다. 공유 cache·기존 개발 환경·원본
+  영상은 개별 실험의 정리 대상으로 자동 편입하지 않는다. CR-1에는 기존의 별도
+  3 GB 계약이 적용된다.
+
+현재 보관본과 선택 복원 절차는 [체크포인트](60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md)에
+있다. 최신 파일 존재 여부와 복구 매핑은 그 manifest를 확인한다. 과거 receipt의
+당시 경로·판정은 재작성하지 않으며, 부분적으로 남은 실행 폴더는 전체 bundle의
+존재를 뜻하지 않는다. 로컬 ZIP과 Git에 올라간 manifest를 원격 데이터 백업으로
+혼동하지 않는다.
 
 ### 크기 점검과 검증
 
