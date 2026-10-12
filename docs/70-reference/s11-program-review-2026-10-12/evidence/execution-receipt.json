@@ -1,0 +1,191 @@
+{
+  "schema": "s11-program-review-delivery-receipt-v1",
+  "date": "2026-10-12",
+  "baseline_head": "2c2ddd20b3dfe0eddcbc8d747b01e766522536a1",
+  "record_kind": "Compact delivery summary of live read-only execution; complete native JSON stays at full_native_record_path.",
+  "full_native_record_path": "sample/output/s11-program-review-20261012-001/verified-cli/peer-probe.json",
+  "script_sha256": "0376cf9044715f21c3389e89bf2528964edcf5821cd87d649a8d3ede055dfb6e",
+  "source_receipt_sha256": "9eb2516c058afca9256f916950f686c87bd458b083162ecf68e1ca7cdf1bd006",
+  "public_archive_sha256": "9032d6301a9fe2803b48ad1ba9f712e6dc232dfb3f6ffcf25dd90aa884e9d3bc",
+  "sample4_inputs": {
+    "raw.json": "399ca8a5d19c2fa26f01c4f24fd72870acd84f22747201d8006616265cc5936f",
+    "completed.json": "f5b403ce9a061fca3bd4933a44bfdbcf83df0c95811222981a7105aa259870ca",
+    "summary.json": "26e330e1d0bb0ee706596a448fde30cbfbf0b4eb3a848b6f70d2e184b194fe45"
+  },
+  "production_files_verified": 221,
+  "archive_logical_files_verified": 95,
+  "production_unchanged": true,
+  "sources": {
+    "sample4": {
+      "frames": 113,
+      "oil_candidate_joins": 2549,
+      "stored_support_values_reproduced": 1841,
+      "support_mismatches": 0
+    },
+    "public_compressor": {
+      "frames": 3,
+      "oil_candidate_joins": 69,
+      "stored_support_values_reproduced": 51,
+      "support_mismatches": 0
+    }
+  },
+  "totals": {
+    "frames": 116,
+    "oil_candidate_joins": 2618,
+    "stored_support_values_reproduced": 1892,
+    "candidates_without_stored_support_field": 726
+  },
+  "fresh_tests": {
+    "passed": 124,
+    "failed": 0,
+    "stdout_duration_s": 4.69,
+    "command": "PYTHONPATH=src:. .venv/bin/python -m pytest -q tests/unit/test_oil_candidate_authority.py tests/unit/test_oil_observation_resolver.py tests/unit/test_foam_episode_resolver.py tests/unit/test_oil_measurement_lineage.py tests/unit/test_s11_row_distribution_roles.py --junitxml=sample/output/s11-program-review-20261012-001/focused-tests.xml",
+    "native_stdout": "sample/output/s11-program-review-20261012-001/focused-tests.log",
+    "native_junit": "sample/output/s11-program-review-20261012-001/focused-tests.xml"
+  },
+  "sample4_selected_examples": [
+    {
+      "frame": 1140,
+      "time_sec": 38,
+      "candidate_index": 9,
+      "y": 844,
+      "review": "protected_correct_candidate",
+      "route": "corroborated_material_path",
+      "cross_representation_support": 0.4122146663672534
+    },
+    {
+      "frame": 1200,
+      "time_sec": 40,
+      "candidate_index": 10,
+      "y": 865.5,
+      "review": "reviewed_wrong_candidate",
+      "route": "ordered_lower_interface",
+      "cross_representation_support": 0.4094428666014448
+    },
+    {
+      "frame": 1260,
+      "time_sec": 42,
+      "candidate_index": 15,
+      "y": 868,
+      "review": "reviewed_wrong_candidate",
+      "route": "ordered_lower_interface",
+      "cross_representation_support": 0.7030113055555556
+    },
+    {
+      "frame": 1275,
+      "time_sec": 42.5,
+      "candidate_index": 12,
+      "y": 835,
+      "review": "protected_correct_candidate",
+      "route": "continuation",
+      "cross_representation_support": 0.0
+    },
+    {
+      "frame": 1320,
+      "time_sec": 44,
+      "candidate_index": 21,
+      "y": 822,
+      "review": "reviewed_wrong_candidate",
+      "route": "continuation",
+      "cross_representation_support": 0.0
+    },
+    {
+      "frame": 1485,
+      "time_sec": 49.5,
+      "candidate_index": 19,
+      "y": 836,
+      "review": "protected_correct_candidate",
+      "route": "ordered_lower_interface",
+      "cross_representation_support": 0.8256322500000001
+    },
+    {
+      "frame": 1560,
+      "time_sec": 52,
+      "candidate_index": 20,
+      "y": 833,
+      "review": "protected_correct_candidate",
+      "route": "continuation",
+      "cross_representation_support": 0.0
+    }
+  ],
+  "public_f1499": {
+    "reviewed_oil_interval_y": [
+      421,
+      435
+    ],
+    "interval_type": "user-reviewed visible row range, not exact point truth",
+    "selected_candidate": {
+      "index": 10,
+      "source": "material_path",
+      "y": 288.0,
+      "route": "corroborated_material_path",
+      "cross_representation_support": 0.26501880247449255,
+      "own_texture_conflict": 0.4328350935663496
+    },
+    "positive_peer_contributions": [
+      {
+        "index": 1,
+        "y": 277.0,
+        "contribution": 0.26501880247449255,
+        "texture_conflict": 0.5166958485330855
+      },
+      {
+        "index": 2,
+        "y": 287.0,
+        "contribution": 0.21425668855713956,
+        "texture_conflict": 0.4281447493671864
+      }
+    ],
+    "lower_range_candidates": [
+      {
+        "index": 5,
+        "y": 430,
+        "support": 0,
+        "own_texture_conflict": 0.9117176135381063
+      },
+      {
+        "index": 9,
+        "y": 425,
+        "support": 0,
+        "own_texture_conflict": 1
+      },
+      {
+        "index": 13,
+        "y": 427,
+        "support": 0,
+        "own_texture_conflict": 1
+      },
+      {
+        "index": 20,
+        "y": 424,
+        "support": 0,
+        "own_texture_conflict": 1
+      }
+    ]
+  },
+  "not_executed": [
+    "fresh full video replay",
+    "new decoder runs",
+    "sample3 processing",
+    "Windows field run",
+    "independent report comprehension test",
+    "learned model inference or training",
+    "production detector modification",
+    "commit or push"
+  ],
+  "physical_acceptance": "NOT_EVALUATED",
+  "field_disposition": "FIELD_FAIL_UNCHANGED",
+  "execution_notes": [
+    "An initial probe attempt read hash-only sample4 receipt rows as detections and failed before output. It was corrected to use the already-existing hash-verified P5 raw/completed captures.",
+    "The final CLI probe was rerun with a new output directory. Script SHA matches the delivered source byte for byte.",
+    "Saved support fields are absent for 726 candidate joins; absence is not counted as either reproduced support or mismatch.",
+    "Review labels in delivery examples come from existing source-qualified repository evidence, not from support scores or new neighboring labels."
+  ],
+  "final_checkout_check": {
+    "head": "2c2ddd20b3dfe0eddcbc8d747b01e766522536a1",
+    "git_status_short_branch": "## main...origin/main",
+    "tracked_and_untracked_visible_changes": [],
+    "origin": "https://github.com/teeeeooo/oil_level_tracker.git",
+    "note": "Final live read after diagnostic execution. Ignored sample/output receipts remain on user host."
+  }
+}

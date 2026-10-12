@@ -1,0 +1,125 @@
+{
+  "schema": "s11-program-review-import-v1",
+  "intake_date": "2026-10-12",
+  "baseline_head": "2c2ddd20b3dfe0eddcbc8d747b01e766522536a1",
+  "archive": {
+    "name": "1-S11-program-review-2026-10-12.zip",
+    "bytes": 43396,
+    "sha256": "01121950c57fcd9e07d851b3a837fc9fb099533f5762bbe81d0ae1d971188847"
+  },
+  "supplied_files": [
+    {
+      "source": "README.md",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/README.md",
+      "bytes": 5566,
+      "sha256": "54b29695a31788814e974c866b568e13bc073e636aaaa879dbcc5b0319a6b864"
+    },
+    {
+      "source": "S11-program-review-and-work-spec-2026-10-12.md",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/S11-program-review-and-work-spec-2026-10-12.md",
+      "bytes": 67205,
+      "sha256": "65bce08f4a47679fbfa71bc4480820c01fa12c7df511b83741e7336605f859be"
+    },
+    {
+      "source": "SHA256SUMS.txt",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/SHA256SUMS.txt",
+      "bytes": 843,
+      "sha256": "32d2bb807f81ef5dffe1783fea63a2b14d89baebefd0e3b91947b01586c86ba7"
+    },
+    {
+      "source": "evidence/execution-receipt.json",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/evidence/execution-receipt.json",
+      "bytes": 6494,
+      "sha256": "afa797af8014ce72195458a1426b0cab8ead1df6d46190c132a498c8ca8e78dd"
+    },
+    {
+      "source": "evidence/focused-tests.log",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/evidence/focused-tests.log",
+      "bytes": 180,
+      "sha256": "ad73e49876cd1845c022a85da8f68d8595da8df6bbde9be6d38f618dec571cab"
+    },
+    {
+      "source": "evidence/story-contract-tests.log",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/evidence/story-contract-tests.log",
+      "bytes": 2095,
+      "sha256": "853327177f81d8412399b070e256d4117e29e1fdd41b15d77024d691dff45e47"
+    },
+    {
+      "source": "scripts/check_delivery.py",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/scripts/check_delivery.py",
+      "bytes": 4726,
+      "sha256": "465e1d30f24bd9ebaa513d04ea190342a32da47d3a6ff6c4d3a78695eed7d6ab"
+    },
+    {
+      "source": "scripts/peer_probe.py",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/scripts/peer_probe.py",
+      "bytes": 4982,
+      "sha256": "0376cf9044715f21c3389e89bf2528964edcf5821cd87d649a8d3ede055dfb6e"
+    },
+    {
+      "source": "scripts/test_story_contract.py",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/scripts/test_story_contract.py",
+      "bytes": 6273,
+      "sha256": "9fd8e3dbcd865dfdc183847f4d5d1d7a171c65f561eafea532ffcfffd54b5130"
+    },
+    {
+      "source": "story-contract.json",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/story-contract.json",
+      "bytes": 7944,
+      "sha256": "3d7fd957e6003f3ea7e4dbfe909c4f50af629b16e7469a0a04fe96bbd0018c66"
+    }
+  ],
+  "native_files": [
+    {
+      "source": "sample/output/s11-program-review-20261012-001/delivery-summary.json",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/native-evidence/delivery-summary.json",
+      "bytes": 25677,
+      "sha256": "e684416dd4ca1747f8ac9882774d6c3c257befcb608d5911791ae47d91ac2fc7",
+      "disposition": "UNIQUE_NATIVE_PRESERVED"
+    },
+    {
+      "source": "sample/output/s11-program-review-20261012-001/focused-tests.log",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/evidence/focused-tests.log",
+      "bytes": 180,
+      "sha256": "ad73e49876cd1845c022a85da8f68d8595da8df6bbde9be6d38f618dec571cab",
+      "disposition": "REUSED_BYTE_IDENTICAL"
+    },
+    {
+      "source": "sample/output/s11-program-review-20261012-001/focused-tests.xml",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/native-evidence/focused-tests.xml",
+      "bytes": 18788,
+      "sha256": "9d11be3d0e653d2ecef31ddfda8b22f6edff4e0e3b5f1747aa0f885310da6c33",
+      "disposition": "UNIQUE_NATIVE_PRESERVED"
+    },
+    {
+      "source": "sample/output/s11-program-review-20261012-001/peer-probe.json",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/native-evidence/peer-probe-initial.json",
+      "bytes": 591378,
+      "sha256": "369fc80da8f6623de00f765ee195f8e9bf580fdd6c8b4e62dc8d2c34b36f3c15",
+      "disposition": "UNIQUE_NATIVE_PRESERVED"
+    },
+    {
+      "source": "sample/output/s11-program-review-20261012-001/peer-probe.log",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/native-evidence/peer-probe.log",
+      "bytes": 5519,
+      "sha256": "224023263e4d9080488d819a9357f3ae47799510b4c96c9f98f35d87c5dcf970",
+      "disposition": "UNIQUE_NATIVE_PRESERVED"
+    },
+    {
+      "source": "sample/output/s11-program-review-20261012-001/peer_probe.py",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/scripts/peer_probe.py",
+      "bytes": 4982,
+      "sha256": "0376cf9044715f21c3389e89bf2528964edcf5821cd87d649a8d3ede055dfb6e",
+      "disposition": "REUSED_BYTE_IDENTICAL"
+    },
+    {
+      "source": "sample/output/s11-program-review-20261012-001/verified-cli/peer-probe.json",
+      "preserved_at": "docs/70-reference/s11-program-review-2026-10-12/native-evidence/peer-probe-verified.json",
+      "bytes": 592040,
+      "sha256": "60b0d2838582ab9b1c994abd71ca0a0d344e4c6ce6f28eb01ecf1d3ef289ab2d",
+      "disposition": "UNIQUE_NATIVE_PRESERVED"
+    }
+  ],
+  "recovery": "Repository-relative paths; copy preserved_at to source and verify sha256. Original absolute paths remain historical provenance. Upstream sample4 replay inputs stay local and are not included in this delivery.",
+  "cleanup": "Only the seven inventoried files in sample/output/s11-program-review-20261012-001 may be removed after all mappings verify. No upstream capture, source video, unrelated branch or worktree is removed."
+}

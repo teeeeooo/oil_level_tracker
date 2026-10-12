@@ -1365,6 +1365,40 @@ retroactively satisfy that entry gate. Independent Foam raw-front work follows
 its existing parent acceptance; consuming typed Witness decisions also invokes
 O2/O3. No Windows execution is useful until the relevant eligible candidate exists.
 
+### Contextual-role experiment preflight
+
+The [CR-1 proposal](../20-architecture/s11-contextual-role-observation-design.md)
+qualifies the October 12 supplied specification. Method-scope authorization in
+Work Plan precedes learned-model readiness/execution. Once authorized, WP1 must
+freeze source/Recipe/frame/reader/candidate and reference bindings, role-label
+precision, exposure and split rules, backend/weight/dependency pins, pixel-to-token
+mapping, common strip support, norm/missing/tie rules, and resource/stop budgets.
+A sparse regional judgment is not exact native contour truth; fewer than two
+assessable roles or a missing reference cannot manufacture a physical winner.
+
+Verify the actual encoder-to-strip operation, as well as feature arithmetic,
+before the representative real-positive/opposition screen and full frozen
+candidate/control readout. Report token overlap and localization limits. The
+local-context ablation must retain scale, token lattice, candidate support and
+reference identities; crop enlargement is a confound, not proof of context benefit.
+Reference self-matches, same-source development and cross-source comparison have
+separate denominators. No untouched holdout is presumed available. Unknown
+candidate identity stays unreviewed; copied/warped and geometry controls remain.
+
+Preference ranking is not a calibrated role decision. A future operating policy
+must address both anchor and continuation, and demonstrate the effect of
+UNASSESSED through the real fallback/owner/publication path. Preserve protected
+movement while evaluating wrong extrema, gaps and alternate selected candidates.
+The supplied story JSON and its 16 synthetic tests accept already-reviewed facts;
+they cannot generate truth, waive a segment or close independent report review.
+
+WP3/P5-a observes Foam presence and upper position independently. Raw-front
+behavior integration remains P5-b under its parent contract; a typed consumer
+also needs O2/O3. Correct raw-front loss is required before WP8/P5-c. Missing
+height or last numeric time cannot establish physical absence/disappearance.
+V2/V3/V4 then V5/O2, separate O3/O4, and final integrated field/report acceptance
+remain in force. The supplied 4–6 day estimate establishes no performance budget.
+
 ### Ordered row-distribution pilot controls
 
 The [P2 frozen comparison](../50-diagnostics/s11/2026-10-12-p2-row-distributions.md)

@@ -1754,6 +1754,13 @@ regional pilot, not every possible shared-support design.
 
 ### Successor positive reachability and independent paths
 
+The [CR-1 contextual-role proposal](s11-contextual-role-observation-design.md)
+is a bounded supplement for the October 12 program review. It separates native
+geometry, learned role representation and later identity consumption, with
+reference, token-support and ablation qualifications. Work Plan owns whether the
+existing learned-method exclusion is reopened; this link grants no execution or
+behavior authority. Oil and Foam research retain the independent paths below.
+
 The [direction-decision intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md)
 adds a preflight obligation to both P2 and P5-a successors. Before large raster
 verification or replay, derive the attainable feature range and decision region,

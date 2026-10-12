@@ -1,0 +1,215 @@
+{
+  "schema": "s11-story-review-contract-proposal-v1",
+  "date": "2026-10-12",
+  "status": "PROPOSAL_NOT_ADOPTED",
+  "baseline_head": "2c2ddd20b3dfe0eddcbc8d747b01e766522536a1",
+  "purpose": "실제 report를 통해 Oil/계면 및 Foam 움직임의 맥락을 이해할 수 있는가",
+  "not_a_physical_classifier": true,
+  "not_a_production_schema": true,
+  "approval_authority": "Existing Work Plan / validation / source-qualified reviewer, not this JSON or synthetic tests",
+  "classification_unit": [
+    "scene_id",
+    "phase_role",
+    "evaluation_scope"
+  ],
+  "dispositions": {
+    "A": {
+      "name": "맥락 왜곡",
+      "definition": "다른 구조 또는 오류로 중요한 극값·방향·사건이 잘못 전달됨",
+      "handling": "중요 sentinel의 미해결 왜곡은 release 차단"
+    },
+    "B": {
+      "name": "맥락 소실",
+      "definition": "Source에서 보이는 핵심 움직임·회복·Foam 사건이 report에서 사라짐",
+      "handling": "과도한 veto 또는 all-unknown을 개선으로 승인하지 않음"
+    },
+    "C": {
+      "name": "국소 잔차 허용",
+      "definition": "핵심 맥락을 보존하며 사전 동결한 잔차 범위를 만족함",
+      "handling": "오류를 숨기지 않고 residual 및 근거 기록; 프로젝트 전체 PASS는 아님"
+    },
+    "U": {
+      "name": "미평가",
+      "definition": "역할·source·가시성·report 이해도 또는 허용 범위 근거가 부족함",
+      "handling": "PASS, 정확한 부재, CONTRADICTED로 변환 금지"
+    }
+  },
+  "requirements_for_C": [
+    "source-qualified reviewer evidence reference",
+    "critical distortion reviewed false",
+    "critical story loss reviewed false",
+    "actual report comprehension reviewed true",
+    "scope review complete",
+    "residual budget frozen before experiment",
+    "residual within that budget"
+  ],
+  "unqualified_numerical_budgets": {
+    "pixel_tolerance": null,
+    "foam_event_timing_tolerance_s": null,
+    "global_missing_run_tolerance_s": null
+  },
+  "existing_oil_gap_requirement": {
+    "seconds": 1.0,
+    "scope": "Only qualified visible moving Oil scope under the existing validation contract",
+    "apply_to_foam_or_all_sources": false
+  },
+  "foam_semantics": {
+    "height_null_implies_absent": false,
+    "last_numeric_time_implies_disappearance_time": false,
+    "presence_only_implies_height_measurement_complete": false
+  },
+  "corpus_semantics": {
+    "sample3_new_processing": "SKIP_QUARANTINED_NOT_PASS",
+    "nine_windows_scenes_are_independent_videos": false,
+    "all_unknown_implies_improvement": false,
+    "unreviewed_candidate_implies_negative": false
+  },
+  "required_windows_source": "docs/30-validation/windows-sample1-heating-coldstart-reviewed-truth.md",
+  "windows_scenes": [
+    {
+      "scene_id": "WS1-BASE-FULL-PREFIX",
+      "start_sec": 480,
+      "end_sec": 550,
+      "start_is_approximate": false,
+      "end_is_approximate": true,
+      "expected_story": "FULL, 보이는 Oil 계면과 Foam 없음",
+      "negative_or_regression_check": "유리 무늬를 Oil/Foam으로 승인하지 않음",
+      "current_run_status": "NOT_EVALUATED",
+      "report_disposition": "U",
+      "source_hash": null,
+      "report_bundle": null,
+      "review_evidence": null
+    },
+    {
+      "scene_id": "WS1-BASE-DRAIN",
+      "start_sec": 550,
+      "end_sec": 662,
+      "start_is_approximate": true,
+      "end_is_approximate": false,
+      "expected_story": "액상 계면의 점진적인 하강",
+      "negative_or_regression_check": "다른 reflection을 매끄럽게 추적하는 잘못된 identity",
+      "current_run_status": "NOT_EVALUATED",
+      "report_disposition": "U",
+      "source_hash": null,
+      "report_bundle": null,
+      "review_evidence": null
+    },
+    {
+      "scene_id": "WS1-BASE-RAPID-REFILL",
+      "start_sec": 662,
+      "end_sec": 663.6,
+      "start_is_approximate": false,
+      "end_is_approximate": true,
+      "expected_story": "빠른 상승 후 상단에서 계면 소실/FULL",
+      "negative_or_regression_check": "급상승을 지우거나 다른 구조로 이어 붙임",
+      "current_run_status": "NOT_EVALUATED",
+      "report_disposition": "U",
+      "source_hash": null,
+      "report_bundle": null,
+      "review_evidence": null
+    },
+    {
+      "scene_id": "WS1-BASE-FULL-SUFFIX",
+      "start_sec": 663.6,
+      "end_sec": 780,
+      "start_is_approximate": true,
+      "end_is_approximate": false,
+      "expected_story": "FULL 유지, 보이는 Oil 계면과 Foam 없음",
+      "negative_or_regression_check": "약 725초 하단 반사를 재등장한 Oil로 오판",
+      "current_run_status": "NOT_EVALUATED",
+      "report_disposition": "U",
+      "source_hash": null,
+      "report_bundle": null,
+      "review_evidence": null
+    },
+    {
+      "scene_id": "WS1-ACCUM-EMPTY",
+      "start_sec": 480,
+      "end_sec": 653,
+      "start_is_approximate": false,
+      "end_is_approximate": true,
+      "expected_story": "EMPTY, Oil/Foam 없음",
+      "negative_or_regression_check": "정지 구조를 가짜 level 또는 Foam event로 승인",
+      "current_run_status": "NOT_EVALUATED",
+      "report_disposition": "U",
+      "source_hash": null,
+      "report_bundle": null,
+      "review_evidence": null
+    },
+    {
+      "scene_id": "WS1-ACCUM-ENTRY-SPLASH",
+      "start_sec": 653,
+      "end_sec": 672,
+      "start_is_approximate": true,
+      "end_is_approximate": true,
+      "expected_story": "Oil 상승과 splash/wall 패턴 구별",
+      "negative_or_regression_check": "Splash를 추적 대상 Oil/Foam 상단으로 치환",
+      "current_run_status": "NOT_EVALUATED",
+      "report_disposition": "U",
+      "source_hash": null,
+      "report_bundle": null,
+      "review_evidence": null
+    },
+    {
+      "scene_id": "WS1-ACCUM-FOAM-LAYERED",
+      "start_sec": 672,
+      "end_sec": 680,
+      "start_is_approximate": true,
+      "end_is_approximate": true,
+      "expected_story": "상단 Foam과 하단 Oil의 독립적인 변화",
+      "negative_or_regression_check": "상하단 혼동 또는 두 곡선이 같은 잘못된 구조에 고정",
+      "current_run_status": "NOT_EVALUATED",
+      "report_disposition": "U",
+      "source_hash": null,
+      "report_bundle": null,
+      "review_evidence": null
+    },
+    {
+      "scene_id": "WS1-ACCUM-POST-FOAM",
+      "start_sec": 680,
+      "end_sec": 700,
+      "start_is_approximate": true,
+      "end_is_approximate": true,
+      "expected_story": "Foam 소멸 후 Oil 계면 유지",
+      "negative_or_regression_check": "Foam residue 유지 또는 Oil 소실",
+      "current_run_status": "NOT_EVALUATED",
+      "report_disposition": "U",
+      "source_hash": null,
+      "report_bundle": null,
+      "review_evidence": null
+    },
+    {
+      "scene_id": "WS1-ACCUM-DRAIN",
+      "start_sec": 700,
+      "end_sec": 780,
+      "start_is_approximate": true,
+      "end_is_approximate": false,
+      "expected_story": "Oil 하강과 잔류 자국 구별",
+      "negative_or_regression_check": "Residue를 Oil identity로 유지",
+      "current_run_status": "NOT_EVALUATED",
+      "report_disposition": "U",
+      "source_hash": null,
+      "report_bundle": null,
+      "review_evidence": null
+    }
+  ],
+  "model_challenger": {
+    "id": "CR-1",
+    "status": "PROPOSED_NOT_EXECUTED",
+    "backend": "DINOv2 ViT-S/14, subject to pinned weights/code and offline feasibility",
+    "variants": [
+      "full-context",
+      "local-only"
+    ],
+    "reference_banks": 1,
+    "prototype_count_per_enabled_role": 1,
+    "production_behavior": "OFF",
+    "preference_is_physical_support": false
+  },
+  "current_project_disposition": {
+    "S11": "ACTIVE",
+    "O2": "OPEN",
+    "field": "FIELD_FAIL_UNCHANGED"
+  },
+  "critical_limit": "This checklist records qualified review decisions. Neither synthetic tests nor numeric counts establish physical truth or report comprehension."
+}

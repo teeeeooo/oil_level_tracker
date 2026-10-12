@@ -1050,3 +1050,62 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/plot-candidates.py](50-diagnostics/s11/2026-10-12-p2-row-distributions/plot-candidates.py) | 전체 후보 비교에서 드러난 평균 외관 비교의 선택 한계 및 검증 |
 | 2026-10-12 | [60-evidence/s11/2026-10-12-boundary-feasibility-handoff.md](60-evidence/s11/2026-10-12-boundary-feasibility-handoff.md) | 경계 판별 연구 체크포인트, 재개 순서와 로컬 입력·보관 검증 |
 | 2026-10-12 | [60-evidence/s11/2026-10-12-boundary-feasibility-handoff.json](60-evidence/s11/2026-10-12-boundary-feasibility-handoff.json) | 경계 판별 연구 체크포인트, 재개 순서와 로컬 입력·보관 검증 |
+
+### 2026-10-12 program review intake
+
+작성일/인수일은 2026-10-12이며, 아래 신규 파일의 최초 Git 추가일은 등록 후 확정합니다.
+
+#### `docs/20-architecture/`
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [20-architecture/s11-contextual-role-observation-design.md](20-architecture/s11-contextual-role-observation-design.md) | CR-1 역할 관측 제안; 참조·해상도·비교 실험 조건; 작성일 2026-10-12 |
+
+#### `docs/60-evidence/s11/`
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [60-evidence/s11/2026-10-12-program-review-intake.md](60-evidence/s11/2026-10-12-program-review-intake.md) | 명세 인수·재현 검증과 조건부 후속 계획; 작성일 2026-10-12 |
+
+#### `docs/60-evidence/s11/2026-10-12-program-review-intake/`
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [60-evidence/s11/2026-10-12-program-review-intake/focused-tests.xml](60-evidence/s11/2026-10-12-program-review-intake/focused-tests.xml) | 명세 인수·재현 검증과 조건부 후속 계획; 작성일 2026-10-12 |
+| Git 미등록 | [60-evidence/s11/2026-10-12-program-review-intake/verification.json](60-evidence/s11/2026-10-12-program-review-intake/verification.json) | 명세 인수·재현 검증과 조건부 후속 계획; 작성일 2026-10-12 |
+
+#### `docs/70-reference/s11-program-review-2026-10-12/`
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/README.md](70-reference/s11-program-review-2026-10-12/README.md) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/S11-program-review-and-work-spec-2026-10-12.md](70-reference/s11-program-review-2026-10-12/S11-program-review-and-work-spec-2026-10-12.md) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/SHA256SUMS.txt](70-reference/s11-program-review-2026-10-12/SHA256SUMS.txt) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/import-manifest.json](70-reference/s11-program-review-2026-10-12/import-manifest.json) | 첨부 10파일·native 7파일 보존과 중복 경로 매핑; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/story-contract.json](70-reference/s11-program-review-2026-10-12/story-contract.json) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+
+#### `docs/70-reference/s11-program-review-2026-10-12/evidence/`
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/evidence/execution-receipt.json](70-reference/s11-program-review-2026-10-12/evidence/execution-receipt.json) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/evidence/focused-tests.log](70-reference/s11-program-review-2026-10-12/evidence/focused-tests.log) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/evidence/story-contract-tests.log](70-reference/s11-program-review-2026-10-12/evidence/story-contract-tests.log) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+
+#### `docs/70-reference/s11-program-review-2026-10-12/native-evidence/`
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/native-evidence/delivery-summary.json](70-reference/s11-program-review-2026-10-12/native-evidence/delivery-summary.json) | 로컬 감사 고유 산출물 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/native-evidence/focused-tests.xml](70-reference/s11-program-review-2026-10-12/native-evidence/focused-tests.xml) | 로컬 감사 고유 산출물 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/native-evidence/peer-probe-initial.json](70-reference/s11-program-review-2026-10-12/native-evidence/peer-probe-initial.json) | 로컬 감사 고유 산출물 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/native-evidence/peer-probe-verified.json](70-reference/s11-program-review-2026-10-12/native-evidence/peer-probe-verified.json) | 로컬 감사 고유 산출물 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/native-evidence/peer-probe.log](70-reference/s11-program-review-2026-10-12/native-evidence/peer-probe.log) | 로컬 감사 고유 산출물 bytes 보존; 작성일 2026-10-12 |
+
+#### `docs/70-reference/s11-program-review-2026-10-12/scripts/`
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/scripts/check_delivery.py](70-reference/s11-program-review-2026-10-12/scripts/check_delivery.py) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/scripts/peer_probe.py](70-reference/s11-program-review-2026-10-12/scripts/peer_probe.py) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-12/scripts/test_story_contract.py](70-reference/s11-program-review-2026-10-12/scripts/test_story_contract.py) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |

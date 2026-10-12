@@ -1,0 +1,21 @@
+test_all_unknown_that_erases_event_is_B (__main__.StoryContractTests.test_all_unknown_that_erases_event_is_B) ... ok
+test_foam_present_with_unlocalized_upper_is_not_absent (__main__.StoryContractTests.test_foam_present_with_unlocalized_upper_is_not_absent) ... ok
+test_json_does_not_promote_model_or_unknown (__main__.StoryContractTests.test_json_does_not_promote_model_or_unknown) ... ok
+test_json_has_nine_unique_unexecuted_windows (__main__.StoryContractTests.test_json_has_nine_unique_unexecuted_windows) ... ok
+test_known_harm_is_not_hidden_by_unknown_residual (__main__.StoryContractTests.test_known_harm_is_not_hidden_by_unknown_residual) ... ok
+test_missing_review_reference_cannot_be_C (__main__.StoryContractTests.test_missing_review_reference_cannot_be_C) ... ok
+test_missing_tolerance_is_not_zero_or_pass (__main__.StoryContractTests.test_missing_tolerance_is_not_zero_or_pass) ... ok
+test_numeric_score_not_accepted_as_review_bool (__main__.StoryContractTests.test_numeric_score_not_accepted_as_review_bool) ... ok
+test_one_false_extremum_is_A_not_small_error_rate (__main__.StoryContractTests.test_one_false_extremum_is_A_not_small_error_rate) ... ok
+test_one_local_miss_can_be_C (__main__.StoryContractTests.test_one_local_miss_can_be_C) ... ok
+test_partial_scope_does_not_approve_whole_scope (__main__.StoryContractTests.test_partial_scope_does_not_approve_whole_scope) ... ok
+test_posthoc_budget_cannot_approve_residual (__main__.StoryContractTests.test_posthoc_budget_cannot_approve_residual) ... ok
+test_report_comprehension_not_tested_is_U (__main__.StoryContractTests.test_report_comprehension_not_tested_is_U) ... ok
+test_reviewed_absence_remains_distinct (__main__.StoryContractTests.test_reviewed_absence_remains_distinct) ... ok
+test_unknown_foam_presence_is_not_absence (__main__.StoryContractTests.test_unknown_foam_presence_is_not_absence) ... ok
+test_unreviewed_all_unknown_is_U_not_pass (__main__.StoryContractTests.test_unreviewed_all_unknown_is_U_not_pass) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.001s
+
+OK

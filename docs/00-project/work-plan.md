@@ -4,11 +4,11 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
-**Next transition:** The [row-distribution and complete-candidate diagnostics](../50-diagnostics/s11/2026-10-12-p2-row-distributions.md) are complete without a production candidate. The distribution model is closed; unchanged means preserve 4/6 known Oil contexts but also accept separate lower proposals, and at the two missed positives only lower proposals qualify. All 160 proposals and prior controls are retained; unreviewed identities remain unassessed. Return to the distinct-observation design entry for P2 and independent P5-a; no next operation is yet established, and no threshold/reference/candidate exclusion rescue is justified. All source questions stay CLOSED. Typed consumption still requires O2/V5 Windows shadow then separate O3. Local XY OFF / O2 OPEN / FIELD FAIL remain; no Windows run is requested.
+**Next transition:** The [October 12 program review intake](../60-evidence/s11/2026-10-12-program-review-intake.md) reproduces the peer-support findings and selects contextual role observation as a proposed research direction. Resolve the existing learned-method exclusion before CR-1 WP1 readiness/execution; if reopened, freeze the [qualified preflight](../20-architecture/s11-contextual-role-observation-design.md#wp1-preflight-decisions), then one bounded offline comparison. Independent Foam/P5-a research retains its own entry. The row-distribution/mean and prior pilots remain closed, all source questions stay CLOSED, and no threshold/reference/candidate-exclusion rescue follows. Typed consumption still requires O2/V5 Windows shadow then separate O3. Local XY OFF / O2 OPEN / FIELD FAIL remain; no Windows run is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
-**Handoff checkpoint (October 12):** [Boundary-feasibility handoff](../60-evidence/s11/2026-10-12-boundary-feasibility-handoff.md) pins the completed research at `e19f6bd`, closed judgments, local-only inputs and the bounded resume order. The user requested this checkpoint; no new experiment or Windows run starts during handoff preparation.
+**Latest planning intake (October 12):** [Program review and artifact mapping](../60-evidence/s11/2026-10-12-program-review-intake.md) preserves the new package and seven native outputs, with no production integration. Its WP0–WP10 aliases refine the existing stages below. The earlier [boundary-feasibility handoff](../60-evidence/s11/2026-10-12-boundary-feasibility-handoff.md) remains the checkpoint for closed research and retained local inputs.
 
 The [direction-decision intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md)
 preserves all supplied files and native audit outputs, verifies S2's algebra and
@@ -49,7 +49,9 @@ local verification and autonomous commits/pushes, stopping for user judgment or 
 
 ## S11 work-item ledger
 
-O1–O5 remain the staged design/acceptance framework. W0–W4 refine O2;
+O1–O5 remain the staged design/acceptance framework. The October 12 WP0–WP10
+aliases map into the existing sequence below; they do not create another ledger.
+W0–W4 refine O2;
 W5/W6/W7 correspond to O3/O4/O5. D0–D6 are the October 8 task aliases below,
 not additional milestones or another live status list. IMPLEMENTED, VERIFIED,
 ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
@@ -61,14 +63,14 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | W1 / O2 target and aggregation | Definitions and local controls verified; passive Windows target binding complete | Preserve physical identity, target role and path/scalar distinctions; prediction remains NOT_EVALUATED | [W1](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [binding return](../60-evidence/s11/s11-o2-passive-control-review-001.md#windows-target-binding-returned--closed-without-prediction-evaluation) |
 | W2 / O2 scene expansion | Bounded transferred geometry review CLOSED | No repeat inventory/relabeling; unresolved alternatives remain | [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) |
 | W3 / O2 evaluation | Tools locally verified; Windows target/context audit and D1 return transferred | D1 recorded readout CLOSED with named unknowns; review-001 corrected. D3 reuses evaluator; tooling is not efficacy | [W3 local](../60-evidence/s11/s11-o2-w3-target-evaluation-local.md), [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) |
-| W4 / O2 challenger | OPEN; P1 offline representation VERIFIED; P2-S1 and row-distribution model CLOSED WITHOUT PROMOTION; mean diagnostic complete without consumer | Any P2 successor needs a distinct role observation and suitable current support; no threshold/reference/transform retuning of S1. Local XY, H0/G1, CBR-1 and cost-order/recent-basis probes remain closed. | [P2-S1 result](../50-diagnostics/s11/2026-10-11-p2-shared-support.md), [P2 entry](../20-architecture/s11-interface-observability-witness-architecture.md#p2-shared-support-role-comparison--proposal-entry), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
+| W4 / O2 challenger | OPEN; P1 offline representation VERIFIED; P2-S1 and row-distribution model CLOSED WITHOUT PROMOTION; mean diagnostic complete without consumer | CR-1 is a proposed next observation, conditional on reopening learned-method scope and completing WP1. No eligible operation or role result is claimed; no threshold/reference/transform retuning of S1. Local XY, H0/G1, CBR-1 and cost-order/recent-basis probes remain closed. | [P2-S1 result](../50-diagnostics/s11/2026-10-11-p2-shared-support.md), [P2 entry](../20-architecture/s11-interface-observability-witness-architecture.md#p2-shared-support-role-comparison--proposal-entry), [qualification contract](../30-validation/s11-interface-observability-witness-validation.md#local-source-and-truth-qualification) |
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | P3 / D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | P4 / D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
 | Foam front / episode | P5 source-position/default linkage VERIFIED; P5-S2/S3 CLOSED WITHOUT PROMOTION; physical selection OPEN | P0 scene-role mapping adopted; P5-a role feasibility is independent of Oil/P2. New public-source upper Foam/lower Oil roles are closed regionally; current-frame representation and reviewed-range joins verified; all source questions closed. Oil lower observations survive but completed anchor admission promotes an upper candidate; Foam component front misses before temporal publication. Verified bounded application linkage supplies the next counterexample. P5-b requires demonstrated role evidence, default linkage and its own behavior acceptance; P5-c opens only for a correct raw front lost downstream. | [S3 result](../50-diagnostics/s11/2026-10-12-p5-extremal-regions.md), [public-source intake](../50-diagnostics/s11/2026-10-12-public-compressor-source.md), [P5-a design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption) |
 | W7 / O5 field qualification | PENDING integrated candidate | P6 / D6: exact runtime, all nine canonical segments, existing report and target resources | [Field gate](../30-validation/s11-interface-observability-witness-validation.md#field-qualification) |
 | Report adjuncts | Source context and episode-source review ADOPTED | Reuse existing report; comprehension and numerical identity remain separate unresolved outcomes | [Source context](../60-evidence/s11/2026-10-07-report-source-context-validation.md), [episode review](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
-| D0 planning intake | Prior packages and the October 11 direction-decision package preserved/reviewed | Planning baseline only; no detector or field acceptance. Current proposal and qualifications are in the existing design/validation owners. | [Direction intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md), [prior audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md), [P1 program integration](../60-evidence/s11/2026-10-11-program-intake.md), earlier intakes above |
+| D0 planning intake / WP0 | October 12 program review preserved; current-function peer diagnostic reproduced | Proposed partial role-layer redesign and conditional CR-1 preflight; no detector or field acceptance. | [Program review intake](../60-evidence/s11/2026-10-12-program-review-intake.md), [Direction intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md), [prior audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md), [P1 program integration](../60-evidence/s11/2026-10-11-program-intake.md), earlier intakes above |
 
 W4-R0–R5 remain internal continuation labels: R0 correction and R3 inventory are
 complete; R1 is closed without promotion; its censored comparison remains
@@ -102,14 +104,15 @@ story distortions, not local residuals. The qualified Foam upper is missing at
 f1620; continuous episode/timing impact is still unassessed. No detector replay
 or successful new classifier follows from reorganizing evaluation.
 
-| Sequence | Concrete next output / owner | Entry, completion and stop condition |
+| Sequence / October 12 alias | Concrete next output / owner | Entry, completion and stop condition |
 |---|---|---|
-| P0 — scene-based evaluation contract | ADOPTED; source-role mapping and saved-baseline audit VERIFIED | Sixteen local groups cover all thirteen prior audit strata; all nine Windows segments remain. Principle/failure-response/workflow roles and impact-based partial-error policy replace the unadopted A/B draft. Operation-specific capability tests and numerical residual bounds still require preflight; source/holdout limits stay explicit. |
-| P2 Oil successor and P5-a Foam successor — independent research paths | One eligible operation per path in the [existing design owner](../20-architecture/s11-interface-observability-witness-architecture.md#successor-positive-reachability-and-independent-paths), with pinned controls and one structural ablation | First identify information absent from closed models, physical rationale, competing explanation, exact support/equation, normalization, missing/tie policy, operating point and bounds. Prove attainable positive region and measured synthetic positive, then fixed real positives/opposition. If none is supportable, record the design limit; do not claim implementation readiness or tune S1/S2. |
-| Full fixed comparison / O2 qualification | Complete frozen readout, including failures/unavailable; V2/V3 controls/holdouts and V4 equality/resources | Stop at the first failed progression condition. A local result is not O2. For typed Witness, an eligible shadow candidate next requires **V5 Windows shadow review before O2 promotion**, with user/Windows checkpoint; do not defer this to P6. |
-| P3/O3 then P4/O4 — Oil | Separate typed authority/association plan after O2, then one supported phase repair | Preserve full-window positives, wrong-owner runs and FULL/EMPTY/refill/drain controls. No cost-first/nearest-Y switch, stale ID copying or speculative phase relaxation. |
-| P5-b then conditional P5-c — Foam | Separate raw-front behavior plan under the parent/Foam acceptance owner; current observed boundary/role/fixed-X/selected-candidate lineage | Role evidence first; verified default linkage is reusable. Keep episode fixed during raw-front evaluation and measure final usefulness, Oil invariance and debug equality. P5-c opens only for independently demonstrated loss of a correct raw front. A typed Witness consumer also requires O2/O3. |
-| P6/O5 then P7 | Exact integrated candidate regression/resources, nine canonical Windows segments and independent existing-report review; final explicit disposition | Shadow and field acceptance stay distinct. Report directions, extrema, reversals, events, gaps and independent Foam story. No segment waiver or inferred FIELD PASS from local tests. |
+| P0 / WP0 — evaluation and causal baseline | Existing scene roster ADOPTED; peer attribution VERIFIED in the [intake](../60-evidence/s11/2026-10-12-program-review-intake.md) | Reuse sixteen local groups, all nine Windows stories and closed source judgments. Known wrong continuation and correct zero-support controls supplement the false-anchor counterexample; no detector improvement is claimed. |
+| P2/P5-a / WP1 — next planning checkpoint | Resolve learned-method scope, then freeze [CR-1 preflight](../20-architecture/s11-contextual-role-observation-design.md#wp1-preflight-decisions) if authorized | Bind references at their actual truth precision; freeze source/episode exposure, token geometry, equal-scale ablation, operating rules, controls and resources. Missing bindings remain unassessed. If ML exclusion remains, CR-1 stays deferred; a different operation needs its own distinct evidence. |
+| P2 / WP2 and P5-a / WP3 — independent role research | One encoder/bank, full/local representations for CR-1; separate Foam presence/upper observation scope | Measured reachability, then fixed real-positive/opposition screen, then full candidate/control readout. Stop at the first failed condition; no post-result model/reference/threshold rescue. WP3 raw-front behavior is P5-b and needs separate acceptance, not automatic promotion from research. |
+| O2 / WP4 then WP5 — typed shadow and acceptance | Versioned Witness delta, frozen operating policy, V2/V3 controls/holdouts and V4 equality/resources; then **V5 Windows shadow before O2** | Candidate must first be eligible. No production behavior during shadow. Keep user/Windows checkpoint here; a later integrated field run cannot replace this gate. |
+| P3/O3 / WP6 then P4/O4 / WP7 — Oil consumption | Separate support/contradiction consumer plan, then physical owner/handoff/continuation plan | Test anchor and continuation, real UNASSESSED fallback, all-UNKNOWN loss and full-window movement. Preserve FULL/EMPTY/refill/drain controls; no cost-first/nearest-Y or stale-ID shortcut. |
+| P5-b / WP3 integration; P5-c / WP8 only if needed | Raw-front behavior acceptance, then conditional episode repair | Independent correct current native upper and role evidence first, with Oil invariance and debug equality. Typed decisions need O2/O3. P5-c opens only for proved loss of a correct raw front; presence-only episodes require a separate semantics contract. |
+| P6/O5 / WP9 then P7 / WP10 | Exact integrated candidate, nine canonical Windows segments, actual independent report review and explicit disposition | Report directions, extrema, reversals, events, gaps and independent Foam story. No segment waiver, new residual budget by implication, or field PASS from local/synthetic tests. |
 
 Use the [successor/story validation preflight](../30-validation/s11-interface-observability-witness-validation.md#successor-reachability-and-story-preflight).
 The supplied nine-segment template is unexecuted reference material; canonical
@@ -161,7 +164,9 @@ are verified. At the reviewed anchor, completed Oil promotes material_path Y288
 through corroborated anchor authority, farther from the interval than current
 Y321; retained lower candidates remain unadmitted. Foam current Y317 is published
 then rejected by completed formation, but it was already outside the interval.
-This prioritizes **false Oil anchor admission** for the next distinct P2 design;
+This supplies the **false Oil anchor admission** counterexample; the later
+[peer audit](../60-evidence/s11/2026-10-12-program-review-intake.md) also requires
+wrong continuation to be covered, so anchor-only repair is insufficient;
 P5-a independently needs a correct raw front, and P5-c remains unopened. A proposal
 must distinguish upper and lower observations with supported physical information
 and preserve existing controls; a cost/threshold/authority-order rescue is not
@@ -880,12 +885,14 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 
 ## Current authorization boundary
 
-The October 12 request authorizes complete attachment/worktree inspection,
-placement and eligible integration, verified duplicate cleanup, specification
-review and a follow-on plan, with autonomous commits/pushes. This intake adds
-successor preflight requirements and a concrete direction proposal; it does not
-supply the pending product-scope decision, a new role hypothesis or field acceptance.
-The direction checkpoint above continues to constrain later implementation.
+The latest October 12 request authorizes attachment/native-output/worktree
+inspection, placement and eligible integration, verified duplicate cleanup,
+specification review and a follow-on plan, with autonomous commits/pushes.
+The intake is documentation and reproducibility work; it does not implement CR-1.
+The supplied learned-model proposal conflicts with the existing method exclusion
+below. A scope question is pending; no answer is inferred from elapsed time or
+from supplying a document for review. The conditional plan is concrete without
+starting model readiness, download, inference, training or production adoption.
 
 The latest October 11 continuation authorizes stepwise implementation and
 verification of the adopted plan, necessary evidence/owner updates and autonomous
@@ -990,8 +997,11 @@ progression gate, as recorded in the linked diagnostic. The supplied original
 does not replace current contracts. P1 now closes the bounded pre-selection representation question offline.
 P2-S1 and P5-S2 are closed without promotion. With P0 scene roles adopted, the
 [independent P2/P5-a successor preflight](../20-architecture/s11-interface-observability-witness-architecture.md#successor-positive-reachability-and-independent-paths)
-requires a distinct measurement, comparison domain and numerical rule; none is
-selected. Reuse the qualified controls at their actual truth scope and the
+requires a distinct measurement, comparison domain and numerical rule. The
+[CR-1 supplement](../20-architecture/s11-contextual-role-observation-design.md)
+is the proposed new representation; learned-method scope and its concrete
+preflight are unresolved, so it is not yet an executable challenger. Reuse the
+qualified controls at their actual truth scope and the
 scene/claim-specific acceptance role, with historical scalar agreement distinct
 from physical acceptance; the integrated path helper supplies no new physical authority.
 Independent support, association, committed handoff and initial-FULL observation

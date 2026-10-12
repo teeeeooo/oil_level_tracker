@@ -95,6 +95,16 @@ R18–R20 predecessor architecture/validation and earlier diagnostics remain his
 
 ## S11 audit specifications and execution routing
 
+The [October 12 program review](70-reference/s11-program-review-2026-10-12/README.md)
+is preserved with all seven native outputs mapped by its import manifest. The
+[intake review](60-evidence/s11/2026-10-12-program-review-intake.md) independently
+repeats the saved-candidate calculation and qualifies the future plan. The bounded
+[CR-1 design supplement](20-architecture/s11-contextual-role-observation-design.md)
+and existing Witness Validation own the proposed experiment and its conditions;
+Work Plan alone owns the learned-method scope decision and WP0–WP10 mapping.
+The supplied story worksheet remains an unexecuted proposal, not canonical truth
+or an automatic field/report evaluator.
+
 The [October 11 direction package](70-reference/s11-direction-decision-2026-10-11/README.md)
 is preserved with its [October 12 intake and artifact mapping](60-evidence/s11/2026-10-12-direction-decision-intake.md).
 It adds an independently reproduced S2 decision-region audit and a proposed
