@@ -27,4 +27,8 @@ done
 
 if [[ "$checked" -eq 0 ]]; then
     printf 'S11 detector governance: no commit updates to check.\n'
+else
+    # Ignored local research outputs are invisible to remote CI. This only checks
+    # directories explicitly created by the artifact tool; it never deletes files.
+    python3 "$repo_root/scripts/experiment_artifacts.py" check
 fi

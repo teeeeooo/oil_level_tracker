@@ -1,6 +1,6 @@
 # CR-1 착수 전 저장소 정리 체크포인트 — 2026-10-12
 
-**결과: 1차 캐시·중복 정리에 이어 추가 산출물 통합과 보존 검증 완료. CR-1 미착수.**
+**결과: 캐시·중복 정리, 산출물 통합, 마지막 추가 압축과 예방 절차 적용 완료. CR-1 미착수.**
 사용자가 이 체크포인트를 확인한 뒤 진행 여부를 알려주기로 했다. 현재 실행 권한과
 다음 행동은 [Work Plan](../../00-project/work-plan.md#repository-cleanup-and-isolated-cr-1-sequence)이 소유한다.
 기존 문서 표의 3번에 섞여 있던 WP1 조건 확정은 대화에서 확인한 범위대로 4번으로
@@ -10,7 +10,58 @@
 미커밋 변경은 없었다. 등록 worktree는 현재 저장소 하나였으며 제거할 다른 worktree는
 없었다. 이 문서가 추가된 체크포인트 커밋은 해당 파일의 Git 이력으로 확인한다.
 
-## 추가 정리 결과
+## 마지막 압축과 관리 절차 적용
+
+사용자 요청에 따라 clean `1073c67666477af2d88c76615458070d82413de8`에서
+마지막 압축 대상과 앞으로의 관리 방법을 적용했다. 아래의 이전 정리 수치는
+각 단계 당시 기록이다. **현재 저장 위치는 기존 통합 manifest와 추가 압축
+매핑을 함께 사용**한다. 역사 receipt·제공 원문의 bytes와 당시 판정을 덮어쓰지 않았다.
+
+| 이번 대상 | 원본 논리 크기 | 최종 추가 저장 |
+|---|---:|---:|
+| 전체 trace JSONL 2개 | 359.78 MB | gzip 43.58 MB |
+| matches / human ROI JSON 2개 | 91.43 MB | gzip 13.35 MB |
+| Local XY sample3 completed JSON 1개 | 21.93 MB | 기존 ZIP의 동일 object 재사용; 새 사본 없음 |
+| 합계 | 473.15 MB | 56.93 MB |
+
+새 gzip 4개를 만들고 원래 전개 파일 5개를 제거했다. JSON 1개는 이미 기존
+보관 ZIP에 있어 중복 gzip도 제거했다. `sample/output`의 실제 할당량은
+**2.998 → 2.578 GB**, 파일 수는 **3,327 → 3,326개**가 됐다.
+`du -sk` 기준 추가 회수량은 **419,971,072 bytes, 약 420 MB**다.
+프로젝트 전체는 최종 문서·Git 객체 반영 전 약 **4.43 GB**다. `.venv` 1.529 GB는
+유지했다. 논리 bytes와 APFS/파일시스템 할당량은 서로 다른 측정값이다.
+
+- [추가 압축 매핑](2026-10-12-pre-cr1-cleanup/compressed-files.json): 기존 manifest hash,
+  원래 경로·길이·SHA-256과 gzip/기존 ZIP object 대응.
+- [검증 receipt](2026-10-12-pre-cr1-cleanup/compression-receipt.json): 전후 실제 용량,
+  삭제 후 복원·형식 검증과 현재 입력 보호 결과.
+- [관리 절차](../../40-operations/experiment-artifact-lifecycle.md): 지침·스크립트·기존
+  Skill 연결·기존 pre-push 훅의 책임과 실제 시작/종료 명령.
+
+모든 gzip은 삭제 전에 원본 길이/hash와 일치했고, 원본 제거 후 선택 복원 도구로
+5개 모두 복원해 bytes·mode·mtime와 JSON/JSONL 로딩을 확인했다. ZIP 재사용으로
+바꾼 1개도 중복 gzip 제거 후 다시 복원했다. 임시 복원본은 즉시 제거했다.
+관리 도구와 복구 도구 테스트 17개가 통과했으며 실제 pre-push 경로의 미완료 실행
+차단과 정리 후 허용도 임시 Git 저장소에서 확인했다. Skill frontmatter는 기존과
+같고 추가 경로/문서 링크를 확인했다. 공식 Skill validator는 기존 환경에
+PyYAML이 없어 실행하지 못했으며 이를 위해 의존성을 추가하지 않았다.
+기존 전개 파일 중 남은 3,321개, 현재 입력 pin 293개, 원본 영상 8개와 기존
+1.207 GB ZIP의 해시는 그대로다. 현재 peer 입력은 이번 이동 대상이 아니며,
+이미 통과한 peer 재현을 다시 실행한 것으로 보고하지 않는다.
+
+과거 trace/JSON 경로를 직접 소비하는 도구는 먼저 필요한 파일을 복원해야 한다.
+특히 Local XY sample3의 `completed.json`도 현재는 원위치에 전개되어 있지 않다.
+그 corpus의 과거 전체 verifier는 이전 정리 전부터 source pin 차이로 실패했으며,
+이번 복원 검증을 해당 verifier의 PASS로 확대하지 않는다.
+
+새 `start`는 기존 폴더를 덮어쓰지 않고 입력·관련 source·조건·예산을 기록한다.
+`finish`는 명시한 증거만 남기고 해당 실행의 나머지 임시 파일을 제거한다.
+동일한 입력·source·조건의 완료 실행을 알려 주며, 동일 payload는 `reuse`로
+연결한다. `check`와 로컬 pre-push는 미완료·중복·예산 초과·잔여 파일을 검사한다.
+frozen 역사 폴더에는 자동 삭제를 적용하지 않으며 훅 자체는 읽기 전용이다.
+전체 생산 detector·의존성·패키징 및 CR-1 미착수/field 상태는 유지한다.
+
+## 앞선 산출물 통합 결과
 
 사용자가 25,755개 잔여 항목과 작은 감소량을 지적한 뒤 추가 정리를 요청했다.
 1차 정리는 일부 전개 사본과 캐시 제거였으며 전체 산출물 구조의 정리 완료로
@@ -37,7 +88,7 @@
 - 실제 용량·삭제·보존·검증 결과: [추가 정리 receipt](2026-10-12-pre-cr1-cleanup/consolidation-receipt.json).
 - 선택 복원 도구: [restore_s11_outputs.py](../../../scripts/restore_s11_outputs.py).
 
-현재 경로에 남긴 3,326개 파일은 기존 tracked 문서·코드·machine manifest의
+이 통합 시점에 원래 경로에 남긴 3,326개 파일은 기존 tracked 문서·코드·machine manifest의
 직접 파일 참조, 현재 candidate pin, peer probe의 `none` bundle, Local XY
 165파일 검증 corpus와 그 동반 파일이다. HTML 검토 화면의 이미지 58개도
 추가로 남겨 기존에 연결되던 로컬 참조 140개를 보존했다. 과거 소스·문서 사본을
@@ -78,14 +129,17 @@ python3 scripts/restore_s11_outputs.py \
 ```
 
 단일 파일 경로도 `--prefix`에 넣을 수 있다. 출력 아래에 원래의
-`sample/output/...` 경로가 재현된다. 링크가 포함된 과거 소스 사본은 명시적으로
+`sample/output/...` 경로가 재현된다. 현재 도구는 기본 manifest 옆의
+`compressed-files.json`을 자동으로 읽어 마지막 압축 파일도 같은 명령으로
+복원한다. 기존 manifest pin과 압축 파일/ZIP hash를 확인하며 과거 manifest를
+재작성하지 않는다. 링크가 포함된 과거 소스 사본은 명시적으로
 `--include-symlinks`를 붙여야 하며, 링크는 현재 repo의 `sample` 트리 안으로만
 연결한다. Windows 링크 생성 권한/실행은 이번에 검증하지 않았다. 기존 절대 경로를
 소비하는 역사 runner를 재사용할 때는 복원한 자료와 pinned source를 먼저 확인하고,
 정말 필요한 경로만 기존 파일과 충돌 없이 원위치로 옮긴다. 검토 후 임시 복원본은
 제거하여 같은 전개 사본이 다시 누적되지 않게 한다.
 
-ZIP은 Git 제외 로컬 자료이며 **원격 백업이 아니다**. manifest·receipt·복구 도구는
+ZIP/gzip은 Git 제외 로컬 자료이며 **원격 백업이 아니다**. manifest·receipt·복구 도구는
 커밋되지만 새 clone에 과거 native 데이터가 자동으로 생기지 않는다. 기존 작은
 복구 ZIP들만으로 전체 native 자료를 복원할 수 있다고 가정하지 않는다.
 ZIP에 `index.json`과 SHA-256 이름의 `objects/`가 있어 경로 대응은 보관본

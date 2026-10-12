@@ -8,6 +8,7 @@ The deployed user-level Codex `AGENTS.md` owns generic execution behavior. This 
 - Broader milestone order/state: `docs/00-project/roadmap.md`.
 - Exact-head review, proportional verification, publication, and formal closeout semantics: `docs/00-project/execution-policy.md`.
 - Documentation classification/authority: `docs/README.md` when creating, moving, renaming, or changing document ownership.
+- Before creating local research outputs: `docs/40-operations/experiment-artifact-lifecycle.md`; use its managed run entry and closeout check for new experiments.
 - Compact past-dependent routing: `docs/00-project/recall-index.md`.
 
 ## Task Skills

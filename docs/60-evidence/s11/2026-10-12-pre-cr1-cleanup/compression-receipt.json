@@ -1,0 +1,116 @@
+{
+  "schema": "s11-output-compression-receipt-v1",
+  "baseline_head": "1073c67666477af2d88c76615458070d82413de8",
+  "du_kib_before": {
+    ".": 4737492,
+    "sample/output": 2927604,
+    ".venv": 1493608,
+    ".git": 87020
+  },
+  "du_kib_after": {
+    ".": 4327376,
+    "sample/output": 2517476,
+    ".venv": 1493608,
+    ".git": 87020
+  },
+  "project_allocated_bytes_reclaimed": 419958784,
+  "output_allocated_bytes_reclaimed": 419971072,
+  "original_bytes": 473146659,
+  "compressed_bytes": 56925205,
+  "compressed_map_sha256": "fa3939615764fb01f6b5651a5eef243500e8b1e96b12df89cc54ad336de86a3d",
+  "compression": "Four deterministic gzip level-6 streams plus one existing ZIP object; original logical bytes unchanged",
+  "current_input_pins_verified": 293,
+  "source_videos_verified": 8,
+  "uncompressed_retained_files_verified": 3321,
+  "preserved_zip_sha256": "aab003f90a3beb37fd8146371b5988b8470b6e443b3173a038ac3266e47e4669",
+  "restored_after_original_removal": [
+    {
+      "path": "sample/output/s11-p5-default-linkage-20261011-001/full/oil-debug-trace-8qunsdfn/debug_trace.jsonl",
+      "sha256": "4aac626061fb02c69ae0c59b0e4f570dcd4cd4d04d78c51c316ab18a040793c7",
+      "parsed": {
+        "kind": "jsonl",
+        "records": 113
+      }
+    },
+    {
+      "path": "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/debug_trace.jsonl",
+      "sha256": "71f755a93a7b50c332dfd7a33a51f2f3e4d1d6fe9f84c415be1a376b58b25fca",
+      "parsed": {
+        "kind": "jsonl",
+        "records": 113
+      }
+    },
+    {
+      "path": "sample/output/s11-a2-patch-correspondence-20261007-001/matches.json",
+      "sha256": "2a6ca3008aeb80a1d387115edf52c8f2c60e1189d1d87a3c18359c55b1cd8c62",
+      "parsed": {
+        "kind": "json",
+        "root_type": "list"
+      }
+    },
+    {
+      "path": "sample/output/s11-local-human-roi-sequence-001/human_roi.json",
+      "sha256": "d1d3acf7c4385e63bd29b815acfbff985d3bc82b2bcd9a21401edf1e0108a2aa",
+      "parsed": {
+        "kind": "json",
+        "root_type": "dict"
+      }
+    },
+    {
+      "path": "sample/output/s11-local-xy-exclusion-20261009-001/sample3-baseline/completed.json",
+      "sha256": "9ec04cbe13b6336e27efbd52116e3d0b104f3001888798a62133cf925f461807",
+      "parsed": {
+        "kind": "json",
+        "root_type": "list"
+      }
+    }
+  ],
+  "output_regular_files": 3326,
+  "limitations": [
+    "gzip payloads remain local and ignored, not an off-machine backup",
+    "historical literal consumers need selective restoration before use",
+    "Local XY sample3 completed.json now requires recovery; historical full verifier already fails on old production pins",
+    "no detector replay, CR-1 setup/execution, Windows run, or acceptance change",
+    "du after compression precedes the final docs, tests, and Git objects"
+  ],
+  "new_gzip_files": 4,
+  "reused_existing_zip_objects": 1,
+  "reused_zip_original_restored_after_duplicate_gzip_removal": "sample/output/s11-local-xy-exclusion-20261009-001/sample3-baseline/completed.json",
+  "lifecycle_verification": {
+    "focused_tests_passed": 17,
+    "test_files": [
+      "tests/unit/test_restore_s11_outputs.py",
+      "tests/unit/test_experiment_artifacts.py"
+    ],
+    "real_pre_push_hook_test": "Open owned run rejected; same run after finish accepted in an isolated Git repository.",
+    "cli_outside_repo_cwd": "start -> finish -> check passed; Unicode/space paths and original inputs preserved.",
+    "scope_checks": "Existing directories, traversal, symlinks, changes during closing, and unfinished reuse are refused.",
+    "reuse_checks": "Identical relevant inputs/source/parameters reuse key survives documentation-only HEAD changes; repeated payloads require references.",
+    "detector_governance": "PASS",
+    "local_link_anchor_checks": 17,
+    "skill_validation": {
+      "frontmatter": "unchanged from baseline",
+      "routing_paths": "PASS",
+      "official_validator": "UNAVAILABLE: PyYAML is absent in project and existing Graphify interpreters; no dependency installed."
+    },
+    "source_sha256": {
+      "scripts/experiment_artifacts.py": "48839b746776b9dba7d60301aa7b3d38bc667c50189736c2ece0f4f8b6e3f868",
+      "scripts/restore_s11_outputs.py": "611c4a1688991d7dddbd20454bff993d3ea5e6233306d95db1c290d5883732de",
+      "tests/unit/test_experiment_artifacts.py": "19e47917121bf5beac7447eb2d653c69c921ad753ebafc292cffeb7f8caa30dc",
+      "tests/unit/test_restore_s11_outputs.py": "3d695a710ed289cffe92dd6722b3f2047160384a5f8c3251e92ab151e92f114c",
+      ".githooks/pre-push": "03fb112f388af10f8249a3861031a217bc4f580cfe2c8bea24ea2f49eb8ab5b3"
+    },
+    "temporary_test_cleanup": {
+      "initial_pytest_files_removed": 288,
+      "initial_pytest_logical_bytes_removed": 301108,
+      "final_tests": "Owned TemporaryDirectory deleted immediately after pytest returned.",
+      "one_off_compression_and_recovery_scratch": "Removed after verification; no trial restores remain."
+    },
+    "managed_runs_in_actual_repo": 0,
+    "limitations": [
+      "No Windows execution; Bash hook test ran on this Mac.",
+      "Budget checks measure current logical bytes, not a continuous disk quota.",
+      "Legacy/unmarked outputs are not automatically checked or deleted."
+    ]
+  }
+}

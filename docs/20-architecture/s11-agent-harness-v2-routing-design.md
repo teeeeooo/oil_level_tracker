@@ -19,6 +19,25 @@ This change does not alter detector source, thresholds, candidate authority, lif
 - Windows qualification procedure: `.agents/skills/windows-qualification/SKILL.md` + `docs/40-operations/s11-current-windows-field-qualification.md`;
 - governance record/checker contract: `docs/30-validation/s11-detector-change-governance.md` + `scripts/check_detector_governance.py`;
 - current detector/failure truth: existing logic map and failure registry.
+- local research-output lifecycle: `docs/40-operations/experiment-artifact-lifecycle.md` + `scripts/experiment_artifacts.py`; local verification also runs from the existing pre-push hook.
+
+## Local research output closeout
+
+The October 12 cleanup exposed a missing common closeout check: individual runners
+already had temporary-directory or output-manifest patterns, but expanded traces,
+source snapshots and repeated outputs accumulated across experiments. New runs now
+use an exclusively created directory with declared inputs, relevant source hashes,
+parameters and scratch/retained budgets. The existing witness replay's
+`TemporaryDirectory` pattern remains the model for short-lived intermediate bundles;
+no detector runner or application storage owner is replaced.
+
+An explicit keep/reuse selection promotes only necessary evidence. The local tool
+rejects duplicate retained payloads and removes only its own unselected intermediates.
+The existing pre-push hook checks managed runs without deleting files. The operational
+document owns the procedure; AGENTS and the existing S11 Skill route to it. Historical
+records keep their bytes and verdicts, with additive compression/recovery maps when
+their live storage changes. This gate checks storage, not scientific sufficiency,
+detector acceptance or Windows field qualification.
 
 ## Optional derived code-topology pilot
 

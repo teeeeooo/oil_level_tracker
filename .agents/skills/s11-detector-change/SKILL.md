@@ -25,6 +25,10 @@ Use Graphify only when the task benefits from code-topology, caller, dependency,
 - Verify `INFERRED` edges and any surprising relationship against current source before using it in a design or acceptance claim. When Graphify and the current logic map disagree, inspect source and correct the stale/incorrect derived surface rather than overriding the owner document.
 - Do not run or install Graphify Git hooks as a prerequisite. For a long source-editing task, Main may start `graphify watch .` in a background process and must stop it when the task ends; ordinary tasks use the one-shot refresh above.
 
+## Local research outputs
+
+Before generating probe/replay artifacts, use the [artifact lifecycle procedure](../../../docs/40-operations/experiment-artifact-lifecycle.md). It owns the managed run entry, keep/reuse selection, temporary cleanup and local closeout check. Reuse existing runners and inputs; this storage procedure does not reopen a frozen experiment or grant field acceptance.
+
 ## Change contract
 
 - Preserve one generic detector across Glass identities; no private timestamp, Glass identity, reviewed coordinate, or case-specific branch enters production control flow.

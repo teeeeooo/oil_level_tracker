@@ -100,3 +100,68 @@ def test_bad_logical_mapping_rolls_back_partial_restore(preservation, tmp_path):
     with pytest.raises(ValueError, match="Restored bytes mismatch"):
         restore(manifest, dest, "sample/output/run", repo=repo)
     assert not dest.exists()
+
+
+def test_additive_gzip_map_restores_removed_file_and_checks_both_hashes(preservation, tmp_path):
+    repo, manifest, _, payload, data = preservation
+    compressed = repo / "sample/output/kept.json.gz"
+    compressed.write_bytes(gzip.compress(payload, mtime=0))
+    mapping = dict(schema="s11-output-compression-v1",
+                   base_manifest_sha256=hashlib.sha256(manifest.read_bytes()).hexdigest(),
+                   files=[dict(path="sample/output/kept.json", bytes=len(payload),
+                               sha256=hashlib.sha256(payload).hexdigest(),
+                               compressed=dict(path="sample/output/kept.json.gz", bytes=compressed.stat().st_size,
+                                               sha256=hashlib.sha256(compressed.read_bytes()).hexdigest()))])
+    overlay = manifest.with_name("compressed-files.json")
+    overlay.write_text(json.dumps(mapping), encoding="utf-8")
+    (repo / "sample/output/kept.json").unlink()
+    dest = tmp_path / "restored"
+    restore(manifest, dest, "sample/output/kept.json", repo=repo)
+    assert (dest / "sample/output/kept.json").read_bytes() == payload
+    compressed.write_bytes(compressed.read_bytes() + b"tampering")
+    with pytest.raises(ValueError, match="Retained input changed"):
+        restore(manifest, tmp_path / "bad", "sample/output/kept.json", repo=repo)
+    assert not (tmp_path / "bad").exists()
+    # Even a matching compressed hash must decode to the original pinned bytes.
+    compressed.write_bytes(gzip.compress(b"different original", mtime=0))
+    mapping["files"][0]["compressed"].update(bytes=compressed.stat().st_size,
+                                            sha256=hashlib.sha256(compressed.read_bytes()).hexdigest())
+    overlay.write_text(json.dumps(mapping), encoding="utf-8")
+    with pytest.raises(ValueError, match="Restored bytes mismatch"):
+        restore(manifest, tmp_path / "bad-original", "sample/output/kept.json", repo=repo)
+    assert not (tmp_path / "bad-original").exists()
+
+
+def test_compression_overlay_cannot_change_pinned_original_or_manifest(preservation, tmp_path):
+    repo, manifest, _, _, _ = preservation
+    overlay = manifest.with_name("compressed-files.json")
+    mapping = dict(schema="s11-output-compression-v1", base_manifest_sha256="wrong", files=[])
+    overlay.write_text(json.dumps(mapping), encoding="utf-8")
+    with pytest.raises(ValueError, match="does not match"):
+        restore(manifest, tmp_path / "bad", "sample/output/kept.json", repo=repo)
+    mapping["base_manifest_sha256"] = hashlib.sha256(manifest.read_bytes()).hexdigest()
+    mapping["files"] = [dict(path="sample/output/kept.json", bytes=0, sha256="wrong",
+                            compressed=dict(path="sample/output/kept.json.gz"))]
+    overlay.write_text(json.dumps(mapping), encoding="utf-8")
+    with pytest.raises(ValueError, match="Invalid compressed-file mapping"):
+        restore(manifest, tmp_path / "bad-original", "sample/output/kept.json", repo=repo)
+    assert not (tmp_path / "bad-original").exists()
+
+
+def test_additive_map_reuses_existing_archive_object_without_another_copy(preservation, tmp_path):
+    repo, manifest, _, payload, data = preservation
+    original_sha = hashlib.sha256(payload).hexdigest()
+    mapping = dict(schema="s11-output-compression-v1",
+                   base_manifest_sha256=hashlib.sha256(manifest.read_bytes()).hexdigest(),
+                   files=[dict(path="sample/output/kept.json", bytes=len(payload), sha256=original_sha,
+                               compressed={**data["archive"], "format": "existing-zip",
+                                           "member": "objects/" + original_sha})])
+    overlay = manifest.with_name("compressed-files.json")
+    overlay.write_text(json.dumps(mapping), encoding="utf-8")
+    (repo / "sample/output/kept.json").unlink()
+    restore(manifest, tmp_path / "restored", "sample/output/kept.json", repo=repo)
+    assert (tmp_path / "restored/sample/output/kept.json").read_bytes() == payload
+    mapping["files"][0]["compressed"]["member"] = "objects/wrong"
+    overlay.write_text(json.dumps(mapping), encoding="utf-8")
+    with pytest.raises(ValueError, match="Invalid existing ZIP mapping"):
+        restore(manifest, tmp_path / "bad", "sample/output/kept.json", repo=repo)

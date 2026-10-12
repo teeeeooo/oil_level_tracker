@@ -302,6 +302,11 @@ conditions; only Work Plan owns sequencing and current state.
 소비자가 요구하는 경로·bytes로 유지하고, 종료된 실행은 판정·요약·입력 hash와
 필요한 전체 증거를 연결한다. 압축 보관은 증거 폐기나 acceptance 변경이 아니다.
 
+새 연구 출력의 생성·예산·보존 목록·즉시 정리와 로컬 push 검사는
+[실험 산출물 관리 절차](40-operations/experiment-artifact-lifecycle.md)가 소유한다.
+`start → work에서 실행 → finish → check`를 사용하며 새 규칙을 기존 frozen
+폴더의 자동 삭제 권한으로 해석하지 않는다.
+
 - Git에 있는 소스·문서를 새 실행마다 통째로 복제하지 않는다. 기준 commit과
   필요한 patch·고유 파일을 우선 사용하며, 기존 snapshot의 고유 bytes는 보존한다.
 - 과거 실행의 전체 trace를 계속 전개해 두지 않는다. 현재 참조와 실제 소비 경로를
@@ -315,7 +320,8 @@ conditions; only Work Plan owns sequencing and current state.
 현재 보관본과 선택 복원 절차는 [체크포인트](60-evidence/s11/2026-10-12-pre-cr1-cleanup-checkpoint.md)에
 있다. 최신 파일 존재 여부와 복구 매핑은 그 manifest를 확인한다. 과거 receipt의
 당시 경로·판정은 재작성하지 않으며, 부분적으로 남은 실행 폴더는 전체 bundle의
-존재를 뜻하지 않는다. 로컬 ZIP과 Git에 올라간 manifest를 원격 데이터 백업으로
+존재를 뜻하지 않는다. 이후 추가 압축은 별도 `compressed-files.json`으로 연결한다.
+로컬 ZIP/gzip과 Git에 올라간 manifest를 원격 데이터 백업으로
 혼동하지 않는다.
 
 ### 크기 점검과 검증

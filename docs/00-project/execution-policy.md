@@ -34,4 +34,6 @@ Update `work-plan.md` only when the active gate, accepted baseline, blocker/unkn
 
 Completed measurements belong in `60-evidence/`; causal investigations belong in `50-diagnostics/`; durable product/architecture/validation contracts remain in their owning directories. Do not turn current-state documents into execution journals.
 
+For newly generated local research outputs, complete the [artifact closeout procedure](../40-operations/experiment-artifact-lifecycle.md) before claiming the experiment finished or pushing. Its local check includes failed/aborted runs; it does not apply automatic deletion to legacy evidence or require output generation for a documentation-only task.
+
 Formal `DONE` means implementation, required acceptance, and required merge/publication are complete. Local implementation, focused tests, or a read-only audit alone do not make a milestone `DONE`.

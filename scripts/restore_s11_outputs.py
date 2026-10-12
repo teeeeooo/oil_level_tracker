@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import ExitStack
 import gzip
 import hashlib
 import json
@@ -33,6 +34,37 @@ def output_path(value: str) -> PurePosixPath:
     return path
 
 
+def compressed_sources(manifest_path: Path, manifest: dict) -> dict:
+    """Read an additive compressed storage map without rewriting historical pins."""
+    mapping = manifest_path.with_name("compressed-files.json")
+    if not mapping.exists():
+        return {}
+    data = json.loads(mapping.read_text(encoding="utf-8"))
+    if data["schema"] != "s11-output-compression-v1" or data["base_manifest_sha256"] != digest(manifest_path):
+        raise ValueError("Compressed-file map does not match preservation manifest")
+    entries = {entry["path"]: entry for entry in manifest["entries"]}
+    sources = {}
+    for item in data["files"]:
+        path = item["path"]
+        output_path(path)
+        output_path(item["compressed"]["path"])
+        entry = entries.get(path)
+        if (path in sources or not entry or entry["kind"] != "file"
+                or entry["disposition"] != "retain"
+                or any(item[k] != entry[k] for k in ("bytes", "sha256"))):
+            raise ValueError("Invalid compressed-file mapping")
+        storage = item["compressed"]
+        if storage.get("format", "gzip") == "existing-zip":
+            if (storage["path"] != manifest["archive"]["path"]
+                    or storage["sha256"] != manifest["archive"]["sha256"]
+                    or storage["member"] != "objects/" + entry["sha256"]):
+                raise ValueError("Invalid existing ZIP mapping")
+        elif storage.get("format", "gzip") != "gzip":
+            raise ValueError("Unsupported compressed storage format")
+        sources[path] = item["compressed"]
+    return sources
+
+
 def restore(
     manifest_path: Path,
     destination: Path,
@@ -43,14 +75,20 @@ def restore(
 ) -> dict[str, int]:
     """Copy original bytes and modes; never overwrite an existing destination.
 
-    Kept files come from their pinned repository paths; archived files come from
-    a self-contained ZIP object store. Each logical path gets an independent file.
+    Kept files come from their pinned repository paths or an additive gzip map;
+    archived files come from a self-contained ZIP object store. Each logical path
+    gets an independent file.
     Historical absolute links require opt-in and are rebound inside this repo.
     """
     prefix_path = output_path(prefix)
     manifest = json.loads(gzip.decompress(manifest_path.read_bytes()))
     if manifest["schema"] != "s11-output-consolidation-v1":
         raise ValueError("Unsupported preservation manifest")
+    compressed = compressed_sources(manifest_path, manifest)
+    for entry in manifest["entries"]:
+        storage = compressed.get(entry["path"], {})
+        if storage.get("format") == "existing-zip":
+            entry.update(disposition="archive", member=storage["member"])
     selected = [
         entry for entry in manifest["entries"]
         if output_path(entry["path"]).is_relative_to(prefix_path)
@@ -76,19 +114,25 @@ def restore(
                and output_path(p).is_relative_to(output_path(entry["path"])) for p in paths):
             raise ValueError("A restored path would traverse a symlink")
     archive = repo / output_path(manifest["archive"]["path"])
-    if digest(archive) != manifest["archive"]["sha256"]:
+    needs_archive = any(e["kind"] == "file" and e["disposition"] == "archive" for e in selected)
+    if needs_archive and digest(archive) != manifest["archive"]["sha256"]:
         raise ValueError("Archive SHA-256 mismatch")
     for entry in selected:
         if entry["kind"] not in {"file", "symlink"}:
             raise ValueError("Unsupported entry kind")
         if entry["kind"] == "file" and entry["disposition"] == "retain":
-            source = repo / output_path(entry["path"])
-            if source.is_symlink() or digest(source) != entry["sha256"]:
+            storage = compressed.get(entry["path"])
+            source = repo / output_path(storage["path"] if storage else entry["path"])
+            expected_sha = storage["sha256"] if storage else entry["sha256"]
+            if source.is_symlink() or digest(source) != expected_sha:
                 raise ValueError(f"Retained input changed: {entry['path']}")
+            if storage and source.stat().st_size != storage["bytes"]:
+                raise ValueError("Compressed file size mismatch")
     created: list[Path] = []
     destination.mkdir()  # Exclusive creation; ancestors must already exist.
     try:
-        with zipfile.ZipFile(archive) as bundle:
+        with ExitStack() as stack:
+            bundle = stack.enter_context(zipfile.ZipFile(archive)) if needs_archive else None
             for entry in selected:
                 if entry["kind"] == "symlink":
                     continue
@@ -100,7 +144,11 @@ def restore(
                         raise ValueError("Invalid archive object mapping")
                     source = bundle.open(expected_member)
                 elif entry["disposition"] == "retain":
-                    source = (repo / output_path(entry["path"])).open("rb")
+                    storage = compressed.get(entry["path"])
+                    if storage:
+                        source = gzip.open(repo / output_path(storage["path"]), "rb")
+                    else:
+                        source = (repo / output_path(entry["path"])).open("rb")
                 else:
                     raise ValueError("Unsupported disposition")
                 with source, target.open("xb") as handle:
