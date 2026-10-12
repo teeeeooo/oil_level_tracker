@@ -241,6 +241,31 @@ optical flow, threshold, segmentation or detector runs. The review cannot transf
 frame1499 interval truth to neighbours or label every small grain as a bubble.
 Do not widen the time/crop search after viewing to seek a desired event.
 
+The plan and adapter were committed at `36973e1` before decoding. The
+[readout](2026-10-12-public-compressor-source/temporal-detail/readout.json)
+retains frames1484–1514 at 49.516133–50.517133 s in the
+[lossless crop archive](2026-10-12-public-compressor-source/temporal-detail/native-crops.npz).
+The [five preselected views](2026-10-12-public-compressor-source/temporal-detail/native-detail-sheet.png)
+show broad-layer texture and upper-contour changes together with camera movement.
+They do not establish an individually identified film-disappearance or cell-neighbour
+change. All 31 crops remain available, but no exhaustive cell/event correspondence
+is claimed. This is no qualified event, not proof that no event occurred.
+
+The [review and verification](2026-10-12-public-compressor-source/temporal-detail/review.json)
+close this bounded screen without a new role operation. All 31 crop hashes,
+30 consecutive time steps, five lossless display panels and the native anchor
+match; all 221 production hashes remain unchanged. Decode/capture took 0.296 s,
+with process peak RSS 157,270,016 bytes. No additional detector ran.
+
+**Design limit:** a directly supported cell-relationship change and its optical/
+occlusion opposition are not yet specified. A renamed motion error or texture
+renewal score is not the missing information. No temporal classifier, new threshold
+or immediate implementation follows, and the old failures remain closed. This
+does not establish impossibility for passive video or every non-learned method.
+The source is useful for the qualified two-role spatial comparison already made;
+its acquisition does not by itself provide the missing role selector. The Work
+Plan retains the open design entry and the existing acceptance boundaries.
+
 ## Verification and reproduction
 
 [Artifact verification](2026-10-12-public-compressor-source/artifact-verification.json)
@@ -256,6 +281,7 @@ With the pinned local original present, reproduce into a new directory:
 MPLCONFIGDIR=/tmp/s11-public-mpl .venv/bin/python docs/50-diagnostics/s11/2026-10-12-public-compressor-source/inspect_detector.py --root . --output /tmp/s11-public-source-baseline
 .venv/bin/python docs/50-diagnostics/s11/2026-10-12-public-compressor-source/prepare_position_review.py --output /tmp/s11-public-source-positions
 .venv/bin/python docs/50-diagnostics/s11/2026-10-12-public-compressor-source/join_positions.py --root . --output /tmp/s11-public-source-position-join.json
+.venv/bin/python docs/50-diagnostics/s11/2026-10-12-public-compressor-source/review_temporal_detail.py --root . --output /tmp/s11-public-source-temporal-detail
 ```
 
 The renderer refuses to overwrite an existing output directory. A future download

@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
-**Next transition:** [scene-based evaluation](../30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract) remains adopted; the material-domain A/B choice is suspended. The [P5-S3 result](../50-diagnostics/s11/2026-10-12-p5-extremal-regions.md) passed synthetic reachability but missed both fixed real Foam positives, closing before the broader comparison. The [new public compressor source intake](../50-diagnostics/s11/2026-10-12-public-compressor-source.md) now has closed regional judgments near 50 s: bright-layer upper = Foam upper, lower = Oil upper. The [fixed current-frame check](../50-diagnostics/s11/2026-10-12-public-compressor-source.md#fixed-result-and-remaining-position-review) now retains lower Oil alternatives while selecting an upper-region current Oil value at both native/half resolution; both NONE/FULL pairs agree. Fresh Foam persistence pending is not an episode miss. The user confirmed both [fixed-column position ranges](../50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.json). The saved native join retains Foam-range edges Y332/336 and Oil-range edges Y428/431/433; current Oil Y321 and spatial Foam front Y317 miss their respective intervals. All source-role/position questions are CLOSED. Next assess a distinct observable role cue before freezing any P2/P5-a successor; no successor is implementation-ready. Typed Witness consumption requires O2/V5 Windows shadow, then separate O3; integrated field qualification remains later. P2-S1/P5-S2/P5-S3 remain CLOSED WITHOUT PROMOTION. Local XY OFF / O2 OPEN / FIELD FAIL remain; no unchanged-detector Windows run is requested.
+**Next transition:** All role/position questions for the [new public compressor source](../50-diagnostics/s11/2026-10-12-public-compressor-source.md) are CLOSED. Its reviewed native join locates Oil selection and Foam component-front failures despite retained interval-compatible edges; the bounded temporal-detail screen does not qualify a new cell-change observation. Next is a distinct, supported P2/P5-a role-observation preflight under the adopted [scene-based evaluation](../30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract). No successor is implementation-ready; P2-S1/P5-S2/P5-S3 remain CLOSED WITHOUT PROMOTION. Typed Witness consumption requires O2/V5 Windows shadow, then separate O3; integrated field qualification remains later. Local XY OFF / O2 OPEN / FIELD FAIL remain, with no unchanged-detector Windows run requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -165,7 +165,14 @@ containment intervals, not exact pixels or holdout. Reuse this causal distinctio
 when assessing the next role observation; it does not reopen S3, authorize a
 component-extreme replacement or justify episode relaxation. Existing water/sample4
 controls, sample3 retirement and all closed-model dispositions remain. No sequence
-acceptance, resolution floor, eligible successor or Windows handoff follows.
+acceptance, resolution floor, eligible successor or Windows handoff follows. The
+[subsequent temporal-detail screen](../50-diagnostics/s11/2026-10-12-public-compressor-source.md#bounded-temporal-detail-feasibility-screen)
+retains 31 consecutive native crops around the anchor and closes its bounded
+source inspection. The five preselected views show changing appearance but do
+not establish a resolved cell-merger/disappearance event or a role operation.
+This is a design limit, not absence of physical events or impossibility of passive
+video. All source judgments stay closed; no new user/Windows action is requested.
+A successor still needs distinct supported information before execution.
 
 ### Source and truth qualification before the next experiment
 
