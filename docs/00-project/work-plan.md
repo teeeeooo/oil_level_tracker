@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
-**Next transition:** All role/position questions for the [new public compressor source](../50-diagnostics/s11/2026-10-12-public-compressor-source.md) are CLOSED. Its reviewed native join locates Oil selection and Foam component-front failures despite retained interval-compatible edges; the bounded temporal-detail screen does not qualify a new cell-change observation. Next is the frozen three-frame application-pipeline linkage for that source, closing the static-learning/completed-window/publication gap before choosing a distinct P2/P5-a operation under the adopted [scene-based evaluation](../30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract). No successor is implementation-ready; P2-S1/P5-S2/P5-S3 remain CLOSED WITHOUT PROMOTION. Typed Witness consumption requires O2/V5 Windows shadow, then separate O3; integrated field qualification remains later. Local XY OFF / O2 OPEN / FIELD FAIL remain, with no unchanged-detector Windows run requested.
+**Next transition:** The [new public compressor source](../50-diagnostics/s11/2026-10-12-public-compressor-source.md#bounded-application-pipeline-linkage) now has a verified three-frame application/CSV/report-model join: at the reviewed anchor Oil ends at Y288 outside its interval, while the already incorrect raw Foam Y317 is rejected by completed formation. Prioritize a distinct P2 operation against false Oil anchor admission; P5-a raw-front identity remains independent. All source questions are CLOSED, and no successor is implementation-ready. P2-S1/P5-S2/P5-S3 remain CLOSED WITHOUT PROMOTION. Typed Witness consumption requires O2/V5 Windows shadow, then separate O3; integrated field qualification remains later. Local XY OFF / O2 OPEN / FIELD FAIL remain; no unchanged-detector Windows run is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -63,7 +63,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | P3 / D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | P4 / D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
-| Foam front / episode | P5 source-position/default linkage VERIFIED; P5-S2/S3 CLOSED WITHOUT PROMOTION; physical selection OPEN | P0 scene-role mapping adopted; P5-a role feasibility is independent of Oil/P2. New public-source upper Foam/lower Oil roles are closed regionally; current-frame representation and reviewed-range joins verified; all source questions closed. Oil lower observations survive selection; Foam component front misses before temporal publication. P5-b requires demonstrated role evidence, default linkage and its own behavior acceptance; P5-c opens only for a correct raw front lost downstream. | [S3 result](../50-diagnostics/s11/2026-10-12-p5-extremal-regions.md), [public-source intake](../50-diagnostics/s11/2026-10-12-public-compressor-source.md), [P5-a design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption) |
+| Foam front / episode | P5 source-position/default linkage VERIFIED; P5-S2/S3 CLOSED WITHOUT PROMOTION; physical selection OPEN | P0 scene-role mapping adopted; P5-a role feasibility is independent of Oil/P2. New public-source upper Foam/lower Oil roles are closed regionally; current-frame representation and reviewed-range joins verified; all source questions closed. Oil lower observations survive but completed anchor admission promotes an upper candidate; Foam component front misses before temporal publication. Verified bounded application linkage supplies the next counterexample. P5-b requires demonstrated role evidence, default linkage and its own behavior acceptance; P5-c opens only for a correct raw front lost downstream. | [S3 result](../50-diagnostics/s11/2026-10-12-p5-extremal-regions.md), [public-source intake](../50-diagnostics/s11/2026-10-12-public-compressor-source.md), [P5-a design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption) |
 | W7 / O5 field qualification | PENDING integrated candidate | P6 / D6: exact runtime, all nine canonical segments, existing report and target resources | [Field gate](../30-validation/s11-interface-observability-witness-validation.md#field-qualification) |
 | Report adjuncts | Source context and episode-source review ADOPTED | Reuse existing report; comprehension and numerical identity remain separate unresolved outcomes | [Source context](../60-evidence/s11/2026-10-07-report-source-context-validation.md), [episode review](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
 | D0 planning intake | Prior packages and the October 11 direction-decision package preserved/reviewed | Planning baseline only; no detector or field acceptance. Current proposal and qualifications are in the existing design/validation owners. | [Direction intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md), [prior audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md), [P1 program integration](../60-evidence/s11/2026-10-11-program-intake.md), earlier intakes above |
@@ -140,39 +140,32 @@ independent verifier and 31 focused tests pass, with all 221 production Python
 files unchanged. Neither a threshold rescue nor the new source reopens S3.
 
 The [public compressor intake](../50-diagnostics/s11/2026-10-12-public-compressor-source.md)
-adds an exposed regional Foam positive from a separately acquired public video,
-outside the frozen seven-source [P0 roster](../50-diagnostics/s11/2026-10-12-scene-evaluation-roster.json).
-Its original local bytes, native 50 s frame and 12-view context are pinned. The
-user confirmed the bright layer's upper boundary as Foam and lower boundary as
-Oil; both source-role questions are CLOSED. The later “두 범위 모두 맞음” reply
-also closes Foam rows323–338 and Oil rows421–435 at native X578/frame1499.
-Unique pixels and adjacent times remain unqualified. Camera movement, zoom and
-slides prevent treating the whole recording
-as one fixed-Recipe physical benchmark. The four-call check retains 43 total
-candidates and 21 visible-center queries with NONE/FULL equality and 221 unchanged
-production files. Native Oil Y321 and half projected Y322.5 are upper-region
-current selections despite retained lower alternatives; native lower ambiguity
-and half lower non-selection are distinct. Fresh Foam pending is not an episode
-miss. The [saved reviewed-range join](../50-diagnostics/s11/2026-10-12-public-compressor-source.md#qualified-ranges-joined-to-saved-observations)
-retains native center edges Y332/336 in Foam A and Y428/431/433 in Oil B.
-Current Oil Y321 misses its interval by at least 99.5 px; spatial Foam front Y317
-misses by at least 5.5 px before publication. Oil lower alternatives survive;
-Foam A is inside a larger appearance component whose first center support is also
-Y317. Candidate medians and pooled center-sector paths remain distinct from
-certified fixed-X contours. Half X578.5 is not numerically scored against X578 truth.
-All role/position questions are closed and must not be repeated. These are exposed
-containment intervals, not exact pixels or holdout. Reuse this causal distinction
-when assessing the next role observation; it does not reopen S3, authorize a
-component-extreme replacement or justify episode relaxation. Existing water/sample4
-controls, sample3 retirement and all closed-model dispositions remain. No sequence
-acceptance, resolution floor, eligible successor or Windows handoff follows. The
-[subsequent temporal-detail screen](../50-diagnostics/s11/2026-10-12-public-compressor-source.md#bounded-temporal-detail-feasibility-screen)
-retains 31 consecutive native crops around the anchor and closes its bounded
-source inspection. The five preselected views show changing appearance but do
-not establish a resolved cell-merger/disappearance event or a role operation.
-This is a design limit, not absence of physical events or impossibility of passive
-video. All source judgments stay closed; no new user/Windows action is requested.
-A successor still needs distinct supported information before execution.
+is exposed development evidence outside the frozen seven-source P0 roster. The
+user confirmed upper Foam/lower Oil roles and native f1499/X578 containment ranges
+(Foam rows323–338, Oil rows421–435); all role/position questions are CLOSED. These
+are not exact pixels, holdout or neighboring-frame labels. Camera movement and
+scene changes preclude a whole-video fixed Recipe. Native center edges survive
+in both intervals, but isolated Oil selects Y321 and Foam reduces a larger
+appearance component to Y317. Half X578.5 is not scored against X578 truth.
+The bounded 31-frame source screen does not establish a resolved cell-change
+observation and supplies no successor operation.
+
+The [application linkage](../50-diagnostics/s11/2026-10-12-public-compressor-source.md#bounded-application-pipeline-linkage)
+now runs the existing pipeline at default 2Hz on the already retained one-second
+window with controlled UNKNOWN_REVIEW initialization and unchanged geometry.
+All three raw/completed/tracking records, report models and normalized CSVs agree
+between NONE/FULL; all 72 candidate lineages and 221 unchanged production files
+are verified. At the reviewed anchor, completed Oil promotes material_path Y288
+through corroborated anchor authority, farther from the interval than current
+Y321; retained lower candidates remain unadmitted. Foam current Y317 is published
+then rejected by completed formation, but it was already outside the interval.
+This prioritizes **false Oil anchor admission** for the next distinct P2 design;
+P5-a independently needs a correct raw front, and P5-c remains unopened. A proposal
+must distinguish upper and lower observations with supported physical information
+and preserve existing controls; a cost/threshold/authority-order rescue is not
+ready. No continuous-episode, operational-judgment, HTML/UI, O2 or field acceptance
+follows. Local work remains authorized; neither another source answer nor a
+Windows run is needed at this checkpoint.
 
 ### Source and truth qualification before the next experiment
 

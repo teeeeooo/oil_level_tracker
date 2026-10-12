@@ -971,6 +971,10 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.png](50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.png) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/pipeline-preflight.json](50-diagnostics/s11/2026-10-12-public-compressor-source/pipeline-preflight.json) | 새 공개 영상의 3프레임 실제 파이프라인 연결 사전 고정 및 실행 어댑터 |
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/replay_pipeline.py](50-diagnostics/s11/2026-10-12-public-compressor-source/replay_pipeline.py) | 새 공개 영상의 3프레임 실제 파이프라인 연결 사전 고정 및 실행 어댑터 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/verify_pipeline.py](50-diagnostics/s11/2026-10-12-public-compressor-source/verify_pipeline.py) | 공개 영상의 실제 분석·최종 후보·CSV 연결 검증과 중복 제거한 원본 진단 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/pipeline-linkage/storage.json](50-diagnostics/s11/2026-10-12-public-compressor-source/pipeline-linkage/storage.json) | 공개 영상의 실제 분석·최종 후보·CSV 연결 검증과 중복 제거한 원본 진단 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/pipeline-linkage/captures.zip](50-diagnostics/s11/2026-10-12-public-compressor-source/pipeline-linkage/captures.zip) | 공개 영상의 실제 분석·최종 후보·CSV 연결 검증과 중복 제거한 원본 진단 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/pipeline-linkage/readout.json](50-diagnostics/s11/2026-10-12-public-compressor-source/pipeline-linkage/readout.json) | 공개 영상의 실제 분석·최종 후보·CSV 연결 검증과 중복 제거한 원본 진단 기록 |
 
 ### 2026-10-12 scene-based evaluation routing
 

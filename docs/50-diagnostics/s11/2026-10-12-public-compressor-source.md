@@ -288,7 +288,7 @@ The renderer refuses to overwrite an existing output directory. A future downloa
 is not assumed to reproduce the same platform encoding; verify the pinned SHA-256
 before decoding. The full downloader metadata remains temporary and untracked.
 
-## Bounded application-pipeline linkage — preflight
+## Bounded application-pipeline linkage
 
 The prior detector checks reinitialized each frame and did not run the application
 pipeline. The [frozen preflight](2026-10-12-public-compressor-source/pipeline-preflight.json)
@@ -313,10 +313,71 @@ No whole-episode, source success rate, HTML/UI, or Windows acceptance follows.
 The frame schedule, geometry and settings are fixed before execution; no rescue
 retuning or window expansion is permitted after the outcome.
 
+The [saved-data verifier](2026-10-12-public-compressor-source/verify_pipeline.py)
+and [readout](2026-10-12-public-compressor-source/pipeline-linkage/readout.json)
+close this bounded linkage. All three raw/completed records, tracking, report
+models and every CSV cell except run ID agree between fresh NONE/FULL processes.
+Each run makes six decodes of the same three source frames; their bytes match
+the retained source readout. The verifier joins all **72 current candidates** by original index and
+all 72 compact completed-trace candidates by verified-unique kind/source/Y tuples;
+the compact completed trace does not contain original candidate indices. It also
+checks all tracking CSV cells against the completed samples and the anchor's
+native crop against the prior isolated capture. All 221 production files remain
+unchanged. The initial verifier assumed the compact trace had raw indices; that
+schema assumption was corrected using saved records without another detector run.
+
+| Native f1499/X578 | Current detection | Completed pipeline / CSV | Qualified interpretation |
+|---|---|---|---|
+| Oil | Y321 | **Y288** | Completed scalar is at least **132.5 px** above Oil B [420.5,435.5]; current scalar distance was 99.5 px. |
+| Foam | Y317, persistence accepted | **Unavailable** | Current front is already 5.5 px above Foam A [322.5,338.5]. A correct raw front is not lost here. |
+| Visible center edges | Foam A: Y332/336; Oil B: Y428/431/433 | No serializer repair | Interval-compatible observations survive; no unique edge identity is inferred. |
+
+Completed Oil chooses original candidate **10**, `material_path` Y288, through
+`corroborated_material_path` anchor authority and the `anchor_corridor` tracklet
+profile. It is still a same-frame candidate, but provenance does not make its
+physical role correct. The interval-compatible lower row contains Y425,430,427,424;
+it remains continuation-only with `ordered_lower_cross_representation` failure,
+and its tracklet is unadmitted (`INSUFFICIENT_NET_PROGRESS`). This is a failure of
+role/admission evidence, not complete loss of lower candidates. The scalar/path
+support is pooled and is not relabeled as a reviewed per-pixel contour.
+
+Foam's selected appearance component remains the same label4/frontY317. Current
+persistence reaches publication at the anchor, then the completed 2-observation
+window rejects it at `formation_witness` / `bounded_stable_front`; the singleton
+window also fails minimum observations. Neither rejection proves an independent
+episode bug: the retained front is already outside the reviewed range, and the
+one-second fixture cannot establish whole-episode efficacy. P5-c remains unopened.
+
+This makes **Oil false anchor admission** the next design priority, while keeping
+Foam raw-front identity as a separate P5-a requirement. Any proposal must explain
+how it distinguishes the saved upper Y288 from lower candidates using new physical
+support and preserves existing controls. Merely lifting lower authority, preferring
+the lowest/nearest row, retuning a threshold or relaxing Foam persistence is not
+a demonstrated repair. No eligible new operation, production change or Windows
+candidate is claimed by this causal check.
+
+NONE work took 0.590 s / 214,925,312 bytes peak RSS; FULL took 1.063 s /
+219,365,376 bytes. The timers include pipeline/capture/CSV/model construction but
+exclude import/font-cache preparation and runtime fingerprinting. No HTML bundle
+was rendered. The [storage manifest](2026-10-12-public-compressor-source/pipeline-linkage/storage.json)
+retains all 95 logical output identities in a [lossless archive](2026-10-12-public-compressor-source/pipeline-linkage/captures.zip)
+with 68 unique payloads (3,396,180 bytes). Equal payloads are stored once; full raw,
+completed, lineage, Foam, report, CSV and trace images remain recoverable. The
+system-Python setup attempt stopped at a missing import before any decode; both
+completed runs used the existing project virtual environment at frozen `4986971`.
+
+Reproduce the frozen runs in fresh directories, then verify the retained archive:
+
+```sh
+MPLCONFIGDIR=/tmp/s11-public-mpl .venv/bin/python docs/50-diagnostics/s11/2026-10-12-public-compressor-source/replay_pipeline.py --root . --level NONE --output /tmp/s11-public-pipeline-none
+MPLCONFIGDIR=/tmp/s11-public-mpl .venv/bin/python docs/50-diagnostics/s11/2026-10-12-public-compressor-source/replay_pipeline.py --root . --level FULL --output /tmp/s11-public-pipeline-full
+.venv/bin/python docs/50-diagnostics/s11/2026-10-12-public-compressor-source/verify_pipeline.py --root . --output /tmp/s11-public-pipeline-verification.json
+```
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `CSV-PUBLICATION`, `TRACE-PUBLICATION`, `RESULT-PRESENTATION`
 - Failure-registry entries: `S11-F02`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: native current-frame Oil selects Y321 outside reviewed Oil rows421–435 despite retained lower observations. The selected Foam appearance component crosses reviewed rows323–338 but reduces to front Y317 before temporal publication. These are interval incompatibilities, not exact contour labels or completed-window results; native lower-hypothesis ambiguity and half-resolution non-selection remain distinct. Fresh Foam persistence pending is not a demonstrated episode failure.
-- Logic-map impact: NONE — reuses the existing video reader for bounded evidence preparation; no production route, geometry policy or selection change.
+- First harmful stage: at reviewed native f1499/X578, current Oil Y321 misses Oil B and the completed pipeline promotes material_path Y288 via corroborated_material_path authority while lower candidates remain unadmitted. Foam appearance-component reduction already chooses Y317 outside Foam A before current persistence accepts it and completed formation rejects it. The bounded sequence now closes the publication join; it does not qualify neighboring positions or an episode repair.
+- Logic-map impact: NONE — existing reader, static preparation, detector, completed resolver, CSV and report-model owners are exercised unchanged; only the controlled diagnostic fixture and saved-data adapter are new.
 - Failure-registry impact: NONE — source/role uncertainty and non-transfer of reviewed truth are already covered; no new field failure or repair is asserted.

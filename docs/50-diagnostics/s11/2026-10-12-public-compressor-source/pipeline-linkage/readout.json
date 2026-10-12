@@ -1,0 +1,3119 @@
+{
+  "schema": "s11-public-source-pipeline-linkage-v1",
+  "preflight_sha256": "c1b5decd755a38138a20575c09c4ae1bdd9707b78f6e574d19f39be6f10543b3",
+  "verifier_sha256": "ccb3b00aa0fd2f9c3f071d0e15544a14d95fae4578ed09527a1de46590200565",
+  "storage_sha256": "e587b75264c5d360da12d57839ed4846d56728dc567e962cd9314f2c02300ab7",
+  "run_summaries": {
+    "NONE": {
+      "schema": "s11-public-source-pipeline-run-v1",
+      "level": "NONE",
+      "execution_head": "49869711a6a53d342b728741c424745d5474ad80",
+      "preflight_sha256": "c1b5decd755a38138a20575c09c4ae1bdd9707b78f6e574d19f39be6f10543b3",
+      "runner_sha256": "96b7b7c6a34f6d3344b4b5e5c175dc8dbb4c766f4d6f38730a2ca9bc436b2c10",
+      "runtime": {
+        "schema": "s11-replay-runtime-provenance-v1",
+        "corpus_access": {
+          "schema": "s11-corpus-access-v1",
+          "restricted_samples": [],
+          "sample3_purpose": null,
+          "physical_acceptance": "NOT_EVALUATED"
+        },
+        "runtime_fingerprint_sha256": "41eb5609f601cf31e6ed3c7025c770b13d3fdd5b111652d76e856636c4709f51",
+        "python_implementation": "CPython",
+        "python_version": "3.14.4",
+        "platform_system": "Darwin",
+        "platform_release": "27.0.0",
+        "platform_machine": "arm64",
+        "opencv_version": "4.14.0",
+        "numpy_version": "2.5.1",
+        "opencv_build_sha256": "c201b5ba726b7370afc3cb0d338454e2964afe1aa907849908b27850ecc043cf",
+        "opencv_videoio": {
+          "FFMPEG": "YES",
+          "avcodec": "YES (61.19.101)",
+          "avformat": "YES (61.7.100)",
+          "avutil": "YES (59.39.100)",
+          "swscale": "YES (8.3.100)",
+          "GStreamer": "NO"
+        },
+        "video_backend": "FFMPEG",
+        "packages": {
+          "opencv-python-headless": "4.14.0.94",
+          "numpy": "2.5.1",
+          "PySide6": "6.11.1",
+          "Jinja2": "3.1.6",
+          "matplotlib": "3.11.1"
+        }
+      },
+      "detector_version": "opencv-phase-detector-r22-3-interface-witness-diagnostics-v1",
+      "rows": 3,
+      "decodes": 6,
+      "production_files_unchanged": 221,
+      "recipe_preserved": true,
+      "pins_preserved": true,
+      "resources": {
+        "elapsed_sec": 0.5900549579964718,
+        "peak_rss_bytes": 214925312,
+        "within_bounds": true
+      },
+      "outputs": {
+        "completed.json": "da90e28ec91de4536799e46cc84e32b86a54b6f732ab12057d057564e8915a7a",
+        "decodes.json": "f0125cfc910ae8a2e4ad5eea4e65578a23185eab74e7192fc965d90fbb308338",
+        "events.csv": "6896cbf57954e14260fefd6785823ac6aa5909e58e7743f216c6a70ba81e1dd8",
+        "foam.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "lineage.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "raw.json": "31e72217e2b386c4aaac012c82503fcf6597b3687bccde2c1c4afa39afcc8347",
+        "recipe.json": "3cead781a89ba942729d2db57c6f609c00b4dbad6216442ff01346e58f773dbf",
+        "report.json": "10b77436104b6afcc8b9686374fd86d2dcfe77e336c130538ea72157be038084",
+        "session.json": "17b0724ec62f634665a5952f03d1aca4a5dd5d1ebadc4a25ebf78394c41fbde8",
+        "tracking.csv": "15b0785ae4b0c9de0766b319158aa9804ee5e19499dece8899d9c9bd73e25b6b",
+        "tracking.json": "bb492d8c1c7130f5d3030fa1ad8fe6b55b7f7c02e20b8f466ba089460271a713"
+      }
+    },
+    "FULL": {
+      "schema": "s11-public-source-pipeline-run-v1",
+      "level": "FULL",
+      "execution_head": "49869711a6a53d342b728741c424745d5474ad80",
+      "preflight_sha256": "c1b5decd755a38138a20575c09c4ae1bdd9707b78f6e574d19f39be6f10543b3",
+      "runner_sha256": "96b7b7c6a34f6d3344b4b5e5c175dc8dbb4c766f4d6f38730a2ca9bc436b2c10",
+      "runtime": {
+        "schema": "s11-replay-runtime-provenance-v1",
+        "corpus_access": {
+          "schema": "s11-corpus-access-v1",
+          "restricted_samples": [],
+          "sample3_purpose": null,
+          "physical_acceptance": "NOT_EVALUATED"
+        },
+        "runtime_fingerprint_sha256": "41eb5609f601cf31e6ed3c7025c770b13d3fdd5b111652d76e856636c4709f51",
+        "python_implementation": "CPython",
+        "python_version": "3.14.4",
+        "platform_system": "Darwin",
+        "platform_release": "27.0.0",
+        "platform_machine": "arm64",
+        "opencv_version": "4.14.0",
+        "numpy_version": "2.5.1",
+        "opencv_build_sha256": "c201b5ba726b7370afc3cb0d338454e2964afe1aa907849908b27850ecc043cf",
+        "opencv_videoio": {
+          "FFMPEG": "YES",
+          "avcodec": "YES (61.19.101)",
+          "avformat": "YES (61.7.100)",
+          "avutil": "YES (59.39.100)",
+          "swscale": "YES (8.3.100)",
+          "GStreamer": "NO"
+        },
+        "video_backend": "FFMPEG",
+        "packages": {
+          "opencv-python-headless": "4.14.0.94",
+          "numpy": "2.5.1",
+          "PySide6": "6.11.1",
+          "Jinja2": "3.1.6",
+          "matplotlib": "3.11.1"
+        }
+      },
+      "detector_version": "opencv-phase-detector-r22-3-interface-witness-diagnostics-v1",
+      "rows": 3,
+      "decodes": 6,
+      "production_files_unchanged": 221,
+      "recipe_preserved": true,
+      "pins_preserved": true,
+      "resources": {
+        "elapsed_sec": 1.0629594580095727,
+        "peak_rss_bytes": 219365376,
+        "within_bounds": true
+      },
+      "outputs": {
+        "completed.json": "da90e28ec91de4536799e46cc84e32b86a54b6f732ab12057d057564e8915a7a",
+        "decodes.json": "f0125cfc910ae8a2e4ad5eea4e65578a23185eab74e7192fc965d90fbb308338",
+        "events.csv": "da206324ea22a9f9e999beeb53cafa973c02647bc3db229db33fd2a2af635993",
+        "foam.json": "81db50536f8106c9dedbbff9d7891ec164703446fa26a6d8d6dd34f75afb2fbc",
+        "lineage.json": "141387601021fe5cafd7be3ca71d82ad424d655bc4bbfe5415f4710524b6731e",
+        "oil-debug-trace-ye6cj7k8/debug_index.json": "977a5007ac06bdcc6417e010650140e7149c770d754997a22ab954cd1fcc7889",
+        "oil-debug-trace-ye6cj7k8/debug_trace.jsonl": "a784554d23337778d85b9d913bae6206a8e5005fa8d59b8711c5f807a94863a2",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/blurred_51dda46d.png": "8d05fb6c378e3d710f0afa970805a9c453c24f0fc283633e10ca48431f78040e",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/canny_147697aa.png": "9e002e76d2420a70e1667c201981c8305faf18f8cbf81c695d584498cd9cd779",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/effective_mask_93e2b9b8.png": "11ee2113a5fd5bc94859d9453ad23fc159e4ffaa8afba1fb4f611a5b75fd5403",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/ellipse_mask_ec603b05.png": "7095fa3ba65193b7b4f89cef02f0db81380873e354aeb0aeb496a8e63fbcacef",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/exclusion_mask_b82c7969.png": "6cab7857633650751eec308ec559a7cc12446c421193d33a32ef7c17bc0fcda8",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/foam_accepted_component_58505b1b.png": "6cab7857633650751eec308ec559a7cc12446c421193d33a32ef7c17bc0fcda8",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/foam_combined_evidence_17dfa098.png": "124761a07934c5d48ecf60f20f72bf5dfc102ea65179f31b61a1ab0453f7acd9",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/foam_component_labels_89feab4d.png": "69037dc833824dd6dec2b488088d87412615a05934c0bdd8359ca4e1aecae558",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/foam_edge_density_01a947b1.png": "d685510f368c895108cb079a87ae548ec1ab29ba7ff309fc49a64563cb5025ae",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/foam_glare_excluded_mask_29dcfa5b.png": "11ee2113a5fd5bc94859d9453ad23fc159e4ffaa8afba1fb4f611a5b75fd5403",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/foam_mask_191cab7b.png": "203b6b20d2f0ce2d86626a6cabff62b8e6f8e0748b550241fe745b96ebc6e301",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/foam_material_support_mask_ff82d7f2.png": "203b6b20d2f0ce2d86626a6cabff62b8e6f8e0748b550241fe745b96ebc6e301",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/foam_texture_evidence_43f6004b.png": "f7db4481930828191c7b2060a1ecba4e9450ce88384e192e58705effd6488c6e",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/foam_variance_01563eac.png": "b1fc00f6ab781faa50b0f7567facc152762cbf58964671c3ecdf110a57ca92c5",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/foam_whiteness_e20ca87c.png": "84e6d7278f4b3adce9dd0cee41f492478af0f6bcafb209d3550f7ea6639c0e95",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/glare_mask_d488b1e6.png": "6cab7857633650751eec308ec559a7cc12446c421193d33a32ef7c17bc0fcda8",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/grayscale_f918a31f.png": "890694425c268f6e2d00d6e0f1b336436c77734bd60c04f205f41083f76ecc14",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/horizontal_mask_e0b5cc74.png": "f51b2bfd0645606dabf8ed6f42ccb89bddee5257a9d737a8f3d7d7883fb535ee",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/normalized_b32b577d.png": "4fb67adc988354bdcc6b1a4fba217214c7bf291b5c24d11fff857d2ca36dfeac",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/original_roi_512ed6ab.png": "a51dd645f6ed7e6c61d7c779c3bc3a9fe91230ba1986d41a70c1351c1e4947f2",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/overlay_b4b33d24.png": "6d91e24610ea7ad327bbbcaa0343495fa9265943a0c912d3ddfce2da54d1a97e",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/sobel_74e6afda.png": "acd1e4539b6e2a6e24d1f52afdf830d5810f599fc38321df5bb443574b0fed8d",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001484_d3b1b74b2d17/static_artifact_map_84db3a2e.png": "c0478d37abf3e46cf8de9b7bb6ba60c065172ded0c66a7488cf82615616d0df5",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/blurred_51dda46d.png": "a5f16e40e0d3d96bcbfcd0195cd114c87d0e5e5de15c7baca20277b08528d50a",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/canny_147697aa.png": "47e2b316c8acaef07e60d025fec31c06a132433744ea5ecdcd74e5fbed0a71e7",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/effective_mask_93e2b9b8.png": "11ee2113a5fd5bc94859d9453ad23fc159e4ffaa8afba1fb4f611a5b75fd5403",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/ellipse_mask_ec603b05.png": "7095fa3ba65193b7b4f89cef02f0db81380873e354aeb0aeb496a8e63fbcacef",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/exclusion_mask_b82c7969.png": "6cab7857633650751eec308ec559a7cc12446c421193d33a32ef7c17bc0fcda8",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/foam_accepted_component_58505b1b.png": "56829416e1919d5fb163cd3fd78765963fa492f87f5ef30738510f5d347d57a0",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/foam_combined_evidence_17dfa098.png": "94e3d542f26285061f62b35e1648f8b689040ee5bce5cfe89825e369a85c6430",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/foam_component_labels_89feab4d.png": "a2d116a2026d27c9ecca66919e21e17746675644fbf1ece14ac6d99af96d7af7",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/foam_edge_density_01a947b1.png": "721e877e2f45e8ebf9168f45825e2cec040c857f7c624a2c0a47905290d27dd7",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/foam_glare_excluded_mask_29dcfa5b.png": "11ee2113a5fd5bc94859d9453ad23fc159e4ffaa8afba1fb4f611a5b75fd5403",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/foam_mask_191cab7b.png": "56829416e1919d5fb163cd3fd78765963fa492f87f5ef30738510f5d347d57a0",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/foam_material_support_mask_ff82d7f2.png": "56829416e1919d5fb163cd3fd78765963fa492f87f5ef30738510f5d347d57a0",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/foam_texture_evidence_43f6004b.png": "6be244ddde1c9e25d9d4ef598967163c3a0577d65e866570e4b52946fe59dfc9",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/foam_variance_01563eac.png": "40223da4bb5fbfe0794c47310862e1365d8f9b790c3f7855f1f1ab6d49671f2a",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/foam_whiteness_e20ca87c.png": "30c674e6117b16a5ae1fac7112cae48b4e254c2d649fccd9543e7697e79ba59e",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/glare_mask_d488b1e6.png": "6cab7857633650751eec308ec559a7cc12446c421193d33a32ef7c17bc0fcda8",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/grayscale_f918a31f.png": "6956fb337b34c88fb2e49b2e3c6b3c5a8cef74c87bc2cef85c517e8a204226c3",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/horizontal_mask_e0b5cc74.png": "feb913d9f4fa79378433570d22644d96b7e9dd376df6c3bdaadc9fc84d469453",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/normalized_b32b577d.png": "dba93dd8d30ea872e13942034055ca58434a75484f3de46d06db68e84212af84",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/original_roi_512ed6ab.png": "425d853ed69af4540ebbf87310a8c9ffe49d5e8f4987756f43c6985a110fc89d",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/overlay_b4b33d24.png": "1d89f025d2141f86e3d0430170a64e2adb8563bb9fa130ff7a619ce5d7836f40",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/sobel_74e6afda.png": "f15cfa84df4a03e0218f2284ca4daa68009b272008beadd8ce0b5b319240f3e6",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001499_40ffdd2ea918/static_artifact_map_84db3a2e.png": "c0478d37abf3e46cf8de9b7bb6ba60c065172ded0c66a7488cf82615616d0df5",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/blurred_51dda46d.png": "091e6ba01b22df3e28c3a76994a4f43c4bf4eb2ac75c51c6268890ecaecc99e2",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/canny_147697aa.png": "8c0fb1dc23f27a2e14d917672a75a4672785c53bbdaca6a2c99adc329eb9922a",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/effective_mask_93e2b9b8.png": "11ee2113a5fd5bc94859d9453ad23fc159e4ffaa8afba1fb4f611a5b75fd5403",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/ellipse_mask_ec603b05.png": "7095fa3ba65193b7b4f89cef02f0db81380873e354aeb0aeb496a8e63fbcacef",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/exclusion_mask_b82c7969.png": "6cab7857633650751eec308ec559a7cc12446c421193d33a32ef7c17bc0fcda8",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/foam_accepted_component_58505b1b.png": "a6a6109186d49fae13296c670bee3b234230e5291c464bcfc316163db484b241",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/foam_combined_evidence_17dfa098.png": "401cdb53d7a352c3ab324cdf11354d7f63dbfeaca2283e0fb29031044db22bcd",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/foam_component_labels_89feab4d.png": "28e9af6ab9c3e86fbedff4a8420cb44e26e18cac8a0eb153bb221272312ac3c2",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/foam_edge_density_01a947b1.png": "82c0c9528076d4ef534d1ba04de2056725c33782d1a6ec23e88d42952809db3e",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/foam_glare_excluded_mask_29dcfa5b.png": "11ee2113a5fd5bc94859d9453ad23fc159e4ffaa8afba1fb4f611a5b75fd5403",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/foam_mask_191cab7b.png": "a6a6109186d49fae13296c670bee3b234230e5291c464bcfc316163db484b241",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/foam_material_support_mask_ff82d7f2.png": "a6a6109186d49fae13296c670bee3b234230e5291c464bcfc316163db484b241",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/foam_texture_evidence_43f6004b.png": "61c90cf9acf6c7c514fdb1d4504eaa9019f6257dbb9df445b7a73a4c246bf02d",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/foam_variance_01563eac.png": "ad4ccc5daf2207ec5ae4772428b3b3b6b10b202b895237ab5aabce7fb07029f2",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/foam_whiteness_e20ca87c.png": "f3695aa189b06f959815fdd59458560a839c80f84b6b833366b65297977b960f",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/glare_mask_d488b1e6.png": "6cab7857633650751eec308ec559a7cc12446c421193d33a32ef7c17bc0fcda8",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/grayscale_f918a31f.png": "9ccecdc97713b12243296d20e0f2274c08f4c07a55e7fb6450fccb44354f8324",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/horizontal_mask_e0b5cc74.png": "f54306286067219a45f684d0f2a36234ec149a09576e09284bafb61143a10313",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/normalized_b32b577d.png": "0c6b9b029c18fe1e49a6beceda5c9647094bef6a88eaf3b8e27c73c2e186dc1a",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/original_roi_512ed6ab.png": "cf3c0a8650b9e5771d0dd33a0df396f121e905ab06a81bca8a400e5f242cb8ba",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/overlay_b4b33d24.png": "0f0d7a9e1785c3ca4a23f74d3f8cef6d20be2121caae9de884b51b72b26d92f1",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/sobel_74e6afda.png": "24b3a5f3c034ddcb54615e1cf044831a9118ad7f773488321c28d795329164c5",
+        "oil-debug-trace-ye6cj7k8/frames/public-source-pipeline-fixture_7d23e14f/f000001514_38bf8ba06e2c/static_artifact_map_84db3a2e.png": "c0478d37abf3e46cf8de9b7bb6ba60c065172ded0c66a7488cf82615616d0df5",
+        "raw.json": "31e72217e2b386c4aaac012c82503fcf6597b3687bccde2c1c4afa39afcc8347",
+        "recipe.json": "3cead781a89ba942729d2db57c6f609c00b4dbad6216442ff01346e58f773dbf",
+        "report.json": "10b77436104b6afcc8b9686374fd86d2dcfe77e336c130538ea72157be038084",
+        "session.json": "62d1d18a6527aa1cfd624cbb50ceecc07017888c1899383ff227e16041677749",
+        "tracking.csv": "6ce4e410b6678126b542b65ed6ddbbd944ab416037e0f772c5e39187e3db4a6a",
+        "tracking.json": "bb492d8c1c7130f5d3030fa1ad8fe6b55b7f7c02e20b8f466ba089460271a713"
+      }
+    }
+  },
+  "equality": {
+    "raw": true,
+    "completed": true,
+    "tracking": true,
+    "report": true,
+    "decodes": true,
+    "recipe": true,
+    "tracking_csv_excluding_run_id": true,
+    "events_csv_excluding_run_id": true
+  },
+  "verification": {
+    "passed": true,
+    "rows": 3,
+    "candidate_joins_current_and_completed": 72,
+    "logical_output_count": 95,
+    "unique_payload_count": 68,
+    "production_files_unchanged": 221,
+    "anchor_native_crop_equal": true,
+    "csv_all_tracking_cells_match": true,
+    "source_decodes_equal": true
+  },
+  "rows": [
+    {
+      "frame_index": 1484,
+      "timestamp_sec": 49.516133333333336,
+      "current_positions": {
+        "raw_oil_y": null,
+        "smoothed_oil_y": null,
+        "raw_foam_y": null,
+        "smoothed_foam_y": null
+      },
+      "completed_positions": {
+        "raw_oil_y": 276.0,
+        "smoothed_oil_y": 276.0,
+        "raw_foam_y": null,
+        "smoothed_foam_y": null
+      },
+      "tracking": {
+        "glass_id": "public-source-pipeline-fixture",
+        "frame_index": 1484,
+        "timestamp_sec": 49.516133333333336,
+        "fill_state": "DRAINING_VISIBLE",
+        "raw_oil_air_level_y": 276.0,
+        "raw_oil_air_level_px_from_zero": 83.0,
+        "raw_oil_air_level_mm_from_zero": null,
+        "smoothed_oil_air_level_px_from_zero": 83.0,
+        "smoothed_oil_air_level_mm_from_zero": null,
+        "oil_air_confidence": 0.5533691740950126,
+        "raw_foam_front_y": null,
+        "raw_foam_front_px_from_zero": null,
+        "raw_foam_front_mm_from_zero": null,
+        "smoothed_foam_front_px_from_zero": null,
+        "smoothed_foam_front_mm_from_zero": null,
+        "foam_confidence": 0.0,
+        "visibility_confidence": 0.45,
+        "overall_confidence": 0.5533691740950126,
+        "is_valid": true,
+        "oil_is_valid": true,
+        "foam_is_valid": false,
+        "flags": [
+          "R17_RESOLVED_OIL",
+          "R17_TRACKLET_WITNESS",
+          "R7_FOAM_UNCONFIRMED",
+          "REVIEW_REQUIRED",
+          "SEQUENCE_RESOLVED_OIL",
+          "SEQUENCE_SAME_FRAME_CANDIDATE"
+        ]
+      },
+      "csv": {
+        "glass_id": "public-source-pipeline-fixture",
+        "frame_index": "1484",
+        "timestamp_sec": "49.516133333333336",
+        "fill_state": "DRAINING_VISIBLE",
+        "raw_oil_air_level_y": "276.0",
+        "raw_oil_air_level_px_from_zero": "83.0",
+        "raw_oil_air_level_mm_from_zero": "",
+        "smoothed_oil_air_level_px_from_zero": "83.0",
+        "smoothed_oil_air_level_mm_from_zero": "",
+        "oil_air_confidence": "0.5533691740950126",
+        "raw_foam_front_y": "",
+        "raw_foam_front_px_from_zero": "",
+        "raw_foam_front_mm_from_zero": "",
+        "smoothed_foam_front_px_from_zero": "",
+        "smoothed_foam_front_mm_from_zero": "",
+        "foam_confidence": "0.0",
+        "visibility_confidence": "0.45",
+        "overall_confidence": "0.5533691740950126",
+        "is_valid": "True",
+        "oil_is_valid": "True",
+        "foam_is_valid": "False",
+        "flags": "R17_RESOLVED_OIL;R17_TRACKLET_WITNESS;R7_FOAM_UNCONFIRMED;REVIEW_REQUIRED;SEQUENCE_RESOLVED_OIL;SEQUENCE_SAME_FRAME_CANDIDATE"
+      },
+      "oil_witness": {
+        "schema_version": "r21-decision-witness-v1",
+        "identity": {
+          "glass_id": "public-source-pipeline-fixture",
+          "frame_index": 1484,
+          "time_sec": 49.516133333333336,
+          "layer": "sequence"
+        },
+        "phase": {
+          "value": "open",
+          "reason": "FILL_EVIDENCE_ACCUMULATING",
+          "owner_chain": [],
+          "allowed_mode": "unconstrained",
+          "allowed_tracklet_ids": null
+        },
+        "routes": {
+          "direct": {
+            "status": "NOT_EVALUATED",
+            "evaluations": []
+          },
+          "recovery": {
+            "status": "NOT_EVALUATED",
+            "evaluations": []
+          },
+          "delayed": {
+            "status": "NOT_EVALUATED",
+            "evaluations": []
+          }
+        },
+        "rows": [
+          {
+            "row_hypothesis_id": "oil-row:000000:004",
+            "tracklet_id": "oil-tracklet:000000:0004",
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 7,
+                "source": "material_path",
+                "y": 413.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 21,
+                "source": "phase_transition_scan",
+                "y": 411.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 14,
+                "source": "calibrated_high_recall",
+                "y": 417.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000000:005",
+            "tracklet_id": "oil-tracklet:000000:0005",
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 9,
+                "source": "material_path",
+                "y": 430.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 22,
+                "source": "phase_transition_scan",
+                "y": 429.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 15,
+                "source": "calibrated_high_recall",
+                "y": 431.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 19,
+                "source": "calibrated_high_recall",
+                "y": 437.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000000:003",
+            "tracklet_id": "oil-tracklet:000000:0003",
+            "phase_admitted": true,
+            "publishable": true,
+            "members": [
+              {
+                "candidate_offset": 13,
+                "source": "distributed_sobel_path",
+                "y": 335.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": true,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000000:001",
+            "tracklet_id": "oil-tracklet:000000:0001",
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 10,
+                "source": "material_path",
+                "y": 295.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "direct_interface",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000000:000",
+            "tracklet_id": "oil-tracklet:000000:0000",
+            "phase_admitted": true,
+            "publishable": true,
+            "members": [
+              {
+                "candidate_offset": 12,
+                "source": "material_path",
+                "y": 276.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "direct_interface",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": true,
+                "selected": true
+              },
+              {
+                "candidate_offset": 11,
+                "source": "material_path",
+                "y": 286.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "direct_interface",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": true,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000000:002",
+            "tracklet_id": "oil-tracklet:000000:0002",
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 0,
+                "source": "oil_hypothesis:546794267820d639c8296c7f",
+                "y": 327.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 20,
+                "source": "phase_transition_scan",
+                "y": 322.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 18,
+                "source": "calibrated_high_recall",
+                "y": 330.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 8,
+                "source": "material_path",
+                "y": 328.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "static_material_front_twin",
+                "phase_identity": "ordered_lower_interface",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000000:006",
+            "tracklet_id": "oil-tracklet:000000:0006",
+            "phase_admitted": true,
+            "publishable": true,
+            "members": [
+              {
+                "candidate_offset": 16,
+                "source": "calibrated_high_recall",
+                "y": 450.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": true,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 2,
+                "source": "oil_hypothesis:29e15b82434e5faf1c1f1ba3",
+                "y": 431.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "insufficient_authority",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          }
+        ],
+        "selection": {
+          "resolved_kind": "oil",
+          "selected_candidate": {
+            "candidate_offset": 12,
+            "source": "material_path",
+            "y": 276.0,
+            "tracklet_id": "oil-tracklet:000000:0000",
+            "row_hypothesis_id": "oil-row:000000:000"
+          }
+        }
+      },
+      "foam_witness": {
+        "schema_version": "r21-decision-witness-v1",
+        "identity": {
+          "glass_id": "public-source-pipeline-fixture",
+          "frame_index": 1484,
+          "time_sec": 49.516133333333336,
+          "layer": "sequence_foam"
+        },
+        "candidate": {
+          "candidate_offset": 23,
+          "source": "foam_evidence",
+          "y": 314.0
+        },
+        "track": {
+          "eligible_evidence": true,
+          "track_id": "foam-track:0000",
+          "track_first_frame": 0,
+          "track_last_frame": 2
+        },
+        "windows": {
+          "evaluation_count": 0,
+          "truncated": false,
+          "evaluations": []
+        },
+        "outcome": {
+          "confirmed": false,
+          "static_rejected": false,
+          "unconfirmed_rejected": true,
+          "oil_alias_rejected": false
+        }
+      }
+    },
+    {
+      "frame_index": 1499,
+      "timestamp_sec": 50.01663333333334,
+      "current_positions": {
+        "raw_oil_y": 321.0,
+        "smoothed_oil_y": 321.0,
+        "raw_foam_y": 317.0,
+        "smoothed_foam_y": 317.0
+      },
+      "completed_positions": {
+        "raw_oil_y": 288.0,
+        "smoothed_oil_y": 288.0,
+        "raw_foam_y": null,
+        "smoothed_foam_y": null
+      },
+      "tracking": {
+        "glass_id": "public-source-pipeline-fixture",
+        "frame_index": 1499,
+        "timestamp_sec": 50.01663333333334,
+        "fill_state": "DRAINING_VISIBLE",
+        "raw_oil_air_level_y": 288.0,
+        "raw_oil_air_level_px_from_zero": 71.0,
+        "raw_oil_air_level_mm_from_zero": null,
+        "smoothed_oil_air_level_px_from_zero": 71.0,
+        "smoothed_oil_air_level_mm_from_zero": null,
+        "oil_air_confidence": 0.869676162760976,
+        "raw_foam_front_y": null,
+        "raw_foam_front_px_from_zero": null,
+        "raw_foam_front_mm_from_zero": null,
+        "smoothed_foam_front_px_from_zero": null,
+        "smoothed_foam_front_mm_from_zero": null,
+        "foam_confidence": 0.0,
+        "visibility_confidence": 1.0,
+        "overall_confidence": 0.869676162760976,
+        "is_valid": true,
+        "oil_is_valid": true,
+        "foam_is_valid": false,
+        "flags": [
+          "R17_RESOLVED_OIL",
+          "R17_TRACKLET_WITNESS",
+          "R7_FOAM_UNCONFIRMED",
+          "SEQUENCE_RESOLVED_OIL",
+          "SEQUENCE_SAME_FRAME_CANDIDATE"
+        ]
+      },
+      "csv": {
+        "glass_id": "public-source-pipeline-fixture",
+        "frame_index": "1499",
+        "timestamp_sec": "50.01663333333334",
+        "fill_state": "DRAINING_VISIBLE",
+        "raw_oil_air_level_y": "288.0",
+        "raw_oil_air_level_px_from_zero": "71.0",
+        "raw_oil_air_level_mm_from_zero": "",
+        "smoothed_oil_air_level_px_from_zero": "71.0",
+        "smoothed_oil_air_level_mm_from_zero": "",
+        "oil_air_confidence": "0.869676162760976",
+        "raw_foam_front_y": "",
+        "raw_foam_front_px_from_zero": "",
+        "raw_foam_front_mm_from_zero": "",
+        "smoothed_foam_front_px_from_zero": "",
+        "smoothed_foam_front_mm_from_zero": "",
+        "foam_confidence": "0.0",
+        "visibility_confidence": "1.0",
+        "overall_confidence": "0.869676162760976",
+        "is_valid": "True",
+        "oil_is_valid": "True",
+        "foam_is_valid": "False",
+        "flags": "R17_RESOLVED_OIL;R17_TRACKLET_WITNESS;R7_FOAM_UNCONFIRMED;SEQUENCE_RESOLVED_OIL;SEQUENCE_SAME_FRAME_CANDIDATE"
+      },
+      "oil_witness": {
+        "schema_version": "r21-decision-witness-v1",
+        "identity": {
+          "glass_id": "public-source-pipeline-fixture",
+          "frame_index": 1499,
+          "time_sec": 50.01663333333334,
+          "layer": "sequence"
+        },
+        "phase": {
+          "value": "open",
+          "reason": "FILL_EVIDENCE_ACCUMULATING",
+          "owner_chain": [],
+          "allowed_mode": "unconstrained",
+          "allowed_tracklet_ids": null
+        },
+        "routes": {
+          "direct": {
+            "status": "NOT_EVALUATED",
+            "evaluations": []
+          },
+          "recovery": {
+            "status": "NOT_EVALUATED",
+            "evaluations": []
+          },
+          "delayed": {
+            "status": "NOT_EVALUATED",
+            "evaluations": []
+          }
+        },
+        "rows": [
+          {
+            "row_hypothesis_id": "oil-row:000001:001",
+            "tracklet_id": "oil-tracklet:000000:0002",
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 8,
+                "source": "material_path",
+                "y": 327.0,
+                "authority": "ANCHOR_ELIGIBLE",
+                "authority_reason": "ordered_lower_interface",
+                "phase_identity": "ordered_lower_interface",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 12,
+                "source": "distributed_sobel_path",
+                "y": 329.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 3,
+                "source": "oil_hypothesis:c23386064a09441cde198853",
+                "y": 321.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 17,
+                "source": "calibrated_high_recall",
+                "y": 329.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 16,
+                "source": "calibrated_high_recall",
+                "y": 322.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000001:000",
+            "tracklet_id": "oil-tracklet:000000:0000",
+            "phase_admitted": true,
+            "publishable": true,
+            "members": [
+              {
+                "candidate_offset": 10,
+                "source": "material_path",
+                "y": 288.0,
+                "authority": "ANCHOR_ELIGIBLE",
+                "authority_reason": "corroborated_material_path",
+                "phase_identity": "direct_interface",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": true,
+                "selected": true
+              },
+              {
+                "candidate_offset": 11,
+                "source": "material_path",
+                "y": 279.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "direct_interface",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": true,
+                "selected": false
+              },
+              {
+                "candidate_offset": 1,
+                "source": "oil_hypothesis:74b6fa1fa2b941fce427d2cb",
+                "y": 277.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": true,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000001:003",
+            "tracklet_id": "oil-tracklet:000000:0005",
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 9,
+                "source": "material_path",
+                "y": 425.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 5,
+                "source": "oil_hypothesis:3432f2f8d2857eb7e3ece453",
+                "y": 430.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 13,
+                "source": "calibrated_high_recall",
+                "y": 427.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 20,
+                "source": "phase_transition_scan",
+                "y": 424.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000001:004",
+            "tracklet_id": "oil-tracklet:000000:0006",
+            "phase_admitted": true,
+            "publishable": true,
+            "members": [
+              {
+                "candidate_offset": 21,
+                "source": "phase_transition_scan",
+                "y": 441.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": true,
+                "selected": false
+              },
+              {
+                "candidate_offset": 14,
+                "source": "calibrated_high_recall",
+                "y": 442.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": true,
+                "selected": false
+              },
+              {
+                "candidate_offset": 15,
+                "source": "calibrated_high_recall",
+                "y": 450.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": true,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000001:002",
+            "tracklet_id": "oil-tracklet:000000:0003",
+            "phase_admitted": true,
+            "publishable": true,
+            "members": [
+              {
+                "candidate_offset": 18,
+                "source": "calibrated_high_recall",
+                "y": 335.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": true,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 6,
+                "source": "oil_hypothesis:5bb106a2546f87e2254ea224",
+                "y": 443.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "insufficient_authority",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          }
+        ],
+        "selection": {
+          "resolved_kind": "oil",
+          "selected_candidate": {
+            "candidate_offset": 10,
+            "source": "material_path",
+            "y": 288.0,
+            "tracklet_id": "oil-tracklet:000000:0000",
+            "row_hypothesis_id": "oil-row:000001:000"
+          }
+        }
+      },
+      "foam_witness": {
+        "schema_version": "r21-decision-witness-v1",
+        "identity": {
+          "glass_id": "public-source-pipeline-fixture",
+          "frame_index": 1499,
+          "time_sec": 50.01663333333334,
+          "layer": "sequence_foam"
+        },
+        "candidate": {
+          "candidate_offset": 22,
+          "source": "foam_evidence",
+          "y": 317.0
+        },
+        "track": {
+          "eligible_evidence": true,
+          "track_id": "foam-track:0000",
+          "track_first_frame": 0,
+          "track_last_frame": 2
+        },
+        "windows": {
+          "evaluation_count": 2,
+          "truncated": false,
+          "evaluations": [
+            {
+              "segment_id": "foam-track:0000:segment:000:window:000",
+              "first_frame": 1,
+              "last_frame": 2,
+              "window_span_frame_offsets": 1,
+              "window_span_seconds": 0.5004999999999953,
+              "aliases_oil": false,
+              "passed": false,
+              "first_failed_predicate": "formation_witness",
+              "predicates": [
+                {
+                  "name": "minimum_observations",
+                  "status": "true"
+                },
+                {
+                  "name": "static_artifact_clear",
+                  "status": "true"
+                },
+                {
+                  "name": "material_support",
+                  "status": "true"
+                },
+                {
+                  "name": "coherent_ratio",
+                  "status": "true"
+                },
+                {
+                  "name": "dynamic_support",
+                  "status": "true"
+                },
+                {
+                  "name": "dynamic_frames",
+                  "status": "true"
+                },
+                {
+                  "name": "dynamic_frame_ratio",
+                  "status": "true"
+                },
+                {
+                  "name": "formation_witness",
+                  "status": "false"
+                }
+              ],
+              "formation": {
+                "passed": false,
+                "branch": null,
+                "dynamic_observation_count": 2,
+                "first_failed_predicate": "bounded_stable_front",
+                "predicates": [
+                  {
+                    "name": "stable_observation_support",
+                    "status": "true"
+                  },
+                  {
+                    "name": "bounded_stable_front",
+                    "status": "false"
+                  },
+                  {
+                    "name": "extent_evolution",
+                    "status": "true"
+                  }
+                ]
+              }
+            },
+            {
+              "segment_id": "foam-track:0000:segment:000:window:001",
+              "first_frame": 1,
+              "last_frame": 1,
+              "window_span_frame_offsets": 0,
+              "window_span_seconds": 0.0,
+              "aliases_oil": false,
+              "passed": false,
+              "first_failed_predicate": "minimum_observations",
+              "predicates": [
+                {
+                  "name": "minimum_observations",
+                  "status": "false"
+                },
+                {
+                  "name": "static_artifact_clear",
+                  "status": "true"
+                },
+                {
+                  "name": "material_support",
+                  "status": "true"
+                },
+                {
+                  "name": "coherent_ratio",
+                  "status": "true"
+                },
+                {
+                  "name": "dynamic_support",
+                  "status": "true"
+                },
+                {
+                  "name": "dynamic_frames",
+                  "status": "false"
+                },
+                {
+                  "name": "dynamic_frame_ratio",
+                  "status": "true"
+                },
+                {
+                  "name": "formation_witness",
+                  "status": "false"
+                }
+              ],
+              "formation": {
+                "passed": false,
+                "branch": null,
+                "dynamic_observation_count": 0,
+                "first_failed_predicate": "minimum_observations",
+                "predicates": [
+                  {
+                    "name": "minimum_observations",
+                    "status": "false"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "outcome": {
+          "confirmed": false,
+          "static_rejected": false,
+          "unconfirmed_rejected": true,
+          "oil_alias_rejected": false
+        }
+      }
+    },
+    {
+      "frame_index": 1514,
+      "timestamp_sec": 50.517133333333334,
+      "current_positions": {
+        "raw_oil_y": null,
+        "smoothed_oil_y": null,
+        "raw_foam_y": 329.0,
+        "smoothed_foam_y": 329.0
+      },
+      "completed_positions": {
+        "raw_oil_y": 282.0,
+        "smoothed_oil_y": 282.0,
+        "raw_foam_y": null,
+        "smoothed_foam_y": null
+      },
+      "tracking": {
+        "glass_id": "public-source-pipeline-fixture",
+        "frame_index": 1514,
+        "timestamp_sec": 50.517133333333334,
+        "fill_state": "FILLING_VISIBLE",
+        "raw_oil_air_level_y": 282.0,
+        "raw_oil_air_level_px_from_zero": 77.0,
+        "raw_oil_air_level_mm_from_zero": null,
+        "smoothed_oil_air_level_px_from_zero": 77.0,
+        "smoothed_oil_air_level_mm_from_zero": null,
+        "oil_air_confidence": 0.9526806950830744,
+        "raw_foam_front_y": null,
+        "raw_foam_front_px_from_zero": null,
+        "raw_foam_front_mm_from_zero": null,
+        "smoothed_foam_front_px_from_zero": null,
+        "smoothed_foam_front_mm_from_zero": null,
+        "foam_confidence": 0.0,
+        "visibility_confidence": 1.0,
+        "overall_confidence": 0.9526806950830744,
+        "is_valid": true,
+        "oil_is_valid": true,
+        "foam_is_valid": false,
+        "flags": [
+          "R17_RESOLVED_OIL",
+          "R17_TRACKLET_CONFIRMED",
+          "R7_FOAM_UNCONFIRMED",
+          "SEQUENCE_RESOLVED_OIL",
+          "SEQUENCE_SAME_FRAME_CANDIDATE"
+        ]
+      },
+      "csv": {
+        "glass_id": "public-source-pipeline-fixture",
+        "frame_index": "1514",
+        "timestamp_sec": "50.517133333333334",
+        "fill_state": "FILLING_VISIBLE",
+        "raw_oil_air_level_y": "282.0",
+        "raw_oil_air_level_px_from_zero": "77.0",
+        "raw_oil_air_level_mm_from_zero": "",
+        "smoothed_oil_air_level_px_from_zero": "77.0",
+        "smoothed_oil_air_level_mm_from_zero": "",
+        "oil_air_confidence": "0.9526806950830744",
+        "raw_foam_front_y": "",
+        "raw_foam_front_px_from_zero": "",
+        "raw_foam_front_mm_from_zero": "",
+        "smoothed_foam_front_px_from_zero": "",
+        "smoothed_foam_front_mm_from_zero": "",
+        "foam_confidence": "0.0",
+        "visibility_confidence": "1.0",
+        "overall_confidence": "0.9526806950830744",
+        "is_valid": "True",
+        "oil_is_valid": "True",
+        "foam_is_valid": "False",
+        "flags": "R17_RESOLVED_OIL;R17_TRACKLET_CONFIRMED;R7_FOAM_UNCONFIRMED;SEQUENCE_RESOLVED_OIL;SEQUENCE_SAME_FRAME_CANDIDATE"
+      },
+      "oil_witness": {
+        "schema_version": "r21-decision-witness-v1",
+        "identity": {
+          "glass_id": "public-source-pipeline-fixture",
+          "frame_index": 1514,
+          "time_sec": 50.517133333333334,
+          "layer": "sequence"
+        },
+        "phase": {
+          "value": "open",
+          "reason": "FILL_EVIDENCE_ACCUMULATING",
+          "owner_chain": [],
+          "allowed_mode": "unconstrained",
+          "allowed_tracklet_ids": null
+        },
+        "routes": {
+          "direct": {
+            "status": "NOT_EVALUATED",
+            "evaluations": []
+          },
+          "recovery": {
+            "status": "NOT_EVALUATED",
+            "evaluations": []
+          },
+          "delayed": {
+            "status": "NOT_EVALUATED",
+            "evaluations": []
+          }
+        },
+        "rows": [
+          {
+            "row_hypothesis_id": "oil-row:000002:001",
+            "tracklet_id": "oil-tracklet:000000:0001",
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 11,
+                "source": "material_path",
+                "y": 290.0,
+                "authority": "ANCHOR_ELIGIBLE",
+                "authority_reason": "corroborated_material_path",
+                "phase_identity": "direct_interface",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              },
+              {
+                "candidate_offset": 14,
+                "source": "distributed_sobel_path",
+                "y": 298.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "direct_interface",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000002:000",
+            "tracklet_id": "oil-tracklet:000000:0000",
+            "phase_admitted": true,
+            "publishable": true,
+            "members": [
+              {
+                "candidate_offset": 13,
+                "source": "raster_material_path",
+                "y": 282.0,
+                "authority": "ANCHOR_ELIGIBLE",
+                "authority_reason": "corroborated_material_path",
+                "phase_identity": "direct_interface",
+                "tracklet_lifecycle": "confirmed",
+                "tracklet_admitted": true,
+                "selected": true
+              },
+              {
+                "candidate_offset": 1,
+                "source": "oil_hypothesis:203d052eb0b0989dd4a68078",
+                "y": 275.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "confirmed",
+                "tracklet_admitted": true,
+                "selected": false
+              },
+              {
+                "candidate_offset": 2,
+                "source": "oil_hypothesis:c6d070a50a3ae9502bb513e7",
+                "y": 287.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "confirmed",
+                "tracklet_admitted": true,
+                "selected": false
+              },
+              {
+                "candidate_offset": 18,
+                "source": "calibrated_high_recall",
+                "y": 276.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "confirmed",
+                "tracklet_admitted": true,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000002:003",
+            "tracklet_id": "oil-tracklet:000000:0006",
+            "phase_admitted": true,
+            "publishable": true,
+            "members": [
+              {
+                "candidate_offset": 10,
+                "source": "material_path",
+                "y": 435.0,
+                "authority": "CONTINUATION_ELIGIBLE",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "confirmed",
+                "tracklet_admitted": true,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 9,
+                "source": "material_path",
+                "y": 342.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 12,
+                "source": "material_path",
+                "y": 273.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": "oil-row:000002:002",
+            "tracklet_id": "oil-tracklet:000000:0003",
+            "phase_admitted": true,
+            "publishable": true,
+            "members": [
+              {
+                "candidate_offset": 22,
+                "source": "phase_transition_scan",
+                "y": 341.0,
+                "authority": "ANCHOR_ELIGIBLE",
+                "authority_reason": "ordered_lower_interface",
+                "phase_identity": "ordered_lower_interface",
+                "tracklet_lifecycle": "confirmed",
+                "tracklet_admitted": true,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 19,
+                "source": "calibrated_high_recall",
+                "y": 343.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "ordered_lower_interface",
+                "phase_identity": "ordered_lower_interface",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 21,
+                "source": "phase_transition_scan",
+                "y": 274.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 23,
+                "source": "phase_transition_scan",
+                "y": 428.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 15,
+                "source": "calibrated_high_recall",
+                "y": 267.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 16,
+                "source": "calibrated_high_recall",
+                "y": 434.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 17,
+                "source": "calibrated_high_recall",
+                "y": 450.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          },
+          {
+            "row_hypothesis_id": null,
+            "tracklet_id": null,
+            "phase_admitted": false,
+            "publishable": false,
+            "members": [
+              {
+                "candidate_offset": 4,
+                "source": "oil_hypothesis:05478dd9388969ff4efb1ae1",
+                "y": 340.0,
+                "authority": "CANDIDATE_ONLY",
+                "authority_reason": "continuation",
+                "phase_identity": "continuation_only",
+                "tracklet_lifecycle": "provisional",
+                "tracklet_admitted": false,
+                "selected": false
+              }
+            ]
+          }
+        ],
+        "selection": {
+          "resolved_kind": "oil",
+          "selected_candidate": {
+            "candidate_offset": 13,
+            "source": "raster_material_path",
+            "y": 282.0,
+            "tracklet_id": "oil-tracklet:000000:0000",
+            "row_hypothesis_id": "oil-row:000002:000"
+          }
+        }
+      },
+      "foam_witness": {
+        "schema_version": "r21-decision-witness-v1",
+        "identity": {
+          "glass_id": "public-source-pipeline-fixture",
+          "frame_index": 1514,
+          "time_sec": 50.517133333333334,
+          "layer": "sequence_foam"
+        },
+        "candidate": {
+          "candidate_offset": 24,
+          "source": "foam_evidence",
+          "y": 329.0
+        },
+        "track": {
+          "eligible_evidence": true,
+          "track_id": "foam-track:0000",
+          "track_first_frame": 0,
+          "track_last_frame": 2
+        },
+        "windows": {
+          "evaluation_count": 1,
+          "truncated": false,
+          "evaluations": [
+            {
+              "segment_id": "foam-track:0000:segment:000:window:000",
+              "first_frame": 1,
+              "last_frame": 2,
+              "window_span_frame_offsets": 1,
+              "window_span_seconds": 0.5004999999999953,
+              "aliases_oil": false,
+              "passed": false,
+              "first_failed_predicate": "formation_witness",
+              "predicates": [
+                {
+                  "name": "minimum_observations",
+                  "status": "true"
+                },
+                {
+                  "name": "static_artifact_clear",
+                  "status": "true"
+                },
+                {
+                  "name": "material_support",
+                  "status": "true"
+                },
+                {
+                  "name": "coherent_ratio",
+                  "status": "true"
+                },
+                {
+                  "name": "dynamic_support",
+                  "status": "true"
+                },
+                {
+                  "name": "dynamic_frames",
+                  "status": "true"
+                },
+                {
+                  "name": "dynamic_frame_ratio",
+                  "status": "true"
+                },
+                {
+                  "name": "formation_witness",
+                  "status": "false"
+                }
+              ],
+              "formation": {
+                "passed": false,
+                "branch": null,
+                "dynamic_observation_count": 2,
+                "first_failed_predicate": "bounded_stable_front",
+                "predicates": [
+                  {
+                    "name": "stable_observation_support",
+                    "status": "true"
+                  },
+                  {
+                    "name": "bounded_stable_front",
+                    "status": "false"
+                  },
+                  {
+                    "name": "extent_evolution",
+                    "status": "true"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "outcome": {
+          "confirmed": false,
+          "static_rejected": false,
+          "unconfirmed_rejected": true,
+          "oil_alias_rejected": false
+        }
+      }
+    }
+  ],
+  "anchor": {
+    "frame_index": 1499,
+    "source_x": 578,
+    "foam_cell_bounds": [
+      322.5,
+      338.5
+    ],
+    "oil_cell_bounds": [
+      420.5,
+      435.5
+    ],
+    "limits": "Only this reviewed anchor is scored by interval distance. No unique edge, neighboring-frame truth, source pass rate or full episode qualification.",
+    "current_positions": {
+      "raw_oil_y": 321.0,
+      "smoothed_oil_y": 321.0,
+      "raw_foam_y": 317.0,
+      "smoothed_foam_y": 317.0
+    },
+    "completed_positions": {
+      "raw_oil_y": 288.0,
+      "smoothed_oil_y": 288.0,
+      "raw_foam_y": null,
+      "smoothed_foam_y": null
+    },
+    "visible_center_edges": [
+      262,
+      263,
+      314,
+      332,
+      336,
+      428,
+      431,
+      433,
+      436,
+      437,
+      442,
+      448,
+      454
+    ],
+    "compatible_foam_edges": [
+      332,
+      336
+    ],
+    "compatible_oil_edges": [
+      428,
+      431,
+      433
+    ],
+    "current_oil_distance_px": 99.5,
+    "completed_oil_distance_px": 132.5,
+    "current_foam_distance_px": 5.5,
+    "all_candidates": [
+      {
+        "input_index": 0,
+        "kind": "oil_air",
+        "source": "oil_hypothesis:60a187559335f0cfdfc5dd9a",
+        "y": 267.0,
+        "distance_to_reviewed_interval_px": 153.5,
+        "current_selected": false,
+        "current_reject_reason": "typed_ambiguous_hypothesis",
+        "completed_selected": false,
+        "completed_reject_reason": "sequence_candidate_hard_invalid",
+        "sequence_features": {
+          "sequence_eligible": 0.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0
+        }
+      },
+      {
+        "input_index": 1,
+        "kind": "oil_air",
+        "source": "oil_hypothesis:74b6fa1fa2b941fce427d2cb",
+        "y": 277.0,
+        "distance_to_reviewed_interval_px": 143.5,
+        "current_selected": false,
+        "current_reject_reason": "typed_ambiguous_hypothesis",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.6669225698364775,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 1.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "material_support;boundary;boundary_advantage;localized_boundary",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "material_support;boundary;boundary_advantage;localized_boundary",
+          "sequence_ordered_lower": 0.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0000",
+          "sequence_row_hypothesis_id": "oil-row:000001:000",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 1.0,
+          "sequence_tracklet_confirmation_profile": "anchor_corridor",
+          "sequence_tracklet_confirmation_support": 0.7187583725135624,
+          "sequence_tracklet_net_progress_px": 2.0,
+          "sequence_tracklet_direction": -1,
+          "sequence_tracklet_directional_agreement": 1.0,
+          "sequence_tracklet_recent_net_progress_px": 2.0,
+          "sequence_tracklet_recent_direction": -1,
+          "sequence_tracklet_recent_directional_agreement": 1.0,
+          "sequence_tracklet_confirmation_start_frame": 0,
+          "sequence_tracklet_confirmation_end_frame": 2,
+          "sequence_tracklet_confirmation_observation_count": 3,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.4495590717299578,
+          "sequence_tracklet_motion_coverage": 0.6666666666666666,
+          "sequence_tracklet_material_conflict": 0.4119414465273257,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 2,
+        "kind": "oil_air",
+        "source": "oil_hypothesis:b8b8d1a9951feac59d2c4128",
+        "y": 287.0,
+        "distance_to_reviewed_interval_px": 133.5,
+        "current_selected": false,
+        "current_reject_reason": "typed_ambiguous_hypothesis",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0
+        }
+      },
+      {
+        "input_index": 3,
+        "kind": "oil_air",
+        "source": "oil_hypothesis:c23386064a09441cde198853",
+        "y": 321.0,
+        "distance_to_reviewed_interval_px": 99.5,
+        "current_selected": true,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 0.0,
+          "sequence_foam_alias_penalty": 0.33428571428571424,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "boundary_advantage",
+          "sequence_foam_material_identity": 0.19999999999999996,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "boundary_advantage",
+          "sequence_ordered_lower": 0.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0002",
+          "sequence_row_hypothesis_id": "oil-row:000001:001",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 0.0,
+          "sequence_tracklet_confirmation_profile": "none",
+          "sequence_tracklet_confirmation_support": 0.0,
+          "sequence_tracklet_net_progress_px": 0.0,
+          "sequence_tracklet_direction": 0,
+          "sequence_tracklet_directional_agreement": 0.0,
+          "sequence_tracklet_recent_net_progress_px": 0.0,
+          "sequence_tracklet_recent_direction": 0,
+          "sequence_tracklet_recent_directional_agreement": 0.0,
+          "sequence_tracklet_confirmation_start_frame": null,
+          "sequence_tracklet_confirmation_end_frame": null,
+          "sequence_tracklet_confirmation_observation_count": 0,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.0,
+          "sequence_tracklet_motion_coverage": 0.0,
+          "sequence_tracklet_material_conflict": 0.0,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "INSUFFICIENT_NET_PROGRESS",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 4,
+        "kind": "oil_air",
+        "source": "oil_hypothesis:5f06809efd6002a3467e2d3e",
+        "y": 336.5,
+        "distance_to_reviewed_interval_px": 84.0,
+        "current_selected": false,
+        "current_reject_reason": "typed_ambiguous_hypothesis",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0
+        }
+      },
+      {
+        "input_index": 5,
+        "kind": "oil_air",
+        "source": "oil_hypothesis:3432f2f8d2857eb7e3ece453",
+        "y": 430.0,
+        "distance_to_reviewed_interval_px": 0.0,
+        "current_selected": false,
+        "current_reject_reason": "typed_ambiguous_hypothesis",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 0.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "boundary_advantage;ordered_lower_cross_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "boundary_advantage;ordered_lower_cross_representation",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0005",
+          "sequence_row_hypothesis_id": "oil-row:000001:003",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 0.0,
+          "sequence_tracklet_confirmation_profile": "none",
+          "sequence_tracklet_confirmation_support": 0.0,
+          "sequence_tracklet_net_progress_px": 0.0,
+          "sequence_tracklet_direction": 0,
+          "sequence_tracklet_directional_agreement": 0.0,
+          "sequence_tracklet_recent_net_progress_px": 0.0,
+          "sequence_tracklet_recent_direction": 0,
+          "sequence_tracklet_recent_directional_agreement": 0.0,
+          "sequence_tracklet_confirmation_start_frame": null,
+          "sequence_tracklet_confirmation_end_frame": null,
+          "sequence_tracklet_confirmation_observation_count": 0,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.0,
+          "sequence_tracklet_motion_coverage": 0.0,
+          "sequence_tracklet_material_conflict": 0.0,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "INSUFFICIENT_NET_PROGRESS",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 6,
+        "kind": "oil_air",
+        "source": "oil_hypothesis:5bb106a2546f87e2254ea224",
+        "y": 443.0,
+        "distance_to_reviewed_interval_px": 7.5,
+        "current_selected": false,
+        "current_reject_reason": "typed_ambiguous_hypothesis",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 1.0,
+          "sequence_post_track_authority_tier": 1.0,
+          "sequence_final_authority_tier": 1.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 0.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "insufficient_authority",
+          "sequence_authority_failed_gates": "boundary_advantage;ordered_lower_cross_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "boundary_advantage;ordered_lower_cross_representation",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "",
+          "sequence_row_hypothesis_id": "",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 0.0,
+          "sequence_tracklet_confirmation_profile": "none",
+          "sequence_tracklet_confirmation_support": 0.0,
+          "sequence_tracklet_net_progress_px": 0.0,
+          "sequence_tracklet_direction": 0,
+          "sequence_tracklet_directional_agreement": 0.0,
+          "sequence_tracklet_recent_net_progress_px": 0.0,
+          "sequence_tracklet_recent_direction": 0,
+          "sequence_tracklet_recent_directional_agreement": 0.0,
+          "sequence_tracklet_confirmation_start_frame": null,
+          "sequence_tracklet_confirmation_end_frame": null,
+          "sequence_tracklet_confirmation_observation_count": 0,
+          "sequence_tracklet_recent_window_end_frame": null,
+          "sequence_tracklet_motion_support": 0.0,
+          "sequence_tracklet_motion_coverage": 0.0,
+          "sequence_tracklet_material_conflict": 0.0,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "INSUFFICIENT_AUTHORITY",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 7,
+        "kind": "oil_air",
+        "source": "oil_hypothesis:c84a4c9658785b56cd37b6c4",
+        "y": 450.0,
+        "distance_to_reviewed_interval_px": 14.5,
+        "current_selected": false,
+        "current_reject_reason": "typed_artifact_likelihood",
+        "completed_selected": false,
+        "completed_reject_reason": "sequence_candidate_hard_invalid",
+        "sequence_features": {
+          "sequence_eligible": 0.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0
+        }
+      },
+      {
+        "input_index": 8,
+        "kind": "oil_air",
+        "source": "material_path",
+        "y": 327.0,
+        "distance_to_reviewed_interval_px": 93.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 3.0,
+          "sequence_post_track_authority_tier": 3.0,
+          "sequence_final_authority_tier": 3.0,
+          "sequence_cross_representation_support": 0.7295930572354793,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 0.0,
+          "sequence_foam_alias_penalty": 0.05571428571428569,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "ordered_lower_interface",
+          "sequence_authority_failed_gates": "",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "ordered_lower_interface",
+          "sequence_phase_identity_failed_gates": "",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0002",
+          "sequence_row_hypothesis_id": "oil-row:000001:001",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 0.0,
+          "sequence_tracklet_confirmation_profile": "none",
+          "sequence_tracklet_confirmation_support": 0.0,
+          "sequence_tracklet_net_progress_px": 0.0,
+          "sequence_tracklet_direction": 0,
+          "sequence_tracklet_directional_agreement": 0.0,
+          "sequence_tracklet_recent_net_progress_px": 0.0,
+          "sequence_tracklet_recent_direction": 0,
+          "sequence_tracklet_recent_directional_agreement": 0.0,
+          "sequence_tracklet_confirmation_start_frame": null,
+          "sequence_tracklet_confirmation_end_frame": null,
+          "sequence_tracklet_confirmation_observation_count": 0,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.0,
+          "sequence_tracklet_motion_coverage": 0.0,
+          "sequence_tracklet_material_conflict": 0.0,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "INSUFFICIENT_NET_PROGRESS",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 9,
+        "kind": "oil_air",
+        "source": "material_path",
+        "y": 425.0,
+        "distance_to_reviewed_interval_px": 0.0,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 0.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "ordered_lower_cross_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "ordered_lower_cross_representation",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0005",
+          "sequence_row_hypothesis_id": "oil-row:000001:003",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 0.0,
+          "sequence_tracklet_confirmation_profile": "none",
+          "sequence_tracklet_confirmation_support": 0.0,
+          "sequence_tracklet_net_progress_px": 0.0,
+          "sequence_tracklet_direction": 0,
+          "sequence_tracklet_directional_agreement": 0.0,
+          "sequence_tracklet_recent_net_progress_px": 0.0,
+          "sequence_tracklet_recent_direction": 0,
+          "sequence_tracklet_recent_directional_agreement": 0.0,
+          "sequence_tracklet_confirmation_start_frame": null,
+          "sequence_tracklet_confirmation_end_frame": null,
+          "sequence_tracklet_confirmation_observation_count": 0,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.0,
+          "sequence_tracklet_motion_coverage": 0.0,
+          "sequence_tracklet_material_conflict": 0.0,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "INSUFFICIENT_NET_PROGRESS",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 10,
+        "kind": "oil_air",
+        "source": "material_path",
+        "y": 288.0,
+        "distance_to_reviewed_interval_px": 132.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": true,
+        "completed_reject_reason": "",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 3.0,
+          "sequence_post_track_authority_tier": 3.0,
+          "sequence_final_authority_tier": 3.0,
+          "sequence_cross_representation_support": 0.26501880247449255,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 1.0,
+          "sequence_trajectory_support": 1.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 1.0,
+          "sequence_authority_reason": "corroborated_material_path",
+          "sequence_authority_failed_gates": "",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "direct_interface",
+          "sequence_phase_identity_failed_gates": "",
+          "sequence_ordered_lower": 0.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0000",
+          "sequence_row_hypothesis_id": "oil-row:000001:000",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 1.0,
+          "sequence_tracklet_confirmation_profile": "anchor_corridor",
+          "sequence_tracklet_confirmation_support": 0.7187583725135624,
+          "sequence_tracklet_net_progress_px": 2.0,
+          "sequence_tracklet_direction": -1,
+          "sequence_tracklet_directional_agreement": 1.0,
+          "sequence_tracklet_recent_net_progress_px": 2.0,
+          "sequence_tracklet_recent_direction": -1,
+          "sequence_tracklet_recent_directional_agreement": 1.0,
+          "sequence_tracklet_confirmation_start_frame": 0,
+          "sequence_tracklet_confirmation_end_frame": 2,
+          "sequence_tracklet_confirmation_observation_count": 3,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.4495590717299578,
+          "sequence_tracklet_motion_coverage": 0.6666666666666666,
+          "sequence_tracklet_material_conflict": 0.4119414465273257,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 11,
+        "kind": "oil_air",
+        "source": "material_path",
+        "y": 279.0,
+        "distance_to_reviewed_interval_px": 141.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 1.0,
+          "sequence_white_material_layer_topology": 1.0,
+          "sequence_white_material_texture_present": 1.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.32948283550882856,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 1.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "direct_interface",
+          "sequence_phase_identity_failed_gates": "",
+          "sequence_ordered_lower": 0.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0000",
+          "sequence_row_hypothesis_id": "oil-row:000001:000",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 1.0,
+          "sequence_tracklet_confirmation_profile": "anchor_corridor",
+          "sequence_tracklet_confirmation_support": 0.7187583725135624,
+          "sequence_tracklet_net_progress_px": 2.0,
+          "sequence_tracklet_direction": -1,
+          "sequence_tracklet_directional_agreement": 1.0,
+          "sequence_tracklet_recent_net_progress_px": 2.0,
+          "sequence_tracklet_recent_direction": -1,
+          "sequence_tracklet_recent_directional_agreement": 1.0,
+          "sequence_tracklet_confirmation_start_frame": 0,
+          "sequence_tracklet_confirmation_end_frame": 2,
+          "sequence_tracklet_confirmation_observation_count": 3,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.4495590717299578,
+          "sequence_tracklet_motion_coverage": 0.6666666666666666,
+          "sequence_tracklet_material_conflict": 0.4119414465273257,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 12,
+        "kind": "oil_air",
+        "source": "distributed_sobel_path",
+        "y": 329.0,
+        "distance_to_reviewed_interval_px": 91.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 0.0,
+          "sequence_white_material_layer_topology": 0.0,
+          "sequence_white_material_texture_present": 0.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 0.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "ordered_lower_cross_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "ordered_lower_cross_representation",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0002",
+          "sequence_row_hypothesis_id": "oil-row:000001:001",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 0.0,
+          "sequence_tracklet_confirmation_profile": "none",
+          "sequence_tracklet_confirmation_support": 0.0,
+          "sequence_tracklet_net_progress_px": 0.0,
+          "sequence_tracklet_direction": 0,
+          "sequence_tracklet_directional_agreement": 0.0,
+          "sequence_tracklet_recent_net_progress_px": 0.0,
+          "sequence_tracklet_recent_direction": 0,
+          "sequence_tracklet_recent_directional_agreement": 0.0,
+          "sequence_tracklet_confirmation_start_frame": null,
+          "sequence_tracklet_confirmation_end_frame": null,
+          "sequence_tracklet_confirmation_observation_count": 0,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.0,
+          "sequence_tracklet_motion_coverage": 0.0,
+          "sequence_tracklet_material_conflict": 0.0,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "INSUFFICIENT_NET_PROGRESS",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 13,
+        "kind": "oil_air",
+        "source": "calibrated_high_recall",
+        "y": 427.0,
+        "distance_to_reviewed_interval_px": 0.0,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 0.0,
+          "sequence_white_material_layer_topology": 0.0,
+          "sequence_white_material_texture_present": 0.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 0.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "ordered_lower_cross_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "ordered_lower_cross_representation",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0005",
+          "sequence_row_hypothesis_id": "oil-row:000001:003",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 0.0,
+          "sequence_tracklet_confirmation_profile": "none",
+          "sequence_tracklet_confirmation_support": 0.0,
+          "sequence_tracklet_net_progress_px": 0.0,
+          "sequence_tracklet_direction": 0,
+          "sequence_tracklet_directional_agreement": 0.0,
+          "sequence_tracklet_recent_net_progress_px": 0.0,
+          "sequence_tracklet_recent_direction": 0,
+          "sequence_tracklet_recent_directional_agreement": 0.0,
+          "sequence_tracklet_confirmation_start_frame": null,
+          "sequence_tracklet_confirmation_end_frame": null,
+          "sequence_tracklet_confirmation_observation_count": 0,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.0,
+          "sequence_tracklet_motion_coverage": 0.0,
+          "sequence_tracklet_material_conflict": 0.0,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "INSUFFICIENT_NET_PROGRESS",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 14,
+        "kind": "oil_air",
+        "source": "calibrated_high_recall",
+        "y": 442.0,
+        "distance_to_reviewed_interval_px": 6.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 0.0,
+          "sequence_white_material_layer_topology": 0.0,
+          "sequence_white_material_texture_present": 0.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 1.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "ordered_lower_cross_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "ordered_lower_cross_representation",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0006",
+          "sequence_row_hypothesis_id": "oil-row:000001:004",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 1.0,
+          "sequence_tracklet_confirmation_profile": "motion_trajectory",
+          "sequence_tracklet_confirmation_support": 0.8200000000000001,
+          "sequence_tracklet_net_progress_px": 15.0,
+          "sequence_tracklet_direction": -1,
+          "sequence_tracklet_directional_agreement": 1.0,
+          "sequence_tracklet_recent_net_progress_px": 15.0,
+          "sequence_tracklet_recent_direction": -1,
+          "sequence_tracklet_recent_directional_agreement": 1.0,
+          "sequence_tracklet_confirmation_start_frame": 0,
+          "sequence_tracklet_confirmation_end_frame": 2,
+          "sequence_tracklet_confirmation_observation_count": 3,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.6666666666666666,
+          "sequence_tracklet_motion_coverage": 0.6666666666666666,
+          "sequence_tracklet_material_conflict": 0.7796925491712899,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 15,
+        "kind": "oil_air",
+        "source": "calibrated_high_recall",
+        "y": 450.0,
+        "distance_to_reviewed_interval_px": 14.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 0.0,
+          "sequence_white_material_layer_topology": 0.0,
+          "sequence_white_material_texture_present": 0.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 1.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "ordered_lower_cross_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "ordered_lower_cross_representation",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0006",
+          "sequence_row_hypothesis_id": "oil-row:000001:004",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 1.0,
+          "sequence_tracklet_confirmation_profile": "motion_trajectory",
+          "sequence_tracklet_confirmation_support": 0.8200000000000001,
+          "sequence_tracklet_net_progress_px": 15.0,
+          "sequence_tracklet_direction": -1,
+          "sequence_tracklet_directional_agreement": 1.0,
+          "sequence_tracklet_recent_net_progress_px": 15.0,
+          "sequence_tracklet_recent_direction": -1,
+          "sequence_tracklet_recent_directional_agreement": 1.0,
+          "sequence_tracklet_confirmation_start_frame": 0,
+          "sequence_tracklet_confirmation_end_frame": 2,
+          "sequence_tracklet_confirmation_observation_count": 3,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.6666666666666666,
+          "sequence_tracklet_motion_coverage": 0.6666666666666666,
+          "sequence_tracklet_material_conflict": 0.7796925491712899,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 16,
+        "kind": "oil_air",
+        "source": "calibrated_high_recall",
+        "y": 322.0,
+        "distance_to_reviewed_interval_px": 98.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 0.0,
+          "sequence_white_material_layer_topology": 0.0,
+          "sequence_white_material_texture_present": 0.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 0.0,
+          "sequence_foam_alias_penalty": 0.28785714285714287,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "material_texture_conflict<0.60;calibrated_independent_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "material_texture_conflict<0.60;calibrated_independent_representation",
+          "sequence_ordered_lower": 0.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0002",
+          "sequence_row_hypothesis_id": "oil-row:000001:001",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 0.0,
+          "sequence_tracklet_confirmation_profile": "none",
+          "sequence_tracklet_confirmation_support": 0.0,
+          "sequence_tracklet_net_progress_px": 0.0,
+          "sequence_tracklet_direction": 0,
+          "sequence_tracklet_directional_agreement": 0.0,
+          "sequence_tracklet_recent_net_progress_px": 0.0,
+          "sequence_tracklet_recent_direction": 0,
+          "sequence_tracklet_recent_directional_agreement": 0.0,
+          "sequence_tracklet_confirmation_start_frame": null,
+          "sequence_tracklet_confirmation_end_frame": null,
+          "sequence_tracklet_confirmation_observation_count": 0,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.0,
+          "sequence_tracklet_motion_coverage": 0.0,
+          "sequence_tracklet_material_conflict": 0.0,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "INSUFFICIENT_NET_PROGRESS",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 17,
+        "kind": "oil_air",
+        "source": "calibrated_high_recall",
+        "y": 329.0,
+        "distance_to_reviewed_interval_px": 91.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 0.0,
+          "sequence_white_material_layer_topology": 0.0,
+          "sequence_white_material_texture_present": 0.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 0.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "ordered_lower_cross_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "ordered_lower_cross_representation",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0002",
+          "sequence_row_hypothesis_id": "oil-row:000001:001",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 0.0,
+          "sequence_tracklet_confirmation_profile": "none",
+          "sequence_tracklet_confirmation_support": 0.0,
+          "sequence_tracklet_net_progress_px": 0.0,
+          "sequence_tracklet_direction": 0,
+          "sequence_tracklet_directional_agreement": 0.0,
+          "sequence_tracklet_recent_net_progress_px": 0.0,
+          "sequence_tracklet_recent_direction": 0,
+          "sequence_tracklet_recent_directional_agreement": 0.0,
+          "sequence_tracklet_confirmation_start_frame": null,
+          "sequence_tracklet_confirmation_end_frame": null,
+          "sequence_tracklet_confirmation_observation_count": 0,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.0,
+          "sequence_tracklet_motion_coverage": 0.0,
+          "sequence_tracklet_material_conflict": 0.0,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "INSUFFICIENT_NET_PROGRESS",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 18,
+        "kind": "oil_air",
+        "source": "calibrated_high_recall",
+        "y": 335.0,
+        "distance_to_reviewed_interval_px": 85.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 0.0,
+          "sequence_white_material_layer_topology": 0.0,
+          "sequence_white_material_texture_present": 0.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 1.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "ordered_lower_cross_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "ordered_lower_cross_representation",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0003",
+          "sequence_row_hypothesis_id": "oil-row:000001:002",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 1.0,
+          "sequence_tracklet_confirmation_profile": "anchor_corridor",
+          "sequence_tracklet_confirmation_support": 0.8585535051437057,
+          "sequence_tracklet_net_progress_px": 6.0,
+          "sequence_tracklet_direction": 1,
+          "sequence_tracklet_directional_agreement": 1.0,
+          "sequence_tracklet_recent_net_progress_px": 6.0,
+          "sequence_tracklet_recent_direction": 1,
+          "sequence_tracklet_recent_directional_agreement": 1.0,
+          "sequence_tracklet_confirmation_start_frame": 0,
+          "sequence_tracklet_confirmation_end_frame": 2,
+          "sequence_tracklet_confirmation_observation_count": 3,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.4902190051967335,
+          "sequence_tracklet_motion_coverage": 0.6666666666666666,
+          "sequence_tracklet_material_conflict": 1.0,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 19,
+        "kind": "oil_air",
+        "source": "phase_transition_scan",
+        "y": 317.0,
+        "distance_to_reviewed_interval_px": 103.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 0.0,
+          "sequence_white_material_layer_topology": 0.0,
+          "sequence_white_material_texture_present": 0.0
+        }
+      },
+      {
+        "input_index": 20,
+        "kind": "oil_air",
+        "source": "phase_transition_scan",
+        "y": 424.0,
+        "distance_to_reviewed_interval_px": 0.0,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 0.0,
+          "sequence_white_material_layer_topology": 0.0,
+          "sequence_white_material_texture_present": 0.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 0.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "ordered_lower_cross_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "ordered_lower_cross_representation",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0005",
+          "sequence_row_hypothesis_id": "oil-row:000001:003",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 0.0,
+          "sequence_tracklet_confirmation_profile": "none",
+          "sequence_tracklet_confirmation_support": 0.0,
+          "sequence_tracklet_net_progress_px": 0.0,
+          "sequence_tracklet_direction": 0,
+          "sequence_tracklet_directional_agreement": 0.0,
+          "sequence_tracklet_recent_net_progress_px": 0.0,
+          "sequence_tracklet_recent_direction": 0,
+          "sequence_tracklet_recent_directional_agreement": 0.0,
+          "sequence_tracklet_confirmation_start_frame": null,
+          "sequence_tracklet_confirmation_end_frame": null,
+          "sequence_tracklet_confirmation_observation_count": 0,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.0,
+          "sequence_tracklet_motion_coverage": 0.0,
+          "sequence_tracklet_material_conflict": 0.0,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "INSUFFICIENT_NET_PROGRESS",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 21,
+        "kind": "oil_air",
+        "source": "phase_transition_scan",
+        "y": 441.0,
+        "distance_to_reviewed_interval_px": 5.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_selected_by_observation_resolver",
+        "sequence_features": {
+          "sequence_eligible": 1.0,
+          "sequence_material_layer_topology": 0.0,
+          "sequence_white_material_layer_topology": 0.0,
+          "sequence_white_material_texture_present": 0.0,
+          "sequence_top_k": 1.0,
+          "sequence_initial_authority_tier": 2.0,
+          "sequence_post_track_authority_tier": 2.0,
+          "sequence_final_authority_tier": 2.0,
+          "sequence_cross_representation_support": 0.0,
+          "sequence_semantic_corridor_support": 0.0,
+          "sequence_track_opposition": 0.0,
+          "sequence_effective_track_opposition": 0.0,
+          "sequence_cluster_support": 0.0,
+          "sequence_trajectory_support": 1.0,
+          "sequence_foam_alias_penalty": 0.0,
+          "sequence_selected": 0.0,
+          "sequence_authority_reason": "continuation",
+          "sequence_authority_failed_gates": "ordered_lower_cross_representation",
+          "sequence_foam_material_identity": 0.0,
+          "sequence_phase_identity": "continuation_only",
+          "sequence_phase_identity_failed_gates": "ordered_lower_cross_representation",
+          "sequence_ordered_lower": 1.0,
+          "sequence_identity_contradiction": "none",
+          "sequence_tracklet_id": "oil-tracklet:000000:0006",
+          "sequence_row_hypothesis_id": "oil-row:000001:004",
+          "sequence_tracklet_lifecycle": "provisional",
+          "sequence_tracklet_admitted": 1.0,
+          "sequence_tracklet_confirmation_profile": "motion_trajectory",
+          "sequence_tracklet_confirmation_support": 0.8200000000000001,
+          "sequence_tracklet_net_progress_px": 15.0,
+          "sequence_tracklet_direction": -1,
+          "sequence_tracklet_directional_agreement": 1.0,
+          "sequence_tracklet_recent_net_progress_px": 15.0,
+          "sequence_tracklet_recent_direction": -1,
+          "sequence_tracklet_recent_directional_agreement": 1.0,
+          "sequence_tracklet_confirmation_start_frame": 0,
+          "sequence_tracklet_confirmation_end_frame": 2,
+          "sequence_tracklet_confirmation_observation_count": 3,
+          "sequence_tracklet_recent_window_end_frame": 1,
+          "sequence_tracklet_motion_support": 0.6666666666666666,
+          "sequence_tracklet_motion_coverage": 0.6666666666666666,
+          "sequence_tracklet_material_conflict": 0.7796925491712899,
+          "sequence_tracklet_incompatible": 0.0,
+          "sequence_tracklet_failure_reason": "",
+          "sequence_material_ownership_barrier": 0.0
+        }
+      },
+      {
+        "input_index": 22,
+        "kind": "foam_front",
+        "source": "foam_evidence",
+        "y": 317.0,
+        "distance_to_reviewed_interval_px": 5.5,
+        "current_selected": false,
+        "current_reject_reason": "",
+        "completed_selected": false,
+        "completed_reject_reason": "not_confirmed_by_r7_foam_episode",
+        "sequence_features": {
+          "sequence_foam_eligible": 1.0,
+          "sequence_foam_eligibility_predicates": {
+            "layer_coherent": true,
+            "static_artifact_clear": true,
+            "glare_overlap": true,
+            "supported_layer_shape": true
+          },
+          "sequence_foam_eligibility_failed_gates": ""
+        }
+      }
+    ],
+    "component_diagnostics": {
+      "schema_version": "s11-foam-components-v1",
+      "coordinate_space": "roi_local",
+      "bbox_convention": "xyxy_half_open",
+      "positive_y_direction": "down",
+      "component_count": 5,
+      "retained_count": 5,
+      "component_limit": 256,
+      "truncated": false,
+      "selected_label": 4,
+      "selection_order": "status_priority, descending_score, front_y, label",
+      "label_image_zero": "outside_retained_support; includes omitted components if truncated",
+      "decision": "NOT_EVALUATED",
+      "components": [
+        {
+          "label": 4,
+          "local_bbox_xyxy": [
+            9,
+            63,
+            220,
+            203
+          ],
+          "pixel_count": 10859,
+          "local_front_y": 63.0,
+          "decision_status": "accepted_strong",
+          "score": 0.9059948835056506,
+          "material_phenotype": "none",
+          "predicates": {
+            "glare_exceeded": false,
+            "structural": false,
+            "shape_ok": true,
+            "strong_appearance_ok": true,
+            "moderate_appearance_ok": true,
+            "texture_ok": true,
+            "strong_pass": true,
+            "moderate_pass": true,
+            "ambiguous_pass": true,
+            "bottom_connected": true,
+            "white_ok": true,
+            "chromatic_ok": false,
+            "bottom_chromatic_layer": false,
+            "area_ok": true,
+            "height_ok": true,
+            "thin_horizontal": false,
+            "structural_substrate_present": false,
+            "front_from_lower_edge": false
+          },
+          "values": {
+            "area_ratio": 0.3367236193370337,
+            "height_ratio": 0.6666666666666666,
+            "width_ratio": 0.9254385964912281,
+            "fill_ratio": 0.367603249830738,
+            "whiteness_ratio": 0.9340639101206373,
+            "chromatic_ratio": 0.0,
+            "texture_ratio": 0.847039322221199,
+            "glare_ratio": 0.0,
+            "wide_row_fraction": 0.9142857142857143,
+            "row_compactness_median": 0.2428303360939026
+          },
+          "thresholds": {
+            "min_area": 0.025,
+            "min_whiteness": 0.25,
+            "minimum_score": 0.48,
+            "strong_score": 0.68,
+            "max_glare": 0.25
+          },
+          "diagnostic_id": 1,
+          "selected_component": true,
+          "source_front_y": 317.0,
+          "source_bbox_xyxy": [
+            473,
+            317,
+            684,
+            457
+          ]
+        },
+        {
+          "label": 2,
+          "local_bbox_xyxy": [
+            35,
+            44,
+            39,
+            47
+          ],
+          "pixel_count": 8,
+          "local_front_y": 44.0,
+          "decision_status": "weak_rejected",
+          "score": 0.5743484205998272,
+          "material_phenotype": "none",
+          "predicates": {
+            "glare_exceeded": false,
+            "structural": false,
+            "shape_ok": false,
+            "strong_appearance_ok": true,
+            "moderate_appearance_ok": true,
+            "texture_ok": true,
+            "strong_pass": false,
+            "moderate_pass": false,
+            "ambiguous_pass": false,
+            "bottom_connected": false,
+            "white_ok": true,
+            "chromatic_ok": false,
+            "bottom_chromatic_layer": false,
+            "area_ok": false,
+            "height_ok": false,
+            "thin_horizontal": false,
+            "structural_substrate_present": false,
+            "front_from_lower_edge": false
+          },
+          "values": {
+            "area_ratio": 0.0002480697075878322,
+            "height_ratio": 0.014285714285714285,
+            "width_ratio": 0.017543859649122806,
+            "fill_ratio": 0.6666666666666666,
+            "whiteness_ratio": 1.0,
+            "chromatic_ratio": 0.0,
+            "texture_ratio": 1.0,
+            "glare_ratio": 0.0,
+            "wide_row_fraction": 1.0,
+            "row_compactness_median": 1.0
+          },
+          "thresholds": {
+            "min_area": 0.025,
+            "min_whiteness": 0.25,
+            "minimum_score": 0.48,
+            "strong_score": 0.68,
+            "max_glare": 0.25
+          },
+          "diagnostic_id": 2,
+          "selected_component": false,
+          "source_front_y": 298.0,
+          "source_bbox_xyxy": [
+            499,
+            298,
+            503,
+            301
+          ]
+        },
+        {
+          "label": 5,
+          "local_bbox_xyxy": [
+            43,
+            175,
+            48,
+            180
+          ],
+          "pixel_count": 13,
+          "local_front_y": 175.0,
+          "decision_status": "weak_rejected",
+          "score": 0.5380612893432692,
+          "material_phenotype": "none",
+          "predicates": {
+            "glare_exceeded": false,
+            "structural": false,
+            "shape_ok": false,
+            "strong_appearance_ok": true,
+            "moderate_appearance_ok": true,
+            "texture_ok": true,
+            "strong_pass": false,
+            "moderate_pass": false,
+            "ambiguous_pass": false,
+            "bottom_connected": true,
+            "white_ok": true,
+            "chromatic_ok": false,
+            "bottom_chromatic_layer": false,
+            "area_ok": false,
+            "height_ok": false,
+            "thin_horizontal": false,
+            "structural_substrate_present": false,
+            "front_from_lower_edge": false
+          },
+          "values": {
+            "area_ratio": 0.0004031132748302273,
+            "height_ratio": 0.023809523809523808,
+            "width_ratio": 0.021929824561403508,
+            "fill_ratio": 0.52,
+            "whiteness_ratio": 0.6153846153846154,
+            "chromatic_ratio": 0.0,
+            "texture_ratio": 1.0,
+            "glare_ratio": 0.0,
+            "wide_row_fraction": 0.8,
+            "row_compactness_median": 1.0
+          },
+          "thresholds": {
+            "min_area": 0.025,
+            "min_whiteness": 0.25,
+            "minimum_score": 0.48,
+            "strong_score": 0.68,
+            "max_glare": 0.25
+          },
+          "diagnostic_id": 3,
+          "selected_component": false,
+          "source_front_y": 429.0,
+          "source_bbox_xyxy": [
+            507,
+            429,
+            512,
+            434
+          ]
+        },
+        {
+          "label": 1,
+          "local_bbox_xyxy": [
+            125,
+            9,
+            128,
+            12
+          ],
+          "pixel_count": 5,
+          "local_front_y": 9.0,
+          "decision_status": "weak_rejected",
+          "score": 0.514131397957149,
+          "material_phenotype": "none",
+          "predicates": {
+            "glare_exceeded": false,
+            "structural": false,
+            "shape_ok": false,
+            "strong_appearance_ok": true,
+            "moderate_appearance_ok": true,
+            "texture_ok": true,
+            "strong_pass": false,
+            "moderate_pass": false,
+            "ambiguous_pass": false,
+            "bottom_connected": false,
+            "white_ok": true,
+            "chromatic_ok": false,
+            "bottom_chromatic_layer": false,
+            "area_ok": false,
+            "height_ok": false,
+            "thin_horizontal": false,
+            "structural_substrate_present": false,
+            "front_from_lower_edge": false
+          },
+          "values": {
+            "area_ratio": 0.00015504356724239512,
+            "height_ratio": 0.014285714285714285,
+            "width_ratio": 0.013157894736842105,
+            "fill_ratio": 0.5555555555555556,
+            "whiteness_ratio": 0.8,
+            "chromatic_ratio": 0.0,
+            "texture_ratio": 1.0,
+            "glare_ratio": 0.0,
+            "wide_row_fraction": 0.3333333333333333,
+            "row_compactness_median": 1.0
+          },
+          "thresholds": {
+            "min_area": 0.025,
+            "min_whiteness": 0.25,
+            "minimum_score": 0.48,
+            "strong_score": 0.68,
+            "max_glare": 0.25
+          },
+          "diagnostic_id": 4,
+          "selected_component": false,
+          "source_front_y": 263.0,
+          "source_bbox_xyxy": [
+            589,
+            263,
+            592,
+            266
+          ]
+        },
+        {
+          "label": 3,
+          "local_bbox_xyxy": [
+            71,
+            48,
+            74,
+            51
+          ],
+          "pixel_count": 5,
+          "local_front_y": 48.0,
+          "decision_status": "weak_rejected",
+          "score": 0.514131397957149,
+          "material_phenotype": "none",
+          "predicates": {
+            "glare_exceeded": false,
+            "structural": false,
+            "shape_ok": false,
+            "strong_appearance_ok": true,
+            "moderate_appearance_ok": true,
+            "texture_ok": true,
+            "strong_pass": false,
+            "moderate_pass": false,
+            "ambiguous_pass": false,
+            "bottom_connected": false,
+            "white_ok": true,
+            "chromatic_ok": false,
+            "bottom_chromatic_layer": false,
+            "area_ok": false,
+            "height_ok": false,
+            "thin_horizontal": false,
+            "structural_substrate_present": false,
+            "front_from_lower_edge": false
+          },
+          "values": {
+            "area_ratio": 0.00015504356724239512,
+            "height_ratio": 0.014285714285714285,
+            "width_ratio": 0.013157894736842105,
+            "fill_ratio": 0.5555555555555556,
+            "whiteness_ratio": 0.8,
+            "chromatic_ratio": 0.0,
+            "texture_ratio": 1.0,
+            "glare_ratio": 0.0,
+            "wide_row_fraction": 0.3333333333333333,
+            "row_compactness_median": 1.0
+          },
+          "thresholds": {
+            "min_area": 0.025,
+            "min_whiteness": 0.25,
+            "minimum_score": 0.48,
+            "strong_score": 0.68,
+            "max_glare": 0.25
+          },
+          "diagnostic_id": 5,
+          "selected_component": false,
+          "source_front_y": 302.0,
+          "source_bbox_xyxy": [
+            535,
+            302,
+            538,
+            305
+          ]
+        }
+      ],
+      "crop_origin": [
+        464,
+        254
+      ],
+      "frame_index": 1499,
+      "glass_id": "public-source-pipeline-fixture"
+    }
+  },
+  "limits": [
+    "Controlled UNKNOWN_REVIEW start. HOLD_BELOW_ZERO exercises downstream assembly without inventing compressor start; zero line is an uncalibrated fixture. Operating judgment and recovery timing are NOT_EVALUATED.",
+    "Harness confirmation only, not a new human physical-state judgment. Prior isolated baseline used AUTO; differences cannot be attributed solely to temporal/static context.",
+    "Only this reviewed anchor is scored by interval distance. No unique edge, neighboring-frame truth, source pass rate or full episode qualification.",
+    "No decoder/detector rerun during verification; no HTML/UI or Windows qualification."
+  ],
+  "production_changed": false,
+  "field_disposition": "FIELD FAIL"
+}
