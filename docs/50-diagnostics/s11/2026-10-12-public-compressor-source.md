@@ -2,9 +2,10 @@
 
 The user identifies the bright horizontal layer's upper boundary near **50 s**
 in [미소냉동's public video](https://www.youtube.com/watch?v=mHOS1-1ck60&t=50s)
-as a Foam upper. This is a new regional principle-check input. It does not supply
-exact pixel truth, a lower-interface label, a continuous benchmark or a detector
-success. The [Work Plan](../../00-project/work-plan.md) owns further work.
+as a Foam upper, and subsequently confirms its lower boundary as an Oil upper.
+This is a new regional principle-check input. It does not supply exact pixel
+truth, a continuous benchmark or a detector success. The
+[Work Plan](../../00-project/work-plan.md) owns further work.
 
 ## Source and exposure
 
@@ -71,25 +72,42 @@ Tiles are half-size context views, not measurement rasters. Inspection finds:
   visible. Their individual identity as bubbles, droplets, reflection or glass
   texture remains unqualified. Larger visible geometry alone is not accuracy.
 
-The source therefore adds a regional Foam-positive **principle** context. It does
-not yet add a **failure-response** pair with a labeled lower boundary, a temporal
-**workflow** benchmark, a calibrated tolerance, or a replacement for the existing
-qualified water/sample4 controls. The frozen seven-source P0 roster remains an
-unchanged baseline; this intake is separately routed.
+The source therefore adds regional Foam/Oil **principle** context and a same-scene
+role contrast: the layer's upper and lower boundaries have different target roles.
+It does not yet add a numerically labeled **failure-response** benchmark, a
+temporal **workflow** benchmark, a calibrated tolerance, or a replacement for the
+existing qualified water/sample4 controls. The frozen seven-source P0 roster
+remains an unchanged baseline; this intake is separately routed.
 
-## Closed upper judgment and separate lower question
+## Closed upper and lower judgments
 
 The [verbatim upper-role reply](2026-10-12-public-compressor-source/upper-role-reply.json)
 records **“밝은 층의 윗 경계가 Foam 상단으로 보인다”**. That question is CLOSED.
 No exact X/Y, neighbouring-frame truth, timing or detector approval follows.
 
-The [separate pending question](2026-10-12-public-compressor-source/lower-role-review.json)
-concerns the bright layer's **lower** boundary
-against the dark region beneath it: is that an Oil upper, another boundary, or
-unassessable? Its purpose is to decide whether the same scene can support an
-Oil/Foam role comparison. The already confirmed Foam upper does not depend on
-that answer. An unclear lower boundary must remain unknown, not a successful
-negative; no exact pixel specification has been requested.
+The [lower-role reply](2026-10-12-public-compressor-source/lower-role-review.json)
+records **“아랫경계는 oil 상단 맞음”**. That question is also CLOSED. The bright
+layer's lower boundary against the dark region beneath it is a regional Oil
+upper, supporting an Oil/Foam role comparison within this scene. Neither answer
+labels exact pixels or neighbouring frames; no exact pixel specification has
+been requested. Do not repeat either physical-role question.
+
+## Current-frame baseline and resolution preflight
+
+The [four-call preflight](2026-10-12-public-compressor-source/current-frame-preflight.json)
+freezes one source-prepared inner-glass ellipse and unchanged detector defaults.
+It reuses `OpenCvPhaseDetector.detect` through the existing diagnostic Recorder,
+with fresh state for native NONE/FULL and half-resolution NONE/FULL. All candidates,
+diagnostic images/state and source-coordinate projections are retained. The
+half-size input uses area resampling and explicit pixel-center coordinate mapping;
+rounding remains with the existing geometry owners. No alternate Recipe or
+parameter search follows a result.
+
+This measures current-frame representation and local resolution sensitivity.
+Both NONE/FULL pairs must agree before causal interpretation. It does not execute
+a completed session, confirm an episode, evaluate continuity, test a new physical
+selector, or reopen S3. Regional role judgments are evaluation context only; no
+numeric precision/recall or universal minimum-resolution requirement follows.
 
 ## Verification and reproduction
 

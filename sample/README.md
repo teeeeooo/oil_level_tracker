@@ -7,8 +7,8 @@ These local videos support S6 engineering qualification. They are not canonical 
 `public_miso_mHOS1-1ck60.mp4` is a separately acquired, ignored local source from
 [미소냉동](https://www.youtube.com/watch?v=mHOS1-1ck60). Its bytes and bounded
 source review are pinned in the [intake record](../docs/50-diagnostics/s11/2026-10-12-public-compressor-source.md).
-The user confirms only the bright layer's upper boundary near 50 s as a regional
-Foam upper. It has no product Recipe, exact pixel truth, continuous-story
+The user confirms the bright layer's upper boundary near 50 s as a regional
+Foam upper and its lower boundary as an Oil upper. It has no product Recipe, exact pixel truth, continuous-story
 qualification, detector result or holdout status. It is not silently added to
 the historical four-video regression or seven-source P0 denominator. The
 [Work Plan](../docs/00-project/work-plan.md) owns further qualification and use.

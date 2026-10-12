@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
-**Next transition:** [scene-based evaluation](../30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract) remains adopted; the material-domain A/B choice is suspended. The [P5-S3 result](../50-diagnostics/s11/2026-10-12-p5-extremal-regions.md) passed synthetic reachability but missed both fixed real Foam positives, closing before the broader comparison. The [new public compressor source intake](../50-diagnostics/s11/2026-10-12-public-compressor-source.md) preserves a user-confirmed regional Foam upper near 50 s; its lower boundary is a separate pending role question. Resolve that question before treating the lower boundary as Oil or another physical control. The upper judgment is closed and usable within its own scope. P2/P5-a still need a distinct eligible role observation; no successor is implementation-ready. Typed Witness consumption requires O2/V5 Windows shadow, then separate O3; integrated field qualification remains later. P2-S1/P5-S2/P5-S3 remain CLOSED WITHOUT PROMOTION. Local XY OFF / O2 OPEN / FIELD FAIL remain; no unchanged-detector Windows run is requested.
+**Next transition:** [scene-based evaluation](../30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract) remains adopted; the material-domain A/B choice is suspended. The [P5-S3 result](../50-diagnostics/s11/2026-10-12-p5-extremal-regions.md) passed synthetic reachability but missed both fixed real Foam positives, closing before the broader comparison. The [new public compressor source intake](../50-diagnostics/s11/2026-10-12-public-compressor-source.md) now has closed regional judgments near 50 s: bright-layer upper = Foam upper, lower = Oil upper. Next execute the [fixed current-frame check](../50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame-preflight.json): unchanged detector at native/half resolution, fresh NONE/FULL pairs, before selecting a new hypothesis. Both role answers remain regional, not exact pixel or continuous truth. P2/P5-a still need a distinct eligible role observation; no successor is implementation-ready. Typed Witness consumption requires O2/V5 Windows shadow, then separate O3; integrated field qualification remains later. P2-S1/P5-S2/P5-S3 remain CLOSED WITHOUT PROMOTION. Local XY OFF / O2 OPEN / FIELD FAIL remain; no unchanged-detector Windows run is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -63,7 +63,7 @@ ACCEPTED and CLOSED WITHOUT PROMOTION retain their distinct meanings.
 | O2 acceptance | OPEN; not satisfied | Controls/holdouts, operating point, behavior equality and Windows shadow acceptance required | [O2 gate](../30-validation/s11-interface-observability-witness-validation.md#o2-shadow-acceptance) |
 | W5 / O3 support and association | PROPOSED; gated on O2 | P3 / D4a: separate implementation plan, typed support and exact physical association | [O3 entry](../30-validation/s11-interface-observability-witness-validation.md#o3-behavior-entry) |
 | W6 / O4 handoff and phase | PROPOSED; gated on W5 and separate controls | P4 / D4b: bounded reacquisition and closure, with FULL/EMPTY counter-controls | [O4](../20-architecture/s11-interface-observability-witness-architecture.md#stage-o4--handoff-and-phase-behavior) |
-| Foam front / episode | P5 source-position/default linkage VERIFIED; P5-S2/S3 CLOSED WITHOUT PROMOTION; physical selection OPEN | P0 scene-role mapping adopted; P5-a role feasibility is independent of Oil/P2. New public-source upper-role reply is closed; lower role remains unqualified. P5-b requires demonstrated role evidence, default linkage and its own behavior acceptance; P5-c opens only for a correct raw front lost downstream. | [S3 result](../50-diagnostics/s11/2026-10-12-p5-extremal-regions.md), [public-source intake](../50-diagnostics/s11/2026-10-12-public-compressor-source.md), [P5-a design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption) |
+| Foam front / episode | P5 source-position/default linkage VERIFIED; P5-S2/S3 CLOSED WITHOUT PROMOTION; physical selection OPEN | P0 scene-role mapping adopted; P5-a role feasibility is independent of Oil/P2. New public-source upper Foam/lower Oil roles are closed regionally; current-frame representation check is next. P5-b requires demonstrated role evidence, default linkage and its own behavior acceptance; P5-c opens only for a correct raw front lost downstream. | [S3 result](../50-diagnostics/s11/2026-10-12-p5-extremal-regions.md), [public-source intake](../50-diagnostics/s11/2026-10-12-public-compressor-source.md), [P5-a design entry](../20-architecture/s11-interface-observability-witness-architecture.md#boundary-local-role-feasibility--october-11-audit-adoption) |
 | W7 / O5 field qualification | PENDING integrated candidate | P6 / D6: exact runtime, all nine canonical segments, existing report and target resources | [Field gate](../30-validation/s11-interface-observability-witness-validation.md#field-qualification) |
 | Report adjuncts | Source context and episode-source review ADOPTED | Reuse existing report; comprehension and numerical identity remain separate unresolved outcomes | [Source context](../60-evidence/s11/2026-10-07-report-source-context-validation.md), [episode review](../60-evidence/s11/2026-10-08-episode-source-review-validation.md) |
 | D0 planning intake | Prior packages and the October 11 direction-decision package preserved/reviewed | Planning baseline only; no detector or field acceptance. Current proposal and qualifications are in the existing design/validation owners. | [Direction intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md), [prior audit intake](../60-evidence/s11/2026-10-11-program-audit-intake.md), [P1 program integration](../60-evidence/s11/2026-10-11-program-intake.md), earlier intakes above |
@@ -143,14 +143,16 @@ The [public compressor intake](../50-diagnostics/s11/2026-10-12-public-compresso
 adds an exposed regional Foam positive from a separately acquired public video,
 outside the frozen seven-source [P0 roster](../50-diagnostics/s11/2026-10-12-scene-evaluation-roster.json).
 Its original local bytes, native 50 s frame and 12-view context are pinned. The
-user confirmed the bright layer's upper boundary as Foam; exact pixels and adjacent
-times remain unqualified. Camera movement, zoom and slides prevent treating the
-whole recording as one fixed-Recipe physical benchmark. The pending lower-role
-question determines whether this same scene can also support an Oil/Foam role
-comparison; an unclear reply must remain unknown, not a negative success. Existing
-qualified water/sample4 controls and sample3 retirement are unchanged. After that
-bounded judgment, assess distinct role information before proposing a new fixed
-pilot; no new eligible P2/P5 operation or Windows handoff is implied by intake.
+user confirmed the bright layer's upper boundary as Foam and lower boundary as
+Oil; both source-role questions are CLOSED. Exact pixels and adjacent times remain
+unqualified. Camera movement, zoom and slides prevent treating the whole recording
+as one fixed-Recipe physical benchmark. The four-call source preflight now checks
+unchanged current-frame representation at native/half resolution with diagnostic
+equality and fresh state. It does not qualify sequence/episode behavior or create
+a resolution acceptance floor. Existing qualified water/sample4 controls and
+sample3 retirement are unchanged. Use its result to assess distinct role information
+before proposing another fixed pilot; no eligible successor or Windows handoff is
+implied by the closed source judgments.
 
 ### Source and truth qualification before the next experiment
 
