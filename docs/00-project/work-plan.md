@@ -8,6 +8,8 @@
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
+**Handoff checkpoint (October 12):** [Boundary-feasibility handoff](../60-evidence/s11/2026-10-12-boundary-feasibility-handoff.md) pins the completed research at `e19f6bd`, closed judgments, local-only inputs and the bounded resume order. The user requested this checkpoint; no new experiment or Windows run starts during handoff preparation.
+
 The [direction-decision intake](../60-evidence/s11/2026-10-12-direction-decision-intake.md)
 preserves all supplied files and native audit outputs, verifies S2's algebra and
 the original reproduction wrapper, and qualifies the proposed delivery direction.

@@ -1048,3 +1048,5 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates-verification.json](50-diagnostics/s11/2026-10-12-p2-row-distributions/candidates-verification.json) | 전체 후보 비교에서 드러난 평균 외관 비교의 선택 한계 및 검증 |
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/candidate-competition.png](50-diagnostics/s11/2026-10-12-p2-row-distributions/candidate-competition.png) | 전체 후보 비교에서 드러난 평균 외관 비교의 선택 한계 및 검증 |
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/plot-candidates.py](50-diagnostics/s11/2026-10-12-p2-row-distributions/plot-candidates.py) | 전체 후보 비교에서 드러난 평균 외관 비교의 선택 한계 및 검증 |
+| 2026-10-12 | [60-evidence/s11/2026-10-12-boundary-feasibility-handoff.md](60-evidence/s11/2026-10-12-boundary-feasibility-handoff.md) | 경계 판별 연구 체크포인트, 재개 순서와 로컬 입력·보관 검증 |
+| 2026-10-12 | [60-evidence/s11/2026-10-12-boundary-feasibility-handoff.json](60-evidence/s11/2026-10-12-boundary-feasibility-handoff.json) | 경계 판별 연구 체크포인트, 재개 순서와 로컬 입력·보관 검증 |
