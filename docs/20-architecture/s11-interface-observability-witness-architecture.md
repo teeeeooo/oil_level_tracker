@@ -1815,7 +1815,12 @@ The frozen primary trial closes the distribution operation without promotion:
 positive retained, wrong target unresolved. Its unchanged mean ablation passes
 that pair; a separately frozen, exposed diagnostic-only follow-up checks the
 remaining existing cases. No threshold change, reopening, new production consumer
-or physical acceptance follows. The original stop rule/result remains intact.
+or physical acceptance follows. The original stop rule/result remains intact. The complete diagnostic retains
+interface preference for 4/6 non-initial Oil contexts, opposition for 2/3 wrong
+targets and 2/2 internal-texture contexts, with the rest unresolved. This is a
+conditional reference lead, not a candidate selector or accepted successor.
+The next comparison must include competing same-frame proposals and retain
+unreviewed identities as unassessed before any consumer can be proposed.
 
 ### Boundary-local role feasibility — October 11 audit adoption
 

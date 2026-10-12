@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Specification intakes through October 12 adopt no new detector behavior.
-**Next transition:** The [ordered row-distribution pilot](../50-diagnostics/s11/2026-10-12-p2-row-distributions.md) is CLOSED WITHOUT PROMOTION: the positive is retained but the primary wrong target remains unresolved. Its unchanged row-mean ablation passes that pair; execute only the separately frozen diagnostic continuation on the remaining existing cases to determine whether that result recurs. No successor is accepted or attached to production. P5-a remains independent, all source questions stay CLOSED, and prior closed models stay closed. O2/V5 Windows shadow then separate O3 remain required for typed consumption. Local XY OFF / O2 OPEN / FIELD FAIL remain; no Windows run is requested.
+**Next transition:** The [row-distribution pilot and unchanged-mean diagnostic](../50-diagnostics/s11/2026-10-12-p2-row-distributions.md) are complete. The distribution hypothesis is CLOSED WITHOUT PROMOTION. Its unchanged mean ablation retains 4/6 non-initial Oil contexts and opposes 2/3 reviewed wrong targets plus 2/2 internal-texture contexts; other results remain unresolved. This is a conditional regional-reference lead, not a candidate selector or runtime improvement. Next freeze comparison against all same-frame competing proposals before proposing any consumer; preserve unknown identities and all prior controls. P5-a remains independent and all source questions stay CLOSED. Typed consumption still requires O2/V5 Windows shadow then separate O3. Local XY OFF / O2 OPEN / FIELD FAIL remain; no Windows run is requested.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -166,6 +166,21 @@ and preserve existing controls; a cost/threshold/authority-order rescue is not
 ready. No continuous-episode, operational-judgment, HTML/UI, O2 or field acceptance
 follows. Local work remains authorized; neither another source answer nor a
 Windows run is needed at this checkpoint.
+
+The [ordered row-distribution experiment](../50-diagnostics/s11/2026-10-12-p2-row-distributions.md)
+tested whether horizontal grain exchange could preserve ordered material context.
+Its intended synthetic positive and 32 focused tests pass, but the fixed real
+positive/opposition pair fails the proposed distribution rule. That hypothesis
+is closed; no settings were retuned. A separately frozen, diagnostic-only check
+of its **unchanged row-mean ablation** covers all 14 original contexts, with
+initialization excluded from success counts. It retains 4/6 Oil contexts and
+opposes 2/3 reviewed wrong targets plus 2/2 internal textures, leaving the others
+unresolved. All 221 production files remain unchanged. This supplies a limited
+reference-conditioned lead, not detection efficacy or automatic scope coverage.
+Before behavior work, compare the unchanged descriptor against all existing
+same-frame candidates; known query locations must not hide competing hypotheses.
+All unreviewed candidate identities remain unassessed, and no new source label,
+setup requirement or Windows execution is currently needed.
 
 ### Source and truth qualification before the next experiment
 

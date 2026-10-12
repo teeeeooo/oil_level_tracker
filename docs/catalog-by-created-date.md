@@ -1040,3 +1040,5 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/verification.json](50-diagnostics/s11/2026-10-12-p2-row-distributions/verification.json) | 행별 색 분포의 실패 판정 및 변경 없는 평균 비교의 별도 진단 |
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-preflight.json](50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-preflight.json) | 행별 색 분포의 실패 판정 및 변경 없는 평균 비교의 별도 진단 |
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/followup.py](50-diagnostics/s11/2026-10-12-p2-row-distributions/followup.py) | 행별 색 분포의 실패 판정 및 변경 없는 평균 비교의 별도 진단 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-readout.json](50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-readout.json) | 변경 없는 행 평균 비교의 14맥락 전체 진단과 독립 수치 검증 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-verification.json](50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-verification.json) | 변경 없는 행 평균 비교의 14맥락 전체 진단과 독립 수치 검증 |

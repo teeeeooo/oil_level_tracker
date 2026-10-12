@@ -39,7 +39,7 @@ snapping, new reference or source-specific inference branch.
 
 ## Frozen operation and positive reachability
 
-Use rows0–10 and14–24 of each 25×25 patch, leaving a three-row center gap.
+Use rows 0–10 and 14–24 of each 25×25 patch, leaving a three-row center gap.
 Intersect visibility across query and all three references at the same local
 coordinates. Every retained row needs at least eight common columns; otherwise
 the whole comparison is unavailable, with that row retained in the record.
@@ -49,15 +49,15 @@ These are regional bindings, not reviewed exact contours or pure material masks.
 
 For each image, subtract one BGR offset equal to the average of its 22 row means.
 For each row/channel, sort those centered common samples and take the mean
-absolute paired difference. Divide by510 and average equally over channels/rows.
-Centered samples lie in[-255,255], so the cost is in[0,1]. The ablation replaces
+absolute paired difference. Divide by 510 and average equally over channels/rows.
+Centered samples lie in [-255,255], so the cost is in [0,1]. The ablation replaces
 sorted distributions with each row's centered channel mean on the same support.
-A unique best cost≤0.05 and role margin≥0.01 yields appearance preference; exact
-or near ties≤1e-12 and missing comparisons remain unresolved. Constants are fixed
+A unique best cost ≤0.05 and role margin ≥0.01 yields appearance preference; exact
+or near ties ≤1e-12 and missing comparisons remain unresolved. Constants are fixed
 pilot choices, not a calibrated runtime operating point.
 
 The actual synthetic operation measures a shuffled interface population plus
-unclipped BGR illumination offset. It yields interface cost0, texture cost
+unclipped BGR illumination offset. It yields interface cost 0, texture cost
 `(24/25)*40/510`, and structure cost `(24/25)*80/510`. All three references have
 identical row means, so the ablation ties. Thus an intended positive can reach the
 acceptance region; no hand-written feature vector substitutes for measurement.
@@ -68,7 +68,7 @@ offset, copied-opponent ambiguity, missing references and input preservation.
 ## Real progression and scope
 
 First compare only the existing **same-frame f1320** confirmed Oil context
-(candidate9/Y844) and reviewed wrong target (candidate21/Y822), using unchanged
+(candidate 9/Y844) and reviewed wrong target (candidate 21/Y822), using unchanged
 S1 initial/interface, structure and internal-texture references. These two must
 receive interface and opposition appearance preferences respectively, while the
 row-mean ablation fails at least one, before the remaining twelve S1 queries run.
@@ -87,21 +87,21 @@ remains independent. No source decoder, application replay or Windows run occurs
 ## Primary result and unchanged-ablation follow-up
 
 The [readout](2026-10-12-p2-row-distributions/readout.json) ran at frozen
-`9118714`. The confirmed Oil context has distribution costs interface0.017143,
-structure0.095460, texture0.045511 and correctly retains interface preference.
-The wrong target has interface0.112903, structure0.068434, texture0.080337;
-its best cost exceeds0.05 and therefore stays unresolved. The required opposition
+`9118714`. The confirmed Oil context has distribution costs interface 0.017143,
+structure 0.095460, texture 0.045511 and correctly retains interface preference.
+The wrong target has interface 0.112903, structure 0.068434, texture 0.080337;
+its best cost exceeds 0.05 and therefore stays unresolved. The required opposition
 result fails. The twelve remaining queries are NOT_RUN in this closed pilot;
 no cutoff or descriptor adjustment follows. This does not prove that every
 threshold would fail; no post-result threshold search was authorized or performed.
 
 The [CDF verification](2026-10-12-p2-row-distributions/verification.json)
-reconstructs396 channel/row/role integrals on exact common pixels, all286 input
-pins and221 unchanged production sources. Execution took0.136 s /90,357,760 bytes
+reconstructs 396 channel/row/role integrals on exact common pixels, all 286 input
+pins and 221 unchanged production sources. Execution took 0.136 s / 90,357,760 bytes
 peak RSS. The failure concerns the proposed operation, not an arithmetic defect.
 
 The unchanged **row-mean ablation** retains interface preference on the positive
-(cost0.016015) and structure preference on the wrong target (cost0.037415).
+(cost 0.016015) and structure preference on the wrong target (cost 0.037415).
 Its success on this one pair is exposed, exploratory evidence. The separately
 [frozen follow-up](2026-10-12-p2-row-distributions/followup-preflight.json) and
 [adapter](2026-10-12-p2-row-distributions/followup.py) reuse those two outputs and
@@ -109,7 +109,56 @@ measure the other twelve saved cases with unchanged references, support, offsets
 costs and cutoffs. This is a diagnostic-only continuation under the existing
 successor preflight allowance, **not promotion or a new name for the failed model**.
 The original stop/result stays intact. Incidental distribution fields from the
-shared helper cannot reopen it. All14 cases and unavailable sources remain visible.
+shared helper cannot reopen it. All 14 cases and unavailable sources remain visible.
+
+## Diagnostic follow-up result
+
+The [complete follow-up](2026-10-12-p2-row-distributions/followup-readout.json)
+ran at frozen `3fe157e`, reusing the original pair and measuring the other twelve
+queries. All 14 source bindings, floor/ceil summaries and non-initial counts were
+checked against the unchanged S1 manifest. The two initialization contexts remain
+visible but are excluded from continuation counts.
+
+| Existing non-initial context | Interface preference | Measured opposition preference | Unresolved |
+|---|---:|---:|---:|
+| Confirmed Oil, 6 contexts | **4** | 0 | 2 |
+| Reviewed wrong Oil targets, 3 contexts | 0 | **2** | 1 |
+| Reviewed internal Foam texture, 2 contexts | 0 | **2** | 0 |
+| Agent-observed old rim failure, 1 context | 0 | 0 | 1 |
+
+These are regional reference preferences on selected, exposed contexts, **not
+Oil detection accuracy, a correct-rejection rate, source coverage or runtime
+improvement**. The four retained positives are f1140/f1200/f1260/f1320. At f1485,
+texture cost 0.02499 is slightly below interface 0.02925; at f1560, interface 0.02285
+and texture 0.02440 are too close. Both remain unresolved. The rejected f1260
+context prefers structure by raw cost but exceeds the unchanged cost limit;
+unresolved is not counted as successful opposition. The old rim context is also
+unresolved. No remaining case is hidden or relabeled.
+
+[Independent CDF arithmetic](2026-10-12-p2-row-distributions/followup-verification.json)
+reconstructs 2,970 row/channel/role integrals across 15 neighborhoods (one fractional
+candidate has two). All 290 pins and 221 production files are unchanged. The
+follow-up took 0.152 s / 90,472,448 bytes peak RSS. Existing math and the failed
+parent operation are unchanged; no image, candidate or video is regenerated.
+
+**Consequence for the product:** unchanged regional row means are a useful
+conditional lead worth examining against all same-frame competing proposals.
+A supplied correct query location is easier than finding the right candidate;
+this record has not demonstrated candidate selection. Before proposing a
+consumer, freeze that candidate-level comparison, preserve the known Oil and
+opposition bindings, mark every other proposal's physical identity unassessed,
+and record ambiguity without choosing a nearest coordinate or lowest-cost winner
+as physical truth. The original distribution pilot remains CLOSED WITHOUT
+PROMOTION; this ablation remains DIAGNOSTIC_ONLY_NO_PROMOTION. No new manual setup,
+source question, Windows request or field acceptance follows.
+
+Reproduce/verify from any working directory with absolute script/input paths:
+
+```sh
+.venv/bin/python docs/50-diagnostics/s11/2026-10-12-p2-row-distributions/run.py run --manifest docs/50-diagnostics/s11/2026-10-12-p2-row-distributions/preflight.json --output /tmp/s11-row-primary.json
+.venv/bin/python docs/50-diagnostics/s11/2026-10-12-p2-row-distributions/followup.py --output /tmp/s11-row-followup.json
+.venv/bin/python docs/50-diagnostics/s11/2026-10-12-p2-row-distributions/run.py verify --manifest docs/50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-preflight.json --readout docs/50-diagnostics/s11/2026-10-12-p2-row-distributions/followup-readout.json --output /tmp/s11-row-verification.json
+```
 
 ## Detector Governance
 
