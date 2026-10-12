@@ -1140,10 +1140,11 @@ author 시각을 Asia/Seoul로 환산한 2026-10-12로 확정했습니다.
 
 ### 2026-10-12 retention-value review
 
-아래 파일의 작성일은 2026-10-12이며, 아직 Git 미등록 상태입니다.
+아래 파일의 작성일과 최초 Git 추가일은 2026-10-12입니다. 최초 추가 커밋
+`5f34477`의 author 시각(`2026-10-12T17:16:52+09:00`)으로 확인했습니다.
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| 미등록 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention-receipt.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention-receipt.json) | 실제 폐기·용량·생존 입력 및 복구 범위 검증 |
-| 미등록 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention.json) | 의사결정별 보존 심사와 현재 생존/폐기 경로 |
-| 미등록 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/temporal-affine-counterexample.npz](60-evidence/s11/2026-10-12-pre-cr1-cleanup/temporal-affine-counterexample.npz) | 폐기 ZIP에서 선별한 작은 합성 실패 반례 |
+| 2026-10-12 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention-receipt.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention-receipt.json) | 실제 폐기·용량·생존 입력 및 복구 범위 검증 |
+| 2026-10-12 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention.json) | 의사결정별 보존 심사와 현재 생존/폐기 경로 |
+| 2026-10-12 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/temporal-affine-counterexample.npz](60-evidence/s11/2026-10-12-pre-cr1-cleanup/temporal-affine-counterexample.npz) | 폐기 ZIP에서 선별한 작은 합성 실패 반례 |
