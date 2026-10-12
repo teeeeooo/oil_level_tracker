@@ -1,0 +1,13 @@
+{
+  "schema": "s11-public-source-current-frame-verification-v1",
+  "status": "PASS",
+  "readout_sha256": "f747c091f68b9a379fa41f1242de5f722a5c0b652383f3ab14c5b4506fbd93d0",
+  "source_files_unchanged": 221,
+  "output_files_verified": 8,
+  "none_full_pairs_equal": 2,
+  "artifact_arrays_verified": 48,
+  "candidate_joins_verified": 43,
+  "visible_center_edge_joins_verified": 21,
+  "physical_accuracy": "NOT_EVALUATED",
+  "scope": "Saved-artifact, projection and capture-equality verification; no detector rerun or physical-label approval."
+}

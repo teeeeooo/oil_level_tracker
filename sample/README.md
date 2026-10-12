@@ -8,8 +8,10 @@ These local videos support S6 engineering qualification. They are not canonical 
 [미소냉동](https://www.youtube.com/watch?v=mHOS1-1ck60). Its bytes and bounded
 source review are pinned in the [intake record](../docs/50-diagnostics/s11/2026-10-12-public-compressor-source.md).
 The user confirms the bright layer's upper boundary near 50 s as a regional
-Foam upper and its lower boundary as an Oil upper. It has no product Recipe, exact pixel truth, continuous-story
-qualification, detector result or holdout status. It is not silently added to
+Foam upper and its lower boundary as an Oil upper. A frozen current-frame
+native/half-resolution check is recorded in the intake. It has no product Recipe,
+exact pixel truth, continuous-story or completed-session qualification, or holdout
+status. It is not silently added to
 the historical four-video regression or seven-source P0 denominator. The
 [Work Plan](../docs/00-project/work-plan.md) owns further qualification and use.
 

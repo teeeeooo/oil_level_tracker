@@ -948,6 +948,21 @@ Native arrays and the verified archive remain local and are indexed by the machi
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/screen-preflight.json](50-diagnostics/s11/2026-10-12-public-compressor-source/screen-preflight.json) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/source-contact-sheet.jpg](50-diagnostics/s11/2026-10-12-public-compressor-source/source-contact-sheet.jpg) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
 | 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/upper-role-reply.json](50-diagnostics/s11/2026-10-12-public-compressor-source/upper-role-reply.json) | 공개 원본 출처·장면 검토·판단 및 무결성 기록 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/inspect_detector.py](50-diagnostics/s11/2026-10-12-public-compressor-source/inspect_detector.py) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/prepare_position_review.py](50-diagnostics/s11/2026-10-12-public-compressor-source/prepare_position_review.py) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/capture-storage.json](50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/capture-storage.json) | 동일 NONE/FULL payload 중복 제거와 진단 JSON 무손실 압축 매핑 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/current-frame-readout.json](50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/current-frame-readout.json) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/current-frame-verification.json](50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/current-frame-verification.json) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/half-diagnostics.json.gz](50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/half-diagnostics.json.gz) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/half-images.npz](50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/half-images.npz) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/half-none.json](50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/half-none.json) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/native-diagnostics.json.gz](50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/native-diagnostics.json.gz) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/native-images.npz](50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/native-images.npz) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/native-none.json](50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/native-none.json) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.json](50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.json) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/join_positions.py](50-diagnostics/s11/2026-10-12-public-compressor-source/join_positions.py) | 사용자 확정 범위와 저장 관측의 후보·중앙선·구성 영역 연결 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-join.json](50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-join.json) | 사용자 확정 범위와 저장 관측의 후보·중앙선·구성 영역 연결 |
+| 2026-10-12 | [50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.png](50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.png) | 공개 영상의 고정 프레임 검출 관찰·검증 및 원본 위치 범위 검토 |
 
 ### 2026-10-12 scene-based evaluation routing
 

@@ -109,6 +109,108 @@ a completed session, confirm an episode, evaluate continuity, test a new physica
 selector, or reopen S3. Regional role judgments are evaluation context only; no
 numeric precision/recall or universal minimum-resolution requirement follows.
 
+<a id="fixed-result-and-remaining-position-review"></a>
+
+### Fixed result and closed position review
+
+The preflight was committed at `a486049` before execution. The
+[saved readout](2026-10-12-public-compressor-source/current-frame/current-frame-readout.json)
+pins the executed [runner](2026-10-12-public-compressor-source/inspect_detector.py)
+and retains four isolated calls through the existing current-frame entry point.
+The two NONE/FULL pairs have identical complete provisional detections.
+
+| Current-frame observation | Native | Half resolution, projected to native source Y |
+|---|---:|---:|
+| ROI height × width | 210 × 228 | 106 × 115 before projection |
+| Current Oil selection | 321.0 | 322.5 |
+| Lower-region Oil hypothesis retained | 430.0 | 428.5 |
+| Lower-region material-path candidate retained | 425.0 | 424.5 |
+| Proposed Foam component front | 317.0 | 318.5 |
+| Oil / Foam candidates retained | 22 / 1 | 19 / 1 |
+| Visible center Canny intersections | 13 | 8 |
+
+Both current Oil selections lie toward the upper bright-layer transition, while
+lower-region candidates survive. This is a qualitative regional reading, not an
+exact-position accuracy score. At native resolution the lower Oil hypothesis
+has `typed_ambiguous_hypothesis`; at half resolution it has
+`typed_not_temporally_selected`. In both cases the actual current decision is
+`initial_shadow_boundary`. Those are current hypothesis/projection reasons, not
+completed-window Oil authority results. A new edge generator or simply increasing
+resolution does not address the entire observed role-selection problem.
+
+Both Foam components are `accepted_strong` at the spatial stage, with evidence
+scores 0.905995 and 0.890840. Both current Foam outputs are null because the fresh
+temporal gate has one observation against its required count of two. This expected
+first-frame pending state does not establish an episode miss or permission to
+relax persistence. The native component front is outside the subsequently
+reviewed Foam interval at the fixed column, as joined below.
+
+The rounded native center is X578; the half-resolution center projects to X578.5.
+The saved source-coordinate mapping reports this difference rather than pretending
+the two sampled columns have identical pixel support. The perturbation also changes
+pixel-based preprocessing and geometry rounding. It is one local resolution
+sensitivity check, not proof that all old recordings are too small or suitable.
+
+[Artifact verification](2026-10-12-public-compressor-source/current-frame/current-frame-verification.json)
+checks eight logical capture outputs, 48 artifact arrays, all 43 candidate projections
+and 21 visible-center joins, plus both complete-detection equality pairs and all
+221 unchanged production Python files. Measured detection/capture work took
+0.664 s with process peak RSS 155,615,232 bytes; import/font-cache preparation is
+outside that timer. No full-session resolver, episode evaluation, report, video
+decode, production modification or field qualification ran.
+
+The [storage mapping](2026-10-12-public-compressor-source/current-frame/capture-storage.json)
+retains the original output names/hashes while storing six distinct payloads.
+Large diagnostic JSON is losslessly gzip-compressed; byte-identical FULL detection
+records alias the retained NONE records. All eight logical outputs were reconstructed
+and checked byte-for-byte before removing the redundant/uncompressed copies. The
+runner still emits the original files into a fresh directory; capture semantics
+and its executed hash are unchanged.
+
+The user replied **“두 범위 모두 맞음”** to the separate
+[source-only position figure](2026-10-12-public-compressor-source/position-review/position-review.png).
+The [closed review](2026-10-12-public-compressor-source/position-review/position-review.json)
+confirms Foam rows **323–338** and Oil rows **421–435** at native **X578** in this
+frame, with pixel-cell bounds [322.5,338.5] and [420.5,435.5]. Both role questions
+and both range questions are CLOSED. These are containment intervals, not exact
+scalars, unique edges, labels for every enclosed candidate or adjacent-frame truth.
+The ranges were proposed after baseline inspection and remain exposed adjudication.
+The [figure renderer](2026-10-12-public-compressor-source/prepare_position_review.py)
+loads only source pixels and displays no detector predictions.
+
+### Qualified ranges joined to saved observations
+
+The [saved-data join](2026-10-12-public-compressor-source/position-review/position-join.json)
+and [reproducer](2026-10-12-public-compressor-source/join_positions.py) add no detector,
+video, path generation or selection run. The adapter reads this new capture schema;
+the earlier interval reproducers bind different historical captures. All 23 native
+candidates, 13 visible center edges and 31 reviewed rows are retained.
+
+| Saved native observation | Relation to reviewed interval | Interpretation |
+|---|---|---|
+| Visible Canny at X578: Y332,336 | Inside Foam A | Current-frame edge observations survive; neither is individually certified Foam. |
+| Visible Canny at X578: Y428,431,433 | Inside Oil B | Lower-boundary observations survive before hypothesis selection. |
+| Current raw/public Oil Y321 | 99.5 px above Oil interval | Provisional selection fails interval containment; this is distance to an uncertainty interval, not exact-Y error or a completed-session result. |
+| Oil hypothesis idx5/Y430 | Scalar inside Oil interval; rejected as `typed_ambiguous_hypothesis` | A lower alternative survives; its pooled scalar is not a certified fixed-X contour. |
+| Material path idx9 | Median Y425; center-sector sample Y429 over X[557,600) | Both scalar values lie in Oil B; the sector sample remains pooled support, not a pixel contour. |
+| Selected spatial Foam component | Front Y317, 5.5 px above Foam interval | The front is already incompatible before temporal publication. |
+| Same component's visible center occupancy | Y317–349,417–428,447–456 | Foam A lies inside a larger appearance component; replacing global top by first center support still gives Y317. |
+
+The native Oil problem is therefore not complete loss of lower observations.
+For Foam, the retained appearance component crosses the reviewed upper range but
+its single front points above it. Whole-component/first-support geometry is not
+enough to choose this boundary. As in the prior sample4 join, relaxing the later
+episode gate cannot turn the retained raw front into the reviewed upper.
+This new frame supplies a separate spatial counterexample without certifying the
+physical meaning of every component pixel. No exact curve or selected-candidate
+identity is inferred from interval compatibility.
+
+The join verified all eight reconstructed logical outputs, all 24 native image
+arrays and all 221 production hashes, and reproduced both NONE/FULL byte-equality
+pairs. It ran from outside the repository with an explicit root. Half-resolution
+physical accuracy remains NOT_EVALUATED because its center is X578.5; native
+interval truth is not transferred to the different sampled column.
+
 ## Verification and reproduction
 
 [Artifact verification](2026-10-12-public-compressor-source/artifact-verification.json)
@@ -121,6 +223,9 @@ With the pinned local original present, reproduce into a new directory:
 
 ```bash
 .venv/bin/python docs/50-diagnostics/s11/2026-10-12-public-compressor-source/render.py --root . --output /tmp/s11-public-source-review
+MPLCONFIGDIR=/tmp/s11-public-mpl .venv/bin/python docs/50-diagnostics/s11/2026-10-12-public-compressor-source/inspect_detector.py --root . --output /tmp/s11-public-source-baseline
+.venv/bin/python docs/50-diagnostics/s11/2026-10-12-public-compressor-source/prepare_position_review.py --output /tmp/s11-public-source-positions
+.venv/bin/python docs/50-diagnostics/s11/2026-10-12-public-compressor-source/join_positions.py --root . --output /tmp/s11-public-source-position-join.json
 ```
 
 The renderer refuses to overwrite an existing output directory. A future download
@@ -131,6 +236,6 @@ before decoding. The full downloader metadata remains temporary and untracked.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `OIL-CANDIDATE`
 - Failure-registry entries: `S11-F02`, `S11-F07`, `S11-F09`, `S11-F10`
-- First harmful stage: NOT_EVALUATED — no detector execution; the intake separates regional physical meaning from exact pixels, temporal scope and changing image geometry before any model comparison.
+- First harmful stage: native current-frame Oil selects Y321 outside reviewed Oil rows421–435 despite retained lower observations. The selected Foam appearance component crosses reviewed rows323–338 but reduces to front Y317 before temporal publication. These are interval incompatibilities, not exact contour labels or completed-window results; native lower-hypothesis ambiguity and half-resolution non-selection remain distinct. Fresh Foam persistence pending is not a demonstrated episode failure.
 - Logic-map impact: NONE — reuses the existing video reader for bounded evidence preparation; no production route, geometry policy or selection change.
 - Failure-registry impact: NONE — source/role uncertainty and non-transfer of reviewed truth are already covered; no new field failure or repair is asserted.
