@@ -1501,6 +1501,13 @@ encoder-through-pixel control before scoring. Native token spacing and contextua
 scope differ across sources; disclose them. Retain all rows/scores/statuses under
 fixed resources with no score-guided geometry/bank/source retry. The absent
 Foam-upper prototype, calibration/holdout and downstream-effect gates remain open.
+The separate [material-side proposal](../20-architecture/s11-contextual-role-observation-design.md#material-side-observation-proposal--reference-review-pending)
+requires its pending finite-footprint material reply before a new operation is
+frozen or scored. Boundary-range agreement alone is not that reply. Preserve the
+reference scene as exposed initialization, the actual native candidate population,
+dark-Foam/no-Foam/rim/internal controls, individual side terms and the unordered
+control. No regional prototype or signed affinity alone supplies calibrated Foam
+identity or permission to change raw fronts/episodes.
 The optional saved-review qualification path must preserve exact baseline audit
 equality before emitting its supplement. Controls must reject stale authority
 bytes, repinned-but-different baseline content, changed query identity/time,

@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1 offline preflight adds no detector behavior.
-**Next transition:** execute the [frozen public-source transfer diagnostic](../50-diagnostics/s11/2026-10-13-cr1-public-transfer.md) once on the previously confirmed containment ranges, after its new-geometry pixel controls. The [f1485 clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md) is CLOSED and executable: B is a practically accepted approximation; neither B nor A supplies the previously claimed physical positive/alternative. The separate [low-quality public still](../50-diagnostics/s11/2026-10-13-public-compressor-role-reply.json) remains unassessable. All 164 saved records remain intact. The new 35-anchor context diagnostic supplies no per-anchor truth, operating point or independent evaluation; production shadow/consumer/efficacy entry remains unmet.
+**Next transition:** receive the [R Foam-interior footprint judgment](../50-diagnostics/s11/2026-10-13-foam-material-reference/proposal.json) for the separate [material-side observation proposal](../20-architecture/s11-contextual-role-observation-design.md#material-side-observation-proposal--reference-review-pending), then freeze its native-candidate/control inputs under WP07/P5-a before another experiment. The [fixed public-source CR1 transfer](../50-diagnostics/s11/2026-10-13-cr1-public-transfer.md) is complete without promotion: all 35 regional anchors were measured, but the existing bank supplies no qualified Oil/Foam-upper role separation. Do not fit a cutoff or retry its crop/scale/bank. The [f1485 clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md) is CLOSED and executable: B is a practically accepted approximation; neither B nor A supplies the previously claimed physical positive/alternative. The separate [low-quality public still](../50-diagnostics/s11/2026-10-13-public-compressor-role-reply.json) remains unassessable. All 164 original records remain intact; physical calibration, independent evaluation and production shadow/consumer entry remain unmet.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 13 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
@@ -35,7 +35,7 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
 | O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | PROPOSED; separate from WP05 | Explicit route for independently role-supported native candidates; name the replaced heuristic. Repair association/lifecycle only if saved earliest-loss evidence identifies that owner; preserve FULL/EMPTY/refill/drain |
-| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | Physical selection OPEN; prior source/default linkage VERIFIED | Independent upper-role/native representation against upper/texture/rim/dark-Foam controls; then actual raw/completed/public linkage. Typed consumers retain O2/O3; Oil policy is not Foam-upper evidence |
+| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | Material-side design PREPARED; R reference-footprint review PENDING; physical selection OPEN | [Proposal and display](../50-diagnostics/s11/2026-10-13-foam-material-reference/proposal.json) bind one new interior footprint, no model calls. After the reply, freeze the separate role operation and complete native/control roster; then only qualified evidence may enter raw/completed/public linkage. Typed consumers retain O2/O3; Oil policy is not Foam-upper evidence |
 | P5-c / WP08 — Foam episode | ENTRY NOT MET | Open only for an independently qualified correct raw upper lost downstream; separate onset/stable-layer versus splash/residue controls |
 | O5/W7/P6/D6 / WP09 — integrated Windows and report | PENDING integrated candidate | Exact runtime, all nine canonical segments, target resources and actual independent report-only reading; V5 shadow and final field acceptance remain separate |
 | P7 / WP10 — disposition and closeout | PENDING acceptance evidence | Record accepted/limited/rejected/unassessed scope and residual impact; retain minimal evidence. S11-M/S12 follow the roadmap, not partial local success |
@@ -55,6 +55,12 @@ absolute local interface support. Preserve full scores as context; no universal
 full-texture veto, category voting or maximum-score candidate selection. Low
 support/ties/missing evidence do not prove structure. Native candidate linkage
 and qualified role precision remain independent of descriptor preference.
+
+The completed [public transfer](../50-diagnostics/s11/2026-10-13-cr1-public-transfer.md)
+does not qualify that family: local interface preference covers all 18 Foam-region
+anchors but only 6/17 Oil-region anchors, with no point labels or Foam-upper bank.
+These are context statistics, not error rates. Keep the complete scores and stop
+that frozen comparison; independent Foam-upper design is the next research slice.
 
 The [WP02–03 manifest/preflight](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md)
 verifies the saved contract without fitting. The [B clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md)

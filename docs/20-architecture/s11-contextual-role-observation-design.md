@@ -397,6 +397,13 @@ different source/token scale and prototype scope; no new Foam-upper reference,
 threshold, per-anchor truth or untouched evaluation follows. Stop after the frozen
 diagnostic; do not search alternative geometry or references to rescue the outcome.
 
+The completed comparison supplies no qualified role separation: every sampled
+Foam-upper context prefers local interface, while the Oil-upper region is mixed.
+These are uncertain regional anchors and the bank has no Foam-upper prototype;
+they are not false-positive/false-negative counts. Do not use the result to fit
+`tau_support`, promote the policy, or add a source-specific scale/bank exception.
+An independent Foam-upper operation retains its separate design and controls below.
+
 ### Separate Oil behavior slices after shadow acceptance
 
 1. **Same-frame role condition:** after O2/V5 and a separate O3 plan, consume the
@@ -440,6 +447,64 @@ prototype. A learned Foam-upper bank/operation needs its own frozen experiment;
 the Oil policy provides no implicit authorization or evidence for it. Preserve
 dark water Foam A, sample4/public uppers, internal texture/rim, no-Foam B/C,
 cropped beer upper and unclear milk lower at their actual review precision.
+
+### Material-side observation proposal — reference review pending
+
+The next bounded question is whether an explicitly qualified **Foam-interior
+appearance reference**, compared separately with each observed boundary side,
+provides useful role evidence. The [R proposal](../50-diagnostics/s11/2026-10-13-foam-material-reference/proposal.json)
+and [native-pixel review](../50-diagnostics/s11/2026-10-13-foam-material-reference/reference-review.png)
+pin one 25×25 region in the already reviewed public frame. Its finite horizontal
+material footprint needs a new scoped reply; earlier upper/lower boundary replies
+remain closed. No inference, replacement reference or material label follows
+until that reply. A reply of unassessable stops this proposed reference; do not
+choose a neighbouring patch from scores or repeatedly ask about the same image.
+
+This is a different P5-a observation contract, not a new bank slipped into the
+closed Oil-context transfer. The original CR1 descriptor already contains ordered
+upper, lower and difference vectors. The proposed distinction is **what the
+reference represents and how each side is compared**, not a claim that CR1 omitted
+the side vectors. A Foam-interior reference supplies an appearance example only;
+it cannot by itself prove Foam identity, an upper front or a native contour.
+
+After qualifying the input, freeze the exact operation and complete source/query
+roster before any scores. Reuse the pinned encoder and dimension-aware geometry,
+existing visible native edges and side-support owners. Do not add an edge generator
+or select anchors from reviewed intervals. The proposed diagnostic records:
+
+```text
+p = unit(weighted mean tokens over the qualified Foam-interior footprint)
+u, l = independently normalized upper/lower side means at an existing edge
+upper_affinity = cosine(u, p)
+lower_affinity = cosine(l, p)
+ordered_contrast = lower_affinity - upper_affinity
+unordered_control = (lower_affinity + upper_affinity) / 2
+```
+
+All raw terms, visibility, token overlap, coordinate transforms and reference
+exposure remain available. Empty/partial required support, nonfinite or degenerate
+vectors stay unavailable. Full/local use identical native geometry and declared
+context masking, with actual pixel controls before real queries. An upper/lower
+exchange control must reverse ordered contrast while preserving the unordered
+control; internal-like both-sides support must remain distinguishable in the raw
+pair. These are implementation controls, not physical validation or a Foam rule.
+
+The public reference scene is exposed initialization, not independent evaluation.
+Separate its self/context result from sample4, dark water A, no-Foam water B/C,
+internal-texture/rim and unavailable-upper controls. Reuse the pinned native
+inventories and existing interval joins. Report every scheduled edge and every
+unreviewed or unsupported guide; do not snap an absent guide to a nearby edge,
+label a whole interval as positive, or select the best score after viewing results.
+Keep dark-Foam reachability and false-front opposition separate. A partial result
+does not require perfect frame accuracy and cannot claim broad recovery either.
+
+No similarity cutoff, calibrated class, current numeric, presence/absence decision
+or episode change is part of this comparison. Its result may reject this operation
+or justify a separately qualified calibration step; it cannot replace that step.
+Freeze resource/stop conditions and the complete comparison before execution;
+an unfavourable result does not authorize reference, scale, crop or margin rescue.
+Until then, the retained environment has a concrete pending use, and the existing
+3 GB footprint/removal contract applies.
 
 ## History Review
 

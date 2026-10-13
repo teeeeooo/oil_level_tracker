@@ -1,6 +1,7 @@
 # CR1 fixed-bank public-source transfer — 2026-10-13
 
-**Preflight frozen before model execution.** This is one exposed-development
+**COMPLETE_DIAGNOSTIC_ONLY; no promotion.** The preflight and adapter were committed
+at `9e106cd830286a18787465865dbcf1dfa7395fb7` before model execution. This is one exposed-development
 comparison on the already reviewed public-miso frame, after separating the
 [sample4 practical acceptance](2026-10-13-cr1-competitor-role.md) from physical truth.
 The [Work Plan](../../00-project/work-plan.md) owns progression. This record does
@@ -62,16 +63,70 @@ bank has no Foam-upper class, so Foam-upper context cannot become a calibrated
 negative or an upper-front detector. `tau_support` and physical accuracy stay unset.
 
 Stop after this comparison or an input/control/resource failure. No crop, scale,
-bank, margin or source retry follows from an unfavourable result. Managed run
-`public-transfer-20261013-001` will retain this preflight and the compact complete
-readout, referencing existing originals rather than copying them. Token maps and
-scratch metadata are disposable. Review retention when a successor replaces this
-source/geometry comparison's decision value.
+bank, margin or source retry follows from an unfavourable result.
+
+## Complete comparison and interpretation
+
+The [complete readout](2026-10-13-cr1-public-transfer/readout.json) preserves all
+35 anchors, 70 three-class vectors and their actual support weights. All anchors
+were measured with 21 common columns; there were no missing results or ties.
+
+| User-confirmed containment region | Anchors | Full preference | Local preference | Local interface score range |
+|---|---:|---|---|---|
+| Foam upper | 18 | interface 16, texture 2 | interface 18 | 0.243390–0.384663 |
+| Oil upper | 17 | structure 17 | interface 6, texture 11 | 0.298809–0.521209 |
+
+Within the Oil region, local preference is interface at Y420–422 and Y434–436,
+and texture at Y423–433. Neither group has point-level truth. The ranges overlap
+in absolute interface support; this is not a calibrated confidence comparison.
+Do not select the favourable anchors, treat the regional roster as required
+variants of one candidate, or call all 18/17 anchors physical positives/negatives.
+
+This result does not establish reliable Oil-versus-Foam-upper role separation
+by the fixed three-reference bank. The bank has no Foam-upper reference; upper
+context favouring interface is therefore not a measured false positive. Likewise,
+Oil-region texture preference is not candidate-level false-negative evidence.
+The source/scale transfer does not identify which of appearance, token footprint,
+reference scope or exact edge position caused the preference. A cutoff cannot
+resolve that missing semantic qualification, and no cutoff is fitted here.
+
+Keep the earlier `SCOPE_LIMITED_USEFULNESS` finding at its original scope. This
+separate diagnostic adds no promotion, independent evaluation, native candidate
+selection, physical cadence or report-effect claim. The sample4 B practical
+acceptance remains separate from physical truth. Further Oil policy work needs
+qualified inputs and a justified observation operation; do not silently replace
+the bank/crop after this result. Foam-upper research remains an independent P5-a
+design with its own controls before any raw-front or episode change.
+
+## Execution, verification and retention
+
+Execution used the existing isolated CPU environment from `/private/tmp`, the
+unchanged encoder and all 159 readiness model/source pins. All 16 preflight pins,
+native source-crop pixels, mask arrays, query roster and reference input hashes
+matched. The actual pixel control passed: remote-pixel changes affected full
+tokens while local tokens stayed exactly equal, and descriptors remained defined.
+The two denied audit events were the deliberate network/write guard smoke checks.
+No other denied event, network access or video decode was needed.
+
+- Total measured runtime: **6.527 s**, including **4.785 s** encoder load and
+  **0.076 s** saved-raster preparation; this is not video/report/Windows timing.
+- **46 forwards**, maximum **0.052759 s** each; **601,554,944 bytes** peak RSS.
+- Workspace allocated bytes at measurement: **743,653,376**; the additional
+  **500,000,000-byte** external reservation keeps the total below the 3 GB cap.
+- Post-run saved audit: preflight/roster equality, all 70 finite score vectors,
+  preferences/margins and unit-mass strip weights pass. No model rerun is needed.
+
+Managed run `public-transfer-20261013-001` is closed. It reuses the canonical
+preflight and **152,343-byte** complete readout, with no duplicate media, dense
+token maps or retained work output. Review retention when a successor replaces
+this source/geometry comparison's decision value. The 13 pre-inference geometry
+tests and actual integration run validate the adapter's tested path, not a
+detector improvement or field acceptance.
 
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-PROJECTION`, `FOAM-CANDIDATE`.
 - Failure-registry entries: `S11-F09`, `S11-F10`.
-- First harmful stage: unknown for this unexecuted transfer; original context preferences do not establish physical role, and interval containment cannot be expanded into per-anchor truth.
+- First harmful stage: physical-role qualification remains unresolved in this offline transfer; no candidate-selection stage was executed. Interval containment cannot be expanded into per-anchor truth, and the existing bank has no Foam-upper prototype.
 - Logic-map impact: NONE — this is an offline input/geometry comparison using an existing fixed encoder/bank; no runtime selection, scalar publication or Foam episode owner changes.
 - Failure-registry impact: NONE — existing coordinate/provenance and threshold-rescue guards apply; no new mechanism or field repair is claimed.
