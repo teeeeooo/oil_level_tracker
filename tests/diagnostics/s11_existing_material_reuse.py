@@ -10,6 +10,7 @@ import argparse
 from collections import Counter
 import gzip
 import json
+import math
 from pathlib import Path
 import sys
 
@@ -22,6 +23,7 @@ from tests.diagnostics import s11_native_role_qualification as roles
 
 SCHEMA = "s11-existing-material-reuse-v1"
 POLICY_SCHEMA = "s11-oil-support-policy-feasibility-v1"
+PUBLIC_SCHEMA = "s11-public-oil-saved-candidate-audit-v1"
 o2 = g0.o2
 
 
@@ -298,12 +300,126 @@ def policy_audit(root: Path, manifest: dict, reused: dict, plan: dict) -> dict:
             "scope": "Necessary condition on exposed original-precision controls only; no operating point or accuracy claim."}
 
 
+def qualify_candidate_acceptance(packet: dict, reply: dict) -> set[int]:
+    """A reply binds practical acceptance to displayed candidates, not paths."""
+    o2.require(reply["schema"] == "s11-public-oil-candidate-acceptance-v1", "unsupported candidate reply")
+    o2.require(reply["review_packet_sha256"] == o2.fingerprint_json(packet), "review packet changed")
+    o2.require(reply["image_sha256"] == packet["image_sha256"], "displayed image changed")
+    o2.require((reply["frame_index"], reply["time_sec"], reply["source_x"])
+               == (packet["frame_index"], packet["time_sec"], packet["source_x"]), "reply frame/time/X mismatch")
+    o2.require(reply["scope"] == "PRACTICAL_APPROXIMATION_AT_THIS_FRAME_ONLY", "reply scope broadened")
+    o2.require(reply["user_text"] == "모두 허용", "unsupported all-candidate reply")
+    subjects = [{"candidate_input_index": r["candidate_input_index"], "candidate_sha256": r["candidate_sha256"]}
+                for r in packet["candidates"] if r["review_requested"]]
+    o2.require(subjects and reply["subjects"] == subjects, "reply subject roster changed")
+    indices = [s["candidate_input_index"] for s in subjects]
+    o2.require(len(set(indices)) == len(indices), "duplicate reviewed candidate")
+    return set(indices)
+
+
+def saved_candidate_observations(raw: dict, packet: dict, transfer: dict, accepted: set[int]) -> list[dict]:
+    """Exact coordinate lookup within one pinned source/geometry, never nearest Y."""
+    geometry = transfer["geometry"]
+    o2.require(len(raw["candidates"]) == len(packet["candidates"]), "complete candidate population required")
+    anchors = {}
+    for i, record in enumerate(transfer["results"]):
+        key = tuple(record["query"]["source_xy"])
+        o2.require(key not in anchors, "duplicate saved anchor")
+        anchors[key] = (i, record)
+    rows = []
+    for i, (candidate, bound) in enumerate(zip(raw["candidates"], packet["candidates"])):
+        o2.require(bound["candidate_input_index"] == i
+                   and bound["candidate_sha256"] == o2.fingerprint_json(candidate)
+                   and (bound["source"], bound["kind"], bound["representative_y"])
+                   == (candidate["source"], candidate["kind"], candidate["y"]), "exact candidate binding failed")
+        x, y = packet["source_x"], o2.number(candidate["y"], "candidate Y")
+        required = [[x, v] for v in sorted({math.floor(y), math.ceil(y)})]
+        found = [anchors.get(tuple(v)) for v in required]
+        query = {"id": f"public-f{raw['frame_index']}-idx{i}", "frame": raw["frame_index"],
+                 "candidate_index": i, "source": candidate["source"], "source_xy": [x, y]}
+        row = {"query": query, "candidate_sha256": bound["candidate_sha256"],
+               "practical_acceptance": "ACCEPTED_APPROXIMATION" if i in accepted else "NOT_REVIEWED",
+               "physical_role": "NOT_QUALIFIED", "native_path_role": "NOT_QUALIFIED",
+               "series": candidate["kind"], "required_anchors": required,
+               "saved_score_pointers": [f"/results/{v[0]}" if v else None for v in found],
+               "score_status": "NOT_SAVED" if any(v is None for v in found) else "SAVED",
+               "decision": "NOT_EVALUATED", "modes": None}
+        if all(v is not None for v in found):
+            variants = []
+            for xy, (_, record) in zip(required, found):
+                o2.require(record["status"] in {"MEASURED", "UNAVAILABLE_COMMON_SUPPORT_OR_CROP"},
+                           "saved anchor not executed")
+                variants.append({"source_center_xy": xy, "common_columns": record["common_columns"],
+                                 "modes": record["modes"], "status": record["status"]})
+            observation = g0.cr1.observe({"query": query, "measurement": {
+                "query": query, "status": "COMPARED", "variants": variants}}, {
+                "native_shape": geometry["native_shape"][:2], "origin_xy": geometry["source_origin_xy"],
+                "native_columns": list(range(-12, 13)), "minimum_common_columns": 8})
+            row["modes"] = observation["modes"]
+        rows.append(row)
+    return rows
+
+
+def public_candidate_audit(root: Path, plan: dict) -> dict:
+    o2.require(plan["schema"] == PUBLIC_SCHEMA, "unsupported public candidate audit")
+    o2.require(plan["operation"] == "SAVED_SIGN_NECESSITY_BEFORE_NEW_MEASUREMENTS", "unsupported operation")
+    o2.require(plan["policy"] == {"id": g0.cr1.POLICY, "tau_support": None,
+                                "tie_epsilon": g0.cr1.TIE_EPSILON}, "policy family changed")
+    docs = {name: read_pin(root, pin) for name, pin in plan["inputs"].items()}
+    review_plan, packet, reply, tp, transfer = (docs[k] for k in (
+        "review_plan", "review_packet", "reply", "transfer_plan", "transfer_readout"))
+    for pin in review_plan["inputs"].values():
+        g0.pinned_path(root, pin)
+    for path, digest in tp["pins"].items():
+        g0.pinned_path(root, {"path": path, "sha256": digest})
+    o2.require(packet["plan_sha256"] == o2.fingerprint_json(review_plan), "review plan changed")
+    g0.pinned_path(root, {"path": plan["review_image"], "sha256": packet["image_sha256"]})
+    o2.require(transfer["preflight_sha256"] == plan["inputs"]["transfer_plan"]["sha256"], "score preflight changed")
+    o2.require(transfer["geometry"] == tp["geometry"] and transfer["pixel_controls"]["status"] == "PASS",
+               "unverified transfer geometry")
+    o2.require(transfer["status"] == "COMPLETE_DIAGNOSTIC_ONLY"
+               and [r["query"] for r in transfer["results"]] == tp["queries"], "complete saved anchor population required")
+    o2.require(all(tp["pins"][review_plan["inputs"][k]["path"]] == review_plan["inputs"][k]["sha256"]
+                   for k in ("arrays", "capture", "position", "image")), "source/geometry inputs differ")
+    raw = read_pin(root, review_plan["inputs"]["raw"])
+    o2.require((raw["frame_index"], raw["time_sec"], packet["source_x"])
+               == (transfer["frame_index"], transfer["timestamp_sec"], tp["source_x"])
+               == (packet["frame_index"], packet["time_sec"], packet["source_x"]), "source frame/time/X changed")
+    accepted = qualify_candidate_acceptance(packet, reply)
+    o2.require(sorted(accepted) == plan["accepted_candidate_indices"] == review_plan["candidate_indices"],
+               "predeclared acceptance set changed")
+    rows = saved_candidate_observations(raw, packet, transfer, accepted)
+    controls = [r for r in rows if r["query"]["candidate_index"] in accepted]
+    o2.require(all(r["series"] == "oil_air" for r in controls), "other series cannot become Oil acceptance")
+    missing = [r["query"]["id"] for r in controls if r["modes"] is None or
+               r["modes"]["local"]["minimum_interface_margin"] is None]
+    passed = [r["query"]["id"] for r in controls if r["modes"] is not None and
+              r["modes"]["local"]["minimum_interface_margin"] is not None and
+              r["modes"]["local"]["minimum_interface_margin"] > g0.cr1.TIE_EPSILON]
+    status = ("INCOMPLETE_ACCEPTED_CONTROLS" if missing else "SIGN_PRESERVATION_POSSIBLE_NEEDS_OPPOSITION"
+              if passed else "CONTRADICTED_PRACTICAL_FRAME_COVERAGE")
+    return {"schema": PUBLIC_SCHEMA, "plan_sha256": o2.fingerprint_json(plan), "status": status,
+            "counts": {"candidates": len(rows), "accepted_approximations": len(accepted),
+                       "score_status": dict(Counter(r["score_status"] for r in rows)),
+                       "series": dict(Counter(r["series"] for r in rows)), "sign_passing_accepted": len(passed)},
+            "accepted_sign_passing_ids": passed, "missing_accepted_controls": missing,
+            "candidate_rows": rows, "saved_anchor_count": len(transfer["results"]),
+            "inputs": plan["inputs"], "source": review_plan["inputs"]["recording"],
+            "geometry": transfer["geometry"], "scope": "Practical at-least-one candidate preservation at one exposed source frame only.",
+            "tau_support": None, "decision": "NOT_EVALUATED", "physical_accuracy": "NOT_EVALUATED",
+            "new_model_calls": 0, "training_executed": False, "production_changed": False,
+            "untouched_holdout_recordings": 0}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--manifest", type=Path, required=True)
-    parser.add_argument("--policy-manifest", type=Path,
+    option = parser.add_mutually_exclusive_group()
+    option.add_argument("--policy-manifest", type=Path,
                         help="Optional frozen necessary-condition audit; no threshold selection")
+    option.add_argument("--public-candidate-manifest", type=Path,
+                        help="Bind practical candidate replies to saved public-source scores")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     o2.require(not args.output.exists(), "refuse overwrite")
@@ -312,6 +428,8 @@ def main() -> None:
     result = audit(args.root.resolve(), manifest)
     if args.policy_manifest:
         result = policy_audit(args.root.resolve(), manifest, result, o2.read_json(args.policy_manifest))
+    if args.public_candidate_manifest:
+        result = public_candidate_audit(args.root.resolve(), o2.read_json(args.public_candidate_manifest))
     elapsed = g0.time.monotonic() - started
     limits = manifest["resources"]
     o2.require(elapsed <= limits["seconds"], "reuse time budget exceeded")

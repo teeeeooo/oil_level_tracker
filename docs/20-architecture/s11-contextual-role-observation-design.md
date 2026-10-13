@@ -356,6 +356,31 @@ training or production replay is required. No seed/crop/bank/margin/cutoff retry
 follows. Only a separately specified source of information can motivate the next
 observation after a contradiction.
 
+### Scoped public candidate acceptance and saved-score entry
+
+The [public reply](../50-diagnostics/s11/2026-10-14-oil-policy-feasibility/public-acceptance.json)
+accepts all four displayed candidate approximations at f1499, not native paths or
+physical material labels. The reuse CLI's optional `--public-candidate-manifest`
+binds that reply to the displayed image, complete candidate hashes, source, frame,
+actual time and fixed X. Same-Y neighbors receive no inherited acceptance.
+
+The [frozen first comparison](../50-diagnostics/s11/2026-10-14-oil-policy-feasibility/public-comparison-plan.json)
+reuses the unchanged public-transfer 35-anchor table at its original 210×228 geometry,
+14.25-native-pixel token spacing and sample4 reference bank. No inference is needed
+to inspect exact saved floor/ceil anchors. Keep all 23 current candidates, including
+the separate Foam candidate, and distinguish absent saved scores from unavailable
+input support. Do not substitute a nearest anchor or favorable fractional variant.
+
+The practical preservation requirement is at least one accepted lower candidate
+at this frame. If all four complete observations fail the fixed sign rule, every
+support threshold loses that frame's accepted set. This is sufficient to close
+the fixed family before measuring missing opposition scores; record those missing
+measurements, never count them as correct rejection. If any accepted candidate
+passes, first freeze the remaining complete-population/opposition measurements.
+Neither branch chooses a cutoff, retrains, changes geometry/bank, labels unknowns
+or promotes a production consumer. The existing reuse time/RSS/output caps and
+2 MB scratch / 100 KB retained limits apply to this saved-data step.
+
 ### Executable saved-contract preflight
 
 [The offline CR1 adapter](../../tests/diagnostics/s11_contextual_role_preflight.py)
@@ -882,5 +907,5 @@ exposed transfer result as an independent validation success by moving N3 into f
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no production executing owner, schema or detector behavior changes.
 - Existing feature coverage: the receiving review reuses pinned CR1/O1/A1 captures and native geometry. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. No new Recipe or static-learning efficacy claim follows from saved-input binding.
-- Execution scope: the received reuse CLI and renderer were rerun over saved inputs from outside the repository cwd with exact output equality. The next saved-score necessary-condition audit reuses that CLI and the CR1 minima; it selects no operating point. No production frame/sequence/report execution or successor observation/training is implied.
+- Execution scope: the received reuse CLI and renderer were rerun over saved inputs from outside the repository cwd with exact output equality. Saved-score necessary-condition audits reuse that CLI and the CR1 minima, including exact public candidate-to-anchor joins after the scoped reply; no operating point, model forward, production frame/sequence/report execution or successor training is implied.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.

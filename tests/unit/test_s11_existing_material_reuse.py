@@ -201,6 +201,74 @@ def test_policy_freeze_cannot_relabel_or_rebind_controls(tmp_path, change):
         reuse.policy_audit(tmp_path, manifest, reused, plan)
 
 
+def public_fixture():
+    raw = {"frame_index": 10, "time_sec": 1.0, "candidates": [
+        {"source": f"family-{i}", "y": y, "kind": "oil_air"} for i, y in enumerate((40.0, 40.5, 43.0, 40.0))]}
+    packet = {"frame_index": 10, "time_sec": 1.0, "source_x": 52, "image_sha256": "image",
+              "candidates": [{"candidate_input_index": i, "candidate_sha256": reuse.o2.fingerprint_json(c),
+                              "source": c["source"], "kind": c["kind"], "representative_y": c["y"],
+                              "review_requested": i in (0, 1)} for i, c in enumerate(raw["candidates"])]}
+    reply = {"schema": "s11-public-oil-candidate-acceptance-v1", "review_packet_sha256": reuse.o2.fingerprint_json(packet),
+             "frame_index": 10, "time_sec": 1.0, "source_x": 52, "image_sha256": "image",
+             "scope": "PRACTICAL_APPROXIMATION_AT_THIS_FRAME_ONLY", "user_text": "모두 허용",
+             "subjects": [{k: c[k] for k in ("candidate_input_index", "candidate_sha256")}
+                          for c in packet["candidates"] if c["review_requested"]]}
+    score = {"status": "MEASURED", "preference": "interface", "scores": {
+        "interface": 0.7, "structure": 0.2, "texture": 0.3}, "top_margin": 0.4}
+    transfer = {"geometry": {"native_shape": [104, 104, 3], "source_origin_xy": [0, 0]},
+                "results": [{"query": {"source_xy": [52, y]}, "status": "MEASURED",
+                             "common_columns": list(range(-12, 13)), "modes": {"full": deepcopy(score), "local": deepcopy(score)}}
+                            for y in (40, 41)]}
+    return raw, packet, reply, transfer
+
+
+def test_exact_saved_candidate_scores_preserve_unknown_neighbors_and_missing_anchors():
+    raw, packet, reply, transfer = public_fixture()
+    accepted = reuse.qualify_candidate_acceptance(packet, reply)
+    before = deepcopy((raw, packet, reply, transfer))
+    rows = reuse.saved_candidate_observations(raw, packet, transfer, accepted)
+    assert rows[1]["required_anchors"] == [[52, 40], [52, 41]]
+    assert rows[2]["score_status"] == "NOT_SAVED" and rows[2]["modes"] is None
+    assert rows[3]["saved_score_pointers"] == rows[0]["saved_score_pointers"]
+    assert rows[3]["practical_acceptance"] == "NOT_REVIEWED"
+    assert all(r["physical_role"] == r["native_path_role"] == "NOT_QUALIFIED" for r in rows)
+    assert (raw, packet, reply, transfer) == before
+
+
+@pytest.mark.parametrize("field,value", [("frame_index", 11), ("time_sec", 2.0), ("source_x", 53),
+    ("image_sha256", "different"), ("scope", "GLOBAL_TOLERANCE"), ("user_text", "일부 허용")])
+def test_public_reply_cannot_broaden_or_rebind_acceptance(field, value):
+    _, packet, reply, _ = public_fixture()
+    reply[field] = value
+    with pytest.raises(ValueError):
+        reuse.qualify_candidate_acceptance(packet, reply)
+
+
+@pytest.mark.parametrize("change", ["omit_subject", "subject_hash", "duplicate_anchor", "candidate_rebound"])
+def test_public_subject_and_score_corruption_rejected(change):
+    raw, packet, reply, transfer = public_fixture()
+    if change == "omit_subject":
+        reply["subjects"].pop()
+    elif change == "subject_hash":
+        reply["subjects"][0]["candidate_sha256"] = "changed"
+    elif change == "duplicate_anchor":
+        transfer["results"].append(deepcopy(transfer["results"][0]))
+    else:
+        raw["candidates"][0]["source"] = "same-Y-other-candidate"
+    with pytest.raises(ValueError):
+        accepted = reuse.qualify_candidate_acceptance(packet, reply)
+        reuse.saved_candidate_observations(raw, packet, transfer, accepted)
+
+
+def test_public_fractional_candidate_keeps_unfavorable_variant():
+    raw, packet, reply, transfer = public_fixture()
+    transfer["results"][1]["modes"]["local"] = {"status": "MEASURED", "preference": "texture",
+        "scores": {"interface": 0.4, "structure": 0.2, "texture": 0.6}, "top_margin": 0.2}
+    rows = reuse.saved_candidate_observations(raw, packet, transfer, reuse.qualify_candidate_acceptance(packet, reply))
+    assert rows[1]["modes"]["local"]["availability"] == "VARIANT_DISAGREEMENT"
+    assert rows[1]["modes"]["local"]["minimum_interface_margin"] == pytest.approx(-0.2)
+
+
 def test_json_pointer_escaping():
     assert reuse.exact_pointer({"a/b": {"~key": [7]}}, "/a~1b/~0key/0") == 7
 

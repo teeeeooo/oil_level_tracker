@@ -1,0 +1,32 @@
+{
+  "schema": "s11-public-oil-candidate-acceptance-v1",
+  "user_text": "모두 허용",
+  "received_date": "2026-10-14",
+  "review_packet_sha256": "9f24267dfdc820f38536064195b4a4ee65db1945a10a9e43cf93c765c40c3ad3",
+  "image_sha256": "78c81d87a12119cc15c9dbb64c6c187deb8d12ef3e079a1fa19e36f48409dd56",
+  "frame_index": 1499,
+  "time_sec": 50.01663333333334,
+  "source_x": 578,
+  "scope": "PRACTICAL_APPROXIMATION_AT_THIS_FRAME_ONLY",
+  "subjects": [
+    {
+      "candidate_input_index": 5,
+      "candidate_sha256": "5f3e8d7e511e4ad0f8b7c23bed2592e649092aca84cbac4a49fdc1b3208baf6c"
+    },
+    {
+      "candidate_input_index": 9,
+      "candidate_sha256": "0727cb8debca146e9fd62b6c7f83fc5696ba764f8bad3608a42ce9a724880903"
+    },
+    {
+      "candidate_input_index": 13,
+      "candidate_sha256": "75bdee1c477494bebaa520ec342e9197e8cf43b930ee2f99b706a0334667cc7a"
+    },
+    {
+      "candidate_input_index": 20,
+      "candidate_sha256": "58dbc8fdecddf950cb011c67b7937329ff9f996f5409bb3c99510e0f14098337"
+    }
+  ],
+  "physical_role": "NOT_QUALIFIED",
+  "native_path_role": "NOT_QUALIFIED",
+  "global_tolerance_created": false
+}
