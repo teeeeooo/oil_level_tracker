@@ -45,6 +45,15 @@ Use the existing owners to close that gap:
   experiment and publication. Presence/placeholder checks make omissions visible;
   they cannot verify scientific reasoning or force an agent to invoke the Skill.
 
+The [maintenance contract](../30-validation/s11-detector-change-governance.md#maintenance-at-change-boundaries)
+assigns updates to the change author and distinguishes feature-table, node/graph,
+per-run record and checker impacts. The range checker now also covers the input
+definitions for Recipe, geometry, scoped Artifact references, session and detector
+settings; those files could previously change without a companion review. The
+existing hook/CI entry remains shared. Path coverage is selective, so setup UI or
+research-runner changes still require a semantic review when they change detector
+inputs or claimed scope. Parameter-only changes need no artificial graph edit.
+
 Representative routing checks: an Artifact/mask proposal must retrieve the D2 and
 later Local XY dispositions; a raw native-head probe must name omitted candidate
 rejection and completed resolution before making a product claim; a report-only
@@ -123,8 +132,8 @@ is unresolved. Current operational anchors and source audit attachments are pres
   records routed by the recall index.
 - Prior mechanisms rejected: revision-specific R7–R12 execution routing is rejected as current procedure because it can apply obsolete detector identities and acceptance assumptions; broad historical scanning is rejected because current logic-map/failure indexes provide bounded routing.
 - Preserved contracts: exact same-frame Oil/Foam provenance, independent validity/ownership, fail-closed ambiguity, reviewed physical truth as the field oracle, field FAIL until current acceptance is satisfied, and no private/case-specific detector control flow.
-- Existing feature coverage: Recipe spatial masks, candidate Artifact rejection, reference-only diagnostics, automatic static preparation, run/initial-state inputs, optional Local XY and completed publication were traced to the existing owners; the D2 and Local XY successor results supply the relevant failed-use history. This process change does not alter any actual Recipe or runtime option.
+- Existing feature coverage: Recipe settings/spatial masks, candidate Artifact rejection, reference-only diagnostics, automatic static preparation, run/initial-state inputs, optional Local XY and completed publication were traced to the existing owners; the D2 and Local XY successor results supply the relevant failed-use history. The checker now includes their core input definitions as well as consuming code. This process change does not alter any actual Recipe or runtime option.
 - Execution scope: repository Skill/map/governance maintenance, source and saved-record inspection, and checker tests only. No detector, video, training, Windows or report replay is performed; no efficacy claim follows from the new fields or diagram.
-- Difference from prior failures: existing setup features and actual run coverage must now be considered before a detector hypothesis, with missing review fields caught by the existing checker. This extends the earlier bounded recall and document closeout without copying feature truth into a new Skill, adding detector authority, changing lifecycle/Foam predicates, or reopening frozen experiments. Current authorization, field disposition and immutable evidence remain preserved.
-- Logic-map impact: UPDATED — setup/feature routes and their claim limits are visible in the quick index and existing flow graph; detector implementation ownership and executing control flow remain unchanged.
+- Difference from prior failures: existing setup features and actual run coverage must now be considered before a detector hypothesis, with missing review fields and previously uncovered core input changes caught by the existing checker. The same change author maintains the affected map claims and checker boundaries. This extends bounded recall and document closeout without copying feature truth into a new Skill, adding detector authority, changing lifecycle/Foam predicates, or reopening frozen experiments. Current authorization, field disposition and immutable evidence remain preserved.
+- Logic-map impact: UPDATED — feature rows now link the core input definitions and detector-setting service; update rules route to the existing governance maintenance contract. Executing control flow and Mermaid edges remain unchanged by this maintenance refinement.
 - Failure-registry impact: NONE — no causal mechanism, no-repeat rule, or field-risk status changes; the migration only routes agents to the existing registry more directly.

@@ -6,7 +6,7 @@ The `s11-detector-change` Skill owns task routing and bounded history recall. Th
 
 ## Applicability
 
-Apply this contract when changing S11 detector vision/control-flow/publication code, S11 detector architecture/validation, or S11 diagnostics/evidence including Windows field records. It does not make unrelated UI/application work a detector change.
+Apply this contract when changing S11 detector input semantics, vision/control-flow/publication code, S11 detector architecture/validation, or S11 diagnostics/evidence including Windows field records. It does not make unrelated UI/application work a detector change.
 
 Current implementation truth is owned by `docs/20-architecture/s11-current-detector-logic-map.md`; durable failed-mechanism history is owned by `docs/50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`. Current architecture/validation/reviewed-truth owners retain their own authority.
 
@@ -45,6 +45,37 @@ results and original artifacts remain frozen; reuse their recorded scope without
 rerunning them. Check the changed draft before a new experiment as well as before
 publication. The checker rejects absent/placeholder fields, but does not certify
 the factual coverage or scientific sufficiency of their text.
+
+## Maintenance at change boundaries
+
+The author of a code or experiment change owns its documentation impact in the
+same change. During Codex work, Codex performs this review without waiting for the
+user to notice drift. Use the existing `Logic-map impact` field to identify the
+affected feature row, node or edge, or explain why those claims remain accurate.
+The map is checked against source; a recent edit date is not proof of freshness.
+
+| Trigger | Required maintenance |
+|---|---|
+| A setup feature, default, input meaning or consumer changes | Check the affected feature row and source links against Recipe/session/constructor and the real caller. Update any changed claims; inspect downstream consumers. Per-run values stay in the experiment record. |
+| Execution order, owner or authority changes | Update the affected node detail and any changed Mermaid edges. A parameter change within the same route does not require redrawing the graph. |
+| A new experiment or changed run input/entry path | Fill feature coverage and execution scope before execution, then reconcile the actual run in its record. Correct the map only if source review finds a missing/incorrect route; keep frozen results intact. |
+| An owner is added, moved or split, or the checker contract changes | Review `is_detector_code_path` / `DETECTOR_BOUNDARIES` in the existing checker. Extend coverage where needed and test an undocumented change failing and a valid review passing; retain an unrelated-change control. |
+| A stage is proposed for acceptance | Reconcile the affected setup → runner → consumer → claimed output path using the stage's required evidence. This is a bounded consistency review, not an automatic full-video replay or whole-history audit. |
+
+The checker includes the vision package, explicit input-contract owners (Recipe,
+geometry, scoped Artifact reference, session and detector-setting service), and
+the completed-window/publication boundaries. It intentionally does not infer
+semantics from every UI or research-script edit. If such an edit changes detector
+input or the claimed execution scope, the author still applies this contract;
+a path-filter pass alone cannot establish no impact.
+
+Keep one implementation in [the checker](../../scripts/check_detector_governance.py).
+The existing pre-push hook and CI invoke it; they do not need copied rules or a
+second checker. Verify changed checker behavior with
+`python3 -m pytest -q tests/test_detector_governance.py`, and run the range check
+below before publishing. Closeout names the updated owners or justified no-impact
+decision, the checks performed and any unverified scope. Whole-project audits are
+reserved for a demonstrated ownership/routing problem.
 
 ## Architecture/design History Review
 

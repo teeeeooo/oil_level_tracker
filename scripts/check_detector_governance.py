@@ -23,11 +23,16 @@ LOGIC_MAP = "docs/20-architecture/s11-current-detector-logic-map.md"
 FAILURE_REGISTRY = "docs/50-diagnostics/s11/s11-detector-mechanism-failure-registry.md"
 GOVERNANCE_DOC = "docs/30-validation/s11-detector-change-governance.md"
 
-# These are the completed-window/publication owners named in the current map.
+# These are the input-contract and completed-window/publication owners in the map.
 # The whole vision package is deliberately included because every file there
 # can alter detector evidence or an ownership boundary.
 DETECTOR_BOUNDARIES = frozenset(
     {
+        "src/oil_tracker/domain/recipe.py",
+        "src/oil_tracker/domain/geometry.py",
+        "src/oil_tracker/domain/artifact_reference.py",
+        "src/oil_tracker/domain/session.py",
+        "src/oil_tracker/application/services/detector_settings.py",
         "src/oil_tracker/application/services/detection_run.py",
         "src/oil_tracker/application/services/analysis_pipeline.py",
         "src/oil_tracker/application/services/detection_processing.py",

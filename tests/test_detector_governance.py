@@ -177,6 +177,41 @@ def repo(tmp_path: Path) -> Path:
     return tmp_path
 
 
+@pytest.mark.parametrize("input_path", [
+    "src/oil_tracker/domain/recipe.py",
+    "src/oil_tracker/domain/geometry.py",
+    "src/oil_tracker/domain/artifact_reference.py",
+    "src/oil_tracker/domain/session.py",
+    "src/oil_tracker/application/services/detector_settings.py",
+])
+def test_input_change_requires_review_in_worktree_and_commit(repo: Path, input_path: str) -> None:
+    target = repo / input_path
+    for path, text in (
+        (target, "default_value = 1\n"),
+        (repo / governance.LOGIC_MAP, MAP),
+        (repo / governance.FAILURE_REGISTRY, REGISTRY),
+    ):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+    git(repo, "add", ".")
+    git(repo, "commit", "-qm", "input baseline")
+    base = git(repo, "rev-parse", "HEAD")
+
+    target.write_text("default_value = 2\n", encoding="utf-8")
+    errors = governance.check_refs(base, root=repo, include_worktree=True)
+    assert any("without a changed S11 architecture/design" in error for error in errors)
+    git(repo, "add", input_path)
+    git(repo, "commit", "-qm", "change input")
+    assert governance.check_refs(base, root=repo)
+
+    design = repo / "docs/20-architecture/s11-input-design.md"
+    design.write_text(history(), encoding="utf-8")
+    assert governance.check_refs(base, root=repo, include_worktree=True) == []
+    git(repo, "add", ".")
+    git(repo, "commit", "-qm", "review input change")
+    assert governance.check_refs(base, root=repo) == []
+
+
 def test_cosmetic_worktree_and_committed_change_pass_without_design(repo: Path) -> None:
     (repo / SOURCE).write_text('"""Owner contract."""\n# Explanation only\nvalue = (\n    1\n)\n', encoding="utf-8")
     assert governance.check_refs("baseline", root=repo, include_worktree=True) == []
