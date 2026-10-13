@@ -1343,3 +1343,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/review-reply.json](50-diagnostics/s11/2026-10-13-native-surface-trial/review-reply.json) | N4/N5 원문·역할·추정과 확인된 context facet |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json](50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json) | 기존 G0에 결속한 두 역할과 입력 범위 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/trial-manifest.json](50-diagnostics/s11/2026-10-13-native-surface-trial/trial-manifest.json) | 다섯 경로·촬영원 분리·고정 head/loss/seed·실패 기준 |
+| 2026-10-13 | [60-evidence/s11/2026-10-13-native-surface-trial.md](60-evidence/s11/2026-10-13-native-surface-trial.md) | N4/N5 응답·고정 학습·N3 손실·검증·다음 자료 범위 판단 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/readout.json](50-diagnostics/s11/2026-10-13-native-surface-trial/readout.json) | 다섯 경로 최종 logits·손실/오수용·조건/비용·종료 판정 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/final-weights.npz](50-diagnostics/s11/2026-10-13-native-surface-trial/final-weights.npz) | 재학습 없는 산술 재검증용 1,118개 최종 parameter |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/verification.json](50-diagnostics/s11/2026-10-13-native-surface-trial/verification.json) | 49 tests·입력/가중치·독립 NumPy 계산·실제 CLI 범위 |

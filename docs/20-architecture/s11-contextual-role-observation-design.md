@@ -813,6 +813,9 @@ and input pins at a clean head before training. Keep final weights and compact
 full five-unit results, not media copies, dense features or intermediate checkpoints.
 The 600 s/1 GB RSS/32 MB scratch/6 MB retained/3 GB workspace ceilings apply.
 Work Plan owns execution authority and the stop reached after the measured outcome.
+The [completed fixed trial](../60-evidence/s11/2026-10-13-native-surface-trial.md)
+retains its N3 positive-loss counterexample. A new data scope cannot recast that
+exposed transfer result as an independent validation success by moving N3 into fit.
 
 ## History Review
 

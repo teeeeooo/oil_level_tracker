@@ -1,0 +1,149 @@
+{
+  "schema": "s11-native-surface-trial-v1",
+  "head": "019ccfd9fae3ea5b3421af5e186a0c053dba0922",
+  "manifest": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-surface-trial/trial-manifest.json",
+    "sha256": "0c2d6aedd0b2dd502a572744b2233ec00698279059620e8fc569dbd1572a7fe4"
+  },
+  "status": "CLOSED_WITHOUT_PROMOTION",
+  "production_changed": false,
+  "training_steps": 1000,
+  "untouched_holdout_recordings": 0,
+  "rows": [
+    {
+      "id": "N1",
+      "partition": "train",
+      "review_role": "EXTERNAL_SURFACE",
+      "expected": "EXTERNAL_SURFACE",
+      "logits": [
+        -1.4214833974838257,
+        -11.888766288757324
+      ],
+      "external_minus_nonexternal": 10.467282891273499,
+      "decision": "EXTERNAL_SURFACE"
+    },
+    {
+      "id": "N2",
+      "partition": "train",
+      "review_role": "INTERNAL_FOAM_CHANGE",
+      "expected": "NON_EXTERNAL_SURFACE",
+      "logits": [
+        -7.474860668182373,
+        3.2132678031921387
+      ],
+      "external_minus_nonexternal": -10.688128471374512,
+      "decision": "NON_EXTERNAL_SURFACE"
+    },
+    {
+      "id": "N3",
+      "partition": "transfer",
+      "review_role": "EXTERNAL_SURFACE",
+      "expected": "EXTERNAL_SURFACE",
+      "logits": [
+        -13.622248649597168,
+        2.0330445766448975
+      ],
+      "external_minus_nonexternal": -15.655293226242065,
+      "decision": "NON_EXTERNAL_SURFACE"
+    },
+    {
+      "id": "N4",
+      "partition": "transfer",
+      "review_role": "INTERNAL_FOAM_CHANGE",
+      "expected": "NON_EXTERNAL_SURFACE",
+      "logits": [
+        -16.903568267822266,
+        21.417545318603516
+      ],
+      "external_minus_nonexternal": -38.32111358642578,
+      "decision": "NON_EXTERNAL_SURFACE"
+    },
+    {
+      "id": "N5",
+      "partition": "transfer",
+      "review_role": "STRUCTURE_BOUNDARY",
+      "expected": "NON_EXTERNAL_SURFACE",
+      "logits": [
+        -13.327401161193848,
+        2.6799581050872803
+      ],
+      "external_minus_nonexternal": -16.007359266281128,
+      "decision": "NON_EXTERNAL_SURFACE"
+    }
+  ],
+  "accounting": {
+    "train": {
+      "units": 2,
+      "correct": 2,
+      "unknown": 0,
+      "target_loss": 0,
+      "wrong_external_acceptance": 0
+    },
+    "transfer": {
+      "units": 3,
+      "correct": 2,
+      "unknown": 0,
+      "target_loss": 1,
+      "wrong_external_acceptance": 0
+    }
+  },
+  "losses": [
+    {
+      "step_before_update": 1,
+      "mean_fragment_cross_entropy": 0.698259711265564
+    },
+    {
+      "step_before_update": 1000,
+      "mean_fragment_cross_entropy": 2.5689267204143107e-05
+    }
+  ],
+  "weights_sha256": "411d255d1b98b0143918fa69a601423c7261a192efc7b4dd7008833e4c2994d9",
+  "initial_parameter_hashes": {
+    "encoder.0.weight": "ea925d0cc97106aac554af0fcdd3d00088939f83d071ecb06a9bd6ca138818dc",
+    "encoder.0.bias": "82597863e77d2c733ad62c57ab271346b29abed0a61cc91379b0608576ef4c3c",
+    "encoder.2.weight": "b943bd1e6b203d2ee7a3aa53861ec474b9ea013268b502c67182375c98d05c0c",
+    "encoder.2.bias": "b5ae4bb4d6f7a66dc83fd02ba948f716948b41b805f441336c11c9a75a49bec1",
+    "encoder.4.weight": "3d49ce9037a6590463a7ea4e22b15a3afe5021bf672775d29aa820619d304740",
+    "encoder.4.bias": "ac921ceafaf868e4531cf01294acf1ff01584ec71cb13f59349a88c7dfa97d59",
+    "classifier.weight": "228dcdf56d791a26d95de0ed5cef60f97b034b8bb4be5bdb39c320dabc6f4805",
+    "classifier.bias": "878f0c20889cdf4a4d8fb680683c524aaa740649d45bdb49659babe114b29829"
+  },
+  "final_parameter_hashes": {
+    "encoder.0.weight": "779ad8a96c10ec1499d991a3428929ab4103cac5a67f8a4ad9267715994eaa39",
+    "encoder.0.bias": "8708051b63c6c87ea166684011b159b9834fb90a42af1cfbf24b86f631401c62",
+    "encoder.2.weight": "2c1817ade81da23337cab03912b840b860eecb046296e3846033dbc38a654332",
+    "encoder.2.bias": "527e0efd7022e5bb785852e8909caa6cd86d0d68c87461f8df89260f919ae830",
+    "encoder.4.weight": "17d8484621d5e940841253943ee89880af8f4e1357f0af6dee2d29255f5d1b92",
+    "encoder.4.bias": "020206767e69c89b000ff6630d715178bcfa046a5db9064f56a868b85628f139",
+    "classifier.weight": "7068ad7978e0e53c706db5429aace2a8cb6ff9ed9852813093271b1a275f1d26",
+    "classifier.bias": "26069cb1b6fb9bc5efe3ba68ff7af073dd586cb80215926262e127af36f49555"
+  },
+  "model_fragment_calls": {
+    "training": 2000,
+    "final_fit": 2,
+    "final_transfer": 3
+  },
+  "runtime": {
+    "python": "3.14.7",
+    "packages": {
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "pillow": "12.3.0"
+    },
+    "torch_build": "PyTorch built with:\n  - GCC 4.2\n  - C++ Version: 202002\n  - clang 21.0.0\n  - OpenMP 202011\n  - LAPACK is enabled (usually provided by MKL)\n  - NNPACK is enabled\n  - CPU capability usage: DEFAULT\n  - Build settings: BLAS_INFO=accelerate, BUILD_TYPE=Release, COMMIT_SHA=5c4886908584029761b579af026dcfb627c84070, CUDA_FLAGS= -DLIBCUDACXX_ENABLE_SIMPLIFIED_COMPLEX_OPERATIONS -Xfatbin -compress-all  -Wno-deprecated-gpu-targets --expt-extended-lambda -DCUB_WRAPPED_NAMESPACE=at_cuda_detail -DDISABLE_CUSPARSE_DEPRECATED -DCUDA_HAS_FP16=1 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -DC10_NODEPRECATED, CXX_COMPILER=/usr/bin/c++, CXX_FLAGS= -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DUSE_PYTORCH_QNNPACK -DAT_BUILD_ARM_VEC256_WITH_SLEEF -DUSE_PYTORCH_METAL_EXPORT -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -DUSE_COREML_DELEGATE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=braced-scalar-init -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wvla-extension -Wsuggest-override -Wnewline-eof -Winconsistent-missing-override -Winconsistent-missing-destructor-override -Wno-pass-failed -Wno-error=old-style-cast -Wconstant-conversion -Qunused-arguments -faligned-new -fno-math-errno -fno-trapping-math -Werror=format -fclang-abi-compat=17 -DUSE_MPS -Wno-missing-braces, LAPACK_INFO=accelerate, TORCH_VERSION=2.14.1, USE_CUDA=OFF, USE_CUDNN=OFF, USE_CUSPARSELT=OFF, USE_EIGEN_FOR_BLAS=ON, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_HIPSPARSELT=OFF, USE_MKL=OFF, USE_MKLDNN=OFF, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n"
+  },
+  "unassessed": "Full G0 population, Oil/material roles, other internal appearances/optical controls, calibration, raw fronts, numeric/report effect, Windows/FIELD",
+  "resources": {
+    "elapsed_seconds": 7.337084208003944,
+    "peak_rss_bytes": 372588544,
+    "workspace_allocated_before": 746446848,
+    "workspace_allocated_after": 746455040
+  },
+  "runtime_guard": {
+    "denied_events": [
+      "socket.getaddrinfo",
+      "open"
+    ],
+    "scope": "Existing CR1 Python audit hook, not OS confinement"
+  }
+}

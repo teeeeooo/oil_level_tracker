@@ -3,9 +3,9 @@
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery` / `ACTIVE`.
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
-**Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1 and native G0 offline preflights add no detector behavior.
-**Next transition:** Run the adopted **one bounded native surface trial** at a clean frozen head, using the [fixed manifest](../50-diagnostics/s11/2026-10-13-native-surface-trial/trial-manifest.json). Train N1/N2 only; evaluate N3/N4/N5 once at the final step. No seed, input, threshold or head search follows a failure.
-**Latest checkpoint:** All five displayed roles are bound. [N4/N5 reply](../50-diagnostics/s11/2026-10-13-native-surface-trial/review-reply.json): N4 is internal Foam change, with separately preserved **suspected** glass-circle path influence; N5 is a circular rim structure. No optical cause or pure side-material labels are established. The original G0 roster and N1–N3 remain unchanged. **Windows work is not yet required.**
+**Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior.
+**Next transition:** **Necessary research-scope decision:** adopt a bounded native-role data qualification pass before considering another learned observation, or defer learning and revisit the observation design. The [completed trial and concrete follow-up](../60-evidence/s11/2026-10-13-native-surface-trial.md#보존과-다음-판단) recommend qualifying independent positive/internal/structure paths from a third recording before using water and sample4 together as development data. No new fit or automatic tuning is authorized by the failed trial.
+**Latest checkpoint:** The one frozen native surface trial at `019ccfd9fae3ea5b3421af5e186a0c053dba0922` is **CLOSED_WITHOUT_PROMOTION**: N1/N2 fit succeeds; sample4 N4 internal change and N5 circular rim are rejected, but true external upper **N3 is also rejected**. Independent arithmetic agrees. All five displayed roles remain qualified; N4's glass-circle influence is a separate user suspicion, not a verified cause. **Windows work is not yet required.**
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [post-CR1 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
@@ -29,12 +29,12 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | O1 extraction | IMPLEMENTED; locally ACCEPTED | Reuse trace-only [O1](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md); no identity authority |
 | W0–W3 / O2 foundations | Fixed profile CLOSED WITHOUT PROMOTION; target/aggregation, bounded scene review and evaluation tools locally verified; D1 return CLOSED | Reuse [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) and [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed); prediction/efficacy is not established by tooling |
 | P0 / W4 / WP01 — baseline and intake | COMPLETE at saved-evidence scope | [October 13 program intake](../60-evidence/s11/2026-10-13-program-review-intake.md) verifies pins, canary and saved report extrema; P0 A/B/C/U remains the impact owner, physical cadence NOT_EVALUATED |
-| W4/P2 / WP02 — observation/policy | G0 and N1–N5 qualification VERIFIED; bounded source-separated trial ADOPTED | Fixed surface/non-surface capability, 1,118 parameters, one seed/1,000 steps; original three-subject proposal remains deferred history. No production consumer |
-| V2/V3 / WP03 — qualification and evaluation | N1–N5 displayed roles CLOSED | [Qualification supplement](../50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json) keeps N4 internal with a suspected context facet and N5 structure distinct. Train water N1/N2; sample4 N3/N4/N5 are exposed transfer, never an untouched holdout |
+| W4/P2 / WP02 — observation/policy | G0/N1–N5 qualification VERIFIED; one frozen trial CLOSED WITHOUT PROMOTION | [Measured readout](../50-diagnostics/s11/2026-10-13-native-surface-trial/readout.json): required N3 positive lost despite fit and two opposition successes. No consumer; next research/data scope needs a decision |
+| V2/V3 / WP03 — qualification and evaluation | N1–N5 displayed roles CLOSED | [Qualification supplement](../50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json) keeps N4 internal with a suspected context facet and N5 structure distinct. The completed trial fitted water N1/N2 and evaluated sample4 N3/N4/N5 as exposed transfer. Further learning needs a new predeclared data/split contract; no untouched holdout exists |
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
 | O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | PROPOSED; separate from WP05 | Explicit route for independently role-supported native candidates; name the replaced heuristic. Repair association/lifecycle only if saved earliest-loss evidence identifies that owner; preserve FULL/EMPTY/refill/drain |
-| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | R/L CLOSED WITHOUT PROMOTION; five native roles qualified; G1 efficacy NOT_EVALUATED | The limited trial probes external preservation and internal/rim rejection on a second source. N3 is not a recovered raw front; one rim does not cover general optical safety or full G1 |
+| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | R/L and limited native-head trial CLOSED WITHOUT PROMOTION; full G1 NOT SATISFIED | N3 native external upper is qualified but the head rejects it. No raw-front recovery or episode change; negative rejection alone cannot pass |
 | P5-c / WP08 — Foam episode | ENTRY NOT MET | Open only for an independently qualified correct raw upper lost downstream; separate onset/stable-layer versus splash/residue controls |
 | O5/W7/P6/D6 / WP09 — integrated Windows and report | PENDING integrated candidate | Exact runtime, all nine canonical segments, target resources and actual independent report-only reading; V5 shadow and final field acceptance remain separate |
 | P7 / WP10 — disposition and closeout | PENDING acceptance evidence | Record accepted/limited/rejected/unassessed scope and residual impact; retain minimal evidence. S11-M/S12 follow the roadmap, not partial local success |
@@ -52,23 +52,23 @@ Adopt the [NSR-1 binding/readiness design](../20-architecture/s11-contextual-rol
 from the latest intake. Its new information must be qualified roles attached to
 actual native paths and complete feature support. Reusing path geometry alone or
 renaming the failed R/L similarity is insufficient. The fixed three-convolution
-7×7 head is adopted only for the linked bounded capability trial, not production
+7×7 head was adopted only for the completed bounded capability trial, not production
 or full material-role classification.
 
 1. **WP02/03 + WP07, G0 and scoped qualification complete:** the original binding
    remains frozen. N1 permits Foam/liquid external-surface interpretations, N2/N4
    are internal Foam changes, N3 is external Foam upper, N5 is circular rim structure.
    N4's possible glass-pattern influence remains tentative and cannot replace its role.
-2. **One bounded trial:** [fixed inputs and protocol](../50-diagnostics/s11/2026-10-13-native-surface-trial/trial-manifest.json)
-   use complete native 7×7 RGB context. The output is external surface versus
-   non-external-surface; internal Foam and structure retain different review roles.
-   N1/N2 alone train the model; N3/N4/N5 test exposed source transfer once after
-   the final update. No structure example is fitted, so N5 tests a novel opposition,
-   not learned structure identification. Same-frame sharing (90 and 98 pixels)
-   stays within source groups. Keep unavailable upper-rim controls and every other
-   unreviewed G0 row explicit. Any wrong/unknown required result closes this fixed
-   trial without promotion; no automatic crop, threshold, seed or head-size retry.
-   Even 5/5 cannot establish full G1 or authorize a production consumer.
+2. **Bounded trial closed; next scope decision:** [readout and follow-up](../60-evidence/s11/2026-10-13-native-surface-trial.md)
+   show N3 target loss under the frozen five-subject comparison. Preserve that failure;
+   do not change the seed, crop, threshold, head or train/test split to rescue it.
+   Recommended next scope is native-role data qualification: if water and sample4
+   both become development data, qualify a third recording's positive/internal/rim
+   paths separately, using original regional evidence only within its precision.
+   The saved public-miso context is a candidate for feasibility/review, not a ready
+   test set. First prepare a bounded correspondence packet; ask only genuinely new
+   path-role questions. Missing opposition stays NOT_READY. A successor training
+   hypothesis and its data/operating-point contract must be designed separately.
 3. **WP04:** qualified typed Witness delta, default OFF/unavailable fallback,
    V4 equality/resources, then **V5 Windows shadow before O2 acceptance**.
 4. **WP05 then WP06:** separate anchor-and-continuation wrong-output suppression
@@ -200,15 +200,16 @@ verification, cleanup and autonomous commits/pushes until a necessary user judgm
 or Windows task is reached. The follow-up explicitly adopts opposition-first
 preparation, followed by a fixed comparison and bounded trial once the required roles
 are qualified. The latest N4/N5 reply satisfies that correspondence gate; the
-fixed five-subject trial can proceed. Existing source judgments are not reopened.
+fixed five-subject trial has now run and closed on N3 positive loss. Existing source
+judgments are not reopened; a new data/learning scope needs the decision above.
 Earlier grants for bounded local development persist subject to the stated gates.
 Main performs implementation/review; no further sub-agents are authorized.
 Stop for a genuinely necessary new user judgment or deliberate Windows work.
 Assistant image interpretation may precede a targeted question but is not human truth.
 
 The earlier isolated frozen DINOv2 exception remains historical. The latest
-adoption additionally covers **one from-scratch 1,118-parameter capability trial**
-with the linked frozen inputs/split/seed/optimizer/resources, in the existing local
+adoption covered **one from-scratch 1,118-parameter capability trial**, now completed,
+using the linked frozen inputs/split/seed/optimizer/resources in the existing local
 Torch environment. It does not authorize fine-tuning DINOv2, model search, extra
 training runs or default product/package adoption. Post-CR1 policy and Foam
 inference still need their executable gates; production consumption cannot precede
