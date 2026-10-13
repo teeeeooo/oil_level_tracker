@@ -1,0 +1,59 @@
+{
+  "schema": "s11-public-oil-candidate-review-v1",
+  "inputs": {
+    "raw": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/native-none.json",
+      "sha256": "9a3f53161a6fb4836cf2d3b3c881f0433509c38292cae67f7d14c58b786a139b"
+    },
+    "diagnostics": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/native-diagnostics.json.gz",
+      "sha256": "d2d9f22fa98e4fe2bb45635e5cb79aec4b9e8a89467ec4e040bb7d49f8ff1137"
+    },
+    "capture": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/current-frame-readout.json",
+      "sha256": "f747c091f68b9a379fa41f1242de5f722a5c0b652383f3ab14c5b4506fbd93d0"
+    },
+    "arrays": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/native-images.npz",
+      "sha256": "00f98905e62e09871d78141b483e71393ab907f17f556dd7e023aa9a2fd02241"
+    },
+    "position": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.json",
+      "sha256": "3b1282c282a92828103a3c0e9ee4ed0da319a42fa6bce63d6415163195edd537"
+    },
+    "join": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-join.json",
+      "sha256": "e11d90b5625ed8ec0a8845c11294957dd2bc02736d05f70ea9eebca2190a1cce"
+    },
+    "image": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/native-at-50.png",
+      "sha256": "280b7869a81edfde722fafc85017fdf45dd6e799978cb6c46b7b9769249a635b"
+    },
+    "recording": {
+      "path": "sample/public_miso_mHOS1-1ck60.mp4",
+      "sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15"
+    }
+  },
+  "candidate_indices": [
+    5,
+    9,
+    13,
+    20
+  ],
+  "detail_crop_xyxy": [
+    550,
+    409,
+    605,
+    446
+  ],
+  "detail_scale": 6,
+  "question": "At this frame only, may all four displayed lower candidates count as practically acceptable Oil-level approximations, or should the allowed set be narrower? Existing boundary ranges stay closed; no native-path truth is requested.",
+  "answer_scope": "Each candidate gets separate practical acceptance; physical role and native path remain unreviewed. No implicit global tolerance or other-frame transfer.",
+  "next_comparison": "Freeze any accepted lower candidates as practical preservation controls; preserve complete candidate population, measure wrong upper scalar suppression and unknown/unavailable separately. Use existing source as exposed evaluation, no threshold fitted to its results.",
+  "resources": {
+    "scratch_budget_bytes": 2000000,
+    "retain_budget_bytes": 500000,
+    "model_calls": 0,
+    "video_decode": false
+  }
+}
