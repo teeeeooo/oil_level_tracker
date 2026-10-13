@@ -1644,9 +1644,8 @@ interpretations; the common surface target cannot become a pure-material label.
 Verify the exact proposal/display/fragment and RGB binding, full receptive-field
 mask/crop support, path crossings and same-frame dependency intersections. A valid
 patch center alone is insufficient. Do not split N1/N2 or treat their replicated
-patches as independent review units. N3 has no matching source-separated internal
-opposition; a successful exposed positive transfer remains limited and cannot pass
-full G1. Training fit is reported separately, with no loss or negative-success
+patches as independent review units. The initial three-subject proposal has no matching source-separated internal
+opposition; its positive-only transfer cannot pass full G1. Training fit is reported separately, with no loss or negative-success
 labels on the rest of the frozen G0 roster. A predeclared tie/unknown on a required
 positive is failure to demonstrate that limited capability, not useful abstention.
 
@@ -1657,6 +1656,22 @@ inspected unavailable controls. An unavailable structure-context input cannot co
 as successful physical rejection. A new role answer qualifies only that displayed
 unit; do not force other real interfaces or optical/structure roles into an existing
 internal-Foam label just to complete a two-class comparison.
+
+For the [five-subject fixed trial](../50-diagnostics/s11/2026-10-13-native-surface-trial/trial-manifest.json),
+check v1/v2 qualification reproducibility and preserve N4's suspected optical facet
+without upgrading it to a cause or overriding its internal role. N5's structural
+role maps only to the declared non-external-surface capability; it is never labeled
+internal Foam. Prevent recording overlap between N1/N2 training and N3/N4/N5
+transfer, including different-frame N5. Verify native tensor bytes, complete patch
+support, parameter count, actual gradient updates and RGB-only model entry. An
+independent valid-convolution calculation should reproduce final logits within a
+recorded numerical tolerance; this is arithmetic verification, not a new training
+trial or an efficacy threshold. Evaluate all three transfer subjects only at the
+final step; record fit separately, target loss, wrong acceptance and unknowns by
+role. No threshold/seed/head retry follows a required wrong/unknown outcome. All
+success remains LIMITED_EXPOSED_TRANSFER_ONLY, with full G0 and unassessed controls
+referenced rather than manufactured negatives. Actual CLI, overwrite refusal,
+resource bounds and managed closeout are required before publishing results.
 
 G0 need not label every existing candidate or certify all four proposed head
 outputs. It must declare the smallest capability to be tested and identify its

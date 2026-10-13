@@ -132,6 +132,45 @@ def test_dependency_mask_is_checked_outside_center_and_crop_is_not_padded():
     assert support['status'] == 'UNAVAILABLE_SIDE_CONTEXT'
 
 
+def facet_reply(tmp_path):
+    root, reply, _ = fixture_reply(tmp_path)
+    reply['schema'] = q.FACET_SCHEMA
+    first, second = reply['answers']
+    first.update(allowed_interpretations=['INTERNAL_FOAM_CHANGE'],
+                 statement_ko='N1 : 내부 변화; 원형 무늬 영향인 듯',
+                 context_facets=[dict(kind='GLASS_CIRCULAR_PATTERN_PATH_INFLUENCE',
+                                      certainty='USER_SUSPECTED', statement_ko='원형 무늬 영향인 듯')])
+    second.update(allowed_interpretations=['STRUCTURE_BOUNDARY'], statement_ko='N2 : 구조물 (원형 rim)',
+                  context_facets=[dict(kind='CIRCULAR_RIM', certainty='USER_CONFIRMED_CONTEXT',
+                                       statement_ko='원형 rim')])
+    reply['response_ko'] = '\n'.join(a['statement_ko'] for a in reply['answers'])
+    return root, reply
+
+
+def test_context_facet_does_not_replace_internal_role_or_prove_cause(tmp_path):
+    root, reply = facet_reply(tmp_path)
+    result = q.qualify(root, reply)
+    internal, structure = result['subjects']
+    assert result['schema'].endswith('-v2')
+    assert internal['capability_target'] == 'INTERNAL_FOAM_CHANGE'
+    assert internal['context_facets'][0]['certainty'] == 'USER_SUSPECTED'
+    assert structure['capability_target'] == 'STRUCTURE_BOUNDARY'
+    assert not any(s['causal_mechanism_verified'] for s in result['subjects'])
+    assert all(s['side_material_labels'] is None for s in result['subjects'])
+
+
+@pytest.mark.parametrize('change,match', [('certainty', 'certainty'), ('statement', 'absent'),
+                                         ('duplicate', 'duplicate facet')])
+def test_facets_cannot_upgrade_uncertainty_or_borrow_another_subject_statement(tmp_path, change, match):
+    root, reply = facet_reply(tmp_path)
+    facet = reply['answers'][0]['context_facets'][0]
+    if change == 'certainty': facet['certainty'] = 'USER_CONFIRMED_CONTEXT'
+    if change == 'statement': facet['statement_ko'] = '원형 rim'
+    if change == 'duplicate': reply['answers'][0]['context_facets'].append(copy.deepcopy(facet))
+    with pytest.raises(ValueError, match=match):
+        q.qualify(root, reply)
+
+
 def test_context_crossings_and_unknown_columns_do_not_become_pure_side_truth():
     path = [(10, 16), (11, 15), (12, 14), (13, 13), (14, 12), (15, 11), (16, 10)]
     result, pixels = q.context_support(np.ones((30, 30), bool), [(13, 13), (14, 12)], path)

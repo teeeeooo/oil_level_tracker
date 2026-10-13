@@ -1,0 +1,418 @@
+{
+  "schema": "s11-native-fragment-role-qualification-v2",
+  "reply_sha256": "f3eeb6b3fb4d79ada7db2e6245b07228021be9e34ee51c057a4c96a4ff7f7975",
+  "g0_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+    "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+  },
+  "baseline_counts": {
+    "contexts": 43,
+    "edges": 1335,
+    "oil_records": 164,
+    "legacy_rl_support": {
+      "AVAILABLE": 1184,
+      "UNAVAILABLE_REQUIRED_SUPPORT": 119,
+      "UNAVAILABLE_SAVED_RGB": 32
+    },
+    "component_capture": {
+      "UNAVAILABLE_SAVED_LABELS": 32,
+      "CAPTURED_APPEARANCE_ONLY": 11
+    },
+    "new_physical_labels": 0,
+    "untouched_holdout_recordings": 0
+  },
+  "subjects": [
+    {
+      "id": "N4",
+      "subject_sha256": "8172ad28f3b88f261f6af8f2be8ef7111cc23392c32d4244ad0b47361634e45f",
+      "case_id": "s4-f1620",
+      "frame": 1620,
+      "time_sec": 54.0,
+      "time_kind": "RECORDED",
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "geometry_sha256": "1cf5d40febd7333c2cbb80dd122edca881432df298efbaab5f3e1f69c5dda7f4",
+      "g0_pointer": [
+        "contexts",
+        28,
+        "rows",
+        3,
+        "incident_fragments",
+        0
+      ],
+      "allowed_interpretations": [
+        "INTERNAL_FOAM_CHANGE"
+      ],
+      "capability_target": "INTERNAL_FOAM_CHANGE",
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY",
+      "dense_labels": false,
+      "coordinate_tolerance": null,
+      "side_material_labels": null,
+      "inference_metadata_allowed": false,
+      "proposed_context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 11,
+            "complete_centers_xy": [
+              [
+                47,
+                23
+              ],
+              [
+                48,
+                22
+              ],
+              [
+                49,
+                22
+              ],
+              [
+                50,
+                21
+              ],
+              [
+                51,
+                21
+              ],
+              [
+                52,
+                21
+              ],
+              [
+                53,
+                21
+              ],
+              [
+                54,
+                21
+              ],
+              [
+                55,
+                22
+              ],
+              [
+                56,
+                23
+              ],
+              [
+                57,
+                23
+              ]
+            ],
+            "complete_patches": 11,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 142,
+            "reused_pixel_uses": 397,
+            "crossing_or_touching_path_pixels": 3,
+            "outside_reviewed_path_columns": 45
+          },
+          "lower": {
+            "requested_patches": 11,
+            "complete_centers_xy": [
+              [
+                47,
+                33
+              ],
+              [
+                48,
+                32
+              ],
+              [
+                49,
+                32
+              ],
+              [
+                50,
+                31
+              ],
+              [
+                51,
+                31
+              ],
+              [
+                52,
+                31
+              ],
+              [
+                53,
+                31
+              ],
+              [
+                54,
+                31
+              ],
+              [
+                55,
+                32
+              ],
+              [
+                56,
+                33
+              ],
+              [
+                57,
+                33
+              ]
+            ],
+            "complete_patches": 11,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 142,
+            "reused_pixel_uses": 397,
+            "crossing_or_touching_path_pixels": 3,
+            "outside_reviewed_path_columns": 45
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "decision": "NOT_EVALUATED",
+      "context_facets": [
+        {
+          "kind": "GLASS_CIRCULAR_PATTERN_PATH_INFLUENCE",
+          "certainty": "USER_SUSPECTED",
+          "statement_ko": "glass 표면의 원형 무늬를 따라서 선이 그려져있는걸 보니 그 경계를 강하게 보고있는듯"
+        }
+      ],
+      "causal_mechanism_verified": false
+    },
+    {
+      "id": "N5",
+      "subject_sha256": "71146468547566d5466ad3e2546e3b694f758bf8c0fde4b7e7c60b2d1438911f",
+      "case_id": "s4-f450",
+      "frame": 450,
+      "time_sec": 15.0,
+      "time_kind": "RECORDED",
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "geometry_sha256": "1cf5d40febd7333c2cbb80dd122edca881432df298efbaab5f3e1f69c5dda7f4",
+      "g0_pointer": [
+        "contexts",
+        19,
+        "rows",
+        7,
+        "incident_fragments",
+        0
+      ],
+      "allowed_interpretations": [
+        "STRUCTURE_BOUNDARY"
+      ],
+      "capability_target": "STRUCTURE_BOUNDARY",
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY",
+      "dense_labels": false,
+      "coordinate_tolerance": null,
+      "side_material_labels": null,
+      "inference_metadata_allowed": false,
+      "proposed_context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 17,
+            "complete_centers_xy": [
+              [
+                40,
+                74
+              ],
+              [
+                41,
+                74
+              ],
+              [
+                42,
+                75
+              ],
+              [
+                43,
+                75
+              ],
+              [
+                44,
+                75
+              ],
+              [
+                45,
+                76
+              ],
+              [
+                46,
+                76
+              ],
+              [
+                47,
+                76
+              ],
+              [
+                48,
+                76
+              ],
+              [
+                49,
+                76
+              ],
+              [
+                50,
+                76
+              ],
+              [
+                51,
+                76
+              ],
+              [
+                52,
+                77
+              ],
+              [
+                53,
+                77
+              ],
+              [
+                54,
+                77
+              ],
+              [
+                55,
+                77
+              ],
+              [
+                56,
+                76
+              ]
+            ],
+            "complete_patches": 17,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 183,
+            "reused_pixel_uses": 650,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 23
+          },
+          "lower": {
+            "requested_patches": 17,
+            "complete_centers_xy": [
+              [
+                40,
+                84
+              ],
+              [
+                41,
+                84
+              ],
+              [
+                42,
+                85
+              ],
+              [
+                43,
+                85
+              ],
+              [
+                44,
+                85
+              ],
+              [
+                45,
+                86
+              ],
+              [
+                46,
+                86
+              ],
+              [
+                47,
+                86
+              ],
+              [
+                48,
+                86
+              ],
+              [
+                49,
+                86
+              ],
+              [
+                50,
+                86
+              ],
+              [
+                51,
+                86
+              ],
+              [
+                52,
+                87
+              ],
+              [
+                53,
+                87
+              ],
+              [
+                54,
+                87
+              ],
+              [
+                55,
+                87
+              ],
+              [
+                56,
+                86
+              ]
+            ],
+            "complete_patches": 17,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 183,
+            "reused_pixel_uses": 650,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 23
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "decision": "NOT_EVALUATED",
+      "context_facets": [
+        {
+          "kind": "CIRCULAR_RIM",
+          "certainty": "USER_CONFIRMED_CONTEXT",
+          "statement_ko": "원형 rim"
+        }
+      ],
+      "causal_mechanism_verified": false
+    }
+  ],
+  "same_frame_dependency": [],
+  "proposed_context": {
+    "kernel": 7,
+    "side_centers_dy": {
+      "upper": -5,
+      "lower": 5
+    },
+    "columns": "existing G0 observed columns within fixed-X +/-12",
+    "preprocessing": "saved native RGB / 255; no resize, CLAHE or image normalization",
+    "padding": "NONE",
+    "required": "all 49 RGB pixels visible per patch",
+    "aggregation": "mean per side, one loss per fragment; patch count is not a model feature",
+    "semantics": "ordered geometric context, NOT pure material labels"
+  },
+  "status": "SCOPED_ROLES_BOUND",
+  "decision": "NOT_EVALUATED",
+  "qualified_units": 2,
+  "exposed_recordings": 1,
+  "untouched_holdout_recordings": 0,
+  "model_calls": 0,
+  "production_changed": false,
+  "training_executed": false,
+  "video_decode": false,
+  "remaining": [
+    "only this supplement's displayed roles are qualified; combine source groups explicitly",
+    "no pure-side material labels or verified optical cause",
+    "no G1 efficacy, O2/V5, raw-front integration or field acceptance"
+  ]
+}

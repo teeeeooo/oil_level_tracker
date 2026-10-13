@@ -65,7 +65,7 @@ Do not copy current status into architecture, diagnostics, or evidence merely fo
 
 ## Current S11 routing
 
-The [native G0 evidence](60-evidence/s11/2026-10-13-native-role-readiness.md) routes its frozen full-population binding. The [N1–N3 supplement](60-evidence/s11/2026-10-13-native-role-qualification.md) retains received roles and input checks; the [N4/N5 packet](60-evidence/s11/2026-10-13-native-opposition-review.md) adds new opposition questions with N3 as closed context. Current response/gate state stays in Work Plan.
+The [native G0 evidence](60-evidence/s11/2026-10-13-native-role-readiness.md) routes its frozen full-population binding. The [N1–N3 supplement](60-evidence/s11/2026-10-13-native-role-qualification.md) retains received roles and input checks; the [N4/N5 packet](60-evidence/s11/2026-10-13-native-opposition-review.md) adds new opposition questions with N3 as closed context. The [received N4/N5 reply and fixed trial](50-diagnostics/s11/2026-10-13-native-surface-trial/trial-manifest.json) retain scoped roles, context facets and source-separated evaluation. Current response/gate state stays in Work Plan.
 
 S11 remains the active detector-effectiveness milestone. Current state and authorization are owned only by the [Work Plan](00-project/work-plan.md).
 
@@ -104,7 +104,7 @@ pins, saved report claims and the actual native-feature canary CLI. The existing
 [contextual-role design](20-architecture/s11-contextual-role-observation-design.md#native-side-role-observation-and-g0-binding-contract)
 and [Witness Validation](30-validation/s11-interface-observability-witness-validation.md#native-side-role-readiness-and-feasibility)
 own the adopted native binding/weak-constraint/readiness delta. NSR-1 names a
-proposed observation; the small role head is not an approved training plan.
+proposed observation; Work Plan owns the separately bounded native-head trial authority.
 Work Plan keeps the single WP01–WP10 ledger. Earlier packages and closed CR1/R/L
 results retain their historical scope; the new intake does not reopen them.
 

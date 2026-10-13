@@ -717,8 +717,8 @@ not a claim that every frame or every material role is labeled. A missing necess
 role, ambiguous join or absent opposition yields a concrete NOT_READY reason.
 All known inputs remain exposed development evidence, not untouched holdout.
 
-The source's small native RGB head is **not yet an executable training plan**.
-Before that separate scope can run, G0 must identify sufficient role/opposition
+The source's small native RGB head is **not itself an executable training plan**.
+Before a separate capability scope can run, G0 must identify sufficient role/opposition
 units and freeze class/facet semantics, aggregation, loss, source/episode split,
 one seed/optimizer/schedule/operating-point selection, resource limits and stop
 rules. Seven-pixel locality and weak labels do not by themselves establish the
@@ -777,11 +777,48 @@ its paths come from different frames. A subsequently qualified structure/optical
 path must not acquire the deferred binary proposal's `INTERNAL_FOAM_CHANGE` label;
 the next operation must preserve those facets or explicitly leave them unsupported.
 
+
+### Bounded native surface compatibility trial
+
+The [N4/N5 supplement](../50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json)
+keeps N4's internal-Foam role separate from its user-suspected glass-circle path
+influence. N5 is a circular-rim structural boundary. Neither establishes a measured
+optical cause, pure-side material truth or a dense mask. The qualifier's v2 adds
+these contextual facets without rewriting v1 replies or the frozen G0 population.
+
+The [fixed successor manifest](../50-diagnostics/s11/2026-10-13-native-surface-trial/trial-manifest.json)
+tests a smaller capability than full NSR-1: **external surface compatibility versus
+non-external-surface** for an already observed path. The latter is an evaluation
+union, not a material class: internal Foam and structure remain distinct reference
+roles. N1/N2 fit an external/internal contrast; N3/N4/N5 evaluate one exposed second
+source, including an unseen structural opposition. This cannot demonstrate a learned
+structure class or general structure safety. Do not reverse or mix that split after
+seeing results. All five paths remain development-exposed, with no calibration set.
+
+Reuse the deferred option's 1,118-parameter 7×7 shared encoder, ordered side means,
+equal fragment loss, CPU/float32, seed 20261013, Adam 0.001 and 1,000 full-batch
+updates. No augmentation, early stopping, validation checkpoint selection or fitted
+confidence cutoff. Exact ties are UNKNOWN. Neither UNKNOWN nor unavailable input
+counts as correct opposition. Any required fit or transfer error closes this fixed
+trial; complete success is limited exposed transfer only, never full G1.
+
+`tests/diagnostics/s11_native_surface_trial.py` owns the new training operation;
+existing score runners own frozen inference experiments and cannot implement this
+loss without changing their contracts. The preparation entry reuses the native
+qualifier and pins actual RGB patches. The Torch entry consumes only JSON/NumPy/
+Pillow, reuses the existing CR1 offline/write guard and resource meters, and never
+imports its encoder or G0/OpenCV. Model inputs contain only upper/lower RGB tensors;
+source, role, facets, position and patch count do not become features. Freeze source
+and input pins at a clean head before training. Keep final weights and compact
+full five-unit results, not media copies, dense features or intermediate checkpoints.
+The 600 s/1 GB RSS/32 MB scratch/6 MB retained/3 GB workspace ceilings apply.
+Work Plan owns execution authority and the stop reached after the measured outcome.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: the October 13 G0 full-population binding, N1–N3 scoped replies, pending N4/N5 opposition subjects, unavailable upper-rim contexts and complete proposed RGB context with same-frame shared pixels, native-feature dependency canary, weak annotation precision and support-face versus raw-edge reachability; current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
+- Prior mechanisms reviewed: the October 13 G0 full-population binding, N1–N3 scoped replies, qualified N4/N5 roles with separate tentative glass-pattern influence and the fixed source-separated capability trial, unavailable upper-rim contexts and complete proposed RGB context with same-frame shared pixels, native-feature dependency canary, weak annotation precision and support-face versus raw-edge reachability; current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
 - Prior mechanisms rejected: threshold/peer-distance rescue, anchor-only fix, cost/maturity-based identity, appearance matching as physical authority, component-extreme Foam replacement and episode relaxation without a correct raw front.
 - Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies, a bounded local footprint and preservation before removal keep the experiment reversible.
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.

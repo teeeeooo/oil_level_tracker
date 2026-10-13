@@ -23,10 +23,12 @@ from tests.diagnostics import s11_native_role_preflight as g0
 
 o2 = g0.o2
 SCHEMA = "s11-native-fragment-role-reply-v1"
+FACET_SCHEMA = "s11-native-fragment-role-reply-v2"
 ROLES = {
     "EXTERNAL_FOAM_UPPER": "EXTERNAL_SURFACE",
     "OSCILLATING_LIQUID_UPPER": "EXTERNAL_SURFACE",
     "INTERNAL_FOAM_CHANGE": "INTERNAL_FOAM_CHANGE",
+    "STRUCTURE_BOUNDARY": "STRUCTURE_BOUNDARY",
 }
 # A proposed operation, not a fitted model or a new G0 support definition.
 CONTEXT = {"kernel": 7, "side_centers_dy": {"upper": -5, "lower": 5},
@@ -88,7 +90,8 @@ def context_support(visible, columns, path):
 def qualify(root, reply):
     o2.require(set(reply) == {"schema", "proposal", "display", "response_ko", "answers"},
                "invalid reply fields")
-    o2.require(reply["schema"] == SCHEMA, "unsupported reply schema")
+    o2.require(reply["schema"] in (SCHEMA, FACET_SCHEMA), "unsupported reply schema")
+    has_facets = reply["schema"] == FACET_SCHEMA
     o2.text(reply["response_ko"], "verbatim response")
     proposal = read_pin(root, reply["proposal"])
     g0.pinned_path(root, reply["display"])
@@ -106,12 +109,24 @@ def qualify(root, reply):
     outputs, loaded, pixels = [], {}, {}
     for sid, subject in subjects.items():
         answer = answers[sid]
-        o2.require(set(answer) == {"id", "subject_sha256", "statement_ko", "allowed_interpretations", "scope"},
+        fields = {"id", "subject_sha256", "statement_ko", "allowed_interpretations", "scope"}
+        o2.require(set(answer) == fields | ({"context_facets"} if has_facets else set()),
                    "invalid answer fields")
         o2.require(answer["subject_sha256"] == o2.fingerprint_json(subject), "review subject changed")
         o2.require(answer["scope"] == "DISPLAYED_FRAGMENT_ROLE_ONLY", "unsupported review precision")
         o2.text(answer["statement_ko"], "subject statement")
         o2.require(answer["statement_ko"] in reply["response_ko"], "statement absent from response")
+        facets = answer.get("context_facets", [])
+        o2.require(isinstance(facets, list), "invalid context facets")
+        for facet in facets:
+            o2.require(set(facet) == {"kind", "certainty", "statement_ko"}, "invalid facet fields")
+            o2.require((facet["kind"], facet["certainty"]) in {
+                ("GLASS_CIRCULAR_PATTERN_PATH_INFLUENCE", "USER_SUSPECTED"),
+                ("CIRCULAR_RIM", "USER_CONFIRMED_CONTEXT"),
+            }, "unsupported facet or certainty")
+            o2.text(facet["statement_ko"], "facet statement")
+            o2.require(facet["statement_ko"] in answer["statement_ko"], "facet absent from subject statement")
+        o2.require(len({f["kind"] for f in facets}) == len(facets), "duplicate facet")
         roles = answer["allowed_interpretations"]
         o2.require(isinstance(roles, list) and roles and len(roles) == len(set(roles)) and set(roles) <= ROLES.keys(),
                    "unsupported or duplicate role")
@@ -178,6 +193,8 @@ def qualify(root, reply):
                         "scope": answer["scope"], "dense_labels": False, "coordinate_tolerance": None,
                         "side_material_labels": None, "inference_metadata_allowed": False,
                         "proposed_context": support, "decision": "NOT_EVALUATED"})
+        if has_facets:
+            outputs[-1].update(context_facets=facets, causal_mechanism_verified=False)
     sharing = []
     for i, first in enumerate(outputs):
         for second in outputs[i+1:]:
@@ -185,17 +202,21 @@ def qualify(root, reply):
                 sharing.append({"subjects": [first["id"], second["id"]],
                                 "shared_dependency_pixels": len(pixels[first["id"]] & pixels[second["id"]]),
                                 "independent_split_allowed": False})
-    return {"schema": "s11-native-fragment-role-qualification-v1", "reply_sha256": o2.fingerprint_json(reply),
+    return {"schema": "s11-native-fragment-role-qualification-v2" if has_facets else
+                      "s11-native-fragment-role-qualification-v1", "reply_sha256": o2.fingerprint_json(reply),
             "g0_readout": proposal["g0_readout"], "baseline_counts": baseline["counts"],
             "subjects": outputs, "same_frame_dependency": sharing, "proposed_context": CONTEXT,
             "status": "SCOPED_ROLES_BOUND", "decision": "NOT_EVALUATED",
             "qualified_units": len(outputs), "exposed_recordings": len({r["source_recording"]["sha256"] for r in outputs}),
             "untouched_holdout_recordings": 0, "model_calls": 0, "production_changed": False,
             "training_executed": False, "video_decode": False,
-            "remaining": ["adopt a concrete learning scope before any training",
+            "remaining": (["only this supplement's displayed roles are qualified; combine source groups explicitly",
+                           "no pure-side material labels or verified optical cause",
+                           "no G1 efficacy, O2/V5, raw-front integration or field acceptance"] if has_facets else
+                          ["adopt a concrete learning scope before any training",
                           "independent native optical/structure opposition remains unqualified",
                           "no cross-source internal-Foam opposition or Oil material-role supervision",
-                          "no G1 efficacy, O2/V5, raw-front integration or field acceptance"]}
+                          "no G1 efficacy, O2/V5, raw-front integration or field acceptance"])}
 
 
 def main():

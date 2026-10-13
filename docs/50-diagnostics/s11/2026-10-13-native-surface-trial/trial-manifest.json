@@ -1,0 +1,987 @@
+{
+  "schema": "s11-native-surface-trial-v1",
+  "capability": "external surface compatibility on reviewed native paths",
+  "classes": [
+    "EXTERNAL_SURFACE",
+    "NON_EXTERNAL_SURFACE"
+  ],
+  "split": {
+    "train": [
+      "N1",
+      "N2"
+    ],
+    "transfer": [
+      "N3",
+      "N4",
+      "N5"
+    ]
+  },
+  "configuration": {
+    "seed": 20261013,
+    "device": "cpu",
+    "dtype": "float32",
+    "threads": 2,
+    "steps": 1000,
+    "optimizer": "Adam",
+    "lr": 0.001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0,
+    "parameters": 1118,
+    "augmentation": false,
+    "calibration": false,
+    "checkpoint": "FINAL_ONLY"
+  },
+  "resource_limits": {
+    "seconds": 600,
+    "peak_rss_bytes": 1000000000,
+    "scratch_bytes": 32000000,
+    "retained_bytes": 6000000,
+    "aggregate_workspace_bytes": 3000000000
+  },
+  "packages": {
+    "torch": "2.14.1",
+    "numpy": "2.5.4",
+    "pillow": "12.3.0"
+  },
+  "python": "3.14.7",
+  "sources": [
+    {
+      "path": "tests/diagnostics/s11_native_surface_trial.py",
+      "sha256": "144159d66f0c7863b6d18346f13b43337b415cefc400a827da7fc7f4d7f6ffa3"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_qualification.py",
+      "sha256": "2f774b1cbd7c0e29013d73c0fe7abe5ae3b3b2c91f5303b12f2de10cf3900e59"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_preflight.py",
+      "sha256": "cd8aa6dfaa6bff27290b7133313887873b2249f488b54baec49460bd69ab4dbe"
+    },
+    {
+      "path": "tests/diagnostics/s11_contextual_role_preflight.py",
+      "sha256": "f1d60f45c132b0725af897d33b6ddc9ac01a4ce315640b3abadda4207cefc1f2"
+    },
+    {
+      "path": "tests/diagnostics/s11_contour_contact_probe.py",
+      "sha256": "5b623820083d94219bee6fe5f4ec476361e2454ece4749689f47c0f38cf29d24"
+    },
+    {
+      "path": "tests/diagnostics/s11_foam_material_sides.py",
+      "sha256": "1873322ab1ddadd9dfdaa508d6002f9e8d728e5733ec181c6962c200e177e5ef"
+    },
+    {
+      "path": "tests/diagnostics/s11_foam_support_geometry.py",
+      "sha256": "2524861754d56f6004eff310bdf841226f19e4f069b89f19733d3583923a8a40"
+    },
+    {
+      "path": "tests/diagnostics/s11_interface_shadow_evaluation.py",
+      "sha256": "5909c468871ed3c5cd2095c7c4a4a88df4d08569b10985c22e999aff0f42c808"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/probe.py",
+      "sha256": "3ccbaad1c8791cdf7770ffa49d33b59af53f53fbb6038a53b159a2d9a3ed5037"
+    },
+    {
+      "path": "src/oil_tracker/application/services/truth_identity.py",
+      "sha256": "5835e2ab1ebf490a80d852819ad1d522a8f1451fb0e454cfef6723817e433556"
+    },
+    {
+      "path": "src/oil_tracker/domain/detector_benchmark.py",
+      "sha256": "e520b82eaa820ec83397fab33cc56e44f48110523a9c77f798451ac73360382d"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-13-native-role-qualification/review-reply.json",
+      "sha256": "4935309ff2f51c262d0cb9baaa69ff8bd8bcaa77bfedd7104fbee450c67dbfa8"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-13-native-role-qualification/qualification.json",
+      "sha256": "43363a257ec79c88a647a513a3f107f5b3795e623d8d87029f2c7d062c595eee"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-13-native-surface-trial/review-reply.json",
+      "sha256": "4a663887566dac272f6ecab139318eda43c94b62edd095f122a16eb2f2670a28"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json",
+      "sha256": "9065e9bc888cbc733f31f93dc5c10eac569cc6910eaa4116176cb61869e06d1f"
+    }
+  ],
+  "predecessor": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-qualification/g1-pilot-proposal.json",
+    "sha256": "098c75be7df528ca11b20597caa53a5f54f600d6218b4edfa16374e9cef0fdaf"
+  },
+  "g0_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+    "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+  },
+  "units": [
+    {
+      "id": "N1",
+      "qualification": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-role-qualification/qualification.json",
+        "sha256": "43363a257ec79c88a647a513a3f107f5b3795e623d8d87029f2c7d062c595eee"
+      },
+      "subject_sha256": "3f4b51359ee0efb276d8687abd89423c8612974d02105aea221cc1c4bbc14956",
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "frame": 1232,
+      "review_role": "EXTERNAL_SURFACE",
+      "target": 0,
+      "rgb": {
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
+        "sha256": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324"
+      },
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              938,
+              471
+            ],
+            [
+              939,
+              471
+            ],
+            [
+              940,
+              471
+            ],
+            [
+              941,
+              471
+            ],
+            [
+              942,
+              471
+            ],
+            [
+              943,
+              471
+            ],
+            [
+              944,
+              471
+            ],
+            [
+              945,
+              471
+            ],
+            [
+              946,
+              471
+            ],
+            [
+              947,
+              472
+            ],
+            [
+              948,
+              472
+            ],
+            [
+              949,
+              472
+            ],
+            [
+              950,
+              472
+            ],
+            [
+              951,
+              472
+            ],
+            [
+              952,
+              473
+            ],
+            [
+              953,
+              473
+            ],
+            [
+              954,
+              473
+            ],
+            [
+              955,
+              473
+            ],
+            [
+              956,
+              474
+            ],
+            [
+              957,
+              474
+            ],
+            [
+              958,
+              474
+            ],
+            [
+              959,
+              474
+            ],
+            [
+              960,
+              474
+            ],
+            [
+              961,
+              474
+            ],
+            [
+              962,
+              474
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "f9b40769eed1de3e65f68b3463024603936d7b4c79ca5c3a172c1e59311404c0"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              938,
+              481
+            ],
+            [
+              939,
+              481
+            ],
+            [
+              940,
+              481
+            ],
+            [
+              941,
+              481
+            ],
+            [
+              942,
+              481
+            ],
+            [
+              943,
+              481
+            ],
+            [
+              944,
+              481
+            ],
+            [
+              945,
+              481
+            ],
+            [
+              946,
+              481
+            ],
+            [
+              947,
+              482
+            ],
+            [
+              948,
+              482
+            ],
+            [
+              949,
+              482
+            ],
+            [
+              950,
+              482
+            ],
+            [
+              951,
+              482
+            ],
+            [
+              952,
+              483
+            ],
+            [
+              953,
+              483
+            ],
+            [
+              954,
+              483
+            ],
+            [
+              955,
+              483
+            ],
+            [
+              956,
+              484
+            ],
+            [
+              957,
+              484
+            ],
+            [
+              958,
+              484
+            ],
+            [
+              959,
+              484
+            ],
+            [
+              960,
+              484
+            ],
+            [
+              961,
+              484
+            ],
+            [
+              962,
+              484
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "143c32db69a370de94c567233489ed08b6b6b7dca8fe4ad6ed86d2ce49c0f380"
+        }
+      }
+    },
+    {
+      "id": "N2",
+      "qualification": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-role-qualification/qualification.json",
+        "sha256": "43363a257ec79c88a647a513a3f107f5b3795e623d8d87029f2c7d062c595eee"
+      },
+      "subject_sha256": "ff2a7455ee0d03774319ba99f67cdb005ad4c623c82725e14022fdd011ecf416",
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "frame": 1232,
+      "review_role": "INTERNAL_FOAM_CHANGE",
+      "target": 1,
+      "rgb": {
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
+        "sha256": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324"
+      },
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              945,
+              479
+            ],
+            [
+              946,
+              480
+            ],
+            [
+              947,
+              480
+            ],
+            [
+              948,
+              481
+            ],
+            [
+              949,
+              481
+            ],
+            [
+              950,
+              482
+            ],
+            [
+              951,
+              482
+            ]
+          ],
+          "shape": [
+            7,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "08d3cdd34bce16c95707d757a820e13b76b96ae5d3a6a426cff10e9b6b9f0ee7"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              945,
+              489
+            ],
+            [
+              946,
+              490
+            ],
+            [
+              947,
+              490
+            ],
+            [
+              948,
+              491
+            ],
+            [
+              949,
+              491
+            ],
+            [
+              950,
+              492
+            ],
+            [
+              951,
+              492
+            ]
+          ],
+          "shape": [
+            7,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "2e648097414bc6d0703bb943dc0ae45939e365eae4f4f9c7828a0e48bc3fdf6b"
+        }
+      }
+    },
+    {
+      "id": "N3",
+      "qualification": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-role-qualification/qualification.json",
+        "sha256": "43363a257ec79c88a647a513a3f107f5b3795e623d8d87029f2c7d062c595eee"
+      },
+      "subject_sha256": "8d7abbae5c074476332ea39c7b0f2274cd19e976b1bd3be39746966916874921",
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "frame": 1620,
+      "review_role": "EXTERNAL_SURFACE",
+      "target": 0,
+      "rgb": {
+        "path": "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001620_523615198887/original_roi_512ed6ab.png",
+        "sha256": "e00d97a5f265f5e6353d27014a46b6aca692112efb3b1c29fc170b171ba0462b"
+      },
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              42,
+              10
+            ],
+            [
+              43,
+              10
+            ],
+            [
+              44,
+              10
+            ],
+            [
+              45,
+              10
+            ],
+            [
+              46,
+              10
+            ],
+            [
+              47,
+              10
+            ],
+            [
+              48,
+              10
+            ],
+            [
+              49,
+              10
+            ],
+            [
+              50,
+              10
+            ],
+            [
+              51,
+              10
+            ],
+            [
+              52,
+              10
+            ],
+            [
+              53,
+              10
+            ],
+            [
+              54,
+              10
+            ],
+            [
+              55,
+              10
+            ],
+            [
+              56,
+              10
+            ],
+            [
+              57,
+              10
+            ],
+            [
+              58,
+              10
+            ],
+            [
+              59,
+              11
+            ],
+            [
+              60,
+              11
+            ]
+          ],
+          "shape": [
+            19,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "535b8136e476cf392f7d0aa5dbba7a6a539e9c66999d8557f5c87d032f4e5b77"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              42,
+              20
+            ],
+            [
+              43,
+              20
+            ],
+            [
+              44,
+              20
+            ],
+            [
+              45,
+              20
+            ],
+            [
+              46,
+              20
+            ],
+            [
+              47,
+              20
+            ],
+            [
+              48,
+              20
+            ],
+            [
+              49,
+              20
+            ],
+            [
+              50,
+              20
+            ],
+            [
+              51,
+              20
+            ],
+            [
+              52,
+              20
+            ],
+            [
+              53,
+              20
+            ],
+            [
+              54,
+              20
+            ],
+            [
+              55,
+              20
+            ],
+            [
+              56,
+              20
+            ],
+            [
+              57,
+              20
+            ],
+            [
+              58,
+              20
+            ],
+            [
+              59,
+              21
+            ],
+            [
+              60,
+              21
+            ]
+          ],
+          "shape": [
+            19,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "ad6b08fcbf1f7757e3c2fbd506a2cd8bcaa03c75a07203800f891206727fb21e"
+        }
+      }
+    },
+    {
+      "id": "N4",
+      "qualification": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json",
+        "sha256": "9065e9bc888cbc733f31f93dc5c10eac569cc6910eaa4116176cb61869e06d1f"
+      },
+      "subject_sha256": "8172ad28f3b88f261f6af8f2be8ef7111cc23392c32d4244ad0b47361634e45f",
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "frame": 1620,
+      "review_role": "INTERNAL_FOAM_CHANGE",
+      "target": 1,
+      "rgb": {
+        "path": "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001620_523615198887/original_roi_512ed6ab.png",
+        "sha256": "e00d97a5f265f5e6353d27014a46b6aca692112efb3b1c29fc170b171ba0462b"
+      },
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              47,
+              23
+            ],
+            [
+              48,
+              22
+            ],
+            [
+              49,
+              22
+            ],
+            [
+              50,
+              21
+            ],
+            [
+              51,
+              21
+            ],
+            [
+              52,
+              21
+            ],
+            [
+              53,
+              21
+            ],
+            [
+              54,
+              21
+            ],
+            [
+              55,
+              22
+            ],
+            [
+              56,
+              23
+            ],
+            [
+              57,
+              23
+            ]
+          ],
+          "shape": [
+            11,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "1c009c85775f8f092af9d821878b80049e302785e12150bc5da6c0152977c01d"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              47,
+              33
+            ],
+            [
+              48,
+              32
+            ],
+            [
+              49,
+              32
+            ],
+            [
+              50,
+              31
+            ],
+            [
+              51,
+              31
+            ],
+            [
+              52,
+              31
+            ],
+            [
+              53,
+              31
+            ],
+            [
+              54,
+              31
+            ],
+            [
+              55,
+              32
+            ],
+            [
+              56,
+              33
+            ],
+            [
+              57,
+              33
+            ]
+          ],
+          "shape": [
+            11,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "39ed192ecdbd7e05599a9aa89c5f8ff945bba1c82f3caadc4b3c68d7f8d7cdff"
+        }
+      }
+    },
+    {
+      "id": "N5",
+      "qualification": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json",
+        "sha256": "9065e9bc888cbc733f31f93dc5c10eac569cc6910eaa4116176cb61869e06d1f"
+      },
+      "subject_sha256": "71146468547566d5466ad3e2546e3b694f758bf8c0fde4b7e7c60b2d1438911f",
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "frame": 450,
+      "review_role": "STRUCTURE_BOUNDARY",
+      "target": 1,
+      "rgb": {
+        "path": "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000000450_fb759bff9e59/original_roi_512ed6ab.png",
+        "sha256": "bdc37f0c0cbd7483db07177a87316827591fc89c53dbd40ef3b3d3517759aaa4"
+      },
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              40,
+              74
+            ],
+            [
+              41,
+              74
+            ],
+            [
+              42,
+              75
+            ],
+            [
+              43,
+              75
+            ],
+            [
+              44,
+              75
+            ],
+            [
+              45,
+              76
+            ],
+            [
+              46,
+              76
+            ],
+            [
+              47,
+              76
+            ],
+            [
+              48,
+              76
+            ],
+            [
+              49,
+              76
+            ],
+            [
+              50,
+              76
+            ],
+            [
+              51,
+              76
+            ],
+            [
+              52,
+              77
+            ],
+            [
+              53,
+              77
+            ],
+            [
+              54,
+              77
+            ],
+            [
+              55,
+              77
+            ],
+            [
+              56,
+              76
+            ]
+          ],
+          "shape": [
+            17,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "a94af4eb552bbf6a6ccc8098c8faa3af040af9e6d81db5458847950f9532dea3"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              40,
+              84
+            ],
+            [
+              41,
+              84
+            ],
+            [
+              42,
+              85
+            ],
+            [
+              43,
+              85
+            ],
+            [
+              44,
+              85
+            ],
+            [
+              45,
+              86
+            ],
+            [
+              46,
+              86
+            ],
+            [
+              47,
+              86
+            ],
+            [
+              48,
+              86
+            ],
+            [
+              49,
+              86
+            ],
+            [
+              50,
+              86
+            ],
+            [
+              51,
+              86
+            ],
+            [
+              52,
+              87
+            ],
+            [
+              53,
+              87
+            ],
+            [
+              54,
+              87
+            ],
+            [
+              55,
+              87
+            ],
+            [
+              56,
+              86
+            ]
+          ],
+          "shape": [
+            17,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "8fdddc05ce39616ecfc7ce14d070c8977d303fc6b3e2cb35ecb53c65633972f5"
+        }
+      }
+    }
+  ],
+  "architecture": "Shared valid Conv3x3 3->8->8->4; ReLU after first two; mean per side; ordered concat; Linear8->2, all biases",
+  "features": "RGB /255 only; no resize, pad, normalization, coordinates, IDs, patch counts, role or facet metadata",
+  "supervision": "Equal weight fragment cross-entropy on N1/N2 only; no side/pixel labels; no structure fit example",
+  "evaluation": "One final-step transfer evaluation on N3/N4/N5; already exposed development, no blind holdout",
+  "unknown": "Exact tied logits UNKNOWN; unavailable support separate; neither counts as success",
+  "success": "All 2 fit and 3 transfer units correct: LIMITED_EXPOSED_TRANSFER_ONLY; never full G1/O2/FIELD",
+  "failure": "Any wrong/unknown required unit closes this fixed trial without promotion; no seed/crop/offset/threshold/head/optimizer retry",
+  "population": "Only five qualified fragments evaluated; other G0 rows remain unreviewed/unavailable, never negative successes; use pinned full roster",
+  "shared_pixels": {
+    "N1_N2": 90,
+    "N3_N4": 98
+  },
+  "untouched_holdout_recordings": 0,
+  "production_changed": false,
+  "raw_front_integration": false
+}

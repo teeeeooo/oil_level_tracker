@@ -1334,3 +1334,12 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-opposition-review/native-opposition-review.png](50-diagnostics/s11/2026-10-13-native-opposition-review/native-opposition-review.png) | 원본 RGB와 N4/N5 경로, N3는 닫힌 기준 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-opposition-review/prepare_review.py](50-diagnostics/s11/2026-10-13-native-opposition-review/prepare_review.py) | 기존 graph/support owner를 쓰는 결속·검토 그림 재현기 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-opposition-review/verification.json](50-diagnostics/s11/2026-10-13-native-opposition-review/verification.json) | 실제 CLI·overwrite 거부·독립 경로와 6-side 입력 검증 |
+
+
+### 2026-10-13 native 대조군 판정과 한정 학습
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/review-reply.json](50-diagnostics/s11/2026-10-13-native-surface-trial/review-reply.json) | N4/N5 원문·역할·추정과 확인된 context facet |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json](50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json) | 기존 G0에 결속한 두 역할과 입력 범위 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/trial-manifest.json](50-diagnostics/s11/2026-10-13-native-surface-trial/trial-manifest.json) | 다섯 경로·촬영원 분리·고정 head/loss/seed·실패 기준 |
