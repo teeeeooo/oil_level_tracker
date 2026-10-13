@@ -1235,12 +1235,14 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:06:19이며, 최초 Git 추가�
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-public-transfer.md](50-diagnostics/s11/2026-10-13-cr1-public-transfer.md) | 기존 reference를 다른 공개 원본의 경계 포함 범위에 적용하는 고정 진단 비교 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-public-transfer/preflight.json](50-diagnostics/s11/2026-10-13-cr1-public-transfer/preflight.json) | 추론 전 원본·geometry·35개 위치·자원·중단 기준 고정 |
 
-### 최초 Git 등록 대기 — 2026-10-13 공개 원본 CR1 결과
+### 2026-10-13 공개 원본 CR1 결과와 Foam 내부 검토
 
-아래 파일의 작성일은 2026-10-13이다. 최초 Git 추가일은 커밋 후 확인한다.
+아래 파일의 작성일은 2026-10-13이다. 최초 추가 커밋 `0275ab2`의
+author 시각은 Asia/Seoul 기준 2026-10-13 15:28:14이며, 최초 Git 추가일도
+2026-10-13으로 확인했다.
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| Git 미등록 | [50-diagnostics/s11/2026-10-13-cr1-public-transfer/readout.json](50-diagnostics/s11/2026-10-13-cr1-public-transfer/readout.json) | 고정 35개 위치 전체 점수·지원 좌표·실제 encoder 대조·자원 결과 |
-| Git 미등록 | [50-diagnostics/s11/2026-10-13-foam-material-reference/proposal.json](50-diagnostics/s11/2026-10-13-foam-material-reference/proposal.json) | 독립 Foam 위·아래 비교에 쓸 내부 영역의 원본·좌표·새 검토 질문 |
-| Git 미등록 | [50-diagnostics/s11/2026-10-13-foam-material-reference/reference-review.png](50-diagnostics/s11/2026-10-13-foam-material-reference/reference-review.png) | R 영역 위치와 가공하지 않은 원본 확대를 담은 모바일 검토 이미지 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-public-transfer/readout.json](50-diagnostics/s11/2026-10-13-cr1-public-transfer/readout.json) | 고정 35개 위치 전체 점수·지원 좌표·실제 encoder 대조·자원 결과 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/proposal.json](50-diagnostics/s11/2026-10-13-foam-material-reference/proposal.json) | 독립 Foam 위·아래 비교에 쓸 내부 영역의 원본·좌표·새 검토 질문 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/reference-review.png](50-diagnostics/s11/2026-10-13-foam-material-reference/reference-review.png) | R 영역 위치와 가공하지 않은 원본 확대를 담은 모바일 검토 이미지 |
