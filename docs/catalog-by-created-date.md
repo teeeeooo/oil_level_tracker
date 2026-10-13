@@ -1353,3 +1353,18 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
 | 2026-10-13 | [60-evidence/s11/2026-10-13-existing-material-handoff.md](60-evidence/s11/2026-10-13-existing-material-handoff.md) | N1–N5 시험 종료·Artifact/마스크 이력·관리 보완 이후 체크포인트와 재개 메시지 |
+
+### 2026-10-13 기존 자료 실행 — 2026-10-14 인수
+
+첨부의 작성일은 2026-10-13이다. 아래 파일은 기존 작업 트리에 미커밋으로 있었으며,
+인수 시 원본과 hash를 대조했다. 최초 Git 추가일은 등록 후 확정한다.
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 미등록 | [50-diagnostics/s11/2026-10-13-existing-material-execution/closeout-checks.json](50-diagnostics/s11/2026-10-13-existing-material-execution/closeout-checks.json) | 원 실행의 governance·산출물 종료 검사 |
+| 미등록 | [50-diagnostics/s11/2026-10-13-existing-material-execution/manifest.json](50-diagnostics/s11/2026-10-13-existing-material-execution/manifest.json) | 원본·판정·source 용도·예산 pin |
+| 미등록 | [50-diagnostics/s11/2026-10-13-existing-material-execution/public-native-subject-review.png](50-diagnostics/s11/2026-10-13-existing-material-execution/public-native-subject-review.png) | 미확정 native 경로 7개의 원본 픽셀 검토 |
+| 미등록 | [50-diagnostics/s11/2026-10-13-existing-material-execution/readout.json](50-diagnostics/s11/2026-10-13-existing-material-execution/readout.json) | 전체 164개 후보·native 경로·판정과 준비도 |
+| 미등록 | [50-diagnostics/s11/2026-10-13-existing-material-execution/render_subject_packet.py](50-diagnostics/s11/2026-10-13-existing-material-execution/render_subject_packet.py) | 경로 검토 이미지 재현기 |
+| 미등록 | [50-diagnostics/s11/2026-10-13-existing-material-execution/verification.json](50-diagnostics/s11/2026-10-13-existing-material-execution/verification.json) | 원 실행의 116 tests·CLI·원본과 경로 검증 |
+| 미등록 | [60-evidence/s11/2026-10-13-existing-material-execution.md](60-evidence/s11/2026-10-13-existing-material-execution.md) | 구현·실행·후속 범위 인수인계 |

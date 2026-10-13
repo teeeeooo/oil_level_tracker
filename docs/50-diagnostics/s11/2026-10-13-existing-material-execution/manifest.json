@@ -1,0 +1,112 @@
+{
+  "schema": "s11-existing-material-reuse-v1",
+  "base_head": "463ea1bb5aa2fb945a7f1871f0aa35f4940c8767",
+  "training_executed": false,
+  "sources": [
+    {
+      "path": "sample/base_sample_1.mp4",
+      "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+      "use": "LEGACY"
+    },
+    {
+      "path": "sample/sample2.mp4",
+      "sha256": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+      "use": "LEGACY"
+    },
+    {
+      "path": "sample/sample3.mp4",
+      "sha256": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+      "use": "QUARANTINED"
+    },
+    {
+      "path": "sample/sample4.mp4",
+      "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+      "use": "DEVELOPMENT"
+    },
+    {
+      "path": "sample/sample5.mp4",
+      "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+      "use": "DEVELOPMENT"
+    },
+    {
+      "path": "sample/sample6.mp4",
+      "sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2",
+      "use": "FAILURE_RESPONSE"
+    },
+    {
+      "path": "sample/sample7.mp4",
+      "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+      "use": "FAILURE_RESPONSE"
+    },
+    {
+      "path": "sample/public_miso_mHOS1-1ck60.mp4",
+      "sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+      "use": "EXPOSED_EVALUATION"
+    },
+    {
+      "path": "sample/public_egenie_nKfQ1J97_QE.mp4",
+      "sha256": "ea522b841deba1b792720f191f5df4c5d65177bb7fa5e4f2b50ccceb1598c744",
+      "use": "UNASSESSED"
+    }
+  ],
+  "inputs": {
+    "g0_manifest": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/manifest.json",
+      "sha256": "8bb03c49017181e54e6164a248ac28ff0977d9a0e3af11882417b5a5f431c632"
+    },
+    "g0_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+      "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+    },
+    "oil_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/readout.json.gz",
+      "sha256": "ed547fa17e6ae987b17fe628d9b7fa0300e0e3f35f0913355c56a4a320aba2d5"
+    },
+    "oil_review_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-cr1-review-qualification/readout.json",
+      "sha256": "02ec0920ff99b2824600983ec309a84d0f70f6dee787db8bbe2fee4a954bc921"
+    },
+    "oil_controls": {
+      "path": "docs/50-diagnostics/s11/2026-10-07-sample4-a2-control-preflight.json",
+      "sha256": "5e3d00edcc9bd571a261bbeb2647593f3563a327f4706d0bd13d1dcd712674b4"
+    }
+  },
+  "native_qualifications": [
+    {
+      "reply": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-role-qualification/review-reply.json",
+        "sha256": "4935309ff2f51c262d0cb9baaa69ff8bd8bcaa77bfedd7104fbee450c67dbfa8"
+      },
+      "readout": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-role-qualification/qualification.json",
+        "sha256": "43363a257ec79c88a647a513a3f107f5b3795e623d8d87029f2c7d062c595eee"
+      }
+    },
+    {
+      "reply": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-surface-trial/review-reply.json",
+        "sha256": "4a663887566dac272f6ecab139318eda43c94b62edd095f122a16eb2f2670a28"
+      },
+      "readout": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json",
+        "sha256": "9065e9bc888cbc733f31f93dc5c10eac569cc6910eaa4116176cb61869e06d1f"
+      }
+    }
+  ],
+  "qualified_subject_ids": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5"
+  ],
+  "prepare_native_cases": [
+    "public-miso-f1499"
+  ],
+  "resources": {
+    "seconds": 180,
+    "peak_rss_bytes": 800000000,
+    "output_bytes": 1000000
+  },
+  "scope": "Source uses are proposals, not fit instructions. Reuse original candidate precision; native evaluation roles remain unbound."
+}
