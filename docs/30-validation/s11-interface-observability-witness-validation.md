@@ -1480,7 +1480,17 @@ containment comparisons only. Scoped practical candidate acceptance, if supplied
 can support a same-frame at-least-one-acceptable-candidate preservation requirement;
 it supplies neither all-candidate physical truth nor native contour labels.
 
-Required checks for the proposed observation/policy are:
+The separate [candidate-local RGB successor](../20-architecture/s11-contextual-role-observation-design.md#candidate-local-rgb-compatibility-successor)
+tests a candidate envelope, not the closed native-surface capability. Before fit,
+verify all required controls, source separation, actual native RGB/visibility and
+complete patch dependencies. Preserve unavailable/unreviewed and fractional variants.
+One final checkpoint must preserve all fit controls and at least one accepted public
+alternative while opposing the known wrong published location. Report the complete
+population and mean-color ablation; a passing mean-only ablation cannot establish
+that local native pattern is the added information. No unreviewed high-score winner,
+physical material label, calibration point, production consumer or O2 success follows.
+
+Required checks for a later calibrated observation/policy are:
 
 - all raw class scores, common support and required floor/ceil variants survive
   the original candidate/frame join; missing classes/support, nonfinite values,

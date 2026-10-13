@@ -102,6 +102,41 @@ sample5의 A/B/C도 재검토하지 않는다. A는 Foam 상단, B/C는 Foam 없
 최종 문서 검사에서 변경 Markdown 7개의 로컬 링크 1,271개와 새 문서·산출물
 7개의 catalog 등록을 확인했다. Detector Governance 및 whitespace 검사도 통과했다.
 
+## Public 답변 반영과 필요조건 반례 — 같은 날 후속
+
+사용자는 위 질문에 **“모두 허용”**이라고 답했다.
+[답변 결합](../../50-diagnostics/s11/2026-10-14-oil-policy-feasibility/public-acceptance.json)은
+idx5/9/13/20 모두를 f1499의 실용적 유면 근사로만 허용한다. 원본 이미지·후보
+hash·frame/time/X를 검사했고, 다른 후보·프레임·native 경로 정답으로 확대하지 않았다.
+
+`e43cae8`에서 코드와 비교를 고정한 뒤, 기존 35-anchor 점수를 정확한 후보
+floor/ceil 좌표에 연결했다. [전체 결과](../../50-diagnostics/s11/2026-10-14-oil-policy-feasibility/public-readout.json)는
+**CONTRADICTED_PRACTICAL_FRAME_COVERAGE**다.
+
+| 허용 후보 | 대표 Y | local interface 지지도 | interface − max(other) |
+|---|---:|---:|---:|
+| idx5 | 430 | 0.456476 | −0.027645 |
+| idx9 | 425 | 0.505060 | −0.038696 |
+| idx13 | 427 | 0.494741 | −0.052293 |
+| idx20 | 424 | 0.484199 | −0.029196 |
+
+네 개 모두 측정 가능하지만 texture가 우세하다. `M > 1e-6`를 필수로 쓰면
+어떤 지지도 임계값도 이 허용 집합에서 하나를 보존할 수 없다. 따라서 sample4의
+간격만 보고 운영점을 정할 수 없다는 점이 실제 다른 촬영원에서 구체화됐다.
+모든 원래 후보 23개를 남겼고, 기존 점수로 연결한 10개와 저장 점수가 없는
+13개를 분리했다. 후자는 입력 불가나 올바른 음성으로 세지 않았다. 보존 필요조건이
+이미 실패했으므로 미저장 거부 후보의 점수 계산과 encoder 실행은 하지 않았다.
+
+관련 계약 테스트 113개 통과. `/private/tmp` CLI는 0.978068 s, RSS 205,438,976
+bytes, 출력 18,051 bytes였다. 관리 실행 `s11-public-oil-acceptance-20261014-001`은
+결과 중복 한 개를 제거하고 tracked readout만 재사용해 종료했다. 관리 실행 28개
+오류 0. 이 판정은 고정된 정책 family의 실용적 후보 보존 실패이며 생산 detector
+실행이나 전체 정확도 측정이 아니다. 새 임계값·prototype·crop 탐색은 없다.
+
+후속은 [후보 RGB 계약](../../20-architecture/s11-contextual-role-observation-design.md#candidate-local-rgb-compatibility-successor)으로
+명시했다. 기존 픽셀과 후보 판정으로 가능한 별도 학습 범위를 먼저 준비하며,
+실제 native 경로 label을 만들어 기존 N3 실패를 재해석하지 않는다.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION`.

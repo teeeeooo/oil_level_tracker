@@ -381,6 +381,62 @@ Neither branch chooses a cutoff, retrains, changes geometry/bank, labels unknown
 or promotes a production consumer. The existing reuse time/RSS/output caps and
 2 MB scratch / 100 KB retained limits apply to this saved-data step.
 
+### Candidate-local RGB compatibility successor
+
+The accepted public four-candidate set falsifies the fixed local-sign family:
+all four prefer texture. Its support threshold cannot recover any of them.
+The successor [candidate RGB plan](../50-diagnostics/s11/2026-10-14-candidate-rgb-trial/plan.json)
+therefore changes the measured information and supervised capability, not that
+threshold. It retains native 7×7 RGB arrangements inside the original ±12 side
+footprint, before the old 6.5/14.25-pixel token reduction and three-prototype role
+comparison. The supervised output is candidate-level Oil compatibility with
+reviewed correspondence/practical/opposition controls; it asserts neither material
+purity, native contours nor external-surface truth. Native-path availability is
+not an entry condition for this candidate-envelope task.
+
+Use every complete, visible/glare-free 7×7 patch wholly contained in the two native
+11×25 strips at dy[-12,-2] and [2,12]. Preserve complete floor/ceil variants, no
+resizing/padding, RGB /255 and at least one complete patch per side. Disclose all
+centers and dependency hashes. A side average is one feature, not one human label
+per patch. Candidate coordinates only index the frozen image; they, source IDs,
+families, Y, counts, labels and authority do not enter the model.
+
+Reuse the closed native trial's 1,118-parameter shared 3→8→8→4 valid-convolution
+encoder, ordered side means and 8→2 classifier without changing its source or
+reopening its external-surface result. That trial fitted two water paths and lost
+N3. This trial fits a different capability on ten sample4 candidates: six current
+correspondences, the practically accepted B, and three opposed Oil targets. A stays
+unqualified. The historical initial reference is an ordinary exposed fit control;
+no prototype bank or self-similarity score enters this model.
+
+The four accepted public candidates are exposed transfer alternatives, with the
+wrong current published idx3/Y321 as the opposed location from the closed source
+range. Do not label every outside-range candidate negative. Keep all 164 sample4
+records and 23 public candidates: 182 Oil candidates, four noncandidate contexts
+and one separate Foam candidate. No source/derivative crosses fit and transfer.
+
+Use the unchanged native trial seed 20261013, CPU float32, two threads, Adam 0.001,
+1,000 updates and final checkpoint only. Average cross-entropy across required
+variants within a candidate, then equally across the ten fit candidates. Required
+variant decisions must agree; tie/disagreement is UNKNOWN. Success requires all
+ten fit controls, at least one accepted public lower alternative and rejection of
+the wrong public output; disclose all individual losses and unreviewed results.
+Success is limited exposed candidate evidence, not physical or field accuracy.
+
+One final-inference ablation replaces each side's patches with its RGB mean,
+retaining color contrast and support. No ablation fitting. If that also satisfies
+the controls, native pattern necessity has not been demonstrated. No seed/crop/
+threshold/head/optimizer/split rescue follows a failed trial. If any required
+control lacks input, stop before fitting. Reuse the 600 s / 1 GB RSS / 32 MB scratch /
+6 MB retained / 3 GB workspace bounds and isolated offline Torch environment.
+
+The [candidate adapter](../../tests/diagnostics/s11_candidate_rgb_trial.py) reuses
+the actual reuse/qualification audit, native patch reader, model and resource guard.
+A distinct adapter is needed because the frozen native-path runner hard-codes five
+path roles and fragment loss; it cannot represent full candidate populations,
+practical alternatives and within-candidate variants. Freeze both the input plan
+before preparation and the prepared source/array hashes at a clean head before fit.
+
 ### Executable saved-contract preflight
 
 [The offline CR1 adapter](../../tests/diagnostics/s11_contextual_role_preflight.py)
@@ -907,5 +963,5 @@ exposed transfer result as an independent validation success by moving N3 into f
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no production executing owner, schema or detector behavior changes.
 - Existing feature coverage: the receiving review reuses pinned CR1/O1/A1 captures and native geometry. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. No new Recipe or static-learning efficacy claim follows from saved-input binding.
-- Execution scope: the received reuse CLI and renderer were rerun over saved inputs from outside the repository cwd with exact output equality. Saved-score necessary-condition audits reuse that CLI and the CR1 minima, including exact public candidate-to-anchor joins after the scoped reply; no operating point, model forward, production frame/sequence/report execution or successor training is implied.
+- Execution scope: saved-score necessary-condition audits reuse the binding CLI and CR1 minima, including exact public candidate-to-anchor joins after the scoped reply. The successor plan separately prepares native RGB dependencies and permits one frozen candidate-level fit/transfer trial with mean-color ablation, conditional on complete required input. No production frame/sequence/report execution, O2 acceptance or Windows qualification is implied.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.
