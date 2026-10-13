@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior.
-**Next transition:** **Necessary research-scope decision:** adopt a bounded native-role data qualification pass before considering another learned observation, or defer learning and revisit the observation design. The [completed trial and concrete follow-up](../60-evidence/s11/2026-10-13-native-surface-trial.md#보존과-다음-판단) recommend qualifying independent positive/internal/structure paths from a third recording before using water and sample4 together as development data. No new fit or automatic tuning is authorized by the failed trial.
+**Next transition:** **Existing-material reuse first.** Reconcile the five already acquired supplementary videos (water/sample5, beer/sample6, milk/sample7, public-miso and Froid117/public-egenie), the existing local corpus and their received judgments against the proposed learning/evaluation capability. The closed trial trained only two paths from one water frame and evaluated three paths from sample4; it does not demonstrate a shortage of videos. No new acquisition, third-video delivery prerequisite or repeated broad role review follows. Establish which existing evidence is reusable and what specific binding is missing before designing any successor trial. The fixed failed trial remains closed; no automatic fitting/tuning.
 **Latest checkpoint:** The one frozen native surface trial at `019ccfd9fae3ea5b3421af5e186a0c053dba0922` is **CLOSED_WITHOUT_PROMOTION**: N1/N2 fit succeeds; sample4 N4 internal change and N5 circular rim are rejected, but true external upper **N3 is also rejected**. Independent arithmetic agrees. All five displayed roles remain qualified; N4's glass-circle influence is a separate user suspicion, not a verified cause. **Windows work is not yet required.**
 
 This is the sole current state, authorization, unknowns and next-action owner.
@@ -29,7 +29,7 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | O1 extraction | IMPLEMENTED; locally ACCEPTED | Reuse trace-only [O1](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md); no identity authority |
 | W0–W3 / O2 foundations | Fixed profile CLOSED WITHOUT PROMOTION; target/aggregation, bounded scene review and evaluation tools locally verified; D1 return CLOSED | Reuse [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) and [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed); prediction/efficacy is not established by tooling |
 | P0 / W4 / WP01 — baseline and intake | COMPLETE at saved-evidence scope | [October 13 program intake](../60-evidence/s11/2026-10-13-program-review-intake.md) verifies pins, canary and saved report extrema; P0 A/B/C/U remains the impact owner, physical cadence NOT_EVALUATED |
-| W4/P2 / WP02 — observation/policy | G0/N1–N5 qualification VERIFIED; one frozen trial CLOSED WITHOUT PROMOTION | [Measured readout](../50-diagnostics/s11/2026-10-13-native-surface-trial/readout.json): required N3 positive lost despite fit and two opposition successes. No consumer; next research/data scope needs a decision |
+| W4/P2 / WP02 — observation/policy | G0/N1–N5 qualification VERIFIED; one frozen trial CLOSED WITHOUT PROMOTION | [Measured readout](../50-diagnostics/s11/2026-10-13-native-surface-trial/readout.json): required N3 positive lost despite fit and two opposition successes. No consumer; audit existing-material use before proposing a successor learning scope |
 | V2/V3 / WP03 — qualification and evaluation | N1–N5 displayed roles CLOSED | [Qualification supplement](../50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json) keeps N4 internal with a suspected context facet and N5 structure distinct. The completed trial fitted water N1/N2 and evaluated sample4 N3/N4/N5 as exposed transfer. Further learning needs a new predeclared data/split contract; no untouched holdout exists |
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
@@ -59,16 +59,23 @@ or full material-role classification.
    remains frozen. N1 permits Foam/liquid external-surface interpretations, N2/N4
    are internal Foam changes, N3 is external Foam upper, N5 is circular rim structure.
    N4's possible glass-pattern influence remains tentative and cannot replace its role.
-2. **Bounded trial closed; next scope decision:** [readout and follow-up](../60-evidence/s11/2026-10-13-native-surface-trial.md)
-   show N3 target loss under the frozen five-subject comparison. Preserve that failure;
-   do not change the seed, crop, threshold, head or train/test split to rescue it.
-   Recommended next scope is native-role data qualification: if water and sample4
-   both become development data, qualify a third recording's positive/internal/rim
-   paths separately, using original regional evidence only within its precision.
-   The saved public-miso context is a candidate for feasibility/review, not a ready
-   test set. First prepare a bounded correspondence packet; ask only genuinely new
-   path-role questions. Missing opposition stays NOT_READY. A successor training
-   hypothesis and its data/operating-point contract must be designed separately.
+2. **Bounded trial closed; use the existing corpus before expanding it:**
+   [readout](../60-evidence/s11/2026-10-13-native-surface-trial.md) preserves N3 loss
+   under the five-path comparison. The five paths are not five videos: N1/N2 are
+   one frame of sample5; N3/N4/N5 come from two frames of sample4. The already
+   acquired [water/beer/milk controls](../50-diagnostics/s11/2026-10-09-public-video-intake.md)
+   and two public compressor recordings remain available, alongside the original
+   local corpus. Do not infer video shortage or make another acquisition a gate.
+   First map existing regional/path judgments, visible and unavailable contexts,
+   and source exposure to a useful training/evaluation design. Reuse qualifications
+   at their stated precision; no region-to-edge pseudo-labels or repeated closed
+   questions. Froid117's unassessable reply remains unassessable. Ask only if an
+   actual unresolved correspondence or a substantive successor design choice is
+   necessary after this reuse review. A third source would be needed **if** both
+   current sources enter fit and source-separated evaluation is required; it can
+   already be a held-out-from-fit recording in the existing corpus, not a request
+   for a newly obtained or untouched video. No seed/crop/threshold/head/split rescue
+   or another training run follows merely from this inventory correction.
 3. **WP04:** qualified typed Witness delta, default OFF/unavailable fallback,
    V4 equality/resources, then **V5 Windows shadow before O2 acceptance**.
 4. **WP05 then WP06:** separate anchor-and-continuation wrong-output suppression
@@ -201,7 +208,10 @@ or Windows task is reached. The follow-up explicitly adopts opposition-first
 preparation, followed by a fixed comparison and bounded trial once the required roles
 are qualified. The latest N4/N5 reply satisfies that correspondence gate; the
 fixed five-subject trial has now run and closed on N3 positive loss. Existing source
-judgments are not reopened; a new data/learning scope needs the decision above.
+judgments are not reopened. The user has pointed out the already acquired videos;
+read-only reuse review and correcting the next plan fit the existing phased-work
+authority. No new-video delivery or generic continuation approval blocks that work.
+A successor learning operation still needs its own concrete data/split contract.
 Earlier grants for bounded local development persist subject to the stated gates.
 Main performs implementation/review; no further sub-agents are authorized.
 Stop for a genuinely necessary new user judgment or deliberate Windows work.
