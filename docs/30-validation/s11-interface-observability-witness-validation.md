@@ -1493,6 +1493,14 @@ Required checks for the proposed observation/policy are:
   Saved-PNG timings do not predict full-pipeline or Windows cost.
 
 These checks supplement V2/V3/V4; V5 Windows shadow still precedes O2 acceptance.
+The optional saved-review qualification path must preserve exact baseline audit
+equality before emitting its supplement. Controls must reject stale authority
+bytes, repinned-but-different baseline content, changed query identity/time,
+same-Y label transfer, cross-subject acceptance, unsupported statement semantics
+and physical-truth promotion. Exercise the real CLI outside the repository cwd
+with Unicode/space-containing input paths and verify write-once behavior. Report
+all original records through the pinned baseline plus explicit overrides; unlisted
+historical labels must not become current physical accuracy or practical rejection.
 The schema/shadow slice retains default OFF, exact old-field/candidate/sequence/
 CSV/event/report equality and NONE/FULL equality. It does not install a default
 Torch dependency or acquire resolver authority.

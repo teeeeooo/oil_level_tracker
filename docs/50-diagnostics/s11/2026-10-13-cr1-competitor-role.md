@@ -80,6 +80,36 @@ interface 우세**라는 필요조건을 어떤 `tau_support`에서도 통과할
 보존 목적은 검출 한계 때문에 허용한 위치가 물리적 정답으로 다시 승격되는 것을
 막는 것이다. 같은 증거의 추가 영상·확대본은 만들지 않았다.
 
+## 실행 도구에 판정 의미 반영
+
+[기존 CR1 사전검사](../../../tests/diagnostics/s11_contextual_role_preflight.py)의
+`--review-manifest`로 후속 설명을 실제 집계에 연결했다. 이 경로는 원래 audit
+결과가 frozen readout과 완전히 일치하는지 확인한 뒤 별도의 작은 보충 결과만
+쓴다. [판정 연결 manifest](2026-10-13-cr1-review-qualification/manifest.json)와
+[실행 결과](2026-10-13-cr1-review-qualification/readout.json)는 각각 3,955 / 6,546 bytes다.
+
+| 검증 항목 | 결과 |
+|---|---|
+| 원래 모집단·점수·좌표 | 164개 전부 기존 readout과 동일; 모델 호출·영상 decode 0 |
+| 원래 라벨 | 미검토 150 / 확인 7 / 거부 3 / 내부 Foam 3 / 기존 CBR 대조 1 그대로 |
+| 이번 물리적 qualification | A/B 2개 `NOT_QUALIFIED`; 나머지 162개는 기존 검토 범위만 보존 |
+| 이번 실용적 수용 | B 1개만 `ACCEPTED_APPROXIMATION`; 나머지 163개는 이번 수용 판정 없음 |
+| 새 물리적 정답 / untouched holdout | 각각 0개; 이를 detector 정확도 분모로 바꾸지 않음 |
+| 실행 검증 | focused tests 42 passed in 0.42 s; 실제 CLI를 `/private/tmp`에서 실행해 164개 연결 확인 |
+
+시간·후보 fingerprint·authority hash가 다르거나 B 설명을 A/같은 Y의 다른 후보에
+적용하려는 입력은 거부한다. 물리적 정답 승격·새 threshold·덮어쓰기도 거부한다.
+원래 명령은 기존 v1 결과를 유지한다. 새 출력의 `HISTORICAL_ONLY`는 기존 판정을
+삭제하거나 모두 오답으로 바꾼다는 뜻이 아니다. 이번 보충 판정이 그 범위를
+추가로 넓히지 않는다는 뜻이다.
+
+재현은 기존 manifest와 `--review-manifest`의 위 manifest를 함께 지정하고
+새 managed work 경로로 출력한다. 실행 `review-qualification-20261013-001`은
+두 JSON만 정식 위치로 옮겨 참조하며 원본·이미지·전체 readout을 중복 저장하지 않는다.
+최초 준비 명령의 import 경로가 빠져 manifest 생성 전에 중단된 시도는 루트 `.venv`와
+명시적인 source import 경로로 정정했다. 그 실패는 model/decode 실행이나 결과를
+남기지 않았고, 위 실제 CLI 검증은 준비 후 성공한 실행이다.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.

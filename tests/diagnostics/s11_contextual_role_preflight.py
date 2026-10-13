@@ -22,6 +22,11 @@ if __package__ in (None, ""):
 from tests.diagnostics import s11_interface_shadow_evaluation as o2
 
 SCHEMA = "s11-contextual-role-preflight-v1"
+REVIEW_SCHEMA = "s11-contextual-role-review-qualification-v1"
+REVIEW_STATEMENTS = {
+    "physical": {"NOT_CONFIRMED_AS_THE_PHYSICAL_BOUNDARY", "WITHDRAWN_FOR_CURRENT_PHYSICAL_EVALUATION"},
+    "practical": {"USER_ACCEPTED_APPROXIMATE_FOAM_OIL_BOUNDARY_LOCATION"},
+}
 POLICY = "local-role-and-absolute-support-v1"
 ROLES = ("interface", "structure", "texture")
 MODES = ("full", "local")
@@ -227,14 +232,128 @@ def audit(root, manifest):
             "rows": rows}
 
 
+def _review_claim(sources, claim):
+    """Resolve an explicit statement, not a score-derived or nearest-case label."""
+    o2.require(set(claim) == {"input", "keys", "value"}, "invalid review claim fields")
+    o2.require(claim["input"] in sources, "unknown review authority")
+    keys = claim["keys"]
+    o2.require(isinstance(keys, list) and keys and all(isinstance(k, str) for k in keys),
+               "review claim needs a nonempty object key path")
+    value = sources[claim["input"]]
+    for key in keys:
+        o2.require(isinstance(value, dict) and key in value, "review claim path missing")
+        value = value[key]
+    o2.require(value == claim["value"], "review claim differs from pinned authority")
+    return value
+
+
+def qualify_reviews(root, baseline, review):
+    """Overlay scoped disqualifications/acceptance without changing historical truth.
+
+    This is not a new physical-label authoring or calibration interface. Unlisted
+    records retain only their historical meaning; no current truth is inferred.
+    """
+    o2.require(set(review) == {"schema", "base_readout", "authorities", "cases"},
+               "invalid review manifest fields")
+    o2.require(review["schema"] == REVIEW_SCHEMA, "unsupported review schema")
+    saved = read_pinned(root, review["base_readout"])
+    o2.require(saved == baseline and baseline["schema"] == SCHEMA,
+               "review baseline differs from verified saved preflight")
+    o2.require(baseline["decision"] == "NOT_EVALUATED" and baseline["tau_support"] is None,
+               "review cannot consume calibrated decisions")
+    rows = baseline["rows"]
+    by_id = {r["query"]["id"]: (i, r) for i, r in enumerate(rows)}
+    o2.require(len(by_id) == len(rows), "duplicate baseline query")
+    o2.require(isinstance(review["cases"], list) and len(review["cases"]) <= len(rows),
+               "review exceeds candidate population")
+    o2.require(isinstance(review["authorities"], dict) and 0 < len(review["authorities"]) <= len(rows),
+               "review authority inventory outside population bound")
+    sources = {name: read_pinned(root, entry) for name, entry in review["authorities"].items()}
+    seen, overrides = set(), []
+    physical = Counter({"HISTORICAL_ONLY": len(rows)})
+    practical = Counter({"NOT_REVIEWED": len(rows)})
+    for case in review["cases"]:
+        o2.require(set(case) == {"query_id", "query_sha256", "identity_claims", "facets", "note"},
+                   "invalid review case fields")
+        query_id = case["query_id"]
+        o2.require(query_id in by_id and query_id not in seen, "unknown or duplicate reviewed query")
+        seen.add(query_id)
+        index, row = by_id[query_id]
+        query = row["query"]
+        o2.require("candidate_index" in query, "context control cannot acquire candidate review")
+        o2.require(o2.fingerprint_json(query) == case["query_sha256"], "reviewed candidate identity changed")
+        expected = {"query_id": query_id, "frame_index": query["frame"],
+                    "glass_id": row["glass_id"], "time_sec": row["time_sec"]}
+        o2.require(set(case["identity_claims"]) == set(expected), "incomplete review identity claims")
+        identity = case["identity_claims"]["query_id"]
+        _review_claim(sources, identity)
+        keys = identity["keys"]
+        o2.require(len(keys) == 2 and keys[0] == "binding" and keys[1].endswith("_query_id"),
+                   "review subject must bind its explicit query ID")
+        subject = keys[1][:-len("_query_id")]
+        o2.require(subject and sources[identity["input"]].get("schema") ==
+                   "s11-source-role-acceptance-clarification-v1", "unsupported source clarification")
+        for name, value in expected.items():
+            claim = case["identity_claims"][name]
+            field = f"{subject}_query_id" if name == "query_id" else (
+                "source_timestamp_sec" if name == "time_sec" else name)
+            o2.require(claim["input"] == identity["input"] and claim["keys"] == ["binding", field],
+                       "review identity claims must share the same authority binding")
+            o2.require(_review_claim(sources, claim) == value,
+                       f"review authority {name} mismatch")
+        facets = case["facets"]
+        o2.require(isinstance(facets, dict) and set(facets) <= {"physical", "practical"}
+                   and "physical" in facets, "physical qualification must be explicit")
+        for name, facet in facets.items():
+            o2.require(set(facet) == {"status", "claim"}, "invalid review facet fields")
+            expected_status = "NOT_QUALIFIED" if name == "physical" else "ACCEPTED_APPROXIMATION"
+            o2.require(facet["status"] == expected_status, "review cannot promote physical truth or infer rejection")
+            claim = facet["claim"]
+            o2.require(claim["input"] == identity["input"] and len(claim["keys"]) == 3
+                       and claim["keys"][:2] == ["current_interpretation", subject],
+                       "review facet must belong to the bound subject")
+            o2.require(_review_claim(sources, claim) in REVIEW_STATEMENTS[name],
+                       "authority statement does not support this review facet")
+        o2.text(case["note"], "review scope note")
+        physical["HISTORICAL_ONLY"] -= 1
+        physical["NOT_QUALIFIED"] += 1
+        if "practical" in facets:
+            practical["NOT_REVIEWED"] -= 1
+            practical["ACCEPTED_APPROXIMATION"] += 1
+        overrides.append({"query_id": query_id, "base_pointer": f"/rows/{index}",
+                          "query_sha256": case["query_sha256"], "historical_label": query["label"],
+                          "identity_claims": copy.deepcopy(case["identity_claims"]),
+                          "facets": copy.deepcopy(facets), "note": case["note"],
+                          "saved_modes": copy.deepcopy(row["modes"]), "decision": "NOT_EVALUATED"})
+    return {"schema": REVIEW_SCHEMA, "review_manifest_sha256": o2.fingerprint_json(review),
+            "status": "REVIEWS_BOUND_CALIBRATION_NOT_READY", "decision": "NOT_EVALUATED",
+            "base_readout": copy.deepcopy(review["base_readout"]),
+            "authorities": copy.deepcopy(review["authorities"]),
+            "counts": {"records": len(rows), "reviewed_candidates": len(overrides),
+                       "historical_labels": copy.deepcopy(baseline["counts"]["labels"]),
+                       "physical_qualification": dict(physical), "practical_acceptance": dict(practical),
+                       "newly_qualified_physical_positives": 0,
+                       "independent_recordings": baseline["counts"]["independent_recordings"],
+                       "untouched_holdout_recordings": baseline["counts"]["untouched_holdout_recordings"]},
+            "unlisted_record_scope": {"physical": "HISTORICAL_ONLY", "practical": "NOT_REVIEWED",
+                                      "meaning": "Original review precision preserved; no current truth promotion or erasure."},
+            "overrides": overrides, "gates": copy.deepcopy(baseline["gates"]),
+            "tau_support": None, "production_changed": False, "encoder_forwards": 0,
+            "source_decode": False, "scalar_truth_created": False}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--review-manifest", type=Path,
+                        help="Optional scoped review overlay; emits a compact qualification supplement")
     parser.add_argument("--output", type=Path, required=True, help="New managed work path; never overwrites")
     args = parser.parse_args()
     manifest = o2.read_json(args.manifest)
     result = audit(args.root.resolve(), manifest)
+    if args.review_manifest is not None:
+        result = qualify_reviews(args.root.resolve(), result, o2.read_json(args.review_manifest))
     o2.require(len((json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode("utf-8"))
                <= manifest["resources"]["max_output_bytes"], "output exceeds preflight budget")
     o2.write_new(args.output, result)

@@ -358,6 +358,26 @@ no negative classifier, model inference, default dependency or production shadow
 Its [completed contract checks and remaining question](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md)
 are separate from physical usefulness and O2/V5 acceptance.
 
+The same adapter's optional `--review-manifest` path binds the subsequent
+[physical/practical clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md#실행-도구에-판정-의미-반영).
+It first repeats the original audit and requires exact logical equality with the
+pinned frozen preflight readout. It then emits a compact qualification supplement,
+leaving the original score table, labels, geometry, output schema and default CLI
+unchanged. This reuses the CR1 owner and O2 hash/write-once primitives; O2's existing
+target-role mapper instead consumes O1 physical-label packets and cannot bind this
+distinct CR1 query envelope or practical acceptance facet.
+
+The supplement binds authority bytes and statement paths to an exact query
+fingerprint, subject, frame, actual timestamp and Glass. Same-coordinate neighbors
+and other subjects receive no inherited review. This version can express a
+physical-qualification withdrawal and an explicitly accepted approximation;
+it cannot create a new physical positive, negative, tolerance, calibration label
+or threshold. Unlisted records retain their original review scope as
+`HISTORICAL_ONLY`, not new current truth. Keep historical label counts separate
+from current qualification and practical-acceptance counts. A practical acceptance
+neither repairs local-role preference nor supplies a native contour. All policy,
+shadow and field gates remain as in the verified baseline.
+
 ### Separate Oil behavior slices after shadow acceptance
 
 1. **Same-frame role condition:** after O2/V5 and a separate O3 plan, consume the

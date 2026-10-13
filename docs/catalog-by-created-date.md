@@ -1212,3 +1212,12 @@ author 시각은 Asia/Seoul 기준 2026-10-13 14:27:04이며, 최초 Git 추가�
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role-annotation.png](50-diagnostics/s11/2026-10-13-cr1-competitor-role-annotation.png) | 미세 Foam 범위를 빨간 점으로 표시한 사용자 첨부 원본 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role-clarification.json](50-diagnostics/s11/2026-10-13-cr1-competitor-role-clarification.json) | 후속 원문·주석·기존 판정 연결과 물리적 정답/실용적 수용의 구분 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-public-compressor-role-reply.json](50-diagnostics/s11/2026-10-13-public-compressor-role-reply.json) | 새 공개 영상의 저화질 판별 불가 및 잠정 Foam 인상; 확정 라벨 없음 |
+
+### 최초 Git 등록 대기 — 2026-10-13 판정 의미 실행 연결
+
+아래 파일의 작성일은 2026-10-13이다. 최초 Git 추가일은 커밋 후 확인한다.
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [50-diagnostics/s11/2026-10-13-cr1-review-qualification/manifest.json](50-diagnostics/s11/2026-10-13-cr1-review-qualification/manifest.json) | 고정 readout과 후속 설명의 정확한 후보·주장 연결 |
+| Git 미등록 | [50-diagnostics/s11/2026-10-13-cr1-review-qualification/readout.json](50-diagnostics/s11/2026-10-13-cr1-review-qualification/readout.json) | 164개 원래 기록 보존 및 A/B 물리적 qualification·B 실용적 수용의 별도 집계 |

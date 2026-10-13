@@ -1,0 +1,133 @@
+{
+  "schema": "s11-contextual-role-review-qualification-v1",
+  "base_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/readout.json.gz",
+    "sha256": "ed547fa17e6ae987b17fe628d9b7fa0300e0e3f35f0913355c56a4a320aba2d5"
+  },
+  "authorities": {
+    "clarification": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-cr1-competitor-role-clarification.json",
+      "sha256": "7bce4c84f09e2fff2fe53e8a3e8f43c46fe0ac5d1b4458fa4e2696cadc9e0016"
+    }
+  },
+  "cases": [
+    {
+      "query_id": "s4-f1485-idx19",
+      "query_sha256": "9b6ad7c6fcc163231a371549fc73695f27ca3b72b4c868a3bae8ef7044f9f6b3",
+      "identity_claims": {
+        "query_id": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "A_query_id"
+          ],
+          "value": "s4-f1485-idx19"
+        },
+        "frame_index": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "frame_index"
+          ],
+          "value": 1485
+        },
+        "glass_id": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "glass_id"
+          ],
+          "value": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2"
+        },
+        "time_sec": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "source_timestamp_sec"
+          ],
+          "value": 49.5
+        }
+      },
+      "facets": {
+        "physical": {
+          "status": "NOT_QUALIFIED",
+          "claim": {
+            "input": "clarification",
+            "keys": [
+              "current_interpretation",
+              "A",
+              "same_frame_physical_alternative_claim"
+            ],
+            "value": "WITHDRAWN_FOR_CURRENT_PHYSICAL_EVALUATION"
+          }
+        }
+      },
+      "note": "Only this candidate at f1485/49.5 s. No exact-X contour, pixel tolerance, Foam-upper truth, neighboring-frame label or current physical accuracy claim. Historical correspondence retained; no new practical acceptance of A is inferred."
+    },
+    {
+      "query_id": "s4-f1485-idx8",
+      "query_sha256": "d335f421f94efdba4f66e9b9d6c3e11b7f2ef85d1a257c9e32e0c03726ec10a5",
+      "identity_claims": {
+        "query_id": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "B_query_id"
+          ],
+          "value": "s4-f1485-idx8"
+        },
+        "frame_index": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "frame_index"
+          ],
+          "value": 1485
+        },
+        "glass_id": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "glass_id"
+          ],
+          "value": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2"
+        },
+        "time_sec": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "source_timestamp_sec"
+          ],
+          "value": 49.5
+        }
+      },
+      "facets": {
+        "physical": {
+          "status": "NOT_QUALIFIED",
+          "claim": {
+            "input": "clarification",
+            "keys": [
+              "current_interpretation",
+              "B",
+              "physical_role_at_candidate_geometry"
+            ],
+            "value": "NOT_CONFIRMED_AS_THE_PHYSICAL_BOUNDARY"
+          }
+        },
+        "practical": {
+          "status": "ACCEPTED_APPROXIMATION",
+          "claim": {
+            "input": "clarification",
+            "keys": [
+              "current_interpretation",
+              "B",
+              "practical_acceptance"
+            ],
+            "value": "USER_ACCEPTED_APPROXIMATE_FOAM_OIL_BOUNDARY_LOCATION"
+          }
+        }
+      },
+      "note": "Only this candidate at f1485/49.5 s. No exact-X contour, pixel tolerance, Foam-upper truth, neighboring-frame label or current physical accuracy claim. Preserve the user-accepted approximate Foam–Oil location."
+    }
+  ]
+}

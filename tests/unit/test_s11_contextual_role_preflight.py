@@ -117,7 +117,7 @@ def test_corrupted_identity_or_geometry_is_not_abstention(error):
         role.observe(item, GEOMETRY)
 
 
-def fixture_manifest(tmp_path):
+def fixture_manifest(tmp_path, labels=("UNREVIEWED",)):
     root = tmp_path / "source space"
     root.mkdir()
 
@@ -127,17 +127,22 @@ def fixture_manifest(tmp_path):
         path.write_bytes(gzip.compress(encoded) if name.endswith(".gz") else encoded)
         return {"path": name, "sha256": role.o2.sha256_file(path)}
 
-    item = record()
+    items = []
+    for i, label in enumerate(labels):
+        item = record()
+        item["query"].update(id=f"fixture-{i}", candidate_index=i, label=label)
+        item["measurement"]["query"] = copy.deepcopy(item["query"])
+        items.append(item)
     capture = {"current": {"frame_index": 10, "time_sec": 0.333, "glass_id": "synthetic",
-                            "candidates": [{"source": "fixture", "y": 40.0}]}, "state": {}}
+                            "candidates": [{"source": "fixture", "y": 40.0} for _ in items]}, "state": {}}
     cap = write("capture.json", capture)
     pre = {"geometry": GEOMETRY, "references": {"fixture": "same frozen bank"},
            "original_capture_pins": {cap["path"]: cap["sha256"]}}
     inputs = {"cr1_preflight": write("pre.json", pre), "followup_preflight": write("followup.json", {})}
-    prepared = {"queries": [item["query"]], "captures": [{"path": "capture.json", "frame": 10}],
+    prepared = {"queries": [item["query"] for item in items], "captures": [{"path": "capture.json", "frame": 10}],
                 "original_frame_times": {"10": 0.333}, "preflight_sha256": inputs["cr1_preflight"]["sha256"]}
     inputs["prepared"] = write("prepared.json", prepared)
-    inputs["readout"] = write("scores.json.gz", {"results": [item], "independent_recordings": 1,
+    inputs["readout"] = write("scores.json.gz", {"results": items, "independent_recordings": 1,
         "untouched_holdout_recordings": 0, "followup_preflight_sha256": inputs["followup_preflight"]["sha256"]})
     inputs["scene_roster"] = write("scenes.json", {"units": [{"id": "synthetic-story"}]})
     source = root / "original.bin"
@@ -148,7 +153,7 @@ def fixture_manifest(tmp_path):
         "bank_sha256": role.o2.fingerprint_json(pre["references"]),
         "policy": {"id": role.POLICY, "tau_support": None, "tie_epsilon": 1e-6},
         "partitions": {"calibration": [], "holdout": []},
-        "resources": {"encoder_forwards": 0, "max_records": 1, "max_output_bytes": 20000},
+        "resources": {"encoder_forwards": 0, "max_records": len(items), "max_output_bytes": 40000},
         "scene_claims": {"p0_unit_ids": ["synthetic-story"]}, "blockers": []}
     return root, manifest
 
@@ -231,3 +236,133 @@ def test_hash_valid_artifacts_still_require_exact_native_and_candidate_joins(tmp
         row = role.audit(root, manifest)["rows"][0]
         assert row["native_support"]["oil_interface_witness"]["physical_role"] == "NOT_EVALUATED"
         assert row["native_support"]["oil_measurement_lineage"]["status"] == "UNAVAILABLE_NO_BOUND_RECORD"
+
+
+def fixture_review(tmp_path):
+    root, manifest = fixture_manifest(tmp_path, ("confirmed_target", "UNREVIEWED", "UNREVIEWED"))
+    baseline = role.audit(root, manifest)
+
+    def pin(name, value):
+        path = root / name
+        path.write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
+        return {"path": name, "sha256": role.o2.sha256_file(path)}
+
+    authority = {
+        "schema": "s11-source-role-acceptance-clarification-v1",
+        "binding": {"A_query_id": "fixture-0", "B_query_id": "fixture-1", "frame_index": 10,
+                    "source_timestamp_sec": 0.333, "glass_id": "synthetic"},
+        "current_interpretation": {
+            "A": {"same_frame_physical_alternative_claim": "WITHDRAWN_FOR_CURRENT_PHYSICAL_EVALUATION"},
+            "B": {"physical_role_at_candidate_geometry": "NOT_CONFIRMED_AS_THE_PHYSICAL_BOUNDARY",
+                  "practical_acceptance": "USER_ACCEPTED_APPROXIMATE_FOAM_OIL_BOUNDARY_LOCATION"}},
+    }
+    review = {"schema": role.REVIEW_SCHEMA, "base_readout": pin("base.json", baseline),
+              "authorities": {"latest": pin("후속 설명.json", authority)}, "cases": []}
+
+    def claim(keys):
+        value = authority
+        for key in keys:
+            value = value[key]
+        return {"input": "latest", "keys": keys, "value": value}
+
+    for i, subject in enumerate(("A", "B")):
+        row = baseline["rows"][i]
+        physical_field = "same_frame_physical_alternative_claim" if subject == "A" else "physical_role_at_candidate_geometry"
+        case = {"query_id": row["query"]["id"], "query_sha256": role.o2.fingerprint_json(row["query"]),
+                "identity_claims": {name: claim(["binding", field]) for name, field in
+                    (("query_id", f"{subject}_query_id"), ("frame_index", "frame_index"),
+                     ("glass_id", "glass_id"), ("time_sec", "source_timestamp_sec"))},
+                "facets": {"physical": {"status": "NOT_QUALIFIED", "claim":
+                    claim(["current_interpretation", subject, physical_field])}},
+                "note": "Regional clarification only; no exact pixel tolerance."}
+        if subject == "B":
+            case["facets"]["practical"] = {"status": "ACCEPTED_APPROXIMATION", "claim":
+                claim(["current_interpretation", subject, "practical_acceptance"])}
+        review["cases"].append(case)
+    return root, manifest, baseline, review
+
+
+def test_current_review_is_separate_from_historical_truth_and_same_y_neighbors(tmp_path):
+    root, _, baseline, review = fixture_review(tmp_path)
+    before, review_before = copy.deepcopy(baseline), copy.deepcopy(review)
+    result = role.qualify_reviews(root, baseline, review)
+    assert result["counts"]["records"] == 3
+    assert result["counts"]["historical_labels"] == {"confirmed_target": 1, "UNREVIEWED": 2}
+    assert result["counts"]["physical_qualification"] == {"HISTORICAL_ONLY": 1, "NOT_QUALIFIED": 2}
+    assert result["counts"]["practical_acceptance"] == {"NOT_REVIEWED": 2, "ACCEPTED_APPROXIMATION": 1}
+    assert result["counts"]["newly_qualified_physical_positives"] == 0
+    assert [row["query_id"] for row in result["overrides"]] == ["fixture-0", "fixture-1"]
+    assert "practical" not in result["overrides"][0]["facets"]
+    assert result["unlisted_record_scope"]["physical"] == "HISTORICAL_ONLY"
+    assert result["gates"] == baseline["gates"] and result["tau_support"] is None
+    assert result["decision"] == "NOT_EVALUATED" and not result["scalar_truth_created"]
+    assert [r["saved_modes"] for r in result["overrides"]] == [r["modes"] for r in baseline["rows"][:2]]
+    assert baseline == before and review == review_before
+
+
+@pytest.mark.parametrize("change", ["duplicate", "same_y_other_query", "query_fingerprint", "cross_subject",
+                                     "physical_promotion", "unsupported_statement", "old_authority_schema",
+                                     "authority_bytes", "authority_timestamp", "changed_baseline", "extra_threshold"])
+def test_reviews_reject_stale_or_misattributed_evidence_and_truth_promotion(tmp_path, change):
+    root, _, baseline, review = fixture_review(tmp_path)
+    authority_path = root / review["authorities"]["latest"]["path"]
+    authority = role.o2.read_json(authority_path)
+    if change == "duplicate":
+        review["cases"].append(copy.deepcopy(review["cases"][1]))
+    elif change == "same_y_other_query":
+        review["cases"][1].update(query_id="fixture-2",
+            query_sha256=role.o2.fingerprint_json(baseline["rows"][2]["query"]))
+    elif change == "query_fingerprint":
+        review["cases"][0]["query_sha256"] = "0" * 64
+    elif change == "cross_subject":
+        review["cases"][0]["facets"]["practical"] = copy.deepcopy(review["cases"][1]["facets"]["practical"])
+    elif change == "physical_promotion":
+        review["cases"][1]["facets"]["physical"]["status"] = "CONFIRMED_TARGET"
+    elif change == "unsupported_statement":
+        authority["current_interpretation"]["B"]["practical_acceptance"] = "NOT_REVIEWED"
+        review["cases"][1]["facets"]["practical"]["claim"]["value"] = "NOT_REVIEWED"
+    elif change == "old_authority_schema":
+        authority["schema"] = "historical-correspondence-v1"
+    elif change == "authority_bytes":
+        authority["new"] = "unreviewed edit"
+    elif change == "authority_timestamp":
+        authority["binding"]["source_timestamp_sec"] = 0.334
+        for case in review["cases"]:
+            case["identity_claims"]["time_sec"]["value"] = 0.334
+    elif change == "changed_baseline":
+        stale = copy.deepcopy(baseline)
+        stale["rows"][0]["query"]["source_xy"][1] = 41.0
+        path = root / review["base_readout"]["path"]
+        path.write_text(json.dumps(stale), encoding="utf-8")
+        review["base_readout"]["sha256"] = role.o2.sha256_file(path)
+    else:
+        review["tau_support"] = 0.5
+    authority_path.write_text(json.dumps(authority, ensure_ascii=False), encoding="utf-8")
+    if change != "authority_bytes":
+        review["authorities"]["latest"]["sha256"] = role.o2.sha256_file(authority_path)
+    with pytest.raises(ValueError):
+        role.qualify_reviews(root, baseline, review)
+
+
+def test_review_cli_from_foreign_cwd_preserves_inputs_and_refuses_overwrite(tmp_path):
+    root, manifest, _, review = fixture_review(tmp_path)
+    manifest_path, review_path = root / "manifest.json", root / "review.json"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    review_path.write_text(json.dumps(review, ensure_ascii=False), encoding="utf-8")
+    before = {p: p.read_bytes() for p in root.iterdir() if p.is_file()}
+    output = tmp_path / "qualified.json"
+    env = {k: v for k, v in os.environ.items() if k != "PYTHONPATH"}
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    command = [sys.executable, "-B", str(Path(role.__file__).resolve()), "--root", str(root),
+               "--manifest", str(manifest_path), "--review-manifest", str(review_path), "--output", str(output)]
+    completed = subprocess.run(command, cwd=tmp_path, env=env, stdin=subprocess.DEVNULL,
+                               capture_output=True, text=True, encoding="utf-8", check=True)
+    report = json.loads(output.read_text(encoding="utf-8"))
+    assert report["schema"] == role.REVIEW_SCHEMA and "rows" not in report
+    assert report["counts"]["practical_acceptance"]["ACCEPTED_APPROXIMATION"] == 1
+    assert json.loads(completed.stdout)["decision"] == "NOT_EVALUATED"
+    original = output.read_bytes()
+    retry = subprocess.run(command, cwd=tmp_path, env=env, stdin=subprocess.DEVNULL,
+                           capture_output=True, text=True, encoding="utf-8")
+    assert retry.returncode != 0 and output.read_bytes() == original
+    assert before == {p: p.read_bytes() for p in before}

@@ -1,0 +1,217 @@
+{
+  "schema": "s11-contextual-role-review-qualification-v1",
+  "review_manifest_sha256": "a9efd0fe3831ebae45ebcd062c213f662aa01f63ab12d3bf8d5fdf34024c7c5f",
+  "status": "REVIEWS_BOUND_CALIBRATION_NOT_READY",
+  "decision": "NOT_EVALUATED",
+  "base_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/readout.json.gz",
+    "sha256": "ed547fa17e6ae987b17fe628d9b7fa0300e0e3f35f0913355c56a4a320aba2d5"
+  },
+  "authorities": {
+    "clarification": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-cr1-competitor-role-clarification.json",
+      "sha256": "7bce4c84f09e2fff2fe53e8a3e8f43c46fe0ac5d1b4458fa4e2696cadc9e0016"
+    }
+  },
+  "counts": {
+    "records": 164,
+    "reviewed_candidates": 2,
+    "historical_labels": {
+      "UNREVIEWED": 150,
+      "confirmed_target": 7,
+      "rejected_target": 3,
+      "internal_foam_texture": 3,
+      "agent_observed_cbr_wrong_region": 1
+    },
+    "physical_qualification": {
+      "HISTORICAL_ONLY": 162,
+      "NOT_QUALIFIED": 2
+    },
+    "practical_acceptance": {
+      "NOT_REVIEWED": 163,
+      "ACCEPTED_APPROXIMATION": 1
+    },
+    "newly_qualified_physical_positives": 0,
+    "independent_recordings": 1,
+    "untouched_holdout_recordings": 0
+  },
+  "unlisted_record_scope": {
+    "physical": "HISTORICAL_ONLY",
+    "practical": "NOT_REVIEWED",
+    "meaning": "Original review precision preserved; no current truth promotion or erasure."
+  },
+  "overrides": [
+    {
+      "query_id": "s4-f1485-idx19",
+      "base_pointer": "/rows/134",
+      "query_sha256": "9b6ad7c6fcc163231a371549fc73695f27ca3b72b4c868a3bae8ef7044f9f6b3",
+      "historical_label": "confirmed_target",
+      "identity_claims": {
+        "query_id": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "A_query_id"
+          ],
+          "value": "s4-f1485-idx19"
+        },
+        "frame_index": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "frame_index"
+          ],
+          "value": 1485
+        },
+        "glass_id": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "glass_id"
+          ],
+          "value": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2"
+        },
+        "time_sec": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "source_timestamp_sec"
+          ],
+          "value": 49.5
+        }
+      },
+      "facets": {
+        "physical": {
+          "status": "NOT_QUALIFIED",
+          "claim": {
+            "input": "clarification",
+            "keys": [
+              "current_interpretation",
+              "A",
+              "same_frame_physical_alternative_claim"
+            ],
+            "value": "WITHDRAWN_FOR_CURRENT_PHYSICAL_EVALUATION"
+          }
+        }
+      },
+      "note": "Only this candidate at f1485/49.5 s. No exact-X contour, pixel tolerance, Foam-upper truth, neighboring-frame label or current physical accuracy claim. Historical correspondence retained; no new practical acceptance of A is inferred.",
+      "saved_modes": {
+        "full": {
+          "availability": "MEASURED",
+          "variant_preferences": [
+            "texture"
+          ],
+          "minimum_interface_similarity": 0.7181780910743978,
+          "minimum_interface_margin": -0.06955984768142898
+        },
+        "local": {
+          "availability": "MEASURED",
+          "variant_preferences": [
+            "interface"
+          ],
+          "minimum_interface_similarity": 0.7269062770211362,
+          "minimum_interface_margin": 0.015512010211825467
+        }
+      },
+      "decision": "NOT_EVALUATED"
+    },
+    {
+      "query_id": "s4-f1485-idx8",
+      "base_pointer": "/rows/123",
+      "query_sha256": "d335f421f94efdba4f66e9b9d6c3e11b7f2ef85d1a257c9e32e0c03726ec10a5",
+      "historical_label": "UNREVIEWED",
+      "identity_claims": {
+        "query_id": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "B_query_id"
+          ],
+          "value": "s4-f1485-idx8"
+        },
+        "frame_index": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "frame_index"
+          ],
+          "value": 1485
+        },
+        "glass_id": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "glass_id"
+          ],
+          "value": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2"
+        },
+        "time_sec": {
+          "input": "clarification",
+          "keys": [
+            "binding",
+            "source_timestamp_sec"
+          ],
+          "value": 49.5
+        }
+      },
+      "facets": {
+        "physical": {
+          "status": "NOT_QUALIFIED",
+          "claim": {
+            "input": "clarification",
+            "keys": [
+              "current_interpretation",
+              "B",
+              "physical_role_at_candidate_geometry"
+            ],
+            "value": "NOT_CONFIRMED_AS_THE_PHYSICAL_BOUNDARY"
+          }
+        },
+        "practical": {
+          "status": "ACCEPTED_APPROXIMATION",
+          "claim": {
+            "input": "clarification",
+            "keys": [
+              "current_interpretation",
+              "B",
+              "practical_acceptance"
+            ],
+            "value": "USER_ACCEPTED_APPROXIMATE_FOAM_OIL_BOUNDARY_LOCATION"
+          }
+        }
+      },
+      "note": "Only this candidate at f1485/49.5 s. No exact-X contour, pixel tolerance, Foam-upper truth, neighboring-frame label or current physical accuracy claim. Preserve the user-accepted approximate Foam–Oil location.",
+      "saved_modes": {
+        "full": {
+          "availability": "MEASURED",
+          "variant_preferences": [
+            "texture"
+          ],
+          "minimum_interface_similarity": 0.7874369716246785,
+          "minimum_interface_margin": -0.007476911683945042
+        },
+        "local": {
+          "availability": "MEASURED",
+          "variant_preferences": [
+            "texture"
+          ],
+          "minimum_interface_similarity": 0.8290812581924134,
+          "minimum_interface_margin": -0.02120642673065043
+        }
+      },
+      "decision": "NOT_EVALUATED"
+    }
+  ],
+  "gates": {
+    "numeric_calibration": "NOT_READY",
+    "native_role": "NOT_QUALIFIED",
+    "production_shadow": "NOT_ENTERED",
+    "o2": "OPEN",
+    "field": "NOT_EVALUATED"
+  },
+  "tau_support": null,
+  "production_changed": false,
+  "encoder_forwards": 0,
+  "source_decode": false,
+  "scalar_truth_created": false
+}
