@@ -1174,11 +1174,13 @@ author 시각을 Asia/Seoul로 환산한 2026-10-12로 확정했습니다.
 
 ### 2026-10-13 post-CR1 executable policy preflight
 
-아래 파일의 작성일은 2026-10-13이며 최초 Git 추가일은 등록 후 확인합니다.
+아래 파일의 작성일은 2026-10-13이다. 최초 추가 커밋 `72d676f`의
+author 시각은 Asia/Seoul 기준 2026-10-13 11:18:57이며, 최초 Git 추가일도
+2026-10-13으로 확인했다.
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| 미등록 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md) | 저장 관측 계약 검증·자료 적합성·한정된 후보 역할 질문 |
-| 미등록 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/manifest.json](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/manifest.json) | 한 운영정책·geometry/bank·자료 노출·미지정 calibration·입력 pin |
-| 미등록 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/readout.json.gz](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/readout.json.gz) | 전체 164개 후보/문맥과 raw-vector·native-lineage 연결, 물리 결정 미실행 |
-| 미등록 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/review.html](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/review.html) | f1485 A/B 원본 및 기록된 표본 위치 검토; 새 정답 아님 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md) | 저장 관측 계약 검증·자료 적합성·한정된 후보 역할 질문 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/manifest.json](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/manifest.json) | 한 운영정책·geometry/bank·자료 노출·미지정 calibration·입력 pin |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/readout.json.gz](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/readout.json.gz) | 전체 164개 후보/문맥과 raw-vector·native-lineage 연결, 물리 결정 미실행 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/review.html](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/review.html) | f1485 A/B 원본 및 기록된 표본 위치 검토; 새 정답 아님 |
