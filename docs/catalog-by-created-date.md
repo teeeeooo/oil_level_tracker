@@ -1187,14 +1187,16 @@ author 시각은 Asia/Seoul 기준 2026-10-13 11:18:57이며, 최초 Git 추가�
 
 ### 2026-10-13 CR1 competitor reply and additional input screen
 
-아래 파일의 작성일은 2026-10-13이며 최초 Git 추가일은 등록 후 확인합니다.
+아래 파일의 작성일은 2026-10-13이다. 최초 추가 커밋 `66a70a9`의
+author 시각은 Asia/Seoul 기준 2026-10-13 12:43:46이며, 최초 Git 추가일도
+2026-10-13으로 확인했다.
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| 미등록 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role.md](50-diagnostics/s11/2026-10-13-cr1-competitor-role.md) | B 동일 유면 답변과 local 역할 필요조건의 실제 후보 누락 |
-| 미등록 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role-reply.json](50-diagnostics/s11/2026-10-13-cr1-competitor-role-reply.json) | 원문·후보·원본·점수·표시 이미지 연결; frozen 라벨의 명시적 보충 |
-| 미등록 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role-review.png](50-diagnostics/s11/2026-10-13-cr1-competitor-role-review.png) | 사용자가 실제 확인한 A/B 모바일 비교 이미지 |
-| 미등록 | [50-diagnostics/s11/2026-10-13-public-compressor-input.md](50-diagnostics/s11/2026-10-13-public-compressor-input.md) | 기존 미획득 공개 원본의 네 시점 입력 품질 검사; 역할 판정 대기 |
-| 미등록 | [50-diagnostics/s11/2026-10-13-public-compressor-input/native-f1147.png](50-diagnostics/s11/2026-10-13-public-compressor-input/native-f1147.png) | 사전 고정한 중간 시점의 원본 프레임 한 장 |
-| 미등록 | [50-diagnostics/s11/2026-10-13-public-compressor-input/review.png](50-diagnostics/s11/2026-10-13-public-compressor-input/review.png) | 좌표 보존 모바일 확대; 새 정답/후보선 없음 |
-| 미등록 | [50-diagnostics/s11/2026-10-13-public-compressor-input/source-review.json](50-diagnostics/s11/2026-10-13-public-compressor-input/source-review.json) | 원본·독립성 한계·실제 시점·입력 한계·질문 연결 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role.md](50-diagnostics/s11/2026-10-13-cr1-competitor-role.md) | B 동일 유면 답변과 local 역할 필요조건의 실제 후보 누락 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role-reply.json](50-diagnostics/s11/2026-10-13-cr1-competitor-role-reply.json) | 원문·후보·원본·점수·표시 이미지 연결; frozen 라벨의 명시적 보충 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role-review.png](50-diagnostics/s11/2026-10-13-cr1-competitor-role-review.png) | 사용자가 실제 확인한 A/B 모바일 비교 이미지 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-public-compressor-input.md](50-diagnostics/s11/2026-10-13-public-compressor-input.md) | 기존 미획득 공개 원본의 네 시점 입력 품질 검사; 역할 판정 대기 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-public-compressor-input/native-f1147.png](50-diagnostics/s11/2026-10-13-public-compressor-input/native-f1147.png) | 사전 고정한 중간 시점의 원본 프레임 한 장 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-public-compressor-input/review.png](50-diagnostics/s11/2026-10-13-public-compressor-input/review.png) | 좌표 보존 모바일 확대; 새 정답/후보선 없음 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-public-compressor-input/source-review.json](50-diagnostics/s11/2026-10-13-public-compressor-input/source-review.json) | 원본·독립성 한계·실제 시점·입력 한계·질문 연결 |
