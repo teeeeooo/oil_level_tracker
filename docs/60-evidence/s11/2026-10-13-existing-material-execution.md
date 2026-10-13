@@ -3,7 +3,9 @@
 **기준:** `463ea1bb5aa2fb945a7f1871f0aa35f4940c8767`.
 **작업 branch:** `work/s11-material-reuse-20261013`.
 **판정:** `REUSE_EXECUTED_NO_DETECTOR_PROMOTION`.
-시작 시 작업 트리는 깨끗했다. 이 기록의 변경은 로컬 미커밋 상태이며 commit/push/merge하지 않았다.
+아래 원 실행은 깨끗한 작업 트리에서 시작했고, 10월 13일 인계 당시에는 로컬 미커밋 상태였다.
+원문은 `d85a4c8fb8a10e62611592e531dee3f3f152fa17`에 보존했다.
+후속 인수·검증·정리는 [10월 14일 보충](#receiving-integration-2026-10-14)을 따른다.
 현재 단계와 승인 상태는 [Work Plan](../../00-project/work-plan.md)이 소유한다.
 
 ## 완료한 실제 작업
@@ -134,6 +136,89 @@ cd /Users/sunjaekim/Developer/oil_level_tracker
 단일 사본으로 옮겨 재사용하고 종료한다. 원본 영상, 기존 bank, Torch/DINO 환경은 건드리지 않는다.
 생산 source·기존 Recipe·기존 frozen trial 파일의 변경은 없으며, R22/R22-3,
 Local XY OFF, O2 OPEN, FIELD FAIL을 유지한다.
+
+<a id="receiving-integration-2026-10-14"></a>
+
+## 2026-10-14 첨부 인수·타당성 검토·통합
+
+인수 기준도 `463ea1bb5aa2fb945a7f1871f0aa35f4940c8767`이었다.
+첨부의 [원본 handoff](../../70-reference/s11-actual-execution-2026-10-13/S11_HANDOFF.md)와
+[휴대용 결과 색인](../../70-reference/s11-actual-execution-2026-10-13/RESULT_INDEX.json)은
+`70-reference`에 원문 그대로 보존했다. 이들은 당시의 미커밋 상태를 기록한 출처이며
+현재 실행 지시나 결과 owner가 아니다. [인수 manifest](../../70-reference/s11-actual-execution-2026-10-13/import-manifest.json)는
+ZIP의 13개 member와 실제 배치·hash·검증·중복 정리를 연결한다.
+
+### 배치와 중복 판단
+
+- `repo-files/`의 7개 파일은 현재 작업 트리와 모두 byte-identical이었다.
+  실제 구현은 `tests/diagnostics`, 회귀 검증은 `tests/unit`, 전체 결과·검토 PNG는
+  기존 `50-diagnostics`, 실행 설명은 이 문서에 유지했다. 패치를 다시 적용하지 않았다.
+- ZIP의 `VERIFICATION.json`/`CLOSEOUT_CHECKS.json`은 기존 파일을 참조한다.
+  패치 57,485 bytes는 `463ea1b` → `d85a4c8`의 파일별 Git diff를 원래 순서로
+  결합하면 동일하다. `SHA256SUMS.txt`도 manifest의 member hash로 동일하게 복원된다.
+  중복 patch·checksum 파일·압축 해제 트리·ZIP을 저장소에 추가하지 않았다.
+- ZIP에서 제외된 `readout.json` 284,322 bytes와 PNG 157,674 bytes는 로컬에
+  있었고, 첨부 색인의 hash와 일치했다. 코드·문서와 함께 원본 snapshot에 등록했다.
+- 등록 Git worktree는 현재 한 개, 앱 attachment는 0개였다. Developer, Codex
+  managed worktree와 `/private/tmp`의 제한된 Git entry 조사에서도 추가 Oil checkout은
+  없었다. 다른 프로젝트의 `may_web`는 유지했다. 원격 fetch 후 main은 인수 기준과
+  같았으며, `c4814bd`/`e5d4a04`의 미승격 실험 분기도 이전 검토와 같아 병합하지 않았다.
+  이번 실행 branch만 main 통합 대상으로 삼는다.
+- 13개 member 모두를 저장 파일/Git snapshot/명시한 재생성 방식으로 복원해 hash를
+  확인한 뒤 전달 ZIP을 제거했다. 압축 컨테이너 bytes 재생성은 보장하지 않는다.
+  이전 direction 인수의 `/private/tmp` 압축 해제 원본 11개도 이미 등록된 원본과
+  byte 비교 후 제거했다. 비교되지 않은 고유 scratch, 원본 영상·capture와
+  기존 모델 환경은 유지했다. 새 CLI/PNG 사본 두 개는 관리 절차로 폐기했다.
+
+### 받는 쪽에서 다시 확인한 결과
+
+| 검사 | 2026-10-14 결과 |
+|---|---|
+| 관련 테스트 5개 모듈 | **116 passed in 1.92 s**, skip 없음 |
+| 실제 CLI, `/private/tmp` cwd | **0.9586 s**, process-lifetime peak RSS 203,915,264 bytes |
+| 전체 결과 비교 | 기존 JSON 284,322 bytes와 완전 일치 |
+| 현재 renderer 재실행 | PNG 157,674 bytes 완전 일치; RGB ROI와 경로 hash 재검증 |
+| PNG 시각 점검 | 일곱 경로·좌표·UNREVIEWED·하부 보존 대조군 표시 확인; 새 물리 판정 없음 |
+| 새 관리 실행 종료 | 재생성 사본 2개/441,996 bytes 폐기, 기존 결과만 reuse; 전체 **25개 / 오류 0** |
+| 문서·보존 검사 | 변경 Markdown 8개, local 링크 1,266개, 기존 Work Plan 앵커 17개, 신규 문서/산출물 색인 10개, ZIP member 복원 13개 통과 |
+| 생산 범위 | `src`, `pyproject.toml`, 기존 Recipe, frozen trial·truth 변경 없음 |
+
+시간은 저장 입력 연결 도구의 이번 실행값이며 이전 5.6723 s를 정정하거나 detector
+성능으로 비교하는 수치가 아니다. 원 실행의 검증 JSON은 재작성하지 않았다.
+새 clone에는 ignored 영상·capture가 없으므로 실제 자료 재현에 현재 Mac 입력이
+필요하다는 제한도 그대로다. 이번 인수에서는 학습·encoder 추론·영상 decode·전체
+detector replay·Windows·독립 report 판독을 수행하지 않았다.
+
+### 명세 타당성과 보완
+
+**증거 연결 구현과 재사용 명세로는 타당하다. 다음 detector 관측의 실행 명세는 아직 아니다.**
+기존 CR1/G0/qualifier/geometry 책임을 조합하며 생산 진입 경로를 추가하지 않았다.
+이 모듈의 `main → audit`와 renderer의 실제 경로를 확인했고, pin·지원·좌표·판정
+분리를 기존 결과 및 회귀 검증과 대조했다. 새로운 범용 binding/edge/학습 구현은 필요하지 않다.
+
+후속 계획에서 특히 다음을 보완한다.
+
+1. **촬영원 수와 Oil 평가 단위는 다르다.** 사용 가능한 Oil 대조군 9개는 모두
+   sample4의 6개 frame에 속한다. 양성 6개 중 f1275/idx12는 기존 초기 참조이므로
+   nonself 양성은 5개다. 9개 원본·43개 context·패치 수를 독립 라벨 수나 다른
+   촬영원 성능으로 세지 않는다. 현재로서는 후보 단위 개발 비교만 가능하다.
+2. **authority와 물리적 정답·최종 선택은 다르다.** 저장 대조군의 양성 6개는
+   anchor 1 / continuation 2 / candidate-only 3, 거부 대상 3개는 anchor 2 /
+   continuation 1이다. 이는 admission 단계의 비교 근거이며 최종 detector 혼동행렬이
+   아니다. 기존 authority, peer-support 또는 CR1 category를 다시 이름만 바꾸어
+   정답 관측으로 채택할 수 없다. 153개 미평가 후보와 A/B의 2개 비정답 상태도 유지한다.
+3. **native 학습의 평가 계약은 미완성이다.** 미소냉동의 일곱 fragment는 모두
+   미확정이며, 외부 upper 보존과 내부/구조 반대 사례의 source-separated 평가가
+   아직 결속되지 않았다. sample4/water를 fit에 넣는 안은 N3의 기존 transfer 실패를
+   개발 노출로 전환할 뿐, 새 독립 검증을 만들어 주지 않는다.
+4. **비교 전 관측 계약을 먼저 확정한다.** 새 정보가 어느 기존 실패를 어떻게
+   구분하는지, 실제 입력과 전체 dependency, 원래 판정 단위, source/episode 노출,
+   하나의 고정 비교·ablation·자원/중단 기준을 기존 설계·검증 owner에 명시해야 한다.
+   새 threshold·seed·crop 탐색이나 미확정 경로의 의사정답화는 후속 계획이 아니다.
+
+현재 다음 작업과 순서는 [Work Plan의 후보 관측 준비 계획](../../00-project/work-plan.md#candidate-observation-follow-up)에
+한 번만 기록한다. 이 검토로 O2/V5, 별도 behavior 수용, 독립 Foam raw/episode 조건이나
+FIELD FAIL을 변경하지 않는다.
 
 ## Detector Governance
 

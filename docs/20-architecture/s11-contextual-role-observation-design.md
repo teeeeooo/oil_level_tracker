@@ -665,6 +665,29 @@ missing guide is snapped to a nearby edge. Keep branch/junction orientation
 ambiguous when the observed geometry does not uniquely define it. Do not close
 edge gaps, use all cell edges as material barriers, or infer air from label zero.
 
+### Existing-material reuse boundary
+
+The [executed supplement](../60-evidence/s11/2026-10-13-existing-material-execution.md)
+uses `tests/diagnostics/s11_existing_material_reuse.py` to compose the existing CR1
+audit/review qualifier, G0 Oil bindings and native-role qualifier. It adds no edge
+generator, role predictor or production consumer. The frozen G0 population and
+original review precision remain inputs rather than a second label authority.
+
+Candidate-role comparison readiness and native-path role readiness are separate.
+A reviewed candidate without a captured path remains useful at candidate precision;
+neither its scalar Y nor pooled sector samples supply a reviewed continuous contour.
+Opposed Oil targets need not be non-interfaces. Practical B acceptance and withdrawn
+A qualification remain separate from physical positives; unreviewed records do not
+become negatives. Existing authority tiers are baseline observations, not labels.
+
+Source-use grouping is a proposal until an observation declares its actual fit and
+evaluation population. Count source recordings, reviewed subjects, initial-reference
+exposure, overlapping patches and derived views separately. A one-source Oil control
+set cannot demonstrate cross-source performance just because other recordings appear
+in the inventory. Source-contained intervals retain all compatible fragments and
+do not select or label a path. The successor contract must name a distinct observable,
+its complete dependency and positive/opposition expectations before comparison.
+
 ### Support and weak-constraint semantics
 
 The reproduced default-settings canary changes visible texture values after
@@ -826,4 +849,6 @@ exposed transfer result as an independent validation success by moving N3 into f
 - Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies, a bounded local footprint and preservation before removal keep the experiment reversible.
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no production executing owner, schema or detector behavior changes.
+- Existing feature coverage: the receiving review reuses pinned CR1/O1/A1 captures and native geometry. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. No new Recipe or static-learning efficacy claim follows from saved-input binding.
+- Execution scope: the received reuse CLI and renderer were rerun over saved inputs from outside the repository cwd with exact output equality. No production frame/sequence/report execution or successor observation/training was performed; this delta defines candidate-versus-native evidence and source-exposure boundaries.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.

@@ -4,8 +4,8 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior.
-**Next transition:** **Use the executed existing-material bindings to choose a candidate-level observation or a separately scoped native successor.** The [reuse execution](../60-evidence/s11/2026-10-13-existing-material-execution.md) accounts for all 164 records and current review facets. Nine candidate-level Oil controls are usable at their original precision, but six lack a captured native path. Public-miso contains four unreviewed Foam-range fragments and three Oil-range preservation guards; interval containment does not select a winner. No new video, broad repeated role review, D2/Local XY rerun or automatic fitting/tuning follows. A successor still needs a concrete observation/data/split and role-qualified positive/opposition evaluation. Production consumption remains behind O2/V5 and behavior acceptance.
-**Latest checkpoint:** [Existing-material execution and handoff](../60-evidence/s11/2026-10-13-existing-material-execution.md), locally implemented on `work/s11-material-reuse-20261013` from `463ea1b`. The previously missing role/support and source-use specification is now executable: 9 sources, 43 contexts, 164 records, exact A1/O1 support checks, N1–N5 qualification equality and public native-path preparation. Related tests: **116 passed**; final-source CLI output equals the first run byte-for-byte. No production/Recipe behavior or model training changed. The original N1/N2-fit, N3-loss native trial stays **CLOSED_WITHOUT_PROMOTION**. All prior roles and A/B clarification retain their scope. **No user answer or Windows execution is currently pending.** Changes are local and uncommitted; this checkpoint is not main adoption or O2/field acceptance.
+**Next transition:** **Specify one candidate-level Oil observation using the executed bindings.** The [follow-up plan](#candidate-observation-follow-up) prioritizes the nine original-precision controls, all from sample4, while retaining all 164 records. Six controls lack captured paths; one of six positives is the initial reference. Native Foam work remains a separate conditional path because the four public Foam-range fragments and three lower Oil guards are unreviewed. No new acquisition, broad repeated review, D2/Local XY rerun or automatic fitting/tuning follows. Production consumption remains behind O2/V5 and behavior acceptance.
+**Latest checkpoint:** [Receiving review and integration](../60-evidence/s11/2026-10-13-existing-material-execution.md#receiving-integration-2026-10-14) verifies the supplied handoff against the actual checkout and preserves its original implementation at `d85a4c8`. The bindings and full results are implemented and committed; integration/publication is being closed out. No detector/Recipe behavior or model training changed. The fixed N3-loss trial remains **CLOSED_WITHOUT_PROMOTION**; O2 OPEN and FIELD FAIL persist. **No user answer or Windows execution is currently pending.**
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [post-CR1 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
@@ -29,7 +29,7 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | O1 extraction | IMPLEMENTED; locally ACCEPTED | Reuse trace-only [O1](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md); no identity authority |
 | W0–W3 / O2 foundations | Fixed profile CLOSED WITHOUT PROMOTION; target/aggregation, bounded scene review and evaluation tools locally verified; D1 return CLOSED | Reuse [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) and [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed); prediction/efficacy is not established by tooling |
 | P0 / W4 / WP01 — baseline and intake | COMPLETE at saved-evidence scope | [October 13 program intake](../60-evidence/s11/2026-10-13-program-review-intake.md) verifies pins, canary and saved report extrema; P0 A/B/C/U remains the impact owner, physical cadence NOT_EVALUATED |
-| W4/P2 / WP02 — observation/policy | G0/N1–N5 qualification VERIFIED; one frozen trial CLOSED WITHOUT PROMOTION | [Measured readout](../50-diagnostics/s11/2026-10-13-native-surface-trial/readout.json): required N3 positive lost despite fit and two opposition successes. No consumer; audit existing-material use before proposing a successor learning scope |
+| W4/P2 / WP02 — observation/policy | G0/N1–N5 qualification and existing-material binding VERIFIED; one frozen trial CLOSED WITHOUT PROMOTION | Reuse the [candidate/support inventory](../60-evidence/s11/2026-10-13-existing-material-execution.md); next output is one observation contract with explicit added information and positive/opposition expectations. N3 loss remains the native trial counterexample; no consumer or automatic training |
 | V2/V3 / WP03 — qualification and evaluation | N1–N5 displayed roles CLOSED | [Qualification supplement](../50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json) keeps N4 internal with a suspected context facet and N5 structure distinct. The completed trial fitted water N1/N2 and evaluated sample4 N3/N4/N5 as exposed transfer. Further learning needs a new predeclared data/split contract; no untouched holdout exists |
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
@@ -45,6 +45,24 @@ and the [parent behavior contract](../30-validation/s11-physical-interface-evide
 ## Next transition
 
 <a id="adopted-program-and-immediate-p5-source-checkpoint"></a>
+
+<a id="candidate-observation-follow-up"></a>
+
+### Immediate candidate observation plan
+
+The receiving review accepts the reuse implementation at its evidence-binding scope.
+It does not select a new detector feature or a learning operation. Follow these bounded steps:
+
+| Order | Next deliverable | Entry and completion boundary |
+|---|---|---|
+| 1 — Oil observation contract | Extend the existing [contextual-role design](../20-architecture/s11-contextual-role-observation-design.md#existing-material-reuse-boundary), using existing CR1/O1/A1 inputs and original candidate IDs. State one new observable, its full dependency/support, contrast with closed CR1/peer-support/row-distribution failures, one ablation, per-control expected outcomes and resource/stop limits | All 164 records stay in scope: 6 physical correspondences, 3 opposed Oil targets, 2 nonqualified A/B states and 153 unassessed. Separate the initial reference from 5 nonself positives; all 9 controls are one-source development evidence. No native path, material purity or other-source claim is inferred. If no distinct supported observation can be specified, record the concrete missing information before any run |
+| 2 — One saved-input comparison, after that contract | Reuse the current binding CLI and add only the missing observation responsibility; freeze source/input hashes and the comparison before execution | Account for every required positive and opposition, unavailable results and all unknown competitors. Both real-target preservation and wrong-target separation are required; all-reject, self-match and selecting an unreviewed winner cannot pass. Close a failed fixed hypothesis without seed/crop/threshold rescue. A pass is bounded development evidence, not O2 or transfer acceptance |
+| Separate conditional Foam path | If a native successor needs public-source evaluation, reuse the seven exact fragment IDs and request only the necessary new path-role correspondence | Retain N1–N5 and original intervals without repeated questions. Define independent upper-positive and internal/structural opposition units by source; lower Oil paths are preservation guards, not automatic negatives. The current public packet lacks these roles, so no fit follows from its geometry alone |
+
+Keep the nine-source inventory as exposure routing. It does not supply nine labeled
+Oil sources or an untouched holdout. A future training option still requires its own
+adopted data/split/loss/aggregation/operating-point/resource contract. After a qualified
+observation, the WP04 → WP05/06 and separate WP07/08 → WP09/10 gates below apply.
 
 ### Direction decision and staged follow-up
 
@@ -140,8 +158,8 @@ reviewed truth, peer baseline and the retained report stay available. No repeat
 cleanup or user continuation checkpoint remains outstanding.
 The [CR-1 complete readout](../50-diagnostics/s11/2026-10-12-cr1-context-comparison.md)
 retains all 164 records, original exposure groups, first-trial failure and the
-scope-limited follow-up. The [latest worktree check](../60-evidence/s11/2026-10-13-program-review-intake.md#워크트리와-중복-정리)
-finds one main worktree and no eligible sibling merge. Retain one existing CR-1
+scope-limited follow-up. The [latest worktree check](../60-evidence/s11/2026-10-13-existing-material-execution.md#receiving-integration-2026-10-14)
+finds one primary checkout and no eligible sibling merge. Retain one existing CR-1
 environment/model set under its [3 GB contract](../20-architecture/s11-contextual-role-observation-design.md#local-footprint-and-removal-contract); unused installer cache was removed.
 Use [managed artifact closeout](../40-operations/experiment-artifact-lifecycle.md)
 for new outputs; do not restore retired bulk runs or duplicate source/media.
@@ -228,7 +246,10 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 
 ## Current authorization boundary
 
-The latest October 13 instruction authorizes phased implementation, appropriate
+The October 14 request authorizes attachment/worktree reconciliation, validity review,
+follow-up planning, duplicate cleanup, necessary integration and autonomous commits/pushes.
+This intake does not execute the proposed successor observation or add a training grant.
+The preceding October 13 instruction authorizes phased implementation, appropriate
 verification, cleanup and autonomous commits/pushes until a necessary user judgment
 or Windows task is reached. The follow-up explicitly adopts opposition-first
 preparation, followed by a fixed comparison and bounded trial once the required roles

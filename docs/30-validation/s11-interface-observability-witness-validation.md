@@ -1237,6 +1237,8 @@ distinction is preserved alongside the guards below.
 - Preserved contracts: generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded resources and separate Windows field acceptance.
 - Difference from prior failures: extraction, discrimination, behavior and field qualification are independent gates with explicit positive/negative/unresolved labels and leakage controls. The NSR-1 delta separately tests native binding/readiness, full dependency support and original weak-label units before any role-head experiment or typed consumer.
 - Logic-map impact: NONE — the clarification changes no implementation or acceptance owner; the mapped diagnostic route and production flow remain unchanged.
+- Existing feature coverage: existing saved CR1/O1/A1 and native geometry support are reused for the material-binding checks; sample4 has empty exclusions/templates and Local XY OFF. D2/Local XY conclusions remain closed. These checks do not evaluate preparation, static learning or a changed Recipe.
+- Execution scope: the receiving-session reuse CLI and renderer verify pinned inputs and output equality only. New observation comparison, production frame/sequence/report execution, training and Windows acceptance were not exercised by this validation clarification.
 - Failure-registry impact: NONE — it adds acceptance obligations for existing named mechanisms without claiming a new cause or repair.
 
 
@@ -1672,6 +1674,23 @@ role. No threshold/seed/head retry follows a required wrong/unknown outcome. All
 success remains LIMITED_EXPOSED_TRANSFER_ONLY, with full G0 and unassessed controls
 referenced rather than manufactured negatives. Actual CLI, overwrite refusal,
 resource bounds and managed closeout are required before publishing results.
+
+For the [existing-material reuse supplement](../60-evidence/s11/2026-10-13-existing-material-execution.md),
+check the whole frozen population and exact candidate/index/source/Y/support joins,
+current versus historical/practical claims, duplicate control/query rejection and
+source-use conflicts. Reproduce N1–N5 qualification without relabeling, all saved
+fixed-column fragments and all interval-compatible alternatives. Verify the real CLI
+outside the repository cwd and compare the complete output; verify displayed RGB and
+path hashes separately. Existing native paths, absent captured paths and qualified
+native roles must not be conflated in readiness or denominators.
+
+Report the actual source/frame and initial-reference exposure of the usable controls;
+the count of recordings in a manifest is not the count of independently labeled
+evaluation sources. A later candidate comparison retains unassessed competitors,
+separates self from nonself results and requires both protected-positive and opposed
+target outcomes. It cannot pass by rejecting everything or counting unreviewed new
+winners as successes. Frozen binding equality verifies provenance, not the usefulness
+of an unimplemented observation or a change to admission/selection/report behavior.
 
 G0 need not label every existing candidate or certify all four proposed head
 outputs. It must declare the smallest capability to be tested and identify its
