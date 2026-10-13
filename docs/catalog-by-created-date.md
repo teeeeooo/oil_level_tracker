@@ -1247,13 +1247,15 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:28:14이며, 최초 Git 추가�
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/proposal.json](50-diagnostics/s11/2026-10-13-foam-material-reference/proposal.json) | 독립 Foam 위·아래 비교에 쓸 내부 영역의 원본·좌표·새 검토 질문 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/reference-review.png](50-diagnostics/s11/2026-10-13-foam-material-reference/reference-review.png) | R 영역 위치와 가공하지 않은 원본 확대를 담은 모바일 검토 이미지 |
 
-### 최초 Git 등록 대기 — 2026-10-13 Foam 두 모습의 기준 분리
+### 2026-10-13 Foam 두 모습의 기준 분리
 
-아래 파일의 작성일은 2026-10-13이다. 최초 Git 추가일은 커밋 후 확인한다.
+아래 파일의 작성일은 2026-10-13이다. 최초 추가 커밋 `1497694`의
+author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가일도
+2026-10-13으로 확인했다.
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| Git 미등록 | [50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-proposal.json](50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-proposal.json) | 큰 기포 Foam 내부 L 영역의 미확정 판단·원본·좌표·노출 범위 |
-| Git 미등록 | [50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-review.png](50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-review.png) | 물 A의 Foam 층과 개별 기포 맥락 및 L 원본 확대 |
-| Git 미등록 | [50-diagnostics/s11/2026-10-13-foam-material-reference/render.py](50-diagnostics/s11/2026-10-13-foam-material-reference/render.py) | 기존 경계 구간 renderer를 바꾸지 않는 유한 내부 영역 검토 재현기 |
-| Git 미등록 | [50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json](50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json) | R의 미세 Foam 승인과 큰 기포 Foam 별도 포괄 요구를 원문에 연결 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-proposal.json](50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-proposal.json) | 큰 기포 Foam 내부 L 영역의 미확정 판단·원본·좌표·노출 범위 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-review.png](50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-review.png) | 물 A의 Foam 층과 개별 기포 맥락 및 L 원본 확대 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/render.py](50-diagnostics/s11/2026-10-13-foam-material-reference/render.py) | 기존 경계 구간 renderer를 바꾸지 않는 유한 내부 영역 검토 재현기 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json](50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json) | R의 미세 Foam 승인과 큰 기포 Foam 별도 포괄 요구를 원문에 연결 |
