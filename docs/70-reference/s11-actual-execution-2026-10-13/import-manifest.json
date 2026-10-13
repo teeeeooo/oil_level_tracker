@@ -411,5 +411,14 @@
     "older_exact_duplicate_files_removed": 11,
     "older_exact_duplicate_bytes_removed": 86417,
     "scope": "Removed only the verified transport archive, the 11 byte-identical old extraction members and fresh generated output copies. Retained unique old scratch, unrelated project worktrees, failed research branch history, original media/captures and model environment."
+  },
+  "integration": {
+    "main_fast_forward_commit": "62cfe46fe079a64af3b5b7867e8951660a13513f",
+    "original_snapshot_commit": "d85a4c8fb8a10e62611592e531dee3f3f152fa17",
+    "retired_local_task_branch": "work/s11-material-reuse-20261013",
+    "remaining_registered_worktrees": 1,
+    "field_disposition": "FIELD FAIL",
+    "o2": "OPEN",
+    "local_xy": "OFF"
   }
 }

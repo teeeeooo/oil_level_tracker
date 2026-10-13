@@ -163,7 +163,8 @@ ZIP의 13개 member와 실제 배치·hash·검증·중복 정리를 연결한�
   managed worktree와 `/private/tmp`의 제한된 Git entry 조사에서도 추가 Oil checkout은
   없었다. 다른 프로젝트의 `may_web`는 유지했다. 원격 fetch 후 main은 인수 기준과
   같았으며, `c4814bd`/`e5d4a04`의 미승격 실험 분기도 이전 검토와 같아 병합하지 않았다.
-  이번 실행 branch만 main 통합 대상으로 삼는다.
+  이번 실행만 `d85a4c8`/`62cfe46`으로 보존·검토한 뒤 main에 fast-forward 통합했다.
+  병합된 `work/s11-material-reuse-20261013` 로컬 branch는 제거했다.
 - 13개 member 모두를 저장 파일/Git snapshot/명시한 재생성 방식으로 복원해 hash를
   확인한 뒤 전달 ZIP을 제거했다. 압축 컨테이너 bytes 재생성은 보장하지 않는다.
   이전 direction 인수의 `/private/tmp` 압축 해제 원본 11개도 이미 등록된 원본과
