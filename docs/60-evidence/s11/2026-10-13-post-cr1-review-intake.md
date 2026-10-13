@@ -3,7 +3,7 @@
 **결과:** 첨부 5개 파일을 원문 그대로 보존했고, 저장 결과 재현과 설계 타당성
 검토를 완료했다. 고정 local 역할 경쟁과 절대 지지도를 함께 보는 정책을 **설계
 가설**로 채택한다. 임계값·calibration 자료·독립 평가 자료는 정해지지 않았다.
-생산 detector, Recipe, truth, 모델·환경은 변경하지 않았다.
+인수 단계에서 생산 detector, Recipe, truth, 모델·환경은 변경하지 않았다.
 
 시작점은 clean `main`, `0bc5af74dc0818a166fc99f7bbdf3b05cd7b65f1`로 첨부의
 기준 HEAD와 같다. 유지되는 판정은 `S11 ACTIVE / FIELD FAIL / O2 OPEN /
@@ -118,6 +118,54 @@ readout을 참조하고 임시 stdout·plan·selection만 정리했다. 전체 �
 governance와 whitespace 검사가 통과했다. 새 managed run은 중복 stdout 1개를
 제거하며 닫혔고 전체 5개 managed run의 closeout 검사 오류는 0이다.
 기록 자체는 field acceptance가 아니다.
+
+## 추가 정리와 CR1 환경 판단
+
+사용자의 불필요한 원본/워크트리 정리 요청으로 `2f0f7de57113b5907f4df08dd443190e25329b39`
+기준의 로컬 보존 가치를 다시 심사했다. 워크트리는 여전히 main 하나이며, 제거할
+추가 checkout은 없다. CR-1은 생산 미채택이지만 후속 정책 검증의 연구 후보로
+남는다. 최종 채택/기각은 아직 결정되지 않았다.
+
+| 제거 항목 | 파일 수 | 논리 bytes | 할당 bytes |
+|---|---:|---:|---:|
+| 이전 `dist/oil_level_tracker-R22-1-source.zip` 및 checksum | 2 | 1,889,436 | 1,896,448 |
+| 격리 CR-1 `cache/uv` 설치용 metadata | 31 | 3,010,517 | 3,080,192 |
+| 저장소 내 파생 Python bytecode | 6 | 53,297 | 69,632 |
+| Finder `.DS_Store` | 5 | 51,220 | 65,536 |
+| 합계 | **44** | **5,004,470** | **5,111,808** |
+
+삭제 전에 모두 untracked이고 frozen 입력과 겹치지 않으며 환경에서 cache로
+연결되는 symlink가 없음을 확인했다. 설치는 `--link-mode copy`로 완료돼 있다.
+cache는 설치 metadata만 담고 있으며 inference·저장 점수 검증의 입력이 아니다.
+필요한 후속 설치 시 다시 생성할 수 있다. bytecode/Finder metadata도 재생성 가능하다.
+
+이전 배포 ZIP의 SHA-256은
+`78cef4c209877c12c9b027347678304c865fdfffce3c679ef7d3dcceb17f47d7`이다.
+651개 source member 전부가 main의 Git 이력과 byte-identical했다. 645개는
+`e95ffce1652b94af9f60ba429bffe7eb09fc8849`, 나머지 6개 문서는
+`f1eea44cf46c39bc00641bb34e615b8ddb31aba5`와
+`52274e9c4539524612df367cea787718ffdb1a42`에서 확인했다. 현재 후보 배포나 비교의
+입력이 아니므로 소스 이력과 기존 R22-1 측정 기록으로 대체했다. ZIP 고유의
+`SOURCE_IDENTITY.json`과 압축 포장 bytes는 폐기했으며 동일 ZIP 재생성을 보장하지 않는다.
+
+보존한 CR-1 환경·모델/source 한 벌은 이후 새 자료에서 고정 표현을 검증할 때
+재사용한다. 지금 없애면 저장 점수 해석은 가능하지만 추론 재개 전에 lock·source·
+weight hash에 맞는 환경 재구성이 필요하다. 준비 입력과 전체 score table은
+현재 역할 정책의 분모·반례·좌표 연결을 보존하는 최소 증거다. 원본 영상, 앱 환경,
+첨부 원문 5개와 완료된 실험 증거도 유지했다. 정책의 기각·교체 또는 로컬 추론
+사용 종료 시 환경 보존을 재심사한다. 이번 정리로 새 추론이나 field 판정을 만들지 않았다.
+
+정리 후 CR-1 workspace는 **743,616,512 할당 bytes**이며 cache는 비었다.
+Torch 2.14.1 / NumPy 2.5.4 / Pillow 12.3.0 import와 기존 5개 managed run 검사가
+통과했다. readiness pin 172개도 일치한다. 이 중 준비 파일 3개는 완료 marker가
+기록한 `work/`→`evidence/` 이동을 따라 확인했다.
+
+과거 검증기를 현재 checkout에서 그대로 실행하면 갱신된 설계/validation 문서
+2개의 frozen hash와 충돌한다. 해당 문서만 기준 `0bc5af7`의 bytes로 임시 복원하고
+현재 저장 증거·생산 소스를 참조한 검증에서는 **164 records / 270 score-rank checks /
+221 production sources unchanged PASS**였다. 이 검증을 위해 현재 문서나 frozen
+receipt를 덮어쓰지 않았고 임시 복원본은 즉시 제거했다. 이는 현재 문서를 과거 pin과 같다고 주장하는
+검증이 아니다. 변경 문서 local 링크 81개, governance, whitespace 검사도 통과했다.
 
 ## Detector Governance
 

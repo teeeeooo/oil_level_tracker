@@ -171,6 +171,16 @@ removal clause above for this experiment, without raising the 3 GB cap or
 authorizing additional model/environment copies. Close completed managed runs
 with explicit evidence retention; run closure is distinct from environment removal.
 
+**October 13 cleanup refinement:** the user's request to remove unnecessary
+material permits retiring unused installer metadata. Retain one pinned runtime,
+model/source set and the small prepared inputs for the adopted post-CR1 policy
+investigation. Saved-score design and verification do not need encoder execution;
+qualified new-input calibration/shadow work still needs the fixed representation.
+Reassess this set when that policy is rejected, replaced or no longer needs local
+inference. Retention does not imply production adoption. The
+[cleanup evidence](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md#추가-정리와-cr1-환경-판단)
+records the removal scope and surviving checks; historical receipts remain frozen.
+
 ## Progression and stop conditions
 
 1. Verify the preceding repository cleanup, freeze WP1, and satisfy footprint/

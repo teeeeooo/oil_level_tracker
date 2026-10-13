@@ -11,8 +11,11 @@ The [October 13 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
 preserves the October 12 post-CR1 package, independently verifies its saved audit
 and adopts a staged follow-on plan. The first CR-1 trial remains
 `CLOSED_WITHOUT_PROMOTION`; the complete review remains
-`SCOPE_LIMITED_USEFULNESS`. Keep the existing environment/weights/caches within
-3 GB until explicit environment cleanup is requested.
+`SCOPE_LIMITED_USEFULNESS`. CR-1 remains a follow-up research candidate; production
+adoption is undecided. Keep one pinned environment/weight set within 3 GB for
+qualified new-input inference. The October 13 requested cleanup removed unused
+installer metadata; saved-score policy design needs no encoder rerun. Reassess
+the retained set when the operating-policy decision replaces or ends its use.
 
 ## S11 work-item ledger
 
