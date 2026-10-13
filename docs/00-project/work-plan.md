@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior.
-**Next transition:** **Existing-material and recipe-defense reuse first.** Reconcile the five already acquired supplementary videos (water/sample5, beer/sample6, milk/sample7, public-miso and Froid117/public-egenie), the existing local corpus and their received judgments against the proposed learning/evaluation capability. Account for existing recipe exclusion and Artifact rejection before assigning fixed structures such as N5 to a new learned mechanism. The closed trial trained only two paths from one water frame and evaluated three paths from sample4; it does not demonstrate a shortage of videos. No new acquisition, third-video delivery prerequisite or repeated broad role review follows. Establish which existing evidence is reusable and what specific binding is missing before designing any successor trial. The fixed failed trial remains closed; no automatic fitting/tuning.
+**Next transition:** **Existing-material reuse, informed by the closed Artifact tests.** Reconcile the five already acquired supplementary videos (water/sample5, beer/sample6, milk/sample7, public-miso and Froid117/public-egenie), the existing local corpus and their received judgments against the proposed learning/evaluation capability. Reuse the completed D2 and Local XY results; another recipe/mask trial is not a prerequisite. N5 remains a structure control, and deleting its path alone does not establish preservation of real interfaces or report context. The closed head trial trained only two paths from one water frame and evaluated three paths from sample4; it does not demonstrate a shortage of videos. No new acquisition, third-video delivery prerequisite or repeated broad role review follows. Establish which existing evidence is reusable and what specific binding is missing before designing any successor trial. The fixed failed trials remain closed; no automatic fitting/tuning.
 **Latest checkpoint:** The one frozen native surface trial at `019ccfd9fae3ea5b3421af5e186a0c053dba0922` is **CLOSED_WITHOUT_PROMOTION**: N1/N2 fit succeeds; sample4 N4 internal change and N5 circular rim are rejected, but true external upper **N3 is also rejected**. Independent arithmetic agrees. All five displayed roles remain qualified; N4's glass-circle influence is a separate user suspicion, not a verified cause. **Windows work is not yet required.**
 
 This is the sole current state, authorization, unknowns and next-action owner.
@@ -77,17 +77,29 @@ or full material-role classification.
    for a newly obtained or untouched video. No seed/crop/threshold/head/split rescue
    or another training run follows merely from this inventory correction.
 
-   **Existing recipe defenses come first for fixed structure:** the saved
-   [sample4 recipe](../../sample/sample4.oilrecipe) has no exclusion zones or
-   Artifact templates. N5's presence in the offline trial is not a demonstrated
-   failure of enabled recipe defenses. Distinguish hard spatial exclusion,
-   candidate-template rejection and evidence-only contour confirmation. Verify
-   suppression together with preservation of real observations; the prior
-   [D2 comparison](../60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md)
-   already shows why excluding one wrong candidate does not establish sequence
-   correctness. Keep N3 external-upper loss and N4 internal Foam change separate;
-   N4's suspected glass influence does not turn it into a confirmed structure.
-   No original recipe or frozen trial is changed by this sequencing correction.
+   **Artifact history supplies completed controls, not another first experiment:**
+   the [D2 registration comparison](../60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md),
+   [shared-mask/Oil-only A–D comparison](../60-evidence/s11/2026-10-09-local-xy-spec-intake.md)
+   and [implemented affected-only Local XY trial](../60-evidence/s11/2026-10-09-local-xy-implementation.md)
+   are already closed without promotion. The subsequent
+   [causal readout](../50-diagnostics/s11/2026-10-09-local-xy-sequence-causality.md)
+   identifies committed-owner selection loss at 52 s and association/confirmation
+   loss at 54–56 s; first physical association error remains unproven. Do not repeat
+   those runs, enlarge exclusions around new winners or relax their gates.
+   These trials used the earlier upper-pattern scope, not N5's exact lower-rim
+   fragment. The saved [sample4 recipe](../../sample/sample4.oilrecipe) still has
+   no exclusion zones or Artifact templates, so neither the old failures nor the
+   N5 single-path mask check establish full-sequence efficacy for a new N5 recipe.
+   Existing exclusion/Artifact functions remain available; evidence-only contour
+   confirmation does not acquire rejection authority from this review.
+
+   The next deliverable is an existing-material role/support and source-split
+   specification, retaining N1–N5 as exposed development controls. Prioritize N3
+   true-upper preservation together with N4/N5 opposition, not negative rejection
+   alone. N4 remains internal Foam despite suspected glass influence. Reuse the
+   saved Artifact/Local XY failures for later consumer and sequence acceptance;
+   observation qualification does not itself repair association or authorize
+   WP05/06. No new fitting, recipe change or frozen-result rewrite follows here.
 3. **WP04:** qualified typed Witness delta, default OFF/unavailable fallback,
    V4 equality/resources, then **V5 Windows shadow before O2 acceptance**.
 4. **WP05 then WP06:** separate anchor-and-continuation wrong-output suppression
