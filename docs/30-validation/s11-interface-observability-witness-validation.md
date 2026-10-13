@@ -1493,6 +1493,14 @@ Required checks for the proposed observation/policy are:
   Saved-PNG timings do not predict full-pipeline or Windows cost.
 
 These checks supplement V2/V3/V4; V5 Windows shadow still precedes O2 acceptance.
+For the separately frozen exposed public-source transfer, keep full floor/ceil
+coverage of the existing containment intervals and label no individual anchor as
+physical truth. Validate source-crop identity, mask hashes, unchanged reference
+geometry, aspect-preserving padding, actual token weights/common support and an
+encoder-through-pixel control before scoring. Native token spacing and contextual
+scope differ across sources; disclose them. Retain all rows/scores/statuses under
+fixed resources with no score-guided geometry/bank/source retry. The absent
+Foam-upper prototype, calibration/holdout and downstream-effect gates remain open.
 The optional saved-review qualification path must preserve exact baseline audit
 equality before emitting its supplement. Controls must reject stale authority
 bytes, repinned-but-different baseline content, changed query identity/time,

@@ -1,0 +1,450 @@
+{
+  "schema": "s11-cr1-public-transfer-preflight-v1",
+  "base_head": "06cdf4bdb791b9c592540af0afd240da1456d981",
+  "no_forward_before_this_freeze": true,
+  "scope": "One exposed-development transfer diagnostic at a previously reviewed source frame. This does not select a policy threshold or certify candidate identity, per-anchor truth, calibrated decisions, continuous motion, source independence, or a Foam-upper classifier.",
+  "source_id": "public-miso-mHOS1-1ck60",
+  "frame_index": 1499,
+  "timestamp_sec": 50.01663333333334,
+  "source_x": 578,
+  "prepared": "sample/output/s11-cr1-workspace/runs/readiness-20261012-001/evidence/prepared.json",
+  "position_review": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.json",
+  "native_images": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/native-images.npz",
+  "native_capture_readout": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/current-frame-readout.json",
+  "source_frame": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/native-at-50.png",
+  "bank_input_owner": "docs/50-diagnostics/s11/2026-10-11-p2-shared-support/preflight.json",
+  "pins": {
+    "tests/diagnostics/s11_contextual_role_transfer.py": "5772b08b10402711c661d728bf7ed5b71c2e0ec7957b0f6d21580d2386efb0a3",
+    "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/probe.py": "3ccbaad1c8791cdf7770ffa49d33b59af53f53fbb6038a53b159a2d9a3ed5037",
+    "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/preflight.json": "6a1bd712cee94b416b7a1d984d1e1186f18d263a4b7e4c492c6e5709dfe15331",
+    "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/readiness.json": "de7b56b5c8c431893c713085a59030e1f6c8289f98d9dbc894a321f50745603b",
+    "docs/50-diagnostics/s11/2026-10-11-p2-shared-support/preflight.json": "43f0e438be8ae4e2c79914639a6a61f822802b0c54d49acda5d7f6c737118525",
+    "sample/output/s11-cr1-workspace/runs/readiness-20261012-001/evidence/prepared.json": "118caed4fccda8f0eada3bf6c4bf2e653c8eeee6bb067805a92a0b407e736668",
+    "sample/output/s11-cr1-workspace/runs/readiness-20261012-001/evidence/visibility.npz": "13ead81bb5a8806f2c38fa6f5327a02020b0dd1e96aedc6e3fddc4d88ee8583a",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.json": "3b1282c282a92828103a3c0e9ee4ed0da319a42fa6bce63d6415163195edd537",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/native-images.npz": "00f98905e62e09871d78141b483e71393ab907f17f556dd7e023aa9a2fd02241",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame/current-frame-readout.json": "f747c091f68b9a379fa41f1242de5f722a5c0b652383f3ab14c5b4506fbd93d0",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/native-at-50.png": "280b7869a81edfde722fafc85017fdf45dd6e799978cb6c46b7b9769249a635b",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/upper-role-reply.json": "0b1b2fc8fee51dec65efb06875a1ca9697a5bdf525eb4909df35e297ddddf75c",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/lower-role-review.json": "190e04240b9c233c46a20ccb25a4fe2cd2ae067d47deec93a1eac45011f00219",
+    "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275-original_roi.png": "1eb2399d42282e7dc70b2964e3344a746f9248e27ca63df6ce3f250f6a7e2e50",
+    "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000000450_fb759bff9e59/original_roi_512ed6ab.png": "bdc37f0c0cbd7483db07177a87316827591fc89c53dbd40ef3b3d3517759aaa4",
+    "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001620_523615198887/original_roi_512ed6ab.png": "e00d97a5f265f5e6353d27014a46b6aca692112efb3b1c29fc170b171ba0462b"
+  },
+  "geometry": {
+    "native_shape": [
+      210,
+      228,
+      3
+    ],
+    "source_origin_xy": [
+      464,
+      254
+    ],
+    "pad_offset_xy": [
+      0,
+      9
+    ],
+    "square_edge": 228,
+    "encoder_canvas": [
+      224,
+      224
+    ],
+    "native_pixels_per_token": 14.25,
+    "reference_native_pixels_per_token": 6.5,
+    "padding": "Symmetric 9-row invalid padding; masked pixels become RGB normalization mean in the unchanged encoder. No native crop resize before the one 228-to-224 encoder transform.",
+    "sampling": "Unchanged native X578 and native ±12 strip offsets, common visible/glare-free columns across query and all three references, minimum 8 columns. Query weights use actual 228 edge; reference weights retain original 104 edge.",
+    "ablation": "Same geometry, masks, token lattice and strips for full/local. Local retains only native 25x25 anchor context; no crop enlargement.",
+    "scope": "Native camera scale and token footprint differ across sources; transfer statistics do not calibrate exact coordinates or isolate all model-distribution effects."
+  },
+  "queries": [
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        322
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        323
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        324
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        325
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        326
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        327
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        328
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        329
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        330
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        331
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        332
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        333
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        334
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        335
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        336
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        337
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        338
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "A",
+      "contained_boundary_role": "Foam upper",
+      "source_xy": [
+        578,
+        339
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        420
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        421
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        422
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        423
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        424
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        425
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        426
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        427
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        428
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        429
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        430
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        431
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        432
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        433
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        434
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        435
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    },
+    {
+      "range_id": "B",
+      "contained_boundary_role": "Oil upper",
+      "source_xy": [
+        578,
+        436
+      ],
+      "anchor_label": "UNREVIEWED_ANCHOR",
+      "meaning": "floor/ceil cover of a boundary-containment interval, not point truth"
+    }
+  ],
+  "max_queries": 35,
+  "anchor_truth": "UNREVIEWED_ANCHOR for every sampled row, including those within the reviewed range. The reply establishes interval containment only. Floor/ceil coverage retains endpoint uncertainty instead of choosing a convenient centre.",
+  "reference_bank": "Original sample4 interface/structure/internal-texture exemplars unchanged; regional contexts, not pure masks. No Foam-upper prototype exists.",
+  "source_overlap": "Different source bytes, exposed development; episode independence and untouched evaluation are not established. No new sample3 access.",
+  "stages": [
+    "Validate pinned source/bank/masks and native source-crop identity.",
+    "13 geometry controls passed before scoring; encoder-through-pixel 228-square control must pass before all real queries.",
+    "Execute the complete 35-anchor full/local roster once, retain every status and all three role scores."
+  ],
+  "geometric_readiness": {
+    "anchors": 35,
+    "anchors_with_common_support": 35,
+    "common_column_count_bounds": [
+      21,
+      21
+    ],
+    "query_upper_lower_token_overlap_bounds": [
+      0.20095693779904308,
+      0.5
+    ]
+  },
+  "packages": {
+    "torch": "2.14.1",
+    "numpy": "2.5.4",
+    "pillow": "12.3.0"
+  },
+  "resources": {
+    "cpu_threads": 2,
+    "forward_seconds_limit": 10,
+    "full_seconds_limit": 180,
+    "peak_rss_bytes_limit": 2000000000,
+    "max_forward_calls": 64,
+    "run_output_bytes_limit": 200000
+  },
+  "external_allocated_reservation_bytes": 500000000,
+  "interpretation": "Report category preferences, raw similarities, availability and token overlap for all anchors. Neither a favourable anchor nor a range average is a physical positive, candidate selector or operating point. All-anchor inability to meet the fixed local preference condition may delimit this frozen transfer only; continuous native accuracy remains unassessed.",
+  "stop": "Stop after this fixed complete diagnostic, or a pin/geometry/pixel-control/resource failure. Do not replace source, tune crop/scale/offsets/bank/margin or rerun with favourable choices. Preserve limits and choose the next design step through current owners.",
+  "retention": "Keep the frozen manifest and compact full readout; reuse existing images/references/model. Discard token maps, unused temporary files and scratch metadata."
+}

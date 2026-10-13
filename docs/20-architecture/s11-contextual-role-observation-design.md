@@ -378,6 +378,25 @@ from current qualification and practical-acceptance counts. A practical acceptan
 neither repairs local-role preference nor supplies a native contour. All policy,
 shadow and field gates remain as in the verified baseline.
 
+### Bounded exposed source transfer before calibration
+
+The [public-source preflight](../50-diagnostics/s11/2026-10-13-cr1-public-transfer.md)
+uses the existing reviewed boundary-containment intervals and complete floor/ceil
+cover at native X578. These are regional-context queries, not candidate labels.
+It reuses the unchanged encoder/bank/rank operation and runtime guard. A separate
+diagnostic adapter is necessary because the frozen historical strip helpers assume
+104-square geometry; it pads a native rectangle without shifting source coordinates
+and changes only the dimension used in pixel-to-token weights/support bounds.
+Reference geometry must remain bit-identical. No production owner imports it.
+
+Freeze source/capture/mask/reference pins, query coverage, aspect-preserving
+transform, native support, full/local intervention and limits before scores.
+Validate actual encoder-through-pixel controls at the new geometry before real
+queries. Keep every uncertain anchor and all three class scores. Disclose the
+different source/token scale and prototype scope; no new Foam-upper reference,
+threshold, per-anchor truth or untouched evaluation follows. Stop after the frozen
+diagnostic; do not search alternative geometry or references to rescue the outcome.
+
 ### Separate Oil behavior slices after shadow acceptance
 
 1. **Same-frame role condition:** after O2/V5 and a separate O3 plan, consume the
