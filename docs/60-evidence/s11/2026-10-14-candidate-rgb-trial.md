@@ -97,6 +97,35 @@ Torch float32 대비 최대 절대 오차는 원본 `6.430397e-6`, 평균 색 `3
 dense feature는 저장하지 않았다. 종료 시 관리 실행 30개 오류 0. 생산 source,
 Recipe, 의존성·package 구성은 바꾸지 않았고 Windows도 실행하지 않았다.
 
+## 첫 미판정 허용 후보의 검토 화면
+
+`5d10b6d`에서 질문 범위와 renderer를 먼저 커밋했다.
+[검토 화면](../../50-diagnostics/s11/2026-10-14-candidate-rgb-trial/opposition-review.png)은
+sample4 f1140/38 s의 원본 ROI와 새 후보 idx7/Y887, idx10/Y880, idx22/Y882를
+각각 표시한다. 초록 idx9/Y844는 기존 허용 문맥이고 노란 십자만 새 질문이다.
+십자는 후보 대표점이며 수평 경로·주변 픽셀 라벨이 아니다. 원본 104×104를
+nearest-neighbor 3배로 표시하고 원본 문맥 배열 동일성을 검사했다. 화면을 직접
+확인해 원본·표식·설명에 잘림이나 겹침이 없음을 확인했다.
+
+[Subject 결합](../../50-diagnostics/s11/2026-10-14-candidate-rgb-trial/opposition-review.json)은
+187개 전체 join, 18개 전체 잠재 대조와 시간순 첫 프레임의 3개 질문을 검증하고
+각 query/source/image hash를 보존한다. model call과 새 라벨은 모두 0이다.
+14–16 s의 C1/N5 원형 테두리 판정과 40–44 s의 기존 오출력 판정은 닫힌 범위로
+유지했다. 이 기록들은 지금 표시한 38 s의 세 후보에 대한 실용적 허용 판정이
+아니므로 새 후보만 묻는다. 모델 점수는 화면에 표시하지 않았다.
+
+관리 실행 `s11-candidate-rgb-review-20261014-001`은 검토 PNG 69,254 bytes와 JSON
+8,407 bytes만 Git 위치에 보존하고 중복 둘을 제거했다. 관리 실행 31개 오류 0.
+답변이 오면 exact subject에 허용/거부/미판정으로 결합해 저장된 모델 결정과
+비교한다. 다른 15개나 이웃 후보·프레임으로 확대하지 않으며 새 학습은 하지
+않는다. 세 후보 중 거부가 있다면 현재 모델의 실제 오수용으로 기록해야 한다.
+
+공개 전 변경 Markdown 7개의 로컬 링크 1,190개와 새 docs 파일 13개의 catalog
+등록을 확인했다. Detector Governance와 whitespace 검사도 통과했다. 현재 Oil
+worktree는 main 한 개이며 이 작업의 임시 plan/선택표/산술 script 9개는 관리
+표식과 검증 기록을 남긴 뒤 제거했다. 고정된 기존 환경·원본·다른 작업 자료는
+복제하거나 삭제하지 않았다.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION`.
