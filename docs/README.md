@@ -106,6 +106,10 @@ conditions. Post-CR1 WP01–WP10 map only in Work Plan's live ledger; they do no
 replace O/W/P gates or the earlier package's differently numbered WP aliases.
 Neither the source's report worksheet nor its Windows table is an executed
 acceptance result. Original CR-1 failure and scope-limited usefulness remain intact.
+The [executable WP02–03 preflight](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md)
+binds the saved vectors to original candidates and available O1/A1 records, keeps
+all exposed-data limits, and supplies a targeted f1485 competitor review. It is
+an offline input contract, not a calibrated classifier or production schema.
 
 The [October 12 program review](70-reference/s11-program-review-2026-10-12/README.md)
 is preserved with all seven native outputs mapped by its import manifest. The

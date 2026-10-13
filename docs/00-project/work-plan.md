@@ -3,8 +3,8 @@
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery` / `ACTIVE`.
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
-**Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. Specification intake adds no detector behavior.
-**Next transition:** prepare the post-CR1 WP02–03 executable preflight: the single local-role/absolute-support policy, applicable geometry, calibration/evaluation exposure, label precision, resource bounds and impact criteria. The policy family is adopted for design; `tau_support` and suitable calibration/held-out sources remain unset. All 164 CR-1 records remain exposed development evidence. No calibrated classifier, consumer or sequential efficacy run is ready.
+**Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1 offline preflight adds no detector behavior.
+**Next transition:** resolve the targeted sample4 f1485 B-candidate role question in the [WP02–03 preflight](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md), then qualify the calibration/evaluation inputs and native claim scope. The saved-measurement contract is implemented and verified on all 164 records; `tau_support`, impact bounds and suitable calibration/held-out sources remain unset. A B-candidate reply alone cannot supply an independent evaluation set or accept a classifier. No production shadow, consumer or sequential efficacy run is ready.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 13 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
@@ -30,8 +30,8 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | O1 extraction | IMPLEMENTED; locally ACCEPTED | Reuse trace-only [O1](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md); no identity authority |
 | W0–W3 / O2 foundations | Fixed profile CLOSED WITHOUT PROMOTION; target/aggregation, bounded scene review and evaluation tools locally verified; D1 return CLOSED | Reuse [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) and [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed); prediction/efficacy is not established by tooling |
 | P0 / W4 / WP01 — baseline and intake | COMPLETE at saved-evidence scope | [Intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md) verifies vectors, report extrema and numeric cadence; physical cadence remains NOT_EVALUATED |
-| W4/P2 / WP02 — operating policy | Design family adopted; executable preflight OPEN | [CR-1 design](../20-architecture/s11-contextual-role-observation-design.md#post-cr1-operating-policy-proposal): preserve vectors/availability, local role competition and absolute support; freeze geometry/claim scope without choosing a cutoff from exposed results |
-| V2/V3 / WP03 — calibration and evaluation | OPEN; no suitable split established | Freeze source/episode/exposure/label manifest, selection method and impact criteria. Existing 164 records and known Windows checkpoints are not untouched holdout; missing data cannot be solved by renaming a split |
+| W4/P2 / WP02 — operating policy | Saved-contract preflight IMPLEMENTED and VERIFIED; physical policy remains uncalibrated | [Preflight](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md): 164 exact candidate/context joins, raw-vector references, availability/floor–ceil/native lineage and original geometry/bank pins; no cutoff or physical decisions |
+| V2/V3 / WP03 — calibration and evaluation | Exposure/claim manifest and selection procedure recorded; input qualification OPEN | No calibration/holdout sources qualified. Pending f1485 idx8/Y841 role review is limited development truth; preserve P0/Windows scope, loss/negative-family tradeoff and independent evaluation entry |
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
 | O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | PROPOSED; separate from WP05 | Explicit route for independently role-supported native candidates; name the replaced heuristic. Repair association/lifecycle only if saved earliest-loss evidence identifies that owner; preserve FULL/EMPTY/refill/drain |
@@ -56,10 +56,13 @@ full-texture veto, category voting or maximum-score candidate selection. Low
 support/ties/missing evidence do not prove structure. Native candidate linkage
 and qualified role precision remain independent of descriptor preference.
 
-The first next deliverable is a concrete WP02–03 manifest/preflight, with unresolved
-source availability stated honestly. Data-neutral schema/availability/coordinate
-work and saved-result checks may proceed within the existing local grant; numeric
-calibration and new inference require the frozen inputs and acceptance entry.
+The [WP02–03 manifest/preflight](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md)
+now verifies the saved contract without fitting. Its one targeted source question
+is f1485 B/idx8: representative Y841, native center-sector sample Y838, versus the
+already confirmed A/idx19/Y836. These are different coordinate meanings; no
+proximity label or automatic native-position repair follows. Existing A truth
+stays closed. Numeric calibration and new inference still require qualified
+inputs and acceptance entry; the source reply does not waive those conditions.
 Do not require all 150 unknown candidates to be labeled. Start with decision-bearing
 competitors using existing source judgments; ask only for genuinely new necessary
 physical judgments. Comparative filming is unavailable; do not repeat that question.
@@ -90,7 +93,7 @@ The [CR-1 complete readout](../50-diagnostics/s11/2026-10-12-cr1-context-compari
 retains all 164 records, original exposure groups, first-trial failure and the
 scope-limited follow-up. The [October 13 worktree check](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md#워크트리와-산출물-정리)
 finds one main worktree and no eligible sibling merge. Retain one existing CR-1
-environment/model/cache set under its [3 GB contract](../20-architecture/s11-contextual-role-observation-design.md#local-footprint-and-removal-contract).
+environment/model set under its [3 GB contract](../20-architecture/s11-contextual-role-observation-design.md#local-footprint-and-removal-contract); unused installer cache was removed.
 Use [managed artifact closeout](../40-operations/experiment-artifact-lifecycle.md)
 for new outputs; do not restore retired bulk runs or duplicate source/media.
 

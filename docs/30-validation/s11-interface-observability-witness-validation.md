@@ -1490,6 +1490,20 @@ The schema/shadow slice retains default OFF, exact old-field/candidate/sequence/
 CSV/event/report equality and NONE/FULL equality. It does not install a default
 Torch dependency or acquire resolver authority.
 
+The [saved-contract preflight](../../tests/diagnostics/s11_contextual_role_preflight.py)
+is a preceding offline check, not that production schema/shadow slice. Its
+[controls](../../tests/unit/test_s11_contextual_role_preflight.py) cover preserved
+full/local vectors, tiny signed advantages, unit-vector roundoff without clipping,
+missing support/classes, floor/ceil disagreement, ties, invalid numerics and
+broken source/candidate/geometry bindings. Also reject a supplied threshold or
+an exposed-corpus holdout, retain every roster member and P0 obligation, and
+exercise the standalone CLI outside repository cwd with overwrite refusal.
+Saved data may contain no actual tie/disagreement; synthetic controls exercise
+those states without being counted as new encoder-through-pixel evidence.
+The original vector table remains the evidence owner; native O1/A1 presence and
+source review each retain their own precision. A new candidate reply does not
+make the reviewed recording independent or supply fixed-X scalar truth.
+
 After O2, evaluate the first O3 role condition on both anchor and continuation
 paths with Recipe, sampling, candidate capacity, lifecycle and Foam fixed. Join
 every changed selection, owner and numeric row to the original native candidate;

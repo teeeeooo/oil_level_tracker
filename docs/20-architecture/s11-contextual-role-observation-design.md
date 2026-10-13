@@ -306,6 +306,40 @@ requirements, not values inferred from this proposal. Numeric publication keeps
 the selected current native candidate Y. A future fixed-X representation needs
 its own candidate/support lineage; no post-selection snapping or reference Y.
 
+### Executable saved-contract preflight
+
+[The offline CR1 adapter](../../tests/diagnostics/s11_contextual_role_preflight.py)
+uses the existing O2 hash, validation and write-once helpers. The distinct adapter
+is needed because CR1 records carry full/local role vectors and floor/ceil anchors,
+not the O1 sector-score envelope. It does not modify the frozen CR1 runner,
+production Witness dataclasses, extraction, serialization or consumers.
+
+Its versioned [input manifest](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/manifest.json)
+pins the original recording, score table, prepared roster, reference bank and
+geometry. Every candidate binds to its original frame/time/index/source/Y and,
+where present, existing O1/A1 native support. Candidate representative Y, a native
+sector sample and an exact fixed-X intersection remain separate meanings. Native
+support availability never certifies its physical role.
+
+The readout preserves complete score/variant/support evidence through hashed
+JSON pointers to the existing table rather than duplicating it. Derived minimum
+support and signed margins are measurements only. Ties, disagreement, partial
+availability and unavailable measurements remain distinct; malformed provenance,
+nonfinite scores or missing required anchors reject the input. Score-bound
+roundoff uses the original verifier's `1e-12` allowance without clipping; that
+tolerance is separate from the `1e-6` preference tie rule. All decisions remain
+`NOT_EVALUATED`, including when both measurements and native geometry exist.
+
+The calibration procedure enumerates support breakpoints only after suitable
+calibration inputs are independently frozen. Compare positive loss, wrong-target
+acceptance by reviewed family and unresolved/availability denominators; retain
+the tradeoff frontier for one bounded operating-point review. Impact bounds and
+the point itself must be qualified before evaluation. This preflight neither
+enumerates those breakpoints nor relabels exposed sources as holdout. It supplies
+no negative classifier, model inference, default dependency or production shadow.
+Its [completed contract checks and remaining question](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md)
+are separate from physical usefulness and O2/V5 acceptance.
+
 ### Separate Oil behavior slices after shadow acceptance
 
 1. **Same-frame role condition:** after O2/V5 and a separate O3 plan, consume the

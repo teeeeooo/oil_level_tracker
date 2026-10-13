@@ -1,0 +1,149 @@
+{
+  "schema": "s11-contextual-role-preflight-v1",
+  "base_head": "94f9cb48a34f04e2dd0b23cf35666bb26d6eda01",
+  "scope": "WP02 executable saved-measurement contract and WP03 exposure/claim feasibility only. No inference, fitting, physical decisions or production schema migration.",
+  "inputs": {
+    "cr1_preflight": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/preflight.json",
+      "sha256": "6a1bd712cee94b416b7a1d984d1e1186f18d263a4b7e4c492c6e5709dfe15331"
+    },
+    "followup_preflight": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/followup-preflight.json",
+      "sha256": "1cd66f5564bacc3bf94ef5f6d41a91dea972e0222f7c7d37cae9aaf66011df21"
+    },
+    "readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/followup-readout.json.gz",
+      "sha256": "c5db499375234c63d27306865a74d21165e07f4d67995149d05a78dec6d2fd4e"
+    },
+    "prepared": {
+      "path": "sample/output/s11-cr1-workspace/runs/readiness-20261012-001/evidence/prepared.json",
+      "sha256": "118caed4fccda8f0eada3bf6c4bf2e653c8eeee6bb067805a92a0b407e736668"
+    },
+    "scene_roster": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-scene-evaluation-roster.json",
+      "sha256": "695fdf739f869406f20bdcc7bbc599f76de5e62b86ffb1ac22bbb6092e0b57f0"
+    }
+  },
+  "source_identity": {
+    "path": "sample/sample4.mp4",
+    "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+    "source_count": 1,
+    "exposure": "all existing CR1 rows are exposed development"
+  },
+  "geometry_sha256": "ab2a1016cec7ff318c905175e67bccb0881bfdc8047f675a8778998e3c40d050",
+  "bank_sha256": "6af651a20d73ab5e68653f59e9425b64225f727da468b3fc8cf4b0d6c714b01c",
+  "geometry_scope": {
+    "owner": "cr1_preflight#/geometry",
+    "native_shape": [
+      104,
+      104
+    ],
+    "canvas": [
+      224,
+      224
+    ],
+    "native_pixels_per_token": 6.5,
+    "transfer": "UNQUALIFIED; different geometry/scale/source requires a separately frozen support contract",
+    "scalar": "Original source candidate Y, never snapped or replaced; regional support is not localization truth"
+  },
+  "policy": {
+    "id": "local-role-and-absolute-support-v1",
+    "tau_support": null,
+    "tie_epsilon": 1e-06,
+    "absolute_support": "minimum local interface similarity over ALL required floor/ceil variants",
+    "competition": "interface - max(structure,texture), separately for every variant; numerical margin > 1e-6",
+    "full_context": "retained diagnostic context; no universal texture veto",
+    "negative_decision": "NOT_QUALIFIED; failure of positive support is not negative evidence",
+    "decision": "NOT_EVALUATED",
+    "candidate_selection": "NONE; no highest-score winner"
+  },
+  "partitions": {
+    "development": [
+      "all 164 original CR1 records, with original three exposure groups"
+    ],
+    "calibration": [],
+    "holdout": [],
+    "grouping": "Same recording and dependent episodes/crops/transforms/coordinates remain together. No relabeling of exposed sources as untouched holdout."
+  },
+  "calibration_selection_procedure": {
+    "state": "METHOD_DECLARED_INPUTS_NOT_READY",
+    "fit_feature": "local conservative support; fixed role-competition sign and numerical tie rule",
+    "method": "On independently frozen calibration inputs only, enumerate support-score breakpoints and report positive loss, wrong-target acceptance by reviewed family, unresolved and availability denominators. Retain the tradeoff frontier for bounded operating-point review; do not optimize on evaluation sources. Choose at most one threshold after impact bounds and the label/geometry scope are qualified. No threshold search runs in this preflight.",
+    "positive_loss_bound": null,
+    "wrong_target_acceptance_bounds": null,
+    "evaluation": "Freeze independent source/episode groups before any scores; one locked evaluation after selection. Existing Windows stories remain exposed qualification/regression evidence."
+  },
+  "scene_claims": {
+    "p0_roster_input": "scene_roster",
+    "p0_unit_ids": [
+      "BASE-WEAK-OVERLAY",
+      "S2-EARLY",
+      "S2-REFRAMING",
+      "S3-RETAINED",
+      "S4-OIL-IDENTITY",
+      "S4-OIL-MOTION",
+      "S4-FOAM-UPPER",
+      "WATER-EMPTY",
+      "WATER-ENTRY",
+      "WATER-INCLINED",
+      "WATER-FOAM-A",
+      "WATER-SURFACE-BC",
+      "BEER-FORMING",
+      "BEER-CROPPED",
+      "MILK-EMPTY",
+      "MILK-BULK-FROTH",
+      "WS1-BASE-FULL-PREFIX",
+      "WS1-BASE-DRAIN",
+      "WS1-BASE-RAPID-REFILL",
+      "WS1-BASE-FULL-SUFFIX",
+      "WS1-ACCUM-EMPTY",
+      "WS1-ACCUM-ENTRY-SPLASH",
+      "WS1-ACCUM-FOAM-LAYERED",
+      "WS1-ACCUM-POST-FOAM",
+      "WS1-ACCUM-DRAIN"
+    ],
+    "public_compressor": "Additional exposed development source: existing f1499/X578 upper 323–338 and lower 421–435 intervals, not unique native candidate labels or untouched evaluation. Geometry/bank transfer not qualified.",
+    "oil_scalar_precision": "Original seven candidate correspondences, three wrong targets; no new exact fixed-center tolerance.",
+    "foam": "No Foam-upper prototype in CR1; upper role/raw representation remains an independent WP07 path.",
+    "retired_source": "sample3 existing evidence only; no decode, scoring or clip mining"
+  },
+  "resources": {
+    "encoder_forwards": 0,
+    "video_decode": false,
+    "max_records": 164,
+    "max_variants_per_record": 2,
+    "max_json_input_bytes": 8388608,
+    "max_output_bytes": 600000,
+    "scratch_budget_bytes": 2000000,
+    "retain_budget_bytes": 700000,
+    "workspace_allocated_bytes_limit": 3000000000,
+    "later_inference": "Existing CPU budget is a starting ceiling, not measured end-to-end/Windows cost; freeze new input counts and decoder/preprocessing/encoder/query/sequence/report bounds before execution."
+  },
+  "blockers": [
+    {
+      "id": "CALIBRATION_EVALUATION_INPUTS",
+      "status": "OPEN",
+      "reason": "Zero qualified calibration sources and zero untouched evaluation recordings; the one scored recording and all P0/Windows sources are already exposed."
+    },
+    {
+      "id": "NATIVE_ROLE_PRECISION",
+      "status": "OPEN",
+      "reason": "Candidate-centred regional prototypes and existing approximate/interval replies do not certify native contour or fixed-X scalar role. No proximity label transfer."
+    },
+    {
+      "id": "DECISION_BEARING_COMPETITOR",
+      "status": "OPEN",
+      "reason": "sample4 f1485 material_path idx8/Y841 is UNREVIEWED versus confirmed phase_transition_scan idx19/Y836; preserve both views, neither argmax nor distance supplies truth."
+    },
+    {
+      "id": "OPERATING_POINT_IMPACT",
+      "status": "OPEN",
+      "reason": "tau_support and loss/negative-family impact bounds are unset; protected false extrema and movement-erasure criteria remain, no new pointwise perfection requirement."
+    },
+    {
+      "id": "GEOMETRY_AND_RUNTIME_TRANSFER",
+      "status": "OPEN",
+      "reason": "No transfer qualification beyond fixed sample4 CR1 geometry/bank and no target-Windows resource/shadow evidence."
+    }
+  ]
+}

@@ -1171,3 +1171,14 @@ author 시각을 Asia/Seoul로 환산한 2026-10-12로 확정했습니다.
 | 2026-10-13 | [70-reference/s11-post-cr1-review-2026-10-12/SHA256SUMS.txt](70-reference/s11-post-cr1-review-2026-10-12/SHA256SUMS.txt) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
 | 2026-10-13 | [70-reference/s11-post-cr1-review-2026-10-12/audit_cr1_saved.py](70-reference/s11-post-cr1-review-2026-10-12/audit_cr1_saved.py) | 첨부 historical 재현 스크립트; 제품/테스트 discovery 밖; 작성일 2026-10-12 |
 | 2026-10-13 | [70-reference/s11-post-cr1-review-2026-10-12/import-manifest.json](70-reference/s11-post-cr1-review-2026-10-12/import-manifest.json) | ZIP/member hash·기존 중복·워크트리/브랜치 판단; 작성일 2026-10-13 |
+
+### 2026-10-13 post-CR1 executable policy preflight
+
+아래 파일의 작성일은 2026-10-13이며 최초 Git 추가일은 등록 후 확인합니다.
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 미등록 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md) | 저장 관측 계약 검증·자료 적합성·한정된 후보 역할 질문 |
+| 미등록 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/manifest.json](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/manifest.json) | 한 운영정책·geometry/bank·자료 노출·미지정 calibration·입력 pin |
+| 미등록 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/readout.json.gz](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/readout.json.gz) | 전체 164개 후보/문맥과 raw-vector·native-lineage 연결, 물리 결정 미실행 |
+| 미등록 | [50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/review.html](50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/review.html) | f1485 A/B 원본 및 기록된 표본 위치 검토; 새 정답 아님 |
