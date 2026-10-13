@@ -1396,4 +1396,6 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-policy-feasibility/public-comparison-plan.json](50-diagnostics/s11/2026-10-14-oil-policy-feasibility/public-comparison-plan.json) | 기존 public 관측을 통한 실용적 후보 보존 필요조건 고정 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-policy-feasibility/public-readout.json](50-diagnostics/s11/2026-10-14-oil-policy-feasibility/public-readout.json) | 허용 후보 4개 모두 sign 조건 미충족인 반례와 전체 23개 분모 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-candidate-rgb-trial/plan.json](50-diagnostics/s11/2026-10-14-candidate-rgb-trial/plan.json) | 후보 RGB 관측·학습/평가 분리·변형·ablation·자원 고정 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-candidate-rgb-trial/prepared.json](50-diagnostics/s11/2026-10-14-candidate-rgb-trial/prepared.json) | 187개 전체 기록·실제 patch 의존성·15개 필수 대조 입력 고정 |
+| 2026-10-14 | [60-evidence/s11/2026-10-14-candidate-rgb-trial.md](60-evidence/s11/2026-10-14-candidate-rgb-trial.md) | 후보 RGB 실제 준비·고정 단일 비교·검증 기록 |
 | 2026-10-14 | [60-evidence/s11/2026-10-14-oil-policy-feasibility.md](60-evidence/s11/2026-10-14-oil-policy-feasibility.md) | 필요조건 실제 실행·한계 및 다른 촬영원 연결 |

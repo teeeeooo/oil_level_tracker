@@ -251,7 +251,11 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 
 The October 14 request authorizes attachment/worktree reconciliation, validity review,
 follow-up planning, duplicate cleanup, necessary integration and autonomous commits/pushes.
-This intake does not execute the proposed successor observation or add a training grant.
+The intake itself did not execute a successor observation. The user's subsequent
+staged-continuation instruction authorizes concrete local implementation and checks
+until necessary human judgment or Windows work is reached. The scoped public reply
+has now been bound and tested; Main adopted the complete candidate-local RGB contract
+above under that continuing authority, with all 15 required inputs verified.
 The preceding October 13 instruction authorizes phased implementation, appropriate
 verification, cleanup and autonomous commits/pushes until a necessary user judgment
 or Windows task is reached. The follow-up explicitly adopts opposition-first
@@ -267,11 +271,12 @@ Main performs implementation/review; no further sub-agents are authorized.
 Stop for a genuinely necessary new user judgment or deliberate Windows work.
 Assistant image interpretation may precede a targeted question but is not human truth.
 
-The earlier isolated frozen DINOv2 exception remains historical. The latest
-adoption covered **one from-scratch 1,118-parameter capability trial**, now completed,
-using the linked frozen inputs/split/seed/optimizer/resources in the existing local
-Torch environment. It does not authorize fine-tuning DINOv2, model search, extra
-training runs or default product/package adoption. Post-CR1 policy and Foam
+The earlier isolated frozen DINOv2 exception and completed native-surface trial
+remain historical. The current adoption covers **one separately specified
+candidate-local RGB trial**, with its own frozen population/supervision/split and
+the existing 1,118-parameter architecture/resources in the local Torch environment.
+It does not authorize fine-tuning DINOv2, model search, retries after this fixed
+outcome or default product/package adoption. Post-CR1 policy and Foam
 inference still need their executable gates; production consumption cannot precede
 O2/V5 and separate behavior acceptance. Retain the existing CR-1 environment/weights/
 caches; general duplicate cleanup does not request their removal.
