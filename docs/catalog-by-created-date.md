@@ -1314,3 +1314,13 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-readiness/review-proposal.json](50-diagnostics/s11/2026-10-13-native-role-readiness/review-proposal.json) | N1–N3 원본 경로·그림·판정 정밀도 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-readiness/native-role-review.png](50-diagnostics/s11/2026-10-13-native-role-readiness/native-role-review.png) | 원본과 native 경로를 나란히 표시한 검토 그림 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-readiness/render_review.py](50-diagnostics/s11/2026-10-13-native-role-readiness/render_review.py) | 원본 pixels/native polyline 검토 재현기 |
+
+### 2026-10-13 native 역할 응답과 연구 범위 준비
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-13 | [60-evidence/s11/2026-10-13-native-role-qualification.md](60-evidence/s11/2026-10-13-native-role-qualification.md) | N1–N3 응답·입력 의존성·검증·다음 선택 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-qualification/review-reply.json](50-diagnostics/s11/2026-10-13-native-role-qualification/review-reply.json) | 사용자 원문과 정확한 subject/그림 결속 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-qualification/qualification.json](50-diagnostics/s11/2026-10-13-native-role-qualification/qualification.json) | 허용 역할 집합·완전한 RGB context·공유 dependency |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-qualification/verification.json](50-diagnostics/s11/2026-10-13-native-role-qualification/verification.json) | 37 tests·실제 CLI·독립 NumPy footprint 검증 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-qualification/g1-pilot-proposal.json](50-diagnostics/s11/2026-10-13-native-role-qualification/g1-pilot-proposal.json) | 별도 채택 전 한정 학습의 data/head/loss/split/비용/중단 제안 |

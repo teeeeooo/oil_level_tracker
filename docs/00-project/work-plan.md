@@ -4,8 +4,8 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1 and native G0 offline preflights add no detector behavior.
-**Next transition:** receive the three scoped native-path role judgments in the [N1–N3 review packet](../60-evidence/s11/2026-10-13-native-role-readiness.md#준비도와-다음-판단). **NSR-1 G0 binding is implemented and verified; role learning is NOT_READY.** Use only the qualified response scope to freeze one useful G1 observation and its opposition. A successor classifier/training plan remains unselected; no production consumer is authorized before its existing gates.
-**Latest checkpoint:** [G0 evidence](../60-evidence/s11/2026-10-13-native-role-readiness.md) preserves all 43 contexts/1,335 edges and 164 Oil records, source/frame view dependencies and weak-review precision. N1–N3 are newly displayed native fragments; the prior R/L, interval, water B/C and f1485 A/B judgments remain closed. **User role judgment is pending; Windows work is not yet required.** The [program intake](../60-evidence/s11/2026-10-13-program-review-intake.md) remains the attached-package checkpoint.
+**Next transition:** choose the [bounded surface/internal learning proposal](../60-evidence/s11/2026-10-13-native-role-qualification.md#검토-가능한-다음-선택), or qualify additional source-separated native opposition first. **N1–N3 roles and proposed input support are bound and verified; training scope adoption is pending.** N1 permits Foam-upper and oscillating-liquid-upper interpretations, N2 is internal Foam change, N3 is external Foam upper. This roster cannot establish full G1 efficacy; production consumers remain gated.
+**Latest checkpoint:** [Native role qualification](../60-evidence/s11/2026-10-13-native-role-qualification.md) records all three replies, complete proposed 7×7 context and N1/N2's 90 shared input pixels; 37 focused tests pass. Frozen G0 retains all 43 contexts/1,335 edges and 164 Oil records. **The N1–N3 review is closed; a new learning-scope decision is pending, and Windows work is not yet required.** The [program intake](../60-evidence/s11/2026-10-13-program-review-intake.md) remains the attached-package checkpoint.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [post-CR1 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
@@ -29,12 +29,12 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | O1 extraction | IMPLEMENTED; locally ACCEPTED | Reuse trace-only [O1](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md); no identity authority |
 | W0–W3 / O2 foundations | Fixed profile CLOSED WITHOUT PROMOTION; target/aggregation, bounded scene review and evaluation tools locally verified; D1 return CLOSED | Reuse [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) and [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed); prediction/efficacy is not established by tooling |
 | P0 / W4 / WP01 — baseline and intake | COMPLETE at saved-evidence scope | [October 13 program intake](../60-evidence/s11/2026-10-13-program-review-intake.md) verifies pins, canary and saved report extrema; P0 A/B/C/U remains the impact owner, physical cadence NOT_EVALUATED |
-| W4/P2 / WP02 — observation/policy | CR1 and NSR G0 binding IMPLEMENTED and VERIFIED; role observation NOT_READY | [G0](../60-evidence/s11/2026-10-13-native-role-readiness.md) binds paths, geometric support, shared views and dependency limitations. Next freeze one qualified role observation; no classifier or physical decisions yet |
-| V2/V3 / WP03 — qualification and evaluation | A/B and original weak units BOUND; N1–N3 user judgment PENDING | Preserve the [review supplement](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md#실행-도구에-판정-의미-반영). New [packet](../50-diagnostics/s11/2026-10-13-native-role-readiness/review-proposal.json) asks only displayed-fragment roles; approximation/unassessable answers cannot become physical positives. Training/calibration/independent evaluation remain separate |
+| W4/P2 / WP02 — observation/policy | G0 and scoped role/input qualification VERIFIED; learning proposal awaiting adoption | [N1–N3](../60-evidence/s11/2026-10-13-native-role-qualification.md) support one limited surface/internal trial. Architecture/loss/split/budget are concrete; no fitting or classifier decision has run |
+| V2/V3 / WP03 — qualification and evaluation | N1–N3 CLOSED and BOUND; independent native opposition still missing | [Reply supplement](../50-diagnostics/s11/2026-10-13-native-role-qualification/review-reply.json) preserves N1's allowed set and whole-fragment role precision. N1/N2 share a frame and pixels; N3 is exposed positive transfer only. A/B and all original weak units remain unchanged |
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
 | O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | PROPOSED; separate from WP05 | Explicit route for independently role-supported native candidates; name the replaced heuristic. Repair association/lifecycle only if saved earliest-loss evidence identifies that owner; preserve FULL/EMPTY/refill/drain |
-| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | R/L CLOSED WITHOUT PROMOTION; G0 binding VERIFIED; role feasibility NOT_READY | Full G0 population retains 151 prior R/L unavailable rows, missing labels and separate face/edge reachability. First capability is external Foam upper versus internal path; source-role judgment precedes its frozen feasibility and independent raw-front integration |
+| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | R/L CLOSED WITHOUT PROMOTION; three native roles qualified; G1 efficacy NOT_EVALUATED | N3 qualifies its displayed external upper path, not a recovered raw front. The bounded surface/internal pilot cannot qualify optical/structure safety or full G1; independent raw-front integration remains separate |
 | P5-c / WP08 — Foam episode | ENTRY NOT MET | Open only for an independently qualified correct raw upper lost downstream; separate onset/stable-layer versus splash/residue controls |
 | O5/W7/P6/D6 / WP09 — integrated Windows and report | PENDING integrated candidate | Exact runtime, all nine canonical segments, target resources and actual independent report-only reading; V5 shadow and final field acceptance remain separate |
 | P7 / WP10 — disposition and closeout | PENDING acceptance evidence | Record accepted/limited/rejected/unassessed scope and residual impact; retain minimal evidence. S11-M/S12 follow the roadmap, not partial local success |
@@ -54,17 +54,18 @@ actual native paths and complete feature support. Reusing path geometry alone or
 renaming the failed R/L similarity is insufficient. The supplied three-convolution
 7×7 head is a research option, not an adopted training plan or a proven classifier.
 
-1. **WP02/03 + WP07, G0 binding complete:** the bounded adapter reuses O2/A1,
-   native fragments and boundary faces. The full readiness table preserves
-   missing correspondence and original weak units. **Pause for N1–N3 roles**:
-   Water f1232 paths at X950/Y477 and Y487, Sample4 f1620 path at X595/Y813.
-   Classify only the displayed fragment; partial/approximate/unassessable replies
-   remain scoped. Do not relabel an entire interval or ask for dense masks.
-2. **G1 only after readiness:** freeze one observation/comparison, source/episode
-   exposure, per-appearance outcomes, costs and stop rules. If the selected method
-   needs learning, present its concrete data/architecture/loss/run-budget scope
-   for separate adoption before training. Missing role evidence yields a named
-   NOT_READY result rather than threshold tuning or implicit labels.
+1. **WP02/03 + WP07, G0 and scoped qualification complete:** the original binding
+   remains frozen. N1 allows Foam/liquid external-surface interpretations, N2 is
+   internal Foam change, N3 is external Foam upper, only on the displayed paths.
+   Complete 7×7 context is available; N1/N2 share 90 pixels and cannot be split.
+2. **New learning-scope decision:** the [concrete proposal](../50-diagnostics/s11/2026-10-13-native-role-qualification/g1-pilot-proposal.json)
+   specifies a 1,118-parameter ordered-context head, equal fragment losses,
+   N1/N2 fitting, N3 exposed positive transfer, one seed/1,000 steps and 10-minute/
+   1-GB-RSS limits. Adopt that single bounded trial or qualify new source-separated
+   internal/structure opposition first. No training is authorized by the role
+   reply alone. Even a useful positive transfer is not full G1 PASS: independent
+   wrong-acceptance and internal-transfer evidence remain missing. No crop,
+   threshold, seed or head-size retries follow automatically.
 3. **WP04:** qualified typed Witness delta, default OFF/unavailable fallback,
    V4 equality/resources, then **V5 Windows shadow before O2 acceptance**.
 4. **WP05 then WP06:** separate anchor-and-continuation wrong-output suppression
@@ -120,8 +121,8 @@ Closed judgments remain closed at their original precision. The
 |---|---|
 | Product scalar | Existing fixed Glass center; upper image projection after physical identification. One visible projection is allowed; no lower fallback, shifted column, mean or interpolation. Current candidate Y is not retroactively changed |
 | Sample4 Oil | Original seven correspondences remain historical labels; the clarified B/idx8 adds practical acceptance, no new physical positive. Current f1485 A/B physical-alternative/accuracy claims are unqualified; other judgments retain their scope. Three rejected targets, static/temporal context and 42.5–44 s movement remain; no intermediate exact Y. X595/f1275 rows833–841 are qualified only there. No exact scalar or all-sector truth follows from B or the red marks |
-| Sample4 Foam | Visible upper at 54/55.5/56 s; f1620/X595 rows812–816 qualified. Internal texture and fixed upper rim replies remain opposition; f1635 is unreviewed. Raw Y813 presence alone is not candidate-role proof; component Y833/global top Y808 do not recover the upper |
-| Water | f205 contains entry, not an empty negative; f822 is a qualitative inclined real surface. A/f1232 Foam upper rows476–481 at X950, lower unclear. B/C are no-Foam water surfaces with upper rows484–489/489–494. Front/back projections are one surface, not thickness; no neighboring-frame labels |
+| Sample4 Foam | Visible upper at 54/55.5/56 s; f1620/X595 rows812–816 qualified. Internal texture and fixed upper rim replies remain opposition; f1635 is unreviewed. N3 now qualifies only its displayed Y813 fragment role; component Y833/global top Y808 still do not recover the upper |
+| Water | f205 contains entry, not an empty negative; f822 is a qualitative inclined real surface. A/f1232 Foam upper rows476–481 at X950, lower unclear. N1 now allows external Foam/liquid-upper interpretations and N2 is internal Foam, each only on its displayed native path. B/C are no-Foam water surfaces with upper rows484–489/489–494. Front/back projections are one surface, not thickness; no neighboring-frame labels |
 | Beer / milk | Beer arcs are one thin layer's front/back and cropped upper is unavailable; milk lower interface unclear. Appearance is not exact contour truth or physical absence |
 | Public compressor | Exposed development source outside the original seven-source roster. f1499/X578 Foam rows323–338 and Oil rows421–435 are closed intervals, not exact pixels or continuous truth. Lower candidates survive but an upper anchor is admitted; Foam raw front also misses. Three-frame default linkage is not whole-video qualification |
 | Additional public source, Cold117 | [Source screen](../50-diagnostics/s11/2026-10-13-public-compressor-input.md) and [closed reply](../50-diagnostics/s11/2026-10-13-public-compressor-role-reply.json): four fixed views, zero encoder/detector calls. Midpoint role unassessable at this quality, with tentative Foam impression only. No physical label, calibration/holdout or workflow qualification; no whole-recording unusability claim |
@@ -193,8 +194,9 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 
 The latest October 13 instruction authorizes phased implementation, appropriate
 verification, cleanup and autonomous commits/pushes until a necessary user judgment
-or Windows task is reached. G0 is complete; N1–N3 require new human role correspondence,
-so dependent G1 work pauses here. Existing source judgments are not reopened.
+or Windows task is reached. N1–N3 replies and the prospective input audit are complete.
+The concrete new learning scope now awaits adoption versus additional native opposition
+review; dependent training pauses here. Existing source judgments are not reopened.
 Earlier grants for bounded local development persist subject to the stated gates.
 Main performs implementation/review; no further sub-agents are authorized.
 Stop for a genuinely necessary new user judgment or deliberate Windows work.

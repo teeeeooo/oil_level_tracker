@@ -1638,6 +1638,18 @@ judgments may coexist with NOT_READY native correspondence; only a new subject-b
 human response can qualify that new review unit. Partial/approximate/unassessable
 responses are not dense truth, negative success or a learning grant.
 
+The [N1–N3 supplement](../60-evidence/s11/2026-10-13-native-role-qualification.md)
+qualifies only its displayed paths. Preserve N1's set of allowed Foam/liquid-upper
+interpretations; the common surface target cannot become a pure-material label.
+Verify the exact proposal/display/fragment and RGB binding, full receptive-field
+mask/crop support, path crossings and same-frame dependency intersections. A valid
+patch center alone is insufficient. Do not split N1/N2 or treat their replicated
+patches as independent review units. N3 has no matching source-separated internal
+opposition; a successful exposed positive transfer remains limited and cannot pass
+full G1. Training fit is reported separately, with no loss or negative-success
+labels on the rest of the frozen G0 roster. A predeclared tie/unknown on a required
+positive is failure to demonstrate that limited capability, not useful abstention.
+
 G0 need not label every existing candidate or certify all four proposed head
 outputs. It must declare the smallest capability to be tested and identify its
 required qualified information. READY for geometry alone is not READY for role

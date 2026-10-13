@@ -734,11 +734,45 @@ changes. Foam raw-front integration has its own parent behavior acceptance and,
 if it consumes Witness decisions, O2/V5/O3 entry. Only demonstrated loss of a
 correct raw upper opens episode work. Final field/report acceptance stays separate.
 
+### Scoped native replies and a surface/internal feasibility option
+
+The [N1–N3 qualification](../60-evidence/s11/2026-10-13-native-role-qualification.md)
+adds subject-bound human roles as a supplement to the immutable G0 snapshot.
+N1 permits both external Foam upper and oscillating-liquid upper interpretations;
+its shared evaluation target is **external surface**, not two simultaneous material
+labels or permission to relabel arbitrary Foam as Oil. N2 is internal Foam change;
+N3 is external Foam upper. These judgments do not label surrounding RGB patches,
+branch continuations, adjacent frames or exact coordinate tolerances.
+
+`s11_native_role_qualification.py` reuses G0/O2 pins and raster readers. A separate
+supplement is needed because CR1's qualifier is specifically a withdrawal/practical
+allowance interface, while the frozen G0 manifest describes the pre-review state.
+Neither owner is widened or silently rewritten. The new adapter binds the complete
+displayed path to the saved fragment and checks its actual RGB display and input
+dependencies. It computes no model score.
+
+The [concrete learning proposal](../50-diagnostics/s11/2026-10-13-native-role-qualification/g1-pilot-proposal.json)
+narrows the first research option to **ordered path context → external surface or
+internal Foam change**, not a four-material pixel classifier. Shared three-layer
+valid convolutions produce four latent channels per 7×7 patch; separate upper/lower
+means feed a two-logit head (1,118 parameters). Those latent channels have no assigned
+material labels. Complete patches are required, while an incompletely represented
+path may still supply context. All actual patch dependencies, reuse and crossings
+remain explicit; geometric sides are not asserted to be pure materials.
+
+N1/N2 remain one training-source group; N3 can only be an exposed positive transfer
+probe. One equal-weight loss per fragment prevents longer paths from becoming more
+human labels. This tiny roster cannot establish cross-source internal rejection or
+optical/structure safety. Even successful fitting and N3 transfer cannot pass full
+G1 or authorize any production consumer. Work Plan owns separate adoption of the
+fully specified seed, optimizer, schedule, split, budget and stop rules; preparing
+the proposal and verifying input support do not run or authorize training.
+
 ## History Review
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: the October 13 G0 full-population native binding and original-precision review packet, native-feature dependency canary, weak annotation precision and support-face versus raw-edge reachability; current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
+- Prior mechanisms reviewed: the October 13 G0 full-population binding, N1–N3 scoped replies and complete proposed RGB context with same-frame shared pixels, native-feature dependency canary, weak annotation precision and support-face versus raw-edge reachability; current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
 - Prior mechanisms rejected: threshold/peer-distance rescue, anchor-only fix, cost/maturity-based identity, appearance matching as physical authority, component-extreme Foam replacement and episode relaxation without a correct raw front.
 - Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies, a bounded local footprint and preservation before removal keep the experiment reversible.
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.

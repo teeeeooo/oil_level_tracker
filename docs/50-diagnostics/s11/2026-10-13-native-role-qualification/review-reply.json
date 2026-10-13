@@ -1,0 +1,42 @@
+{
+  "schema": "s11-native-fragment-role-reply-v1",
+  "proposal": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/review-proposal.json",
+    "sha256": "21fa23e718659ec09ec2374f810090ce7599b194fffebc4176f3f4b9e903f13e"
+  },
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/native-role-review.png",
+    "sha256": "39db9e0b5d0fe18a20c31b221c59f863b057e16591c14e35d2d48e9e19523feb"
+  },
+  "response_ko": "N1 : 외부 foam 상단 (사용자에 따라 흔들리는 액체의 상단이라고 생각 할 수 있음. 둘 다 허용)\nN2 : Foam 내부 변화\nN3 : 외부 foam 상단",
+  "answers": [
+    {
+      "id": "N1",
+      "subject_sha256": "3f4b51359ee0efb276d8687abd89423c8612974d02105aea221cc1c4bbc14956",
+      "statement_ko": "N1 : 외부 foam 상단 (사용자에 따라 흔들리는 액체의 상단이라고 생각 할 수 있음. 둘 다 허용)",
+      "allowed_interpretations": [
+        "EXTERNAL_FOAM_UPPER",
+        "OSCILLATING_LIQUID_UPPER"
+      ],
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY"
+    },
+    {
+      "id": "N2",
+      "subject_sha256": "ff2a7455ee0d03774319ba99f67cdb005ad4c623c82725e14022fdd011ecf416",
+      "statement_ko": "N2 : Foam 내부 변화",
+      "allowed_interpretations": [
+        "INTERNAL_FOAM_CHANGE"
+      ],
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY"
+    },
+    {
+      "id": "N3",
+      "subject_sha256": "8d7abbae5c074476332ea39c7b0f2274cd19e976b1bd3be39746966916874921",
+      "statement_ko": "N3 : 외부 foam 상단",
+      "allowed_interpretations": [
+        "EXTERNAL_FOAM_UPPER"
+      ],
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY"
+    }
+  ]
+}
