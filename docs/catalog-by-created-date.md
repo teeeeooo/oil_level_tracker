@@ -1347,3 +1347,9 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/readout.json](50-diagnostics/s11/2026-10-13-native-surface-trial/readout.json) | 다섯 경로 최종 logits·손실/오수용·조건/비용·종료 판정 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/final-weights.npz](50-diagnostics/s11/2026-10-13-native-surface-trial/final-weights.npz) | 재학습 없는 산술 재검증용 1,118개 최종 parameter |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-surface-trial/verification.json](50-diagnostics/s11/2026-10-13-native-surface-trial/verification.json) | 49 tests·입력/가중치·독립 NumPy 계산·실제 CLI 범위 |
+
+### 2026-10-13 기존 자료 재사용 인수인계
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-13 | [60-evidence/s11/2026-10-13-existing-material-handoff.md](60-evidence/s11/2026-10-13-existing-material-handoff.md) | N1–N5 시험 종료·Artifact/마스크 이력·관리 보완 이후 체크포인트와 재개 메시지 |
