@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1 offline preflight adds no detector behavior.
-**Next transition:** execute the frozen [two-appearance material-side diagnostic](../50-diagnostics/s11/2026-10-13-foam-material-sides/preflight.json) under WP07/P5-a after input/geometry/control verification. The [R reply](../50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json) approves very fine Foam and the [L reply](../50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-reply.json) approves large-grained Foam at their displayed footprints; both questions are CLOSED. Keep separate reference/side scores and internal appearance transitions, 43 contexts/1,335 edges and all unavailable rows. Water A is now reference exposure, not independent large-grain/dark-Foam evaluation. Weak similarity does not prove non-Foam. Physical calibration, independent evaluation and production shadow/consumer entry remain unmet.
+**Next transition:** design-entry review for a genuinely different material-role observation, using existing native path/support owners. The [fixed R/L side comparison](../50-diagnostics/s11/2026-10-13-foam-material-sides.md) is COMPLETE / CLOSED_WITHOUT_PROMOTION: all 1,335 edges retained, 1,184 measured; sample4's upper-range Y813 loses required upper-side support, three internal-texture guides lack exact centre edges, and constructed large→fine Foam gives positive contrast to both references. No crop/scale/reference/cutoff retry of this operation is queued. A successor must resolve physical side support, token/context sharing and internal/no-Foam opposition before another preflight. [R](../50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json) and [L](../50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-reply.json) are approved finite interior references; both questions stay CLOSED. Reference scenes stay exposed. Physical calibration, independent evaluation and production shadow/consumer entry remain unmet.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 13 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
@@ -35,7 +35,7 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
 | O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | PROPOSED; separate from WP05 | Explicit route for independently role-supported native candidates; name the replaced heuristic. Repair association/lifecycle only if saved earliest-loss evidence identifies that owner; preserve FULL/EMPTY/refill/drain |
-| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | R and L references APPROVED; two-appearance operation FROZEN; physical selection OPEN | [Preflight](../50-diagnostics/s11/2026-10-13-foam-material-sides/preflight.json): 43 contexts/1,335 existing centre edges, separate references, full/local side scores and internal-transition controls. All missing support/RGB remain unavailable. Run once under fixed resources; typed consumers retain O2/O3 |
+| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | R/L reference qualification COMPLETE; fixed material-side comparison CLOSED WITHOUT PROMOTION; physical selection OPEN | [Readout](../50-diagnostics/s11/2026-10-13-foam-material-sides.md): 43 contexts/1,335 edges, 1,184 measured with separate full/local R/L pairs, 151 unavailable; internal appearance-transition and no-Foam context overlap remain. Successor design must address native physical side support, token sharing and independent opposition; no retry of the frozen geometry/bank or episode relaxation |
 | P5-c / WP08 — Foam episode | ENTRY NOT MET | Open only for an independently qualified correct raw upper lost downstream; separate onset/stable-layer versus splash/residue controls |
 | O5/W7/P6/D6 / WP09 — integrated Windows and report | PENDING integrated candidate | Exact runtime, all nine canonical segments, target resources and actual independent report-only reading; V5 shadow and final field acceptance remain separate |
 | P7 / WP10 — disposition and closeout | PENDING acceptance evidence | Record accepted/limited/rejected/unassessed scope and residual impact; retain minimal evidence. S11-M/S12 follow the roadmap, not partial local success |
@@ -89,6 +89,16 @@ chosen here. Protect important movement as well as rejection. The sample4 wrong
 partial improvement may be recorded while whole-report success remains open.
 The one-second Oil target applies only to separately qualified visible movement;
 CSV validity and report bridges do not establish same-interface cadence.
+
+The [completed two-appearance material-side comparison](../50-diagnostics/s11/2026-10-13-foam-material-sides.md)
+qualifies neither a similarity-only filter nor an upper-front consumer. R/L remain
+valid approved interior footprints, with their reference episodes exposed. The
+sample4 upper-range query is unavailable at 236/275 upper support pixels, and
+local L affinity overlaps no-Foam water B/C. Constructed internal transitions can
+produce positive ordered contrast against both references. These are limits of
+this frozen operation, not proof that all learned role evidence is impossible.
+Keep raw scores and unsupported rows; no additional reference or scale tuning
+continues this result. The original CR1 scope-limited usefulness remains unchanged.
 
 Foam WP07 can be designed independently of Oil policy work. The current component
 front misses the qualified upper before episode acceptance; P5-c is not opened.

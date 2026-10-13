@@ -1,0 +1,171 @@
+{
+  "schema": "s11-foam-material-sides-verification-v1",
+  "status": "PASS",
+  "execution_head": "48cf500f44893c7ef39253f1a05bc6bc59ed53a9",
+  "preflight_sha256": "d414111b9afc891c0e290b4bd0d73a4702fc1abbde26c242a27082e09352730f",
+  "readout_sha256": "be7b5d9bbe120a2977dce32070e505372c1e2f4d1589a6e6cabbd6ab3b8a22d1",
+  "checks": {
+    "input_pins": 142,
+    "backend_pins_verified_by_runner": 159,
+    "all_cases": 43,
+    "all_rows_coordinates_and_support": 1335,
+    "all_measured_reference_side_pairs": 4736,
+    "all_sparse_weights_mass_and_overlap": 1184,
+    "statuses": {
+      "MEASURED": 1184,
+      "UNAVAILABLE_REQUIRED_SUPPORT": 119,
+      "UNAVAILABLE_SAVED_RGB": 32
+    },
+    "runtime_limits": true,
+    "encoder_pixel_controls": "PASS",
+    "source_rgb_reference_bindings": true,
+    "no_physical_decisions": true
+  },
+  "interval_joins": [
+    {
+      "id": "s4-upper",
+      "case_id": "s4-f1620",
+      "scope": "Foam upper containment",
+      "source_y": [
+        813.0
+      ],
+      "statuses": {
+        "UNAVAILABLE_REQUIRED_SUPPORT": 1
+      },
+      "individual_edge_truth": "UNREVIEWED"
+    },
+    {
+      "id": "water-A",
+      "case_id": "water-f001232",
+      "scope": "Foam upper outline",
+      "source_y": [
+        477.0
+      ],
+      "statuses": {
+        "MEASURED": 1
+      },
+      "individual_edge_truth": "UNREVIEWED"
+    },
+    {
+      "id": "water-B",
+      "case_id": "water-f001438",
+      "scope": "Water upper surface",
+      "source_y": [
+        485.0,
+        488.0
+      ],
+      "statuses": {
+        "MEASURED": 2
+      },
+      "individual_edge_truth": "UNREVIEWED"
+    },
+    {
+      "id": "water-C",
+      "case_id": "water-f001643",
+      "scope": "Water upper surface",
+      "source_y": [
+        491.0
+      ],
+      "statuses": {
+        "MEASURED": 1
+      },
+      "individual_edge_truth": "UNREVIEWED"
+    },
+    {
+      "id": "public-A",
+      "case_id": "public-miso-f1499",
+      "scope": "Foam upper",
+      "source_y": [
+        332.0,
+        336.0
+      ],
+      "statuses": {
+        "MEASURED": 2
+      },
+      "individual_edge_truth": "UNREVIEWED"
+    },
+    {
+      "id": "public-B",
+      "case_id": "public-miso-f1499",
+      "scope": "Oil upper",
+      "source_y": [
+        428.0,
+        431.0,
+        433.0
+      ],
+      "statuses": {
+        "MEASURED": 3
+      },
+      "individual_edge_truth": "UNREVIEWED"
+    }
+  ],
+  "exact_guide_joins": [
+    {
+      "id": "s4-texture-f1620",
+      "source_xy": [
+        595,
+        833.0
+      ],
+      "status": "NO_OBSERVED_CENTER_EDGE",
+      "snapped": false
+    },
+    {
+      "id": "s4-texture-f1665",
+      "source_xy": [
+        595,
+        837.0
+      ],
+      "status": "NO_OBSERVED_CENTER_EDGE",
+      "snapped": false
+    },
+    {
+      "id": "s4-texture-f1680",
+      "source_xy": [
+        595,
+        838.0
+      ],
+      "status": "NO_OBSERVED_CENTER_EDGE",
+      "snapped": false
+    },
+    {
+      "id": "s4-cbr-rim-f450",
+      "source_xy": [
+        595,
+        880
+      ],
+      "status": "MEASURED",
+      "snapped": false
+    }
+  ],
+  "resources": {
+    "elapsed_seconds": 56.972929416020634,
+    "encoder_load_seconds": 4.768570541986264,
+    "forward_count": 1242,
+    "peak_rss_bytes": 880410624,
+    "workspace_allocated_bytes": 746438656,
+    "retained_token_maps": 0
+  },
+  "resources_extra": {
+    "max_forward_seconds": 0.1305274580081459,
+    "mean_forward_seconds": 0.0393100025679413,
+    "compressed_readout_bytes": 342536
+  },
+  "disposition": "CLOSED_WITHOUT_PROMOTION",
+  "reason": "Distinct interior references are qualified, but native side/role coverage and independent opposition are unmet; constructed internal transition yields positive contrast to both references, and local large-reference affinity overlaps no-Foam scene context. No cutoff/crop/scale rescue.",
+  "physical_accuracy": "NOT_EVALUATED",
+  "per_appearance_generalization": "NOT_EVALUATED",
+  "production_changed": false,
+  "sample4_upper_query_support": {
+    "source_xy": [
+      595,
+      813
+    ],
+    "upper_visible_pixels": 236,
+    "upper_required_pixels": 275,
+    "lower_visible_pixels": 275,
+    "lower_required_pixels": 275,
+    "effective_mask_upper_nonzero": 236,
+    "glare_mask_upper_nonzero": 0,
+    "first_loss_in_this_operation": "Required full rectangular upper-side support crosses the existing effective mask. The native edge remains present; no detector change or physical wrong-edge label follows."
+  }
+}

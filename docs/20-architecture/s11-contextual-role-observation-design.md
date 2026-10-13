@@ -594,6 +594,13 @@ readout can motivate a later calibrated policy only with independently qualified
 side/edge roles, opposition and available evidence. Self-reproduction, unresolved
 appearance coverage or missing opposition cannot satisfy that entry.
 
+The [completed fixed readout](../50-diagnostics/s11/2026-10-13-foam-material-sides.md)
+closes this operation without promotion. Its support loss at sample4's upper-range
+edge, token sharing, internal-transition collision and no-Foam context overlap
+must remain constraints on a different future observation contract; they do not
+authorize changing this operation's references, crop, scale or cutoff. R/L input
+approval and original CR1 scope-limited usefulness retain their separate meaning.
+
 ## History Review
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.

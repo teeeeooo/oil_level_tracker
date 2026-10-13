@@ -1260,10 +1260,19 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/render.py](50-diagnostics/s11/2026-10-13-foam-material-reference/render.py) | 기존 경계 구간 renderer를 바꾸지 않는 유한 내부 영역 검토 재현기 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json](50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json) | R의 미세 Foam 승인과 큰 기포 Foam 별도 포괄 요구를 원문에 연결 |
 
-### 2026-10-13 Foam 양측 비교 준비 — Git 등록 대기
+### 2026-10-13 Foam 양측 비교 준비
+
+처음 추가한 세 문서의 날짜는 `48cf500f44893c7ef39253f1a05bc6bc59ed53a9`의 author 날짜(KST)로 확정했습니다.
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| 미등록 — 작성 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-reply.json](50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-reply.json) | L 영역의 큰 알갱이 Foam 내부 승인과 기준 노출 범위 |
-| 미등록 — 작성 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides.md](50-diagnostics/s11/2026-10-13-foam-material-sides.md) | R/L 내부 기준을 경계 양측과 따로 비교하는 진단 |
-| 미등록 — 작성 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides/preflight.json](50-diagnostics/s11/2026-10-13-foam-material-sides/preflight.json) | 추론 전 43장면·1,335경계·geometry·대조·자원 고정 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-reply.json](50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-reply.json) | L 영역의 큰 알갱이 Foam 내부 승인과 기준 노출 범위 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides.md](50-diagnostics/s11/2026-10-13-foam-material-sides.md) | R/L 내부 기준을 경계 양측과 따로 비교하는 진단 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides/preflight.json](50-diagnostics/s11/2026-10-13-foam-material-sides/preflight.json) | 추론 전 43장면·1,335경계·geometry·대조·자원 고정 |
+
+### 2026-10-13 Foam 양측 비교 결과 — Git 등록 대기
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 미등록 — 작성 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides/readout.json.gz](50-diagnostics/s11/2026-10-13-foam-material-sides/readout.json.gz) | 전체 경계·결측·R/L 양측 점수·실제 encoder 대조·자원 결과 |
+| 미등록 — 작성 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides/verification.json](50-diagnostics/s11/2026-10-13-foam-material-sides/verification.json) | 핀·좌표·지원·연산·guide 연결 및 고정 비교 미채택 검증 |
