@@ -18,6 +18,34 @@ New/deleted/renamed files, mode/encoding/shebang changes, syntax failures, unava
 
 Validation/design/evidence Markdown still follows its existing contract: arbitrary typo, link, or acceptance prose changes cannot safely be classified by AST equality. No self-declared editorial bypass is supported.
 
+## Existing-system review before execution
+
+Before selecting a new detector hypothesis or running a new comparison, use the
+[existing-feature map](../20-architecture/s11-current-detector-logic-map.md#existing-features-and-run-coverage)
+to connect user setup, the actual experiment input, the executing owner and the
+claimed output. The mandatory fields below belong in the existing design/evidence
+block and may link to exact fields in an existing pinned preflight; do not create
+a parallel manifest or a new document solely for this check.
+
+- **Existing feature coverage:** identify relevant existing capabilities and their
+  actual or planned input state, with Recipe/session/constructor/source evidence.
+  Distinguish configured, empty/OFF, bypassed and unknown. Explain deliberate
+  exclusions and the applicable prior result; feature presence in code is not
+  evidence of use or failure. For Artifact/mask work, follow D2 through the later
+  Local XY results in the recall index rather than stopping at an earlier proposal.
+- **Execution scope:** name the entry path and which setup, frame, completed-sequence
+  and publication stages are exercised or omitted, with the resulting claim limit.
+  A raw feature probe may remain a raw feature probe; no full replay is required
+  merely to fill this field. Planning-only or process/document changes explicitly
+  state that no runtime was exercised and which responsibility is being reviewed.
+
+Resolve missing input state only when it bears on the proposed conclusion; otherwise
+record unknown and bound the claim. This is not a new user-approval gate. Historical
+results and original artifacts remain frozen; reuse their recorded scope without
+rerunning them. Check the changed draft before a new experiment as well as before
+publication. The checker rejects absent/placeholder fields, but does not certify
+the factual coverage or scientific sufficiency of their text.
+
 ## Architecture/design History Review
 
 A changed S11 architecture/design document must contain one completed block:
@@ -30,6 +58,8 @@ A changed S11 architecture/design document must contain one completed block:
 - Prior mechanisms reviewed: <specific relevant mechanisms/evidence>
 - Prior mechanisms rejected: <what is not being repeated and why>
 - Preserved contracts: <current contracts preserved>
+- Existing feature coverage: <relevant existing capabilities, actual/planned input state and evidence>
+- Execution scope: <entry path, exercised/omitted stages and claim limit, or explicit no-run scope>
 - Difference from prior failures: <specific difference or constrained non-change>
 - Logic-map impact: NONE — <meaningful reason>
 - Failure-registry impact: NONE — <meaningful reason>
@@ -47,6 +77,8 @@ A changed S11 diagnostic/evidence record must contain one completed block:
 - Logic-map nodes: `OIL-PHASE-FILL`, `FOAM-EPISODE`
 - Failure-registry entries: `S11-F07`, `S11-F08`
 - First harmful stage: <earliest supported stage, or explicitly unknown with missing evidence>
+- Existing feature coverage: <relevant existing capabilities, actual input state and evidence>
+- Execution scope: <entry path, exercised/omitted stages and claim limit, or explicit no-run scope>
 - Logic-map impact: NONE — <meaningful reason>
 - Failure-registry impact: NONE — <meaningful reason>
 ```

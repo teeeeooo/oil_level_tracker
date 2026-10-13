@@ -48,6 +48,8 @@ HISTORY_FIELDS = (
     "Prior mechanisms reviewed",
     "Prior mechanisms rejected",
     "Preserved contracts",
+    "Existing feature coverage",
+    "Execution scope",
     "Difference from prior failures",
     "Logic-map impact",
     "Failure-registry impact",
@@ -56,6 +58,8 @@ GOVERNANCE_FIELDS = (
     "Logic-map nodes",
     "Failure-registry entries",
     "First harmful stage",
+    "Existing feature coverage",
+    "Execution scope",
     "Logic-map impact",
     "Failure-registry impact",
 )

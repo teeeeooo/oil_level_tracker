@@ -10,11 +10,37 @@ Read this index completely before opening the detailed flow. Use the stable IDs 
 
 | Pipeline group | Route at a glance | Node IDs to scan first |
 |---|---|---|
+| Recipe / run setup | user configuration and run preparation → spatial support, Artifact rejection, static evidence and initial state | `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `OIL-PHASE-INITIAL` |
 | Input / evidence | decoded frame → bounded ROI, preprocessing, Oil evidence and Foam evidence | `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-PROPOSAL`, `OIL-HYPOTHESIS`, `FOAM-CANDIDATE` |
 | Oil authority / identity | candidates → typed authority → directed physical owner | `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET` |
 | Lifecycle / selection | physical rows → initial/fill/drain ownership → fixed-lag selected node → same-frame projection | `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION` |
 | Foam | candidate/material identity → bounded episode formation, after Oil projection | `FOAM-IDENTITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION` |
 | Publication / presentation | final detections → samples/events, CSV/trace, graph/report/UI | `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`, `TRACE-PUBLICATION`, `RESULT-PRESENTATION` |
+
+### Existing features and run coverage
+
+Start from the user's analysis flow as well as the proposed detector owner.
+Feature availability does not mean a probe used it. For relevant rows, inspect
+the actual Recipe/session/constructor and runner, then record enabled, empty/OFF,
+bypassed, or unknown with its source. An isolated probe is legitimate; its omitted
+paths limit the conclusion. The [governance contract](../30-validation/s11-detector-change-governance.md#existing-system-review-before-execution)
+owns the record, not a second feature inventory in each experiment.
+
+| Existing capability | Input and executing owner | What must remain distinct in a study |
+|---|---|---|
+| ROI, margin and exclusion zones | Recipe geometry from [`RoiEditorDialog`](../../src/oil_tracker/ui/widgets/roi_editor_dialog.py) → [`build_mask_bundle`](../../src/oil_tracker/adapters/vision/geometry_masks.py) → shared Oil/Foam evidence | Actual geometry and exclusions versus defaults; shared sample removal also affects Foam. Upstream feature context is not wholly removed by masking output coordinates. |
+| User Artifact templates | Accepted proposals in the Recipe → [`apply_artifact_templates`](../../src/oil_tracker/adapters/vision/artifact_calibration.py) at current Oil/Foam checks and candidate assembly; completed eligibility consumes the rejection | Template count and matching geometry versus an unconfigured recipe. Whole-candidate rejection differs from local sample withdrawal. |
+| Reviewed structure reference | Stored `support_reference` from [`ArtifactSupportDialog`](../../src/oil_tracker/ui/widgets/artifact_support_dialog.py) → [`compare_reference_measurements`](../../src/oil_tracker/adapters/vision/artifact_reference_diagnostics.py) in debug projection | A confirmed reference is scoped evidence; the checkbox alone adds neither a mask nor rejection authority. Record reference/review state and whether debug comparison actually ran. |
+| Learned static artifacts | [`DetectionRunCoordinator.run`](../../src/oil_tracker/application/services/detection_run.py) resets the detector and calls [`learn_static_artifacts`](../../src/oil_tracker/application/services/detection_processing.py) before target detection | Prepared static frames/maps versus a fresh direct `detect` call; this automatic preparation is separate from user Artifact templates and ML-head training. |
+| Run window, cadence and initial state | [`AnalysisPipeline.run`](../../src/oil_tracker/application/services/analysis_pipeline.py) schedules frames and forwards matching session confirmations to completed resolution | Actual sampling and confirmed state versus Recipe intent or standalone frame identity; neither static preparation nor initial-state confirmation may be assumed from a helper test. |
+| Experimental Local XY | Explicit [`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py) constructor input → selected Oil measurement lanes | Default OFF; it is not the Recipe exclusion mask. State scope/digest if used; historical rejection does not authorize enabling or tuning it. |
+| Completed analysis and report | [`DetectionRunCoordinator`](../../src/oil_tracker/application/services/detection_run.py) → sequence composition → sample/event/judgment/export owners below | Raw helper, current-frame output, completed Oil/Foam, and report are different execution scopes. Recipe judgment/scale and report rendering do not establish physical accuracy. |
+
+For structure/exclusion hypotheses, the [recall index](../00-project/recall-index.md)
+routes both the D2 registration/reference work and the later Local XY comparisons.
+Read the successor result before treating an older `NOT TESTED` statement as current.
+Existing feature coverage does not require enabling every feature, rerunning closed
+trials, or testing all product paths for a narrow claim.
 
 ### Hard-gate hotspots
 
@@ -41,6 +67,20 @@ There are two related paths. The online path produces one current-frame `PhaseDe
 
 ```mermaid
 flowchart LR
+  R[Recipe / Profile setup] --> G[ROI + margin + exclusions]
+  G --> E
+  R --> AT[User Artifact templates]
+  AT -->|matching candidate rejection| OC
+  AT -->|matching candidate rejection| FC
+  R --> RR[Reviewed structure reference]
+  RR -.-> RD[Footprint diagnostics only]
+  E -.-> RD
+  RD -.-> TP
+  RUN[Run setup / coordinator] -->|window and cadence| V
+  RUN --> SR[Static artifact preparation]
+  SR --> E
+  RUN -->|confirmed initial state| P0
+  XY[Optional Local XY / default OFF] -->|Oil sampling only| OC
   V[decoded frame] --> E[FRAME-EVIDENCE\nROI + preprocess + current evidence]
   E --> OC[OIL-CANDIDATE\nOil hypotheses + proposal families]
   E --> FC[FOAM-CANDIDATE\nraw Foam front + motion/material features]
@@ -323,7 +363,8 @@ authority, not a flag prefix alone.
 
 ## 8. Update rules
 
-- Update this map only when the current `main` control flow, owner, invariant, version, or publication boundary changes. Verify the changed claim against source first, then update the active [behavioral architecture](s11-behavioral-lifecycle-and-foam-witness-architecture.md) and/or [validation/work specification](../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md) if the durable contract changed; retain R18–R20 predecessor documents as historical records.
+- Update this map when the current `main` control flow, owner, invariant, version, or publication boundary changes, or source inspection identifies an omitted/incorrect route. Verify the changed claim against source first, then update the active [behavioral architecture](s11-behavioral-lifecycle-and-foam-witness-architecture.md) and/or [validation/work specification](../30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md) if the durable contract changed; retain R18–R20 predecessor documents as historical records.
+- When a Recipe/session/constructor feature changes detector input or result interpretation, update the quick-index feature row and its consuming route in the same change. Keep actual per-run values in the experiment record, not this map; unrelated UI changes do not require a new row.
 - Keep project status and field-run disposition in the project authority documents, not here.
 - Keep completed replay measurements and audit findings in `docs/60-evidence/`; keep investigations in `docs/50-diagnostics/`. Do not copy historical counts or failed-design chronology into this current map.
 - Preserve the stable node IDs above. If an owner is split or renamed, retain the old ID as a compatibility alias in the replacement section and link the source owner; do not silently reuse an ID for a different responsibility.
@@ -362,6 +403,13 @@ bounded expiry and one-attempt semantics.
   path finding and diagnostic-peak recentering.
 - Preserved contracts: bounded identity, fail-closed ambiguity, coordinate-free
   barriers, exact same-frame provenance, and independent Foam ownership.
+- Existing feature coverage: the quick index now connects Recipe geometry/exclusions,
+  Artifact templates, scoped reference diagnostics, static preparation, run state,
+  optional Local XY and completed publication to their existing source owners.
+  No actual Recipe, constructor option or feature state is changed by this map update.
+- Execution scope: source/caller and prior-record review only; no detector, video,
+  training or report replay. The diagram exposes routes, not proof that any specific
+  experiment exercised them.
 - Difference from prior failures: typed competing-identity contradiction is
   propagated before member selection, and only one independently reaffirmed
   same-owner initial-FULL lease may extend within a fixed total horizon. R22-2
@@ -371,7 +419,7 @@ bounded expiry and one-attempt semantics.
 - Logic-map impact: UPDATED — this section records the R22 current owners and
   transition/evidence boundaries plus the R22-2 debug-only capture/measurement route
   and complete branch-specific phase failure reasons, plus A1 pure spatial
-  diagnostic reproduction with exact candidate binding, and D2 scoped reference/measurement-footprint comparison in the existing debug projector.
+  diagnostic reproduction with exact candidate binding, and D2 scoped reference/measurement-footprint comparison in the existing debug projector. The quick index and graph now expose existing setup and auxiliary inputs before detector experimentation.
 - Failure-registry impact: NONE — historical mechanisms remain unchanged.
 
 ## O1 trace-only observation witness

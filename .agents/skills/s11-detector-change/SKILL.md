@@ -1,6 +1,6 @@
 ---
 name: s11-detector-change
-description: Use for Oil Level Tracker S11 detector code, detector architecture/design, detector validation, diagnostics, or field evidence. Routes current implementation, prior failure history, acceptance owners, and governance checks without broad historical scanning.
+description: Use for Oil Level Tracker S11 detector code, detector architecture/design, detector validation, diagnostics, or field evidence. Connects Recipe/setup features and actual experiment scope to current implementation, prior failures, and acceptance owners without broad historical scanning.
 ---
 
 # S11 Detector Change
@@ -11,9 +11,16 @@ Use this skill for S11 detector behavior, detector ownership, detector validatio
 
 1. Read `docs/00-project/work-plan.md` for the current gate and candidate status.
 2. Locate headings first, then read only `## Quick start / design index` in `docs/20-architecture/s11-current-detector-logic-map.md` and `## Quick failure index (F01–F10)` in `docs/50-diagnostics/s11/s11-detector-mechanism-failure-registry.md`, each up to the next level-2 heading. Do not load either whole document before selecting relevant detail.
-3. Identify the affected semantic node IDs and failure IDs, then read only their full entries plus the current architecture/validation owner needed for the task. For a general ownership/validation question without a concrete change, use the relevant overview and acceptance owner rather than expanding every node or failure entry.
-4. For Windows field work, also read the canonical reviewed truth and use the `windows-qualification` Skill.
-5. Stop recall once the current owner, relevant prior failure, and required acceptance are known. Do not walk revision history R1→R20 unless a focused pointer requires it.
+3. Use the quick index's existing-feature table to trace the relevant user setup through the actual Recipe/session/constructor and runner. Distinguish a feature existing from being configured and exercised. Follow the recall index through successor results for those features, not only the proposed detector mechanism; for Artifact/masks this includes the completed D2 and Local XY work.
+4. Identify the affected semantic node IDs and failure IDs, then read only their full entries plus the current architecture/validation owner needed for the task. For a general ownership/validation question without a concrete change, use the relevant overview and acceptance owner rather than expanding every node or failure entry.
+5. For Windows field work, also read the canonical reviewed truth and use the `windows-qualification` Skill.
+6. Stop recall once the current owner, relevant prior failure, input-feature coverage and required acceptance are known. Do not walk revision history R1→R20 unless a focused pointer requires it.
+
+## Before proposing or running a new experiment
+
+Complete `Existing feature coverage` and `Execution scope` in the existing design/evidence block under the [governance contract](../../../docs/30-validation/s11-detector-change-governance.md#existing-system-review-before-execution), linking the actual or planned preflight fields where available. Run the existing checker on the draft before the experiment. State which existing responsibility the hypothesis reuses or changes; an isolated native-path/feature test cannot establish failure of unexercised Recipe defenses or success of the completed report.
+
+For a read-only question, give the same distinction in the answer without creating a new report. This review does not enable unused options, require every feature in every test, reopen closed experiments, or add a user-approval step.
 
 ## Optional Graphify topology aid
 

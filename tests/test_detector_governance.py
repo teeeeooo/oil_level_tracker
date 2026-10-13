@@ -33,6 +33,8 @@ def history(*, node: str = "OIL-PHASE-FILL", failure: str = "S11-F01", map_impac
 - Prior mechanisms reviewed: reviewed the linked prior diagnostic
 - Prior mechanisms rejected: rejected the unbounded shortcut
 - Preserved contracts: fail-closed same-frame provenance
+- Existing feature coverage: reference diagnostics are unchanged; this design changes only the named lifecycle owner
+- Execution scope: design review only; runtime and report replay are not claimed
 - Difference from prior failures: bounded owner remains explicit
 - Logic-map impact: {map_impact}
 - Failure-registry impact: {registry_impact}
@@ -45,6 +47,8 @@ def field(*, node: str = "FOAM-EPISODE", failure: str = "S11-F07", map_impact: s
 - **Logic-map nodes:** `{node}`
 - **Failure-registry entries:** `{failure}`
 - **First harmful stage:** `NOT_PROVEN` — the required bundle is absent
+- Existing feature coverage: Recipe and constructor state are unknown because the required bundle is absent
+- Execution scope: saved text review only; unexercised detector and report paths remain unqualified
 - **Logic-map impact:** `{map_impact}`
 - **Failure-registry impact:** `{registry_impact}`
 """
@@ -131,6 +135,22 @@ def test_windows_field_evidence_without_governance_fails() -> None:
 def test_valid_field_evidence_with_none_reason_passes() -> None:
     path = "docs/60-evidence/s11/new-field-result.md"
     assert run({path}, {path: field()}) == []
+
+
+@pytest.mark.parametrize(("path", "make_block"), [
+    ("docs/20-architecture/s11-next-architecture.md", history),
+    ("docs/60-evidence/s11/new-field-result.md", field),
+])
+@pytest.mark.parametrize("label", ["Existing feature coverage", "Execution scope"])
+@pytest.mark.parametrize("replacement", [None, "", "N/A"])
+def test_missing_or_placeholder_system_review_fails(
+    path: str, make_block, label: str, replacement: str | None,
+) -> None:
+    text = make_block()
+    line = next(line for line in text.splitlines() if line.startswith(f"- {label}:"))
+    changed_line = "" if replacement is None else f"- {label}: {replacement}"
+    errors = run({path}, {path: text.replace(line, changed_line)})
+    assert any(label in error for error in errors)
 
 
 SOURCE = "src/oil_tracker/adapters/vision/example.py"

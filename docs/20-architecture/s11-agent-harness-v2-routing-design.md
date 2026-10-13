@@ -21,6 +21,44 @@ This change does not alter detector source, thresholds, candidate authority, lif
 - current detector/failure truth: existing logic map and failure registry.
 - local research-output lifecycle: `docs/40-operations/experiment-artifact-lifecycle.md` + `scripts/experiment_artifacts.py`; local verification also runs from the existing pre-push hook.
 
+## Existing features in detector research
+
+The October 13 Artifact follow-up exposed a routing failure rather than an absent
+feature or absent history. The Skill, logic map and recall index already named
+Recipe exclusions, Artifact calibration, scoped reference diagnostics and the
+closed D2/Local XY trials. Research nevertheless followed native detector inputs
+without first accounting for the configured product path; a single-path masking
+check then risked being proposed as another first test of existing defenses.
+
+Use the existing owners to close that gap:
+
+- The logic-map quick index now includes a compact setup/feature table, and its
+  graph shows where Recipe masks, user Artifact templates, reviewed references,
+  static preparation, confirmed initial state and optional Local XY enter. Source
+  links own behavior; this is not a new feature registry or a new detector layer.
+- The existing S11 Skill requires that table and the relevant successor history
+  before choosing a hypothesis. Record actual/planned input state and the entry
+  path in the existing design/preflight, including deliberate bypasses. Empty
+  templates, default-OFF inputs and unavailable configuration are distinct.
+- The existing governance checker requires `Existing feature coverage` and
+  `Execution scope` in changed design/evidence blocks. Run it before a new
+  experiment and publication. Presence/placeholder checks make omissions visible;
+  they cannot verify scientific reasoning or force an agent to invoke the Skill.
+
+Representative routing checks: an Artifact/mask proposal must retrieve the D2 and
+later Local XY dispositions; a raw native-head probe must name omitted candidate
+rejection and completed resolution before making a product claim; a report-only
+change may explain that runtime input features are unaffected. A read-only question
+needs an answer, not a new report. Unrelated UI changes retain the existing checker
+boundary. No automatic replay, option enablement, model fit, user-approval step or
+global Skill installation follows. Frozen evidence is not rewritten for this rule.
+
+The current host catalog already exposes the repository S11 Skill, and its existing
+`allow_implicit_invocation: true` remains unchanged. The repository Skill stays the
+single source for this workflow; no same-name global copy or new wrapper Skill is
+introduced. Graphify can find callers but does not establish which Recipe options
+were used by an experiment, so it remains an optional topology aid.
+
 ## Local research output closeout
 
 The October 12 cleanup exposed a missing common closeout check: individual runners
@@ -76,11 +114,17 @@ is unresolved. Current operational anchors and source audit attachments are pres
 
 ## History Review
 
-- Logic-map nodes: `PUBLICATION-PROVENANCE`, `TRACE-PUBLICATION`, `OIL-PHASE-DRAIN`, `FOAM-EPISODE`
-- Failure-registry entries: `S11-F07`, `S11-F08`, `S11-F09`, `S11-F10`
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-PHASE-INITIAL`, `PUBLICATION-PROVENANCE`, `TRACE-PUBLICATION`, `OIL-PHASE-DRAIN`, `FOAM-EPISODE`
+- Failure-registry entries: `S11-F04`, `S11-F06`, `S11-F07`, `S11-F08`, `S11-F09`, `S11-F10`
 - Prior mechanisms reviewed: the 2026-10-03 docs audit, historical A–D/R2–R4 contracts, current responsibility architecture §Historical preservation boundary and cross-revision validation §Controlled preservation surface; current logic-map quick index and affected publication/lifecycle/Foam nodes; failure-registry no-repeat rules for false Foam dynamics, lifecycle dead ends, provenance ambiguity, and case-specific escape hatches; canonical reviewed Windows truth; current cross-revision detector-effectiveness validation; historical R7–R12 Windows procedure sections.
+  The October 13 extension also reviews existing Recipe/mask/Artifact callers and
+  the [D2 registration](../60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md)
+  and [Local XY successor](../60-evidence/s11/2026-10-09-local-xy-implementation.md)
+  records routed by the recall index.
 - Prior mechanisms rejected: revision-specific R7–R12 execution routing is rejected as current procedure because it can apply obsolete detector identities and acceptance assumptions; broad historical scanning is rejected because current logic-map/failure indexes provide bounded routing.
 - Preserved contracts: exact same-frame Oil/Foam provenance, independent validity/ownership, fail-closed ambiguity, reviewed physical truth as the field oracle, field FAIL until current acceptance is satisfied, and no private/case-specific detector control flow.
-- Difference from prior failures: the documentation closeout preserves current authorization, field disposition and immutable evidence; historical contracts move with link-only rebasing and recorded successor obligations. This migration changes only instruction/procedure routing; it does not add detector authority, alter lifecycle/Foam predicates, reinterpret field evidence, or make historical output an oracle.
-- Logic-map impact: NONE — detector implementation ownership and executing control flow are unchanged by the harness/procedure migration.
+- Existing feature coverage: Recipe spatial masks, candidate Artifact rejection, reference-only diagnostics, automatic static preparation, run/initial-state inputs, optional Local XY and completed publication were traced to the existing owners; the D2 and Local XY successor results supply the relevant failed-use history. This process change does not alter any actual Recipe or runtime option.
+- Execution scope: repository Skill/map/governance maintenance, source and saved-record inspection, and checker tests only. No detector, video, training, Windows or report replay is performed; no efficacy claim follows from the new fields or diagram.
+- Difference from prior failures: existing setup features and actual run coverage must now be considered before a detector hypothesis, with missing review fields caught by the existing checker. This extends the earlier bounded recall and document closeout without copying feature truth into a new Skill, adding detector authority, changing lifecycle/Foam predicates, or reopening frozen experiments. Current authorization, field disposition and immutable evidence remain preserved.
+- Logic-map impact: UPDATED — setup/feature routes and their claim limits are visible in the quick index and existing flow graph; detector implementation ownership and executing control flow remain unchanged.
 - Failure-registry impact: NONE — no causal mechanism, no-repeat rule, or field-risk status changes; the migration only routes agents to the existing registry more directly.
