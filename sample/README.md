@@ -15,6 +15,16 @@ status. It is not silently added to
 the historical four-video regression or seven-source P0 denominator. The
 [Work Plan](../docs/00-project/work-plan.md) owns further qualification and use.
 
+## Additional public source screen — 2026-10-13
+
+`public_egenie_nKfQ1J97_QE.mp4` is the previously listed but unacquired second
+public compressor source, now pinned in its
+[bounded input screen](../docs/50-diagnostics/s11/2026-10-13-public-compressor-input.md).
+Four fixed source views were decoded without detector/encoder calls. The midpoint
+bright-band role is pending user review; title/hand, watermark and reframing limit
+the inspected views. It has no Recipe, assigned calibration/holdout partition,
+native truth or continuous-story qualification and does not replace P0 groups.
+
 ## Sample3 use restriction
 
 **sample3 is retired from routine development and logically quarantined.** Its

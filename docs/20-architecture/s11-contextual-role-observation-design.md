@@ -297,6 +297,16 @@ than a reviewed target does not identify an unreviewed competitor; preserve the
 whole candidate population and unresolved same-boundary versus other-role claims.
 No maximum-score winner or proximity-based label transfer is implied.
 
+The [October 13 source reply](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md)
+confirms f1485 B/idx8/Y841 as the same physical Oil boundary as A/idx19/Y836.
+B nevertheless prefers texture locally, so this positive policy can miss a real
+candidate regardless of `tau_support`. Record that miss; failure of the positive
+condition is not negative physical identity. A remains a same-frame confirmed
+alternative with positive local margin, which does not by itself prove future
+sequence/report preservation. Assess candidate loss, qualified frame alternatives
+and workflow impact separately. Do not relax the sign or invent an argmax route
+to rescue B. This correspondence supplies no exact-X or whole-native-path truth.
+
 The existing sample4 104-to-224 transform gives a 6.5-native-pixel token spacing;
 it cannot certify a native or subpixel boundary coordinate. Before transfer,
 freeze the applicable geometry/scale, support and source/ROI transform. Those

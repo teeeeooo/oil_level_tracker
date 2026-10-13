@@ -110,6 +110,11 @@ The [executable WP02–03 preflight](50-diagnostics/s11/2026-10-13-post-cr1-poli
 binds the saved vectors to original candidates and available O1/A1 records, keeps
 all exposed-data limits, and supplies a targeted f1485 competitor review. It is
 an offline input contract, not a calibrated classifier or production schema.
+The [f1485 B source reply](50-diagnostics/s11/2026-10-13-cr1-competitor-role.md)
+adds same-boundary correspondence without rewriting frozen readouts; B's local
+texture preference is now an explicit positive-condition miss. The
+[additional public-source screen](50-diagnostics/s11/2026-10-13-public-compressor-input.md)
+routes the next bounded role question and preserves its unqualified data status.
 
 The [October 12 program review](70-reference/s11-program-review-2026-10-12/README.md)
 is preserved with all seven native outputs mapped by its import manifest. The

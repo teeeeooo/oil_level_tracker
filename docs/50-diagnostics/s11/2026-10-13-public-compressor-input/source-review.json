@@ -1,0 +1,200 @@
+{
+  "schema": "s11-public-source-native-review-v1",
+  "source": {
+    "id": "nKfQ1J97_QE",
+    "title": "Froid117-L'huile du compresseur qui mousse au voyant d'huile",
+    "uploader": "e-genieclimatique",
+    "upload_date": "20121001",
+    "duration": 92,
+    "availability": "public",
+    "url": "https://www.youtube.com/watch?v=nKfQ1J97_QE"
+  },
+  "original": {
+    "format_id": "136",
+    "bytes": 21841275,
+    "sha256": "ea522b841deba1b792720f191f5df4c5d65177bb7fa5e4f2b50ccceb1598c744",
+    "path": "sample/public_egenie_nKfQ1J97_QE.mp4"
+  },
+  "decoded": {
+    "path": "sample/public_egenie_nKfQ1J97_QE.mp4",
+    "width": 1280,
+    "height": 720,
+    "fps": 25.0,
+    "duration_sec": 91.72,
+    "frame_count": 2293,
+    "codec": "h264",
+    "timestamp_reliability_warning": "OpenCV timestamp seeking is backend/keyframe dependent; actual decoded timestamps are recorded."
+  },
+  "frames": [
+    {
+      "fraction": 0,
+      "requested_sec": 0.0,
+      "frame_index": 0,
+      "actual_sec": 0.0,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "e640336ec5717897f8fb6f115fb669942098c759808996109afae00f9c5718eb",
+      "sha256": "af6165a0b71a9eedb0da3de9e9b0f7b16a6dfdec5ff7be8dbbaf6ccd76ca9077",
+      "original_work_name": "frame-00000.png",
+      "retained_path": null,
+      "retention": "file not retained; same fixed timestamp reproducible from retained original"
+    },
+    {
+      "fraction": 0.25,
+      "requested_sec": 22.93,
+      "frame_index": 573,
+      "actual_sec": 22.92,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "66a833a83fceb84f06f820e2acee80e6f3bd3a59aa2604a5a47a70051ede46d2",
+      "sha256": "e4a19d7cc4ebdf227145d507e62a29abf9406e907525174f5ab0baace864992d",
+      "original_work_name": "frame-00573.png",
+      "retained_path": null,
+      "retention": "file not retained; same fixed timestamp reproducible from retained original"
+    },
+    {
+      "fraction": 0.5,
+      "requested_sec": 45.86,
+      "frame_index": 1147,
+      "actual_sec": 45.88,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "e3ac29374ddc4436ab84bcf95ec25bfcdbc164576ff2f3844939fe73bde7bdb6",
+      "sha256": "f15d260cd1eb51686e040253f758c3076c0934ba6befb82272766c37930f78a5",
+      "original_work_name": "frame-01147.png",
+      "retained_path": "docs/50-diagnostics/s11/2026-10-13-public-compressor-input/native-f1147.png",
+      "retention": "midpoint question original retained"
+    },
+    {
+      "fraction": 0.75,
+      "requested_sec": 68.78999999999999,
+      "frame_index": 1720,
+      "actual_sec": 68.8,
+      "shape": [
+        720,
+        1280,
+        3
+      ],
+      "bgr_sha256": "3b5400022b2d45b4d6db7cdcb28c3d4c8c866c837aa3b3f0a966e02424d883d2",
+      "sha256": "f02db3554c1cd22f6a649054669a1541827cfc60679807c96178737c233e0efc",
+      "original_work_name": "frame-01720.png",
+      "retained_path": null,
+      "retention": "file not retained; same fixed timestamp reproducible from retained original"
+    }
+  ],
+  "access": {
+    "schema": "s11-corpus-access-v1",
+    "restricted_samples": [],
+    "sample3_purpose": null,
+    "physical_acceptance": "NOT_EVALUATED"
+  },
+  "versions": {
+    "python": "3.14.4",
+    "opencv": "4.14.0",
+    "yt_dlp": "2026.8.19"
+  },
+  "encoder_forwards": 0,
+  "detector_calls": 0,
+  "physical_accuracy": "NOT_EVALUATED",
+  "partition": "SOURCE_SCREEN_CANDIDATE; no calibration/holdout assignment",
+  "source_unchanged_after": true,
+  "comparison_source_files": [
+    {
+      "path": "sample/base_sample_1.mp4",
+      "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+      "matches_new_source": false
+    },
+    {
+      "path": "sample/public_miso_mHOS1-1ck60.mp4",
+      "sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+      "matches_new_source": false
+    },
+    {
+      "path": "sample/sample2.mp4",
+      "sha256": "73c6586ac167b7c6267c5729c04f05399a3fadc09852d367c49762501285634f",
+      "matches_new_source": false
+    },
+    {
+      "path": "sample/sample3.mp4",
+      "sha256": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04",
+      "matches_new_source": false
+    },
+    {
+      "path": "sample/sample4.mp4",
+      "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+      "matches_new_source": false
+    },
+    {
+      "path": "sample/sample5.mp4",
+      "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+      "matches_new_source": false
+    },
+    {
+      "path": "sample/sample6.mp4",
+      "sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2",
+      "matches_new_source": false
+    },
+    {
+      "path": "sample/sample7.mp4",
+      "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+      "matches_new_source": false
+    }
+  ],
+  "question": {
+    "status": "PENDING_USER_SOURCE_JUDGMENT",
+    "selected_frame_basis": "predeclared 50% source-duration sample; no detector-score selection",
+    "source_crop_xyxy": [
+      800,
+      565,
+      925,
+      685
+    ],
+    "precision": "regional role only, no exact scalar/contour or continuous-event truth",
+    "verbatim": "새 영상 45.88초의 중앙 밝은 가로띠(대략 Y627–632)는 실제 Oil 유면 경계로 보이나요, 아니면 Foam 층이어서 상·하단을 구분해야 하나요? 정지화면으로 구별하기 어렵다면 그대로 알려주세요.",
+    "image": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-public-compressor-input/review.png",
+      "sha256": "06e5998d5dae11c9beaa4c4c1b42ab0aaea5cb6371dd9e88455040eb7143b048"
+    },
+    "image_rendering": "nearest-neighbor plot of original pixels, existing full-frame coordinates, no detector overlay or pixel repair"
+  },
+  "screen_findings": {
+    "agent_observed": [
+      "At 0 s the opening title and a pointing hand obscure the sight glass.",
+      "At 22.92 and 45.88 s the glass is small and the publisher watermark overlaps its lower portion; framing changes.",
+      "At 68.8 s the view shows pressure gauges rather than the compressor glass.",
+      "The midpoint visible glass contains a narrow bright horizontal band; its physical Oil/Foam/pattern role is not established by the title or assistant."
+    ],
+    "use": "PENDING role/geometry input qualification; possible principle/failure-response evidence only",
+    "not_qualified": [
+      "calibration dataset",
+      "untouched evaluation recording",
+      "continuous workflow",
+      "whole-source independence from all historical video excerpts",
+      "fixed-X truth",
+      "CR1 scale/bank transfer"
+    ]
+  },
+  "sources": {
+    "src/oil_tracker/adapters/vision/opencv_video_reader.py": "b4d3304d37890570b57101418e69546133b9a8317ce18766d52b7ab221b34686",
+    "tests/diagnostics/s11_corpus_access.py": "6c4c5b5f27404158473d4afacdec3ed0ac7dc73ccbe12f13bed609267a6eb800",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/screen-preflight.json": "ee76e29e68b726155ec16505a3582134df1ca60ee2e5b59528eb88d15face370"
+  },
+  "acquisition": {
+    "authentication": "none; public source, no cookies",
+    "tls": "verified using system CA via SSL_CERT_FILE and REQUESTS_CA_BUNDLE",
+    "format": "136 original video-only MP4; no re-encode",
+    "temporary_dependency": "yt-dlp 2026.8.19 installed outside repository; remove after source screening",
+    "initial_attempt": "unsupported --ca-certificate option failed before network; corrected to system CA environment, metadata and download then succeeded"
+  },
+  "base_head": "c248c9286b03093c213ee08bbb46cc7cb567f60b",
+  "managed_run": "sample/output/s11-cr1-workspace/runs/source-screen-20261013-001"
+}

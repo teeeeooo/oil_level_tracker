@@ -1,0 +1,218 @@
+{
+  "schema": "s11-reviewed-source-feature-relation-v1",
+  "base_head": "c248c9286b03093c213ee08bbb46cc7cb567f60b",
+  "reply_date": "2026-10-13",
+  "authority": "direct user reply after mobile original and recorded-candidate images",
+  "question_verbatim": "49.5초 검토 화면의 B 후보가 기존 A와 같은 실제 유면인가요? 같은 유면 / 다른 무늬·경계 / 판단 어려움 중 알려주세요.",
+  "reply_verbatim": "같은 유면의 경계야",
+  "status": "CLOSED",
+  "question_artifacts": {
+    "html": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/review.html",
+      "sha256": "b2f34edcb63fe5c86a244c0a523cb9bed0c9fb019840d8a2923187eee7d1bf64"
+    },
+    "mobile_comparison": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-cr1-competitor-role-review.png",
+      "sha256": "9dc39ca25c7ebe77a6b4e5c98cac615caf7340c7fbe17a1d54caff92230eae19"
+    },
+    "original_roi": {
+      "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485-original_roi.png",
+      "sha256": "f0f2394eeabc08734d548ee91ab8d73723abc205eecbea17f0dbdcdbe3da67ee"
+    }
+  },
+  "display_provenance": {
+    "origin_xy": [
+      543,
+      798
+    ],
+    "shape": [
+      104,
+      104
+    ],
+    "display": "nearest-neighbor original pixels with recorded geometry guides; no pixel repair or inferred contour",
+    "A": {
+      "color": "cyan",
+      "shown_source_x_range": [
+        584,
+        605
+      ],
+      "shown_source_y": 836
+    },
+    "B": {
+      "color": "magenta",
+      "shown_native_sector_samples": [
+        [
+          547,
+          566,
+          843
+        ],
+        [
+          566,
+          586,
+          837
+        ],
+        [
+          586,
+          605,
+          838
+        ],
+        [
+          605,
+          625,
+          841
+        ],
+        [
+          625,
+          644,
+          841
+        ]
+      ],
+      "representative_y": 841
+    },
+    "review_precision": "same-boundary candidate correspondence, not per-sector or exact fixed-X localization"
+  },
+  "source_video": {
+    "path": "sample/sample4.mp4",
+    "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+  },
+  "capture": {
+    "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485.json",
+    "sha256": "ae2fa571fabb9bdb237fabdfe7991b5f05a36a2510780858b0024348cd4fa1c0"
+  },
+  "saved_scores": {
+    "path": "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/followup-readout.json.gz",
+    "sha256": "c5db499375234c63d27306865a74d21165e07f4d67995149d05a78dec6d2fd4e"
+  },
+  "frame_index": 1485,
+  "source_timestamp_sec": 49.5,
+  "glass_id": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2",
+  "reviewed_relation": {
+    "subject_query": {
+      "id": "s4-f1485-idx8",
+      "frame": 1485,
+      "source_xy": [
+        595,
+        841.0
+      ],
+      "candidate_index": 8,
+      "source": "material_path",
+      "label": "UNREVIEWED",
+      "subtype_status": "UNASSESSED",
+      "initial_reference": false
+    },
+    "subject_query_sha256": "d335f421f94efdba4f66e9b9d6c3e11b7f2ef85d1a257c9e32e0c03726ec10a5",
+    "subject_record_pointer": "/results/123",
+    "reference_query": {
+      "id": "s4-f1485-idx19",
+      "frame": 1485,
+      "source_xy": [
+        595,
+        836.0
+      ],
+      "candidate_index": 19,
+      "source": "phase_transition_scan",
+      "label": "confirmed_target",
+      "subtype_status": "CONFIRMED_CORRESPONDENCE",
+      "initial_reference": false
+    },
+    "reference_query_sha256": "9b6ad7c6fcc163231a371549fc73695f27ca3b72b4c868a3bae8ef7044f9f6b3",
+    "reference_record_pointer": "/results/134",
+    "relation": "SAME_PHYSICAL_OIL_INTERFACE",
+    "subject_status": "HUMAN_CONFIRMED_OIL_CORRESPONDENCE",
+    "reference_status": "EXISTING_CORRESPONDENCE_RETAINED",
+    "original_subject_label": "UNREVIEWED",
+    "current_subject_label": "confirmed_target",
+    "exposure": "outside_reference_episode_development"
+  },
+  "saved_measurement_comparison": {
+    "A": {
+      "raw_measurement_sha256": "f359980f70fb66cc140886a3642e8a8f5bf56a3dde48094bd196819bc9b5ad9b",
+      "modes": {
+        "full": {
+          "availability": "MEASURED",
+          "variant_preferences": [
+            "texture"
+          ],
+          "minimum_interface_similarity": 0.7181780910743978,
+          "minimum_interface_margin": -0.06955984768142898
+        },
+        "local": {
+          "availability": "MEASURED",
+          "variant_preferences": [
+            "interface"
+          ],
+          "minimum_interface_similarity": 0.7269062770211362,
+          "minimum_interface_margin": 0.015512010211825467
+        }
+      }
+    },
+    "B": {
+      "raw_measurement_sha256": "ee136170aa6c1eb8b97bfbfc135727d91230f8eabbdebd93231d560314750328",
+      "modes": {
+        "full": {
+          "availability": "MEASURED",
+          "variant_preferences": [
+            "texture"
+          ],
+          "minimum_interface_similarity": 0.7874369716246785,
+          "minimum_interface_margin": -0.007476911683945042
+        },
+        "local": {
+          "availability": "MEASURED",
+          "variant_preferences": [
+            "texture"
+          ],
+          "minimum_interface_similarity": 0.8290812581924134,
+          "minimum_interface_margin": -0.02120642673065043
+        }
+      }
+    }
+  },
+  "derived_exposed_counts": {
+    "records": 164,
+    "original_confirmed_targets": 7,
+    "current_confirmed_targets": 8,
+    "original_unreviewed": 150,
+    "current_unreviewed": 149,
+    "nonself_confirmed_targets": 7,
+    "nonself_local_interface_preferred": 6,
+    "nonself_confirmed_frames": [
+      1140,
+      1200,
+      1260,
+      1320,
+      1485,
+      1560
+    ],
+    "nonself_frames_with_local_interface_preferred_confirmed_candidate": [
+      1140,
+      1200,
+      1260,
+      1320,
+      1485,
+      1560
+    ],
+    "independent_recordings": 1,
+    "untouched_holdout_recordings": 0
+  },
+  "interpretation": {
+    "B": "Actual Oil correspondence despite local/full texture preference; positive policy necessary role condition cannot pass B for any support threshold. This does not certify a physical negative.",
+    "A": "Known same-frame true alternative still has positive local margin. Candidate loss and frame/sequence/report loss must remain separate. No threshold applied and no new sequence run.",
+    "scope": "Descriptor preference and physical role disagree for B. No sole-true-candidate or important-motion loss has been established by this reply."
+  },
+  "unchanged": {
+    "tau_support": null,
+    "calibrated_decisions": "NOT_EVALUATED",
+    "native_contour_truth": "NOT_QUALIFIED",
+    "fixed_x_scalar_truth": "NOT_QUALIFIED",
+    "production_changed": false,
+    "encoder_forwards": 0,
+    "field": "NOT_EVALUATED"
+  },
+  "limits": [
+    "Only B/idx8 at f1485 acquires the new correspondence; frozen source/readouts retain original labels.",
+    "No labels transfer to equal-Y candidates, other sectors, neighboring frames, source families or complete episodes.",
+    "Y841 is a representative and Y838 a native sector sample, not a new exact-X595 target or tolerance.",
+    "No margin relaxation, highest-score selector, threshold fit, calibration or untouched holdout follows."
+  ]
+}
