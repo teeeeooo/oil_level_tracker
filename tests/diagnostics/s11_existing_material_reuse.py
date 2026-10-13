@@ -21,6 +21,7 @@ from tests.diagnostics import s11_native_role_preflight as g0
 from tests.diagnostics import s11_native_role_qualification as roles
 
 SCHEMA = "s11-existing-material-reuse-v1"
+POLICY_SCHEMA = "s11-oil-support-policy-feasibility-v1"
 o2 = g0.o2
 
 
@@ -251,16 +252,66 @@ def audit(root: Path, manifest: dict) -> dict:
     }
 
 
+def policy_audit(root: Path, manifest: dict, reused: dict, plan: dict) -> dict:
+    """Bind a predeclared family falsification to the fully reverified corpus."""
+    o2.require(plan["schema"] == POLICY_SCHEMA, "unsupported policy audit schema")
+    o2.require(plan["reuse_manifest_sha256"] == o2.fingerprint_json(manifest), "reuse manifest changed")
+    o2.require(reused == read_pin(root, plan["reuse_readout"]), "reuse readout changed")
+    o2.require(plan["policy"] == {"id": g0.cr1.POLICY, "tau_support": None,
+                                "tie_epsilon": g0.cr1.TIE_EPSILON}, "policy family changed")
+    o2.require(plan["operation"] == "NECESSARY_CONDITION_NO_THRESHOLD_SELECTION", "unsupported operation")
+    o2.require(plan["required_control_outcome"] == {"positive_loss": 0, "opposition_accepted": 0},
+               "required control outcome changed")
+    units = reused["oil_units"]
+    baseline = read_pin(root, manifest["inputs"]["oil_readout"])
+    o2.require(len(units) == len(baseline["rows"]), "complete population required")
+    controls, facets = [], []
+    for index, (unit, row) in enumerate(zip(units, baseline["rows"])):
+        o2.require(unit["baseline_pointer"] == f"/rows/{index}" and unit["query"] == row["query"]
+                   and unit["query_sha256"] == o2.fingerprint_json(row["query"]), "exact policy query join failed")
+        if unit["candidate_role_comparison_ready"] or unit["physical_claim"] == "NOT_QUALIFIED":
+            query = unit["query"]
+            o2.require(type(query["initial_reference"]) is bool, "reference membership missing")
+            result = {"id": query["id"], "query": query, "query_sha256": unit["query_sha256"],
+                      "baseline_pointer": unit["baseline_pointer"], "claim": unit["physical_claim"],
+                      "practical_acceptance": unit["practical_acceptance"],
+                      "initial_reference": query["initial_reference"], "local": row["modes"]["local"],
+                      "decision": "NOT_EVALUATED"}
+            (controls if unit["candidate_role_comparison_ready"] else facets).append(result)
+    roster = [{k: c[k] for k in ("id", "query_sha256", "claim", "initial_reference")} for c in controls]
+    o2.require(roster == plan["controls"], "predeclared control roster changed")
+    nonself = [c for c in controls if not c["initial_reference"]]
+    results = {"all_current_controls": g0.cr1.support_policy_feasibility(controls),
+               "excluding_initial_reference": g0.cr1.support_policy_feasibility(nonself)}
+    return {"schema": POLICY_SCHEMA, "plan_sha256": o2.fingerprint_json(plan),
+            "status": results["all_current_controls"]["status"], "results": results,
+            "inputs": {"reuse_readout": plan["reuse_readout"], "oil_readout": manifest["inputs"]["oil_readout"]},
+            "counts": {"population": len(units), "controls": len(controls),
+                       "claims": dict(Counter(u["physical_claim"] for u in units)),
+                       "local_availability": dict(Counter(r["modes"]["local"]["availability"] for r in baseline["rows"])),
+                       "independent_scored_recordings": baseline["counts"]["independent_recordings"],
+                       "untouched_holdout_recordings": 0},
+            "full_population_query_digest": o2.fingerprint_json([u["query_sha256"] for u in units]),
+            "controls": controls, "nonphysical_facets": facets,
+            "production_changed": False, "training_executed": False, "model_calls": 0,
+            "decision": "NOT_EVALUATED", "native_path_role_ready": False,
+            "scope": "Necessary condition on exposed original-precision controls only; no operating point or accuracy claim."}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--policy-manifest", type=Path,
+                        help="Optional frozen necessary-condition audit; no threshold selection")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     o2.require(not args.output.exists(), "refuse overwrite")
     manifest = o2.read_json(args.manifest)
     started = g0.time.monotonic()
     result = audit(args.root.resolve(), manifest)
+    if args.policy_manifest:
+        result = policy_audit(args.root.resolve(), manifest, result, o2.read_json(args.policy_manifest))
     elapsed = g0.time.monotonic() - started
     limits = manifest["resources"]
     o2.require(elapsed <= limits["seconds"], "reuse time budget exceeded")

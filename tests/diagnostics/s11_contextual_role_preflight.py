@@ -247,6 +247,59 @@ def _review_claim(sources, claim):
     return value
 
 
+def support_policy_feasibility(controls):
+    """Falsify the fixed sign + lower support bound; never choose that bound.
+
+    If a sign-passing opposition has A(n) >= A(p), every support threshold
+    preserving p also admits n. This necessary-condition audit is not fitting,
+    an eligibility decision, or proof that the surviving family is useful.
+    """
+    o2.unique(controls, "id", "policy controls")
+    positive, opposed, missing, sign_failures = [], [], [], []
+    for row in controls:
+        o2.require(row["claim"] in {"TARGET_CORRESPONDENCE", "OPPOSED_OIL_TARGET"},
+                   "policy control must have a current physical claim")
+        local = row["local"]
+        a, m = local["minimum_interface_similarity"], local["minimum_interface_margin"]
+        unavailable = local["availability"] in {"UNAVAILABLE", "PARTLY_UNAVAILABLE"}
+        if unavailable:
+            o2.require(a is None and m is None, "missing variants cannot supply aggregate scores")
+            missing.append(row["id"])
+            continue
+        o2.require(local["availability"] in {"MEASURED", "NUMERICAL_TIE", "VARIANT_DISAGREEMENT"},
+                   "unknown score availability")
+        o2.number(a, "minimum interface similarity")
+        o2.number(m, "minimum interface margin")
+        if row["claim"] == "TARGET_CORRESPONDENCE":
+            positive.append(row)
+            if m <= TIE_EPSILON:
+                sign_failures.append(row["id"])
+        else:
+            opposed.append(row)
+    o2.require(any(r["claim"] == "TARGET_CORRESPONDENCE" for r in controls)
+               and any(r["claim"] == "OPPOSED_OIL_TARGET" for r in controls),
+               "both positive and opposition controls required")
+    witnesses = []
+    for p in positive:
+        if p["local"]["minimum_interface_margin"] <= TIE_EPSILON:
+            continue
+        for n in opposed:
+            if (n["local"]["minimum_interface_margin"] > TIE_EPSILON
+                    and n["local"]["minimum_interface_similarity"]
+                    >= p["local"]["minimum_interface_similarity"]):
+                witnesses.append({"positive": p["id"], "opposition": n["id"],
+                                  "support_difference": n["local"]["minimum_interface_similarity"]
+                                  - p["local"]["minimum_interface_similarity"]})
+    contradicted = bool(sign_failures or witnesses)
+    status = ("CONTRADICTED_BY_CONTROLS" if contradicted else
+              "INCOMPLETE_CONTROLS" if missing else "NOT_FALSIFIED_ON_EXPOSED_CONTROLS")
+    return {"status": status, "missing_controls": missing,
+            "positive_sign_failures": sign_failures, "support_order_witnesses": witnesses,
+            "opposition_sign_failures": [n["id"] for n in opposed
+                                         if n["local"]["minimum_interface_margin"] <= TIE_EPSILON],
+            "tau_support": None, "decision": "NOT_EVALUATED", "calibration": "UNCALIBRATED"}
+
+
 def qualify_reviews(root, baseline, review):
     """Overlay scoped disqualifications/acceptance without changing historical truth.
 

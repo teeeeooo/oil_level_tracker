@@ -326,6 +326,38 @@ its own candidate/support lineage; no post-selection snapping or reference Y.
 
 ### Executable saved-contract preflight
 
+#### Necessary-condition check before a new observation
+
+The existing continuous family must first face the current candidate controls.
+The optional `--policy-manifest` entry in the existing material-reuse CLI reruns
+the full binding audit and emits a small supplement through the CR1 owner. It
+adds no image information, model operation or operating point. Its predeclared
+[plan](../50-diagnostics/s11/2026-10-14-oil-policy-feasibility/manifest.json)
+requires preservation of all six current correspondences and separation of all
+three opposed Oil targets. Report the five nonself positives separately from the
+initial reference. The two unqualified A/B records and 153 unassessed records
+remain in the pinned 164-record population; they cannot become negatives.
+
+For a measured positive `p`, failure of any required local margin's fixed `1e-6`
+sign rule already contradicts that requirement. For sign-passing `p` and opposed
+`n`, `A(n) >= A(p)` proves that every lower support bound preserving `p` also
+admits `n`. Enumerate such pairs, not threshold breakpoints. Missing observations
+remain incomplete controls, never correct rejection. The complete floor/ceil
+minima come from the existing audited score table; no favorable anchor selection.
+
+This is falsification of the already proposed family, not a new observable or
+calibration on exposed records. `NOT_FALSIFIED_ON_EXPOSED_CONTROLS` is not a pass,
+chosen threshold or demonstrated cross-source accuracy. A contradiction closes
+this fixed family at the stated zero-loss/zero-opposition requirement; changing
+that requirement would be a separate user impact decision. Retain B's practical
+acceptance as a separate facet regardless of this physical-control result.
+
+Reuse the existing 180 s, 800 MB RSS and 1 MB output caps; the managed run has
+2 MB scratch and 100 KB retained limits. No model, video decode, native-path
+training or production replay is required. No seed/crop/bank/margin/cutoff retry
+follows. Only a separately specified source of information can motivate the next
+observation after a contradiction.
+
 [The offline CR1 adapter](../../tests/diagnostics/s11_contextual_role_preflight.py)
 uses the existing O2 hash, validation and write-once helpers. The distinct adapter
 is needed because CR1 records carry full/local role vectors and floor/ceil anchors,
@@ -850,5 +882,5 @@ exposed transfer result as an independent validation success by moving N3 into f
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no production executing owner, schema or detector behavior changes.
 - Existing feature coverage: the receiving review reuses pinned CR1/O1/A1 captures and native geometry. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. No new Recipe or static-learning efficacy claim follows from saved-input binding.
-- Execution scope: the received reuse CLI and renderer were rerun over saved inputs from outside the repository cwd with exact output equality. No production frame/sequence/report execution or successor observation/training was performed; this delta defines candidate-versus-native evidence and source-exposure boundaries.
+- Execution scope: the received reuse CLI and renderer were rerun over saved inputs from outside the repository cwd with exact output equality. The next saved-score necessary-condition audit reuses that CLI and the CR1 minima; it selects no operating point. No production frame/sequence/report execution or successor observation/training is implied.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.

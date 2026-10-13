@@ -158,6 +158,62 @@ def fixture_manifest(tmp_path, labels=("UNREVIEWED",)):
     return root, manifest
 
 
+@pytest.mark.parametrize("positive,opposition,expected", [
+    ((0.7, 0.1), (0.8, 0.1), "CONTRADICTED_BY_CONTROLS"),
+    ((0.7, 0.1), (0.7, 0.1), "CONTRADICTED_BY_CONTROLS"),
+    ((0.7, 0.1), (0.6, 0.1), "NOT_FALSIFIED_ON_EXPOSED_CONTROLS"),
+    ((0.7, 0.1), (0.9, 1e-6), "NOT_FALSIFIED_ON_EXPOSED_CONTROLS"),
+    ((0.7, 1e-6), (0.6, 0.1), "CONTRADICTED_BY_CONTROLS"),
+    ((0.7, -0.1), (0.6, -0.1), "CONTRADICTED_BY_CONTROLS"),
+    ((None, None), (0.6, 0.1), "INCOMPLETE_CONTROLS"),
+    ((0.7, 0.1), (None, None), "INCOMPLETE_CONTROLS"),
+])
+def test_fixed_support_family_necessary_condition(positive, opposition, expected):
+    controls = []
+    for name, claim, (support, margin) in (
+            ("p", "TARGET_CORRESPONDENCE", positive), ("n", "OPPOSED_OIL_TARGET", opposition)):
+        controls.append({"id": name, "claim": claim, "local": {
+            "availability": "UNAVAILABLE" if support is None else "MEASURED",
+            "minimum_interface_similarity": support, "minimum_interface_margin": margin}})
+    before = copy.deepcopy(controls)
+    result = role.support_policy_feasibility(controls)
+    assert result["status"] == expected
+    assert result["tau_support"] is None and result["decision"] == "NOT_EVALUATED"
+    assert controls == before
+
+
+def test_favorable_fractional_variant_cannot_remove_policy_contradiction():
+    item = record(40.5)
+    item["measurement"]["variants"][0]["modes"]["local"] = mode(0.9)
+    item["measurement"]["variants"][1]["modes"]["local"] = mode(0.6)
+    positive = {"id": "p", "claim": "TARGET_CORRESPONDENCE",
+                "local": role.observe(item, GEOMETRY)["modes"]["local"]}
+    opposed = {"id": "n", "claim": "OPPOSED_OIL_TARGET",
+               "local": role.observe(record(), GEOMETRY)["modes"]["local"]}
+    result = role.support_policy_feasibility([positive, opposed])
+    assert result["status"] == "CONTRADICTED_BY_CONTROLS"
+    assert result["support_order_witnesses"][0]["support_difference"] == pytest.approx(0.1)
+
+
+@pytest.mark.parametrize("change", ["duplicate", "unknown_claim", "missing_opposition", "nonfinite", "partial_score"])
+def test_policy_audit_rejects_invalid_controls(change):
+    local = role.observe(record(), GEOMETRY)["modes"]["local"]
+    controls = [{"id": "p", "claim": "TARGET_CORRESPONDENCE", "local": copy.deepcopy(local)},
+                {"id": "n", "claim": "OPPOSED_OIL_TARGET", "local": copy.deepcopy(local)}]
+    if change == "duplicate":
+        controls[1]["id"] = "p"
+    elif change == "unknown_claim":
+        controls[1]["claim"] = "UNASSESSED"
+    elif change == "missing_opposition":
+        controls.pop()
+    elif change == "nonfinite":
+        controls[1]["local"]["minimum_interface_similarity"] = float("nan")
+    else:
+        controls[1]["local"]["availability"] = "PARTLY_UNAVAILABLE"
+    with pytest.raises(ValueError):
+        role.support_policy_feasibility(controls)
+
+
 @pytest.mark.parametrize("change", ["threshold", "holdout", "geometry", "source", "candidate", "story"])
 def test_preflight_rejects_unsafe_freeze_changes(tmp_path, change):
     root, manifest = fixture_manifest(tmp_path)

@@ -1381,3 +1381,9 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [70-reference/s11-actual-execution-2026-10-13/RESULT_INDEX.json](70-reference/s11-actual-execution-2026-10-13/RESULT_INDEX.json) | 첨부의 휴대용 결과 색인 원본; live 결과 owner 아님 |
 | 2026-10-14 | [70-reference/s11-actual-execution-2026-10-13/S11_HANDOFF.md](70-reference/s11-actual-execution-2026-10-13/S11_HANDOFF.md) | 첨부의 인수인계 원문; 당시 미커밋 상태 보존 |
 | 2026-10-14 | [70-reference/s11-actual-execution-2026-10-13/import-manifest.json](70-reference/s11-actual-execution-2026-10-13/import-manifest.json) | 13개 member 배치·hash·수신 검증·중복 정리와 복원 방법 |
+
+### 2026-10-14 Oil 정책 필요조건 검사
+
+| 최초 등록일 (KST) | 파일 | 역할 |
+|---|---|---|
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-policy-feasibility/manifest.json](50-diagnostics/s11/2026-10-14-oil-policy-feasibility/manifest.json) | 기존 연속 정책의 9개 대조군·연산·중단 조건 고정 |

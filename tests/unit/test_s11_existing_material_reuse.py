@@ -140,6 +140,67 @@ def test_same_candidate_under_different_query_ids_is_rejected():
         reuse.oil_units([candidate, alias], [control(candidate)])
 
 
+def policy_fixture(tmp_path):
+    rows = [row(index=0), row(index=1), row("rejected_target", index=2),
+            row(index=3, physical="NOT_QUALIFIED"), row("UNREVIEWED", index=4)]
+    for i, r in enumerate(rows):
+        r["query"]["initial_reference"] = i == 0
+    units = reuse.oil_units(rows, [control(r) for r in rows[:3]])
+    baseline = {"rows": [{"query": r["query"], "modes": {"local": {
+        "availability": "MEASURED", "minimum_interface_similarity": a,
+        "minimum_interface_margin": 0.1}}} for r, a in zip(rows, [0.5, 0.8, 0.6, 0.9, 1.0])],
+        "counts": {"independent_recordings": 1}}
+
+    def write(name, value):
+        path = tmp_path / name
+        path.write_text(json.dumps(value), encoding="utf-8")
+        return {"path": name, "sha256": reuse.o2.sha256_file(path)}
+
+    reused = {"oil_units": units}
+    manifest = {"inputs": {"oil_readout": write("baseline.json", baseline)}}
+    plan = {"schema": reuse.POLICY_SCHEMA, "reuse_manifest_sha256": reuse.o2.fingerprint_json(manifest),
+        "reuse_readout": write("reuse.json", reused),
+        "policy": {"id": reuse.g0.cr1.POLICY, "tau_support": None, "tie_epsilon": 1e-6},
+        "operation": "NECESSARY_CONDITION_NO_THRESHOLD_SELECTION",
+        "required_control_outcome": {"positive_loss": 0, "opposition_accepted": 0},
+        "controls": [{"id": u["query"]["id"], "query_sha256": u["query_sha256"],
+                      "claim": u["physical_claim"], "initial_reference": u["query"]["initial_reference"]}
+                     for u in units[:3]]}
+    return manifest, reused, plan
+
+
+def test_policy_reference_and_nonphysical_cases_are_separate(tmp_path):
+    manifest, reused, plan = policy_fixture(tmp_path)
+    report = reuse.policy_audit(tmp_path, manifest, reused, plan)
+    assert report["results"]["all_current_controls"]["status"] == "CONTRADICTED_BY_CONTROLS"
+    assert report["results"]["excluding_initial_reference"]["status"] == "NOT_FALSIFIED_ON_EXPOSED_CONTROLS"
+    assert report["counts"]["population"] == 5
+    assert report["counts"]["claims"]["UNASSESSED"] == 1
+    assert [r["id"] for r in report["nonphysical_facets"]] == ["q3"]
+
+
+@pytest.mark.parametrize("change", ["threshold", "roster", "claim", "reference", "hash", "rebound_pointer"])
+def test_policy_freeze_cannot_relabel_or_rebind_controls(tmp_path, change):
+    manifest, reused, plan = policy_fixture(tmp_path)
+    if change == "threshold":
+        plan["policy"]["tau_support"] = 0.7
+    elif change == "roster":
+        plan["controls"].pop()
+    elif change == "claim":
+        plan["controls"][1]["claim"] = "OPPOSED_OIL_TARGET"
+    elif change == "reference":
+        plan["controls"][1]["initial_reference"] = True
+    elif change == "hash":
+        plan["reuse_readout"]["sha256"] = "0" * 64
+    else:
+        reused["oil_units"][1]["baseline_pointer"] = "/rows/0"
+        path = tmp_path / "reuse.json"
+        path.write_text(json.dumps(reused), encoding="utf-8")
+        plan["reuse_readout"]["sha256"] = reuse.o2.sha256_file(path)
+    with pytest.raises(ValueError):
+        reuse.policy_audit(tmp_path, manifest, reused, plan)
+
+
 def test_json_pointer_escaping():
     assert reuse.exact_pointer({"a/b": {"~key": [7]}}, "/a~1b/~0key/0") == 7
 
