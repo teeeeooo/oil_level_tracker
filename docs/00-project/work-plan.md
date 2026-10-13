@@ -4,19 +4,17 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1 offline preflight adds no detector behavior.
-**Next transition:** on resumption, produce one executable design for a different material-role observation using existing native path/support owners. It must address physical side support, token/context sharing and internal/no-Foam opposition, with the reused owner, comparison and stop conditions stated before new inference. No successor detector is selected. The [fixed R/L comparison](../50-diagnostics/s11/2026-10-13-foam-material-sides.md) is CLOSED_WITHOUT_PROMOTION; both interior-reference judgments stay CLOSED, with no crop/scale/reference/cutoff retry. Physical calibration, independent evaluation and production consumer entry remain unmet.
-**Resume checkpoint:** the user requested a handoff on October 13; research execution stops at the [material-role checkpoint](../60-evidence/s11/2026-10-13-material-role-handoff.md). It records the verified `d23f0a5` research state, local-only inputs and a restart prompt. No unanswered physical judgment or Windows run is pending; this is not S11 completion.
+**Next transition:** implement the offline **NSR-1 G0 native binding/readiness slice** defined in the [existing design owner](../20-architecture/s11-contextual-role-observation-design.md#native-side-role-observation-and-g0-binding-contract). Deliver one pinned manifest and complete per-capability READY/NOT_READY table linking native paths, actual side/feature support and original weak review units. No training, new encoder call or production consumer is part of that first slice. A successor classifier remains unselected; physical calibration and independent evaluation are still open.
+**Latest intake:** the [October 13 program review](../60-evidence/s11/2026-10-13-program-review-intake.md) verifies the supplied six-file package at `badf7ca`, adopts the input/readiness delta and supersedes the prior design-only resume instruction. The [material-role handoff](../60-evidence/s11/2026-10-13-material-role-handoff.md) remains the checkpoint for closed R/L/B judgments and local inputs. No physical question or Windows run is pending.
 
 This is the sole current state, authorization, unknowns and next-action owner.
-The [October 13 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
-preserves the October 12 post-CR1 package, independently verifies its saved audit
-and adopts a staged follow-on plan. The first CR-1 trial remains
-`CLOSED_WITHOUT_PROMOTION`; the complete review remains
-`SCOPE_LIMITED_USEFULNESS`. CR-1 remains a follow-up research candidate; production
-adoption is undecided. Keep one pinned environment/weight set within 3 GB for
-qualified new-input inference. The October 13 requested cleanup removed unused
-installer metadata; saved-score policy design needs no encoder rerun. Reassess
-the retained set when the operating-policy decision replaces or ends its use.
+The [post-CR1 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
+retains the preceding saved-score audit. Original CR1 remains
+`CLOSED_WITHOUT_PROMOTION` for the first trial and `SCOPE_LIMITED_USEFULNESS`
+for the complete review. The fixed R/L operation is closed without promotion;
+no crop/scale/reference/cutoff retry follows. Keep one pinned environment/weight
+set under the existing 3 GB contract; the G0 input work needs no encoder rerun.
+Reassess that retained set when its research use is explicitly replaced or ended.
 
 ## S11 work-item ledger
 
@@ -30,13 +28,13 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 |---|---|---|
 | O1 extraction | IMPLEMENTED; locally ACCEPTED | Reuse trace-only [O1](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md); no identity authority |
 | W0–W3 / O2 foundations | Fixed profile CLOSED WITHOUT PROMOTION; target/aggregation, bounded scene review and evaluation tools locally verified; D1 return CLOSED | Reuse [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) and [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed); prediction/efficacy is not established by tooling |
-| P0 / W4 / WP01 — baseline and intake | COMPLETE at saved-evidence scope | [Intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md) verifies vectors, report extrema and numeric cadence; physical cadence remains NOT_EVALUATED |
-| W4/P2 / WP02 — operating policy | Saved-contract preflight IMPLEMENTED and VERIFIED; physical policy remains uncalibrated | [Preflight](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md): 164 exact candidate/context joins, raw-vector references, availability/floor–ceil/native lineage and original geometry/bank pins; no cutoff or physical decisions |
-| V2/V3 / WP03 — calibration and evaluation | Scoped review binding IMPLEMENTED and VERIFIED; input qualification OPEN | [Executable supplement](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md#실행-도구에-판정-의미-반영) preserves 164 rows and binds A/B physical withdrawal plus B practical acceptance only; 42 focused tests and actual CLI pass. Qualify physical calibration inputs and practical-use evaluation separately; new public still stays unassessable, P0/Windows scope and independent evaluation entry remain |
+| P0 / W4 / WP01 — baseline and intake | COMPLETE at saved-evidence scope | [October 13 program intake](../60-evidence/s11/2026-10-13-program-review-intake.md) verifies pins, canary and saved report extrema; P0 A/B/C/U remains the impact owner, physical cadence NOT_EVALUATED |
+| W4/P2 / WP02 — observation/policy | CR1 saved-contract preflight IMPLEMENTED and VERIFIED; NSR input contract ADOPTED, not implemented | Reuse the 164-row [preflight](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md). Next G0 joins observed paths, side support and complete feature dependencies; no cutoff, classifier or physical decisions |
+| V2/V3 / WP03 — qualification and evaluation | Existing A/B review binding IMPLEMENTED and VERIFIED; native weak-constraint readiness OPEN | Preserve the [review supplement](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md#실행-도구에-판정-의미-반영); compile source/region/interval/candidate units without precision promotion. G0 lists necessary missing role/opposition and exposure per capability; training/calibration/independent evaluation remain separate |
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
 | O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | PROPOSED; separate from WP05 | Explicit route for independently role-supported native candidates; name the replaced heuristic. Repair association/lifecycle only if saved earliest-loss evidence identifies that owner; preserve FULL/EMPTY/refill/drain |
-| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | R/L reference qualification COMPLETE; fixed material-side comparison CLOSED WITHOUT PROMOTION; physical selection OPEN | [Readout](../50-diagnostics/s11/2026-10-13-foam-material-sides.md): 43 contexts/1,335 edges, 1,184 measured with separate full/local R/L pairs, 151 unavailable; internal appearance-transition and no-Foam context overlap remain. Successor design must address native physical side support, token sharing and independent opposition; no retry of the frozen geometry/bank or episode relaxation |
+| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | R/L comparison CLOSED WITHOUT PROMOTION; NSR G0 is next; physical selection OPEN | Preserve [all 43 contexts/1,335 edges](../50-diagnostics/s11/2026-10-13-foam-material-sides.md), including 151 unavailable. G0 separates component-face/raw-edge reachability, side-role/opposition and fine/coarse coverage; qualified feasibility precedes independent raw-front integration |
 | P5-c / WP08 — Foam episode | ENTRY NOT MET | Open only for an independently qualified correct raw upper lost downstream; separate onset/stable-layer versus splash/residue controls |
 | O5/W7/P6/D6 / WP09 — integrated Windows and report | PENDING integrated candidate | Exact runtime, all nine canonical segments, target resources and actual independent report-only reading; V5 shadow and final field acceptance remain separate |
 | P7 / WP10 — disposition and closeout | PENDING acceptance evidence | Record accepted/limited/rejected/unassessed scope and residual impact; retain minimal evidence. S11-M/S12 follow the roadmap, not partial local success |
@@ -50,62 +48,50 @@ and the [parent behavior contract](../30-validation/s11-physical-interface-evide
 
 ### Direction decision and staged follow-up
 
-The existing fixed encoder/bank can motivate one small operating-policy family:
-local interface uniquely preferred at every required anchor variant, plus minimum
-absolute local interface support. Preserve full scores as context; no universal
-full-texture veto, category voting or maximum-score candidate selection. Low
-support/ties/missing evidence do not prove structure. Native candidate linkage
-and qualified role precision remain independent of descriptor preference.
+Adopt the [NSR-1 binding/readiness design](../20-architecture/s11-contextual-role-observation-design.md#native-side-role-observation-and-g0-binding-contract)
+from the latest intake. Its new information must be qualified roles attached to
+actual native paths and complete feature support. Reusing path geometry alone or
+renaming the failed R/L similarity is insufficient. The supplied three-convolution
+7×7 head is a research option, not an adopted training plan or a proven classifier.
 
-The completed [public transfer](../50-diagnostics/s11/2026-10-13-cr1-public-transfer.md)
-does not qualify that family: local interface preference covers all 18 Foam-region
-anchors but only 6/17 Oil-region anchors, with no point labels or Foam-upper bank.
-These are context statistics, not error rates. Keep the complete scores and stop
-that frozen comparison; independent Foam-upper design is the next research slice.
+1. **WP02/03 + WP07, G0:** implement the bounded offline binding adapter using
+   existing O2 pin helpers, A1, native edge/path and boundary-face owners. Produce
+   a manifest and complete readiness table; keep source constraints when exact
+   candidate correspondence is absent. Declare one useful role capability and
+   its required positive/opposition evidence. No source/video/model copies.
+2. **G1 only after readiness:** freeze one observation/comparison, source/episode
+   exposure, per-appearance outcomes, costs and stop rules. If the selected method
+   needs learning, present its concrete data/architecture/loss/run-budget scope
+   for separate adoption before training. Missing role evidence yields a named
+   NOT_READY result rather than threshold tuning or implicit labels.
+3. **WP04:** qualified typed Witness delta, default OFF/unavailable fallback,
+   V4 equality/resources, then **V5 Windows shadow before O2 acceptance**.
+4. **WP05 then WP06:** separate anchor-and-continuation wrong-output suppression
+   from independently supported positive admission. Name the replaced heuristic;
+   modify later lifecycle ownership only when its earliest loss is demonstrated.
+5. **WP07/08:** Foam observation develops independently of Oil. Raw-front behavior
+   needs its own acceptance (and O2/V5/O3 if consuming Witness decisions). Episode
+   work opens only for a correct raw upper demonstrably lost downstream.
+6. **WP09/10:** integrated candidate, all nine canonical Windows segments and
+   actual independent report reading; classify supported/limited/rejected/
+   unassessed claims before any milestone closeout.
 
-The [WP02–03 manifest/preflight](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md)
-verifies the saved contract without fitting. The [B clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md)
-corrects the initial interpretation: B's representative Y841/native center-sector
-Y838 is a user-accepted approximation, while the red-mark description places fine
-Foam above a lower regional extent. A/idx19/Y836 is not newly qualified as a physical
-alternative by this explanation. B fails the proposed local-role condition at
-any support threshold; that is a conflict with practical acceptance, not a proven
-physical-interface false negative. CR1 texture preference alone proves neither
-physical success nor failure. Preserve B's practical allowance without deriving
-exact red-dot truth, a universal tolerance or an all-candidates-perfect gate.
+Keep the [B clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md):
+B's scoped practical approximation survives; neither B nor A is newly qualified
+physical calibration truth at f1485. Its negative local margin conflicts with
+practical acceptance, not a proven physical false negative. The
+[public transfer](../50-diagnostics/s11/2026-10-13-cr1-public-transfer.md) and
+[R/L comparison](../50-diagnostics/s11/2026-10-13-foam-material-sides.md) remain
+closed at their recorded scope. Weak affinity/support is not physical absence.
 
-Record physical role/localization and scoped practical acceptability separately
-before using these inputs in any policy comparison. Numeric calibration and new
-inference still require qualified inputs and acceptance entry. The public midpoint
-question is closed as unassessable; do not ask the same low-quality still again.
-Do not require all remaining unknown candidates to be labeled. Start with decision-bearing
-competitors using existing source judgments; ask only for genuinely new necessary
-physical judgments. Comparative filming is unavailable; do not repeat that question.
-
-The [P0 scene/claim contract](../30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract)
-remains adopted; the compressor-versus-water/beer/milk A/B scope choice is suspended.
-Partial local errors are permitted in principle, with no numerical allowance
-chosen here. Protect important movement as well as rejection. The sample4 wrong
-42 s minimum and 44 s maximum remain blocking report distortions. A verified
-partial improvement may be recorded while whole-report success remains open.
-The one-second Oil target applies only to separately qualified visible movement;
-CSV validity and report bridges do not establish same-interface cadence.
-
-The [completed two-appearance material-side comparison](../50-diagnostics/s11/2026-10-13-foam-material-sides.md)
-qualifies neither a similarity-only filter nor an upper-front consumer. R/L remain
-valid approved interior footprints, with their reference episodes exposed. The
-sample4 upper-range query is unavailable at 236/275 upper support pixels, and
-local L affinity overlaps no-Foam water B/C. Constructed internal transitions can
-produce positive ordered contrast against both references. These are limits of
-this frozen operation, not proof that all learned role evidence is impossible.
-Keep raw scores and unsupported rows; no additional reference or scale tuning
-continues this result. The original CR1 scope-limited usefulness remains unchanged.
-
-Foam WP07 can be designed independently of Oil policy work. The current component
-front misses the qualified upper before episode acceptance; P5-c is not opened.
-Keep presence, upper height and physical disappearance separate. A different
-Foam-upper bank needs its own frozen operation and controls, not a renamed Oil
-texture prototype. No new report UI or whole-detector rewrite is needed.
+The [P0 contract](../30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract)
+owns impact. First reduce false 42/44 s report extrema while preserving real
+movement, then recover independently supported candidates and Foam upper. `all-unknown`
+cannot pass; numerical coverage is not physical cadence. Partial local
+improvement is distinct from whole-report success; the prior material-scope
+A/B choice stays suspended. The one-second Oil target applies
+only to separately qualified visible movement. Do not repeat the closed R/L, B,
+Cold117, sample3 or unavailable comparative-filming questions, or add report UI.
 
 ### Repository cleanup and isolated CR-1 sequence
 
@@ -116,7 +102,7 @@ reviewed truth, peer baseline and the retained report stay available. No repeat
 cleanup or user continuation checkpoint remains outstanding.
 The [CR-1 complete readout](../50-diagnostics/s11/2026-10-12-cr1-context-comparison.md)
 retains all 164 records, original exposure groups, first-trial failure and the
-scope-limited follow-up. The [October 13 worktree check](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md#워크트리와-산출물-정리)
+scope-limited follow-up. The [latest worktree check](../60-evidence/s11/2026-10-13-program-review-intake.md#워크트리와-중복-정리)
 finds one main worktree and no eligible sibling merge. Retain one existing CR-1
 environment/model set under its [3 GB contract](../20-architecture/s11-contextual-role-observation-design.md#local-footprint-and-removal-contract); unused installer cache was removed.
 Use [managed artifact closeout](../40-operations/experiment-artifact-lifecycle.md)
@@ -204,7 +190,7 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 
 ## Current authorization boundary
 
-The October 13 request authorizes this package/worktree intake, eligible integration,
+The October 13 program-review request authorizes this package/worktree intake, eligible integration,
 verified duplicate cleanup, validity review and follow-on planning, with autonomous
 commits/pushes. It is not an instruction to run every future WP during intake.
 Earlier grants for bounded local development persist subject to the stated gates.
@@ -258,8 +244,8 @@ stay NOT_EVALUATED.
 The [physical-interface proposal](../20-architecture/s11-physical-interface-evidence-repair-design.md),
 [Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md)
 and [Witness Validation](../30-validation/s11-interface-observability-witness-validation.md)
-retain their responsibilities. The [CR-1 policy supplement](../20-architecture/s11-contextual-role-observation-design.md#post-cr1-operating-policy-proposal)
-owns the adopted design family; the ledger owns entry and sequencing. Closed
+retain their responsibilities. The [contextual-role supplement](../20-architecture/s11-contextual-role-observation-design.md#native-side-role-observation-and-g0-binding-contract)
+owns the NSR input delta and preceding CR1 hypotheses; the ledger owns entry and sequencing. Closed
 research is not reopened by an old pending sentence. Independent support,
 association, committed handoff and initial-FULL observation remain later gates.
 Failed descriptors do not prove physical unobservability or justify product-scope reduction.

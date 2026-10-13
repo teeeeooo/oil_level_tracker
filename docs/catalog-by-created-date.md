@@ -1286,3 +1286,18 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
 | 2026-10-13 | [60-evidence/s11/2026-10-13-material-role-handoff.md](60-evidence/s11/2026-10-13-material-role-handoff.md) | 검증된 체크포인트·닫힌 판정·로컬 입력·후속 설계와 재개 메시지 |
+
+### 2026-10-13 전반 검토 명세 인수
+
+아래 파일의 작성·인수일은 2026-10-13이며 최초 Git 추가일은 등록 후 확정합니다.
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [60-evidence/s11/2026-10-13-program-review-intake.md](60-evidence/s11/2026-10-13-program-review-intake.md) | 검증·타당성·채택 범위·정리 기록 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-13/README.md](70-reference/s11-program-review-2026-10-13/README.md) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-13/S11-evidence-audit-2026-10-13.json](70-reference/s11-program-review-2026-10-13/S11-evidence-audit-2026-10-13.json) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-13/S11-program-review-and-work-spec-2026-10-13.md](70-reference/s11-program-review-2026-10-13/S11-program-review-and-work-spec-2026-10-13.md) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-13/SHA256SUMS](70-reference/s11-program-review-2026-10-13/SHA256SUMS) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-13/VERIFICATION.json](70-reference/s11-program-review-2026-10-13/VERIFICATION.json) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-13/import-manifest.json](70-reference/s11-program-review-2026-10-13/import-manifest.json) | 원본 hash·배치·worktree mapping |
+| Git 미등록 | [70-reference/s11-program-review-2026-10-13/reproduce_native_feature_canary.py](70-reference/s11-program-review-2026-10-13/reproduce_native_feature_canary.py) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |

@@ -1,0 +1,32 @@
+{
+  "schema": "s11-review-package-verification-v1",
+  "date": "2026-10-13",
+  "scope": "PACKAGE CHECKS ONLY; not production, model or field acceptance",
+  "checks": {
+    "markdown_nonempty": true,
+    "markdown_fences_balanced": true,
+    "source_ids_unique": true,
+    "sha256_fields_well_formed": true,
+    "work_packages_01_through_10_present": true,
+    "windows_nine_segments_present": true,
+    "head_consistent": true,
+    "coverage_is_not_accuracy_explicit": true,
+    "default_setting_canary_scope_explicit": true,
+    "classifier_not_implemented_explicit": true,
+    "canary_does_not_claim_improvement": true,
+    "cli_ast_parse": true,
+    "cli_help": true
+  },
+  "all_passed": true,
+  "core_canary_executed_in_mac_repo": true,
+  "cli_wrapper_full_mac_execution": false,
+  "cli_wrapper_checks": [
+    "AST parse",
+    "--help"
+  ],
+  "production_change": false,
+  "new_model_training": false,
+  "new_encoder_inference": false,
+  "windows_execution": false,
+  "independent_report_read": false
+}

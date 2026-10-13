@@ -1235,7 +1235,7 @@ distinction is preserved alongside the guards below.
 - Prior mechanisms reviewed: R22/R22-2 evidence and diagnostics, public probe, reviewed BASE/Accum checkpoints, R23 rejection, CR-1 raw-vector/competition and report/cadence audit, and existing parent validation.
 - Prior mechanisms rejected: threshold widening, polarity/source/motion identity, unpartitioned calibration, private-coordinate tuning, missing-as-zero, stale identity/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded resources and separate Windows field acceptance.
-- Difference from prior failures: extraction, discrimination, behavior and field qualification are independent gates with explicit positive/negative/unresolved labels and leakage controls.
+- Difference from prior failures: extraction, discrimination, behavior and field qualification are independent gates with explicit positive/negative/unresolved labels and leakage controls. The NSR-1 delta separately tests native binding/readiness, full dependency support and original weak-label units before any role-head experiment or typed consumer.
 - Logic-map impact: NONE — the clarification changes no implementation or acceptance owner; the mapped diagnostic route and production flow remain unchanged.
 - Failure-registry impact: NONE — it adds acceptance obligations for existing named mechanisms without claiming a new cause or repair.
 
@@ -1592,6 +1592,73 @@ all nine canonical segment IDs and the pending private-source fingerprint in
 the [Windows truth owner](windows-sample1-heating-coldstart-reviewed-truth.md).
 Its exact-runtime field gate, V5 shadow and report comprehension remain separate.
 The one-second Oil target applies only to qualified visible same-interface motion.
+
+### Native side-role readiness and feasibility
+
+The [NSR-1 design delta](../20-architecture/s11-contextual-role-observation-design.md#native-side-role-observation-and-g0-binding-contract)
+qualifies a successor's inputs; it does not reopen CR1/R/L or accept the proposed
+small head. The [intake](../60-evidence/s11/2026-10-13-program-review-intake.md)
+reproduces the supplied canary without establishing detector improvement.
+
+| Stage | Required result | Advancement limit |
+|---|---|---|
+| G0 — binding/readiness | Pinned source/Recipe/frame/PTS and geometry, native path/support references, original review units, complete population/exposure, per-capability positive/opposition and READY/NOT_READY reasons | Offline engineering readiness only; no physical classifier, training grant or O2 acceptance |
+| G1 — one frozen observation | A predeclared capability demonstration, all known wrong/positive/unreviewed/unavailable rows, fine/coarse and self/nonself facets, source/episode splits, costs and stopped/failed runs | Exposed development usefulness only; no untouched holdout or production authority inferred |
+| G2 — behavior/workflow | Separately accepted consumer/raw-front change with full-window lineage, wrong/new extrema, retained real movement and independent Oil/Foam results | Existing O2/V5/O3 and parent Foam gates apply; Windows field/report acceptance remains separate |
+
+G0's planned offline adapter must exercise its real CLI with pinned inputs,
+write-once output and execution outside the repository cwd. Focused controls cover:
+
+- stale source/review hashes, wrong frame/PTS/Glass/geometry or candidate index,
+  duplicate views and missing native path; preserve all scheduled rows and the
+  original authority's precision rather than inferring labels from Y proximity;
+- interval containing zero, one or several edges: none becomes a positive bag
+  without separately supported native correspondence. Retain source constraints
+  when candidate recall or identity is unqualified;
+- component-face reachability separately from raw-edge reachability, branch or
+  junction orientation, curved/partial paths, crop/mask censoring, shared faces
+  and label zero. No closure/fill/nearest-edge repair;
+- complete feature dependency support, including preprocessing/padding and head
+  aggregation; cross-side/shared features cannot become independent side votes.
+  A valid center with a censored footprint remains explicit context/unavailable
+  according to the frozen operation, not a physical negative;
+- R/L region units, A's withdrawn physical qualification, B's independent practical
+  allowance, no-Foam scope and unclear/cropped scenes. Keep review metadata out
+  of inference and do not count replicated pixels/crops as independent labels;
+- material roles versus overlapping optical/context facets, and fine/fine,
+  coarse/coarse and both internal transitions. Constructed controls prove contract
+  behavior, not real-scene classification; absent exact guide joins stay untested.
+
+G0 need not label every existing candidate or certify all four proposed head
+outputs. It must declare the smallest capability to be tested and identify its
+required qualified information. READY for geometry alone is not READY for role
+learning. Missing headspace/bulk-liquid or opposition units must be named where
+the selected capability requires them. No replacement question for the closed
+R/L, B, Cold117 or sample3 reviews is implied.
+
+Before G1, freeze that capability's useful positive/opposition demonstration,
+known-target loss and wrong-acceptance accounting, unavailable/unreviewed handling,
+source/episode exposure, resource ceiling and stop rules. A training option also
+requires explicit scope adoption and one architecture/aggregation/loss/seed/
+optimizer/schedule/calibration specification; the native 7×7 stack is only a
+candidate. Do not infer dense labels from regional approvals or fit a candidate
+probability loss before defining its variable/domain/censoring semantics.
+
+Self-match, all-unknown output, dropping an appearance or missing counterexample,
+and source leakage cannot pass. Failure closes that fixed capability hypothesis;
+insufficient evidence is NOT_READY/NOT_EVALUATED, not proof of universal physical
+unobservability. No crop/scale/reference/cutoff/head-size retry follows by default.
+
+WP04 must additionally prove default OFF and unavailable fallback, exact old
+candidate/sequence/CSV/event/report fields and NONE/FULL equality, schema
+compatibility and V4 resources; then V5 Windows shadow precedes O2 acceptance.
+G1 cannot substitute for it. WP05 suppression and WP06 independently supported
+admission have separate ablations. WP07 raw-upper work is independent of final
+Oil; WP08 still requires a qualified correct raw upper actually lost downstream.
+Use P0 A/B/C/U for G2, the complete sample4 0–56 s baseline and all nine canonical
+Windows segments at their original precision. Protect rapid refill, stationary
+interfaces and real reversals. No new scalar/time tolerance, interpolation,
+report smoothing or automatic S11 closeout follows from this intake.
 
 ### Ordered row-distribution pilot controls
 

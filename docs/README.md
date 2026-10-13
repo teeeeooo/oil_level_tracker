@@ -95,6 +95,17 @@ R18–R20 predecessor architecture/validation and earlier diagnostics remain his
 
 ## S11 audit specifications and execution routing
 
+The [October 13 program-review package](70-reference/s11-program-review-2026-10-13/README.md)
+is byte-preserved with its [import manifest](70-reference/s11-program-review-2026-10-13/import-manifest.json).
+The [intake review](60-evidence/s11/2026-10-13-program-review-intake.md) verifies source/input
+pins, saved report claims and the actual native-feature canary CLI. The existing
+[contextual-role design](20-architecture/s11-contextual-role-observation-design.md#native-side-role-observation-and-g0-binding-contract)
+and [Witness Validation](30-validation/s11-interface-observability-witness-validation.md#native-side-role-readiness-and-feasibility)
+own the adopted native binding/weak-constraint/readiness delta. NSR-1 names a
+proposed observation; the small role head is not an approved training plan.
+Work Plan keeps the single WP01–WP10 ledger. Earlier packages and closed CR1/R/L
+results retain their historical scope; the new intake does not reopen them.
+
 The [post-CR1 October 12 package](70-reference/s11-post-cr1-review-2026-10-12/README.md)
 is byte-preserved with its [import manifest](70-reference/s11-post-cr1-review-2026-10-12/import-manifest.json).
 The [October 13 intake](60-evidence/s11/2026-10-13-post-cr1-review-intake.md) verifies

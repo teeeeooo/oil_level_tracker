@@ -601,13 +601,132 @@ must remain constraints on a different future observation contract; they do not
 authorize changing this operation's references, crop, scale or cutoff. R/L input
 approval and original CR1 scope-limited usefulness retain their separate meaning.
 
+## Native side-role observation and G0 binding contract
+
+The [October 13 specification](../70-reference/s11-program-review-2026-10-13/S11-program-review-and-work-spec-2026-10-13.md)
+and [independent intake](../60-evidence/s11/2026-10-13-program-review-intake.md)
+add **NSR-1 as a proposed observation direction**, not a detector version or an
+accepted classifier. The adopted delta is native path/side-support binding plus
+qualification at the original annotation precision. The three-convolution role
+head remains a research option; Work Plan owns execution/training authority.
+The earlier CR1 policy and frozen R/L operation retain their own scope and results.
+
+### Reuse and first deliverable
+
+The first implementation slice is an offline G0 binding adapter and compact
+readiness record. It performs no training, encoder inference, candidate selection
+or production schema migration. Reuse these actual owners:
+
+| Responsibility | Owner and bounded delta |
+|---|---|
+| Source geometry and masks | `CurrentFrameEvidenceOwner` captures; source/frame/PTS, Recipe/Glass transform, origin/scale and input hashes remain explicit |
+| Observed paths | `oil_material_path.diagnose_center_path_alternatives` and `s11_contour_contact_probe.measure_edge_fragments`; retain alternatives and missing paths |
+| Retained support geometry | `s11_foam_support_geometry.measure_boundary_faces`; reuse inside/outside, normals and crop/mask censoring without creating material labels |
+| Native candidate join | Existing A1 frame/index/family/source-Y lineage; representative Y, sector Y and observed fixed-X intersections remain separate |
+| Pinned input and review qualification | Existing O2 input/output primitives and CR1 physical/practical separation; preserve original authorities and frozen rows |
+| Future shadow and consumers | Existing Witness, Oil admission and Foam raw-front owners under their existing gates; no second tracker, edge generator or report path |
+
+The planned `tests/diagnostics/s11_native_role_preflight.py` may own only the new
+native path/side/weak-constraint envelope. CR1's existing adapter requires saved
+full/local vectors and floor/ceil queries, so it cannot represent this envelope
+without conflating observations. Reuse its underlying O2 pin/validation helpers;
+do not extend the frozen score runner or duplicate geometry/label authorities.
+This names a future implementation boundary, not an API already delivered.
+
+For each scheduled subject, retain source/frame/actual timestamp/geometry digest,
+original candidate binding when available, observed path/face references and their
+representation, orientation status, fixed-X intersections, upper/lower support
+membership (or lossless references), requested/observed/censored counts, actual
+feature dependency footprint, shared/cross-side support and unavailable reason.
+Keep role hypotheses, physical qualification, scoped practical acceptance and
+policy/calibration status separate. `decision=NOT_EVALUATED` until qualification.
+Review statements are evaluation/training metadata, never inference features.
+
+Component faces and Canny fragments are distinct representations. A component
+perimeter can already omit the real upper, so G0 must record reachability for
+each representation rather than require a component face at every reviewed
+interval. A Canny hit such as Y813 is geometric support only; neither proximity
+nor containment establishes its physical role or labels the whole path. No
+missing guide is snapped to a nearby edge. Keep branch/junction orientation
+ambiguous when the observed geometry does not uniquely define it. Do not close
+edge gaps, use all cell edges as material barriers, or infer air from label zero.
+
+### Support and weak-constraint semantics
+
+The reproduced default-settings canary changes visible texture values after
+outside-mask interventions, while the inspected X595/Y813 values remain equal.
+It supports dependency accounting, not a production defect or a masking repair.
+A feature can be called side-contained only when its **entire dependency footprint**
+is within the observed support for that side and boundary hypothesis. Center
+visibility is insufficient. Boundary-crossing gradients and shared/context
+features may remain useful, but cannot count as independent pure-side evidence.
+This geometric condition still does not prove physical material purity.
+
+Track preprocessing, padding, normalization, aggregation and head dependencies,
+not just convolution kernels. Three stride-1 3×3 convolutions have a theoretical
+7×7 local footprint, but the complete role operation may depend on a larger
+region. G0 must expose that distinction before any head is frozen. Smaller native
+support is a new explicit operation, not a retrospective rescue of the R/L test.
+
+| Authority unit | Permitted binding | Forbidden promotion |
+|---|---|---|
+| Approved R/L interior footprint | Scoped Foam-region/appearance evidence; fine/coarse facets | 625 independent pure-phase pixel labels or whole-scene masks |
+| Boundary containment interval | Source-level role/location constraint | Every enclosed edge positive; even one enclosed edge is not automatically the physical boundary |
+| Candidate/path correspondence | Only the reviewed native subject and precision | Whole family, tracklet, sector or neighbouring-frame truth |
+| Internal marker or no-Foam reply | Its reviewed context/region/time and opposition role | Nearest-edge truth or entire-video absence |
+| B approximation | Exact-subject practical-use evaluation | Physical positive, universal tolerance or training target |
+| Withdrawn A qualification, crop or unclear role | Explicit exclusion/unassessed reason with history retained | Negative success or restored physical truth |
+
+Compile a candidate-positive bag only if source visibility and native
+correspondence/reachability support that claim. Otherwise keep a source constraint
+with no candidate-level loss. The proposed interval probability loss is not
+adopted until the modeled variable, normalization domain, multiple-boundary and
+censored states are defined; it must not quietly introduce coordinate regression
+or turn the observer into another edge generator.
+
+Roles are compatible hypotheses, not an exhaustive mutually exclusive four-class
+pixel ontology. Transparent liquid can project structure/optical context at the
+same location. A future head must specify how material-role and optical/context
+facets coexist and how ambiguity is represented before choosing its loss. The
+relationships gas/liquid, gas/Foam, Foam/liquid and Foam/Foam constrain a bound
+path; they do not classify pixels by themselves. Fine/coarse remain one material
+with separate appearance coverage. Missing support cannot imply absence/FULL/EMPTY.
+
+### Readiness, research option and integration
+
+G0 produces one pinned manifest and complete compact binding/readiness table,
+linked to original evidence rather than copying images or existing score tables.
+It retains the 43-context inventory, unavailable rows, Oil alternatives and P0
+controls; any new claim has an explicit population, source/episode exposure,
+required positive/opposition and native binding. READY is per declared capability,
+not a claim that every frame or every material role is labeled. A missing necessary
+role, ambiguous join or absent opposition yields a concrete NOT_READY reason.
+All known inputs remain exposed development evidence, not untouched holdout.
+
+The source's small native RGB head is **not yet an executable training plan**.
+Before that separate scope can run, G0 must identify sufficient role/opposition
+units and freeze class/facet semantics, aggregation, loss, source/episode split,
+one seed/optimizer/schedule/operating-point selection, resource limits and stop
+rules. Seven-pixel locality and weak labels do not by themselves establish the
+information needed to distinguish transparent gas/liquid or coarse Foam. Missing
+information is not repaired by relabeling B, pseudo-labeling unknowns or trying
+larger receptive fields until the exposed controls pass.
+
+[The G0/G1/G2 acceptance delta](../30-validation/s11-interface-observability-witness-validation.md#native-side-role-readiness-and-feasibility)
+owns progression. Oil and Foam observation research may advance independently.
+Qualified typed observation still needs WP04/V4 then Windows V5 before O2; Oil
+suppression (both admission routes) and positive recovery remain separate O3
+changes. Foam raw-front integration has its own parent behavior acceptance and,
+if it consumes Witness decisions, O2/V5/O3 entry. Only demonstrated loss of a
+correct raw upper opens episode work. Final field/report acceptance stays separate.
+
 ## History Review
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
+- Prior mechanisms reviewed: the October 13 native-feature dependency canary, weak annotation precision and support-face versus raw-edge reachability; current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
 - Prior mechanisms rejected: threshold/peer-distance rescue, anchor-only fix, cost/maturity-based identity, appearance matching as physical authority, component-extreme Foam replacement and episode relaxation without a correct raw front.
 - Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies, a bounded local footprint and preservation before removal keep the experiment reversible.
-- Difference from prior failures: the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
-- Logic-map impact: NONE — this contract adds an operating-policy proposal to offline research; no executing owner, implemented schema or production behavior changes.
+- Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
+- Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no executing owner, implemented schema or production behavior changes.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.
