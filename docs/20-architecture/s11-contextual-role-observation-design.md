@@ -297,15 +297,23 @@ than a reviewed target does not identify an unreviewed competitor; preserve the
 whole candidate population and unresolved same-boundary versus other-role claims.
 No maximum-score winner or proximity-based label transfer is implied.
 
-The [October 13 source reply](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md)
-confirms f1485 B/idx8/Y841 as the same physical Oil boundary as A/idx19/Y836.
-B nevertheless prefers texture locally, so this positive policy can miss a real
-candidate regardless of `tau_support`. Record that miss; failure of the positive
-condition is not negative physical identity. A remains a same-frame confirmed
-alternative with positive local margin, which does not by itself prove future
-sequence/report preservation. Assess candidate loss, qualified frame alternatives
-and workflow impact separately. Do not relax the sign or invent an argmax route
-to rescue B. This correspondence supplies no exact-X or whole-native-path truth.
+The [October 13 clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md)
+separates physical description from practical acceptance. The user identifies
+fine Foam above the lower red marks and accepts B/idx8/Y841 as an approximation
+because of detector limitations. The original same-physical-boundary interpretation
+is superseded. B's local texture preference conflicts with that practical allowance;
+it is not a demonstrated physical-interface false negative. A/idx19/Y836 retains
+its historical label and positive local margin, but its current qualification as
+a physical alternative is not established by these replies.
+
+Preserve two independent evaluation facets: physical role/localization evidence
+and user-accepted practical approximation, with their scope and uncertainty. Do
+not discard B's practical acceptance or silently demand perfect-pixel accuracy;
+do not count it as clean physical-role calibration truth either. No exact-X truth,
+error band, front/back projection relation or universal proxy rule follows from
+the red marks. Evaluate downstream movement/report usefulness separately. Do not
+relax the sign or invent an argmax route to rescue this one case; any subsequent
+operating-policy comparison must disclose which facet it measures.
 
 The existing sample4 104-to-224 transform gives a 6.5-native-pixel token spacing;
 it cannot certify a native or subpixel boundary coordinate. Before transfer,
@@ -398,9 +406,9 @@ cropped beer upper and unclear milk lower at their actual review precision.
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
+- Prior mechanisms reviewed: current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
 - Prior mechanisms rejected: threshold/peer-distance rescue, anchor-only fix, cost/maturity-based identity, appearance matching as physical authority, component-extreme Foam replacement and episode relaxation without a correct raw front.
 - Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies, a bounded local footprint and preservation before removal keep the experiment reversible.
-- Difference from prior failures: the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
+- Difference from prior failures: the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds an operating-policy proposal to offline research; no executing owner, implemented schema or production behavior changes.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.

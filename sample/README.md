@@ -20,10 +20,14 @@ the historical four-video regression or seven-source P0 denominator. The
 `public_egenie_nKfQ1J97_QE.mp4` is the previously listed but unacquired second
 public compressor source, now pinned in its
 [bounded input screen](../docs/50-diagnostics/s11/2026-10-13-public-compressor-input.md).
-Four fixed source views were decoded without detector/encoder calls. The midpoint
-bright-band role is pending user review; title/hand, watermark and reframing limit
-the inspected views. It has no Recipe, assigned calibration/holdout partition,
-native truth or continuous-story qualification and does not replace P0 groups.
+Four fixed source views were decoded without detector/encoder calls. The
+[midpoint reply](../docs/50-diagnostics/s11/2026-10-13-public-compressor-role-reply.json)
+closes the still-image question as unassessable at its quality, with a tentative
+Foam-layer impression. This is neither confirmed Foam nor negative Oil truth.
+Title/hand, watermark and reframing limit the inspected views. It has no Recipe,
+assigned calibration/holdout partition, native truth or continuous-story
+qualification and does not replace P0 groups. Other parts of the recording are
+not declared unusable by this one answer.
 
 ## Sample3 use restriction
 

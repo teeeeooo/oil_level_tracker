@@ -1,0 +1,71 @@
+{
+  "schema": "s11-public-source-role-reply-v1",
+  "base_head": "90c5b819301c17b3ccf190dd747da557353c2c81",
+  "reply_date": "2026-10-13",
+  "authority": "direct user reply to the displayed midpoint source image",
+  "reply_verbatim": "이 이미지는 너무 저화질이라 나도 판단이 어렵네. foam 층에 가까운듯.",
+  "question_verbatim": "새 공개 영상의 45.88초 확대 이미지에서 중앙의 얇고 밝은 가로띠(대략 Y627–632)는 어떻게 보이나요? 기존 sample4 판정과 별개의 새 자료이며, 영상 제목만으로 Oil/Foam 정답을 정하지 않으려는 질문입니다.",
+  "status": "CLOSED_UNASSESSABLE_WITH_TENTATIVE_FOAM_IMPRESSION",
+  "source_screen": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-public-compressor-input/source-review.json",
+    "bytes": 7735,
+    "sha256": "7e2abf8ac8fb6bb2ae91c4641e40d9dae2a80f29f0373f5046cfbd82d121da31"
+  },
+  "source_video": {
+    "format_id": "136",
+    "bytes": 21841275,
+    "sha256": "ea522b841deba1b792720f191f5df4c5d65177bb7fa5e4f2b50ccceb1598c744",
+    "path": "sample/public_egenie_nKfQ1J97_QE.mp4"
+  },
+  "question_image": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-public-compressor-input/review.png",
+    "sha256": "06e5998d5dae11c9beaa4c4c1b42ab0aaea5cb6371dd9e88455040eb7143b048"
+  },
+  "native_frame": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-public-compressor-input/native-f1147.png",
+    "bytes": 1469531,
+    "sha256": "f15d260cd1eb51686e040253f758c3076c0934ba6befb82272766c37930f78a5"
+  },
+  "binding": {
+    "source_id": "nKfQ1J97_QE",
+    "frame_index": 1147,
+    "source_timestamp_sec": 45.88,
+    "source_crop_xyxy": [
+      800,
+      565,
+      925,
+      685
+    ]
+  },
+  "interpretation": {
+    "assessment": "The user cannot reliably distinguish the role at this image quality.",
+    "tentative_impression": "Foam layer",
+    "confirmed_physical_role": null,
+    "qualified_calibration_or_evaluation_truth": false,
+    "scope": "This still/question only; not a judgment that the entire recording is unusable."
+  },
+  "constraints": [
+    "Do not turn the tentative Foam impression into a positive Foam label or a negative Oil label.",
+    "No exact height, upper/lower contour, absence, adjacent-frame or whole-episode truth follows.",
+    "Do not repeat the same low-quality still question or alter the original frozen screen receipt."
+  ],
+  "execution": {
+    "encoder_forwards": 0,
+    "detector_calls": 0,
+    "new_decodes": 0,
+    "physical_accuracy": "NOT_EVALUATED"
+  },
+  "detector_governance": {
+    "logic_map_nodes": [
+      "OIL-CANDIDATE",
+      "FOAM-CANDIDATE"
+    ],
+    "failure_registry_entries": [
+      "S11-F09",
+      "S11-F10"
+    ],
+    "first_harmful_stage": "Unqualified source image for a physical-role judgment; no detector was run.",
+    "logic_map_impact": "NONE: input-role response only.",
+    "failure_registry_impact": "NONE: unresolved evidence remains unqualified."
+  }
+}

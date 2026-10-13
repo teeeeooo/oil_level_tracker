@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1 offline preflight adds no detector behavior.
-**Next transition:** qualify the regional role in the [new public-source screen](../50-diagnostics/s11/2026-10-13-public-compressor-input.md), then its admissible source/geometry use. The [f1485 B reply](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md) is CLOSED: B and A are the same actual Oil boundary, despite B's local texture preference. All 164 saved records remain intact; `tau_support`, impact bounds and suitable calibration/held-out sources remain unset. Source replies do not accept a classifier or create an untouched evaluation set. No production shadow, consumer or sequential efficacy run is ready.
+**Next transition:** qualify follow-up inputs and policy comparisons with physical role/localization separated from scoped practical acceptance. The [f1485 clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md) is CLOSED: the user accepts B as an approximate Foam–Oil boundary despite fine Foam extending above the lower red marks. The initial physical-positive/missed-boundary claim and A physical-alternative claim are withdrawn. The [new public still reply](../50-diagnostics/s11/2026-10-13-public-compressor-role-reply.json) is CLOSED as unassessable with a tentative Foam impression. All 164 saved records remain intact; `tau_support`, impact bounds and suitable calibration/held-out sources remain unset. No production shadow, consumer or sequential efficacy run is ready.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [October 13 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
@@ -31,7 +31,7 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | W0–W3 / O2 foundations | Fixed profile CLOSED WITHOUT PROMOTION; target/aggregation, bounded scene review and evaluation tools locally verified; D1 return CLOSED | Reuse [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) and [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed); prediction/efficacy is not established by tooling |
 | P0 / W4 / WP01 — baseline and intake | COMPLETE at saved-evidence scope | [Intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md) verifies vectors, report extrema and numeric cadence; physical cadence remains NOT_EVALUATED |
 | W4/P2 / WP02 — operating policy | Saved-contract preflight IMPLEMENTED and VERIFIED; physical policy remains uncalibrated | [Preflight](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md): 164 exact candidate/context joins, raw-vector references, availability/floor–ceil/native lineage and original geometry/bank pins; no cutoff or physical decisions |
-| V2/V3 / WP03 — calibration and evaluation | Exposure/claim manifest and selection procedure recorded; input qualification OPEN | f1485 B correspondence received; real-candidate role-condition miss is explicit. Previously unacquired public source screened without scores; regional-role reply pending. No calibration/holdout set qualified; preserve P0/Windows scope and independent evaluation entry |
+| V2/V3 / WP03 — calibration and evaluation | Exposure/claim manifest and selection procedure recorded; input qualification OPEN | B clarification separates practical approximation from physical truth; original positive-count and physical-alternative inferences withdrawn. New public still is unassessable with tentative Foam impression. Qualify physical calibration inputs and practical-use evaluation separately; preserve P0/Windows scope and independent evaluation entry |
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
 | O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | PROPOSED; separate from WP05 | Explicit route for independently role-supported native candidates; name the replaced heuristic. Repair association/lifecycle only if saved earliest-loss evidence identifies that owner; preserve FULL/EMPTY/refill/drain |
@@ -57,16 +57,21 @@ support/ties/missing evidence do not prove structure. Native candidate linkage
 and qualified role precision remain independent of descriptor preference.
 
 The [WP02–03 manifest/preflight](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md)
-verifies the saved contract without fitting. The [B reply](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md)
-adds one confirmed same-boundary correspondence: representative Y841, native
-center-sector sample Y838, versus A/idx19/Y836. Their coordinate meanings remain
-distinct. B fails the proposed positive local-role condition regardless of the
-support threshold, but that is not a physical-negative label. A remains an
-available same-frame positive alternative; sequence/report loss is unassessed.
-Keep this candidate miss visible without inventing an all-candidates-perfect gate.
-Existing A/B judgments stay closed. Numeric calibration and new inference still
-require qualified inputs and acceptance entry; replies do not waive those conditions.
-Do not require all 149 remaining unknown candidates to be labeled. Start with decision-bearing
+verifies the saved contract without fitting. The [B clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md)
+corrects the initial interpretation: B's representative Y841/native center-sector
+Y838 is a user-accepted approximation, while the red-mark description places fine
+Foam above a lower regional extent. A/idx19/Y836 is not newly qualified as a physical
+alternative by this explanation. B fails the proposed local-role condition at
+any support threshold; that is a conflict with practical acceptance, not a proven
+physical-interface false negative. CR1 texture preference alone proves neither
+physical success nor failure. Preserve B's practical allowance without deriving
+exact red-dot truth, a universal tolerance or an all-candidates-perfect gate.
+
+Record physical role/localization and scoped practical acceptability separately
+before using these inputs in any policy comparison. Numeric calibration and new
+inference still require qualified inputs and acceptance entry. The public midpoint
+question is closed as unassessable; do not ask the same low-quality still again.
+Do not require all remaining unknown candidates to be labeled. Start with decision-bearing
 competitors using existing source judgments; ask only for genuinely new necessary
 physical judgments. Comparative filming is unavailable; do not repeat that question.
 
@@ -110,12 +115,12 @@ Closed judgments remain closed at their original precision. The
 | Preserved input | Scope and remaining limitation |
 |---|---|
 | Product scalar | Existing fixed Glass center; upper image projection after physical identification. One visible projection is allowed; no lower fallback, shifted column, mean or interpolation. Current candidate Y is not retroactively changed |
-| Sample4 Oil | Original seven correspondences plus f1485 B/idx8 same-boundary reply: eight candidates, three rejected targets, static/temporal context retained. 42.5–44 s is one rapidly moving boundary; no intermediate exact Y. X595/f1275 rows833–841 are qualified only there. The new B/Y841 reply does not qualify an exact scalar or all sectors |
+| Sample4 Oil | Original seven correspondences remain historical labels; the clarified B/idx8 adds practical acceptance, no new physical positive. Current f1485 A/B physical-alternative/accuracy claims are unqualified; other judgments retain their scope. Three rejected targets, static/temporal context and 42.5–44 s movement remain; no intermediate exact Y. X595/f1275 rows833–841 are qualified only there. No exact scalar or all-sector truth follows from B or the red marks |
 | Sample4 Foam | Visible upper at 54/55.5/56 s; f1620/X595 rows812–816 qualified. Internal texture and fixed upper rim replies remain opposition; f1635 is unreviewed. Raw Y813 presence alone is not candidate-role proof; component Y833/global top Y808 do not recover the upper |
 | Water | f205 contains entry, not an empty negative; f822 is a qualitative inclined real surface. A/f1232 Foam upper rows476–481 at X950, lower unclear. B/C are no-Foam water surfaces with upper rows484–489/489–494. Front/back projections are one surface, not thickness; no neighboring-frame labels |
 | Beer / milk | Beer arcs are one thin layer's front/back and cropped upper is unavailable; milk lower interface unclear. Appearance is not exact contour truth or physical absence |
 | Public compressor | Exposed development source outside the original seven-source roster. f1499/X578 Foam rows323–338 and Oil rows421–435 are closed intervals, not exact pixels or continuous truth. Lower candidates survive but an upper anchor is admitted; Foam raw front also misses. Three-frame default linkage is not whole-video qualification |
-| Additional public source, Cold117 | [Source screen](../50-diagnostics/s11/2026-10-13-public-compressor-input.md): newly acquired original, four fixed views, zero encoder/detector calls. Hand/title, watermark and reframing limit scope. Midpoint bright-band role pending; no calibrated/holdout or workflow qualification |
+| Additional public source, Cold117 | [Source screen](../50-diagnostics/s11/2026-10-13-public-compressor-input.md) and [closed reply](../50-diagnostics/s11/2026-10-13-public-compressor-role-reply.json): four fixed views, zero encoder/detector calls. Midpoint role unassessable at this quality, with tentative Foam impression only. No physical label, calibration/holdout or workflow qualification; no whole-recording unusability claim |
 | Sample3 / base / sample2 | Sample3 remains [restricted](../../sample/README.md#sample3-use-restriction): saved A/B regional Oil, C structure, D unobservable; no clip mining/reopening/continuous accuracy claim. Base f156 conflict stays quarantined. Old proposal/ruler values retain legacy scores without becoming fixed-center truth |
 | Windows controls | W3 73 and passive 75 inventories remain distinct; target/path/scalar meanings and idx0/idx20 ambiguity are pinned. Idx13 sector-0 reply does not label remaining sectors; idx12 correspondence remains unestablished. Source companion fingerprint/operator provenance remain pending |
 
@@ -166,7 +171,7 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 | Topic | Preserved result / limitation | Detail owner |
 |---|---|---|
 | October 7 adoption | A0B, report wording/display cap and Oil event compatibility adopted; A1 diagnostic lineage complete; paired scorer rejected; A0Q unresolved | [Adoption checkpoint](../60-evidence/s11/2026-10-07-audit-adoption-checkpoint.md), [report adoption](../60-evidence/s11/2026-10-07-report-context-adoption.md), [event compatibility](../60-evidence/s11/2026-10-07-event-compatibility.md), [A1](../60-evidence/s11/2026-10-07-a1-measurement-lineage.md) |
-| sample4 Oil controls | Original seven correspondences plus f1485 B reply; three rejected targets and four correct observations protected. Wrong-target subtypes remain one unresolved/two tentative. Same Y, family or tracklet is not transferable truth | [Lineage and replies](../50-diagnostics/s11/2026-10-07-sample4-interval-candidate-lineage.md), [new B correspondence](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md) |
+| sample4 Oil controls | Original seven correspondences and prior protected-observation counts remain historical; f1485 B practical acceptance is separate from physical truth, and A's physical-alternative claim is withdrawn. Other reviewed cases and three rejected targets retain their scope. Wrong-target subtypes remain one unresolved/two tentative; no transfer by Y/family/tracklet | [Lineage and replies](../50-diagnostics/s11/2026-10-07-sample4-interval-candidate-lineage.md), [B clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md) |
 | Temporal context | User requires static and temporal evidence; one actual boundary moves rapidly through 42.5–44 s. Short forward correspondence confirmed, other seeds/directions drift. No intermediate Y/speed truth; standalone matcher rejected | [Human reply](../50-diagnostics/s11/2026-10-07-sample4-temporal-context-human-reply.json), [patch comparison](../60-evidence/s11/2026-10-07-a2-patch-correspondence.md) |
 | Region/texture hypotheses | A/B interpretation closed; fixed joint region exchange loses all seven targets. Fixed side texture and earlier locality/color/profile/paired-scale models closed without promotion; no threshold continuation | [Region exchange](../60-evidence/s11/2026-10-07-a2-region-exchange.md), [episode evidence](../60-evidence/s11/2026-10-08-episode-source-review-validation.md), [color disposition](../60-evidence/s11/s11-o2-color-side-local.md#denominator-reconciliation-closed-and-bounded-region-disposition) |
 | Unadopted delivery experiments | H1/H1b fail terminal/ownership safety; LabPics, cellular and selector trials closed without promotion. Three sample4 targets fail before selector entry; no new Windows first cause is established. Both branches remain unmerged | [Windows-first closeout](https://github.com/teeeeooo/oil_level_tracker/blob/e5d4a0430ea69beab59736396a2817c09b5efd69/docs/60-evidence/s11/2026-10-08-windows-first-detector-closeout.md), [cellular closeout](https://github.com/teeeeooo/oil_level_tracker/blob/e5d4a0430ea69beab59736396a2817c09b5efd69/docs/60-evidence/s11/2026-10-08-cellular-selector-closeout.md) |
@@ -226,8 +231,10 @@ runtime remains unknown. Keep the golden and the [provenance diagnostic](../50-d
 Canonical source fingerprint/operator provenance remains pending; bundle linkage
 alone does not close it or invalidate existing labels. Existing Mac recordings
 and SPL#1 remain regression; no independent-video availability question is reopened.
-The 49.5–52 s gap has known correct endpoints but no newly qualified continuous
-visibility. Broader physical cadence stays NOT_EVALUATED.
+The 49.5–52 s numeric gap is unchanged, but the f1485 clarification prevents
+treating the 49.5 s endpoint as currently qualified physical truth through the
+earlier correspondence alone. Continuous visibility and broader physical cadence
+stay NOT_EVALUATED.
 
 ## Active follow-up design
 

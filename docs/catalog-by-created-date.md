@@ -1193,10 +1193,20 @@ author 시각은 Asia/Seoul 기준 2026-10-13 12:43:46이며, 최초 Git 추가�
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role.md](50-diagnostics/s11/2026-10-13-cr1-competitor-role.md) | B 동일 유면 답변과 local 역할 필요조건의 실제 후보 누락 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role.md](50-diagnostics/s11/2026-10-13-cr1-competitor-role.md) | B 최초 답변 해석의 정정: 미세 Foam의 물리적 설명과 근사 위치의 실용적 수용 구분 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role-reply.json](50-diagnostics/s11/2026-10-13-cr1-competitor-role-reply.json) | 원문·후보·원본·점수·표시 이미지 연결; frozen 라벨의 명시적 보충 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role-review.png](50-diagnostics/s11/2026-10-13-cr1-competitor-role-review.png) | 사용자가 실제 확인한 A/B 모바일 비교 이미지 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-public-compressor-input.md](50-diagnostics/s11/2026-10-13-public-compressor-input.md) | 기존 미획득 공개 원본의 네 시점 입력 품질 검사; 역할 판정 대기 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-public-compressor-input/native-f1147.png](50-diagnostics/s11/2026-10-13-public-compressor-input/native-f1147.png) | 사전 고정한 중간 시점의 원본 프레임 한 장 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-public-compressor-input/review.png](50-diagnostics/s11/2026-10-13-public-compressor-input/review.png) | 좌표 보존 모바일 확대; 새 정답/후보선 없음 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-public-compressor-input/source-review.json](50-diagnostics/s11/2026-10-13-public-compressor-input/source-review.json) | 원본·독립성 한계·실제 시점·입력 한계·질문 연결 |
+
+### 최초 Git 등록 대기 — 2026-10-13 판정 의미 명확화
+
+아래 파일의 작성일은 2026-10-13이다. 최초 Git 추가일은 커밋 후 확인한다.
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role-annotation.png](50-diagnostics/s11/2026-10-13-cr1-competitor-role-annotation.png) | 미세 Foam 범위를 빨간 점으로 표시한 사용자 첨부 원본 |
+| Git 미등록 | [50-diagnostics/s11/2026-10-13-cr1-competitor-role-clarification.json](50-diagnostics/s11/2026-10-13-cr1-competitor-role-clarification.json) | 후속 원문·주석·기존 판정 연결과 물리적 정답/실용적 수용의 구분 |
+| Git 미등록 | [50-diagnostics/s11/2026-10-13-public-compressor-role-reply.json](50-diagnostics/s11/2026-10-13-public-compressor-role-reply.json) | 새 공개 영상의 저화질 판별 불가 및 잠정 Foam 인상; 확정 라벨 없음 |

@@ -1478,13 +1478,16 @@ Required checks for the proposed observation/policy are:
   `INTERNAL_OR_ARTIFACT` requires its own qualified negative evidence;
 - regional context does not certify a native contour/fixed-X scalar; changed
   geometry/scale/reference exposure requires a newly qualified input contract;
-- the [49.5 s B/Y841 reply](../50-diagnostics/s11/2026-10-13-cr1-competitor-role-reply.json)
-  now confirms the same physical Oil boundary as A/Y836, at candidate-correspondence
-  precision only. Preserve B as a real candidate whose local texture preference
-  fails the proposed positive role condition; do not turn that into a physical
-  negative or silently drop it. A still satisfies the role condition, so candidate
-  loss is not automatically frame or workflow loss. Other unreviewed alternatives
-  remain unknown; ranking or a new ±5 px tolerance supplies no identity; and
+- the [49.5 s B/Y841 clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role-clarification.json)
+  supersedes the initial physical-correspondence interpretation: fine Foam extends
+  above the user's lower red marks, while B is accepted as a practical approximation.
+  Report physical role/localization and scoped practical acceptability separately.
+  Keep B in the latter assessment; it supplies no new confirmed physical positive
+  or clean physical-role calibration label. A's saved positive local margin does
+  not restore a qualified physical alternative at this frame. Withdraw the derived
+  eight-physical-correspondence and six-of-six true-frame-coverage claims without
+  rewriting frozen readouts. No exact red-dot contour, universal error allowance,
+  adjacent-frame truth or physical CR1 success/failure follows; and
 - cold/warm CPU, decode/preprocessing/encoder/query/sequence/report costs, forward
   calls per frame, peak RSS and output bytes are measured against frozen bounds.
   Saved-PNG timings do not predict full-pipeline or Windows cost.
@@ -1646,7 +1649,7 @@ and every unavailable/unresolved result; no favorable subset becomes a full pass
 | Base sample1 weak boundary / overlay | Failure response and historical agreement | Broad uncertain Oil position; f156 Foam conflict is quarantined. No exact fixed-center accuracy claim. |
 | Sample2 early 0–2 s / later reframing | Early qualitative roles; later geometry/input stress | Ruler conversion is not pixel truth. The early Recipe does not certify later reframed accuracy. |
 | Sample3 retained source replies | Existing blur/geometry/opposition evidence and necessary legacy reproduction | Quarantine stays in force: no new replay, clip mining, relabeling or continuous-accuracy use. Frozen A/B are regional, C is structure and D is unassessable. |
-| Sample4 Oil identity / motion | Original seven confirmed contexts plus the [f1485 B reply](../50-diagnostics/s11/2026-10-13-cr1-competitor-role-reply.json), three rejected targets, reviewed 42.5–44 s movement | Eight correspondences, seven non-initial candidates across six non-initial frames. Frozen roster/readouts keep their original counts; the reply is an explicit supplement. Candidate identity is not exact center truth or full-video coverage. |
+| Sample4 Oil identity / motion | Original seven historical correspondences, three rejected targets and reviewed 42.5–44 s movement; [f1485 clarification](../50-diagnostics/s11/2026-10-13-cr1-competitor-role-clarification.json) supersedes the initial B interpretation | Frozen counts remain historical. B adds one practically accepted approximation, no confirmed physical positive. f1485 A/B do not currently qualify physical-accuracy or true-alternative claims through these replies. Other judgments retain their original precision; no automatic relabeling or full-video coverage. |
 | Sample4 Foam upper / texture | Qualified f1620/X595 upper position and reviewed upper-visibility/internal-texture opposition | One position is not a continuous episode; f1635 stays unreviewed. Y833 internal texture and global top Y808 cannot substitute for the reviewed upper. |
 | Water f0 / f205 | Same-scene structure context / mixed entry response | f0 is agent-provisional empty-looking context. The corrected f205 already contains entry; it is not an empty negative. |
 | Water inclined f822 | Qualitative real-surface deformation | Neighbor frames provide context, not extra contour/scalar/correspondence truth. |
