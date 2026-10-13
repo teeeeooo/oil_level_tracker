@@ -768,11 +768,20 @@ G1 or authorize any production consumer. Work Plan owns separate adoption of the
 fully specified seed, optimizer, schedule, split, budget and stop rules; preparing
 the proposal and verifying input support do not run or authorize training.
 
+The [opposition-first review](../60-evidence/s11/2026-10-13-native-opposition-review.md)
+keeps new path questions distinct from already-qualified context. Native path
+reachability and input availability may guide a review selection, but neither
+supplies its role. Preserve inspected unavailable controls and the rest of the
+unreviewed roster. Treat each source recording as one exposure group even when
+its paths come from different frames. A subsequently qualified structure/optical
+path must not acquire the deferred binary proposal's `INTERNAL_FOAM_CHANGE` label;
+the next operation must preserve those facets or explicitly leave them unsupported.
+
 ## History Review
 
-- Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: the October 13 G0 full-population binding, N1–N3 scoped replies and complete proposed RGB context with same-frame shared pixels, native-feature dependency canary, weak annotation precision and support-face versus raw-edge reachability; current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
+- Prior mechanisms reviewed: the October 13 G0 full-population binding, N1–N3 scoped replies, pending N4/N5 opposition subjects, unavailable upper-rim contexts and complete proposed RGB context with same-frame shared pixels, native-feature dependency canary, weak annotation precision and support-face versus raw-edge reachability; current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
 - Prior mechanisms rejected: threshold/peer-distance rescue, anchor-only fix, cost/maturity-based identity, appearance matching as physical authority, component-extreme Foam replacement and episode relaxation without a correct raw front.
 - Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies, a bounded local footprint and preservation before removal keep the experiment reversible.
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.

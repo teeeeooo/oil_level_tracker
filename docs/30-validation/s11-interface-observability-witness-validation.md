@@ -1650,6 +1650,14 @@ full G1. Training fit is reported separately, with no loss or negative-success
 labels on the rest of the frozen G0 roster. A predeclared tie/unknown on a required
 positive is failure to demonstrate that limited capability, not useful abstention.
 
+For a successor opposition packet, distinguish pending subjects from a previously
+qualified context reference and verify both authorities. Preserve complete native
+path extent, source/frame grouping and a bounded selection account including
+inspected unavailable controls. An unavailable structure-context input cannot count
+as successful physical rejection. A new role answer qualifies only that displayed
+unit; do not force other real interfaces or optical/structure roles into an existing
+internal-Foam label just to complete a two-class comparison.
+
 G0 need not label every existing candidate or certify all four proposed head
 outputs. It must declare the smallest capability to be tested and identify its
 required qualified information. READY for geometry alone is not READY for role

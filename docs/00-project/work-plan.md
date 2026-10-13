@@ -4,8 +4,8 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1 and native G0 offline preflights add no detector behavior.
-**Next transition:** choose the [bounded surface/internal learning proposal](../60-evidence/s11/2026-10-13-native-role-qualification.md#검토-가능한-다음-선택), or qualify additional source-separated native opposition first. **N1–N3 roles and proposed input support are bound and verified; training scope adoption is pending.** N1 permits Foam-upper and oscillating-liquid-upper interpretations, N2 is internal Foam change, N3 is external Foam upper. This roster cannot establish full G1 efficacy; production consumers remain gated.
-**Latest checkpoint:** [Native role qualification](../60-evidence/s11/2026-10-13-native-role-qualification.md) records all three replies, complete proposed 7×7 context and N1/N2's 90 shared input pixels; 37 focused tests pass. Frozen G0 retains all 43 contexts/1,335 edges and 164 Oil records. **The N1–N3 review is closed; a new learning-scope decision is pending, and Windows work is not yet required.** The [program intake](../60-evidence/s11/2026-10-13-program-review-intake.md) remains the attached-package checkpoint.
+**Next transition:** **opposition-first preparation is adopted.** Receive the two new path-role judgments in the [N4/N5 packet](../60-evidence/s11/2026-10-13-native-opposition-review.md). N1–N3 stay closed; N3 is displayed only as the existing external-Foam reference. After scoped replies, freeze the updated G1 input/output roles and source-separated comparison before a bounded trial. No model or production consumer has run.
+**Latest checkpoint:** [Opposition review preparation](../60-evidence/s11/2026-10-13-native-opposition-review.md) binds N4 to sample4 f1620 fragment 295 and N5 to f450 fragment 1278, with original RGB and exact native paths. Both roles remain pending. The [N1–N3 qualification](../60-evidence/s11/2026-10-13-native-role-qualification.md) and frozen 43-context/1,335-edge/164-Oil G0 roster are unchanged. **Windows work is not yet required.**
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [post-CR1 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
@@ -29,8 +29,8 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | O1 extraction | IMPLEMENTED; locally ACCEPTED | Reuse trace-only [O1](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md); no identity authority |
 | W0–W3 / O2 foundations | Fixed profile CLOSED WITHOUT PROMOTION; target/aggregation, bounded scene review and evaluation tools locally verified; D1 return CLOSED | Reuse [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) and [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed); prediction/efficacy is not established by tooling |
 | P0 / W4 / WP01 — baseline and intake | COMPLETE at saved-evidence scope | [October 13 program intake](../60-evidence/s11/2026-10-13-program-review-intake.md) verifies pins, canary and saved report extrema; P0 A/B/C/U remains the impact owner, physical cadence NOT_EVALUATED |
-| W4/P2 / WP02 — observation/policy | G0 and scoped role/input qualification VERIFIED; learning proposal awaiting adoption | [N1–N3](../60-evidence/s11/2026-10-13-native-role-qualification.md) support one limited surface/internal trial. Architecture/loss/split/budget are concrete; no fitting or classifier decision has run |
-| V2/V3 / WP03 — qualification and evaluation | N1–N3 CLOSED and BOUND; independent native opposition still missing | [Reply supplement](../50-diagnostics/s11/2026-10-13-native-role-qualification/review-reply.json) preserves N1's allowed set and whole-fragment role precision. N1/N2 share a frame and pixels; N3 is exposed positive transfer only. A/B and all original weak units remain unchanged |
+| W4/P2 / WP02 — observation/policy | G0 and N1–N3 qualification VERIFIED; opposition-first direction ADOPTED | The previous three-subject learning option is deferred. Qualify new opposition, then freeze updated roles/split/trial scope; no fitting or classifier decision has run |
+| V2/V3 / WP03 — qualification and evaluation | N1–N3 CLOSED; N4/N5 displayed-path roles PENDING | [New packet](../50-diagnostics/s11/2026-10-13-native-opposition-review/review-proposal.json) asks only two new sample4 subjects. Internal/structure opposition is still a hypothesis; no role transfers from old guides. N3/N4 share a frame; all sample4 views stay in one source group |
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
 | O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | PROPOSED; separate from WP05 | Explicit route for independently role-supported native candidates; name the replaced heuristic. Repair association/lifecycle only if saved earliest-loss evidence identifies that owner; preserve FULL/EMPTY/refill/drain |
@@ -58,14 +58,17 @@ renaming the failed R/L similarity is insufficient. The supplied three-convoluti
    remains frozen. N1 allows Foam/liquid external-surface interpretations, N2 is
    internal Foam change, N3 is external Foam upper, only on the displayed paths.
    Complete 7×7 context is available; N1/N2 share 90 pixels and cannot be split.
-2. **New learning-scope decision:** the [concrete proposal](../50-diagnostics/s11/2026-10-13-native-role-qualification/g1-pilot-proposal.json)
-   specifies a 1,118-parameter ordered-context head, equal fragment losses,
-   N1/N2 fitting, N3 exposed positive transfer, one seed/1,000 steps and 10-minute/
-   1-GB-RSS limits. Adopt that single bounded trial or qualify new source-separated
-   internal/structure opposition first. No training is authorized by the role
-   reply alone. Even a useful positive transfer is not full G1 PASS: independent
-   wrong-acceptance and internal-transfer evidence remain missing. No crop,
-   threshold, seed or head-size retries follow automatically.
+2. **Opposition-first adopted:** the user chose to qualify additional native
+   opposition before learning. [N4/N5](../60-evidence/s11/2026-10-13-native-opposition-review.md)
+   now ask for sample4's candidate internal change and lower-rim context at exact
+   displayed paths; their roles are not filled by assistant interpretation.
+   Existing N3 is a context reference only. Keep the upper-rim unavailable paths
+   and other unreviewed paths explicit, not successful negatives. After replies,
+   determine whether the expanded set supports the needed external/internal and
+   structural opposition; then freeze the updated G1 roles and source-group split.
+   The earlier [three-subject pilot](../50-diagnostics/s11/2026-10-13-native-role-qualification/g1-pilot-proposal.json)
+   is retained as a deferred proposal, not executed or promoted. No automatic
+   crop, threshold, seed or head-size retries follow.
 3. **WP04:** qualified typed Witness delta, default OFF/unavailable fallback,
    V4 equality/resources, then **V5 Windows shadow before O2 acceptance**.
 4. **WP05 then WP06:** separate anchor-and-continuation wrong-output suppression
@@ -194,9 +197,10 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 
 The latest October 13 instruction authorizes phased implementation, appropriate
 verification, cleanup and autonomous commits/pushes until a necessary user judgment
-or Windows task is reached. N1–N3 replies and the prospective input audit are complete.
-The concrete new learning scope now awaits adoption versus additional native opposition
-review; dependent training pauses here. Existing source judgments are not reopened.
+or Windows task is reached. The follow-up explicitly adopts opposition-first
+preparation, followed by a fixed comparison and bounded trial once the required roles
+are qualified. N4/N5 now require new human path correspondence, so dependent work
+pauses at that judgment. Existing N1–N3/source judgments are not reopened.
 Earlier grants for bounded local development persist subject to the stated gates.
 Main performs implementation/review; no further sub-agents are authorized.
 Stop for a genuinely necessary new user judgment or deliberate Windows work.

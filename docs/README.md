@@ -65,7 +65,7 @@ Do not copy current status into architecture, diagnostics, or evidence merely fo
 
 ## Current S11 routing
 
-The [native G0 evidence](60-evidence/s11/2026-10-13-native-role-readiness.md) routes its frozen full-population binding. The [N1–N3 supplement](60-evidence/s11/2026-10-13-native-role-qualification.md) retains received roles, proposed-input checks and the concrete learning option. Current response/gate state stays in Work Plan.
+The [native G0 evidence](60-evidence/s11/2026-10-13-native-role-readiness.md) routes its frozen full-population binding. The [N1–N3 supplement](60-evidence/s11/2026-10-13-native-role-qualification.md) retains received roles and input checks; the [N4/N5 packet](60-evidence/s11/2026-10-13-native-opposition-review.md) adds new opposition questions with N3 as closed context. Current response/gate state stays in Work Plan.
 
 S11 remains the active detector-effectiveness milestone. Current state and authorization are owned only by the [Work Plan](00-project/work-plan.md).
 

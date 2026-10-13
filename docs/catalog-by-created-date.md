@@ -1324,3 +1324,13 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-qualification/qualification.json](50-diagnostics/s11/2026-10-13-native-role-qualification/qualification.json) | 허용 역할 집합·완전한 RGB context·공유 dependency |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-qualification/verification.json](50-diagnostics/s11/2026-10-13-native-role-qualification/verification.json) | 37 tests·실제 CLI·독립 NumPy footprint 검증 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-qualification/g1-pilot-proposal.json](50-diagnostics/s11/2026-10-13-native-role-qualification/g1-pilot-proposal.json) | 별도 채택 전 한정 학습의 data/head/loss/split/비용/중단 제안 |
+
+### 2026-10-13 다른 촬영원 대조군 검토 준비
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-13 | [60-evidence/s11/2026-10-13-native-opposition-review.md](60-evidence/s11/2026-10-13-native-opposition-review.md) | 대조군 우선 방향·새 N4/N5 질문·선정과 검증 범위 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-opposition-review/review-proposal.json](50-diagnostics/s11/2026-10-13-native-opposition-review/review-proposal.json) | 새 subject의 원본·전체 경로 결속·기존 N3 authority·선정 기록 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-opposition-review/native-opposition-review.png](50-diagnostics/s11/2026-10-13-native-opposition-review/native-opposition-review.png) | 원본 RGB와 N4/N5 경로, N3는 닫힌 기준 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-opposition-review/prepare_review.py](50-diagnostics/s11/2026-10-13-native-opposition-review/prepare_review.py) | 기존 graph/support owner를 쓰는 결속·검토 그림 재현기 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-opposition-review/verification.json](50-diagnostics/s11/2026-10-13-native-opposition-review/verification.json) | 실제 CLI·overwrite 거부·독립 경로와 6-side 입력 검증 |
