@@ -1270,9 +1270,11 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides.md](50-diagnostics/s11/2026-10-13-foam-material-sides.md) | R/L 내부 기준을 경계 양측과 따로 비교하는 진단 |
 | 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides/preflight.json](50-diagnostics/s11/2026-10-13-foam-material-sides/preflight.json) | 추론 전 43장면·1,335경계·geometry·대조·자원 고정 |
 
-### 2026-10-13 Foam 양측 비교 결과 — Git 등록 대기
+### 2026-10-13 Foam 양측 비교 결과
+
+두 결과 파일의 날짜는 `acf1ae122164435d8370579ae608174197fc6930`의 author 날짜(KST)로 확정했습니다.
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| 미등록 — 작성 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides/readout.json.gz](50-diagnostics/s11/2026-10-13-foam-material-sides/readout.json.gz) | 전체 경계·결측·R/L 양측 점수·실제 encoder 대조·자원 결과 |
-| 미등록 — 작성 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides/verification.json](50-diagnostics/s11/2026-10-13-foam-material-sides/verification.json) | 핀·좌표·지원·연산·guide 연결 및 고정 비교 미채택 검증 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides/readout.json.gz](50-diagnostics/s11/2026-10-13-foam-material-sides/readout.json.gz) | 전체 경계·결측·R/L 양측 점수·실제 encoder 대조·자원 결과 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-foam-material-sides/verification.json](50-diagnostics/s11/2026-10-13-foam-material-sides/verification.json) | 핀·좌표·지원·연산·guide 연결 및 고정 비교 미채택 검증 |
