@@ -1289,15 +1289,16 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 
 ### 2026-10-13 전반 검토 명세 인수
 
-아래 파일의 작성·인수일은 2026-10-13이며 최초 Git 추가일은 등록 후 확정합니다.
+아래 8개 파일의 최초 추가일은 `dd3c986e5284110066f739d1beb972333a2aaa23`의 author 날짜(KST)
+**2026-10-13**로 확정했습니다. 첨부 작성일·인수일과 Git 추가일을 구분합니다.
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| Git 미등록 | [60-evidence/s11/2026-10-13-program-review-intake.md](60-evidence/s11/2026-10-13-program-review-intake.md) | 검증·타당성·채택 범위·정리 기록 |
-| Git 미등록 | [70-reference/s11-program-review-2026-10-13/README.md](70-reference/s11-program-review-2026-10-13/README.md) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
-| Git 미등록 | [70-reference/s11-program-review-2026-10-13/S11-evidence-audit-2026-10-13.json](70-reference/s11-program-review-2026-10-13/S11-evidence-audit-2026-10-13.json) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
-| Git 미등록 | [70-reference/s11-program-review-2026-10-13/S11-program-review-and-work-spec-2026-10-13.md](70-reference/s11-program-review-2026-10-13/S11-program-review-and-work-spec-2026-10-13.md) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
-| Git 미등록 | [70-reference/s11-program-review-2026-10-13/SHA256SUMS](70-reference/s11-program-review-2026-10-13/SHA256SUMS) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
-| Git 미등록 | [70-reference/s11-program-review-2026-10-13/VERIFICATION.json](70-reference/s11-program-review-2026-10-13/VERIFICATION.json) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
-| Git 미등록 | [70-reference/s11-program-review-2026-10-13/import-manifest.json](70-reference/s11-program-review-2026-10-13/import-manifest.json) | 원본 hash·배치·worktree mapping |
-| Git 미등록 | [70-reference/s11-program-review-2026-10-13/reproduce_native_feature_canary.py](70-reference/s11-program-review-2026-10-13/reproduce_native_feature_canary.py) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+| 2026-10-13 | [60-evidence/s11/2026-10-13-program-review-intake.md](60-evidence/s11/2026-10-13-program-review-intake.md) | 검증·타당성·채택 범위·정리 기록 |
+| 2026-10-13 | [70-reference/s11-program-review-2026-10-13/README.md](70-reference/s11-program-review-2026-10-13/README.md) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+| 2026-10-13 | [70-reference/s11-program-review-2026-10-13/S11-evidence-audit-2026-10-13.json](70-reference/s11-program-review-2026-10-13/S11-evidence-audit-2026-10-13.json) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+| 2026-10-13 | [70-reference/s11-program-review-2026-10-13/S11-program-review-and-work-spec-2026-10-13.md](70-reference/s11-program-review-2026-10-13/S11-program-review-and-work-spec-2026-10-13.md) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+| 2026-10-13 | [70-reference/s11-program-review-2026-10-13/SHA256SUMS](70-reference/s11-program-review-2026-10-13/SHA256SUMS) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+| 2026-10-13 | [70-reference/s11-program-review-2026-10-13/VERIFICATION.json](70-reference/s11-program-review-2026-10-13/VERIFICATION.json) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+| 2026-10-13 | [70-reference/s11-program-review-2026-10-13/import-manifest.json](70-reference/s11-program-review-2026-10-13/import-manifest.json) | 원본 hash·배치·worktree mapping |
+| 2026-10-13 | [70-reference/s11-program-review-2026-10-13/reproduce_native_feature_canary.py](70-reference/s11-program-review-2026-10-13/reproduce_native_feature_canary.py) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
