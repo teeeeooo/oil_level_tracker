@@ -448,17 +448,38 @@ the Oil policy provides no implicit authorization or evidence for it. Preserve
 dark water Foam A, sample4/public uppers, internal texture/rim, no-Foam B/C,
 cropped beer upper and unclear milk lower at their actual review precision.
 
-### Material-side observation proposal — reference review pending
+<a id="material-side-observation-proposal--reference-review-pending"></a>
+
+### Material-side observation proposal — fine and large-grained Foam
 
 The next bounded question is whether an explicitly qualified **Foam-interior
 appearance reference**, compared separately with each observed boundary side,
 provides useful role evidence. The [R proposal](../50-diagnostics/s11/2026-10-13-foam-material-reference/proposal.json)
 and [native-pixel review](../50-diagnostics/s11/2026-10-13-foam-material-reference/reference-review.png)
-pin one 25×25 region in the already reviewed public frame. Its finite horizontal
-material footprint needs a new scoped reply; earlier upper/lower boundary replies
-remain closed. No inference, replacement reference or material label follows
-until that reply. A reply of unassessable stops this proposed reference; do not
-choose a neighbouring patch from scores or repeatedly ask about the same image.
+pin one 25×25 region in the already reviewed public frame. The
+[bound reply](../50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json)
+approves R as an interior reference and identifies it as **very fine-grained
+Foam**. The user also requires coverage of **large-grained Foam**. R is one
+appearance example; even its usefulness on other fine-Foam scenes is untested.
+Its approval supplies neither a large-grained reference nor coverage of that
+appearance. Earlier upper/lower boundary replies and the R question remain closed.
+
+Keep the two requested appearances as separate reference/evaluation facets, not
+two different physical materials or an exhaustive calibrated size taxonomy.
+Record mixed/transitional or unclassified appearance explicitly. Apparent pixel
+size depends on source/camera/encoding scale; do not infer a physical grain-size
+threshold from a crop or resize. Find a concrete large-grained interior footprint
+in the existing source corpus and qualify that new footprint before freezing the
+two-appearance comparison. A visibly large isolated bubble in liquid is not by
+itself a Foam-layer reference. An unassessable reference stays unqualified; no
+score-guided neighbouring-patch selection or repeated same-image question follows.
+The [L proposal](../50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-proposal.json)
+uses one native footprint inside the source-qualified water A context and an
+[unaltered-pixel display](../50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-review.png).
+Its Foam-interior/large-grained meaning remains pending; the old unclear lower
+interface is not relabeled. The existing positional interval renderers are frozen
+and describe a line range, so the small [footprint renderer](../50-diagnostics/s11/2026-10-13-foam-material-reference/render.py)
+adds only a two-dimensional box with clean source detail, outside the detector.
 
 This is a different P5-a observation contract, not a new bank slipped into the
 closed Oil-context transfer. The original CR1 descriptor already contains ordered
@@ -473,12 +494,13 @@ existing visible native edges and side-support owners. Do not add an edge genera
 or select anchors from reviewed intervals. The proposed diagnostic records:
 
 ```text
-p = unit(weighted mean tokens over the qualified Foam-interior footprint)
+for each separately qualified reference k (fine / large-grained):
+    p[k] = unit(weighted mean tokens over that reference footprint)
 u, l = independently normalized upper/lower side means at an existing edge
-upper_affinity = cosine(u, p)
-lower_affinity = cosine(l, p)
-ordered_contrast = lower_affinity - upper_affinity
-unordered_control = (lower_affinity + upper_affinity) / 2
+upper_affinity[k] = cosine(u, p[k])
+lower_affinity[k] = cosine(l, p[k])
+ordered_contrast[k] = lower_affinity[k] - upper_affinity[k]
+unordered_control[k] = (lower_affinity[k] + upper_affinity[k]) / 2
 ```
 
 All raw terms, visibility, token overlap, coordinate transforms and reference
@@ -487,16 +509,44 @@ vectors stay unavailable. Full/local use identical native geometry and declared
 context masking, with actual pixel controls before real queries. An upper/lower
 exchange control must reverse ordered contrast while preserving the unordered
 control; internal-like both-sides support must remain distinguishable in the raw
-pair. These are implementation controls, not physical validation or a Foam rule.
+pair. Preserve reference identity, each score pair and missing-reference reasons;
+do not average the two references into a single prototype, select the largest
+score as authority, require resemblance to both appearances, or treat unavailable
+coverage as a measured rejection. Any later aggregation needs its own evaluation.
+These are implementation controls, not physical validation or a Foam rule.
+
+Low similarity to the fine reference cannot establish non-Foam: the side may
+contain large-grained, mixed or otherwise unsupported Foam. In particular, a
+fine→large or large→fine transition **inside Foam** can create a signed change
+against one reference. Switching the preferred Foam appearance is not a Foam
+upper surface. The semantic comparison must preserve fine/fine, large/large,
+fine/large and large/fine internal contexts separately from non-Foam/actual-Foam
+upper contexts. Their presence in a constructed vector/pixel control does not
+label a real scene; retain the actual scope of real controls and unavailable
+combinations. Upper-front qualification still needs independently supported
+side roles and actual native boundary evidence.
+Adding a second reference does not make the bank exhaustive: weak similarity to
+both still means unsupported appearance, not a certified Foam-absence observation.
 
 The public reference scene is exposed initialization, not independent evaluation.
-Separate its self/context result from sample4, dark water A, no-Foam water B/C,
-internal-texture/rim and unavailable-upper controls. Reuse the pinned native
+If L is approved and included, water A and its neighbouring episode also become
+reference context for this operation; neither its large-grained nor its dark-Foam
+self-match is evidence of generalization. Later no-Foam B/C from the same recording
+remain same-source development controls. Keep reference-self, reference-neighbour
+and outside-reference-episode results distinct, excluding exposed reference groups
+from any claimed independent evaluation. Do not reuse the previous operation's
+query label as evidence that the scene is still independent after changing its role.
+Retain sample4, dark water A, no-Foam water B/C, internal-texture/rim and
+unavailable-upper cases with those operation-specific exposure roles. Reuse the pinned native
 inventories and existing interval joins. Report every scheduled edge and every
 unreviewed or unsupported guide; do not snap an absent guide to a nearby edge,
 label a whole interval as positive, or select the best score after viewing results.
-Keep dark-Foam reachability and false-front opposition separate. A partial result
-does not require perfect frame accuracy and cannot claim broad recovery either.
+Keep fine-Foam and large-grained-Foam reachability/loss separate, alongside dark
+Foam and false-front opposition. Report per-appearance availability, unreviewed
+coverage and source/reference overlap; a pooled improvement must not conceal
+losing an entire appearance. If large-grained examples cannot be qualified, state
+that coverage is NOT_EVALUATED rather than crediting R as its substitute. A partial
+result does not require perfect frame accuracy and cannot claim broad recovery.
 
 No similarity cutoff, calibrated class, current numeric, presence/absence decision
 or episode change is part of this comparison. Its result may reject this operation
@@ -513,6 +563,6 @@ Until then, the retained environment has a concrete pending use, and the existin
 - Prior mechanisms reviewed: current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
 - Prior mechanisms rejected: threshold/peer-distance rescue, anchor-only fix, cost/maturity-based identity, appearance matching as physical authority, component-extreme Foam replacement and episode relaxation without a correct raw front.
 - Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies, a bounded local footprint and preservation before removal keep the experiment reversible.
-- Difference from prior failures: the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
+- Difference from prior failures: the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds an operating-policy proposal to offline research; no executing owner, implemented schema or production behavior changes.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.

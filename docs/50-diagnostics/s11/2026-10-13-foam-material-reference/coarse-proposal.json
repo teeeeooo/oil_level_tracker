@@ -1,0 +1,87 @@
+{
+  "schema": "s11-foam-material-reference-review-v1",
+  "status": "PENDING_USER_LARGE_GRAINED_FOAM_FOOTPRINT_JUDGMENT",
+  "id": "L",
+  "source_case_id": "water-f001232",
+  "source_frame_index": 1232,
+  "nominal_time_sec": 41.107733333333336,
+  "time_scope": "Time/index from the already pinned source case; no new decode or new timing claim.",
+  "source_image": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
+  "source_image_sha256": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324",
+  "proposal": {
+    "id": "L",
+    "role_requested": "Large-grained Foam interior appearance, not isolated bubbles in liquid",
+    "source_rectangle_xyxy_half_open": [
+      938,
+      485,
+      963,
+      510
+    ],
+    "native_center_xy": [
+      950,
+      497
+    ],
+    "native_shape": [
+      25,
+      25,
+      3
+    ],
+    "rgb_array_sha256": "5ae0e52745e4bc4066c2caa925f8292d8af162dfd0fbc688a03f30ed6c4e6b2e"
+  },
+  "existing_review_scope": {
+    "layer_presence": "User-confirmed Foam layer in water A/f1232.",
+    "upper_position": "User-confirmed upper containment rows476–481 at X950 only.",
+    "lower_position": "Unclear; remains unavailable.",
+    "new_scope": "The existing replies do not label this finite footprint or its grain appearance. No whole-image Foam label follows from visible bubbles."
+  },
+  "new_question": "L 상자 안을 알갱이가 큰 Foam 내부 기준 영역으로 사용해도 되나요? 액체 속의 개별 기포를 Foam 층으로 잘못 포함하지 않으려는 별도 내부 영역 판단입니다. 기존 상단/하단 판정은 다시 묻지 않습니다.",
+  "options": [
+    "큰 알갱이 Foam 내부 기준으로 사용 가능",
+    "Foam 내부 기준으로는 부적절",
+    "이 화질로는 판단하기 어려움"
+  ],
+  "scope_limits": [
+    "No model inference or material label before the reply.",
+    "Approval would qualify this footprint only, not a pixel mask, upper/front position, lower interface, adjacent frame, source-wide large-grain label or grain-size threshold.",
+    "As a reference, water A and its neighbouring episode become exposed initialization/reference context for this operation; they cannot independently validate large-grained or dark-Foam generalization. No-Foam B/C from the same recording stay same-source development controls.",
+    "Existing R is approved for fine-grained Foam only. Low R similarity is not non-Foam; per-reference evidence and internal appearance transitions remain separate.",
+    "Physical bubble size and apparent source/token size are different; actual geometry remains to be frozen before the two-reference operation."
+  ],
+  "authority_pins": {
+    "docs/50-diagnostics/s11/2026-10-10-upper-projection-ac-reply.json": "360b43529ab23bc4ff9c53aff48d7a10db71398f4aed6604544783802c023c26",
+    "docs/50-diagnostics/s11/2026-10-10-water-foam-role-reply.json": "57ef93a47183b090258848adea6b756a9d0fa70b2130028a41c5933a267913f1",
+    "docs/50-diagnostics/s11/2026-10-10-water-lower-interface-reply.json": "1d19cc557c4e40fd686aeac056736718fb11fbacc82f40fb57485deeea81731e",
+    "docs/50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json": "6e5f21cea01a78269c3a8b288751b41383ea07b8df8577417070ba1e3dfee638"
+  },
+  "display": {
+    "path": "coarse-review.png",
+    "sha256": "5d49bc99da5d223bb871fb6bcc189415698dc86788ae9f76183167ce0d14ddd7",
+    "overview_source_rectangle_xyxy_half_open": [
+      760,
+      330,
+      1140,
+      750
+    ],
+    "overview_rgb_sha256": "4261aa8cd41d3c619c25deb6a48f8be5004141216b35c9d50d09057cfee5de8e",
+    "source_pixels": "Unchanged RGB shown nearest-neighbour; clean detail and context; no enhancement or generated detail."
+  },
+  "renderer": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-foam-material-reference/render.py",
+    "sha256": "81d549f3f5dc9ca43fd1adce96a5f06169664e6f8b079858e4bababade4032c7",
+    "command": "python render.py --source <pinned source_image> --overview 760 330 1140 750 --footprint 938 485 963 510 --label L --output <new path>"
+  },
+  "verification": {
+    "source_equals_saved_case_pin": true,
+    "footprint_within_source_and_overview": true,
+    "source_shape": [
+      1080,
+      1920,
+      3
+    ],
+    "display_bytes": 302361,
+    "visual_review": "Context, proposal box, clean detail and labels inspected; native image content preserved."
+  },
+  "model_calls": 0,
+  "video_decode": false,
+  "production_changed": false
+}

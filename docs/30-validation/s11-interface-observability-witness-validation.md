@@ -1502,12 +1502,27 @@ scope differ across sources; disclose them. Retain all rows/scores/statuses unde
 fixed resources with no score-guided geometry/bank/source retry. The absent
 Foam-upper prototype, calibration/holdout and downstream-effect gates remain open.
 The separate [material-side proposal](../20-architecture/s11-contextual-role-observation-design.md#material-side-observation-proposal--reference-review-pending)
-requires its pending finite-footprint material reply before a new operation is
-frozen or scored. Boundary-range agreement alone is not that reply. Preserve the
-reference scene as exposed initialization, the actual native candidate population,
-dark-Foam/no-Foam/rim/internal controls, individual side terms and the unordered
-control. No regional prototype or signed affinity alone supplies calibrated Foam
-identity or permission to change raw fronts/episodes.
+has an [approved fine-Foam R footprint](../50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json),
+with a new user requirement to cover large-grained Foam separately. Qualify the
+large-grained reference footprint and freeze both appearances before the proposed
+two-appearance comparison; do not credit R as a universal prototype. Preserve each
+reference's two side scores, availability and provenance, without averaging,
+maximum-score authority, requiring both appearances to match, or converting a
+missing/weak match into non-Foam. Include fine/fine, large/large and both directions
+of internal appearance transition in semantic controls; a change of appearance
+inside Foam must not become an upper front. Constructed controls do not label
+real scenes. Report per-appearance coverage/loss and unreviewed cases separately,
+with source/camera/token scale and mixed appearance disclosed. A missing appearance
+remains NOT_EVALUATED; pooled success cannot hide its loss. Preserve the reference
+scene as exposed initialization, actual native candidates, dark-Foam/no-Foam/rim
+controls and the unordered control. No regional prototype or signed affinity alone
+supplies calibrated Foam identity or permission to change raw fronts/episodes.
+The [L water-A proposal](../50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-proposal.json)
+is a new material/appearance footprint review, not a reopening of the already
+closed upper/lower boundary questions. If adopted, its source episode becomes
+reference exposure; its self-match cannot count as independent large-grained or
+dark-Foam validation. Same-source B/C opposition stays exposed development. Weak
+support against both references remains unresolved rather than Foam absence.
 The optional saved-review qualification path must preserve exact baseline audit
 equality before emitting its supplement. Controls must reject stale authority
 bytes, repinned-but-different baseline content, changed query identity/time,
