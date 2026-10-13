@@ -476,7 +476,8 @@ score-guided neighbouring-patch selection or repeated same-image question follow
 The [L proposal](../50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-proposal.json)
 uses one native footprint inside the source-qualified water A context and an
 [unaltered-pixel display](../50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-review.png).
-Its Foam-interior/large-grained meaning remains pending; the old unclear lower
+The [L reply](../50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-reply.json)
+approves this footprint as large-grained Foam interior; the old unclear lower
 interface is not relabeled. The existing positional interval renderers are frozen
 and describe a line range, so the small [footprint renderer](../50-diagnostics/s11/2026-10-13-foam-material-reference/render.py)
 adds only a two-dimensional box with clean source detail, outside the detector.
@@ -529,7 +530,7 @@ Adding a second reference does not make the bank exhaustive: weak similarity to
 both still means unsupported appearance, not a certified Foam-absence observation.
 
 The public reference scene is exposed initialization, not independent evaluation.
-If L is approved and included, water A and its neighbouring episode also become
+With approved L included, water A and its neighbouring episode become
 reference context for this operation; neither its large-grained nor its dark-Foam
 self-match is evidence of generalization. Later no-Foam B/C from the same recording
 remain same-source development controls. Keep reference-self, reference-neighbour
@@ -555,6 +556,43 @@ Freeze resource/stop conditions and the complete comparison before execution;
 an unfavourable result does not authorize reference, scale, crop or margin rescue.
 Until then, the retained environment has a concrete pending use, and the existing
 3 GB footprint/removal contract applies.
+
+### Frozen material-side operation
+
+The [executable preflight](../50-diagnostics/s11/2026-10-13-foam-material-sides/preflight.json)
+reuses all 42 S2 saved raster/edge inventories and the public compressor native
+raster: 43 contexts, 1,335 existing visible centre-column edges. Nine reduced
+contexts remain transformed development controls, never additional independent
+native observations. Eleven sample4 RGB crops match their saved grayscale inputs;
+three other contexts have no retained RGB and remain unavailable without decoding
+or synthesizing colour. Regional/interval review does not label an individual edge.
+
+The [offline runner](../../tests/diagnostics/s11_foam_material_sides.py) reuses the
+unchanged encoder and dimension-aware transfer padding/weights. A separate entry
+is necessary because the frozen CR1 transfer owns joint role descriptors and its
+original bank, whereas this operation compares each side with a material interior.
+No additional edge generator, model, production dependency or consumer is added.
+
+Both approved references use all 625 pixels of the 25×25 footprint. Queries use
+25 columns and 11 rows on each side (vertical offsets −12…−2 / +2…+12); every
+requested pixel must be visible. Do not shrink support to rescue a partial side.
+Record full/local per-reference pairs, both weight arrays and token overlap.
+Square-padding the existing ROI and resizing to 224 preserves the declared scope
+but produces different native token spacing across sources; some 25-pixel patches
+are smaller than one token. Neither a weighted region nor a full-context token is
+a pure-phase measurement. No crop/scale retry follows its scores.
+
+The complete geometry preflight has 1,184 eligible edges, 119 missing required side
+support and 32 lacking saved RGB. Unavailable rows stay in the denominator. It
+freezes at most 1,247 forwards, a 600-second compute budget, 10 seconds per forward,
+2 GB peak RSS and 6 MB compressed output within the existing 3 GB workspace contract.
+Encoder-through-pixel controls precede real queries; side-exchange algebra and
+constructed fine/fine, large/large, fine/large, large/fine and blank/fine directions
+retain appearance transitions without claiming their construction labels real scenes.
+No sign, affinity maximum or fitted cutoff is an upper-front rule. The complete
+readout can motivate a later calibrated policy only with independently qualified
+side/edge roles, opposition and available evidence. Self-reproduction, unresolved
+appearance coverage or missing opposition cannot satisfy that entry.
 
 ## History Review
 

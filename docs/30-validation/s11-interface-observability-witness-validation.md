@@ -1503,9 +1503,9 @@ fixed resources with no score-guided geometry/bank/source retry. The absent
 Foam-upper prototype, calibration/holdout and downstream-effect gates remain open.
 The separate [material-side proposal](../20-architecture/s11-contextual-role-observation-design.md#material-side-observation-proposal--reference-review-pending)
 has an [approved fine-Foam R footprint](../50-diagnostics/s11/2026-10-13-foam-material-reference/reply.json),
-with a new user requirement to cover large-grained Foam separately. Qualify the
-large-grained reference footprint and freeze both appearances before the proposed
-two-appearance comparison; do not credit R as a universal prototype. Preserve each
+and the [approved large-grained L footprint](../50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-reply.json).
+The [two-appearance preflight](../50-diagnostics/s11/2026-10-13-foam-material-sides/preflight.json)
+freezes both appearances before scores; do not credit R as a universal prototype. Preserve each
 reference's two side scores, availability and provenance, without averaging,
 maximum-score authority, requiring both appearances to match, or converting a
 missing/weak match into non-Foam. Include fine/fine, large/large and both directions
@@ -1519,7 +1519,7 @@ controls and the unordered control. No regional prototype or signed affinity alo
 supplies calibrated Foam identity or permission to change raw fronts/episodes.
 The [L water-A proposal](../50-diagnostics/s11/2026-10-13-foam-material-reference/coarse-proposal.json)
 is a new material/appearance footprint review, not a reopening of the already
-closed upper/lower boundary questions. If adopted, its source episode becomes
+closed upper/lower boundary questions. The received approval makes its source episode
 reference exposure; its self-match cannot count as independent large-grained or
 dark-Foam validation. Same-source B/C opposition stays exposed development. Weak
 support against both references remains unresolved rather than Foam absence.
