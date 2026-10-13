@@ -77,6 +77,31 @@ sample5의 A/B/C도 재검토하지 않는다. A는 Foam 상단, B/C는 Foam 없
 아니다. 공개 압축기는 실제 Foam/Oil 문맥이 있는 두 번째 source이며 기존 노출된
 평가 자료로만 사용한다. 어느 경우에도 untouched holdout으로 바꾸지 않는다.
 
+### 검토 화면과 종료 검사
+
+[후보 화면](../../50-diagnostics/s11/2026-10-14-oil-policy-feasibility/candidate-review.png)에서
+노란 십자는 후보 대표점이며 idx9의 청록 선분은 저장된 sector Y429다.
+선분은 픽셀 윤곽이 아니다. 원본 영역과 저장 RGB 배열의 동일성, 23개 전체
+후보의 index/source/Y, 네 개 질문 대상의 누락 없음이 실제 실행에서 확인됐다.
+원본과 확대 화면을 직접 확인해 위치·legend·잘림 없는 배치를 검토했다.
+[Subject 기록](../../50-diagnostics/s11/2026-10-14-oil-policy-feasibility/review.json)은
+전체 23개 후보 hash와 질문 대상 4개의 미평가 상태를 보존한다.
+
+`9c7d087`에서 입력·scope·renderer를 먼저 고정했다. 재현기는 기존 native-fragment
+화면과 다른 **후보 대표점/pooled sector** envelope를 다루기 위한 작은 adapter다.
+기존 position join과 O2/G0 pin reader를 재사용하며 frozen 렌더러를 수정하지 않는다.
+별도 점수, 영상 decode, 새 물리 라벨은 없다. CLI는 `/private/tmp`에서 실행했다.
+같은 plan으로 `prepare_candidate_review.py --root <repo> --plan
+<repo>/docs/50-diagnostics/s11/2026-10-14-oil-policy-feasibility/candidate-review-plan.json
+--output <new-managed-work>/review`를 실행하면 된다.
+
+검토 PNG 159,587 bytes와 JSON 10,793 bytes만 Git 위치에 보존했다. 관리 실행
+`s11-public-oil-candidate-review-20261014-001`의 중복 두 파일은 종료 시 제거했다.
+이 실행을 포함한 관리 실행 27개 오류 0. 원본 영상·NPZ·capture 복제본은 만들지
+않았다. 현재 허용 범위의 답변이 와야 후속 평가를 고정하므로 이 지점에서 멈춘다.
+최종 문서 검사에서 변경 Markdown 7개의 로컬 링크 1,271개와 새 문서·산출물
+7개의 catalog 등록을 확인했다. Detector Governance 및 whitespace 검사도 통과했다.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION`.

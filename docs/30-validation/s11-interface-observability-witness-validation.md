@@ -1469,6 +1469,17 @@ only data-neutral contract work or explicitly exposed diagnostics. Do not choose
 a cutoff from the known score gap or request new filming as an assumed dependency.
 Private calibration, if needed, stays predeclared and work-PC-only under V3/V5.
 
+The [necessary-condition audit](../20-architecture/s11-contextual-role-observation-design.md#necessary-condition-check-before-a-new-observation)
+can falsify the fixed family before these calibration gates. Absence of a support-order
+contradiction on the exposed sample4 controls is not their satisfaction. Report initial
+reference and nonself results separately; a positive-sign failure, missing control and
+opposition-order witness are distinct. An already accepted practical approximation
+that fails the sign rule remains a consumer-impact limitation, not a new physical
+false-negative label or permission to discard it. A source-range review permits
+containment comparisons only. Scoped practical candidate acceptance, if supplied,
+can support a same-frame at-least-one-acceptable-candidate preservation requirement;
+it supplies neither all-candidate physical truth nor native contour labels.
+
 Required checks for the proposed observation/policy are:
 
 - all raw class scores, common support and required floor/ceil variants survive

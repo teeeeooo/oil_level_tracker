@@ -1390,4 +1390,6 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-policy-feasibility/readout.json](50-diagnostics/s11/2026-10-14-oil-policy-feasibility/readout.json) | 초기 참조 분리·A/B facet·9개 대조군 필요조건 결과 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-policy-feasibility/candidate-review-plan.json](50-diagnostics/s11/2026-10-14-oil-policy-feasibility/candidate-review-plan.json) | 공개 촬영원 후보 근사 허용 질문과 입력·범위 고정 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-policy-feasibility/prepare_candidate_review.py](50-diagnostics/s11/2026-10-14-oil-policy-feasibility/prepare_candidate_review.py) | 원본 후보 대표점·sector를 구분하는 검토 화면 재현기 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-policy-feasibility/candidate-review.png](50-diagnostics/s11/2026-10-14-oil-policy-feasibility/candidate-review.png) | 공개 Oil 범위 안 4개 후보의 점수 없는 근사 허용 검토 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-policy-feasibility/review.json](50-diagnostics/s11/2026-10-14-oil-policy-feasibility/review.json) | 23개 전체 후보·4개 질문 대상·pixel/hash 검증 |
 | 2026-10-14 | [60-evidence/s11/2026-10-14-oil-policy-feasibility.md](60-evidence/s11/2026-10-14-oil-policy-feasibility.md) | 필요조건 실제 실행·한계 및 다른 촬영원 연결 |

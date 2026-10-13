@@ -1,0 +1,326 @@
+{
+  "schema": "s11-public-oil-candidate-review-v1",
+  "plan_sha256": "429175c19746f72f93b68f91ef0ba0c122f35438d8eb0e3342277d195f0a9c18",
+  "status": "AWAITING_SCOPED_PRACTICAL_ACCEPTANCE",
+  "frame_index": 1499,
+  "time_sec": 50.01663333333334,
+  "source_x": 578,
+  "confirmed_oil_range": {
+    "id": "B",
+    "role": "Oil upper",
+    "source_rows_inclusive": [
+      421,
+      435
+    ],
+    "source_y_cell_bounds": [
+      420.5,
+      435.5
+    ]
+  },
+  "candidates": [
+    {
+      "candidate_input_index": 0,
+      "candidate_sha256": "24bf45865dc02a84fca97fcacc546805c49c876d3a50da44fe7ea7a41046e539",
+      "source": "oil_hypothesis:8f1589f5d4059804db74a521",
+      "kind": "oil_air",
+      "representative_y": 267.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 1,
+      "candidate_sha256": "5318d474f97fdb4686caad754bf1834995473bc63b69fb6011957ee6e2321849",
+      "source": "oil_hypothesis:53c90e081a7066ada36d7187",
+      "kind": "oil_air",
+      "representative_y": 277.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 2,
+      "candidate_sha256": "527fb975f6aa390206d693967ac5799c8619427629c31210bb541eaaecac42bc",
+      "source": "oil_hypothesis:cc7e09833432dea270898ec5",
+      "kind": "oil_air",
+      "representative_y": 287.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 3,
+      "candidate_sha256": "f724eb0b31f4c97c137371fc7d9a2ec330362885a2779175bbed070532273f98",
+      "source": "oil_hypothesis:371da8d7026d4b99bac652c5",
+      "kind": "oil_air",
+      "representative_y": 321.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 4,
+      "candidate_sha256": "a0f62029271c9d273ed3f1d16a6becd236bbae700f0aa482679e83729b1402ca",
+      "source": "oil_hypothesis:9ae72cd82b8e47234103f9a0",
+      "kind": "oil_air",
+      "representative_y": 336.5,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 5,
+      "candidate_sha256": "5f3e8d7e511e4ad0f8b7c23bed2592e649092aca84cbac4a49fdc1b3208baf6c",
+      "source": "oil_hypothesis:21193a4786a0e981d80a066a",
+      "kind": "oil_air",
+      "representative_y": 430.0,
+      "review_requested": true,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 6,
+      "candidate_sha256": "3dbf86206c59c8810273cea1254cd7f4adb0ade8de27d4e986d456337ca755d9",
+      "source": "oil_hypothesis:5d053def29b4fffd81bf772d",
+      "kind": "oil_air",
+      "representative_y": 443.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 7,
+      "candidate_sha256": "6ea9ed401c1d3d4827aedb4c6f550deca10af718be780f3122725f023be7c771",
+      "source": "oil_hypothesis:1a9cdf97bfcb8d302feb1f92",
+      "kind": "oil_air",
+      "representative_y": 450.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 8,
+      "candidate_sha256": "6a1bb9054a7859fe3fe5f759ec22bcf2d7bea964b417eac3c29390ceecd2e94d",
+      "source": "material_path",
+      "kind": "oil_air",
+      "representative_y": 327.0,
+      "review_requested": false,
+      "center_sector_samples": [
+        {
+          "source_x_range_half_open": [
+            557,
+            600
+          ],
+          "pooled_path_source_y": 328,
+          "scalar_range_membership_only": [
+            "A"
+          ]
+        }
+      ],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 9,
+      "candidate_sha256": "0727cb8debca146e9fd62b6c7f83fc5696ba764f8bad3608a42ce9a724880903",
+      "source": "material_path",
+      "kind": "oil_air",
+      "representative_y": 425.0,
+      "review_requested": true,
+      "center_sector_samples": [
+        {
+          "source_x_range_half_open": [
+            557,
+            600
+          ],
+          "pooled_path_source_y": 429,
+          "scalar_range_membership_only": [
+            "B"
+          ]
+        }
+      ],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 10,
+      "candidate_sha256": "4356f99c347129160420b1c2a29b75eabee6620d978ff921e805d71c23c54c87",
+      "source": "material_path",
+      "kind": "oil_air",
+      "representative_y": 288.0,
+      "review_requested": false,
+      "center_sector_samples": [
+        {
+          "source_x_range_half_open": [
+            557,
+            600
+          ],
+          "pooled_path_source_y": 272,
+          "scalar_range_membership_only": []
+        }
+      ],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 11,
+      "candidate_sha256": "8afc91d6b46040001aa8130101880b851db8212e66d1f02c331dd58c98e1ed98",
+      "source": "material_path",
+      "kind": "oil_air",
+      "representative_y": 279.0,
+      "review_requested": false,
+      "center_sector_samples": [
+        {
+          "source_x_range_half_open": [
+            557,
+            600
+          ],
+          "pooled_path_source_y": 272,
+          "scalar_range_membership_only": []
+        }
+      ],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 12,
+      "candidate_sha256": "b154f92457247b8b46a631b73e9f7ebc82e191c1d6265525547cf41c17ec13f0",
+      "source": "distributed_sobel_path",
+      "kind": "oil_air",
+      "representative_y": 329.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 13,
+      "candidate_sha256": "75bdee1c477494bebaa520ec342e9197e8cf43b930ee2f99b706a0334667cc7a",
+      "source": "calibrated_high_recall",
+      "kind": "oil_air",
+      "representative_y": 427.0,
+      "review_requested": true,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 14,
+      "candidate_sha256": "f7beed14f041a1f5850d9572ca0c7e8b69de960c92224c3179ed79945795e82b",
+      "source": "calibrated_high_recall",
+      "kind": "oil_air",
+      "representative_y": 442.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 15,
+      "candidate_sha256": "abdec2d972594e6a1f3308685aea1d117754b4082ecbfc5c5cd5b271e047f890",
+      "source": "calibrated_high_recall",
+      "kind": "oil_air",
+      "representative_y": 450.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 16,
+      "candidate_sha256": "166abf221127d8059d35e09a52bda40ed8e4a9998376262f184a75172123a7d3",
+      "source": "calibrated_high_recall",
+      "kind": "oil_air",
+      "representative_y": 322.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 17,
+      "candidate_sha256": "f5c2aa18aaa42a6996bcb51c4b39e2e6e54b80d87c432b67fd57a31b6dedb7fa",
+      "source": "calibrated_high_recall",
+      "kind": "oil_air",
+      "representative_y": 329.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 18,
+      "candidate_sha256": "838611736c97732fbb7f8eaf64ea2c52c349f62e6222acf56287808c534a8669",
+      "source": "calibrated_high_recall",
+      "kind": "oil_air",
+      "representative_y": 335.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 19,
+      "candidate_sha256": "58a9359e91a7b718f9111c425edce8c58354bb4071a6f938b90af833d03d3172",
+      "source": "phase_transition_scan",
+      "kind": "oil_air",
+      "representative_y": 317.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 20,
+      "candidate_sha256": "58dbc8fdecddf950cb011c67b7937329ff9f996f5409bb3c99510e0f14098337",
+      "source": "phase_transition_scan",
+      "kind": "oil_air",
+      "representative_y": 424.0,
+      "review_requested": true,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 21,
+      "candidate_sha256": "b1bd5728be96c50679e35eba46340da6638ac17024abae1c7721e6c3c449feca",
+      "source": "phase_transition_scan",
+      "kind": "oil_air",
+      "representative_y": 441.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    },
+    {
+      "candidate_input_index": 22,
+      "candidate_sha256": "83a4ad22c2c12c2f166b536d17b7bc6a2280973b17227c6fe1b33f07e0098bb9",
+      "source": "foam_evidence",
+      "kind": "foam_front",
+      "representative_y": 317.0,
+      "review_requested": false,
+      "center_sector_samples": [],
+      "physical_role": "UNREVIEWED",
+      "practical_acceptance": "UNREVIEWED"
+    }
+  ],
+  "selection_rule": "All Oil candidates with representative Y in the closed Oil interval; no score selection.",
+  "image_sha256": "78c81d87a12119cc15c9dbb64c6c187deb8d12ef3e079a1fa19e36f48409dd56",
+  "verification": {
+    "original_roi_equals_saved_rgb": true,
+    "candidate_joins": 23,
+    "reviewed_candidates": 4,
+    "new_labels": 0
+  },
+  "decision": "NOT_EVALUATED",
+  "model_calls": 0,
+  "production_changed": false
+}

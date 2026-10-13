@@ -70,6 +70,9 @@ connect the complete saved inventory to current candidate roles and native suppo
 The [import manifest](70-reference/s11-actual-execution-2026-10-13/import-manifest.json)
 maps supplied originals and deduplicated repository files. Candidate comparison readiness
 does not qualify native path labels or source transfer; the Work Plan owns the next step.
+The [continuous-policy feasibility result](60-evidence/s11/2026-10-14-oil-policy-feasibility.md)
+separates physical-control possibility from practical B preservation and routes the
+four-candidate public-source acceptance review without selecting a threshold.
 
 The [native G0 evidence](60-evidence/s11/2026-10-13-native-role-readiness.md) routes its frozen full-population binding. The [N1–N3 supplement](60-evidence/s11/2026-10-13-native-role-qualification.md) retains received roles and input checks; the [N4/N5 packet](60-evidence/s11/2026-10-13-native-opposition-review.md) adds new opposition questions with N3 as closed context. The [received N4/N5 reply and fixed trial](50-diagnostics/s11/2026-10-13-native-surface-trial/trial-manifest.json) retain scoped roles, context facets and source-separated evaluation. The [completed native trial](60-evidence/s11/2026-10-13-native-surface-trial.md) records N3 target loss and independent arithmetic verification. Current response/gate state stays in Work Plan.
 

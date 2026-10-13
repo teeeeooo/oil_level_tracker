@@ -324,9 +324,7 @@ requirements, not values inferred from this proposal. Numeric publication keeps
 the selected current native candidate Y. A future fixed-X representation needs
 its own candidate/support lineage; no post-selection snapping or reference Y.
 
-### Executable saved-contract preflight
-
-#### Necessary-condition check before a new observation
+### Necessary-condition check before a new observation
 
 The existing continuous family must first face the current candidate controls.
 The optional `--policy-manifest` entry in the existing material-reuse CLI reruns
@@ -357,6 +355,8 @@ Reuse the existing 180 s, 800 MB RSS and 1 MB output caps; the managed run has
 training or production replay is required. No seed/crop/bank/margin/cutoff retry
 follows. Only a separately specified source of information can motivate the next
 observation after a contradiction.
+
+### Executable saved-contract preflight
 
 [The offline CR1 adapter](../../tests/diagnostics/s11_contextual_role_preflight.py)
 uses the existing O2 hash, validation and write-once helpers. The distinct adapter
