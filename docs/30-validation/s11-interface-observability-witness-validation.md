@@ -1606,7 +1606,7 @@ reproduces the supplied canary without establishing detector improvement.
 | G1 — one frozen observation | A predeclared capability demonstration, all known wrong/positive/unreviewed/unavailable rows, fine/coarse and self/nonself facets, source/episode splits, costs and stopped/failed runs | Exposed development usefulness only; no untouched holdout or production authority inferred |
 | G2 — behavior/workflow | Separately accepted consumer/raw-front change with full-window lineage, wrong/new extrema, retained real movement and independent Oil/Foam results | Existing O2/V5/O3 and parent Foam gates apply; Windows field/report acceptance remains separate |
 
-G0's planned offline adapter must exercise its real CLI with pinned inputs,
+G0's offline adapter must exercise its real CLI with pinned inputs,
 write-once output and execution outside the repository cwd. Focused controls cover:
 
 - stale source/review hashes, wrong frame/PTS/Glass/geometry or candidate index,
@@ -1628,6 +1628,15 @@ write-once output and execution outside the repository cwd. Focused controls cov
 - material roles versus overlapping optical/context facets, and fine/fine,
   coarse/coarse and both internal transitions. Constructed controls prove contract
   behavior, not real-scene classification; absent exact guide joins stay untested.
+
+The [G0 implementation evidence](../60-evidence/s11/2026-10-13-native-role-readiness.md)
+records the first complete binding result. Its geometric support uses actual observed
+fragment columns, counts unavailable dependencies and keeps legacy context support
+separate. Shared-view accounting must be checked with an overlapping synthetic case
+even when the saved population has zero cross-side overlap. Original region/interval
+judgments may coexist with NOT_READY native correspondence; only a new subject-bound
+human response can qualify that new review unit. Partial/approximate/unassessable
+responses are not dense truth, negative success or a learning grant.
 
 G0 need not label every existing candidate or certify all four proposed head
 outputs. It must declare the smallest capability to be tested and identify its

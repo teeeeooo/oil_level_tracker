@@ -3,9 +3,9 @@
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery` / `ACTIVE`.
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
-**Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1 offline preflight adds no detector behavior.
-**Next transition:** implement the offline **NSR-1 G0 native binding/readiness slice** defined in the [existing design owner](../20-architecture/s11-contextual-role-observation-design.md#native-side-role-observation-and-g0-binding-contract). Deliver one pinned manifest and complete per-capability READY/NOT_READY table linking native paths, actual side/feature support and original weak review units. No training, new encoder call or production consumer is part of that first slice. A successor classifier remains unselected; physical calibration and independent evaluation are still open.
-**Latest intake:** the [October 13 program review](../60-evidence/s11/2026-10-13-program-review-intake.md) verifies the supplied six-file package at `badf7ca`, adopts the input/readiness delta and supersedes the prior design-only resume instruction. The [material-role handoff](../60-evidence/s11/2026-10-13-material-role-handoff.md) remains the checkpoint for closed R/L/B judgments and local inputs. No physical question or Windows run is pending.
+**Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1 and native G0 offline preflights add no detector behavior.
+**Next transition:** receive the three scoped native-path role judgments in the [N1–N3 review packet](../60-evidence/s11/2026-10-13-native-role-readiness.md#준비도와-다음-판단). **NSR-1 G0 binding is implemented and verified; role learning is NOT_READY.** Use only the qualified response scope to freeze one useful G1 observation and its opposition. A successor classifier/training plan remains unselected; no production consumer is authorized before its existing gates.
+**Latest checkpoint:** [G0 evidence](../60-evidence/s11/2026-10-13-native-role-readiness.md) preserves all 43 contexts/1,335 edges and 164 Oil records, source/frame view dependencies and weak-review precision. N1–N3 are newly displayed native fragments; the prior R/L, interval, water B/C and f1485 A/B judgments remain closed. **User role judgment is pending; Windows work is not yet required.** The [program intake](../60-evidence/s11/2026-10-13-program-review-intake.md) remains the attached-package checkpoint.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 The [post-CR1 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
@@ -29,12 +29,12 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | O1 extraction | IMPLEMENTED; locally ACCEPTED | Reuse trace-only [O1](../60-evidence/s11/s11-r22-3-interface-witness-diagnostics.md); no identity authority |
 | W0–W3 / O2 foundations | Fixed profile CLOSED WITHOUT PROMOTION; target/aggregation, bounded scene review and evaluation tools locally verified; D1 return CLOSED | Reuse [W1 controls](../60-evidence/s11/s11-o2-w1-target-aggregation-controls.md), [W2 reconciliation](../60-evidence/s11/s11-o2-w2-f14865-scene-review.md#geometry-reconciliation-received-and-bounded-w2-closed--2026-10-02) and [D1 reconciliation](../60-evidence/s11/2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed); prediction/efficacy is not established by tooling |
 | P0 / W4 / WP01 — baseline and intake | COMPLETE at saved-evidence scope | [October 13 program intake](../60-evidence/s11/2026-10-13-program-review-intake.md) verifies pins, canary and saved report extrema; P0 A/B/C/U remains the impact owner, physical cadence NOT_EVALUATED |
-| W4/P2 / WP02 — observation/policy | CR1 saved-contract preflight IMPLEMENTED and VERIFIED; NSR input contract ADOPTED, not implemented | Reuse the 164-row [preflight](../50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight.md). Next G0 joins observed paths, side support and complete feature dependencies; no cutoff, classifier or physical decisions |
-| V2/V3 / WP03 — qualification and evaluation | Existing A/B review binding IMPLEMENTED and VERIFIED; native weak-constraint readiness OPEN | Preserve the [review supplement](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md#실행-도구에-판정-의미-반영); compile source/region/interval/candidate units without precision promotion. G0 lists necessary missing role/opposition and exposure per capability; training/calibration/independent evaluation remain separate |
+| W4/P2 / WP02 — observation/policy | CR1 and NSR G0 binding IMPLEMENTED and VERIFIED; role observation NOT_READY | [G0](../60-evidence/s11/2026-10-13-native-role-readiness.md) binds paths, geometric support, shared views and dependency limitations. Next freeze one qualified role observation; no classifier or physical decisions yet |
+| V2/V3 / WP03 — qualification and evaluation | A/B and original weak units BOUND; N1–N3 user judgment PENDING | Preserve the [review supplement](../50-diagnostics/s11/2026-10-13-cr1-competitor-role.md#실행-도구에-판정-의미-반영). New [packet](../50-diagnostics/s11/2026-10-13-native-role-readiness/review-proposal.json) asks only displayed-fragment roles; approximation/unassessable answers cannot become physical positives. Training/calibration/independent evaluation remain separate |
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
 | O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | PROPOSED; separate from WP05 | Explicit route for independently role-supported native candidates; name the replaced heuristic. Repair association/lifecycle only if saved earliest-loss evidence identifies that owner; preserve FULL/EMPTY/refill/drain |
-| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | R/L comparison CLOSED WITHOUT PROMOTION; NSR G0 is next; physical selection OPEN | Preserve [all 43 contexts/1,335 edges](../50-diagnostics/s11/2026-10-13-foam-material-sides.md), including 151 unavailable. G0 separates component-face/raw-edge reachability, side-role/opposition and fine/coarse coverage; qualified feasibility precedes independent raw-front integration |
+| P5-a → P5-b / D5 / WP07 — Foam upper and raw input | R/L CLOSED WITHOUT PROMOTION; G0 binding VERIFIED; role feasibility NOT_READY | Full G0 population retains 151 prior R/L unavailable rows, missing labels and separate face/edge reachability. First capability is external Foam upper versus internal path; source-role judgment precedes its frozen feasibility and independent raw-front integration |
 | P5-c / WP08 — Foam episode | ENTRY NOT MET | Open only for an independently qualified correct raw upper lost downstream; separate onset/stable-layer versus splash/residue controls |
 | O5/W7/P6/D6 / WP09 — integrated Windows and report | PENDING integrated candidate | Exact runtime, all nine canonical segments, target resources and actual independent report-only reading; V5 shadow and final field acceptance remain separate |
 | P7 / WP10 — disposition and closeout | PENDING acceptance evidence | Record accepted/limited/rejected/unassessed scope and residual impact; retain minimal evidence. S11-M/S12 follow the roadmap, not partial local success |
@@ -54,11 +54,12 @@ actual native paths and complete feature support. Reusing path geometry alone or
 renaming the failed R/L similarity is insufficient. The supplied three-convolution
 7×7 head is a research option, not an adopted training plan or a proven classifier.
 
-1. **WP02/03 + WP07, G0:** implement the bounded offline binding adapter using
-   existing O2 pin helpers, A1, native edge/path and boundary-face owners. Produce
-   a manifest and complete readiness table; keep source constraints when exact
-   candidate correspondence is absent. Declare one useful role capability and
-   its required positive/opposition evidence. No source/video/model copies.
+1. **WP02/03 + WP07, G0 binding complete:** the bounded adapter reuses O2/A1,
+   native fragments and boundary faces. The full readiness table preserves
+   missing correspondence and original weak units. **Pause for N1–N3 roles**:
+   Water f1232 paths at X950/Y477 and Y487, Sample4 f1620 path at X595/Y813.
+   Classify only the displayed fragment; partial/approximate/unassessable replies
+   remain scoped. Do not relabel an entire interval or ask for dense masks.
 2. **G1 only after readiness:** freeze one observation/comparison, source/episode
    exposure, per-appearance outcomes, costs and stop rules. If the selected method
    needs learning, present its concrete data/architecture/loss/run-budget scope
@@ -190,9 +191,10 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 
 ## Current authorization boundary
 
-The October 13 program-review request authorizes this package/worktree intake, eligible integration,
-verified duplicate cleanup, validity review and follow-on planning, with autonomous
-commits/pushes. It is not an instruction to run every future WP during intake.
+The latest October 13 instruction authorizes phased implementation, appropriate
+verification, cleanup and autonomous commits/pushes until a necessary user judgment
+or Windows task is reached. G0 is complete; N1–N3 require new human role correspondence,
+so dependent G1 work pauses here. Existing source judgments are not reopened.
 Earlier grants for bounded local development persist subject to the stated gates.
 Main performs implementation/review; no further sub-agents are authorized.
 Stop for a genuinely necessary new user judgment or deliberate Windows work.

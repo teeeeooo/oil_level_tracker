@@ -626,12 +626,26 @@ or production schema migration. Reuse these actual owners:
 | Pinned input and review qualification | Existing O2 input/output primitives and CR1 physical/practical separation; preserve original authorities and frozen rows |
 | Future shadow and consumers | Existing Witness, Oil admission and Foam raw-front owners under their existing gates; no second tracker, edge generator or report path |
 
-The planned `tests/diagnostics/s11_native_role_preflight.py` may own only the new
+The implemented `tests/diagnostics/s11_native_role_preflight.py` owns only the new
 native path/side/weak-constraint envelope. CR1's existing adapter requires saved
 full/local vectors and floor/ceil queries, so it cannot represent this envelope
 without conflating observations. Reuse its underlying O2 pin/validation helpers;
 do not extend the frozen score runner or duplicate geometry/label authorities.
-This names a future implementation boundary, not an API already delivered.
+Its G0 v1 contract retains the old 25×11 vertical context denominator and adds
+point support along each existing X-monotone fragment's observed columns. Missing
+columns, crop/mask pixels, non-monotone paths and incident junctions remain explicit;
+no interpolation, branch pairing or material normal is inferred. Membership is
+reconstructible from the pinned raster, exact path columns and signed side offsets.
+Alternative views record union/reused/cross-side pixel counts, never independent votes.
+
+The only complete leaf dependency described by this slice is saved RGB point identity.
+Reduced rasters retain resize context. Existing Canny/texture dependencies are marked
+context-bearing; the unselected head's complete dependency is not yet specified.
+A missing legacy label raster is unavailable, not a request to regenerate it or a
+negative component-recall result. Source times retain nominal/recorded/decoder-position
+semantics; a manifest does not upgrade them to newly acquired PTS. The
+[completed G0 record](../60-evidence/s11/2026-10-13-native-role-readiness.md) owns measured
+availability and costs. Geometry READY and role NOT_READY are valid separate outcomes.
 
 For each scheduled subject, retain source/frame/actual timestamp/geometry digest,
 original candidate binding when available, observed path/face references and their
@@ -724,9 +738,9 @@ correct raw upper opens episode work. Final field/report acceptance stays separa
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: the October 13 native-feature dependency canary, weak annotation precision and support-face versus raw-edge reachability; current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
+- Prior mechanisms reviewed: the October 13 G0 full-population native binding and original-precision review packet, native-feature dependency canary, weak annotation precision and support-face versus raw-edge reachability; current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
 - Prior mechanisms rejected: threshold/peer-distance rescue, anchor-only fix, cost/maturity-based identity, appearance matching as physical authority, component-extreme Foam replacement and episode relaxation without a correct raw front.
 - Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies, a bounded local footprint and preservation before removal keep the experiment reversible.
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
-- Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no executing owner, implemented schema or production behavior changes.
+- Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no production executing owner, schema or detector behavior changes.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.

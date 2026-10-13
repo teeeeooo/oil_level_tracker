@@ -65,6 +65,8 @@ Do not copy current status into architecture, diagnostics, or evidence merely fo
 
 ## Current S11 routing
 
+The [native G0 evidence](60-evidence/s11/2026-10-13-native-role-readiness.md) routes its complete pinned readout and source-bound review packet. Current response/gate state stays in Work Plan.
+
 S11 remains the active detector-effectiveness milestone. Current state and authorization are owned only by the [Work Plan](00-project/work-plan.md).
 
 For an S11 detector change, use the repository-local `s11-detector-change` Skill. It performs bounded routing through the current implementation map, relevant failure history, current architecture/validation, and the mechanical governance contract.

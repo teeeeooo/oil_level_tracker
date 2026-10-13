@@ -1,0 +1,1748 @@
+{
+  "schema": "s11-native-role-preflight-v1",
+  "base_head": "d1a8b714161cef908b771d549501d544c8ffe763",
+  "scope": "G0 native input/readiness binding only; no classifier or physical calibration",
+  "inputs": {
+    "foam_preflight": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-foam-material-sides/preflight.json",
+      "sha256": "d414111b9afc891c0e290b4bd0d73a4702fc1abbde26c242a27082e09352730f"
+    },
+    "oil_manifest": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-post-cr1-policy-preflight/manifest.json",
+      "sha256": "0eac6511437451270f4f25d9a26ceee0c436aaaba96feed34e7a65b68938d353"
+    },
+    "oil_review_manifest": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-cr1-review-qualification/manifest.json",
+      "sha256": "f5fd2e1a4e78f00b09ae1c76a82d7ac85ec6a462a8851d4c2fd6f3831c728752"
+    },
+    "boundary_archive": {
+      "path": "docs/50-diagnostics/s11/2026-10-09-retained-support-boundaries.json",
+      "sha256": "31055abf7b645f4c593f2c5e812777219bf9fd64793a1f0a5e0faefb1dc14fa4"
+    },
+    "water_archive": {
+      "path": "docs/50-diagnostics/s11/2026-10-10-water-foam-representation.json",
+      "sha256": "efdbe145f01f9f6924c31751c4eef952b12e934eb043a5b3cd6848f00ccaa38c"
+    },
+    "public_preflight": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/current-frame-preflight.json",
+      "sha256": "58fcaa79cb43ee35b737c59b4105c4f83a85fbaaee66654fdcbe3248be28e4e6"
+    },
+    "public_provenance": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/provenance.json",
+      "sha256": "1ca4403db55124fda3801799f36076dacd7f60ea3b0d123f679883241e4b8e3b"
+    },
+    "foam_upper_reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-11-foam-upper-position-reply.json",
+      "sha256": "0efe4893589f3ec5561b76bae49709faf8aae0f6a375f4c3fda346562dc5f79e"
+    },
+    "water_surface_reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-10-water-surface-feature-reply.json",
+      "sha256": "10b53b08cd47a962556b45f3e39d4788dbadf88f373be024c22bdf8479bf0399"
+    },
+    "water_foam_reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-10-water-foam-role-reply.json",
+      "sha256": "57ef93a47183b090258848adea6b756a9d0fa70b2130028a41c5933a267913f1"
+    },
+    "water_no_foam_reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-10-later-water-role-reply.json",
+      "sha256": "36f7ac8697b952b4ce74eff8ffbd4632281b3f4ba316a145221db33ce8a0b0d8"
+    },
+    "public_position_reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.json",
+      "sha256": "3b1282c282a92828103a3c0e9ee4ed0da319a42fa6bce63d6415163195edd537"
+    },
+    "sample4_recipe": {
+      "path": "sample/sample4.oilrecipe",
+      "sha256": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849"
+    },
+    "default_linkage": {
+      "path": "docs/50-diagnostics/s11/2026-10-11-p5-default-linkage/preflight.json",
+      "sha256": "10caed80677aa98f091ac542831c6730d7339d39d48baecd42fdab86d4f7c201"
+    },
+    "default_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-11-p5-default-linkage/readout.json",
+      "sha256": "e90b1d5d90af2c561c6357b9fa86e3a10074ff6252947398ff9300e9c4513e51"
+    },
+    "oil_capture_1140": {
+      "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140.json",
+      "sha256": "44ef26c2675a1bc3612e0dec6dfe204c0071ef36261536e2f601f00f311142ad"
+    },
+    "oil_capture_1200": {
+      "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1200.json",
+      "sha256": "2302974b18ddad2776134e7718a081e162a710f13d4a89a36e228fec7b794e0a"
+    },
+    "oil_capture_1260": {
+      "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1260.json",
+      "sha256": "2f1baac170542bacb918a05a4e862a766750f3eba52d25d25e1daa5a3152bfff"
+    },
+    "oil_capture_1275": {
+      "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1275.json",
+      "sha256": "40eea7e489ba09bd881f5b212db1996f4ee431f9b1b61f43110a7f5b7dc7bb55"
+    },
+    "oil_capture_1320": {
+      "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1320.json",
+      "sha256": "a1b2a9ae3ad6b6764ba5d9b97f4553ba5ec258171ca8dc6327b343fc90b9d933"
+    },
+    "oil_capture_1485": {
+      "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1485.json",
+      "sha256": "ae2fa571fabb9bdb237fabdfe7991b5f05a36a2510780858b0024348cd4fa1c0"
+    },
+    "oil_capture_1560": {
+      "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1560.json",
+      "sha256": "25802b8815ce7bf58b844808835b858de79a52afede8ad40f1c78d79753eeb99"
+    }
+  },
+  "artifacts": [
+    {
+      "path": "sample/sample5.mp4",
+      "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+    },
+    {
+      "path": "sample/sample6.mp4",
+      "sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2"
+    },
+    {
+      "path": "sample/sample7.mp4",
+      "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+    },
+    {
+      "path": "sample/sample4.mp4",
+      "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+    },
+    {
+      "path": "sample/public_miso_mHOS1-1ck60.mp4",
+      "sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_preflight.py",
+      "sha256": "cd8aa6dfaa6bff27290b7133313887873b2249f488b54baec49460bd69ab4dbe"
+    },
+    {
+      "path": "tests/diagnostics/s11_contextual_role_preflight.py",
+      "sha256": "f1d60f45c132b0725af897d33b6ddc9ac01a4ce315640b3abadda4207cefc1f2"
+    },
+    {
+      "path": "tests/diagnostics/s11_contour_contact_probe.py",
+      "sha256": "5b623820083d94219bee6fe5f4ec476361e2454ece4749689f47c0f38cf29d24"
+    },
+    {
+      "path": "tests/diagnostics/s11_foam_support_geometry.py",
+      "sha256": "2524861754d56f6004eff310bdf841226f19e4f069b89f19733d3583923a8a40"
+    },
+    {
+      "path": "tests/diagnostics/s11_interface_shadow_evaluation.py",
+      "sha256": "5909c468871ed3c5cd2095c7c4a4a88df4d08569b10985c22e999aff0f42c808"
+    },
+    {
+      "path": "tests/diagnostics/s11_resolver_replacement_profile.py",
+      "sha256": "27d29ebde1eb411f795b7863630bb3d154b5f11fd9e1f45994cceffbefceee30"
+    },
+    {
+      "path": "src/oil_tracker/adapters/vision/preprocessing.py",
+      "sha256": "55e33486cf34e709ccaf1930720f41978f74c3448baa69eceac8bb570233236e"
+    },
+    {
+      "path": "src/oil_tracker/adapters/vision/foam_front_detector.py",
+      "sha256": "b1b19e3384925c44344ebaa8010ff75569885448f314f8531fec94294cfde947"
+    }
+  ],
+  "bindings": [
+    {
+      "id": "s5-empty-native",
+      "case_sha256": "dee494b6054bb1509ef3d8866c1d8eb38a3cd8fd2c1f8bc90d6b8890bb58bfec",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          0,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "7d84bb4fb666852454b6a42f435ab40596d8ec195ad82b381d67c7c52a25a1fc"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            0
+          ],
+          "sha256": "118cb4c028c10e76ce5622f583a61a06b22996223dbb90281b3cd3f943acff32"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s5-empty-height_200",
+      "case_sha256": "210ba814109b0d4e8b375cb56043ee691a71f50abb491bbe98fa34f7f890b439",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          1,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "7d84bb4fb666852454b6a42f435ab40596d8ec195ad82b381d67c7c52a25a1fc"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            1
+          ],
+          "sha256": "1ef7324bc3605bbf524e49162d7c4c15316bd70b52441d038bd55876f58dd7aa"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s5-inclined-native",
+      "case_sha256": "f619bb27a781d43a01886b2c966d005ac102f8f75d89b4f670fe35480e3d5d09",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          2,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "50e8179db3779761c287b60c79deb63cf8463ff82e4ae3d4e2d577fd2ae4c940"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            2
+          ],
+          "sha256": "68787f4c174b35d2aa2f21b584fe5972fd6313ba211446bf69dddc5dce99aac0"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s5-inclined-height_200",
+      "case_sha256": "4499a6fc2cf9fded7270a474f2097e17eeb0b79854e552e2521442896f35a5aa",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          3,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "50e8179db3779761c287b60c79deb63cf8463ff82e4ae3d4e2d577fd2ae4c940"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            3
+          ],
+          "sha256": "672ec361b61e89d5d9219f72cd3bd6cd2f9eaf236ef2699f3b4ce5c9da6c2273"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s5-settled-native",
+      "case_sha256": "193bc4ad647e5dd009d3daa4c7d3955ef15af076ce544cef945e597ce6e6e43b",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          4,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "5ae84d054a0a8161dc0fc7cd8758bd5cb475bc85dc8901e1388d5a82960e43c1"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            4
+          ],
+          "sha256": "6c48f55fe27dcc4f7017c85587aabc0b67c685275be1729bb27c9fcbb70aeb68"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s5-settled-height_200",
+      "case_sha256": "c35c100b2b62df60a30181dcd03fcd76499bb901797bd016da6ca78a23009c35",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          5,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "5ae84d054a0a8161dc0fc7cd8758bd5cb475bc85dc8901e1388d5a82960e43c1"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            5
+          ],
+          "sha256": "6b411f395e1abc98f5bafd06ca8ad19354728f5a19b746566f0c9742b3a87d85"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s6-empty-native",
+      "case_sha256": "1f694834b8a3d2cd5cf32581a1433c80e38445dbd44f54ec3886f615f3ce66c3",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          6,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "d5980176ab8ad60fe99f0b3da03b8e901314be09310f2f3f740bc0cdee203e8b"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            6
+          ],
+          "sha256": "5f7ddf7fd29449d046943472343e9c1c054e36ad8de1fd2c6be2f7e6741d21f2"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample6.mp4",
+        "sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s6-empty-height_200",
+      "case_sha256": "c76632f41c245c637607a4b15b33b76d323875e01abf86e9bcb05e838ddcd7c3",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          7,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "d5980176ab8ad60fe99f0b3da03b8e901314be09310f2f3f740bc0cdee203e8b"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            7
+          ],
+          "sha256": "78893684c85379e72e9e2a38d9ddec45a0e4e41dd2d951aa0a6888c3979e4cc1"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample6.mp4",
+        "sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s6-forming-native",
+      "case_sha256": "fd2ad2352e1138a7187d840633d88c274c0863c604c4f793a21dd5d7f0b05ced",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          8,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "5980be81f93c12e351c1dca75937c881651b561fe85062f026608a36630e0ce2"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            8
+          ],
+          "sha256": "b592419ccc42a9c123dd76b2680a0fb1a7c083f6088baa5883de35826579f5b6"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample6.mp4",
+        "sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s6-forming-height_200",
+      "case_sha256": "81cb738a65cc6c51d96adc8342a1334a80fe12ebe6290eccd67e0dd35ed1357e",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          9,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "5980be81f93c12e351c1dca75937c881651b561fe85062f026608a36630e0ce2"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            9
+          ],
+          "sha256": "f4c759697ee70b6a42655ed5d9be8f44d699455efbe291a069c4b1ffbff6533c"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample6.mp4",
+        "sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s6-layer-native",
+      "case_sha256": "44bc01c6eb3c413ab846977bc8ddf662a321e859417f537bb6942d230ebaeb92",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          10,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "8fcf3e8f236231182e7fb0d236804f33ced1ec47a1f8353268567de4de8c2a2e"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            10
+          ],
+          "sha256": "1a36ce34d594c49afe488bdb270f7daff4046a9e179fa6b60e58d781973fefaa"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample6.mp4",
+        "sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s6-layer-height_200",
+      "case_sha256": "baddc016e250d72d9056c325551d70dbf263780aa0bb042e1aa1321f372b5fd6",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          11,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "8fcf3e8f236231182e7fb0d236804f33ced1ec47a1f8353268567de4de8c2a2e"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            11
+          ],
+          "sha256": "edb2e1a265f98796e2032f293dcb88fa47cccf1c78f992c98a7efb40322dbee4"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample6.mp4",
+        "sha256": "46b309fe432e0563dcb4b8dac7a788db3d3cdb0f494469f5cff29b9c734506c2"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s7-empty-native",
+      "case_sha256": "b085d9e50df5bbccae8ed37e46aaccf971f73c902d2f5d38b9e560a1b2541e4b",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          12,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "743dcc01441be7ba193522848ce7e2566731a3c00de4e1ba0d8e8a8e5b68b0f3"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            12
+          ],
+          "sha256": "e4f5ebe6e456c1063ba3313a66aa1dead992d9b415788e2c3697f635a02dab7b"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s7-empty-height_200",
+      "case_sha256": "4b0acc7b09fdf0a069d3cb117120a0b6bf647197731f364bad813253d2db31b1",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          13,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "743dcc01441be7ba193522848ce7e2566731a3c00de4e1ba0d8e8a8e5b68b0f3"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            13
+          ],
+          "sha256": "226a81d953adf7bef7578c3080c98f63a0ba5a12d2221abba907a08fb122f2c4"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s7-pouring-native",
+      "case_sha256": "9eb5013d8d0b533f08b2d6c1c7307bcfea621d941389e4e603d3428aa18be5ae",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          14,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "12597956b19d88c06236defd2afe814c7fd6dc639d5ff0ef8ece72ee22beb1f5"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            14
+          ],
+          "sha256": "822ddf51028970e03b59a4099cae0bdbc9a7dee56ada214aca69c2be6d697126"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s7-pouring-height_200",
+      "case_sha256": "6bfe67173634b05b44c7377043da18427382f2b1ca93903104cda74b73a6f8e4",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          15,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "12597956b19d88c06236defd2afe814c7fd6dc639d5ff0ef8ece72ee22beb1f5"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            15
+          ],
+          "sha256": "4a90af34d11df6723dbfe9d7dcd914cc0c13fc8ee60057bc2adf512afc1d04dc"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s7-settled-native",
+      "case_sha256": "08276a77e7477033419800e0a21db6bec9c434159dbe9f1bb17de66aa8df5d3a",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          16,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "433f3d7f82ac2ce71dbad5b2553868c94f7f00135fa593cc143d6d85586e4e39"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            16
+          ],
+          "sha256": "2b689c177d5aca41ab9ed616966564dc05794e0f8bc89d14041aa7f2726c3b52"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s7-settled-height_200",
+      "case_sha256": "ee82b2320dda7bef3b751c8de995d9aa6d7e97c240343e0ff9d639fcb0b4335e",
+      "labels": null,
+      "identity": {
+        "input": "boundary_archive",
+        "keys": [
+          "experiments",
+          "measurement",
+          "files",
+          "preflight.json",
+          "content",
+          "cases",
+          17,
+          "source_identity",
+          "source_raster"
+        ],
+        "sha256": "433f3d7f82ac2ce71dbad5b2553868c94f7f00135fa593cc143d6d85586e4e39"
+      },
+      "frame_key": "frame_index",
+      "time_key": "decoder_pos_msec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "boundary_archive",
+          "keys": [
+            "experiments",
+            "measurement",
+            "files",
+            "preflight.json",
+            "content",
+            "cases",
+            17
+          ],
+          "sha256": "b466c7c2986be2905a241799361157f4af12c917fab668b8755afecdcf146915"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "time_kind": "DECODER_POSITION"
+    },
+    {
+      "id": "s4-f420",
+      "case_sha256": "284d6c6bf7284abdd27bda41ae968d1137a9807b9a11530a30ed5761f781b040",
+      "labels": null,
+      "identity": {
+        "input": "default_readout",
+        "keys": [
+          "foam_frames",
+          0
+        ],
+        "sha256": "77e7600d6a32dcbfa76c408301a1b0cb1debbfe3ba7d0d49ec6922a4f2859fb1"
+      },
+      "frame_key": "frame_index",
+      "time_key": "timestamp_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f450",
+      "case_sha256": "30e5f77e13a5a69970d1cc3a525e2ec0ac9317c2cd560d079e2098fffbe3afc2",
+      "labels": null,
+      "identity": {
+        "input": "default_readout",
+        "keys": [
+          "foam_frames",
+          1
+        ],
+        "sha256": "ebd8df79fa040b90fd03adb2ac28577083d55196ce0d0252ce235eee45af0ea0"
+      },
+      "frame_key": "frame_index",
+      "time_key": "timestamp_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f480",
+      "case_sha256": "5ee876a10925f698aefc932b978f13d0f13f39ad44a44b744fd63b416c98d6c7",
+      "labels": null,
+      "identity": {
+        "input": "default_readout",
+        "keys": [
+          "foam_frames",
+          2
+        ],
+        "sha256": "d44639731039a8d91e7fca8d059f8bb76e995644a93961b8c6070cad6afb8af5"
+      },
+      "frame_key": "frame_index",
+      "time_key": "timestamp_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f1140",
+      "case_sha256": "6ccc13299547a05076717b46d34631cce14d034df9795b9770f6b2b51439fdb0",
+      "labels": null,
+      "identity": {
+        "input": "oil_capture_1140",
+        "keys": [
+          "current"
+        ],
+        "sha256": "997cf645a6bbce87d56e5580578ed92d8f3c09dfb8ba517b9e93c23d04b9a3fe"
+      },
+      "frame_key": "frame_index",
+      "time_key": "time_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f1200",
+      "case_sha256": "c720c7b8119b6c80fcf3fb6c577b590bf0d3871b31f27430dc23db9eabe3550d",
+      "labels": null,
+      "identity": {
+        "input": "oil_capture_1200",
+        "keys": [
+          "current"
+        ],
+        "sha256": "d091a41b9349cdcc4200fced76f203877a6a828f8ff1d44f7292310bfb6156eb"
+      },
+      "frame_key": "frame_index",
+      "time_key": "time_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f1260",
+      "case_sha256": "ab20d9eba27e2e2079d7a21e2c5ef800504b21a1bc7f8055b63879f803e7614d",
+      "labels": null,
+      "identity": {
+        "input": "oil_capture_1260",
+        "keys": [
+          "current"
+        ],
+        "sha256": "6d62e9bab13c5071c14c62c926d7d16c8cdd6ac999fca9ff743e43c30b887739"
+      },
+      "frame_key": "frame_index",
+      "time_key": "time_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f1275",
+      "case_sha256": "5f9c5509c7daef03bf94d733fc846c931b36e56b4938d159f11823f3f4a3b688",
+      "labels": null,
+      "identity": {
+        "input": "oil_capture_1275",
+        "keys": [
+          "current"
+        ],
+        "sha256": "974e49bf4a16d8dd4e7452209893c1a7a4a148f8dd0f47d51a052d83b393f2d7"
+      },
+      "frame_key": "frame_index",
+      "time_key": "time_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f1320",
+      "case_sha256": "792a4e6b8cafab0f7885a5e66eb0de0195a45f36f91f545c7c8deacfc7dda831",
+      "labels": null,
+      "identity": {
+        "input": "oil_capture_1320",
+        "keys": [
+          "current"
+        ],
+        "sha256": "781e8d65bdd944aa44b231c367ec803bcb5e3afb2d6875cbefcde176ad335979"
+      },
+      "frame_key": "frame_index",
+      "time_key": "time_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f1485",
+      "case_sha256": "3cb22b83a0387149e2656f4683346859ef59cd1efc9f9e9cb6deabcede9d2d17",
+      "labels": null,
+      "identity": {
+        "input": "oil_capture_1485",
+        "keys": [
+          "current"
+        ],
+        "sha256": "235931e892724937838232deafb21cc0993c8de7e320c4154451cb374a705b66"
+      },
+      "frame_key": "frame_index",
+      "time_key": "time_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f1560",
+      "case_sha256": "9f34bb8515deac486a1b2b17b882879dd3e9fad6e472a37b0b8450200049a356",
+      "labels": null,
+      "identity": {
+        "input": "oil_capture_1560",
+        "keys": [
+          "current"
+        ],
+        "sha256": "1c9c2669981cac0581d35c02cba94be98ecbca0eac18c3db62a0ebf64a8136e1"
+      },
+      "frame_key": "frame_index",
+      "time_key": "time_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f1620",
+      "case_sha256": "aa054b75e909c654993230861f88f1f24678fcb73b001364e4ecb9ff17951359",
+      "labels": null,
+      "identity": {
+        "input": "default_readout",
+        "keys": [
+          "foam_frames",
+          4
+        ],
+        "sha256": "b22764aeb5d02e2bd70d423c684cb7a78034a342617c3ffb0b1595fa366a04fa"
+      },
+      "frame_key": "frame_index",
+      "time_key": "timestamp_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f1635",
+      "case_sha256": "040a9102f8b3cc29636f95950fc70c1aa1f142edfc255fd4faecb9f597732e5b",
+      "labels": null,
+      "identity": {
+        "input": "default_readout",
+        "keys": [
+          "foam_frames",
+          5
+        ],
+        "sha256": "d8ece2c9a6e041d3e4ed595478d2471bb140293f88e519c34d1093e36521498d"
+      },
+      "frame_key": "frame_index",
+      "time_key": "timestamp_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f1665",
+      "case_sha256": "439c9afdcd41503a68e491001f8b3c26796e12cb33aaf6db6304684fb23bf70c",
+      "labels": null,
+      "identity": {
+        "input": "default_readout",
+        "keys": [
+          "foam_frames",
+          6
+        ],
+        "sha256": "5df4ffc4f16ec57bc626d5c6af06ef206b27277fb78979263687d3315cb3b22a"
+      },
+      "frame_key": "frame_index",
+      "time_key": "timestamp_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "s4-f1680",
+      "case_sha256": "a9c9f4720b5c2e977ee0715142bb2a1a06619d2bde827599c09cbd9058e24d26",
+      "labels": null,
+      "identity": {
+        "input": "default_readout",
+        "keys": [
+          "foam_frames",
+          7
+        ],
+        "sha256": "7b84df30b19678d5083fcf3ac7ec6fd7e53caf5a1339487d547cce26a401345d"
+      },
+      "frame_key": "frame_index",
+      "time_key": "timestamp_sec",
+      "glass_recipe": {
+        "status": "SAVED_FIXED_GLASS",
+        "recipe": {
+          "input": "sample4_recipe",
+          "keys": [],
+          "sha256": "dfe852d81e778d40b4fd30bbd7a8cb689979f34788017633631c0e8e918e2a66"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "time_kind": "RECORDED"
+    },
+    {
+      "id": "water-f000000",
+      "case_sha256": "52bb0758483eddfb29954e56da5dec4d47cceff8333fd4f40b07f67e50a4f424",
+      "labels": null,
+      "identity": {
+        "input": "water_archive",
+        "keys": [
+          "preflight",
+          "cases",
+          0
+        ],
+        "sha256": "d786241b1cde1d8bfe0f8b3de0a88e1339d94f8a1adae23ff36f4cbcd438211b"
+      },
+      "frame_key": "frame_index",
+      "time_key": "nominal_time_sec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "water_archive",
+          "keys": [
+            "preflight",
+            "geometry"
+          ],
+          "sha256": "d954083d73fe44b1d63fa375bba00484ed1aa159ca9813903fce40705f1b8d3e"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "NOMINAL_ONLY"
+    },
+    {
+      "id": "water-f000205",
+      "case_sha256": "c2a01f224fd774fa0b5b3502419b424bf65f603c2211a8bbb896b9807ef1b9b8",
+      "labels": null,
+      "identity": {
+        "input": "water_archive",
+        "keys": [
+          "preflight",
+          "cases",
+          1
+        ],
+        "sha256": "c07378483270ea3c50f05cd788598d4c3b44cd7f88105a9209be18abb4365eff"
+      },
+      "frame_key": "frame_index",
+      "time_key": "nominal_time_sec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "water_archive",
+          "keys": [
+            "preflight",
+            "geometry"
+          ],
+          "sha256": "d954083d73fe44b1d63fa375bba00484ed1aa159ca9813903fce40705f1b8d3e"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "NOMINAL_ONLY"
+    },
+    {
+      "id": "water-f000815",
+      "case_sha256": "08a9176a4673964c72606a632fc2036e913e4391592a3de203b91ed5ed616926",
+      "labels": null,
+      "identity": {
+        "input": "water_archive",
+        "keys": [
+          "preflight",
+          "cases",
+          2
+        ],
+        "sha256": "4cb98920fa690e67e0a48b99715e6be818336a89f95a3dcfe304f0477b520141"
+      },
+      "frame_key": "frame_index",
+      "time_key": "nominal_time_sec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "water_archive",
+          "keys": [
+            "preflight",
+            "geometry"
+          ],
+          "sha256": "d954083d73fe44b1d63fa375bba00484ed1aa159ca9813903fce40705f1b8d3e"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "NOMINAL_ONLY"
+    },
+    {
+      "id": "water-f000822",
+      "case_sha256": "9cdcf17ba024945cdfc7278f8106ad784583bdd210abe45f16786cd9fd926331",
+      "labels": null,
+      "identity": {
+        "input": "water_archive",
+        "keys": [
+          "preflight",
+          "cases",
+          3
+        ],
+        "sha256": "75ea06cb6ac0bd34e6af8a6e3993641c7c7cbc4564e0362f113406cd1da39aaf"
+      },
+      "frame_key": "frame_index",
+      "time_key": "nominal_time_sec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "water_archive",
+          "keys": [
+            "preflight",
+            "geometry"
+          ],
+          "sha256": "d954083d73fe44b1d63fa375bba00484ed1aa159ca9813903fce40705f1b8d3e"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "NOMINAL_ONLY"
+    },
+    {
+      "id": "water-f000829",
+      "case_sha256": "44a4395f4c94277b1f852bfc062400a74d5cd9e35d53ed6fb56f04dcd6ded224",
+      "labels": null,
+      "identity": {
+        "input": "water_archive",
+        "keys": [
+          "preflight",
+          "cases",
+          4
+        ],
+        "sha256": "c80cf7166031b17c61f2f0f85c33966b0e8d96bf6c838e74b5bd649911a5878b"
+      },
+      "frame_key": "frame_index",
+      "time_key": "nominal_time_sec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "water_archive",
+          "keys": [
+            "preflight",
+            "geometry"
+          ],
+          "sha256": "d954083d73fe44b1d63fa375bba00484ed1aa159ca9813903fce40705f1b8d3e"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "NOMINAL_ONLY"
+    },
+    {
+      "id": "water-f001225",
+      "case_sha256": "d5412f2c6d201b83d793602ff56046735c40deac14be5ec49d2939a9400387cd",
+      "labels": null,
+      "identity": {
+        "input": "water_archive",
+        "keys": [
+          "preflight",
+          "cases",
+          5
+        ],
+        "sha256": "f50828c0041da800a92d5ec359ae74cd082768a2443e411fe8202bd9f9393031"
+      },
+      "frame_key": "frame_index",
+      "time_key": "nominal_time_sec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "water_archive",
+          "keys": [
+            "preflight",
+            "geometry"
+          ],
+          "sha256": "d954083d73fe44b1d63fa375bba00484ed1aa159ca9813903fce40705f1b8d3e"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "NOMINAL_ONLY"
+    },
+    {
+      "id": "water-f001232",
+      "case_sha256": "311f808ca06a1bbfbdbc89dae711d57b3ba562334442de991614676d6ffb7602",
+      "labels": null,
+      "identity": {
+        "input": "water_archive",
+        "keys": [
+          "preflight",
+          "cases",
+          6
+        ],
+        "sha256": "ac0fbab178baf1f27aff011331721abc61801c6d185e4a1cd120077871923ec9"
+      },
+      "frame_key": "frame_index",
+      "time_key": "nominal_time_sec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "water_archive",
+          "keys": [
+            "preflight",
+            "geometry"
+          ],
+          "sha256": "d954083d73fe44b1d63fa375bba00484ed1aa159ca9813903fce40705f1b8d3e"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "NOMINAL_ONLY"
+    },
+    {
+      "id": "water-f001239",
+      "case_sha256": "db7c397032aa3b3be0b0aea3d7593b40d31bc2ac7eef64ea400ac82cd730defd",
+      "labels": null,
+      "identity": {
+        "input": "water_archive",
+        "keys": [
+          "preflight",
+          "cases",
+          7
+        ],
+        "sha256": "f07363787ef16dc2d7ddbe0c0aad5099403b9f4b8628929f4030d3391869937d"
+      },
+      "frame_key": "frame_index",
+      "time_key": "nominal_time_sec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "water_archive",
+          "keys": [
+            "preflight",
+            "geometry"
+          ],
+          "sha256": "d954083d73fe44b1d63fa375bba00484ed1aa159ca9813903fce40705f1b8d3e"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "NOMINAL_ONLY"
+    },
+    {
+      "id": "water-f001438",
+      "case_sha256": "476f03331aff33a427779cf9f372be977d022ec2b560847e2dcb97a40ab59a38",
+      "labels": null,
+      "identity": {
+        "input": "water_archive",
+        "keys": [
+          "preflight",
+          "cases",
+          8
+        ],
+        "sha256": "3551669633b70eec2892a0f225003aac0a93c1a23ff2e859a75ed096795bafd1"
+      },
+      "frame_key": "frame_index",
+      "time_key": "nominal_time_sec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "water_archive",
+          "keys": [
+            "preflight",
+            "geometry"
+          ],
+          "sha256": "d954083d73fe44b1d63fa375bba00484ed1aa159ca9813903fce40705f1b8d3e"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "NOMINAL_ONLY"
+    },
+    {
+      "id": "water-f001643",
+      "case_sha256": "6a3ac1c63d4ffb16f9f91dbf3e4589d7db9ef5907c6c5ad58e53540b3877f18c",
+      "labels": null,
+      "identity": {
+        "input": "water_archive",
+        "keys": [
+          "preflight",
+          "cases",
+          9
+        ],
+        "sha256": "dd71e594c33dc2e2a68f15b977a12823fd58b191a4ade554e61924d56144ae22"
+      },
+      "frame_key": "frame_index",
+      "time_key": "nominal_time_sec",
+      "glass_recipe": {
+        "status": "ISOLATED_SAVED_PUBLIC_CROP",
+        "authority": {
+          "input": "water_archive",
+          "keys": [
+            "preflight",
+            "geometry"
+          ],
+          "sha256": "d954083d73fe44b1d63fa375bba00484ed1aa159ca9813903fce40705f1b8d3e"
+        }
+      },
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "time_kind": "NOMINAL_ONLY"
+    },
+    {
+      "id": "public-miso-f1499",
+      "case_sha256": "b65bddf2d7b030eae1b5a51873ca25bcec8a1e68845e5ed6d3bc7ea32208b944",
+      "labels": null,
+      "identity": {
+        "input": "public_preflight",
+        "keys": [
+          "source_frame"
+        ],
+        "sha256": "2e9f34494c8e07a6c571a4f02d7ec70c22caadd1c257047fe4e166bbe26f4938"
+      },
+      "frame_key": "frame_index",
+      "time_key": "timestamp_sec",
+      "glass_recipe": {
+        "status": "ISOLATED_CURRENT_FRAME",
+        "authority": {
+          "input": "public_preflight",
+          "keys": [
+            "native_geometry"
+          ],
+          "sha256": "fa14653548be5350d6032bf268f8aeb6b6385380f71fd0da0335600bf2fdb3de"
+        }
+      },
+      "source_recording": {
+        "path": "sample/public_miso_mHOS1-1ck60.mp4",
+        "sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15"
+      },
+      "time_kind": "RECORDED"
+    }
+  ],
+  "dependencies": {
+    "saved_rgb_point": {
+      "operation": "identity of one saved RGB pixel; no feature/head executed",
+      "footprint": [
+        [
+          0,
+          0
+        ]
+      ],
+      "normalization": null,
+      "padding": null,
+      "aggregation": null,
+      "shared_upper_lower_pixels": 0,
+      "source_scope": "Native saved RGB only; reduced pixels retain resize context, not a one-source-pixel claim."
+    },
+    "saved_canny": {
+      "use": "geometry only, never an independent pure-side feature",
+      "upstream": "BGR-to-gray, CLAHE 8x8 tiles, Gaussian 5x5, Canny including hysteresis, effective mask",
+      "source_dependency": "ROI_CONTEXT; exact active upstream dependency not captured",
+      "shared_sides": "POSSIBLE; disjoint edge centers do not certify independent input"
+    },
+    "existing_foam_texture": {
+      "use": "NOT_EXECUTED; prior values are not promoted to side-contained evidence",
+      "upstream": "small/large reflected box filters over gray and saved Canny, pointwise normalization, final valid mask",
+      "source_dependency": "Canny/CLAHE/hysteresis context and reflected padding precede output masking",
+      "shared_sides": "POSSIBLE; center visibility does not certify dependency containment"
+    },
+    "proposed_role_head": {
+      "status": "NOT_ADOPTED",
+      "complete_dependency": "UNSPECIFIED",
+      "limit": "Three 3x3 stride-one convolutions alone have a 7x7 local field; preprocessing/normalization/aggregation may enlarge it."
+    }
+  },
+  "side_offsets": {
+    "upper": [
+      -12,
+      -11,
+      -10,
+      -9,
+      -8,
+      -7,
+      -6,
+      -5,
+      -4,
+      -3,
+      -2
+    ],
+    "lower": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ]
+  },
+  "resources": {
+    "max_cases": 43,
+    "max_edges": 1335,
+    "max_output_bytes": 10000000,
+    "encoder_forwards": 0,
+    "video_decode": false,
+    "seconds_limit": 180,
+    "peak_rss_bytes_limit": 800000000
+  },
+  "regional_opposition": [
+    {
+      "input": "water_no_foam_reply",
+      "keys": [
+        "cases",
+        0
+      ],
+      "sha256": "75888963adb1cc919f6b5d4257b1e444d6d56665c6f288da371b6d0311a5ef09"
+    },
+    {
+      "input": "water_no_foam_reply",
+      "keys": [
+        "cases",
+        1
+      ],
+      "sha256": "08075f1e1c171ea3460ada3ca3bef360285e2a1094ead342102975a8ac4359cb"
+    }
+  ],
+  "claim": "All source groups are exposed development; pooled sectors, rasters, scalar guides and regions remain different units."
+}

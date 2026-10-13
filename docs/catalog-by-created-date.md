@@ -1302,3 +1302,15 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-13 | [70-reference/s11-program-review-2026-10-13/VERIFICATION.json](70-reference/s11-program-review-2026-10-13/VERIFICATION.json) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
 | 2026-10-13 | [70-reference/s11-program-review-2026-10-13/import-manifest.json](70-reference/s11-program-review-2026-10-13/import-manifest.json) | 원본 hash·배치·worktree mapping |
 | 2026-10-13 | [70-reference/s11-program-review-2026-10-13/reproduce_native_feature_canary.py](70-reference/s11-program-review-2026-10-13/reproduce_native_feature_canary.py) | 첨부 원본 bytes 보존; 작성일 2026-10-13 |
+
+### 2026-10-13 native G0 구현과 역할 검토
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-13 | [60-evidence/s11/2026-10-13-native-role-readiness.md](60-evidence/s11/2026-10-13-native-role-readiness.md) | G0 구현·전체 결속 검증·역할 준비도와 새 subject 질문의 범위 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-readiness/manifest.json](50-diagnostics/s11/2026-10-13-native-role-readiness/manifest.json) | 입력·source·geometry·원래 판정 pin |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz](50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz) | 43-context/1,335-edge/164-Oil 전체 결속 표 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-readiness/verification.json](50-diagnostics/s11/2026-10-13-native-role-readiness/verification.json) | 테스트·실제 CLI·전체 support 재계산 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-readiness/review-proposal.json](50-diagnostics/s11/2026-10-13-native-role-readiness/review-proposal.json) | N1–N3 원본 경로·그림·판정 정밀도 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-readiness/native-role-review.png](50-diagnostics/s11/2026-10-13-native-role-readiness/native-role-review.png) | 원본과 native 경로를 나란히 표시한 검토 그림 |
+| 2026-10-13 | [50-diagnostics/s11/2026-10-13-native-role-readiness/render_review.py](50-diagnostics/s11/2026-10-13-native-role-readiness/render_review.py) | 원본 pixels/native polyline 검토 재현기 |

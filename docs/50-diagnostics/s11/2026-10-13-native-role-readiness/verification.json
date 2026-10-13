@@ -1,0 +1,46 @@
+{
+  "schema": "s11-native-role-readiness-verification-v1",
+  "base_head": "d1a8b714161cef908b771d549501d544c8ffe763",
+  "status": "PASS_AT_G0_SCOPE",
+  "readout_sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd",
+  "manifest_sha256": "8bb03c49017181e54e6164a248ac28ff0977d9a0e3af11882417b5a5f431c632",
+  "independent_reconstruction": {
+    "contexts": 43,
+    "center_edges": 1335,
+    "context_sides": 2670,
+    "incident_fragment_views": 3047,
+    "all_path_hashes_and_incident_alternatives_match": true,
+    "all_support_denominators_match": true,
+    "source_coordinate_transforms_match": true,
+    "oil_records": 164,
+    "A_withdrawal_B_practical_separation": true,
+    "interval_edge_cardinalities": [
+      1,
+      1,
+      2,
+      1,
+      2,
+      3
+    ],
+    "no_candidate_labels_from_weak_constraints": true,
+    "production_source_files_unchanged": 221
+  },
+  "focused_tests": {
+    "command": ".venv/bin/python -m pytest tests/unit/test_s11_native_role_preflight.py -q",
+    "passed": 21
+  },
+  "real_cli": {
+    "cwd": "/private/tmp",
+    "elapsed_seconds": 2.7954464170034043,
+    "peak_rss_bytes": 299204608,
+    "compressed_readout_bytes": 247457,
+    "encoder_forwards": 0,
+    "video_decode": false
+  },
+  "limits": [
+    "Existing observed rasters only; geometry/review binding is not physical detector efficacy.",
+    "Nominal/recorded decoder/source times are distinguished; no new PTS acquisition.",
+    "All sources exposed; no independent model evaluation or Windows execution.",
+    "Run 001 preliminary readout was discarded; final run adds shared-view and original regional-opposition accounting."
+  ]
+}

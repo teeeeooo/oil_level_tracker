@@ -1,0 +1,462 @@
+{
+  "schema": "s11-native-fragment-role-review-proposal-v1",
+  "status": "PENDING_USER_JUDGMENT",
+  "base_head": "d1a8b714161cef908b771d549501d544c8ffe763",
+  "g0_manifest": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/manifest.json",
+    "sha256": "8bb03c49017181e54e6164a248ac28ff0977d9a0e3af11882417b5a5f431c632"
+  },
+  "g0_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+    "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+  },
+  "views": [
+    {
+      "id": "water",
+      "title": "Water | frame 1232",
+      "source": {
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001232.png",
+        "sha256": "995769e946c234aa209e4200500fb5baf2c0125befb4436d3ba3fb97c74d8324"
+      },
+      "image_origin_xy": [
+        0,
+        0
+      ],
+      "display_xyxy": [
+        900,
+        440,
+        1005,
+        535
+      ]
+    },
+    {
+      "id": "sample4",
+      "title": "Sample4 | frame 1620 (54 s)",
+      "source": {
+        "path": "sample/output/s11-local-xy-implementation-20261009-001/v2-sample4-scoped-FULL/oil-debug-trace-3llo9b0v/frames/ecb6e1ec-0259-5982-a35f-7cb1f7075af2_71ad147f/f000001620_523615198887/original_roi_512ed6ab.png",
+        "sha256": "e00d97a5f265f5e6353d27014a46b6aca692112efb3b1c29fc170b171ba0462b"
+      },
+      "image_origin_xy": [
+        543,
+        798
+      ],
+      "display_xyxy": [
+        543,
+        798,
+        647,
+        902
+      ]
+    }
+  ],
+  "subjects": [
+    {
+      "id": "N1",
+      "case_id": "water-f001232",
+      "frame": 1232,
+      "view_id": "water",
+      "fixed_column_xy": [
+        950.0,
+        477.0
+      ],
+      "native_fragment_id": 1197,
+      "source_path_xy": [
+        [
+          931,
+          476
+        ],
+        [
+          932,
+          475
+        ],
+        [
+          933,
+          475
+        ],
+        [
+          934,
+          475
+        ],
+        [
+          935,
+          475
+        ],
+        [
+          936,
+          475
+        ],
+        [
+          937,
+          475
+        ],
+        [
+          938,
+          476
+        ],
+        [
+          939,
+          476
+        ],
+        [
+          940,
+          476
+        ],
+        [
+          941,
+          476
+        ],
+        [
+          942,
+          476
+        ],
+        [
+          943,
+          476
+        ],
+        [
+          944,
+          476
+        ],
+        [
+          945,
+          476
+        ],
+        [
+          946,
+          476
+        ],
+        [
+          947,
+          477
+        ],
+        [
+          948,
+          477
+        ],
+        [
+          949,
+          477
+        ],
+        [
+          950,
+          477
+        ],
+        [
+          951,
+          477
+        ],
+        [
+          952,
+          478
+        ],
+        [
+          953,
+          478
+        ],
+        [
+          954,
+          478
+        ],
+        [
+          955,
+          478
+        ],
+        [
+          956,
+          479
+        ],
+        [
+          957,
+          479
+        ],
+        [
+          958,
+          479
+        ],
+        [
+          959,
+          479
+        ],
+        [
+          960,
+          479
+        ],
+        [
+          961,
+          479
+        ],
+        [
+          962,
+          479
+        ],
+        [
+          963,
+          479
+        ],
+        [
+          964,
+          479
+        ],
+        [
+          965,
+          479
+        ],
+        [
+          966,
+          479
+        ],
+        [
+          967,
+          479
+        ],
+        [
+          968,
+          479
+        ],
+        [
+          969,
+          479
+        ],
+        [
+          970,
+          479
+        ],
+        [
+          971,
+          478
+        ],
+        [
+          972,
+          478
+        ],
+        [
+          973,
+          478
+        ],
+        [
+          974,
+          478
+        ],
+        [
+          975,
+          478
+        ],
+        [
+          976,
+          478
+        ],
+        [
+          977,
+          478
+        ],
+        [
+          978,
+          478
+        ],
+        [
+          979,
+          478
+        ],
+        [
+          980,
+          478
+        ],
+        [
+          981,
+          478
+        ],
+        [
+          982,
+          478
+        ],
+        [
+          983,
+          477
+        ],
+        [
+          984,
+          477
+        ],
+        [
+          985,
+          477
+        ],
+        [
+          986,
+          477
+        ],
+        [
+          987,
+          477
+        ]
+      ],
+      "raster_path_sha256": "76346f7f5b5f4ad137e094d7787bf3ef7b6b93fb5cc0d5dda38d06d9181860ee",
+      "readout_subject_sha256": "fbe1403c979f692bde2a4c6437ebe37e52c6ab49e96a07962e44d9ea77493cd4",
+      "vertex_count": 57,
+      "junction_incident": true,
+      "display_label_xy": [
+        903,
+        453
+      ],
+      "role": "PENDING_USER_REVIEW",
+      "scope": "This complete highlighted saved fragment only; no family, adjacent frame, dense pixel mask or exact physical-coordinate tolerance."
+    },
+    {
+      "id": "N2",
+      "case_id": "water-f001232",
+      "frame": 1232,
+      "view_id": "water",
+      "fixed_column_xy": [
+        950.0,
+        487.0
+      ],
+      "native_fragment_id": 1542,
+      "source_path_xy": [
+        [
+          945,
+          484
+        ],
+        [
+          946,
+          485
+        ],
+        [
+          947,
+          485
+        ],
+        [
+          948,
+          486
+        ],
+        [
+          949,
+          486
+        ],
+        [
+          950,
+          487
+        ],
+        [
+          951,
+          487
+        ]
+      ],
+      "raster_path_sha256": "0e3e5dc2418c22e9d3d3308d16da3568a260d97fdca52d0c0ea0502e9dfb42b4",
+      "readout_subject_sha256": "9be39756383f97b7991f2ede7318ad9cd76b959c38a77e8961ffdf6af12d08ce",
+      "vertex_count": 7,
+      "junction_incident": true,
+      "display_label_xy": [
+        978,
+        512
+      ],
+      "role": "PENDING_USER_REVIEW",
+      "scope": "This complete highlighted saved fragment only; no family, adjacent frame, dense pixel mask or exact physical-coordinate tolerance."
+    },
+    {
+      "id": "N3",
+      "case_id": "s4-f1620",
+      "frame": 1620,
+      "view_id": "sample4",
+      "fixed_column_xy": [
+        595.0,
+        813.0
+      ],
+      "native_fragment_id": 120,
+      "source_path_xy": [
+        [
+          585,
+          813
+        ],
+        [
+          586,
+          813
+        ],
+        [
+          587,
+          813
+        ],
+        [
+          588,
+          813
+        ],
+        [
+          589,
+          813
+        ],
+        [
+          590,
+          813
+        ],
+        [
+          591,
+          813
+        ],
+        [
+          592,
+          813
+        ],
+        [
+          593,
+          813
+        ],
+        [
+          594,
+          813
+        ],
+        [
+          595,
+          813
+        ],
+        [
+          596,
+          813
+        ],
+        [
+          597,
+          813
+        ],
+        [
+          598,
+          813
+        ],
+        [
+          599,
+          813
+        ],
+        [
+          600,
+          813
+        ],
+        [
+          601,
+          813
+        ],
+        [
+          602,
+          814
+        ],
+        [
+          603,
+          814
+        ]
+      ],
+      "raster_path_sha256": "1396047167818f3438e7d26ab80d5cdf79f37377cccff87845fabd03a37fef1c",
+      "readout_subject_sha256": "a11011b63210f22fe87b4a073a8681524768f9ae682ef3949da0017aa1939f32",
+      "vertex_count": 19,
+      "junction_incident": true,
+      "display_label_xy": [
+        617,
+        805
+      ],
+      "role": "PENDING_USER_REVIEW",
+      "scope": "This complete highlighted saved fragment only; no family, adjacent frame, dense pixel mask or exact physical-coordinate tolerance."
+    }
+  ],
+  "question_ko": "각 N1/N2/N3 선은 어떤 대상을 따라가나요? 외부 Foam 상단 / Foam 내부 변화 / 액체 상단 / 구조·반사 / 위치 근사만 허용 / 판정 불가 중에서 답해주세요. 선의 일부만 해당하면 그 점도 알려주세요.",
+  "precision": "Same-subject role correspondence, not a demand for exact-pixel truth. Only-approximation stays a practical facet, not a physical positive.",
+  "prior_judgments": "Original upper containment ranges, R/L interior references, water B/C no-Foam, and f1485 A/B clarification remain closed and unchanged. This asks for the newly displayed native fragments.",
+  "why_needed": "G0 binds the pixels but has no qualified path-role positives/internal opposition. No one-enclosed-edge, nearest-guide or score argument can fill that gap.",
+  "inference_inputs": "Review IDs/frame/time and answers remain evaluation/training metadata, never inference features.",
+  "training_authority": "No training plan adopted by this question or by preparing this packet.",
+  "model_calls": 0,
+  "video_decode": false
+}
