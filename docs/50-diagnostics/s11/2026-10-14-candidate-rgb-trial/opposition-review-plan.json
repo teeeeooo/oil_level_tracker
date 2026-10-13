@@ -1,0 +1,54 @@
+{
+  "schema": "s11-candidate-rgb-unknown-review-v1",
+  "inputs": {
+    "prepared": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-candidate-rgb-trial/prepared.json",
+      "sha256": "95af399faaf64f0f07a2ffd486af604527cb0225f6f140414613b7e3f24f7ad0"
+    },
+    "readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-candidate-rgb-trial/readout.json",
+      "sha256": "5dccc6065c5b3bb674a0403b17230a1ade33610e89c460c5c8844a4ba060483b"
+    },
+    "trial_plan": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-candidate-rgb-trial/plan.json",
+      "sha256": "d22fecc413fed6fb011254e35e55884a4f3e9556fb4f550011937f67ecd97095"
+    }
+  },
+  "selection": "All unreviewed compatible candidates whose required +/-12 input footprint is disjoint from the existing positive fit control at the same frame; first affected frame by source time only, no score ranking.",
+  "potential_ids": [
+    "s4-f1140-idx7",
+    "s4-f1140-idx10",
+    "s4-f1140-idx22",
+    "s4-f1200-idx7",
+    "s4-f1200-idx9",
+    "s4-f1260-idx8",
+    "s4-f1260-idx21",
+    "s4-f1275-idx6",
+    "s4-f1275-idx8",
+    "s4-f1275-idx19",
+    "s4-f1320-idx8",
+    "s4-f1320-idx23",
+    "s4-f1485-idx7",
+    "s4-f1485-idx9",
+    "s4-f1485-idx20",
+    "s4-f1560-idx7",
+    "s4-f1560-idx10",
+    "s4-f1560-idx21"
+  ],
+  "frame_id": "sample4-f1140",
+  "reference_id": "s4-f1140-idx9",
+  "review_ids": [
+    "s4-f1140-idx7",
+    "s4-f1140-idx10",
+    "s4-f1140-idx22"
+  ],
+  "question": "Are the three yellow candidate representative points acceptable practical Oil-level approximations at sample4 f1140 / 38 s / X595? Classify each ACCEPTED_APPROXIMATION, REJECTED_APPROXIMATION or UNASSESSED. The green existing accepted candidate is context only.",
+  "scope": "Exact displayed candidates at this frame only. No native path, material subtype, neighboring frame or other candidate label. Post-outcome error discovery, never an untouched holdout.",
+  "display": {
+    "scale": 3,
+    "scores_shown": false,
+    "original_context": true,
+    "green": "existing accepted idx9/Y844",
+    "yellow": "one new candidate per panel"
+  }
+}

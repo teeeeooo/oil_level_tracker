@@ -437,6 +437,16 @@ path roles and fragment loss; it cannot represent full candidate populations,
 practical alternatives and within-candidate variants. Freeze both the input plan
 before preparation and the prepared source/array hashes at a clean head before fit.
 
+The [completed fixed trial](../60-evidence/s11/2026-10-14-candidate-rgb-trial.md)
+passes those exposed controls in both full and mean-color views; every available
+candidate decision is identical between views. This establishes neither native
+pattern necessity nor physical discrimination. Review newly exposed compatible
+unknowns before defining a calibrated consumer. Select all such candidates whose
+±12 input footprint is disjoint from their frame's existing positive control,
+retain the complete set, and ask only the earliest affected frame first. This is
+post-outcome error discovery, not independent validation; do not propagate its
+answer to another candidate, frame, path or subtype without a scoped binding.
+
 ### Executable saved-contract preflight
 
 [The offline CR1 adapter](../../tests/diagnostics/s11_contextual_role_preflight.py)
