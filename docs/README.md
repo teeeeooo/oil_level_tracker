@@ -95,13 +95,25 @@ R18–R20 predecessor architecture/validation and earlier diagnostics remain his
 
 ## S11 audit specifications and execution routing
 
+The [post-CR1 October 12 package](70-reference/s11-post-cr1-review-2026-10-12/README.md)
+is byte-preserved with its [import manifest](70-reference/s11-post-cr1-review-2026-10-12/import-manifest.json).
+The [October 13 intake](60-evidence/s11/2026-10-13-post-cr1-review-intake.md) verifies
+its standalone audit, raw scores and source/report joins and records the worktree
+review. The existing [CR-1 design](20-architecture/s11-contextual-role-observation-design.md#post-cr1-operating-policy-proposal)
+and [Witness Validation](30-validation/s11-interface-observability-witness-validation.md#post-cr1-operating-policy-and-consumer-acceptance)
+own the proposed local-role/absolute-support policy and its calibration/consumer
+conditions. Post-CR1 WP01–WP10 map only in Work Plan's live ledger; they do not
+replace O/W/P gates or the earlier package's differently numbered WP aliases.
+Neither the source's report worksheet nor its Windows table is an executed
+acceptance result. Original CR-1 failure and scope-limited usefulness remain intact.
+
 The [October 12 program review](70-reference/s11-program-review-2026-10-12/README.md)
 is preserved with all seven native outputs mapped by its import manifest. The
 [intake review](60-evidence/s11/2026-10-12-program-review-intake.md) independently
 repeats the saved-candidate calculation and qualifies the future plan. The bounded
 [CR-1 design supplement](20-architecture/s11-contextual-role-observation-design.md)
 and existing Witness Validation own the proposed experiment and its conditions;
-Work Plan alone owns the learned-method scope decision and WP0–WP10 mapping.
+Work Plan alone owns the learned-method scope decision and current delivery mapping.
 The supplied story worksheet remains an unexecuted proposal, not canonical truth
 or an automatic field/report evaluator.
 

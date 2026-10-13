@@ -1232,7 +1232,7 @@ distinction is preserved alongside the guards below.
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`, `FOAM-CANDIDATE`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: current evidence supports an upstream contour/observability and physical-discrimination gap; exact private first harmful stages remain segment-specific until reviewed.
-- Prior mechanisms reviewed: R22/R22-2 evidence and diagnostics, public probe, reviewed BASE/Accum checkpoints, R23 rejection, and existing parent validation.
+- Prior mechanisms reviewed: R22/R22-2 evidence and diagnostics, public probe, reviewed BASE/Accum checkpoints, R23 rejection, CR-1 raw-vector/competition and report/cadence audit, and existing parent validation.
 - Prior mechanisms rejected: threshold widening, polarity/source/motion identity, unpartitioned calibration, private-coordinate tuning, missing-as-zero, stale identity/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded resources and separate Windows field acceptance.
 - Difference from prior failures: extraction, discrimination, behavior and field qualification are independent gates with explicit positive/negative/unresolved labels and leakage controls.
@@ -1444,6 +1444,95 @@ also needs O2/O3. Correct raw-front loss is required before WP8/P5-c. Missing
 height or last numeric time cannot establish physical absence/disappearance.
 V2/V3/V4 then V5/O2, separate O3/O4, and final integrated field/report acceptance
 remain in force. The supplied 4–6 day estimate establishes no performance budget.
+
+### Post-CR1 operating-policy and consumer acceptance
+
+The [post-CR1 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
+verifies the supplied saved-score/report audit. The
+[single policy family](../20-architecture/s11-contextual-role-observation-design.md#post-cr1-operating-policy-proposal)
+is a development proposal. Its 164 records, including six nonself known targets
+and three known wrong candidates, are exposed development evidence. They cannot
+both suggest the family and serve as independent proof of its operating point.
+The original failed trial and later scope-limited usefulness remain distinct.
+
+Before choosing `tau_support` or emitting calibrated typed decisions, freeze a
+manifest covering source hashes/episodes/actual times, original label owners and
+precision, development/calibration/held-out use, reference exposure, duplicate
+lineage, geometry/scale/support, policy version, resource bounds and the P0
+protected-story/residual criteria. Keep near frames, crops, transforms and
+same-coordinate proposals together; disclose source overlap. Repartitioning
+already inspected sources does not create an untouched holdout. If suitable
+calibration/holdout evidence is unavailable, record the missing gate and permit
+only data-neutral contract work or explicitly exposed diagnostics. Do not choose
+a cutoff from the known score gap or request new filming as an assumed dependency.
+Private calibration, if needed, stays predeclared and work-PC-only under V3/V5.
+
+Required checks for the proposed observation/policy are:
+
+- all raw class scores, common support and required floor/ceil variants survive
+  the original candidate/frame join; missing classes/support, nonfinite values,
+  ties and variant disagreement remain explicit;
+- the positive operating point has a frozen selection method, positive-loss
+  and negative-family outcomes, unresolved coverage and held-out results;
+- low positive support is unresolved rather than a certified negative;
+  `INTERNAL_OR_ARTIFACT` requires its own qualified negative evidence;
+- regional context does not certify a native contour/fixed-X scalar; changed
+  geometry/scale/reference exposure requires a newly qualified input contract;
+- the 49.5 s Y841/Y836 competition and other unreviewed alternatives stay unknown
+  until existing source evidence or a targeted review can support the claim;
+  neither ranking nor a new ±5 px tolerance supplies candidate identity; and
+- cold/warm CPU, decode/preprocessing/encoder/query/sequence/report costs, forward
+  calls per frame, peak RSS and output bytes are measured against frozen bounds.
+  Saved-PNG timings do not predict full-pipeline or Windows cost.
+
+These checks supplement V2/V3/V4; V5 Windows shadow still precedes O2 acceptance.
+The schema/shadow slice retains default OFF, exact old-field/candidate/sequence/
+CSV/event/report equality and NONE/FULL equality. It does not install a default
+Torch dependency or acquire resolver authority.
+
+After O2, evaluate the first O3 role condition on both anchor and continuation
+paths with Recipe, sampling, candidate capacity, lifecycle and Foam fixed. Join
+every changed selection, owner and numeric row to the original native candidate;
+measure wrong selections removed, true observations lost, new wrong winners and
+unassessed alternatives. Include real UNRESOLVED fallback and an all-unknown
+control. The latter cannot pass usefulness through an empty denominator.
+Use the complete fixed sample4 0–56 s/2 Hz baseline; seven checkpoints alone do
+not prove continuity. The public three-frame fixture proves only its scoped
+entry/geometry behavior unless a larger source/Recipe window is qualified first.
+Sample3 restriction remains in force.
+
+Evaluate positive admission recovery as a separate O3 change/ablation, identifying
+the heuristic replaced by qualified positive role evidence. A numerical hole
+closed by a new unreviewed winner is not recovery. Only a demonstrated later
+association/lifecycle loss opens the appropriate O4 slice. P5-a/b independently
+requires correct raw upper-role/position evidence and actual default pipeline
+linkage before P5-c; missing height, last detection and physical disappearance
+remain different claims under the existing Foam contract below.
+
+Record partial-function improvement, regression, no demonstrated utility or
+insufficient evidence separately from whole-report/field acceptance. A remaining
+known false extremum blocks that workflow claim, but does not erase a verified
+improvement elsewhere. New context-distorting/erasing regressions prevent behavior
+acceptance. Apply the same frozen P0 impact rules to baseline and candidate;
+neither 100% frame correctness nor a new blanket numerical tolerance is added.
+
+For final independent report review, use actual bundles with names masked where
+practical. Record the reader's account before showing expected source/trace
+answers, then compare at qualified truth precision:
+
+| Report-only account | Required discrepancy record |
+|---|---|
+| Full/empty versus directly visible interface | Unsupported certainty or state mistaken for a coordinate |
+| Rise/fall/reversal/recovery and extrema | False major events or erased movement, including changed/new extrema |
+| Foam formation, persistence, last observation and disappearance | Detection ending mistaken for physical disappearance |
+| Upper Foam versus lower Oil | Role transfer, duplicate interface or independent unavailability |
+| Intervals where no conclusion is possible | Missing/obscured/unqualified spans communicated or concealed |
+
+Developer graph inspection is not independent comprehension acceptance. Retain
+all nine canonical segment IDs and the pending private-source fingerprint in
+the [Windows truth owner](windows-sample1-heating-coldstart-reviewed-truth.md).
+Its exact-runtime field gate, V5 shadow and report comprehension remain separate.
+The one-second Oil target applies only to qualified visible same-interface motion.
 
 ### Ordered row-distribution pilot controls
 

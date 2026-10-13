@@ -1,0 +1,365 @@
+{
+  "schema": "s11-post-cr1-session-execution-summary-v1",
+  "review_date": "2026-10-12",
+  "repository": "teeeeooo/oil_level_tracker",
+  "baseline_head": "0bc5af74dc0818a166fc99f7bbdf3b05cd7b65f1",
+  "head_after_read_only_audit": "0bc5af74dc0818a166fc99f7bbdf3b05cd7b65f1",
+  "worktree_before": "CLEAN",
+  "worktree_after": "CLEAN",
+  "scope": "Session summary of actual live-repository, saved-result, source-decode and focused-test verification. Not detector efficacy.",
+  "physical_acceptance": "NOT_EVALUATED",
+  "project_disposition_retained": {
+    "S11": "ACTIVE",
+    "field": "FAIL",
+    "O2": "OPEN",
+    "local_xy": "OFF"
+  },
+  "original_cr1_trial_retained": "CLOSED_WITHOUT_PROMOTION",
+  "latest_cr1_usefulness_retained": "SCOPE_LIMITED_USEFULNESS",
+  "original_saved_verifier": {
+    "status": "PASS",
+    "records": 164,
+    "reused_first_trial_records": 2,
+    "measured_variants": 135,
+    "score_rank_checks": 270,
+    "common_support_checks": 167,
+    "duplicate_groups": 24,
+    "production_sources_unchanged": 221,
+    "full_summary_and_exposure_checks": "PASS",
+    "model_rerun": false,
+    "entrypoint": "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/verify_followup.py::verify"
+  },
+  "denominators": {
+    "records": 164,
+    "candidates": 160,
+    "context_controls": 4,
+    "unreviewed_records": 150,
+    "fully_unavailable_records": 32,
+    "integer_anchor_variants": 167,
+    "reference_episode_outside_development": 91,
+    "reference_episode_diagnostic": 71,
+    "reference_self_support": 2,
+    "known_nonself_target_candidates": 6,
+    "known_rejected_candidates": 3,
+    "outside_reference_episode_known_targets": 4,
+    "outside_reference_episode_known_rejected": 1,
+    "independent_recordings": 1,
+    "untouched_holdout_recordings": 0
+  },
+  "joint_preferences_all_records": [
+    {
+      "full": "interface",
+      "local": "interface",
+      "count": 41
+    },
+    {
+      "full": "structure",
+      "local": "structure",
+      "count": 37
+    },
+    {
+      "full": null,
+      "local": null,
+      "count": 32
+    },
+    {
+      "full": "texture",
+      "local": "interface",
+      "count": 28
+    },
+    {
+      "full": "structure",
+      "local": "interface",
+      "count": 17
+    },
+    {
+      "full": "texture",
+      "local": "texture",
+      "count": 9
+    }
+  ],
+  "categorical_information_bound": {
+    "known_nonself_records": 9,
+    "homogeneous_signature_records": 6,
+    "mixed_signature_records": 3,
+    "maximum_zero_error_decided_records": 6,
+    "minimum_binary_errors": 1,
+    "scope": "Descriptive bound using only observed full/local category pairs; not a predictive error estimate, selected policy or requirement of zero pointwise error."
+  },
+  "absolute_interface_score_ranges": {
+    "full": {
+      "known_nonself_target": [
+        0.6423322701404983,
+        0.8782048355343544
+      ],
+      "known_rejected": [
+        0.3636769180211199,
+        0.4233945186248286
+      ]
+    },
+    "local": {
+      "known_nonself_target": [
+        0.7269062770211362,
+        0.8588176278197972
+      ],
+      "known_rejected": [
+        0.3108430185123835,
+        0.4428850871102846
+      ]
+    },
+    "scope": "All floor/ceil variants of the 6 target / 3 rejected records. Texture controls overlap the target score range; no threshold was fitted."
+  },
+  "illustrative_local_scores_rounded": [
+    {
+      "id": "s4-f1320-idx21",
+      "label": "rejected_target",
+      "interface_score": 0.442885,
+      "signed_role_margin": 0.068245
+    },
+    {
+      "id": "s4-f1485-idx19",
+      "label": "confirmed_target",
+      "interface_score": 0.726906,
+      "signed_role_margin": 0.015512
+    },
+    {
+      "id": "s4-f1560-idx20",
+      "label": "confirmed_target",
+      "interface_score": 0.820188,
+      "signed_role_margin": 0.001624
+    },
+    {
+      "id": "s4-texture-f1665",
+      "label": "internal_foam_texture",
+      "interface_score": 0.727457,
+      "signed_role_margin": -0.147952
+    }
+  ],
+  "competition_diagnostic": {
+    "scope": "Descriptive order by minimum interface similarity over floor/ceil variants. Maxima are not selectors or new labels.",
+    "times_sec": [
+      38.0,
+      40.0,
+      42.0,
+      42.5,
+      44.0,
+      49.5,
+      52.0
+    ],
+    "local_maximum_score_y": [
+      840.0,
+      841.0,
+      837.0,
+      835.0,
+      845.0,
+      841.0,
+      833.0
+    ],
+    "known_target_y": [
+      844.0,
+      841.0,
+      839.0,
+      835.0,
+      844.0,
+      836.0,
+      833.0
+    ],
+    "local_known_target_record_rank": [
+      2,
+      1,
+      2,
+      1,
+      3,
+      4,
+      1
+    ],
+    "important_unreviewed_competitor": {
+      "id": "s4-f1485-idx8",
+      "y": 841.0,
+      "label": "UNREVIEWED",
+      "full_interface_score_rounded": 0.787437,
+      "local_interface_score_rounded": 0.829081,
+      "note": "Exceeds the known target in both modes; no correspondence inferred."
+    }
+  },
+  "retained_report": {
+    "bundle": "sample/output/s11-p5-default-linkage-20261011-001/none/oil_level_analysis_Local_XY_fixed_comparison_sample4_20261011_224401",
+    "tracking_rows": 113,
+    "events": 31,
+    "valid_numeric_oil_rows": 101,
+    "valid_numeric_foam_rows": 26,
+    "minimum_event": {
+      "time_sec": 42.0,
+      "frame": 1260,
+      "y": 868.0,
+      "level_px": -18.0
+    },
+    "maximum_event": {
+      "time_sec": 44.0,
+      "frame": 1320,
+      "y": 822.0,
+      "level_px": 28.0
+    },
+    "numeric_cadence": {
+      "captured_span_sec": [
+        0.0,
+        56.0
+      ],
+      "unavailable_rows": 12,
+      "invalid_numeric_rows": 0,
+      "pairs": 100,
+      "pairs_at_most_1_sec": 98,
+      "pairs_over_1_sec": 2,
+      "maximum_interval_sec": 2.5,
+      "p95_interval_sec": 0.5249999999999986,
+      "leading_unavailable_sec": 1.5,
+      "trailing_unavailable_sec": 0.0,
+      "over_one_second_pairs": [
+        {
+          "start_sec": 42.5,
+          "end_sec": 44.0,
+          "elapsed_sec": 1.5,
+          "intervening_unavailable_rows": 2
+        },
+        {
+          "start_sec": 49.5,
+          "end_sec": 52.0,
+          "elapsed_sec": 2.5,
+          "intervening_unavailable_rows": 4
+        }
+      ],
+      "physical_cadence": "NOT_EVALUATED",
+      "reason": "CSV validity does not establish same-physical-interface identity or continuous visible movement."
+    }
+  },
+  "source_decode_checks": {
+    "method": "Existing OpenCvVideoReader.read_at; original BGR equality via numpy.array_equal.",
+    "sample4": [
+      {
+        "frame": 450,
+        "actual_frame": 450,
+        "actual_sec": 15.0,
+        "saved_roi_equals_native": true
+      },
+      {
+        "frame": 1140,
+        "actual_frame": 1140,
+        "actual_sec": 38.0,
+        "saved_roi_equals_native": true
+      },
+      {
+        "frame": 1200,
+        "actual_frame": 1200,
+        "actual_sec": 40.0,
+        "saved_roi_equals_native": true
+      },
+      {
+        "frame": 1260,
+        "actual_frame": 1260,
+        "actual_sec": 42.0,
+        "saved_roi_equals_native": true
+      },
+      {
+        "frame": 1275,
+        "actual_frame": 1275,
+        "actual_sec": 42.5,
+        "saved_roi_equals_native": true
+      },
+      {
+        "frame": 1320,
+        "actual_frame": 1320,
+        "actual_sec": 44.0,
+        "saved_roi_equals_native": true
+      },
+      {
+        "frame": 1485,
+        "actual_frame": 1485,
+        "actual_sec": 49.5,
+        "saved_roi_equals_native": true
+      },
+      {
+        "frame": 1560,
+        "actual_frame": 1560,
+        "actual_sec": 52.0,
+        "saved_roi_equals_native": true
+      },
+      {
+        "frame": 1620,
+        "actual_frame": 1620,
+        "actual_sec": 54.0,
+        "saved_roi_equals_native": true
+      },
+      {
+        "frame": 1665,
+        "actual_frame": 1665,
+        "actual_sec": 55.5,
+        "saved_roi_equals_native": true
+      },
+      {
+        "frame": 1680,
+        "actual_frame": 1680,
+        "actual_sec": 56.0,
+        "saved_roi_equals_native": true
+      }
+    ],
+    "sample4_crop_xyxy_half_open": [
+      543,
+      798,
+      647,
+      902
+    ],
+    "public_compressor": {
+      "frame": 1499,
+      "actual_sec": 50.01663333333334,
+      "saved_png_equals_native": true
+    },
+    "unique_source_frames": 12,
+    "passes": 2,
+    "total_decode_calls": 24,
+    "sample3_decoded": false,
+    "new_truth_labels": false,
+    "entire_video_visual_review": false
+  },
+  "focused_tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src .venv/bin/python -m pytest -q -p no:cacheprovider tests/unit/test_s11_observation_cadence.py tests/test_center_path_diagnostics.py tests/unit/test_source_context_renderer.py",
+    "exit_code": 0,
+    "passed": 109,
+    "pytest_reported_elapsed_sec": 8.81,
+    "tool_process_elapsed_sec": 11.23,
+    "scope": "Cadence arithmetic/input handling, center-path diagnostics and source-context rendering. Not the full suite or field efficacy."
+  },
+  "reproduction_wrapper": {
+    "file": "audit_cr1_saved.py",
+    "sha256": "b31773b892d0f5fddd3794051a207896016a986a96a86e779549a211eca09c8c",
+    "execution": "Byte-identical source compiled and executed in existing Mac Python REPL; run(root, True).",
+    "status": "PASS",
+    "standalone_cli_end_to_end": "NOT_RUN",
+    "syntax_compile": "PASS",
+    "uses_existing_verifier_and_cadence_owner": true
+  },
+  "artifacts_inspected_visually": [
+    "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/primary-pair-and-references.png",
+    "docs/50-diagnostics/s11/2026-10-11-foam-upper-position-review.png",
+    "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/position-review/position-review.png",
+    "docs/50-diagnostics/s11/2026-10-10-water-foam-center-stages.png",
+    "sample/output/s11-p5-default-linkage-20261011-001/none/oil_level_analysis_Local_XY_fixed_comparison_sample4_20261011_224401/graphs/sample4_sight_glass_detail.png"
+  ],
+  "input_hashes": {
+    "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/followup-readout.json.gz": "c5db499375234c63d27306865a74d21165e07f4d67995149d05a78dec6d2fd4e",
+    "sample/output/s11-p5-default-linkage-20261011-001/none/oil_level_analysis_Local_XY_fixed_comparison_sample4_20261011_224401/tracking_data.csv": "04575e75a736464e2de1bd51d37efcd36c41a9097150820aaf668a83cbb14052",
+    "sample/output/s11-p5-default-linkage-20261011-001/none/oil_level_analysis_Local_XY_fixed_comparison_sample4_20261011_224401/events.csv": "4a298a42bfa6fb76f0faadc102149d310978031f3c73f96b3c29b8bb3bafeb52",
+    "sample/sample4.mp4": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+    "sample/public_miso_mHOS1-1ck60.mp4": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15"
+  },
+  "not_performed": [
+    "Encoder/model rerun",
+    "Threshold selection or model training",
+    "Production detector/Recipe/authority modification",
+    "New truth or candidate-label transfer",
+    "Windows/private-video execution or transfer",
+    "Field acceptance",
+    "Independent user report-comprehension acceptance",
+    "Repository commit/push",
+    "CR1 environment/cache cleanup"
+  ]
+}

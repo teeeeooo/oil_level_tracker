@@ -1,0 +1,72 @@
+{
+  "schema": "s11-post-cr1-review-import-v1",
+  "intake_date": "2026-10-13",
+  "baseline_head": "0bc5af74dc0818a166fc99f7bbdf3b05cd7b65f1",
+  "archive": {
+    "name": "1-s11-post-cr1-review-2026-10-12.zip",
+    "bytes": 34956,
+    "sha256": "15b5cdc9934741757c186759c80127415354c0e88255d580de4e220b171d44df",
+    "member_prefix": "s11-post-cr1-review-2026-10-12/"
+  },
+  "supplied_files": [
+    {
+      "source": "README.md",
+      "preserved_at": "docs/70-reference/s11-post-cr1-review-2026-10-12/README.md",
+      "bytes": 3541,
+      "sha256": "53db2cb7e025203d451caac1aabb0cefaf933df5144c642a4b96c406080fbb57"
+    },
+    {
+      "source": "S11-program-review-and-work-spec-post-CR1-2026-10-12.md",
+      "preserved_at": "docs/70-reference/s11-post-cr1-review-2026-10-12/S11-program-review-and-work-spec-post-CR1-2026-10-12.md",
+      "bytes": 61870,
+      "sha256": "67c340b60f7d7ac87707d8460ed26c0cab1caec0473b63f48d68139e34ea3d55"
+    },
+    {
+      "source": "S11-review-execution-summary.json",
+      "preserved_at": "docs/70-reference/s11-post-cr1-review-2026-10-12/S11-review-execution-summary.json",
+      "bytes": 11095,
+      "sha256": "7890b71578115abd2e3e7d8c78e15ac4ee2cc7077e68df4ec21ef9db6be73086"
+    },
+    {
+      "source": "SHA256SUMS.txt",
+      "preserved_at": "docs/70-reference/s11-post-cr1-review-2026-10-12/SHA256SUMS.txt",
+      "bytes": 383,
+      "sha256": "cb03b694104b7a7bf7bacff18acbb64cd17c81cf03bd9345dca2b2cef0cf1923"
+    },
+    {
+      "source": "audit_cr1_saved.py",
+      "preserved_at": "docs/70-reference/s11-post-cr1-review-2026-10-12/audit_cr1_saved.py",
+      "bytes": 8695,
+      "sha256": "b31773b892d0f5fddd3794051a207896016a986a96a86e779549a211eca09c8c"
+    }
+  ],
+  "supplied_checksum_entries_verified": 4,
+  "byte_identical_existing_tracked_documents": [],
+  "native_artifacts": "The five supplied files are the complete archive. No sibling worktree or separate post-CR1 output directory predates this intake; original media, CR-1 readouts/prepared inputs and report bundle are reused at existing paths.",
+  "worktrees": {
+    "registered": [
+      {
+        "path": "/Users/sunjaekim/Developer/oil_level_tracker",
+        "branch": "main",
+        "head": "0bc5af74dc0818a166fc99f7bbdf3b05cd7b65f1",
+        "starting_status": "CLEAN"
+      }
+    ],
+    "attached_to_task": [],
+    "unmerged_s11_heads": [
+      {
+        "branch": "work/s11-spatial-identity-20261008",
+        "head": "e5d4a0430ea69beab59736396a2817c09b5efd69",
+        "disposition": "RETAINED_UNMERGED: closed, unpromoted cellular/selector experiments; no new eligible behavior"
+      },
+      {
+        "branch": "work/s11-windows-first-detector-20261008",
+        "head": "c4814bdc25c4da22776d985fbb7a2d66fbc4e1e8",
+        "disposition": "RETAINED_UNMERGED: closed, unpromoted H1/H1b; adopted saved-reader responsibility already exists on main"
+      }
+    ],
+    "removed": []
+  },
+  "verification_owner": "docs/60-evidence/s11/2026-10-13-post-cr1-review-intake.md",
+  "preservation": "Supplied files are byte-preserved provenance, not live status. No duplicate ZIP, model, source or report copies. Current source and acceptance owners govern adoption; the source package does not restore the original full experiment on a fresh clone."
+}

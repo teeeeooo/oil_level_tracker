@@ -1148,3 +1148,25 @@ author 시각을 Asia/Seoul로 환산한 2026-10-12로 확정했습니다.
 | 2026-10-12 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention-receipt.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention-receipt.json) | 실제 폐기·용량·생존 입력 및 복구 범위 검증 |
 | 2026-10-12 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention.json](60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention.json) | 의사결정별 보존 심사와 현재 생존/폐기 경로 |
 | 2026-10-12 | [60-evidence/s11/2026-10-12-pre-cr1-cleanup/temporal-affine-counterexample.npz](60-evidence/s11/2026-10-12-pre-cr1-cleanup/temporal-affine-counterexample.npz) | 폐기 ZIP에서 선별한 작은 합성 실패 반례 |
+
+### 2026-10-13 post-CR1 specification intake
+
+아래 파일은 현재 Git 미등록입니다. 원문 작성일은 2026-10-12이며 인수/manifest
+작성일은 2026-10-13입니다. 최초 Git 추가일은 등록 후 실제 author 날짜로 확정합니다.
+
+#### `docs/60-evidence/s11/`
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [60-evidence/s11/2026-10-13-post-cr1-review-intake.md](60-evidence/s11/2026-10-13-post-cr1-review-intake.md) | 독립 재현 검증·명세 채택 범위·워크트리 검토·계획 축약; 작성일 2026-10-13 |
+
+#### `docs/70-reference/s11-post-cr1-review-2026-10-12/`
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 | [70-reference/s11-post-cr1-review-2026-10-12/README.md](70-reference/s11-post-cr1-review-2026-10-12/README.md) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-post-cr1-review-2026-10-12/S11-program-review-and-work-spec-post-CR1-2026-10-12.md](70-reference/s11-post-cr1-review-2026-10-12/S11-program-review-and-work-spec-post-CR1-2026-10-12.md) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-post-cr1-review-2026-10-12/S11-review-execution-summary.json](70-reference/s11-post-cr1-review-2026-10-12/S11-review-execution-summary.json) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-post-cr1-review-2026-10-12/SHA256SUMS.txt](70-reference/s11-post-cr1-review-2026-10-12/SHA256SUMS.txt) | 첨부 원본 bytes 보존; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-post-cr1-review-2026-10-12/audit_cr1_saved.py](70-reference/s11-post-cr1-review-2026-10-12/audit_cr1_saved.py) | 첨부 historical 재현 스크립트; 제품/테스트 discovery 밖; 작성일 2026-10-12 |
+| Git 미등록 | [70-reference/s11-post-cr1-review-2026-10-12/import-manifest.json](70-reference/s11-post-cr1-review-2026-10-12/import-manifest.json) | ZIP/member hash·기존 중복·워크트리/브랜치 판단; 작성일 2026-10-13 |

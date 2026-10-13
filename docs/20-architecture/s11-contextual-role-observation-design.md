@@ -1,4 +1,4 @@
-# S11 Contextual Role Observation — CR-1 Offline Experiment
+# S11 Contextual Role Observation — CR-1 and Operating-Policy Design
 
 **Scope:** bounded offline research supplement to the [Witness Architecture](s11-interface-observability-witness-architecture.md#successor-positive-reachability-and-independent-paths).
 **Design boundary:** isolated offline experiment with the preflight and lifecycle
@@ -10,6 +10,9 @@ the [Witness Validation](../30-validation/s11-interface-observability-witness-va
 owns acceptance. The [supplied specification](../70-reference/s11-program-review-2026-10-12/S11-program-review-and-work-spec-2026-10-12.md)
 is preserved unchanged. This bounded supplement avoids adding another experiment
 history or status ledger to the parent architecture.
+The [post-CR1 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
+adds the bounded operating-policy proposal below. It does not reopen either
+frozen CR-1 trial or accept a calibrated role decision.
 
 ## Problem and reuse boundary
 
@@ -230,6 +233,90 @@ Sequential consumer behavior, independent Foam-upper observation, Windows shadow
 and final nine-segment/report acceptance remain later stages. The CR-1 review
 neither requires them to finish this diagnostic nor claims them through it.
 
+## Post-CR1 operating-policy proposal
+
+The [supplied follow-up](../70-reference/s11-post-cr1-review-2026-10-12/S11-program-review-and-work-spec-post-CR1-2026-10-12.md)
+identifies information discarded by category-only comparison. Preserve continuous
+support and role competition together. This is one development hypothesis over
+the existing fixed representation, not a new encoder/bank search or an operating
+point selected from the exposed 164 records. Calibration and evaluation entry are
+owned by [Witness Validation](../30-validation/s11-interface-observability-witness-validation.md#post-cr1-operating-policy-and-consumer-acceptance).
+
+### Observation and decision boundary
+
+Extend the existing Witness/diagnostic owner through a reviewed versioned delta;
+the following is a design contract, not an implemented API or a second sidecar:
+
+| Content | Required distinction |
+|---|---|
+| Identity and lineage | Source/frame/actual timestamp, Glass/geometry/profile and bank digests; original candidate index/family/source-Y and available native support |
+| Measured evidence | All full/local interface, structure and texture scores, signed margins, common support/visible columns/crop completeness and every required floor/ceil variant |
+| Availability | Measured, numerical tie, unavailable and inconsistent variants remain distinct; include reasons. Missing evidence is neither a measured zero nor a physical negative |
+| Policy provenance | Explicit UNCALIBRATED status until a policy/version/partition digest is qualified; similarities are not probabilities |
+| Claim scope | Regional context, physical boundary role, native contour and fixed-X scalar are separate claims. Record only the precision actually supported |
+
+Keep `decision=NOT_EVALUATED` on uncalibrated role observations. A later calibrated
+output uses the existing `INTERFACE_SUPPORTED / INTERNAL_OR_ARTIFACT / UNRESOLVED`
+vocabulary at its qualified scope. Failure of positive eligibility cannot emit
+`INTERNAL_OR_ARTIFACT`: that needs separately validated negative evidence. A
+regional preference alone cannot emit a boundary-role assertion.
+
+### Single local-support policy family
+
+For candidate `c` and its frozen required anchor variants `V(c)`, define:
+
+```text
+A(c) = min over v in V(c) of local_interface_similarity(v)
+M(v) = local_interface_similarity(v)
+       - max(local_structure_similarity(v), local_texture_similarity(v))
+
+provisional eligibility = required support/geometry available for every v
+                         AND M(v) > 1e-6 for every v
+                         AND A(c) >= tau_support
+```
+
+`tau_support` remains unset. Freeze its selection procedure and acceptance scope
+before calibration. `1e-6` retains CR-1's numerical tie convention; it is not a
+physical confidence margin. Do not add a large margin floor, discard an
+unfavorable/missing fractional variant or substitute a favorable rounded anchor.
+No eligibility decision can be executed with an unset operating point.
+
+Keep full scores for context/opposition analysis without a universal full-texture
+veto. Full/local/mean are dependent views, not independent votes. A higher score
+than a reviewed target does not identify an unreviewed competitor; preserve the
+whole candidate population and unresolved same-boundary versus other-role claims.
+No maximum-score winner or proximity-based label transfer is implied.
+
+The existing sample4 104-to-224 transform gives a 6.5-native-pixel token spacing;
+it cannot certify a native or subpixel boundary coordinate. Before transfer,
+freeze the applicable geometry/scale, support and source/ROI transform. Those
+choices, independent calibration/evaluation sources, role-label precision,
+resource bounds and permissible residual impact remain executable-preflight
+requirements, not values inferred from this proposal. Numeric publication keeps
+the selected current native candidate Y. A future fixed-X representation needs
+its own candidate/support lineage; no post-selection snapping or reference Y.
+
+### Separate Oil behavior slices after shadow acceptance
+
+1. **Same-frame role condition:** after O2/V5 and a separate O3 plan, consume the
+   qualified role result consistently for anchors and continuations at the
+   existing admission owner. Keep original candidates for diagnostics. Withhold
+   unresolved current numerics without recoding role uncertainty as physical
+   absence or `HARD_INVALID`. Existing bounded owner state may survive, but cannot
+   supply a missing current Y. Measure wrong-output reduction and true-observation
+   loss together; suppression alone does not recover a lower Oil candidate.
+2. **Positive admission route:** only with independently qualified positive role
+   evidence, specify which legacy corroboration heuristic that evidence may
+   replace. Validate a separate authority route with its own controls/ablation;
+   support=0 or lack of opposition is not positive proof. Preserve hard geometry,
+   optics, material, ambiguity and ownership contracts. Association/handoff/phase
+   changes require a saved earliest-loss join to their actual owner and separate
+   O4 acceptance; motion alone never creates identity.
+
+Use separate implementation commits and full-window comparisons for these slices.
+Shadow preserves production decisions exactly, including real unavailable
+fallback. Typed decision recording and consuming it remain different gates.
+
 ## Independent Foam path and future consumption
 
 Foam presence, upper localization and temporal disappearance answer different
@@ -245,13 +332,21 @@ requires O2/O3. WP8/P5-c opens only when a source-qualified correct raw upper is
 demonstrably lost downstream. Presence-driven episodes would change the input
 semantics and require a separate design, not a persistence-threshold adjustment.
 
+The post-CR1 WP07/WP08 aliases retain this order. Reuse existing edge/path/support
+owners to establish an independent current native upper before raw-front
+integration. Internal Foam texture in the CR-1 bank is not an upper-front
+prototype. A learned Foam-upper bank/operation needs its own frozen experiment;
+the Oil policy provides no implicit authorization or evidence for it. Preserve
+dark water Foam A, sample4/public uppers, internal texture/rim, no-Foam B/C,
+cropped beer upper and unclear milk lower at their actual review precision.
+
 ## History Review
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: current max-peer support and authority source; zero-support continuation counterexamples; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
+- Prior mechanisms reviewed: current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
 - Prior mechanisms rejected: threshold/peer-distance rescue, anchor-only fix, cost/maturity-based identity, appearance matching as physical authority, component-extreme Foam replacement and episode relaxation without a correct raw front.
 - Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies, a bounded local footprint and preservation before removal keep the experiment reversible.
-- Difference from prior failures: CR-1 proposes a fixed pretrained contextual representation with explicit reference exposure, token-resolution and ablation controls; no new optical information or physical success is asserted. Geometry and future consumption retain existing owners.
-- Logic-map impact: NONE — this contract adds offline experiment isolation, resource and removal boundaries; no executing owner, schema or production behavior changes.
+- Difference from prior failures: the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
+- Logic-map impact: NONE — this contract adds an operating-policy proposal to offline research; no executing owner, implemented schema or production behavior changes.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.
