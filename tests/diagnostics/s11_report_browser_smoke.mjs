@@ -1,12 +1,15 @@
 // Exercise an unchanged retained report using isolated local Chrome, not a user profile.
 import { spawn } from 'node:child_process';
-import { mkdtempSync, writeFileSync, existsSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, existsSync, rmSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const [reportArg, outputArg] = process.argv.slice(2);
 if (!reportArg || !outputArg) throw new Error('Usage: node script.mjs REPORT WORK_DIRECTORY');
 const report = resolve(reportArg), output = resolve(outputArg);
+const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+const reportBefore = digest(readFileSync(report));
 for (const name of ['browser.json', 'report-browser.png']) {
   if (existsSync(join(output, name))) throw new Error(`Refusing overwrite: ${name}`);
 }
@@ -33,6 +36,64 @@ async function evaluate(expression) {
   const response = await request('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true }, session);
   if (response.exceptionDetails) throw new Error(JSON.stringify(response.exceptionDetails));
   return response.result.value;
+}
+async function canvasState(cardIndex) {
+  return evaluate(`(async () => {
+    const card=document.querySelectorAll('.source-sequence')[${cardIndex}];
+    const canvas=card.querySelector('canvas'); canvas.scrollIntoView({block:'center',behavior:'instant'});
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    const box=canvas.getBoundingClientRect();
+    const data=JSON.parse(card.querySelector('.sequence-data').textContent);
+    const index=Number(card.querySelector('input[type="range"]').value);
+    return {card_index:${cardIndex}, index, frame:data.frames[index], tile_size:data.tile_size,
+      width:canvas.width, height:canvas.height,
+      clip:{x:box.left+scrollX,y:box.top+scrollY,width:box.width,height:box.height,scale:1}};
+  })()`);
+}
+async function drawReference(state) {
+  await evaluate(`(async () => {
+    const s=${JSON.stringify(state)}, image=new Image(); image.src=s.frame.page_path;
+    await image.decode();
+    const canvas=document.querySelectorAll('.source-sequence')[s.card_index].querySelector('canvas');
+    const backup=document.createElement('canvas'); backup.width=s.width; backup.height=s.height;
+    backup.getContext('2d').drawImage(canvas,0,0);
+    window.__s11CanvasCheckBackup={canvas,backup};
+    const ctx=canvas.getContext('2d'); ctx.save(); ctx.setTransform(1,0,0,1,0,0);
+    ctx.globalAlpha=1; ctx.globalCompositeOperation='copy';
+    ctx.drawImage(image,s.frame.tile_xy[0],s.frame.tile_xy[1],
+      s.tile_size,s.tile_size,0,0,s.width,s.height);
+    ctx.restore();
+  })()`);
+}
+async function checkCanvas(cardIndex) {
+  const state = await canvasState(cardIndex);
+  if (state.frame.status !== 'AVAILABLE') throw new Error('Expected available source frame');
+  // file:// taints canvas readback. CDP screenshots keep normal browser security intact.
+  const screenshot = () => request('Page.captureScreenshot',
+    {format:'png',clip:state.clip,captureBeyondViewport:true}, session);
+  const actual = await screenshot();
+  let expected;
+  try {
+    await drawReference(state);
+    expected = await screenshot();
+  } finally {
+    await evaluate(`(() => { const saved=window.__s11CanvasCheckBackup; if (!saved) return;
+      const ctx=saved.canvas.getContext('2d'); ctx.save(); ctx.setTransform(1,0,0,1,0,0);
+      ctx.globalAlpha=1; ctx.globalCompositeOperation='copy'; ctx.drawImage(saved.backup,0,0);
+      ctx.restore(); delete window.__s11CanvasCheckBackup; })()`);
+  }
+  const observedHash = digest(Buffer.from(actual.data, 'base64'));
+  const expectedHash = digest(Buffer.from(expected.data, 'base64'));
+  const restored = await screenshot();
+  const restoredHash = digest(Buffer.from(restored.data, 'base64'));
+  if (restoredHash !== observedHash) throw new Error('Canvas restoration mismatch');
+  if (observedHash !== expectedHash) {
+    throw new Error(`Canvas pixel mismatch: card=${cardIndex}, index=${state.index}, frame=${state.frame.frame_index}`);
+  }
+  return {card_index:cardIndex,index:state.index,frame_index:state.frame.frame_index,
+    actual_time_sec:state.frame.actual_time_sec,page_path:state.frame.page_path,
+    tile_xy:state.frame.tile_xy,observed_png_sha256:observedHash,
+    reference_png_sha256:expectedHash,restored_png_sha256:restoredHash,equal:true,pixels_restored:true};
 }
 try {
   const address = await new Promise((resolve, reject) => {
@@ -80,6 +141,10 @@ try {
   if (initial.length !== 3 || initial.some(s => !s.canvas_visible || !s.controls_visible || !s.first_disabled)) {
     throw new Error('Initial report controls failed');
   }
+  const canvasChecks = [];
+  for (let cardIndex = 0; cardIndex < initial.length; cardIndex++) {
+    canvasChecks.push(await checkCanvas(cardIndex));
+  }
   const checks = [];
   for (const index of [75, 120, 180, 0]) {
     await evaluate(`(() => { const card=document.querySelectorAll('.source-sequence')[1];
@@ -96,11 +161,13 @@ try {
       throw new Error(`Slider mismatch ${JSON.stringify(state)}`);
     }
     checks.push({ ...state, expected_frame: frame });
+    canvasChecks.push(await checkCanvas(1));
   }
   await evaluate(`document.querySelectorAll('.source-sequence')[1].querySelector('[data-step="1"]').click()`);
   await sleep(150);
   const step = await evaluate(`document.querySelectorAll('.source-sequence')[1].querySelector('.sequence-time').textContent`);
   if (!step.endsWith('f1201')) throw new Error('Step button failed');
+  canvasChecks.push(await checkCanvas(1));
   const imageLoads = await evaluate(`Promise.all([...new Set([
     ...Array.from(document.images, image => image.getAttribute('src')),
     ...Array.from(document.querySelectorAll('.sequence-data'), s => JSON.parse(s.textContent).frames)
@@ -116,8 +183,11 @@ try {
   await sleep(200);
   const shot = await request('Page.captureScreenshot', { format:'png' }, session);
   writeFileSync(join(output, 'report-browser.png'), Buffer.from(shot.data, 'base64'), { flag: 'wx' });
-  const result = { schema:'s11-round2-browser-smoke-v1', report, browser:version,
+  if (digest(readFileSync(report)) !== reportBefore) throw new Error('Report bytes changed during check');
+  const result = { schema:'s11-round3-browser-smoke-v3', report, report_sha256:reportBefore, browser:version,
     access_mode:'file://; no special file-access flags', initial_controls:initial,
+    canvas_verification:'CDP PNG equality before/after same-canvas source-tile reference repaint; original pixels restored and rechecked; CSS layout unchanged',
+    canvas_checks:canvasChecks,
     slider_checks:checks, next_step_check:step, images:imageLoads,
     page_errors:errors, network_failures:networkFailures,
     original_report_changed:false, human_comprehension:'NOT_EVALUATED' };
