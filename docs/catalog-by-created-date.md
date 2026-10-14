@@ -1406,5 +1406,8 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-candidate-rgb-trial/opposition-review.json](50-diagnostics/s11/2026-10-14-candidate-rgb-trial/opposition-review.json) | 전체 18개 잠재 대조·질문 3개·원본/표식/hash 결합 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-reply.json](50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-reply.json) | 사용자가 직접 확인한 세 후보의 glass-rim 역할과 Oil 근사 거부 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-plan.json](50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-plan.json) | 원본 결과를 유지하는 사후 판정 결합·점수 순서 필요조건 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-readout.json](50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-readout.json) | 세 rim 오수용과 단조 margin 정책의 보존 불가능 반례 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/review-plan.json](50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/review-plan.json) | 기존 sample3 A/B에서 새 후보 두 개의 실용적 허용 질문 범위 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/prepare_review.py](50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/prepare_review.py) | archive 원본 후보·픽셀을 연결하는 두 화면 재현기 |
 | 2026-10-14 | [60-evidence/s11/2026-10-14-candidate-rgb-trial.md](60-evidence/s11/2026-10-14-candidate-rgb-trial.md) | 후보 RGB 실제 준비·고정 단일 비교·검증 기록 |
 | 2026-10-14 | [60-evidence/s11/2026-10-14-oil-policy-feasibility.md](60-evidence/s11/2026-10-14-oil-policy-feasibility.md) | 필요조건 실제 실행·한계 및 다른 촬영원 연결 |

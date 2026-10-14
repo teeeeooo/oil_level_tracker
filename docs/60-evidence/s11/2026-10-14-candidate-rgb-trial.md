@@ -139,6 +139,55 @@ Recipe 제외 영역에는 확장하지 않는다. 초록 idx9 판정은 유지�
 대조의 원본/평균 색 결정을 확인한다. 단일 margin cutoff의 필요조건만 조사하며
 학습·추론·임계값 선택을 하지 않는다. 원래 limited readout은 수정하지 않는다.
 
+`9ef0aae`에서 코드를 고정한 뒤 `/private/tmp`에서 실행한
+[결과](../../50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-readout.json)는
+**FALSIFIED_BY_REVIEWED_RIM**이다. 세 rim 모두 원본 및 평균 색 입력에서
+Oil 호환으로 판정됐다. 원래 15개 대조의 limited 통과는 당시 비교 사실로 유지하고,
+현재 분류 능력은 채택하지 않는 것으로 종료한다. 3/3은 사후 선정된 반례의
+오수용 수이며 전체 모집단의 오수용률 추정이 아니다.
+
+| 입력 view | 가장 높은 rim margin | 가장 높은 기존 양성 margin | 모든 반대를 제거하면서 양성 하나라도 보존 |
+|---|---:|---:|---|
+| 원본 | idx7: 18.800531 | f1200 idx4: 14.790019 | 불가능 |
+| side 평균 색 | idx7: 17.813394 | f1260 idx4: 14.198208 | 불가능 |
+
+margin은 두 logit의 차이며 확률이 아니다. 필수 변형별 margin의 최솟값이 공통
+임계값보다 클 때만 허용하는 단조 정책에서의 필요조건이다. 임계값은 선택하지
+않았다. 모든 확정 양성보다 높은 rim을 제거하면 양성도 모두 사라진다. 모델이나
+전체 학습의 불가능성을 의미하지는 않으며, 이 결과를 같은 모델의 cutoff 변경으로
+구제하지 않는다.
+
+전체 187개 / Oil 182개를 검증했다. 원래 대조 15개, 새 대조 3개, 미판정 Oil
+164개와 그 안의 입력 부족 17개를 구분했다. 질문 밖의 잠재 후보 15개는 여전히
+미판정이다. 새 방어 테스트 15개를 포함한 관련 76개가 통과했다. 실제 실행은
+0.969787 s, peak RSS 205,684,736 bytes, 출력 17,615 bytes이며 추가 model call은 0이다.
+관리 실행 `s11-candidate-rgb-rim-20261014-001`은 결과 하나만 Git 위치에 보존하고
+동일한 작업용 사본을 제거했다.
+
+## 기존 다른 촬영원으로 후보 판정 확장 준비
+
+다음 작업은 새 학습을 먼저 반복하는 것이 아니라, sample4의 새 구조물 대조와
+함께 쓸 수 있는 다른 촬영원의 후보 판정을 정리하는 것이다. 기존 sample3 A/B의
+[regional 판정](../../50-diagnostics/s11/2026-10-10-sample3-gap-source-reply.json)과
+[허용 평가 범위](../../50-diagnostics/s11/2026-10-10-sample3-evaluation-scope.md)를
+읽었다. A/B의 Oil 존재는 확정이며 전체 영상의 위치·초점 문제, C 구조물과 D
+판별 불가는 그대로 유지한다. 두 정지 프레임을 쓰는 것은 전체 구간을 물리 정확도
+기준으로 되살리는 것이 아니다.
+
+[후보 질문 계획](../../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/review-plan.json)은
+옛 archive의 각 A/B 상단 row에 저장된 유일한 material-path 후보를 질문한다:
+**A/f2249 idx6, X835/Y219; B/f2339 idx5, X835/Y227**. Row는 탐색 기준일 뿐 물리
+권한이 아니며, 다른 모든 38개 후보도 분모에 남긴다. 중앙 sector의 별도 pooled
+Y는 A216/B227이고 native contour가 아니다. 기존 빨간 점을 좌표·허용 폭으로
+추출하지 않는다. 새 모델 점수 없이 대표값의 실용적 허용만 묻는다.
+
+Archive renderer는 기존 pin reader와 current/native candidate 결합을 재사용한다.
+원본 archive는 압축 해제 시 95,879,807 bytes로 CR1의 8 MiB JSON reader 범위를
+넘으므로 전역 제한을 높이지 않고, 이 고정 archive만 exact-size / 100 MB 상한으로
+읽는다. 원본 프레임·기존 crop·닫힌 review 화면의 픽셀 동일성을 확인하도록 했다.
+모델 입력의 가시성 계약·학습 split·음성 촬영원 범위는 별도 준비 전까지 미정이다.
+새 학습, candidate score, 영상 decode, 생산·Recipe 변경은 이 준비에 포함되지 않는다.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION`.
@@ -147,6 +196,6 @@ Recipe 제외 영역에는 확장하지 않는다. 초록 idx9 판정은 유지�
 - Prior mechanisms reviewed: old CR1 category collision and all-four public sign failure; B practical acceptance; original native-head N3 loss; source-qualified candidate bindings and exact floor/ceil support.
 - Difference from prior failures: one fixed native RGB candidate-compatibility trial changes input information and supervision, with sample4-only fit and exposed public transfer. It does not retry native external-surface labels, tune the failed role threshold or choose a new production winner.
 - Existing feature coverage: existing saved candidate population, original RGB, effective/glare masks and source pins; Recipe exclusions/templates unchanged, Local XY OFF, no D2 efficacy claim.
-- Execution scope: completed input preparation and one predeclared offline 1,118-parameter / 1,000-step fit, full-population final inference, mean-color ablation and independent arithmetic verification. The three-point review is prepared and its explicit rim reply is received. The existing reuse CLI binds that scoped reply to saved logits and checks monotone margin feasibility; no new inference, training or automatic labels for other candidates. No production replay, report reading, O2 acceptance or Windows execution.
+- Execution scope: completed input preparation and one predeclared offline 1,118-parameter / 1,000-step fit, full-population final inference, mean-color ablation and independent arithmetic verification. The existing reuse CLI executed the explicit rim-reply binding and saved margin check. The separate archive adapter prepares two sample3 candidate questions from existing regional-positive views with complete current/native joins and source-pixel checks. No new inference, training, automatic labels for other candidates, production replay, report reading, O2 acceptance or Windows execution.
 - Logic-map impact: NONE — offline diagnostic only; production owners and schemas unchanged.
 - Failure-registry impact: NONE — no new failure family or accepted detector repair; this checks candidate-level input capability under existing evidence boundaries.

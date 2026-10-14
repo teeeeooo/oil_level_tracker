@@ -1490,6 +1490,14 @@ population and mean-color ablation; a passing mean-only ablation cannot establis
 that local native pattern is the added information. No unreviewed high-score winner,
 physical material label, calibration point, production consumer or O2 success follows.
 
+Subsequent scoped human opposition is a new evaluation layer, not a rewrite of that
+trial's fit/transfer targets or original result. The f1140 glass-rim reply binds only
+the three displayed candidates and falsifies their saved acceptance. Preserve unknown
+same-Y neighbors, source/frame/hash identity, required variants and unavailable status.
+The next two sample3 questions concern practical representative-point acceptance in
+the already qualified regional A/B views. They cannot restore whole-window physical
+accuracy, promote the old track history or convert painted dots to scalar tolerances.
+
 Required checks for a later calibrated observation/policy are:
 
 - all raw class scores, common support and required floor/ceil variants survive

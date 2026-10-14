@@ -457,6 +457,23 @@ Before another learning contract, expand the candidate-level source/control audi
 using existing scoped evidence; do not turn sample3's two regional positives into
 whole-window truth or infer scalar acceptability from its red marks.
 
+The [executed rim audit](../50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-readout.json)
+falsifies this candidate model: all three structures are accepted, and the strongest
+rim margin exceeds every qualified positive in both views. A common lower-margin
+cutoff cannot preserve even one such positive while removing all opposition. Keep
+the original limited result immutable; this is a post-trial counterexample, not an
+estimated population false-acceptance rate or a license to retrain the same trial.
+
+The next [source-expansion preparation](../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/review-plan.json)
+asks about only the archived upper material candidate in each already reviewed
+sample3 A/B view. Preserve all 38 current/native candidate joins and original
+RGB pixels. Candidate representatives Y219/Y227 differ from the saved central
+pooled sector Y216/Y227. Do not infer pixel tolerances, whole-path truth or motion
+from the old red marks/row IDs. These two exposed views are reserved from future
+fit pending a separate contract, not designated as an untouched holdout. Full
+sample3 accuracy/cadence remains quarantined; no Recipe/geometry correction,
+model input, new training or calibration is implied by preparing this question.
+
 ### Executable saved-contract preflight
 
 [The offline CR1 adapter](../../tests/diagnostics/s11_contextual_role_preflight.py)
