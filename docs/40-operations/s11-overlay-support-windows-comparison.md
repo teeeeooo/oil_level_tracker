@@ -128,38 +128,37 @@ selected-candidate 출처를 비교한 다음, 확보된 trace의 원본 ROI·gl
 
 ## 5. 수신 결과 이후: 기존 bundle만으로 확인
 
-다음 작업은 detector 재실행이나 GUI 조작 없이 기존 후보 bundle을 읽는 것이다.
-베이스라인 manifest 재조사와 새 분석 실행을 먼저 요구하지 않는다. 성능 측정은
+**기존 분석 기록을 먼저 재사용한다.** 앞서 적었던 아홉 구간 전체 요약과 BASE·Accum
+최초 손실 재조사 요청은 이미 완료한 분석을 충분히 연결하지 못한 계획이므로 철회한다.
+최신 비교 보고서에 세부 표가 없다는 사실은 과거 분석 기록이 없다는 뜻이 아니다.
+
+| 재사용할 기록 | 이미 확인된 범위 |
+|---|---|
+| [R18 전체 구간 분석](../50-diagnostics/s11/s11-r18-windows-causal-closure.md#completed-causal-observability-rerun), [R20 BASE release 분석](../60-evidence/s11/s11-r20-windows-evidence-consolidation.md#check0404a--base-release-funnel) | R18의 1,202행·아홉 구간 집계, BASE 배출/재유입 출력 0, R20의 방향·진행량·회복 경로별 탈락 기록 |
+| [R22 실제 경계 후보 분석](../50-diagnostics/s11/s11-r22-reviewed-interface-causal-findings.md#confirmed-transferred-observations) | BASE f14386의 실제 경계 후보는 존재하며 초기 FULL 해제에서 `downward_direction` 실패. Accum f16280의 실제 Y213 후보는 허용된 추적 대상에서 제외됨 |
+| [종료된 D1 phase/owner 확인](../60-evidence/s11/2026-10-08-next-work-intake.md#phase-and-owner-fields-confirmed) | BASE review-002는 `INITIAL_FULL_BARRIER / hard_gate`, Accum review-003은 `FILL_MOTION_OWNER / owner_bounded`. D1을 위한 추가 Windows 조회·재실행은 불필요 |
+
+수치는 각 기록의 버전과 입력에 한정한다. R18/R20 집계를 최신 후보의 새 측정값으로
+옮기지 않는다. 확인된 checkpoint의 차단 지점과 전체 영상에서의 최초 물리적 오류는
+구분한다. 후자와 D1 후보 28개의 보존 이전 손실 원인은 여전히 미확정이다.
+
+후속 로컬 설계에는 BASE의 실제 경계 idx8/9와 비경계 idx20이 같은 admission
+조건을 통과하고 같은 hard gate에 막힌다는 대조 사례를 함께 사용한다. Accum의
+실제 후보가 다른 owner에 속해 제외된 사례도 유지한다. 단순한 gate 해제나 owner
+목록 확장으로는 올바른 경계와 오검출을 구분할 수 없다. 기존
+[물리 경계 설계](../20-architecture/s11-physical-interface-evidence-repair-design.md)와
+[검증 조건](../30-validation/s11-physical-interface-evidence-repair-validation.md)의
+역할 관측, 초기 FULL의 보이는 경계 수용, owner 전환 책임을 구분해 다음 변경을
+구체화한다. 현재 순서와 허용 범위는 [Work Plan](../00-project/work-plan.md)이 소유한다.
+
+BASE의 retrospective FULL / coverage 100%는 검출 성공이 아니다.
+`R17_OBSERVATION_UNAVAILABLE`와 Accum 5.99%도 최초 검출 실패 원인을 단독으로
+확정하지 않는다. EMPTY를 677 s까지 늘려 69.9%를 복구하지 않는다. 해석 차이는
+기존 [10월 7일 호환성 수정](../60-evidence/s11/2026-10-07-event-compatibility.md)과 일치하는
+양상이며, 로컬 sample3 sequence 실패와 별개로 다룬다.
+
+지금은 추가 Windows 반환물을 요청하지 않는다. 후속 설계에 필요한 특정 필드나
+물리적 역할이 기존 기록에 없을 때만 해당 항목과 필요한 이유를 명시한다. 필요한
+픽셀 판독은 Windows에서 수행하고 허용된 텍스트만 전달한다. 베이스라인 manifest
+재조사와 새 영상 실행은 선행 조건이 아니다. 성능 측정은 계속
 [검출력 개선 이후](../00-project/retained-commitments.md#windows-analysis-throughput-after-detector-improvement)로 유지한다.
-
-사용자는 BASE도 검출률 0%라고 보고했다. 앞선 BASE의 retrospective FULL / coverage
-100%는 경계 검출 성공을 뜻하지 않는다. **두 Glass의 현황을 이번에 함께 요약하고,
-상세 원인은 BASE부터 차례로 확인한다.** BASE는 판독상 Foam이 없는 Oil 경계
-사례이므로 먼저 후보 생성·선택·상태 전환의 손실을 분리한다. Accum 전체 해결까지
-BASE를 미루거나 BASE 전체 해결까지 Accum 현황 확인을 미루지 않는다.
-
-1. 최종 CSV가 동일하므로 후보의 한 벌을 사용해 기존 아홉 WS1 구간별로 실제
-   sample 범위, 유효 Oil/Foam 수치 개수와 연속 구간, source Y 범위·방향,
-   최장 누락 구간을 요약한다. 물리적으로 잘못된 경로의 길이는 기존 판독으로
-   확인할 수 있는 범위만 보고하고, 좌표 정답이 없으면 미확인으로 남긴다.
-2. BASE 약 550–662 s 배출에서 경계가 보이기 시작한 뒤의 최초 누락을 먼저
-   찾고, 662–약 663.6 s 재유입·상단 소멸도 확인한다. 원래 후보 ID·source·Y,
-   선택/거부 사유와 완료 sequence 판정을 함께 읽어 후보 부재인지, 역할 판정·
-   선택·추적/상태 전환 이후 손실인지 구분한다. FULL-prefix와 FULL-suffix에서는
-   경계가 없는 것이 정상이므로 이를 미검출로 세지 않으며, BASE Foam은 전 구간
-   없어야 한다. 초기 FULL 고착은 확인할 가설이지 이미 확정된 원인이 아니다.
-3. 이어서 Accum 약 653–672 s 유입과 672–680 s 층 분리의 최초 손실을 같은
-   방식으로 확인한다. BASE와 같은 단계의 같은 원인인지, 별도 원인인지 구분한
-   뒤 근거가 있는 변경부터 한 건씩 진행한다. 변경 검증에는 항상 양쪽 Glass의
-   관측 회복과 원래 경계가 없는 구간의 오검출 방지를 포함한다.
-4. `R17_OBSERVATION_UNAVAILABLE`는 초기 상태를 확장하지 못한 사유다.
-   그 표시만으로 최초 검출 실패 원인을 확정하지 않는다. 69.9%를 복구하려고
-   EMPTY를 677 s까지 늘리거나 unavailable 조건을 완화하지 않는다.
-5. 베이스라인과 후보의 해석 차이는 기존 [10월 7일 호환성 수정](../60-evidence/s11/2026-10-07-event-compatibility.md)과
-   일치하는 양상이다. 새 극값·하강 이벤트는 기존 타입의 새 출력이며 검출 개선의
-   증거가 아니다. 이번 차이를 로컬 sample3 sequence 실패와 합치지 않는다.
-
-반환물은 구간 요약과 최초 손실의 후보/선택 근거를 담은 허용된 텍스트다.
-원본 픽셀 판독이 정말 필요하면 해당 Windows PC에서 표시하고 구체적인
-미확정 역할만 질문한다. 기존 자료만으로 원인이 확정되지 않으면 그 지점과
-필요한 증거를 적고, 자동 재촬영·재학습·임계값 조정으로 넘어가지 않는다.

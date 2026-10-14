@@ -112,11 +112,11 @@ permitted text can be relayed.
 
 **User follow-up:** BASE detection also remains at **0%**, according to the
 user. This is a reported operational failure, not a newly calculated per-segment
-metric; exact numerator/denominator and trace loss stage remain unavailable
-here. It must not be obscured by the reported retrospective FULL coverage of
+metric; this latest report supplies neither its exact numerator/denominator nor
+a new trace loss analysis. Prior analyses below already identify scoped losses.
+The reported failure must not be obscured by retrospective FULL coverage of
 100%. BASE drain/refill requires visible Oil tracking, while its full/no-interface
-prefix and suffix correctly require no boundary. The next diagnosis includes
-both Glasses immediately and reads the simpler, Foam-absent BASE case first.
+prefix and suffix correctly require no boundary.
 
 The cited 13-case PASS is the existing four-source local comparison, not new
 private-field acceptance. The local sequence failure is sample3 f2413 with 37
@@ -152,7 +152,9 @@ production code, threshold, Recipe, stored result or truth was changed.
 
 The [reviewed source](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
 remains the oracle. No per-segment numeric runs, Y direction or missing/wrong
-durations were supplied. Preserve the nine segment assessments explicitly:
+durations were supplied in this latest comparison summary. The assessments below
+apply only to that receipt; they do not supersede prior bundle investigations or
+mean these segments have never been analyzed:
 
 | Segment ID | Receipt assessment |
 |---|---|
@@ -166,14 +168,34 @@ durations were supplied. Preserve the nine segment assessments explicitly:
 | `WS1-ACCUM-POST-FOAM` | NOT_EVALUATED; per-segment output absent |
 | `WS1-ACCUM-DRAIN` | NOT_EVALUATED; a drop event alone cannot establish continuous tracking |
 
-Disposition remains **NOT ADOPTED; no reported final-output gain**. Next locate
-the first missing/wrong physical Oil/Foam observation in the saved candidate
-trace: summarize both Glasses across all nine segments, then inspect BASE
-drain/refill before Accum entry/layering. Distinguish shared from independent
-causes before a bounded repair and validate both Glasses after each change;
-neither one's complete repair is a prerequisite for inspecting the other.
-The [saved-output follow-up](../../40-operations/s11-overlay-support-windows-comparison.md#5-수신-결과-이후-기존-bundle만으로-확인)
-requests permitted text, not another GUI analysis or private-file transfer.
+### Existing bundle-analysis reuse — planning correction
+
+The user pointed out that substantial bundle analysis had already been completed.
+Repository reconciliation confirms the following records. The preceding request
+to repeat a whole-bundle nine-segment/first-loss diagnosis is withdrawn.
+
+| Existing record | Reusable finding and limit |
+|---|---|
+| [R18 causal closure](../../50-diagnostics/s11/s11-r18-windows-causal-closure.md#completed-causal-observability-rerun) and [R20 consolidation](s11-r20-windows-evidence-consolidation.md#check0404a--base-release-funnel) | R18 accounts for all 1,202 rows across nine segments, with zero BASE Oil publication. R20 records direct/recovery release failures and again zero BASE drain/refill publication. These are their recorded runs, not new measurements of the October 14 candidate |
+| [R22 reviewed-interface findings](../../50-diagnostics/s11/s11-r22-reviewed-interface-causal-findings.md#confirmed-transferred-observations) | At BASE f14386, an actual-interface candidate exists and direct initial-FULL release fails only `downward_direction`. At Accum f16280, the reviewed Y213 candidate belongs to `000388:0186` while allowed owner `000381:0181` excludes it before scoring. These are distinct recorded loss boundaries, not a complete whole-window causal proof |
+| [Closed D1 reconciliation](2026-10-08-next-work-intake.md#d1-saved-record-reconciliation--closed) and [confirmed phase/owner fields](2026-10-08-next-work-intake.md#phase-and-owner-fields-confirmed) | BASE review-002 has seven `PHASE_HARD_GATE` losses; Accum review-003 has ten `OWNER_NOT_ALLOWED` losses. BASE interface idx8/9 and non-interface idx20 pass the same admission flags and face the same hard gate. D1 explicitly requires no further Windows lookup or rerun |
+
+The known checkpoint losses constrain the existing
+[physical-interface repair proposal](../../20-architecture/s11-physical-interface-evidence-repair-design.md)
+and its [positive/opposition controls](../../30-validation/s11-physical-interface-evidence-repair-validation.md).
+They do not establish physical identity from admission flags or justify removing
+the gate. The 28 D1 pre-retention causes and the earliest physical failure over
+the complete window remain unknown. Historical sparse candidate/region judgments
+are not continuous exact contour truth. The
+[rejected R23 polarity experiment](../../50-diagnostics/s11/s11-r23-native-polarity-rejection.md)
+also remains closed; these records do not authorize its retry or a closed-model refit.
+
+Disposition remains **NOT ADOPTED; no reported final-output gain**. The corrected
+[follow-up](../../40-operations/s11-overlay-support-windows-comparison.md#5-수신-결과-이후-기존-bundle만으로-확인)
+reuses these findings for the next local observation/control design under the
+Work Plan, with initial-FULL admission and owner handoff as separate later
+consumers. It requests no new Windows return. Further field work must identify a
+specific missing fact required by that design, rather than repeat a completed audit.
 Do not restore EMPTY through 677 s or relax barriers to raise coverage. The
 local sample3 failure, closed model trials and deferred performance work retain
 their existing dispositions.
@@ -218,7 +240,7 @@ evidence is deleted.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `OIL-TRACKLET`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`, `RESULT-PRESENTATION`
 - Failure-registry entries: `S11-F02`, `S11-F06`, `S11-F09`, `S11-F10`
-- First harmful stage: B's valid regional input is removed by chromatic-overlay classification after opening loses parent thickness. Restoring that input changes later sample3 ownership; its cause is not established by row counts. The received private report shows unchanged tracking and a separate interpretation difference consistent with the prior compatibility repair; its first physical detector loss remains unlocalized.
+- First harmful stage: B's valid regional input is removed by chromatic-overlay classification after opening loses parent thickness. Restoring that input changes later sample3 ownership; its cause is not established by row counts. The received private report shows unchanged tracking and a separate interpretation difference consistent with the prior compatibility repair. Prior R22/D1 evidence already identifies BASE hard-gate and Accum allowed-owner losses at reviewed checkpoints; whole-window first physical loss remains unlocalized. This reconciliation adds no detector execution or new physical labels.
 - Existing feature coverage: original Recipe ellipse/margin/default settings execute; A/B/Base have empty exclusions/templates. Four-window sessions and static preparation execute with unchanged settings/initial-state confirmation. Local XY OFF and D2/Local XY closures remain. The received private comparison reports identical Recipe/session and FULL trace with confirmed FULL/EMPTY; exact ROI/exclusion/template values are unavailable in the relayed text and are not inferred.
 - Execution scope: direct preprocessing and real frame detection, then four-window analysis/resolution/report construction with serial fresh workers. sample3 is engineering/legacy reproduction, not physical scoring. Receipt review adds source inspection and 47 existing event/retrospective tests; private bundle values remain user-reported. No new Windows, private-video or training execution. The local sequence failure remains unresolved and blocks adoption.
 - Logic-map impact: NONE — receipt review changes no route, authority or input semantics. The map already records the original-support HUD prerequisite introduced at `0073def`; the earlier implementation updated that entry. Existing publication/retrospective owners explain the received scope.
