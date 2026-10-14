@@ -274,12 +274,46 @@ from the text. Both display runs are closed; all **65 managed runs** pass. The
 only new physical question is the regional upper boundary, with unassessability
 an allowed result. No precision or new role is inferred from the ruler.
 
+### Red-marked upper reply and unchanged-owner stage inspection
+
+The user returned [57306.jpg](2026-10-14-raw-front-inventory/base-foam-upper-user.jpg)
+with **“빨간 점으로 표시해놨어”**. The six red marks identify the local Foam
+upper feature in the same f144 view. Preserve the supplied JPEG bytes; its crop
+and resize differ from the original review PNG. The [fixed plan](2026-10-14-raw-front-inventory/base-foam-stage-plan.json)
+maps the complete source panel through the existing `CoordinateTransform`,
+checks agreement with the unmarked image outside the red ink, and retains all
+six marker locations. Red-color thresholds parse annotation ink only; they are
+not a material detector. Expand the mapped ink envelope by one source pixel for
+a conservative diagnostic query, not dense Foam labels or an error tolerance.
+This closes only the regional upper-location question. It adds no exact native
+path, pixel mask, scalar training label, whole-layer extent or adjacent-frame truth.
+
+The existing [water stage audit](2026-10-10-water-foam-representation.md#causal-stage-readout)
+already demonstrated a source-bound lightness-floor failure. Reuse its saved
+return-event observer, extracted as the original function, rather than duplicate
+Foam support formulas or infer this case has the same cause. The existing
+`probe_base.probe` runs the exact f144 baseline real frame entry; the complete
+result must equal the frozen receipt except runtime. Capture current arrays from
+the unchanged Foam owner and raw chromatic helper before arbitration. Inspect
+all stages over the fixed marked region and full Recipe center column. Preserve
+full-frame counts/hashes and all queried values; do not retain new dense rasters.
+The one-off adapter is needed only because the old observer's top-level script
+is fixed to ten water frames and obsolete output paths; the observer, detector,
+Recipe, image and preprocessing owners remain unchanged.
+
+Keep native Canny absence, raw white/chromatic membership, cleanup, component
+selection and later temporal state separate. If multiple required inputs are
+missing, report each; removing one condition is not demonstrated recovery. No
+brightness/texture threshold change, morphology repair, new frame, closed model
+retry, episode relaxation or Windows run is part of this inspection. Use the
+existing environment, 120 seconds, 12 MB owned scratch/cache and 500 KB retained.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
 - First harmful stage: baseline native Canny geometry is absent before role input in A. All 35 pre-mask Canny pixels lie outside the effective region; no valid edge is established as erased. The existing material-path candidate remains available; this does not locate a production candidate, owner, temporal or report loss. Raw plateau graph fragmentation is a separate representation limit, not physical absence.
 - Existing feature coverage: reuse original sample3 and base_sample_1 Recipe ROI/exclusions and baseline glare/digital-overlay preprocessing, with archived/original RGB equality. Artifact templates are not consumed by raw geometry entries. The later real f144 entry uses its unchanged ellipse/margin/settings; exclusions, templates and reviewed Artifact reference are empty, Local XY OFF. Fresh current temporal owners execute without prior frames; learned static maps, session confirmation and completed-window consumers are absent. Completed D2/Local XY/overlay failures remain controls; no efficacy claim follows for unused features.
-- Execution scope: A representation, f144 source preparation and reply binding reuse their recorded narrow owners. The separately pinned f144 probe invokes real baseline `detect` on one saved PNG with debug projection and no warmed temporal/static state, session confirmation, completed sequence or report. No model fitting, video decode or Windows runs; exact native path truth is not input to the detector or transferred to a candidate.
+- Execution scope: A representation, f144 source preparation and reply binding reuse their recorded narrow owners. The separately pinned f144 probe invokes real baseline `detect` on one saved PNG with debug projection and no warmed temporal/static state, session confirmation, completed sequence or report. The red-marked regional reply adds a coordinate-bound query; the saved water observer reads unchanged Foam locals during the same real entry and requires complete receipt equality. No model fitting, video decode or Windows runs; reviewed geometry never enters detector inference or transfers a role to a candidate.
 - Logic-map impact: NONE — an offline representation adapter has no production caller or authority; existing candidate and native input responsibilities remain separate.
 - Failure-registry impact: NONE — reuses the established raw-representation/role distinction and signed-gap counterexamples; no classifier is promoted or new general failure family asserted.

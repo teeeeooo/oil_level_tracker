@@ -1,0 +1,69 @@
+{
+  "schema": "s11-regional-foam-stage-plan-v1",
+  "response_ko": "빨간 점으로 표시해놨어",
+  "inputs": {
+    "review": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-review.json",
+      "sha256": "f6740803142a2a092960172243d27735fc4ffb2cf3d7c9f2dfdf08fa7c35b5b7"
+    },
+    "attachment": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-user.jpg",
+      "sha256": "97ab3677e0d3cd2f78e27f32f76383d5bb2d3572d4fcabfda15bcab34e2728be"
+    },
+    "frame_plan": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-probe-plan.json",
+      "sha256": "e5f810a5e27561f62265c4154ce65a3be8b26598af633d9ede274038f2d5fc3e"
+    },
+    "frame_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-frame-entry.json.gz",
+      "sha256": "e17ae6ed72e4f6fb7e958f878a17260cd624704ca13a32ab951fbf42ca46a356"
+    },
+    "water_stage_owner": {
+      "path": "docs/50-diagnostics/s11/2026-10-10-water-foam-representation.json",
+      "sha256": "efdbe145f01f9f6924c31751c4eef952b12e934eb043a5b3cd6848f00ccaa38c"
+    }
+  },
+  "sources": [
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/inspect_foam_upper.py",
+      "sha256": "9b03b276ce2de08a7ece247d18924d6fdfac3c29efc2b63b605c3f4f23a9c83b"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/probe_base.py",
+      "sha256": "525b2850305f7019b2dd5d5f5897121508607e1fbdf024718753eecc099aceba"
+    },
+    {
+      "path": "src/oil_tracker/domain/geometry.py",
+      "sha256": "451f38447d4decfaaf841ec78cbd44453040c83543744ef8fa4b96220f015242"
+    },
+    {
+      "path": "src/oil_tracker/adapters/vision/foam_front_detector.py",
+      "sha256": "b1b19e3384925c44344ebaa8010ff75569885448f314f8531fec94294cfde947"
+    },
+    {
+      "path": "src/oil_tracker/adapters/vision/phase_frame_detection.py",
+      "sha256": "85777a652891f67941c9d2150588a2efabdd5530ed6f5d1c521945a33d98f564"
+    }
+  ],
+  "annotation_panel_xyxy": [
+    121,
+    51,
+    1183,
+    1135
+  ],
+  "original_display_panel_xywh": [
+    100,
+    135,
+    870,
+    888
+  ],
+  "expected_red_marks": 6,
+  "source": "User attachment: 57306.jpg; preserve original bytes",
+  "selection": "All six red marks; panel bounds checked on five widely separated rows and three columns; no detector-score selection",
+  "scope": "Regional role binding and existing unmodified Foam stage observations through the frozen real-frame probe",
+  "resources": {
+    "seconds": 120,
+    "scratch_bytes": 12000000,
+    "retained_bytes": 500000
+  }
+}
