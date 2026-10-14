@@ -1,0 +1,240 @@
+{
+  "schema": "s11-native-fragment-proposal-inspection-v1",
+  "g0_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+    "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+  },
+  "baseline_counts": {
+    "contexts": 43,
+    "edges": 1335,
+    "oil_records": 164,
+    "legacy_rl_support": {
+      "AVAILABLE": 1184,
+      "UNAVAILABLE_REQUIRED_SUPPORT": 119,
+      "UNAVAILABLE_SAVED_RGB": 32
+    },
+    "component_capture": {
+      "UNAVAILABLE_SAVED_LABELS": 32,
+      "CAPTURED_APPEARANCE_ONLY": 11
+    },
+    "new_physical_labels": 0,
+    "untouched_holdout_recordings": 0
+  },
+  "subjects": [
+    {
+      "id": "fragment-708",
+      "subject_sha256": "c7fce9c6c27eb963d02601fac0bccd2955cb983d401119fbda0274aff7705053",
+      "case_id": "s4-f1140",
+      "frame": 1140,
+      "time_sec": 38.0,
+      "time_kind": "RECORDED",
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "geometry_sha256": "1cf5d40febd7333c2cbb80dd122edca881432df298efbaab5f3e1f69c5dda7f4",
+      "g0_pointer": [
+        "contexts",
+        21,
+        "rows",
+        11,
+        "incident_fragments",
+        0
+      ],
+      "allowed_interpretations": [],
+      "capability_target": null,
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY",
+      "dense_labels": false,
+      "coordinate_tolerance": null,
+      "side_material_labels": null,
+      "inference_metadata_allowed": false,
+      "proposed_context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 15,
+            "complete_centers_xy": [
+              [
+                50,
+                37
+              ],
+              [
+                51,
+                38
+              ],
+              [
+                52,
+                38
+              ],
+              [
+                53,
+                39
+              ],
+              [
+                54,
+                39
+              ],
+              [
+                55,
+                40
+              ],
+              [
+                56,
+                40
+              ],
+              [
+                57,
+                41
+              ],
+              [
+                58,
+                41
+              ],
+              [
+                59,
+                41
+              ],
+              [
+                60,
+                41
+              ],
+              [
+                61,
+                41
+              ],
+              [
+                62,
+                41
+              ],
+              [
+                63,
+                40
+              ],
+              [
+                64,
+                40
+              ]
+            ],
+            "complete_patches": 15,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 177,
+            "reused_pixel_uses": 558,
+            "crossing_or_touching_path_pixels": 3,
+            "outside_reviewed_path_columns": 23
+          },
+          "lower": {
+            "requested_patches": 15,
+            "complete_centers_xy": [
+              [
+                50,
+                47
+              ],
+              [
+                51,
+                48
+              ],
+              [
+                52,
+                48
+              ],
+              [
+                53,
+                49
+              ],
+              [
+                54,
+                49
+              ],
+              [
+                55,
+                50
+              ],
+              [
+                56,
+                50
+              ],
+              [
+                57,
+                51
+              ],
+              [
+                58,
+                51
+              ],
+              [
+                59,
+                51
+              ],
+              [
+                60,
+                51
+              ],
+              [
+                61,
+                51
+              ],
+              [
+                62,
+                51
+              ],
+              [
+                63,
+                50
+              ],
+              [
+                64,
+                50
+              ]
+            ],
+            "complete_patches": 15,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 177,
+            "reused_pixel_uses": 558,
+            "crossing_or_touching_path_pixels": 3,
+            "outside_reviewed_path_columns": 23
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "decision": "NOT_EVALUATED",
+      "review_status": "PENDING_REVIEW"
+    }
+  ],
+  "same_frame_dependency": [],
+  "proposed_context": {
+    "kernel": 7,
+    "side_centers_dy": {
+      "upper": -5,
+      "lower": 5
+    },
+    "columns": "existing G0 observed columns within fixed-X +/-12",
+    "preprocessing": "saved native RGB / 255; no resize, CLAHE or image normalization",
+    "padding": "NONE",
+    "required": "all 49 RGB pixels visible per patch",
+    "aggregation": "mean per side, one loss per fragment; patch count is not a model feature",
+    "semantics": "ordered geometric context, NOT pure material labels"
+  },
+  "status": "PROPOSAL_VERIFIED_PENDING_REVIEW",
+  "decision": "NOT_EVALUATED",
+  "qualified_units": 0,
+  "exposed_recordings": 1,
+  "untouched_holdout_recordings": 0,
+  "model_calls": 0,
+  "production_changed": false,
+  "training_executed": false,
+  "video_decode": false,
+  "remaining": [
+    "only qualified displayed roles can constrain a separately declared comparison",
+    "pending, ambiguous and unassessable subjects supply no target or negative success",
+    "no pure-side truth, learning grant, G1 efficacy, O2/V5 or field acceptance"
+  ],
+  "accounted_units": 1,
+  "review_status_counts": {
+    "PENDING_REVIEW": 1
+  },
+  "new_training_labels": 0,
+  "request_sha256": "6e08db6c979d7faee37a600eab31d877d1432f55b85ea6f43bc244e8f0b62c5b"
+}

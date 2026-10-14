@@ -1,0 +1,3056 @@
+{
+  "schema": "s11-native-review-source-readout-v1",
+  "manifest_sha256": "766fd44fb3d31eee5f9f45cf9f42b16af63e59247b2a59c927867ced5340312a",
+  "native_review_packets": [
+    {
+      "case_id": "s4-f1140",
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "frame": 1140,
+      "time_sec": 38.0,
+      "geometry": {
+        "origin": [
+          543,
+          798
+        ],
+        "shape": [
+          104,
+          104
+        ],
+        "scale_xy": [
+          1,
+          1
+        ],
+        "column": 52
+      },
+      "geometry_sha256": "1cf5d40febd7333c2cbb80dd122edca881432df298efbaab5f3e1f69c5dda7f4",
+      "fragments": [
+        {
+          "id": "s4-f1140/fragment-0",
+          "fragment_id": 0,
+          "g0_fragment_sha256": "da424e0d554192ccb1b6cf5a92451b7a6bae0e7d1e675ef9984e651e8ac90954",
+          "source_path_xy": [
+            [
+              589,
+              802
+            ],
+            [
+              590,
+              802
+            ],
+            [
+              591,
+              802
+            ],
+            [
+              592,
+              802
+            ],
+            [
+              593,
+              802
+            ],
+            [
+              594,
+              802
+            ],
+            [
+              595,
+              802
+            ],
+            [
+              596,
+              802
+            ],
+            [
+              597,
+              802
+            ],
+            [
+              598,
+              802
+            ],
+            [
+              599,
+              802
+            ],
+            [
+              600,
+              802
+            ],
+            [
+              601,
+              802
+            ]
+          ],
+          "fixed_column_source_ys": [
+            802
+          ],
+          "junction_incident": false,
+          "context_support": {
+            "status": "UNAVAILABLE_SIDE_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 13,
+                "complete_centers_xy": [],
+                "complete_patches": 0,
+                "censored_crop_patches": 13,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 0,
+                "reused_pixel_uses": 0,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 0
+              },
+              "lower": {
+                "requested_patches": 13,
+                "complete_centers_xy": [
+                  [
+                    46,
+                    9
+                  ],
+                  [
+                    47,
+                    9
+                  ],
+                  [
+                    48,
+                    9
+                  ],
+                  [
+                    49,
+                    9
+                  ],
+                  [
+                    50,
+                    9
+                  ],
+                  [
+                    51,
+                    9
+                  ],
+                  [
+                    52,
+                    9
+                  ],
+                  [
+                    53,
+                    9
+                  ],
+                  [
+                    54,
+                    9
+                  ],
+                  [
+                    55,
+                    9
+                  ],
+                  [
+                    56,
+                    9
+                  ],
+                  [
+                    57,
+                    9
+                  ],
+                  [
+                    58,
+                    9
+                  ]
+                ],
+                "complete_patches": 13,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 133,
+                "reused_pixel_uses": 504,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-7",
+          "fragment_id": 7,
+          "g0_fragment_sha256": "23a8f6ff8e01cd59a25f1c266703c246ee1e49813e75089fb1936c9945827140",
+          "source_path_xy": [
+            [
+              592,
+              805
+            ],
+            [
+              593,
+              805
+            ],
+            [
+              594,
+              805
+            ],
+            [
+              595,
+              805
+            ],
+            [
+              596,
+              805
+            ],
+            [
+              597,
+              805
+            ],
+            [
+              598,
+              805
+            ]
+          ],
+          "fixed_column_source_ys": [
+            805
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "UNAVAILABLE_SIDE_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 7,
+                "complete_centers_xy": [],
+                "complete_patches": 0,
+                "censored_crop_patches": 7,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 0,
+                "reused_pixel_uses": 0,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 0
+              },
+              "lower": {
+                "requested_patches": 7,
+                "complete_centers_xy": [
+                  [
+                    49,
+                    12
+                  ],
+                  [
+                    50,
+                    12
+                  ],
+                  [
+                    51,
+                    12
+                  ],
+                  [
+                    52,
+                    12
+                  ],
+                  [
+                    53,
+                    12
+                  ],
+                  [
+                    54,
+                    12
+                  ],
+                  [
+                    55,
+                    12
+                  ]
+                ],
+                "complete_patches": 7,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 91,
+                "reused_pixel_uses": 252,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-36",
+          "fragment_id": 36,
+          "g0_fragment_sha256": "a644be6434f72a81582b4920f3262360c8cbdb10a08d9842c67ed086ad7d1f42",
+          "source_path_xy": [
+            [
+              594,
+              808
+            ],
+            [
+              595,
+              808
+            ]
+          ],
+          "fixed_column_source_ys": [
+            808
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "UNAVAILABLE_SIDE_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [],
+                "complete_patches": 0,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 2,
+                "dependency_union_pixels": 0,
+                "reused_pixel_uses": 0,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 0
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    51,
+                    15
+                  ],
+                  [
+                    52,
+                    15
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 56,
+                "reused_pixel_uses": 42,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-38",
+          "fragment_id": 38,
+          "g0_fragment_sha256": "4a6de1100100db17c3bc647c6c33716ff413d6de7dbb5dc59d1c1fae71c39298",
+          "source_path_xy": [
+            [
+              595,
+              808
+            ],
+            [
+              596,
+              808
+            ]
+          ],
+          "fixed_column_source_ys": [
+            808
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "UNAVAILABLE_SIDE_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [],
+                "complete_patches": 0,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 2,
+                "dependency_union_pixels": 0,
+                "reused_pixel_uses": 0,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 0
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    52,
+                    15
+                  ],
+                  [
+                    53,
+                    15
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 56,
+                "reused_pixel_uses": 42,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-39",
+          "fragment_id": 39,
+          "g0_fragment_sha256": "0e7b95ff3ba88dffbafdb9d0ac19731fcdf8ff5e367887c0f1c19ff6532fef9b",
+          "source_path_xy": [
+            [
+              595,
+              808
+            ],
+            [
+              595,
+              809
+            ]
+          ],
+          "fixed_column_source_ys": [
+            808,
+            809
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "UNRESOLVED_PATH_ORIENTATION"
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-37",
+          "fragment_id": 37,
+          "g0_fragment_sha256": "c0491ee1b7f82c384aa811b7860b2cea6a73fc50d05b0f0442d24a84e2674ced",
+          "source_path_xy": [
+            [
+              594,
+              808
+            ],
+            [
+              595,
+              809
+            ]
+          ],
+          "fixed_column_source_ys": [
+            809
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "UNAVAILABLE_SIDE_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [],
+                "complete_patches": 0,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 2,
+                "dependency_union_pixels": 0,
+                "reused_pixel_uses": 0,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 0
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    51,
+                    15
+                  ],
+                  [
+                    52,
+                    16
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 62,
+                "reused_pixel_uses": 36,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 46
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-41",
+          "fragment_id": 41,
+          "g0_fragment_sha256": "d0657edb04b05f500d5d80e1bdd426b7372f6abe017fe972d842b48a862eee82",
+          "source_path_xy": [
+            [
+              596,
+              808
+            ],
+            [
+              595,
+              809
+            ]
+          ],
+          "fixed_column_source_ys": [
+            809
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "UNAVAILABLE_SIDE_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [],
+                "complete_patches": 0,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 2,
+                "dependency_union_pixels": 0,
+                "reused_pixel_uses": 0,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 0
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    53,
+                    15
+                  ],
+                  [
+                    52,
+                    16
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 62,
+                "reused_pixel_uses": 36,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 46
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-62",
+          "fragment_id": 62,
+          "g0_fragment_sha256": "78a2c8eab36d72fb26b16c3b86df88c210f7762cd15e0c6229f948cc5641d53c",
+          "source_path_xy": [
+            [
+              595,
+              809
+            ],
+            [
+              594,
+              810
+            ]
+          ],
+          "fixed_column_source_ys": [
+            809
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    51,
+                    7
+                  ]
+                ],
+                "complete_patches": 1,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 1,
+                "dependency_union_pixels": 49,
+                "reused_pixel_uses": 0,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 35
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    52,
+                    16
+                  ],
+                  [
+                    51,
+                    17
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 62,
+                "reused_pixel_uses": 36,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 46
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-63",
+          "fragment_id": 63,
+          "g0_fragment_sha256": "64e3fda1c10e153791585046ee0d287211ddf4fc0ddd921550c514257ea22132",
+          "source_path_xy": [
+            [
+              595,
+              809
+            ],
+            [
+              595,
+              810
+            ]
+          ],
+          "fixed_column_source_ys": [
+            809,
+            810
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "UNRESOLVED_PATH_ORIENTATION"
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-76",
+          "fragment_id": 76,
+          "g0_fragment_sha256": "de74b6f94d23096176e59fe661b5cde82c3eecf6e5a82191c6097aec61e2d295",
+          "source_path_xy": [
+            [
+              594,
+              810
+            ],
+            [
+              595,
+              810
+            ]
+          ],
+          "fixed_column_source_ys": [
+            810
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    51,
+                    7
+                  ],
+                  [
+                    52,
+                    7
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 56,
+                "reused_pixel_uses": 42,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    51,
+                    17
+                  ],
+                  [
+                    52,
+                    17
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 56,
+                "reused_pixel_uses": 42,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-78",
+          "fragment_id": 78,
+          "g0_fragment_sha256": "6965949a938d03b933ec56e58af227c2aca0afe9a072595dafb51527402b7104",
+          "source_path_xy": [
+            [
+              595,
+              810
+            ],
+            [
+              595,
+              811
+            ]
+          ],
+          "fixed_column_source_ys": [
+            810,
+            811
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "UNRESOLVED_PATH_ORIENTATION"
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-79",
+          "fragment_id": 79,
+          "g0_fragment_sha256": "4909ffab429b3cfbf0f14d4c8dc51ec9a3a5923754b0f726185697adfe611cb1",
+          "source_path_xy": [
+            [
+              595,
+              810
+            ],
+            [
+              596,
+              811
+            ]
+          ],
+          "fixed_column_source_ys": [
+            810
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    52,
+                    7
+                  ],
+                  [
+                    53,
+                    8
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 62,
+                "reused_pixel_uses": 36,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 46
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    52,
+                    17
+                  ],
+                  [
+                    53,
+                    18
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 62,
+                "reused_pixel_uses": 36,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 46
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-77",
+          "fragment_id": 77,
+          "g0_fragment_sha256": "524cfcab58286174766e16b4a1c705e74325894c35112e8d0fa798b38145fdd1",
+          "source_path_xy": [
+            [
+              594,
+              810
+            ],
+            [
+              595,
+              811
+            ]
+          ],
+          "fixed_column_source_ys": [
+            811
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    51,
+                    7
+                  ],
+                  [
+                    52,
+                    8
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 62,
+                "reused_pixel_uses": 36,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 46
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    51,
+                    17
+                  ],
+                  [
+                    52,
+                    18
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 62,
+                "reused_pixel_uses": 36,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 46
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-102",
+          "fragment_id": 102,
+          "g0_fragment_sha256": "8bb766d58334bb97df4629bafe940bf10cc576b66d4ee94fadbf834710a30707",
+          "source_path_xy": [
+            [
+              595,
+              811
+            ],
+            [
+              596,
+              811
+            ]
+          ],
+          "fixed_column_source_ys": [
+            811
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    52,
+                    8
+                  ],
+                  [
+                    53,
+                    8
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 56,
+                "reused_pixel_uses": 42,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    52,
+                    18
+                  ],
+                  [
+                    53,
+                    18
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 56,
+                "reused_pixel_uses": 42,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-169",
+          "fragment_id": 169,
+          "g0_fragment_sha256": "60aeb193e222b0991500e72ac20c7bcce1e0366daaf777448b7d67db82248d83",
+          "source_path_xy": [
+            [
+              589,
+              814
+            ],
+            [
+              590,
+              814
+            ],
+            [
+              591,
+              814
+            ],
+            [
+              592,
+              814
+            ],
+            [
+              593,
+              813
+            ],
+            [
+              594,
+              813
+            ],
+            [
+              595,
+              813
+            ],
+            [
+              596,
+              813
+            ],
+            [
+              597,
+              814
+            ],
+            [
+              598,
+              814
+            ]
+          ],
+          "fixed_column_source_ys": [
+            813
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 10,
+                "complete_centers_xy": [
+                  [
+                    46,
+                    11
+                  ],
+                  [
+                    47,
+                    11
+                  ],
+                  [
+                    48,
+                    11
+                  ],
+                  [
+                    49,
+                    11
+                  ],
+                  [
+                    50,
+                    10
+                  ],
+                  [
+                    51,
+                    10
+                  ],
+                  [
+                    52,
+                    10
+                  ],
+                  [
+                    53,
+                    10
+                  ],
+                  [
+                    54,
+                    11
+                  ],
+                  [
+                    55,
+                    11
+                  ]
+                ],
+                "complete_patches": 10,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 122,
+                "reused_pixel_uses": 368,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 43
+              },
+              "lower": {
+                "requested_patches": 10,
+                "complete_centers_xy": [
+                  [
+                    46,
+                    21
+                  ],
+                  [
+                    47,
+                    21
+                  ],
+                  [
+                    48,
+                    21
+                  ],
+                  [
+                    49,
+                    21
+                  ],
+                  [
+                    50,
+                    20
+                  ],
+                  [
+                    51,
+                    20
+                  ],
+                  [
+                    52,
+                    20
+                  ],
+                  [
+                    53,
+                    20
+                  ],
+                  [
+                    54,
+                    21
+                  ],
+                  [
+                    55,
+                    21
+                  ]
+                ],
+                "complete_patches": 10,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 122,
+                "reused_pixel_uses": 368,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 43
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-284",
+          "fragment_id": 284,
+          "g0_fragment_sha256": "facab6ecc86db3492483609f49761484eed74568fe3a3a7083c840989763ef6c",
+          "source_path_xy": [
+            [
+              596,
+              819
+            ],
+            [
+              595,
+              819
+            ],
+            [
+              594,
+              819
+            ],
+            [
+              593,
+              819
+            ],
+            [
+              592,
+              819
+            ],
+            [
+              591,
+              819
+            ],
+            [
+              590,
+              819
+            ],
+            [
+              589,
+              819
+            ],
+            [
+              588,
+              819
+            ],
+            [
+              587,
+              820
+            ],
+            [
+              586,
+              820
+            ],
+            [
+              585,
+              820
+            ],
+            [
+              584,
+              820
+            ],
+            [
+              583,
+              821
+            ]
+          ],
+          "fixed_column_source_ys": [
+            819
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 14,
+                "complete_centers_xy": [
+                  [
+                    53,
+                    16
+                  ],
+                  [
+                    52,
+                    16
+                  ],
+                  [
+                    51,
+                    16
+                  ],
+                  [
+                    50,
+                    16
+                  ],
+                  [
+                    49,
+                    16
+                  ],
+                  [
+                    48,
+                    16
+                  ],
+                  [
+                    47,
+                    16
+                  ],
+                  [
+                    46,
+                    16
+                  ],
+                  [
+                    45,
+                    16
+                  ],
+                  [
+                    44,
+                    17
+                  ],
+                  [
+                    43,
+                    17
+                  ],
+                  [
+                    42,
+                    17
+                  ],
+                  [
+                    41,
+                    17
+                  ],
+                  [
+                    40,
+                    18
+                  ]
+                ],
+                "complete_patches": 14,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 152,
+                "reused_pixel_uses": 534,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 44
+              },
+              "lower": {
+                "requested_patches": 14,
+                "complete_centers_xy": [
+                  [
+                    53,
+                    26
+                  ],
+                  [
+                    52,
+                    26
+                  ],
+                  [
+                    51,
+                    26
+                  ],
+                  [
+                    50,
+                    26
+                  ],
+                  [
+                    49,
+                    26
+                  ],
+                  [
+                    48,
+                    26
+                  ],
+                  [
+                    47,
+                    26
+                  ],
+                  [
+                    46,
+                    26
+                  ],
+                  [
+                    45,
+                    26
+                  ],
+                  [
+                    44,
+                    27
+                  ],
+                  [
+                    43,
+                    27
+                  ],
+                  [
+                    42,
+                    27
+                  ],
+                  [
+                    41,
+                    27
+                  ],
+                  [
+                    40,
+                    28
+                  ]
+                ],
+                "complete_patches": 14,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 152,
+                "reused_pixel_uses": 534,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 44
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-403",
+          "fragment_id": 403,
+          "g0_fragment_sha256": "9427c18b1ae5a84379abbece36274be97b3344bae396ce3ecc7721b602aad2e4",
+          "source_path_xy": [
+            [
+              597,
+              823
+            ],
+            [
+              596,
+              823
+            ],
+            [
+              595,
+              824
+            ],
+            [
+              594,
+              824
+            ],
+            [
+              593,
+              824
+            ],
+            [
+              592,
+              825
+            ],
+            [
+              591,
+              825
+            ],
+            [
+              590,
+              825
+            ],
+            [
+              589,
+              826
+            ],
+            [
+              588,
+              826
+            ],
+            [
+              587,
+              826
+            ],
+            [
+              586,
+              826
+            ],
+            [
+              585,
+              826
+            ],
+            [
+              584,
+              827
+            ]
+          ],
+          "fixed_column_source_ys": [
+            824
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 14,
+                "complete_centers_xy": [
+                  [
+                    54,
+                    20
+                  ],
+                  [
+                    53,
+                    20
+                  ],
+                  [
+                    52,
+                    21
+                  ],
+                  [
+                    51,
+                    21
+                  ],
+                  [
+                    50,
+                    21
+                  ],
+                  [
+                    49,
+                    22
+                  ],
+                  [
+                    48,
+                    22
+                  ],
+                  [
+                    47,
+                    22
+                  ],
+                  [
+                    46,
+                    23
+                  ],
+                  [
+                    45,
+                    23
+                  ],
+                  [
+                    44,
+                    23
+                  ],
+                  [
+                    43,
+                    23
+                  ],
+                  [
+                    42,
+                    23
+                  ],
+                  [
+                    41,
+                    24
+                  ]
+                ],
+                "complete_patches": 14,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 164,
+                "reused_pixel_uses": 522,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 45
+              },
+              "lower": {
+                "requested_patches": 14,
+                "complete_centers_xy": [
+                  [
+                    54,
+                    30
+                  ],
+                  [
+                    53,
+                    30
+                  ],
+                  [
+                    52,
+                    31
+                  ],
+                  [
+                    51,
+                    31
+                  ],
+                  [
+                    50,
+                    31
+                  ],
+                  [
+                    49,
+                    32
+                  ],
+                  [
+                    48,
+                    32
+                  ],
+                  [
+                    47,
+                    32
+                  ],
+                  [
+                    46,
+                    33
+                  ],
+                  [
+                    45,
+                    33
+                  ],
+                  [
+                    44,
+                    33
+                  ],
+                  [
+                    43,
+                    33
+                  ],
+                  [
+                    42,
+                    33
+                  ],
+                  [
+                    41,
+                    34
+                  ]
+                ],
+                "complete_patches": 14,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 164,
+                "reused_pixel_uses": 522,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 45
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-595",
+          "fragment_id": 595,
+          "g0_fragment_sha256": "6ed1608d87ea145d606a5a16a7791721f414511b98888a812126fd09f6ee5901",
+          "source_path_xy": [
+            [
+              596,
+              832
+            ],
+            [
+              595,
+              833
+            ]
+          ],
+          "fixed_column_source_ys": [
+            833
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    53,
+                    29
+                  ],
+                  [
+                    52,
+                    30
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 62,
+                "reused_pixel_uses": 36,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 46
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    53,
+                    39
+                  ],
+                  [
+                    52,
+                    40
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 62,
+                "reused_pixel_uses": 36,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 46
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-610",
+          "fragment_id": 610,
+          "g0_fragment_sha256": "1a4fed2f6581feb3a75924af6db467f1f87aeb1ee4f8a948c8221a722b076f5c",
+          "source_path_xy": [
+            [
+              594,
+              833
+            ],
+            [
+              595,
+              833
+            ]
+          ],
+          "fixed_column_source_ys": [
+            833
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    51,
+                    30
+                  ],
+                  [
+                    52,
+                    30
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 56,
+                "reused_pixel_uses": 42,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    51,
+                    40
+                  ],
+                  [
+                    52,
+                    40
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 56,
+                "reused_pixel_uses": 42,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-612",
+          "fragment_id": 612,
+          "g0_fragment_sha256": "15434dbc4542dfcd64ebbfdf1a7f022898e16d144f6ff9223a2a78d2203d8f98",
+          "source_path_xy": [
+            [
+              595,
+              833
+            ],
+            [
+              596,
+              833
+            ]
+          ],
+          "fixed_column_source_ys": [
+            833
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    52,
+                    30
+                  ],
+                  [
+                    53,
+                    30
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 56,
+                "reused_pixel_uses": 42,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              },
+              "lower": {
+                "requested_patches": 2,
+                "complete_centers_xy": [
+                  [
+                    52,
+                    40
+                  ],
+                  [
+                    53,
+                    40
+                  ]
+                ],
+                "complete_patches": 2,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 56,
+                "reused_pixel_uses": 42,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-1052",
+          "fragment_id": 1052,
+          "g0_fragment_sha256": "321bd57bb100f9d5dddd293601561f1476f0efbf784e15eef832b89502812fd9",
+          "source_path_xy": [
+            [
+              596,
+              837
+            ],
+            [
+              595,
+              838
+            ],
+            [
+              596,
+              838
+            ],
+            [
+              596,
+              837
+            ]
+          ],
+          "fixed_column_source_ys": [
+            838
+          ],
+          "junction_incident": false,
+          "context_support": {
+            "status": "UNRESOLVED_PATH_ORIENTATION"
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-708",
+          "fragment_id": 708,
+          "g0_fragment_sha256": "967cd3b6466f4be3a442b85fd4a57ceef4d8f9d4d894c0a5a97bc41ea0a1dcaa",
+          "source_path_xy": [
+            [
+              593,
+              840
+            ],
+            [
+              594,
+              841
+            ],
+            [
+              595,
+              841
+            ],
+            [
+              596,
+              842
+            ],
+            [
+              597,
+              842
+            ],
+            [
+              598,
+              843
+            ],
+            [
+              599,
+              843
+            ],
+            [
+              600,
+              844
+            ],
+            [
+              601,
+              844
+            ],
+            [
+              602,
+              844
+            ],
+            [
+              603,
+              844
+            ],
+            [
+              604,
+              844
+            ],
+            [
+              605,
+              844
+            ],
+            [
+              606,
+              843
+            ],
+            [
+              607,
+              843
+            ],
+            [
+              608,
+              843
+            ],
+            [
+              609,
+              843
+            ],
+            [
+              610,
+              843
+            ],
+            [
+              611,
+              843
+            ],
+            [
+              612,
+              843
+            ],
+            [
+              613,
+              843
+            ],
+            [
+              614,
+              843
+            ],
+            [
+              615,
+              844
+            ],
+            [
+              616,
+              844
+            ],
+            [
+              617,
+              844
+            ],
+            [
+              618,
+              844
+            ],
+            [
+              619,
+              843
+            ],
+            [
+              620,
+              843
+            ],
+            [
+              621,
+              843
+            ],
+            [
+              622,
+              843
+            ],
+            [
+              623,
+              843
+            ],
+            [
+              624,
+              843
+            ],
+            [
+              625,
+              843
+            ],
+            [
+              626,
+              843
+            ],
+            [
+              627,
+              842
+            ]
+          ],
+          "fixed_column_source_ys": [
+            841
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 15,
+                "complete_centers_xy": [
+                  [
+                    50,
+                    37
+                  ],
+                  [
+                    51,
+                    38
+                  ],
+                  [
+                    52,
+                    38
+                  ],
+                  [
+                    53,
+                    39
+                  ],
+                  [
+                    54,
+                    39
+                  ],
+                  [
+                    55,
+                    40
+                  ],
+                  [
+                    56,
+                    40
+                  ],
+                  [
+                    57,
+                    41
+                  ],
+                  [
+                    58,
+                    41
+                  ],
+                  [
+                    59,
+                    41
+                  ],
+                  [
+                    60,
+                    41
+                  ],
+                  [
+                    61,
+                    41
+                  ],
+                  [
+                    62,
+                    41
+                  ],
+                  [
+                    63,
+                    40
+                  ],
+                  [
+                    64,
+                    40
+                  ]
+                ],
+                "complete_patches": 15,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 177,
+                "reused_pixel_uses": 558,
+                "crossing_or_touching_path_pixels": 3,
+                "outside_reviewed_path_columns": 23
+              },
+              "lower": {
+                "requested_patches": 15,
+                "complete_centers_xy": [
+                  [
+                    50,
+                    47
+                  ],
+                  [
+                    51,
+                    48
+                  ],
+                  [
+                    52,
+                    48
+                  ],
+                  [
+                    53,
+                    49
+                  ],
+                  [
+                    54,
+                    49
+                  ],
+                  [
+                    55,
+                    50
+                  ],
+                  [
+                    56,
+                    50
+                  ],
+                  [
+                    57,
+                    51
+                  ],
+                  [
+                    58,
+                    51
+                  ],
+                  [
+                    59,
+                    51
+                  ],
+                  [
+                    60,
+                    51
+                  ],
+                  [
+                    61,
+                    51
+                  ],
+                  [
+                    62,
+                    51
+                  ],
+                  [
+                    63,
+                    50
+                  ],
+                  [
+                    64,
+                    50
+                  ]
+                ],
+                "complete_patches": 15,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 177,
+                "reused_pixel_uses": 558,
+                "crossing_or_touching_path_pixels": 3,
+                "outside_reviewed_path_columns": 23
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-898",
+          "fragment_id": 898,
+          "g0_fragment_sha256": "8652bc078a0faeb8d8ab4a2953abe0c1dbf7ba98989630fb940cc8eb1cfe254c",
+          "source_path_xy": [
+            [
+              581,
+              867
+            ],
+            [
+              582,
+              868
+            ],
+            [
+              583,
+              868
+            ],
+            [
+              584,
+              868
+            ],
+            [
+              585,
+              868
+            ],
+            [
+              586,
+              868
+            ],
+            [
+              587,
+              868
+            ],
+            [
+              588,
+              868
+            ],
+            [
+              589,
+              868
+            ],
+            [
+              590,
+              868
+            ],
+            [
+              591,
+              869
+            ],
+            [
+              592,
+              869
+            ],
+            [
+              593,
+              869
+            ],
+            [
+              594,
+              869
+            ],
+            [
+              595,
+              869
+            ],
+            [
+              596,
+              869
+            ],
+            [
+              597,
+              869
+            ],
+            [
+              598,
+              869
+            ],
+            [
+              599,
+              869
+            ],
+            [
+              600,
+              869
+            ],
+            [
+              601,
+              868
+            ],
+            [
+              602,
+              869
+            ],
+            [
+              603,
+              869
+            ],
+            [
+              604,
+              869
+            ],
+            [
+              605,
+              868
+            ],
+            [
+              606,
+              868
+            ],
+            [
+              607,
+              869
+            ]
+          ],
+          "fixed_column_source_ys": [
+            869
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 25,
+                "complete_centers_xy": [
+                  [
+                    40,
+                    65
+                  ],
+                  [
+                    41,
+                    65
+                  ],
+                  [
+                    42,
+                    65
+                  ],
+                  [
+                    43,
+                    65
+                  ],
+                  [
+                    44,
+                    65
+                  ],
+                  [
+                    45,
+                    65
+                  ],
+                  [
+                    46,
+                    65
+                  ],
+                  [
+                    47,
+                    65
+                  ],
+                  [
+                    48,
+                    66
+                  ],
+                  [
+                    49,
+                    66
+                  ],
+                  [
+                    50,
+                    66
+                  ],
+                  [
+                    51,
+                    66
+                  ],
+                  [
+                    52,
+                    66
+                  ],
+                  [
+                    53,
+                    66
+                  ],
+                  [
+                    54,
+                    66
+                  ],
+                  [
+                    55,
+                    66
+                  ],
+                  [
+                    56,
+                    66
+                  ],
+                  [
+                    57,
+                    66
+                  ],
+                  [
+                    58,
+                    65
+                  ],
+                  [
+                    59,
+                    66
+                  ],
+                  [
+                    60,
+                    66
+                  ],
+                  [
+                    61,
+                    66
+                  ],
+                  [
+                    62,
+                    65
+                  ],
+                  [
+                    63,
+                    65
+                  ],
+                  [
+                    64,
+                    66
+                  ]
+                ],
+                "complete_patches": 25,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 235,
+                "reused_pixel_uses": 990,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 30
+              },
+              "lower": {
+                "requested_patches": 25,
+                "complete_centers_xy": [
+                  [
+                    46,
+                    75
+                  ],
+                  [
+                    47,
+                    75
+                  ],
+                  [
+                    48,
+                    76
+                  ],
+                  [
+                    49,
+                    76
+                  ],
+                  [
+                    50,
+                    76
+                  ],
+                  [
+                    51,
+                    76
+                  ],
+                  [
+                    52,
+                    76
+                  ],
+                  [
+                    53,
+                    76
+                  ],
+                  [
+                    54,
+                    76
+                  ],
+                  [
+                    55,
+                    76
+                  ],
+                  [
+                    56,
+                    76
+                  ],
+                  [
+                    57,
+                    76
+                  ],
+                  [
+                    58,
+                    75
+                  ],
+                  [
+                    59,
+                    76
+                  ],
+                  [
+                    60,
+                    76
+                  ],
+                  [
+                    61,
+                    76
+                  ],
+                  [
+                    62,
+                    75
+                  ],
+                  [
+                    63,
+                    75
+                  ],
+                  [
+                    64,
+                    76
+                  ]
+                ],
+                "complete_patches": 19,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 6,
+                "dependency_union_pixels": 193,
+                "reused_pixel_uses": 738,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 23
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-950",
+          "fragment_id": 950,
+          "g0_fragment_sha256": "b6fb6b8a2826cbd1ec3bc2d388bb4c43df3643031c9af3abbc2e58591f0d0a30",
+          "source_path_xy": [
+            [
+              584,
+              872
+            ],
+            [
+              585,
+              872
+            ],
+            [
+              586,
+              872
+            ],
+            [
+              587,
+              872
+            ],
+            [
+              588,
+              872
+            ],
+            [
+              589,
+              872
+            ],
+            [
+              590,
+              872
+            ],
+            [
+              591,
+              873
+            ],
+            [
+              592,
+              873
+            ],
+            [
+              593,
+              873
+            ],
+            [
+              594,
+              873
+            ],
+            [
+              595,
+              873
+            ],
+            [
+              596,
+              873
+            ],
+            [
+              597,
+              873
+            ],
+            [
+              598,
+              873
+            ],
+            [
+              599,
+              873
+            ],
+            [
+              600,
+              873
+            ],
+            [
+              601,
+              873
+            ],
+            [
+              602,
+              872
+            ],
+            [
+              603,
+              872
+            ],
+            [
+              604,
+              872
+            ]
+          ],
+          "fixed_column_source_ys": [
+            873
+          ],
+          "junction_incident": false,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 21,
+                "complete_centers_xy": [
+                  [
+                    41,
+                    69
+                  ],
+                  [
+                    42,
+                    69
+                  ],
+                  [
+                    43,
+                    69
+                  ],
+                  [
+                    44,
+                    69
+                  ],
+                  [
+                    45,
+                    69
+                  ],
+                  [
+                    46,
+                    69
+                  ],
+                  [
+                    47,
+                    69
+                  ],
+                  [
+                    48,
+                    70
+                  ],
+                  [
+                    49,
+                    70
+                  ],
+                  [
+                    50,
+                    70
+                  ],
+                  [
+                    51,
+                    70
+                  ],
+                  [
+                    52,
+                    70
+                  ],
+                  [
+                    53,
+                    70
+                  ],
+                  [
+                    54,
+                    70
+                  ],
+                  [
+                    55,
+                    70
+                  ],
+                  [
+                    56,
+                    70
+                  ],
+                  [
+                    57,
+                    70
+                  ],
+                  [
+                    58,
+                    70
+                  ],
+                  [
+                    59,
+                    69
+                  ],
+                  [
+                    60,
+                    69
+                  ],
+                  [
+                    61,
+                    69
+                  ]
+                ],
+                "complete_patches": 21,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 201,
+                "reused_pixel_uses": 828,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 42
+              },
+              "lower": {
+                "requested_patches": 21,
+                "complete_centers_xy": [
+                  [
+                    48,
+                    80
+                  ],
+                  [
+                    49,
+                    80
+                  ],
+                  [
+                    50,
+                    80
+                  ],
+                  [
+                    51,
+                    80
+                  ],
+                  [
+                    52,
+                    80
+                  ],
+                  [
+                    53,
+                    80
+                  ],
+                  [
+                    54,
+                    80
+                  ],
+                  [
+                    55,
+                    80
+                  ],
+                  [
+                    56,
+                    80
+                  ],
+                  [
+                    57,
+                    80
+                  ],
+                  [
+                    58,
+                    80
+                  ],
+                  [
+                    59,
+                    79
+                  ],
+                  [
+                    60,
+                    79
+                  ],
+                  [
+                    61,
+                    79
+                  ]
+                ],
+                "complete_patches": 14,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 7,
+                "dependency_union_pixels": 146,
+                "reused_pixel_uses": 540,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 21
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-979",
+          "fragment_id": 979,
+          "g0_fragment_sha256": "0d1bfabe9d3c26a676e83a4b77239c9f708b70af73e03a3b453a0357fbcee4c4",
+          "source_path_xy": [
+            [
+              584,
+              875
+            ],
+            [
+              585,
+              875
+            ],
+            [
+              586,
+              875
+            ],
+            [
+              587,
+              876
+            ],
+            [
+              588,
+              876
+            ],
+            [
+              589,
+              876
+            ],
+            [
+              590,
+              876
+            ],
+            [
+              591,
+              876
+            ],
+            [
+              592,
+              876
+            ],
+            [
+              593,
+              876
+            ],
+            [
+              594,
+              876
+            ],
+            [
+              595,
+              876
+            ],
+            [
+              596,
+              876
+            ],
+            [
+              597,
+              876
+            ],
+            [
+              598,
+              876
+            ],
+            [
+              599,
+              876
+            ],
+            [
+              600,
+              876
+            ],
+            [
+              601,
+              876
+            ],
+            [
+              602,
+              876
+            ],
+            [
+              603,
+              875
+            ]
+          ],
+          "fixed_column_source_ys": [
+            876
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 20,
+                "complete_centers_xy": [
+                  [
+                    41,
+                    72
+                  ],
+                  [
+                    42,
+                    72
+                  ],
+                  [
+                    43,
+                    72
+                  ],
+                  [
+                    44,
+                    73
+                  ],
+                  [
+                    45,
+                    73
+                  ],
+                  [
+                    46,
+                    73
+                  ],
+                  [
+                    47,
+                    73
+                  ],
+                  [
+                    48,
+                    73
+                  ],
+                  [
+                    49,
+                    73
+                  ],
+                  [
+                    50,
+                    73
+                  ],
+                  [
+                    51,
+                    73
+                  ],
+                  [
+                    52,
+                    73
+                  ],
+                  [
+                    53,
+                    73
+                  ],
+                  [
+                    54,
+                    73
+                  ],
+                  [
+                    55,
+                    73
+                  ],
+                  [
+                    56,
+                    73
+                  ],
+                  [
+                    57,
+                    73
+                  ],
+                  [
+                    58,
+                    73
+                  ],
+                  [
+                    59,
+                    73
+                  ],
+                  [
+                    60,
+                    72
+                  ]
+                ],
+                "complete_patches": 20,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 194,
+                "reused_pixel_uses": 786,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 44
+              },
+              "lower": {
+                "requested_patches": 20,
+                "complete_centers_xy": [
+                  [
+                    50,
+                    83
+                  ],
+                  [
+                    51,
+                    83
+                  ],
+                  [
+                    52,
+                    83
+                  ],
+                  [
+                    53,
+                    83
+                  ],
+                  [
+                    54,
+                    83
+                  ],
+                  [
+                    55,
+                    83
+                  ],
+                  [
+                    56,
+                    83
+                  ],
+                  [
+                    57,
+                    83
+                  ],
+                  [
+                    58,
+                    83
+                  ],
+                  [
+                    59,
+                    83
+                  ],
+                  [
+                    60,
+                    82
+                  ]
+                ],
+                "complete_patches": 11,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 9,
+                "dependency_union_pixels": 125,
+                "reused_pixel_uses": 414,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 23
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        },
+        {
+          "id": "s4-f1140/fragment-1050",
+          "fragment_id": 1050,
+          "g0_fragment_sha256": "b5abd42b0f85d1310ba4629897de5f862034f64d8e3a7bf8b1b05a819e460bc4",
+          "source_path_xy": [
+            [
+              599,
+              887
+            ],
+            [
+              598,
+              887
+            ],
+            [
+              597,
+              888
+            ],
+            [
+              596,
+              888
+            ],
+            [
+              595,
+              888
+            ],
+            [
+              594,
+              888
+            ],
+            [
+              593,
+              888
+            ],
+            [
+              592,
+              888
+            ],
+            [
+              591,
+              888
+            ],
+            [
+              590,
+              888
+            ]
+          ],
+          "fixed_column_source_ys": [
+            888
+          ],
+          "junction_incident": true,
+          "context_support": {
+            "status": "AVAILABLE_PARTIAL_CONTEXT",
+            "sides": {
+              "upper": {
+                "requested_patches": 10,
+                "complete_centers_xy": [
+                  [
+                    56,
+                    84
+                  ],
+                  [
+                    55,
+                    84
+                  ],
+                  [
+                    54,
+                    85
+                  ],
+                  [
+                    53,
+                    85
+                  ],
+                  [
+                    52,
+                    85
+                  ],
+                  [
+                    51,
+                    85
+                  ],
+                  [
+                    50,
+                    85
+                  ]
+                ],
+                "complete_patches": 7,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 3,
+                "dependency_union_pixels": 97,
+                "reused_pixel_uses": 246,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 22
+              },
+              "lower": {
+                "requested_patches": 10,
+                "complete_centers_xy": [
+                  [
+                    56,
+                    94
+                  ],
+                  [
+                    55,
+                    94
+                  ],
+                  [
+                    54,
+                    95
+                  ],
+                  [
+                    53,
+                    95
+                  ],
+                  [
+                    52,
+                    95
+                  ],
+                  [
+                    51,
+                    95
+                  ],
+                  [
+                    50,
+                    95
+                  ],
+                  [
+                    49,
+                    95
+                  ],
+                  [
+                    48,
+                    95
+                  ],
+                  [
+                    47,
+                    95
+                  ]
+                ],
+                "complete_patches": 10,
+                "censored_crop_patches": 0,
+                "censored_mask_patches": 0,
+                "dependency_union_pixels": 118,
+                "reused_pixel_uses": 372,
+                "crossing_or_touching_path_pixels": 0,
+                "outside_reviewed_path_columns": 43
+              }
+            },
+            "shared_upper_lower_pixels": 0,
+            "pure_material_truth": false
+          },
+          "role": "UNREVIEWED",
+          "training_label_created": false
+        }
+      ],
+      "intervals": [],
+      "scope": "All saved fixed-column fragments; no interval-to-path labels or selected winner."
+    }
+  ],
+  "qualified_paths": 0,
+  "model_calls": 0,
+  "video_decodes": 0,
+  "production_changed": false
+}

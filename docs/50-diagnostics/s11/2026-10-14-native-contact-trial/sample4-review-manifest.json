@@ -1,0 +1,37 @@
+{
+  "schema": "s11-native-review-source-reuse-v1",
+  "scope": "Complete sample4/f1140 native population for one still-unqualified contact-role question; no NCT-1 retry",
+  "case_id": "s4-f1140",
+  "inputs": {
+    "g0_manifest": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/manifest.json",
+      "sha256": "8bb03c49017181e54e6164a248ac28ff0977d9a0e3af11882417b5a5f431c632"
+    },
+    "g0_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+      "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+    }
+  },
+  "sources": [
+    {
+      "path": "tests/diagnostics/s11_existing_material_reuse.py",
+      "sha256": "0b79efc1429c6f861c27f270baccd46ca4642089bef1438b22bf716f26834a84"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_qualification.py",
+      "sha256": "e91062e9696464e5d7a990f54e3aa1046e15467603d01b26bcfa2fb14110c5d6"
+    }
+  ],
+  "candidate_context_only": {
+    "input": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-existing-material-execution/readout.json",
+      "sha256": "e1052b1e5bbc7ccc40d71b445157c7f448b83e43d30ab4958261644812d2bb08"
+    },
+    "id": "s4-f1140-idx9",
+    "source_xy": [
+      595,
+      844.0
+    ],
+    "precision": "Candidate correspondence; not native path or pure side truth"
+  }
+}

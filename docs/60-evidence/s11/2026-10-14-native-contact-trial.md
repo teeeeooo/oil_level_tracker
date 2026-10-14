@@ -1,5 +1,9 @@
 # NCT-1 — ordered native-side contact interaction
 
+**Disposition: CLOSED WITHOUT PROMOTION.** Separate targets and the side-interaction
+term do not preserve the required controls. No production change or threshold retry
+follows. All preceding physical replies retain their original meaning.
+
 ## Frozen protocol
 
 This trial tests whether the **combination of two native side appearances**,
@@ -39,12 +43,111 @@ of one. Bound execution to 120 s, 1 GB RSS, 8 MB scratch and 3 MB retained. No
 retired runtime/model is restored. Retain complete compact scores, final dual
 coefficients, source/feature hashes and verification; remove owned intermediates.
 
+## Result and verification
+
+The code, tests, [plan](../../50-diagnostics/s11/2026-10-14-native-contact-trial/plan.json)
+and protocol were frozen at **`c40d46e46809d03e4192d13456b9197790b6aeda`**.
+The [complete readout](../../50-diagnostics/s11/2026-10-14-native-contact-trial/readout.json)
+retains all 109 paths, all 24 fitted coefficient sets and all three arms:
+
+| Held-source result | Native joint (primary) | Native additive | Mean-RGB joint |
+|---|---:|---:|---:|
+| Foam control decisions correct | 8/14 | 8/14 | 10/14 |
+| Liquid control decisions correct | 7/10 | 7/10 | 7/10 |
+| N1 disjunction supported | 0/1 | 0/1 | 0/1 |
+
+These are 24 channel-specific control decisions over overlapping native subjects,
+not 24 independent recordings. All arms lose the certain Foam upper N3 and both
+liquid positives (Miso 1463 and water 1378). The primary Foam channel also accepts
+all three Miso rims and both milk cup structures. Its liquid channel accepts N4's
+internal Foam change. Native/additive decisions agree on every required control;
+their 2 Foam / 18 liquid differences occur only on unreviewed paths. The interaction
+term therefore demonstrates no required-control benefit. Mean RGB's two additional
+correct rim decisions do not erase its positive losses or select it for adoption.
+
+Fitting is not confused with held-source evaluation: primary liquid fits classify
+all their fitting controls correctly, then lose both source-held-out positives.
+Primary Foam fits themselves retain one error in three folds. The result rejects
+this fixed operation; it does not prove a universal impossibility for local RGB
+or establish that contact/source confounding caused every failure.
+
+[Verification](../../50-diagnostics/s11/2026-10-14-native-contact-trial/verification.json)
+records **47 focused tests passed**, including 23 new interaction, independent
+primal/dual arithmetic, partial-target, source-isolation and CLI guards. A separate
+image/JSON calculation verifies all 1,130 native patch tensors, 252 feature hashes,
+24 normal equations and 504 held-source scores from saved coefficients without
+another fit. Maximum score error is `2.22e-14`; maximum equation residual is
+`4.35e-14`. Its first audit used a different array memory layout; adopting the
+already-declared contiguous tensor contract reproduces all hashes. Trial code,
+coefficients and outcomes were not changed.
+
+The actual CLI ran from `/private/tmp` in **1.0043 s**, with **177,242,112 bytes**
+peak process RSS. This is an offline control trial, not detector throughput.
+The current Python 3.14.4 / NumPy 2.5.1 / Pillow 12.3.0 environment was sufficient;
+no model or retired environment was restored. The plan, complete result and
+verification total **209,389 bytes** in one canonical folder. Managed run
+`sample/output/s11-native-contact-trial-20261014-001` references those files rather
+than keeping duplicate media/tensors. O2 OPEN, FIELD FAIL and Local XY OFF remain.
+
+## Next evidence boundary
+
+The native liquid corpus has one **Foam-contact** positive in Miso and one
+**air-contact** positive in water. Each contact type currently occurs in only one
+recording, so holding either source out also removes that contact type from fit.
+This is a coverage limit, not a proven causal explanation or license to retune NCT-1.
+
+Reuse the earliest non-initial accepted sample4 candidate, f1140 idx9, only to
+locate a new correspondence review. Its scalar Y844/pooled generator support does
+not label a native edge. In the existing source ROI, the horizontal transition
+has the already-saved row Y841 and one incident fragment, 708. Prepare that entire
+path and retain the complete frame inventory, with no model score or length-based
+selection. Ask its physical contact role only after source/path/display checks.
+N5 is a different frame and the previously rejected f1140 candidate rims stay
+rejected; none supplies 708's answer. A reply may extend scoped contact diversity;
+it will not reopen this kernel trial or imply a successful detector.
+
+### Prepared 708 correspondence review
+
+The [source manifest](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-manifest.json)
+and [complete inventory](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-native-readout.json)
+retain **26 native paths: 16 with partial context, 10 unresolved orientations**.
+The [preparation plan](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-plan.json)
+selects every fragment at the visually located, still-unlabelled source row Y841:
+exactly one, 708. This is not a nearest-Y truth join to the Y844 candidate.
+The [proposal](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-proposal.json)
+contains all 35 saved vertices, and the existing qualifier's
+[inspection](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-inspection.json)
+returns `PROPOSAL_VERIFIED_PENDING_REVIEW`, **zero qualified subjects**.
+
+The [direct PNG](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review.png)
+shows the entire 104×104 glass ROI at 5× nearest-neighbor scale, plain on the left
+and with the exact path on the right. No new video decode or estimated contour
+was used. The new question is whether that displayed path meets Foam and liquid,
+liquid and empty space, or has another/unreadable role. It does not reopen prior
+candidate approvals, rim judgments, N3/N4 or the milk lower-boundary uncertainty.
+
+[Display verification](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-verification.json)
+confirms original crop equality and exact overlay vertices/hash. Each side has
+15 complete patches; three pixels per side touch/cross the saved path, so these
+remain mixed context, never pure material labels. Both existing qualifier CLIs
+ran from `/private/tmp`. No score, fit or corpus qualification was added.
+
+Managed run `sample/output/s11-native-contact-review-20261014-001` preserves these
+seven files (**143,468 bytes**) in one canonical folder and removes its temporary
+plans. The original 109-path/17-role corpus stays frozen. Only the new exact
+physical correspondence is pending before dependent work continues.
+
+Both runs are closed with no duplicate working payloads. All **56 managed runs**
+pass the artifact check; governance and whitespace checks pass. Focused links
+across the changed owners pass (281 local links / 51 anchors). Commit/push preserves
+the failed experiment and pending review; neither action adopts detector behavior.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F06`, `S11-F09`, `S11-F10`.
 - First harmful stage: the prior shared surface observations fail qualified uppers versus structure before candidate consumption. This trial tests ordered-side interaction and separate role support at that observation boundary; it does not assert that downstream admission/ownership is repaired.
 - Existing feature coverage: reuse all six pinned native frame geometries, visible-support decisions and both 7×7 side footprints from the complete corpus. No enlarged crop, new edge, semantic forward or inherited score enters the regressor. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. Recipe/session/static-learning, production candidate/episode and report paths are bypassed, so this run cannot establish their efficacy or failure.
-- Execution scope: one offline CLI validates saved source/roles/pixels, performs the 24 predeclared kernel solves and predicts the complete held-source population. No source video decode, temporal propagation, model download, GUI, production sequence/report replay or Windows qualification. The existing physical replies are never expanded to pure-side labels or unknown-path negatives.
+- Execution scope: one offline CLI validates saved source/roles/pixels, performs the 24 predeclared kernel solves and predicts the complete held-source population. It is closed after required failures. Subsequent source-only preparation may reconstruct sample4/f1140's complete saved native inventory and inspect the single Y841 fragment for a new human role reply, with no additional model call or label. No source video decode, temporal propagation, model download, GUI, production sequence/report replay or Windows qualification. Existing physical replies are never expanded to pure-side labels or unknown-path negatives.
 - Logic-map impact: NONE — this adds an offline research operation; no executing production owner, setup parameter or runtime schema changes.
 - Failure-registry impact: NONE — separate-head/support testing refines the existing appearance and coupling risks; no accepted repair or new general failure theorem is claimed.

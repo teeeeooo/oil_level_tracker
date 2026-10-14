@@ -1,0 +1,211 @@
+{
+  "schema": "s11-native-fragment-role-review-proposal-v1",
+  "g0_manifest": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/manifest.json",
+    "sha256": "8bb03c49017181e54e6164a248ac28ff0977d9a0e3af11882417b5a5f431c632"
+  },
+  "g0_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+    "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+  },
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review.png",
+    "sha256": "ccd2a0fd48556dd5437b191f56abab10d0a9679ddc9a4a7f3bf41fe22c0f3f47"
+  },
+  "subjects": [
+    {
+      "id": "fragment-708",
+      "case_id": "s4-f1140",
+      "frame": 1140,
+      "view_id": "sample4-contact-native",
+      "fixed_column_xy": [
+        595.0,
+        841.0
+      ],
+      "native_fragment_id": 708,
+      "source_path_xy": [
+        [
+          593,
+          840
+        ],
+        [
+          594,
+          841
+        ],
+        [
+          595,
+          841
+        ],
+        [
+          596,
+          842
+        ],
+        [
+          597,
+          842
+        ],
+        [
+          598,
+          843
+        ],
+        [
+          599,
+          843
+        ],
+        [
+          600,
+          844
+        ],
+        [
+          601,
+          844
+        ],
+        [
+          602,
+          844
+        ],
+        [
+          603,
+          844
+        ],
+        [
+          604,
+          844
+        ],
+        [
+          605,
+          844
+        ],
+        [
+          606,
+          843
+        ],
+        [
+          607,
+          843
+        ],
+        [
+          608,
+          843
+        ],
+        [
+          609,
+          843
+        ],
+        [
+          610,
+          843
+        ],
+        [
+          611,
+          843
+        ],
+        [
+          612,
+          843
+        ],
+        [
+          613,
+          843
+        ],
+        [
+          614,
+          843
+        ],
+        [
+          615,
+          844
+        ],
+        [
+          616,
+          844
+        ],
+        [
+          617,
+          844
+        ],
+        [
+          618,
+          844
+        ],
+        [
+          619,
+          843
+        ],
+        [
+          620,
+          843
+        ],
+        [
+          621,
+          843
+        ],
+        [
+          622,
+          843
+        ],
+        [
+          623,
+          843
+        ],
+        [
+          624,
+          843
+        ],
+        [
+          625,
+          843
+        ],
+        [
+          626,
+          843
+        ],
+        [
+          627,
+          842
+        ]
+      ],
+      "raster_path_sha256": "632b0869e3d4b466b2922e4f3284cc3e2901be8df384dc934b2c5fa697d83087",
+      "readout_subject_sha256": "967cd3b6466f4be3a442b85fd4a57ceef4d8f9d4d894c0a5a97bc41ea0a1dcaa",
+      "vertex_count": 35,
+      "junction_incident": true
+    }
+  ],
+  "views": [
+    {
+      "id": "sample4-contact-native",
+      "source": {
+        "path": "sample/output/s11-a1-lineage-20261007-001/frames-final/f1140-original_roi.png",
+        "sha256": "eea14d8eb7f39dee1c8b8748e8031f5638321612d1a9fa2d9ff27e0b43a74525"
+      },
+      "image_origin_xy": [
+        543,
+        798
+      ],
+      "display_xyxy": [
+        543,
+        798,
+        647,
+        902
+      ]
+    }
+  ],
+  "preparation_plan_sha256": "32769f01fdd654ee8048c86ee50d447d50badfbcee11dea8e4216654baf97f13",
+  "reuse_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-native-readout.json",
+    "sha256": "6e7958ebf0ef3b2bc165128ba2717b5e4758f0b502aa1bcf430bb6dc0ec556ff"
+  },
+  "selection": "Every saved fragment at the selected unlabelled row; no score or length choice",
+  "preserved_intervals": [],
+  "complete_saved_fragment_count": 26,
+  "question": "오른쪽 보라색 708 경로는 거품의 하단과 액체가 만나는 경계인가요, 액체와 빈공간이 만나는 윗경계인가요? 다른 경계이거나 불분명하면 그대로 알려주세요.",
+  "status": "PENDING_PATH_ROLE_REVIEW",
+  "qualified_units": 0,
+  "training_executed": false,
+  "scope": "Displayed path role only; no dense/pure-side/coordinate truth or training grant",
+  "selection_row": {
+    "source_y": 841,
+    "reason": "First noninitial current sample4 candidate correspondence is f1140 idx9 at approximate Y844. Visual source location identifies the saved horizontal row Y841 for a new question only; every incident native fragment is retained. No candidate-to-path truth transfer, model score or path-length selection.",
+    "physical_role": "UNREVIEWED"
+  }
+}

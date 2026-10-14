@@ -1,0 +1,24 @@
+{
+  "schema": "s11-native-contact-verification-v1",
+  "code_commit": "c40d46e46809d03e4192d13456b9197790b6aeda",
+  "focused_tests": {
+    "passed": 47,
+    "new_trial_tests": 23,
+    "seconds": 1.17,
+    "command": "PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -B -m pytest -q tests/unit/test_s11_native_contact_trial.py tests/unit/test_s11_native_role_corpus.py"
+  },
+  "native_patches": 1130,
+  "feature_hashes_verified": 252,
+  "models_verified": 24,
+  "held_source_scores_verified": 504,
+  "max_score_error": 2.220446049250313e-14,
+  "max_normal_equation_residual": 4.3520742565306136e-14,
+  "source_and_partial_target_isolation": true,
+  "extra_fit_calls": 0,
+  "audit_note": "Initial audit used noncontiguous transposed arrays; matching the declared contiguous tensor layout reproduced every feature hash. No model or trial source changed.",
+  "runtime_restored": false,
+  "actual_cli_cwd": "/private/tmp",
+  "conclusion": "CLOSED_WITHOUT_PROMOTION",
+  "production_changed": false,
+  "windows_executed": false
+}

@@ -1211,6 +1211,13 @@ Use current NumPy/Pillow on CPU: 120 s, 1 GB peak RSS, 8 MB scratch and 3 MB ret
 Keep compact predictions/dual coefficients and input hashes; no new environment,
 weights download, image/tensor archive or production dependency is needed.
 
+The completed NCT-1 operation is **closed without promotion**: the primary arm
+passes 8/14 Foam and 7/10 liquid decisions, losing N3 and both liquid positives.
+The evidence record preserves the identical required-control failures without
+the joint term. A source-only sample4/f1140 correspondence review may qualify a
+new contact example at its original path precision; it neither explains away
+these failures nor reopens this fixed model/regularization/operating point.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
