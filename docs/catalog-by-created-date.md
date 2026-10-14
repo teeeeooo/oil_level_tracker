@@ -1609,3 +1609,9 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [60-evidence/s11/2026-10-14-foam-input-handoff.md](60-evidence/s11/2026-10-14-foam-input-handoff.md) | b225dd1 main 통합·미채택 guard 철회·Foam 입력 조사 인수인계 |
 
 인수인계 문서의 최초 Git 추가일은 `b225dd1297839dea1651ace087fe7d4bf479f848` author 시각의 KST 날짜로 확정했다.
+
+### 2026-10-14 bounded-context 작업 추가 — Git 최초 등록일 미확정
+
+| 작성일 / Git 상태 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-14 / 미등록 | [60-evidence/s11/2026-10-14-bounded-context-experiment.md](60-evidence/s11/2026-10-14-bounded-context-experiment.md) | DTO-1 실제 영상·정적 광학 반례·독립 검산 및 3–4회 종료 예산 인수인계; 생산 승격 없음 |
