@@ -142,12 +142,38 @@ pass the artifact check; governance and whitespace checks pass. Focused links
 across the changed owners pass (281 local links / 51 anchors). Commit/push preserves
 the failed experiment and pending review; neither action adopts detector behavior.
 
+## 708 reply and append-only contact extension
+
+The subsequent exact user reply is **“거품 하단과 액체의 경계”**. Bind it only to
+the displayed 35-vertex fragment 708 as `FOAM_LOWER_LIQUID_INTERFACE`: a definite
+bulk-liquid-upper relation, not Foam upper, pure side materials, motion, an exact
+product scalar or a whole-layer label. The original proposal/inspection above
+remain the pre-reply checkpoint. The new [reply](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-reply.json)
+pins that subject and display; the candidate's Y844 remains separate from native Y841.
+
+The [extension reader](../../tests/diagnostics/s11_native_role_extension.py)
+reuses the frozen corpus reconstruction, native-packet validator and liquid reply
+qualifier. A separate append entry is necessary because the original corpus and
+NCT-1 source pins are frozen. It retains only the new frame's complete population
+and a base-corpus pin, rather than duplicating all 109 earlier rows. It must reject
+an incomplete population, conflicting source/frame/path, old-frame replacement,
+role overwrite or changed original pixels. Unknown and unavailable paths remain
+explicit; no semantic vectors are fabricated.
+
+Before execution, the [extension plan](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension-plan.json)
+pins code, tests and inputs. The actual entry is the extension CLI with absolute
+paths from `/private/tmp`; retain the delta and verification only, with 2 MB
+scratch / 300 KB retained. Independently check the new patches directly against
+the original image and all earlier rows against the pinned corpus. Count positive
+recordings separately for Foam-contact and air-contact, grouping every sample4
+frame together. This binding is not a new fitting operation or NCT-1 retry.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F06`, `S11-F09`, `S11-F10`.
 - First harmful stage: the prior shared surface observations fail qualified uppers versus structure before candidate consumption. This trial tests ordered-side interaction and separate role support at that observation boundary; it does not assert that downstream admission/ownership is repaired.
 - Existing feature coverage: reuse all six pinned native frame geometries, visible-support decisions and both 7×7 side footprints from the complete corpus. No enlarged crop, new edge, semantic forward or inherited score enters the regressor. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. Recipe/session/static-learning, production candidate/episode and report paths are bypassed, so this run cannot establish their efficacy or failure.
-- Execution scope: one offline CLI validates saved source/roles/pixels, performs the 24 predeclared kernel solves and predicts the complete held-source population. It is closed after required failures. Subsequent source-only preparation may reconstruct sample4/f1140's complete saved native inventory and inspect the single Y841 fragment for a new human role reply, with no additional model call or label. No source video decode, temporal propagation, model download, GUI, production sequence/report replay or Windows qualification. Existing physical replies are never expanded to pure-side labels or unknown-path negatives.
+- Execution scope: the completed offline trial performed the 24 predeclared kernel solves; it stays closed. Subsequent source-only preparation reconstructed sample4/f1140's entire saved native inventory and inspected the single Y841 fragment. The new extension CLI reuses the original qualifier to bind the user's exact 708 contact reply and append the complete frame population while preserving the frozen corpus and scores. No additional model call, fit, source video decode, temporal propagation, model download, GUI, production sequence/report replay or Windows qualification. Existing physical replies are never expanded to pure-side labels or unknown-path negatives.
 - Logic-map impact: NONE — this adds an offline research operation; no executing production owner, setup parameter or runtime schema changes.
 - Failure-registry impact: NONE — separate-head/support testing refines the existing appearance and coupling risks; no accepted repair or new general failure theorem is claimed.

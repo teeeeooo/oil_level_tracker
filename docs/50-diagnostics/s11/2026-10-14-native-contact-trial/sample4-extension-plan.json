@@ -1,0 +1,43 @@
+{
+  "schema": "s11-native-role-extension-v1",
+  "inputs": {
+    "base_plan": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus-plan.json",
+      "sha256": "6540c0fb9d0ba65fb862cba7f30fa597731aed0c3d53d1c45d4f637ab74c39f7"
+    },
+    "base_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus.json",
+      "sha256": "35e458186f50a046776fd30452deae902a80282433efc19883518c53a6c1ac67"
+    },
+    "manifest": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-manifest.json",
+      "sha256": "e5d59322c7920d756de861646b1288b47f9c2ac624c8ef0927d86966c7a4ea8a"
+    },
+    "native_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-native-readout.json",
+      "sha256": "6e7958ebf0ef3b2bc165128ba2717b5e4758f0b502aa1bcf430bb6dc0ec556ff"
+    },
+    "reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-reply.json",
+      "sha256": "c5234ce944216a98f0e2e830cdd456cbacf67e660112a9a370de9d88e0614506"
+    }
+  },
+  "sources": [
+    {
+      "path": "tests/diagnostics/s11_native_role_extension.py",
+      "sha256": "ff574287ec2b80c97c7f9933b26a193b89e72e8f7d2c372de6cb9ef3c81de61a"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_corpus.py",
+      "sha256": "4358cbb78ccc2d8b59c4e4c1befe54e67a2e5b0c19cfe23f8ad68289523b8cdb"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_liquid_reply.py",
+      "sha256": "754a11e6fc8c20066789ffdd8f456eaab42cb9e62d7ca7bed2295816869a0d78"
+    },
+    {
+      "path": "tests/unit/test_s11_native_role_extension.py",
+      "sha256": "39644dc9db01d7c99945e427ddb88b96cdf704af16bb9aad41237ffdaa1b0eec"
+    }
+  ]
+}
