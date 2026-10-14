@@ -110,6 +110,14 @@ permitted text can be relayed.
 | Baseline Accum prefix | EMPTY through 677.01 s; appearance at 677.51 s | Conflicts with reviewed inflow from about 653 s; higher coverage is not a restoration target |
 | Trace | 1,202 records, 601 per Glass; same capture reasons; 1,763 → 1,895 MB reported | File size does not establish that overlay support caused the extra 132 MB |
 
+**User follow-up:** BASE detection also remains at **0%**, according to the
+user. This is a reported operational failure, not a newly calculated per-segment
+metric; exact numerator/denominator and trace loss stage remain unavailable
+here. It must not be obscured by the reported retrospective FULL coverage of
+100%. BASE drain/refill requires visible Oil tracking, while its full/no-interface
+prefix and suffix correctly require no boundary. The next diagnosis includes
+both Glasses immediately and reads the simpler, Foam-absent BASE case first.
+
 The cited 13-case PASS is the existing four-source local comparison, not new
 private-field acceptance. The local sequence failure is sample3 f2413 with 37
 changed tracking rows, **not** this Accum retrospective difference.
@@ -160,7 +168,10 @@ durations were supplied. Preserve the nine segment assessments explicitly:
 
 Disposition remains **NOT ADOPTED; no reported final-output gain**. Next locate
 the first missing/wrong physical Oil/Foam observation in the saved candidate
-trace, starting with Accum entry/layering while retaining all nine segments.
+trace: summarize both Glasses across all nine segments, then inspect BASE
+drain/refill before Accum entry/layering. Distinguish shared from independent
+causes before a bounded repair and validate both Glasses after each change;
+neither one's complete repair is a prerequisite for inspecting the other.
 The [saved-output follow-up](../../40-operations/s11-overlay-support-windows-comparison.md#5-수신-결과-이후-기존-bundle만으로-확인)
 requests permitted text, not another GUI analysis or private-file transfer.
 Do not restore EMPTY through 677 s or relax barriers to raise coverage. The
