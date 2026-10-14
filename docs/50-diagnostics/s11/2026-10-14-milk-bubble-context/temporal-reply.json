@@ -1,0 +1,89 @@
+{
+  "schema": "s11-bounded-temporal-reply-v1",
+  "user_reply_verbatim": "동일한 거품인데 우측 방향으로 점점 커지네.",
+  "status": "QUALIFIED_OBJECT_RELATION",
+  "display": {
+    "review-standalone.html": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-milk-bubble-context/review-standalone.html",
+      "sha256": "a006c8ef82bcd22cdad8294545230cbff51c030196457a2082f32b37baaed900"
+    },
+    "remote-contact-sheet.png": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-milk-bubble-context/remote-contact-sheet.png",
+      "sha256": "2aa410c55056bacad1fa162b886f299f61b67e5fceb02bf550e5db20fdb24261"
+    }
+  },
+  "question": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-milk-bubble-context/review.json",
+    "sha256": "e09e1b53a59de555ce166b453f47cf18b0b9256cdfdfa5ce54b0d97af7eabb32"
+  },
+  "source": {
+    "path": "sample/sample7.mp4",
+    "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+    "corpus_id": "sample7",
+    "provenance": "public_milk_fill_pexels_11158788; reuse existing local original"
+  },
+  "frame_interval_inclusive": [
+    1039,
+    1063
+  ],
+  "source_time_interval_sec": [
+    43.33495833333333,
+    44.33595833333333
+  ],
+  "crop_source_xyxy": [
+    1000,
+    345,
+    1260,
+    625
+  ],
+  "anchor": {
+    "frame_index": 1063,
+    "native_fragment_id": 687,
+    "existing_role": "EXTERNAL_FOAM_UPPER",
+    "qualification_path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/location-qualification.json",
+    "qualification_sha256": "3dd9ecd3e691f616896ecae5dec03f67eaa8201c9e77cc67c9f3f0505f744b3b"
+  },
+  "qualified_relation": {
+    "same_bubble": true,
+    "observed_change": "gradual growth toward image right",
+    "precision": "qualitative object relation over the displayed interval"
+  },
+  "not_qualified": [
+    "Exact outline, endpoint, point trajectory or per-frame native-path correspondence",
+    "Rigid translation, numerical width/area/volume or growth rate",
+    "Rupture, merger, replacement or proof of their complete absence",
+    "Stable whole-layer/episode truth or a universal motion/size Foam criterion"
+  ],
+  "counts": {
+    "new_object_relation_units": 1,
+    "new_spatial_path_labels": 0,
+    "existing_spatial_path_roles": 15,
+    "source_recordings": 4
+  },
+  "legacy_reuse": {
+    "record": {
+      "path": "docs/50-diagnostics/s11/2026-10-09-reference-correspondence.json",
+      "sha256": "a42498c4cba22efd06a9402e7cbe631809d94c77324a08a87a4b3d4c03ef8914"
+    },
+    "pointer": [
+      "experiments",
+      "short_tracks",
+      "files",
+      "readout.json",
+      "content",
+      "results",
+      16
+    ],
+    "same_frame_set": true,
+    "legacy_direction": "backward 1063 to 1039",
+    "scope": "Original whole-ROI point tracking, not bubble-687 measurements. Aggregate survival/motion cannot be assigned to this object.",
+    "dense_arrays_present": false,
+    "retention_owner": {
+      "path": "docs/60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention.json",
+      "sha256": "15f592d288503fd0dc8b0cacb07e4af4a097fc20bf8f46b5d5a98285cc37a907"
+    },
+    "retained_files_in_group": 0,
+    "rerun": false
+  },
+  "decision": "Close the temporal question; preserve same-object growth as a qualitative positive-control requirement. No event label, new matcher or motion-to-role classifier follows from this reply."
+}

@@ -133,12 +133,39 @@ failure is not a physical unassessability answer; the temporal question remains
 pending. This necessary transfer package is a deliberate small duplicate of the
 canonical images, not a second research result. Reassess it after the reply is bound.
 
+## Temporal reply received — same bubble grows rightward
+
+The user replied: **“동일한 거품인데 우측 방향으로 점점 커지네.”**
+The [source-bound reply](2026-10-14-milk-bubble-context/temporal-reply.json)
+closes this question: the same bubble persists through the displayed interval
+while growing toward image right. The reply is one qualitative object relation,
+not 25 new exact path labels. All 15 spatial roles / four recordings retain their
+previous precision. Growth is not rigid translation, a measured volume change,
+a merger/rupture label or a stable-layer/episode decision. The prior delivery
+failure and pending proposal remain historical; they are not the current status.
+
+A bounded reuse audit also finds that the earlier
+[consecutive-frame LK experiment](2026-10-09-reference-correspondence.md)
+**already covered this exact 25-frame set**, backwards from 1063 to 1039. Its
+stored whole-ROI summaries span 8,495 initial vertices / 7,847 surviving endpoints;
+those counts are not bubble 687 tracking accuracy. All 51 dense-run entries were
+retired by the [retention owner](../../60-evidence/s11/2026-10-12-pre-cr1-cleanup/retention.json),
+and the per-vertex array is absent. No archived bulk restore or LK rerun was
+performed. Its fixed-pattern optical-warp counterexample still prevents motion,
+link stretch or long tracks from acquiring physical role authority.
+
+The usable new requirement is to preserve a real, deforming Foam upper while
+its object's shape changes. An event detector requiring rupture/merger is not
+supported by this clip. A successor must add independently meaningful object or
+material context and oppose the existing structures/internal changes; merely
+measuring rightward motion or retuning the failed local patch models is insufficient.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F09`, `S11-F10`.
 - First harmful stage: frozen local observations misorder qualified upper/structure controls; the production harmful stage is unchanged and this source-only screen cannot repair it.
 - Existing feature coverage: original sample7 video plus saved frame/path/role pins. Production Recipe setup, static learning, exclusions, Artifact consumers and report are not exercised; Local XY remains OFF. sample4's empty exclusion/template configuration and the closed D2/Local XY comparisons remain separate recorded controls.
-- Execution scope: one completed 25-frame source extraction via the existing reader, exact pixel verification and manual context inspection. No detector/model/optical-flow/segmentation execution, fit, label propagation, sequence inference, Windows run or field acceptance.
+- Execution scope: one completed 25-frame source extraction via the existing reader, exact pixel verification, a received qualitative same-object/rightward-growth reply, and read-only reuse of existing whole-ROI LK summaries. No detector/model/optical-flow/segmentation execution, fit, label propagation, sequence inference, Windows run or field acceptance.
 - Logic-map impact: NONE — no production owner, typed observation, candidate selection or setup behavior changes.
 - Failure-registry impact: NONE — the source review supplies no replacement detector and retires none of the existing optical-warp, color or identity counterexamples.
