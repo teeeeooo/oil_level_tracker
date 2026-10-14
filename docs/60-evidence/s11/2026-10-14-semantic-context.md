@@ -270,6 +270,58 @@ production consumer or Windows execution is part of this operation. Scratch
 and retained budgets are 8 MB and 3 MB; keep one canonical corpus with input
 references instead of duplicate image/tensor payloads.
 
+Execution used clean **`211af0a70bc8831a583d2a6d51b2dfd8c8e1928b`** and the
+[pinned corpus plan](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus-plan.json).
+The actual CLI ran from `/private/tmp` with absolute root, plan and output paths.
+The [complete corpus](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus.json)
+contains both freshly validated contact qualifications and reports:
+
+| Scope | Result |
+|---|---|
+| Complete native roster | 109 paths / 4 recordings / 6 frames |
+| Qualified / unknown | 17 / 92 |
+| Certain Foam uppers | 6 paths / 3 recordings |
+| Certain liquid uppers | 2 paths / 2 recordings: Miso 1463 meets Foam; water 1378 meets air |
+| Preserved opposition | 2 internal-Foam changes / 6 structures |
+| Partial interpretation | N1 remains Foam-or-liquid; neither individual target is asserted |
+| Native RGB available / unavailable | 84 / 25 |
+| Saved semantic input available | 39; none of C's 61 paths has a saved semantic vector |
+
+Both native positive-source conditions now pass. The saved-semantic liquid channel
+still has only one positive source. The four source-held-out partitions therefore
+report input coverage separately; water A and C always stay together. They are
+exposed development folds, not independent validation results. No fitting split
+or training operation was selected. Positive Foam and liquid roles do not become
+automatic negatives for the other channel; explicit internal/structural opposition
+and unknown/unavailable masks remain separate.
+
+[Verification](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus-verification.json)
+records **44 passing focused tests**, including 24 new corpus/partial-target,
+missing-input, source-group, identity and foreign-cwd guards. An independent
+JSON/image audit confirms all **48 old observations and 16 preceding roles are
+unchanged**, the entire 61-path extension is present, and all **168 ordered RGB
+sides / 1,130 native patches** match their byte hashes by direct image slicing.
+The raw user statement is bound to the original 39-vertex path and PNG, with no
+motion, scalar, pure-side or dense-layer extension. No prior spatial question
+remains pending among these seventeen paths.
+
+This completes the native input/target binding stage. A subsequent observation
+trial must declare its separate Foam/liquid mechanism and the treatment of missing
+semantic input **before** fitting, retain the milk and N3/N4 counterexamples, and
+evaluate held-source preservation as well as opposition. Source coverage alone
+does not choose a successful mechanism or justify replaying the failed heads.
+No additional user judgment or Windows run is required for that local design
+stage. Production adoption still requires its existing O2/V5 and consumer gates.
+
+Managed run `sample/output/s11-native-role-corpus-20261014-001` retains one corpus
+and verification receipt in this canonical folder, plus the new plan and raw
+reply: **369,187 bytes** across four new files. No source image, model, tensor
+archive or prior readout was duplicated. Temporary plans are removed; all **54
+managed runs** pass closeout checks. Governance, whitespace and focused link
+checks pass (295 local links / 53 anchors).
+The retired environment/models/cache remain absent. **O2 OPEN, FIELD FAIL and
+Local XY OFF remain unchanged.**
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `PUBLICATION-PROVENANCE`.
