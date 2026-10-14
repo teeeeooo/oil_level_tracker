@@ -1230,10 +1230,11 @@ The next narrow source check reuses already exposed sample3 A/f2249, with origin
 Recipe and baseline preprocessing. Available candidate RGB patches do not imply
 an available native contour: this frame's reconstructed native graph is empty.
 Keep that absence explicit instead of deriving a line from the approved Y219
-candidate. A pending contact-type reply is candidate/regional evidence only;
+candidate. The received liquid–empty-space reply is candidate/regional evidence only;
 B's liquid–empty-space reply does not transfer across frames. No new clip mining,
-Canny threshold change or closed-model retry follows. After that reply, a successor
-must separately address representation availability and contact-role observation;
+Canny threshold change or closed-model retry follows. The separate [raw-front inventory audit](../50-diagnostics/s11/2026-10-14-raw-front-inventory.md)
+reuses existing raw-gradient/plateau/graph owners without component/Canny anchoring.
+It must separately address representation availability and contact-role observation;
 even a confirmed air contact cannot fill the missing native-path label. Existing
 sample3 full-window restrictions, closed C/D replies and reserve-from-fit status
 stay intact.

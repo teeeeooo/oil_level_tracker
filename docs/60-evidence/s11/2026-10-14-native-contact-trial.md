@@ -242,6 +242,17 @@ changing the original budget record. Managed run
 files. Both new runs are closed; all **58 managed runs** pass with no remaining
 artifact errors. No retired model/runtime or duplicate source media was restored.
 
+### A contact reply received
+
+The user subsequently replied **“액체–빈공간”**. The
+[attributed reply](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-reply.json)
+binds that answer only to the existing A/f2249 candidate point. It adds no native
+label or pure-side, motion, exact-Y or whole-window truth. The earlier pending
+review remains an immutable pre-reply record. The 135-path / 18-qualified corpus
+is unchanged, and NCT-1 remains closed. The separate
+[raw-front audit](../../50-diagnostics/s11/2026-10-14-raw-front-inventory.md) owns the
+next representation investigation; it cannot infer a contour from this reply.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `PUBLICATION-PROVENANCE`.
