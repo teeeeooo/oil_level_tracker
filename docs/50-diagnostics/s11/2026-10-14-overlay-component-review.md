@@ -38,7 +38,9 @@ The [generic guard design](../../20-architecture/s11-chromatic-overlay-support-d
 and [comparison plan](2026-10-14-overlay-component-review/comparison-plan.json)
 freeze a single repair. Two synthetic regressions fail on the original code;
 all 107 focused preprocessing/Oil/Foam checks pass with the guard. Paired actual
-frames and full-window engineering replay remain to be executed at this freeze.
+frames and full-window engineering replay were pending at this freeze; the subsequent
+[completed evidence](../../60-evidence/s11/2026-10-14-overlay-support-guard.md) records
+input recovery with a sequence regression and no adoption.
 The baseline is reconstructed by substituting only original preprocessing into
 both existing call sites; no duplicate checkout or alternate pipeline is created.
 

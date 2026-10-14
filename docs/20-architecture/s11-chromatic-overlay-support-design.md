@@ -50,6 +50,15 @@ against an exposed frame to recover it.
    movement/report behavior or native training labels. If local gates pass,
    target-Windows behavior remains a separate required qualification.
 
+## Recorded outcome and field boundary
+
+The [paired evidence](../60-evidence/s11/2026-10-14-overlay-support-guard.md)
+restores B input and preserves actual HUD controls, with all 13 legacy cases
+unchanged. A separate existing sequence test fails. This blocks adoption; the
+subsequent Windows A/B handoff is diagnostic evidence gathering with that failure
+explicitly disclosed, not an assertion that local gates all passed. It does not
+change the frozen acceptance criteria, relabel sample3 or authorize threshold rescue.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`

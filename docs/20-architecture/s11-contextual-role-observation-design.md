@@ -486,11 +486,14 @@ relaxing the mask or retrying the failed model. C remains regional structure
 opposition and D unassessable; neither becomes a candidate label from this reply.
 No fit assignment or successor architecture is adopted by input readiness.
 
-The completed A/B input audit finds the accepted B upper side unavailable. Reuse
-the original pixels and exact unchanged mask to ask the missing regional role
-only. Predicate overlap can identify why pixels were removed, but cannot certify
-reflection, fluid or a correct exclusion. The accepted position stays closed;
-no crop displacement, glare relaxation or successor fitting follows automatically.
+The completed A/B input audit finds the accepted B upper side unavailable. Its
+[regional reply](../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-reply.json)
+confirms a fluid–empty-space interface wobbling under continuous inflow. This
+closes the original-mask role question; it is not an all-pixel label or a measured
+motion sequence. The separately frozen [overlay support guard](s11-chromatic-overlay-support-design.md)
+investigates original-component geometry and downstream effects. Its input recovery
+and sequence regression are distinct outcomes; neither alters this frozen RGB
+trial's input/learning contract or licenses fitting the failed model again.
 
 ### Executable saved-contract preflight
 

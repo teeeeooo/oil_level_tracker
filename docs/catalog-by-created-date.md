@@ -1420,3 +1420,22 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-review.json](50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-review.json) | 원본/가시성 hash·225개 제거 픽셀·predicate 겹침과 질문 결합 |
 | 2026-10-14 | [60-evidence/s11/2026-10-14-candidate-rgb-trial.md](60-evidence/s11/2026-10-14-candidate-rgb-trial.md) | 후보 RGB 실제 준비·고정 단일 비교·검증 기록 |
 | 2026-10-14 | [60-evidence/s11/2026-10-14-oil-policy-feasibility.md](60-evidence/s11/2026-10-14-oil-policy-feasibility.md) | 필요조건 실제 실행·한계 및 다른 촬영원 연결 |
+
+### 2026-10-14 chromatic overlay 원래 연결 영역 검토
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-reply.json](50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-reply.json) | B 유체–빈공간 경계·지속 유입 흔들림의 지역 판정 |
+| 2026-10-14 | [20-architecture/s11-chromatic-overlay-support-design.md](20-architecture/s11-chromatic-overlay-support-design.md) | 원래 연결 영역의 thin/wide 조건과 입력/추적 검증 계약 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review.md](50-diagnostics/s11/2026-10-14-overlay-component-review.md) | 형태 처리로 원래 두께가 소실되는 원인과 고정 비교 |
+| 2026-10-14 | [40-operations/s11-overlay-support-windows-comparison.md](40-operations/s11-overlay-support-windows-comparison.md) | 알려진 로컬 실패를 포함한 미채택 후보 Windows A/B 인수인계 |
+| 2026-10-14 | [60-evidence/s11/2026-10-14-overlay-support-guard.md](60-evidence/s11/2026-10-14-overlay-support-guard.md) | B 입력 복구·341 집중 테스트·13-case 비교 및 sequence 실패 기록 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/plan.json](50-diagnostics/s11/2026-10-14-overlay-component-review/plan.json) | 원래 마스크의 다섯 프레임 원인 분석 pin |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/readout.json](50-diagnostics/s11/2026-10-14-overlay-component-review/readout.json) | 전체 열린 core와 원래 parent 비교 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/comparison-plan.json](50-diagnostics/s11/2026-10-14-overlay-component-review/comparison-plan.json) | 미채택 guard의 고정 paired 입력/source/정지 조건 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/frames.json](50-diagnostics/s11/2026-10-14-overlay-component-review/frames.json) | 실제 detector 경로와 원본 전처리 mask 동일성 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/replay-baseline.json.gz](50-diagnostics/s11/2026-10-14-overlay-component-review/replay-baseline.json.gz) | 기존 전처리 299행·전체 source/runtime/hash 기록 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/replay-candidate.json.gz](50-diagnostics/s11/2026-10-14-overlay-component-review/replay-candidate.json.gz) | 후보 전처리 299행·전체 source/runtime/hash 기록 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/replay-comparison.json](50-diagnostics/s11/2026-10-14-overlay-component-review/replay-comparison.json) | 13개 기존 비교 전체와 37개 changed row 필드 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/integrity-candidate.txt](50-diagnostics/s11/2026-10-14-overlay-component-review/integrity-candidate.txt) | 보호된 sequence barrier 회귀 실패 원문 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/verification.json](50-diagnostics/s11/2026-10-14-overlay-component-review/verification.json) | 소스 동결·테스트·행 변화·미채택 판정 |

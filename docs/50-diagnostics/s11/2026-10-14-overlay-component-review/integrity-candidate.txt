@@ -1,0 +1,91 @@
+sample3 explicit purpose=legacy-regression; physical_acceptance=NOT_EVALUATED
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs _____
+
+tmp_path = PosixPath('/private/var/folders/s2/wbnr4dhn1z1bk7tcl342s8bw0000gn/T/pytest-of-sunjaekim/pytest-32/test_sample3_r16_sequence_pres0')
+
+    def test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs(
+        tmp_path,
+    ) -> None:
+        root = require_s11_local_corpus()
+        video_path = root / "sample" / "sample3.mp4"
+        recipe = JsonRecipeRepository().load(root / "sample" / "sample3.oilrecipe")
+        reader = OpenCvVideoReader(video_path)
+        try:
+            metadata = reader.metadata
+        finally:
+            reader.close()
+        session = AnalysisSession(
+            input_video_path=str(video_path),
+            video_metadata=metadata,
+            analysis_start_sec=30.03,
+            analysis_end_sec=105.0,
+            compressor_start_sec=30.03,
+            sampling_fps=2.0,
+            output_directory=str(tmp_path),
+            run_name="S11 R16 owner lifecycle observability integrity",
+            resolution_confirmed=True,
+        )
+        result = AnalysisPipeline(
+            lambda path: OpenCvVideoReader(path),
+            OpenCvPhaseDetector(),
+            _LocalSequenceValidator(),
+        ).run(recipe, session)
+        rows = result.glass_results[0].samples
+    
+        assert len(rows) == 151
+        onset = [sample for sample in rows if sample.timestamp_sec < 32.0]
+        checked_truth_handoff = min(
+            rows,
+            key=lambda sample: abs(sample.timestamp_sec - 34.5345),
+        )
+        post_truth_gap = [
+            sample
+            for sample in rows
+            if 35.0 <= sample.timestamp_sec < 37.0
+        ]
+        completed_fill = [
+            sample
+            for sample in rows
+            if 39.0 <= sample.timestamp_sec < 50.0
+        ]
+        full_gap = [
+            sample
+            for sample in rows
+            if 50.0 <= sample.timestamp_sec < 64.0
+        ]
+        assert len(onset) == 4
+        assert all(sample.raw_oil_air_level_y is not None for sample in onset)
+        assert all(
+            abs(float(sample.raw_oil_air_level_y) - 316.0) <= 26.0
+            for sample in onset
+        )
+        # Checked-in user truth remains authoritative even when an accumulated
+        # track direction disagrees. A bounded current material anchor can own this
+        # frame without mutating the fill phase or reopening the later barrier.
+        assert checked_truth_handoff.raw_oil_air_level_y is not None
+        assert abs(float(checked_truth_handoff.raw_oil_air_level_y) - 243.0) <= 2.0
+        assert not any(_numeric(sample) for sample in post_truth_gap)
+        # Direct review shows the free interface rising into the upper entrance and
+        # disappearing. The later high-cap texture is internal full/turbulent
+        # material, so R14 must not reacquire it as a numeric interface.
+        assert not any(_numeric(sample) for sample in completed_fill)
+        assert not any(_numeric(sample) for sample in full_gap)
+        assert all(
+            sample.fill_state is FillState.UNKNOWN_REVIEW for sample in full_gap
+        )
+        barrier = [
+            sample
+            for sample in rows
+            if 37.0 <= sample.timestamp_sec < 81.0
+        ]
+        assert barrier
+>       assert not any(_numeric(sample) for sample in barrier)
+E       assert not True
+E        +  where True = any(<generator object test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs.<locals>.<genexpr> at 0x11e61f5a0>)
+
+tests/test_s11_sequence_observability_integrity.py:110: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_s11_sequence_observability_integrity.py::test_sample3_r16_sequence_preserves_owner_barrier_and_drain_handoffs
+1 failed in 20.81s
