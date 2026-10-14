@@ -1,0 +1,606 @@
+{
+  "schema": "s11-native-liquid-role-qualification-v1",
+  "reply_sha256": "311f196472680edf33929adc8371768a362fc1662eee9ad5a5565fbc38564c6f",
+  "proposal": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-proposal.json",
+    "sha256": "6115d4fe95ffbe4948f813f75d2e6cc1201fe81c3448ee13cc35d567a64df0d3"
+  },
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/review.png",
+    "sha256": "f15aa3e07c73b656fbaeda6b1989f447bcb57d42def70192053c3ef7ec78cb16"
+  },
+  "subjects": [
+    {
+      "id": "fragment-1463",
+      "subject_sha256": "169cd989f391bd8ec235896de178afcb602482b122324c632daf66222911e984",
+      "case_id": "public-miso-f1499",
+      "frame": 1499,
+      "time_sec": 50.01663333333334,
+      "time_kind": "RECORDED",
+      "source_recording": {
+        "path": "sample/public_miso_mHOS1-1ck60.mp4",
+        "sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15"
+      },
+      "geometry_sha256": "7104ea8ed75b70f624dd6b7482e938bc640a49032fad8073695541366859a006",
+      "g0_pointer": [
+        "contexts",
+        42,
+        "rows",
+        5,
+        "incident_fragments",
+        0
+      ],
+      "allowed_interpretations": [
+        "FOAM_LOWER_LIQUID_INTERFACE"
+      ],
+      "capability_target": "LIQUID_UPPER",
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY",
+      "dense_labels": false,
+      "coordinate_tolerance": null,
+      "side_material_labels": null,
+      "inference_metadata_allowed": false,
+      "proposed_context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 10,
+            "complete_centers_xy": [
+              [
+                105,
+                168
+              ],
+              [
+                106,
+                168
+              ],
+              [
+                107,
+                168
+              ],
+              [
+                108,
+                168
+              ],
+              [
+                109,
+                168
+              ],
+              [
+                110,
+                169
+              ],
+              [
+                111,
+                169
+              ],
+              [
+                112,
+                169
+              ],
+              [
+                113,
+                169
+              ],
+              [
+                114,
+                169
+              ]
+            ],
+            "complete_patches": 10,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 118,
+            "reused_pixel_uses": 372,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 42
+          },
+          "lower": {
+            "requested_patches": 10,
+            "complete_centers_xy": [
+              [
+                105,
+                178
+              ],
+              [
+                106,
+                178
+              ],
+              [
+                107,
+                178
+              ],
+              [
+                108,
+                178
+              ],
+              [
+                109,
+                178
+              ],
+              [
+                110,
+                179
+              ],
+              [
+                111,
+                179
+              ],
+              [
+                112,
+                179
+              ],
+              [
+                113,
+                179
+              ],
+              [
+                114,
+                179
+              ]
+            ],
+            "complete_patches": 10,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 118,
+            "reused_pixel_uses": 372,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 42
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "decision": "NOT_EVALUATED",
+      "review_status": "QUALIFIED_ROLE",
+      "path_sha256": "3f190c4ee415ce5fc281622dd5abc7d17b43ac633b3f9bf2e15066a73f92b3eb",
+      "boundary_relation": "Foam lower boundary in contact with bulk liquid",
+      "role_source": "USER_REPLY",
+      "motion_qualified": false,
+      "scalar_qualified": false
+    }
+  ],
+  "qualified_units": 1,
+  "status": "SCOPED_LIQUID_ROLE_BOUND",
+  "model_calls": 0,
+  "training_executed": false,
+  "production_changed": false,
+  "scope": "Displayed contact relation only; no pure-side, motion, scalar or whole-layer truth",
+  "base_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/readout.json",
+    "sha256": "235ca19922ddce04fa254eaaf8a0f61ad922ddf4e2cbdee4f01abd25f77dae97"
+  },
+  "readiness_after_reply": {
+    "overridden_ids": [
+      "fragment-1463"
+    ],
+    "population_counts": {
+      "total": 48,
+      "available": 39,
+      "qualified": 16,
+      "unknown": 32,
+      "recordings": 4,
+      "frames": 5
+    },
+    "unchanged_observation_rows": 48,
+    "review_states": {
+      "QUALIFIED_DISJUNCTION": 1,
+      "QUALIFIED_SINGLE_ROLE": 15,
+      "UNREVIEWED": 32
+    },
+    "role_coverage": {
+      "FOAM_UPPER": {
+        "certain_paths": [
+          "N3",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "s7-settled-native/fragment-687"
+        ],
+        "available_certain_paths": [
+          "N3",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "s7-settled-native/fragment-687"
+        ],
+        "available_certain_sources": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "compatible_disjunctions": [
+          "N1"
+        ]
+      },
+      "LIQUID_UPPER": {
+        "certain_paths": [
+          "fragment-1463"
+        ],
+        "available_certain_paths": [
+          "fragment-1463"
+        ],
+        "available_certain_sources": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15"
+        ],
+        "compatible_disjunctions": [
+          "N1"
+        ]
+      },
+      "INTERNAL_FOAM_CHANGE": {
+        "certain_paths": [
+          "N2",
+          "N4"
+        ],
+        "available_certain_paths": [
+          "N2",
+          "N4"
+        ],
+        "available_certain_sources": [
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "compatible_disjunctions": []
+      },
+      "STRUCTURE_BOUNDARY": {
+        "certain_paths": [
+          "N5",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453"
+        ],
+        "available_certain_paths": [
+          "N5",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453"
+        ],
+        "available_certain_sources": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "compatible_disjunctions": []
+      }
+    },
+    "source_group_folds": [
+      {
+        "held_out_source": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+        "fitting_source_candidates": [
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "fitting_subject_candidates": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096"
+        ],
+        "held_out_subjects": [
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 2,
+            "held_out": 4
+          },
+          "LIQUID_UPPER": {
+            "fit": 0,
+            "held_out": 1
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 2,
+            "held_out": 0
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 3,
+            "held_out": 3
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      },
+      {
+        "held_out_source": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+        "fitting_source_candidates": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "fitting_subject_candidates": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030"
+        ],
+        "held_out_subjects": [
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 5,
+            "held_out": 1
+          },
+          "LIQUID_UPPER": {
+            "fit": 1,
+            "held_out": 0
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 2,
+            "held_out": 0
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 4,
+            "held_out": 2
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      },
+      {
+        "held_out_source": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+        "fitting_source_candidates": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "fitting_subject_candidates": [
+          "N3",
+          "N4",
+          "N5",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096"
+        ],
+        "held_out_subjects": [
+          "N1",
+          "N2"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 6,
+            "held_out": 0
+          },
+          "LIQUID_UPPER": {
+            "fit": 1,
+            "held_out": 0
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 1,
+            "held_out": 1
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 6,
+            "held_out": 0
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      },
+      {
+        "held_out_source": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+        "fitting_source_candidates": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+        ],
+        "fitting_subject_candidates": [
+          "N1",
+          "N2",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096"
+        ],
+        "held_out_subjects": [
+          "N3",
+          "N4",
+          "N5"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 5,
+            "held_out": 1
+          },
+          "LIQUID_UPPER": {
+            "fit": 1,
+            "held_out": 0
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 1,
+            "held_out": 1
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 5,
+            "held_out": 1
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      }
+    ],
+    "missing_single_role_positive": [],
+    "missing_disjoint_positive_sources": [
+      "LIQUID_UPPER"
+    ],
+    "status": "ROLE_SUPERVISION_INCOMPLETE",
+    "training_executed": false,
+    "evaluation_executed": false,
+    "untouched_holdout_recordings": 0
+  }
+}

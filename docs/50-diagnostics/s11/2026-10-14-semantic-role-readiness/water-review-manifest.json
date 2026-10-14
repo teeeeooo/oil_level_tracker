@@ -1,0 +1,33 @@
+{
+  "schema": "s11-native-review-source-reuse-v1",
+  "scope": "Complete saved water-C fixed-column native population for one path correspondence; no model or decoder",
+  "inputs": {
+    "g0_manifest": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/manifest.json",
+      "sha256": "8bb03c49017181e54e6164a248ac28ff0977d9a0e3af11882417b5a5f431c632"
+    },
+    "g0_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+      "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+    }
+  },
+  "sources": [
+    {
+      "path": "tests/diagnostics/s11_existing_material_reuse.py",
+      "sha256": "0b79efc1429c6f861c27f270baccd46ca4642089bef1438b22bf716f26834a84"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_qualification.py",
+      "sha256": "e91062e9696464e5d7a990f54e3aa1046e15467603d01b26bcfa2fb14110c5d6"
+    }
+  ],
+  "case_id": "water-f001643",
+  "source_review": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-upper-projection-ac-review.json",
+    "sha256": "175e310a925648c19a3a07d7cb6502d219b275146ee2b97ff43bbe202f4529f4"
+  },
+  "closed_interval_reply": {
+    "path": "docs/50-diagnostics/s11/2026-10-10-upper-projection-ac-reply.json",
+    "sha256": "360b43529ab23bc4ff9c53aff48d7a10db71398f4aed6604544783802c023c26"
+  }
+}

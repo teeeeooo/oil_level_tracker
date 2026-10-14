@@ -203,26 +203,55 @@ role, not Foam upper or internal Foam texture. No temporal movement, pure patch
 materials, chemical Oil identity, whole-layer mask or scalar tolerance is inferred.
 The original pending proposal/readout stay as the pre-reply checkpoint.
 
-At preparation time, the new liquid-role adapter and tests reuse the frozen native
-qualifier's actual path/pixel inspection, then apply the contact role without its
-old `OSCILLATING_LIQUID_UPPER` label. The optional readiness overlay revalidates
-the frozen 48-path readout and may change only an exactly matching unreviewed
-path's qualification. All previous roles, prompt vectors and unknown paths remain.
+The new adapter, tests and input reply were frozen at clean `ae0e91e` before
+the actual run. It reused the frozen native qualifier's path/pixel inspection,
+then applied the contact role without the old `OSCILLATING_LIQUID_UPPER` label.
+The [qualification and coverage delta](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-qualification.json)
+returns `SCOPED_LIQUID_ROLE_BOUND`: **16 qualified / 32 unreviewed**, while all
+48 observations, 39 available inputs and fifteen earlier roles remain identical.
+The effective roles are six certain Foam uppers, **one certain liquid upper**,
+two internal changes, six structures and N1's unchanged disjunction. The liquid
+positive belongs to one recording, so `ROLE_SUPERVISION_INCOMPLETE` remains the
+source-group coverage result. No new score or classifier was selected.
 
 The next bounded source-only preparation is water C/f1643, whose regional water
 surface and X950/Y489–494 interval are already closed. Its G0 inventory has one
 interval-compatible native fragment, 1378. B/f1438 instead has three two-vertex
 junction fragments at Y485 and one unresolved-orientation fragment at Y488;
-none is silently selected or labelled. Use the existing `native_packet` reader
-to reconstruct C's complete column population from saved edges, and the original
-qualifier to inspect the new proposal. A full-location PNG with plain/marked
-native pixels will ask only whether the displayed path corresponds to the known
-water surface. No further inference or training follows from preparation.
+none is silently selected or labelled. The existing `native_packet` reader
+reconstructed C's [complete 61-path population](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-native-readout.json)
+from saved edges: 45 have partial context and 16 have unresolved orientation.
+The [manifest](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-manifest.json)
+and [review plan](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-plan.json)
+pin the old source interval, original pixels, G0 and reused code. The original
+qualifier prepared the [proposal](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-proposal.json)
+and [inspected it](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-inspection.json):
+one 39-vertex path, 14 complete patches per side, `PROPOSAL_VERIFIED_PENDING_REVIEW`,
+zero qualified C roles. The [PNG](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review.png)
+shows the native cup context and plain/marked 5× details. Its only question is
+whether that exact segment corresponds to the already reviewed water surface.
+This is a second recording relative to the Miso liquid contact, but the same
+water recording as N1/N2 and already exposed. C is outside the frozen 48-path
+SCM roster; no semantic vector was generated or silently added to it.
 
-One managed run budgets **8 MB scratch / 3 MB retained** for the scoped
-qualification/coverage delta and this review packet. Reuse the old source PNG
-and immutable input plans; keep no copied runtime or model. The artifact receipt
-will retain the actual complete population, source/geometry checks and test results.
+The [verification receipt](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-verification.json)
+records **99 focused tests passed**, including 20 new contact-role/identity/scope,
+immutable prior-role, one-source coverage and foreign-cwd/overwrite guards.
+All three actual CLIs ran from `/private/tmp`. An independent JSON join confirms
+the single 1463 override, all 48 unchanged observations and all 61 water path hashes.
+Plain PNG pixels equal the original crop after declared nearest-neighbor scaling;
+the saved path coordinates reproduce the overlay exactly, and the image was
+visually inspected without assigning its physical role.
+
+Managed run `sample/output/s11-liquid-role-reply-20261014-001` budgets **8 MB
+scratch / 3 MB retained**. The nine new receipt/qualification/review/verification
+files total **483,695 bytes**. It references the canonical outputs and original
+source PNG instead of retaining duplicates. Intermediate packet/render records
+and temporary plans were removed at closeout. The retired runtime remains absent;
+no model, decoder, training, production change or Windows execution occurred.
+Governance and whitespace checks pass; 291 local links / 53 anchors have no
+errors, and all 53 managed runs pass closeout checks. The next necessary user
+judgment is only water-C 1378's native correspondence.
 
 ## Detector Governance
 

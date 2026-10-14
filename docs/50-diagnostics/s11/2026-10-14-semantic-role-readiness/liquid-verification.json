@@ -1,0 +1,308 @@
+{
+  "schema": "s11-liquid-role-reply-verification-v1",
+  "code_freeze_head": "ae0e91e47ba352ee6510632e6caa1dec3e99f43f",
+  "sources": [
+    {
+      "path": "tests/diagnostics/s11_native_liquid_reply.py",
+      "sha256": "754a11e6fc8c20066789ffdd8f456eaab42cb9e62d7ca7bed2295816869a0d78"
+    },
+    {
+      "path": "tests/unit/test_s11_native_liquid_reply.py",
+      "sha256": "b1584b9469574e85bbced8e08f6d48f221093171201706bc112c21ce72245d24"
+    }
+  ],
+  "inputs_and_artifacts": [
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-reply.json",
+      "sha256": "12f35a6af8f792aa250c3d3446a18e178ea35393968887bfe09b1934e44860fa"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-qualification.json",
+      "sha256": "6c4b7684fb9bea8b94042ced3cd5e4e0a748fbe8a754b63ccb74b0449f1f853f"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-manifest.json",
+      "sha256": "8656cb22e63f24ce1612927e20eda611fc2cd6c0bb9f4bdd5733fdf8f4ffb57b"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-native-readout.json",
+      "sha256": "d5bcad4df1226c7d9ec0618c709cc862cda1f41eb70d9cd933d1ee2bd0995e4b"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-plan.json",
+      "sha256": "e145d5fb04f6fff38ac11ac4c468b9fc1f925cbec3f702df1753ffa1198d85f7"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-proposal.json",
+      "sha256": "232f590ca3693fff0a3ef63eae757dfb4463c125fd106a217cf084f61c4f385a"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-inspection.json",
+      "sha256": "c06fa1ff7542456501b7938d3270574962e3abf53570957d75603e755793312d"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review.png",
+      "sha256": "5fe52e14bdf307de0a75b2c5a7fdb0b47dc2dc0261b528f3f102841d3eeab9eb"
+    }
+  ],
+  "actual_cli_cwd": "/private/tmp",
+  "runtime": {
+    "python": "3.14.4",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "executable": "/Users/sunjaekim/Developer/oil_level_tracker/.venv/bin/python"
+  },
+  "entries": [
+    "s11_native_liquid_reply.py --root <absolute-repo> --reply <liquid-reply.json> --base-plan <plan.json> --base-readout <readout.json> --output <managed-work>/liquid-qualification.json",
+    "s11_existing_material_reuse.native_packet(root, g0_manifest, g0_readout, water-f001643)",
+    "s11_native_role_qualification.py --prepare-plan <water-review-plan.json> --output <managed-work>/water-review-proposal.json",
+    "s11_native_role_qualification.py --inspect-proposal <water-review-proposal.json> --output <managed-work>/water-review-inspection.json"
+  ],
+  "focused_tests": {
+    "command": ".venv/bin/python -B -m pytest -q tests/unit/test_s11_native_liquid_reply.py tests/unit/test_s11_semantic_role_preflight.py tests/unit/test_s11_native_role_qualification.py",
+    "passed": 99,
+    "new_tests": 20
+  },
+  "independent_checks": {
+    "method": "Direct JSON joins, preserved support equality, source coverage enumeration and full G0 path hashes; direct PIL source crop and overlay checks",
+    "previous_qualified_paths_unchanged": 15,
+    "all_observation_rows_unchanged": 48,
+    "complete_rows_unchanged": 47,
+    "new_user_qualified_paths": 1,
+    "machine_created_physical_labels": 0,
+    "liquid_positive_sources": 1,
+    "water_complete_native_population": 61,
+    "water_interval_matches": 1,
+    "water_displayed_vertices": 39,
+    "water_side_patches_each": 14,
+    "water_roles_qualified": 0,
+    "water_availability_counts": {
+      "AVAILABLE_PARTIAL_CONTEXT": 45,
+      "UNRESOLVED_PATH_ORIENTATION": 16
+    }
+  },
+  "render": {
+    "source": {
+      "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png",
+      "sha256": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22"
+    },
+    "display": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review.png",
+      "sha256": "5fe52e14bdf307de0a75b2c5a7fdb0b47dc2dc0261b528f3f102841d3eeab9eb"
+    },
+    "source_shape": [
+      1920,
+      1080
+    ],
+    "context_source_xyxy": [
+      740,
+      250,
+      1160,
+      1080
+    ],
+    "context_offset_xy": [
+      24,
+      110
+    ],
+    "detail_source_xyxy": [
+      900,
+      450,
+      1040,
+      530
+    ],
+    "scale": 5,
+    "resampling": "NEAREST",
+    "plain_panel_xyxy": [
+      510,
+      110,
+      1210,
+      510
+    ],
+    "marked_panel_xyxy": [
+      510,
+      585,
+      1210,
+      985
+    ],
+    "plain_pixels_equal": true,
+    "marked_pixels_equal": true,
+    "overlay_width": 3,
+    "overlay_color": [
+      226,
+      29,
+      180
+    ],
+    "native_path_sha256": "1af5a561921dedc403c3a782d9a23d16fb2c126f7beaf6b0887067f546f3741b",
+    "native_vertices": 39,
+    "full_population": 61,
+    "displayed_path_xy": [
+      [
+        437,
+        192
+      ],
+      [
+        432,
+        192
+      ],
+      [
+        427,
+        192
+      ],
+      [
+        422,
+        197
+      ],
+      [
+        417,
+        202
+      ],
+      [
+        412,
+        207
+      ],
+      [
+        407,
+        212
+      ],
+      [
+        402,
+        212
+      ],
+      [
+        397,
+        212
+      ],
+      [
+        392,
+        207
+      ],
+      [
+        387,
+        207
+      ],
+      [
+        382,
+        212
+      ],
+      [
+        377,
+        212
+      ],
+      [
+        372,
+        212
+      ],
+      [
+        367,
+        212
+      ],
+      [
+        362,
+        212
+      ],
+      [
+        357,
+        212
+      ],
+      [
+        352,
+        212
+      ],
+      [
+        347,
+        212
+      ],
+      [
+        342,
+        212
+      ],
+      [
+        337,
+        212
+      ],
+      [
+        332,
+        207
+      ],
+      [
+        327,
+        207
+      ],
+      [
+        322,
+        207
+      ],
+      [
+        317,
+        207
+      ],
+      [
+        312,
+        207
+      ],
+      [
+        307,
+        202
+      ],
+      [
+        302,
+        202
+      ],
+      [
+        297,
+        207
+      ],
+      [
+        292,
+        207
+      ],
+      [
+        287,
+        207
+      ],
+      [
+        282,
+        207
+      ],
+      [
+        277,
+        207
+      ],
+      [
+        272,
+        207
+      ],
+      [
+        267,
+        207
+      ],
+      [
+        262,
+        207
+      ],
+      [
+        257,
+        207
+      ],
+      [
+        252,
+        207
+      ],
+      [
+        247,
+        207
+      ]
+    ],
+    "physical_role": null
+  },
+  "visual_review": "Native cup location and plain/marked detail inspected; magenta path and its unmarked counterpart are visible. No C role inferred.",
+  "retired_runtime_paths_still_absent": [
+    "sample/output/s11-cr1-workspace/env",
+    "sample/output/s11-cr1-workspace/models",
+    "sample/output/s11-cr1-workspace/cache"
+  ],
+  "new_model_calls": 0,
+  "new_video_decodes": 0,
+  "training_executed": false,
+  "production_changed": false,
+  "limit": "One Miso liquid source is qualified. Water-C source correspondence is pending and outside the frozen 48-path semantic roster; no new semantic vectors, fit/evaluation or detector efficacy."
+}

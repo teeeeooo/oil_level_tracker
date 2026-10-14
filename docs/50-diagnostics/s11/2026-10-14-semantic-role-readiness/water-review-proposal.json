@@ -1,0 +1,233 @@
+{
+  "schema": "s11-native-fragment-role-review-proposal-v1",
+  "g0_manifest": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/manifest.json",
+    "sha256": "8bb03c49017181e54e6164a248ac28ff0977d9a0e3af11882417b5a5f431c632"
+  },
+  "g0_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+    "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+  },
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review.png",
+    "sha256": "5fe52e14bdf307de0a75b2c5a7fdb0b47dc2dc0261b528f3f102841d3eeab9eb"
+  },
+  "subjects": [
+    {
+      "id": "fragment-1378",
+      "case_id": "water-f001643",
+      "frame": 1643,
+      "view_id": "water-c-native-detail",
+      "fixed_column_xy": [
+        950.0,
+        491.0
+      ],
+      "native_fragment_id": 1378,
+      "source_path_xy": [
+        [
+          987,
+          488
+        ],
+        [
+          986,
+          488
+        ],
+        [
+          985,
+          488
+        ],
+        [
+          984,
+          489
+        ],
+        [
+          983,
+          490
+        ],
+        [
+          982,
+          491
+        ],
+        [
+          981,
+          492
+        ],
+        [
+          980,
+          492
+        ],
+        [
+          979,
+          492
+        ],
+        [
+          978,
+          491
+        ],
+        [
+          977,
+          491
+        ],
+        [
+          976,
+          492
+        ],
+        [
+          975,
+          492
+        ],
+        [
+          974,
+          492
+        ],
+        [
+          973,
+          492
+        ],
+        [
+          972,
+          492
+        ],
+        [
+          971,
+          492
+        ],
+        [
+          970,
+          492
+        ],
+        [
+          969,
+          492
+        ],
+        [
+          968,
+          492
+        ],
+        [
+          967,
+          492
+        ],
+        [
+          966,
+          491
+        ],
+        [
+          965,
+          491
+        ],
+        [
+          964,
+          491
+        ],
+        [
+          963,
+          491
+        ],
+        [
+          962,
+          491
+        ],
+        [
+          961,
+          490
+        ],
+        [
+          960,
+          490
+        ],
+        [
+          959,
+          491
+        ],
+        [
+          958,
+          491
+        ],
+        [
+          957,
+          491
+        ],
+        [
+          956,
+          491
+        ],
+        [
+          955,
+          491
+        ],
+        [
+          954,
+          491
+        ],
+        [
+          953,
+          491
+        ],
+        [
+          952,
+          491
+        ],
+        [
+          951,
+          491
+        ],
+        [
+          950,
+          491
+        ],
+        [
+          949,
+          491
+        ]
+      ],
+      "raster_path_sha256": "69a5ca947301b648c92ace6a1f73153e26b3a40d22a40ff83e137f51af97d3b7",
+      "readout_subject_sha256": "8672c9c221840a81a406794da46a480d03b4880ab807715134344548d209ae4d",
+      "vertex_count": 39,
+      "junction_incident": true
+    }
+  ],
+  "views": [
+    {
+      "id": "water-c-native-detail",
+      "source": {
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_water_fill_pexels_6381722/f001643.png",
+        "sha256": "adfbace25cabce3dad3b3cd5f59d0f3cff5c11c1bab778eb5881ee0cf0c0aa22"
+      },
+      "image_origin_xy": [
+        0,
+        0
+      ],
+      "display_xyxy": [
+        900,
+        450,
+        1040,
+        530
+      ]
+    }
+  ],
+  "preparation_plan_sha256": "4a6bc0ddc5cc26480c3a9ba02754a3749a403df8e557533f6846ad7716eb38ab",
+  "reuse_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-native-readout.json",
+    "sha256": "d5bcad4df1226c7d9ec0618c709cc862cda1f41eb70d9cd933d1ee2bd0995e4b"
+  },
+  "selection_interval": {
+    "id": "water-C",
+    "case_id": "water-f001643",
+    "role": "Water upper surface",
+    "interval": [
+      488.5,
+      494.5
+    ],
+    "appearance": "L footprint qualified in A only; no type label on each edge",
+    "precision": "Interval containment only; edges unreviewed"
+  },
+  "selection": "Every saved fragment intersecting the closed interval; no score or length choice",
+  "preserved_intervals": [],
+  "complete_saved_fragment_count": 61,
+  "question": "오른쪽 아래 B의 보라색 경로 1378은 앞서 확인한 실제 수면의 윗경계에 해당하나요? 다르면 다른 경계 또는 판독 불가라고 알려주세요. 기존 수면 위치 판정은 유지하고 이 원본 경로의 대응만 확인합니다.",
+  "status": "PENDING_PATH_ROLE_REVIEW",
+  "qualified_units": 0,
+  "training_executed": false,
+  "scope": "Displayed path role only; no dense/pure-side/coordinate truth or training grant"
+}
