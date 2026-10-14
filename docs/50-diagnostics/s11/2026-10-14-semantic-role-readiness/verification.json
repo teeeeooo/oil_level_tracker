@@ -1,0 +1,172 @@
+{
+  "schema": "s11-semantic-role-readiness-verification-v1",
+  "code_freeze_head": "b4ff286640895bca6f64b782b23ca7d9a83c4846",
+  "runtime": {
+    "python": "3.14.4",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "executable": "/Users/sunjaekim/Developer/oil_level_tracker/.venv/bin/python",
+    "working_directory": "/private/tmp for both actual CLIs; repository for independent audit"
+  },
+  "actual_entries": [
+    "tests/diagnostics/s11_semantic_role_preflight.py --root <absolute-repo> --plan <absolute-plan.json> --output <managed-work>/readout.json",
+    "tests/diagnostics/s11_native_role_qualification.py --root <absolute-repo> --prepare-plan <absolute-review-plan.json> --output <managed-work>/review-proposal.json",
+    "tests/diagnostics/s11_native_role_qualification.py --root <absolute-repo> --inspect-proposal <absolute-review-proposal.json> --output <managed-work>/review-inspection.json"
+  ],
+  "artifacts": [
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/plan.json",
+      "sha256": "da5bec7982aa2fb420d4cedb187acc22593faecdc6f26037bba72676d8aaecca"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/readout.json",
+      "sha256": "235ca19922ddce04fa254eaaf8a0f61ad922ddf4e2cbdee4f01abd25f77dae97"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-plan.json",
+      "sha256": "938527b1e20b745e9a979852017d9a35371840d6f2319a4fee42fd8ab51cbd38"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-proposal.json",
+      "sha256": "6115d4fe95ffbe4948f813f75d2e6cc1201fe81c3448ee13cc35d567a64df0d3"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-inspection.json",
+      "sha256": "b584fc5c93c6e7a5fe451142234c886202cad4ab1a6d343b2a5247589f48f579"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/review.png",
+      "sha256": "f15aa3e07c73b656fbaeda6b1989f447bcb57d42def70192053c3ef7ec78cb16"
+    }
+  ],
+  "focused_tests": {
+    "command": ".venv/bin/python -B -m pytest -q tests/unit/test_s11_semantic_role_preflight.py tests/unit/test_s11_semantic_context_trial.py",
+    "passed": 51,
+    "new_tests": 32,
+    "scope": "partial-role/support/source-group/CLI guards plus existing frozen semantic contracts; not detector or Windows acceptance"
+  },
+  "independent_audit": {
+    "method": "stdlib JSON/hashlib reads, original qualification joins, direct sum arithmetic and source membership; no call to the new reader",
+    "complete_population": 48,
+    "qualified": 15,
+    "unreviewed": 33,
+    "ordered_sides": 78,
+    "saved_patch_vectors": 724,
+    "maximum_mean_absolute_error": 3.3306690738754696e-16,
+    "certain_role_counts": {
+      "INTERNAL_FOAM_CHANGE": 2,
+      "FOAM_UPPER": 6,
+      "STRUCTURE_BOUNDARY": 6
+    },
+    "preserved_disjunction": [
+      "N1"
+    ],
+    "source_group_folds": 4,
+    "source_groups_disjoint": true,
+    "liquid_certain_positive_sources": 0,
+    "qualified_role_pins_verified": 6
+  },
+  "render": {
+    "source": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/native-at-50.png",
+      "sha256": "280b7869a81edfde722fafc85017fdf45dd6e799978cb6c46b7b9769249a635b"
+    },
+    "source_size": [
+      1280,
+      720
+    ],
+    "display": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/review.png",
+      "sha256": "f15aa3e07c73b656fbaeda6b1989f447bcb57d42def70192053c3ef7ec78cb16"
+    },
+    "detail_source_xyxy": [
+      520,
+      380,
+      632,
+      460
+    ],
+    "detail_scale": 5,
+    "detail_resampling": "NEAREST",
+    "source_panel_offset": [
+      0,
+      48
+    ],
+    "plain_panel_xyxy": [
+      40,
+      824,
+      600,
+      1224
+    ],
+    "marked_panel_xyxy": [
+      680,
+      824,
+      1240,
+      1224
+    ],
+    "native_path_sha256": "3f190c4ee415ce5fc281622dd5abc7d17b43ac633b3f9bf2e15066a73f92b3eb",
+    "rendered_path_xy": [
+      [
+        247,
+        237
+      ],
+      [
+        252,
+        237
+      ],
+      [
+        257,
+        237
+      ],
+      [
+        262,
+        237
+      ],
+      [
+        267,
+        237
+      ],
+      [
+        272,
+        242
+      ],
+      [
+        277,
+        242
+      ],
+      [
+        282,
+        242
+      ],
+      [
+        287,
+        242
+      ],
+      [
+        292,
+        242
+      ]
+    ],
+    "native_vertices": 10,
+    "full_saved_population": 27,
+    "plain_detail_pixels_equal": true,
+    "marked_detail_pixels_equal": true,
+    "overlay_width_display_px": 3,
+    "overlay_color_rgb": [
+      226,
+      29,
+      180
+    ],
+    "new_physical_role": null
+  },
+  "visual_review": "Full source locator and A/B panels inspected; the saved magenta segment is visible without obscuring the unmarked duplicate crop; no physical role inferred.",
+  "review_status": "PENDING_PATH_ROLE_REVIEW",
+  "new_physical_labels": 0,
+  "new_model_calls": 0,
+  "new_video_decodes": 0,
+  "production_changed": false,
+  "retired_runtime_paths_still_absent": [
+    "sample/output/s11-cr1-workspace/env",
+    "sample/output/s11-cr1-workspace/models",
+    "sample/output/s11-cr1-workspace/cache"
+  ],
+  "verification_limit": "Saved observation arithmetic and scoped role bindings only. No trained/selected replacement, untouched holdout, detector efficacy or field result."
+}

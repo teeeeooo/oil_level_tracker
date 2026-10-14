@@ -113,7 +113,7 @@ separate required stages.
 
 ## Separate-role readiness follow-up
 
-**Preparation only at this checkpoint.** The CR-1 runtime has been
+**Executed at saved-input readiness scope; one new path role is pending.** The CR-1 runtime has been
 [retired](2026-10-13-post-cr1-review-intake.md#cr1-runtime-retirement-2026-10-14).
 The successor role objective and its partial-label boundaries are in the
 [existing design owner](../../20-architecture/s11-contextual-role-observation-design.md#separate-foamliquid-role-readiness-after-scm-1).
@@ -139,19 +139,59 @@ patches or false-negative successes. Candidate-level practical Oil acceptance
 does not certify 1463's full native path. The selection precedes any new role
 response and does not use semantic score, path length or a new crop for inference.
 
-Prepare a PNG with full source location, an unmarked enlarged crop and a separate
-marked crop; draw only the saved path. Reuse the native qualifier's preparation
-and inspection entries to check original pixels/path pins. A new display crop
-serves human inspection only. Preserve the full 27-path source inventory and
-all closed spatial/temporal replies. Stop for the path role after completing the
-readiness implementation and verification; no repeated Foam/rim/milk question.
+The code, tests and input plan were frozen at clean `b4ff286` before execution.
+The [readout](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/readout.json)
+retains **48 paths / 39 available / 15 qualified / 33 unreviewed**, from four
+recordings and five frames. Its status is `ROLE_SUPERVISION_INCOMPLETE`:
 
-Use one managed output run with **8 MB scratch / 3 MB retained** bounds, existing
-application dependencies, and no model/decoder calls. Keep the compact readiness
-readout, review plan/proposal/inspection, review PNG and verification by canonical
-reference; remove scratch copies and temporary plans. Test malformed/changed
-vectors, duplicate identity, role narrowing, unknown/unavailable handling,
-source aliases, foreign-cwd CLI and overwrite refusal before the actual audit.
+| Certain native role | Paths with available input | Source recordings |
+|---|---:|---:|
+| Foam upper | 6 | 3 |
+| Liquid upper | 0 | 0 |
+| Internal Foam change | 2 | 2 |
+| Structure boundary | 6 | 3 |
+
+N1 remains a Foam-or-liquid disjunction, not a seventh definite Foam upper or a
+definite liquid positive. Four source-group coverage folds retain all derivatives
+of a recording together. No fold was fitted/evaluated or called untouched.
+The missing liquid positives prevent separate positive fit/evaluation coverage;
+this finding does not revoke the nine candidate-level Oil controls or their scope.
+Even a positive 1463 reply would add only one exposed source, not complete the
+training/evaluation contract or establish pure-side material truth.
+
+The [review PNG](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/review.png)
+shows the full source location, the unmarked crop at 5× nearest-neighbor scale,
+and a marked copy with only the ten saved vertices of 1463. The existing qualifier
+prepared the [proposal](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-proposal.json)
+from the [review plan](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-plan.json).
+Its [inspection](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-inspection.json)
+returns `PROPOSAL_VERIFIED_PENDING_REVIEW`, with ten complete patches on each
+ordered side and zero new labels. The full 27-path source inventory is preserved.
+The crop is for human inspection only; it was not a new model input. All fifteen
+previous spatial replies and the milk temporal reply remain closed. The next
+step is the actual role of this previously unqualified segment; a still-image
+answer will not be expanded into an oscillation or temporal label.
+
+[Verification](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/verification.json)
+records **51 focused tests passed**, including 32 new guards for changed vectors,
+duplicate identity, role narrowing, unknown/unavailable handling, source aliases,
+foreign-cwd CLI and overwrite refusal. The actual reader and both qualifier
+entries ran from `/private/tmp` using absolute paths. A separate JSON/hash audit
+joined all six qualification documents and recomputed all 78 ordered sides /
+724 patch vectors: maximum mean error `3.33e-16`. Source grouping, original
+interpretations and complete population agree. The raw display crop equals
+the source pixels after declared scaling; overlay coordinates and hashes match,
+and the PNG was visually checked. These are input/tool checks, not detector gains.
+
+Managed run `sample/output/s11-semantic-role-readiness-20261014-001` uses
+**8 MB scratch / 3 MB retained** bounds and existing application dependencies.
+The seven canonical plan/readout/review/verification files total **677,868 bytes**;
+the managed record references them without duplicate payloads. Its intermediate
+render receipt and temporary plans were removed at closeout. No model, decoder,
+training or production consumer ran. The retired CR-1 environment/models/cache
+remain absent. Governance and whitespace checks pass; the focused documentation
+check finds **282 local links / 54 anchors with no errors**, and all **52 managed
+runs** pass closeout checks. O2 OPEN, FIELD FAIL and Local XY OFF are unchanged.
 
 ## Detector Governance
 
