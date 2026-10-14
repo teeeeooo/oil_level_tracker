@@ -1157,6 +1157,60 @@ selecting a model, loss, aggregation, operating point or fitting split. Any futu
 trial must address the milk and N3/N4 counterexamples in its own frozen contract;
 it cannot claim training readiness from the source-count condition alone.
 
+### Ordered-side contact interaction trial (NCT-1)
+
+The scoped successor tests **a joint relation between observed upper and lower
+RGB**, with separate Foam-upper and bulk-liquid-upper targets. The closed native
+head concatenated two independently encoded means into a linear classifier, so
+its final score was additive across sides. SCM-1 reduced a shared foreground
+union. Neither operation tests the new contact-role supervision with an explicit
+upper-by-lower interaction. This is a bounded capability test, not a change of
+crop/encoder size, restoration of the retired model, or a claim that RGB identifies
+physical materials universally. The existing 109-path corpus and 7×7 footprints
+remain fixed; its missing semantic vectors are irrelevant to this RGB-only trial.
+
+For each side, transform uint8 RGB by `RGB / 127.5 - 1` and take the equal-weight
+mean of the native patches, preserving the 3×7×7 stencil. Write the resulting
+147-dimensional vectors as `u` and `l`. For two paths, define `U = dot(u,u')/147`
+and `L = dot(l,l')/147`. The primary kernel is `K = 1 + U + L + U*L`. It is the
+inner product of a constant, both side vectors and their tensor product. No source,
+position, path length, patch count, role metadata or semantic score enters inference.
+
+Use exactly three predeclared arms: native joint, native additive (`1+U+L`, removing
+only the interaction), and mean-RGB joint (remove within-patch spatial pattern).
+All arms use the same footprints, targets and four whole-recording held-out folds.
+Water A/C and all sample4 frames stay together. These are exposed development
+folds; N3 and milk 687 are held out from their own fold's fitting, not newly unseen.
+
+Each arm/fold fits two independent kernel ridge regressors. Certain positives are
+`+1`, explicit internal/structural opposition is `-1`; all other targets remain
+masked. In particular, Foam positive is not a liquid negative and N1's disjunction
+is not two labels. Balance the two classes equally, then sources within each class,
+then paths within each source/class. Minimize the weighted squared error plus
+`0.01 * ||f||²` with one float64 linear solve. There is no stochastic initialization,
+optimizer schedule, feature standardization fitted on evaluation data, augmentation,
+hyperparameter search, early stopping or post-result calibration. Exactly **24
+solves** cover three arms × four folds × two channels; no final all-source fit follows.
+
+The fixed operating point is zero: positive/negative scores are role support/
+opposition, and `abs(score) <= 1e-9` is numerical UNKNOWN. Scores are not probabilities.
+Unavailable inputs retain null scores and never count as rejection success. Report
+all 109 paths, every known-role error and all unknowns. Primary necessary success
+requires all 14 Foam controls and 10 liquid controls correct on their held-source
+predictions, plus support for at least one allowed interpretation of N1. A different
+channel's unqualified target is unassessed. Report fitting separately. Equal ablation
+decisions cannot demonstrate that interaction or native pattern was necessary.
+
+Any required failure closes this fixed trial without promotion or a new cutoff,
+ridge, split, crop, feature or head retry. Full success is only a limited exposed
+control result, not complete two-material classification, G1 acceptance, O2/V5 or
+production selection. The [NCT-1 evidence](../60-evidence/s11/2026-10-14-native-contact-trial.md)
+owns the pinned run. Reuse the corpus/source/pixel validators and existing RSS
+meter; the new runner owns only this joint kernel, partial-role loss and evaluation.
+Use current NumPy/Pillow on CPU: 120 s, 1 GB peak RSS, 8 MB scratch and 3 MB retained.
+Keep compact predictions/dual coefficients and input hashes; no new environment,
+weights download, image/tensor archive or production dependency is needed.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
@@ -1167,5 +1221,5 @@ it cannot claim training readiness from the source-count condition alone.
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no production executing owner, schema or detector behavior changes.
 - Existing feature coverage: the receiving review reuses pinned CR1/O1/A1 captures and native geometry. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. No new Recipe or static-learning efficacy claim follows from saved-input binding.
-- Execution scope: preceding saved-score audits and separately frozen RGB/native trials retain their recorded outcomes. The October 14 runtime retirement is complete. The separate-role follow-up checks saved semantic vectors, original partial-role qualifications and source-group coverage, and prepares one unreviewed native path without granting its role. It executes no model, training, production frame/sequence/report run or Windows qualification. Historical trial instructions are not current execution authority.
+- Execution scope: preceding saved-score audits and separately frozen RGB/native trials retain their recorded outcomes. The October 14 runtime retirement is complete. Separate-role input binding is complete without inference. The distinct NCT-1 contract permits exactly 24 CPU kernel-ridge solves over the fixed native corpus, with two independent partial-role objectives and predeclared interaction/pattern ablations. It executes no production frame/sequence/report run or Windows qualification. Historical trial instructions are not current execution authority.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.

@@ -1,0 +1,64 @@
+{
+  "schema": "s11-native-contact-trial-v1",
+  "configuration": {
+    "arms": [
+      "native_joint",
+      "native_additive",
+      "mean_joint"
+    ],
+    "channels": [
+      "FOAM_UPPER",
+      "LIQUID_UPPER"
+    ],
+    "ridge": 0.01,
+    "tie_epsilon": 1e-09,
+    "normalization": "RGB / 127.5 - 1; equal patch mean; no fitted transform",
+    "kernel": "1 + upper_dot/147 + lower_dot/147 + product of both dots",
+    "loss": "class-balanced, then source-balanced, then path-balanced squared error plus ridge",
+    "targets": "positive +1; explicit internal/structure opposition -1; other roles masked",
+    "split": "leave one entire recording out, all four fixed folds",
+    "operating_point": 0,
+    "optimizer": "one float64 linear solve per arm/channel/fold",
+    "calibration": "NONE; scores are not probabilities",
+    "seed": null
+  },
+  "limits": {
+    "seconds": 120,
+    "peak_rss_bytes": 1000000000,
+    "scratch_bytes": 8000000,
+    "retained_bytes": 3000000
+  },
+  "runtime": {
+    "python": "3.14.4",
+    "numpy": "2.5.1",
+    "pillow": "12.3.0",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "corpus": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus.json",
+    "sha256": "35e458186f50a046776fd30452deae902a80282433efc19883518c53a6c1ac67"
+  },
+  "corpus_plan": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus-plan.json",
+    "sha256": "6540c0fb9d0ba65fb862cba7f30fa597731aed0c3d53d1c45d4f637ab74c39f7"
+  },
+  "sources": [
+    {
+      "path": "tests/diagnostics/s11_native_contact_trial.py",
+      "sha256": "69e570716ac14a52a56d63e29c43ccf891c6bbde1a581c4d07b7b1f002661a47"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_corpus.py",
+      "sha256": "4358cbb78ccc2d8b59c4e4c1befe54e67a2e5b0c19cfe23f8ad68289523b8cdb"
+    },
+    {
+      "path": "tests/diagnostics/s11_resolver_replacement_profile.py",
+      "sha256": "27d29ebde1eb411f795b7863630bb3d154b5f11fd9e1f45994cceffbefceee30"
+    },
+    {
+      "path": "tests/unit/test_s11_native_contact_trial.py",
+      "sha256": "e8971ac929128d8ebd20e34041d79e48c9e26c65324b8df83b4de51bd903bd1e"
+    }
+  ]
+}
