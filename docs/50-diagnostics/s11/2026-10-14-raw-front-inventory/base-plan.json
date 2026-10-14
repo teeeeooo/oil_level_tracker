@@ -32,7 +32,7 @@
   "sources": [
     {
       "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/prepare_base.py",
-      "sha256": "7de74fb4d15151c0fd308e46944fb1ba7eb566969ac110a733e0ebeb569829cb"
+      "sha256": "f1a3982d8aa72e4b6e5983c74210e9121fc1ed91cd91f0b3caf9decbb5d1661b"
     },
     {
       "path": "tests/diagnostics/s11_existing_material_reuse.py",
@@ -61,6 +61,10 @@
     {
       "path": "src/oil_tracker/domain/recipe.py",
       "sha256": "2ded05b7b5db1f44e394bd0aead92a3cdd74efe655361911cffb1a16e448e039"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/render_base.py",
+      "sha256": "bb79a665707810f8fd3c1e47386f5c7a23ff23f7de2a3505f327b353d4ae4438"
     }
   ],
   "selection": "First approved pre-overlay S1-01 original f144; old source guide 378–394 is not exact/native truth; f156 conflict is not transferred",
@@ -69,5 +73,6 @@
     "seconds": 120,
     "scratch_bytes": 12000000,
     "retained_bytes": 1500000
-  }
+  },
+  "preparation_repair": "First unpublished preparation omitted the counts field required by the existing qualifier; no geometry/model change. Repeat same one-frame operation and inspect real review entry."
 }

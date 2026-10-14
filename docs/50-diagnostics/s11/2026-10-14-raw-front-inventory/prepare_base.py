@@ -62,6 +62,8 @@ def prepare(plan,work):
         source_recording=inputs["recording"],geometry=geometry,geometry_sha256=o2.fingerprint_json(geometry),
         rows=rows,graph=graph)
     readout=dict(schema=g0.SCHEMA,manifest_sha256=o2.fingerprint_json(manifest),contexts=[context],
+        counts=dict(contexts=1,edges=len(rows),new_physical_labels=0,
+                    fixed_column_fragments=len({f["fragment_id"] for r in rows for f in r["incident_fragments"]})),
         weak_constraints=[],scope="One newly reconstructed source; complete fixed-column population, zero roles")
     readout_pin=publish("base-g0-readout.json",readout)
     reuse_manifest=dict(schema="s11-native-review-source-reuse-v1",case_id=case["id"],
