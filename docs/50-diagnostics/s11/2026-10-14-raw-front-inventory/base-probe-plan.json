@@ -1,0 +1,50 @@
+{
+  "schema": "s11-reviewed-native-frame-entry-plan-v1",
+  "time_sec": 4.8048,
+  "inputs": {
+    "source_plan": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-plan.json",
+      "sha256": "6f1395b892223d57c8898d6b07317c47151179e2111d7061fe31f3b801775267"
+    },
+    "raster": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-raster.npz",
+      "sha256": "48f0b5d40ef604082d3581763ad1e49c2af1229c87881991e43d34a17428b461"
+    },
+    "qualified_role": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-extension.json",
+      "sha256": "edb02adc2f64702857c966f9e1dcd16e5fb105ff31112cfe236b7ef12fc5f92d"
+    }
+  },
+  "sources": [
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/probe_base.py",
+      "sha256": "525b2850305f7019b2dd5d5f5897121508607e1fbdf024718753eecc099aceba"
+    },
+    {
+      "path": "tests/diagnostics/s11_overlay_mask_comparison.py",
+      "sha256": "ffca8931d85ee20b73daf33f814f8d41466f3635be6b5ecc848d9b8f9326bb70"
+    },
+    {
+      "path": "src/oil_tracker/adapters/vision/opencv_phase_detector.py",
+      "sha256": "4bb1a761eed1445dc044a5727ed22e3ba6670a9a055128e5ce830707e4d080b8"
+    },
+    {
+      "path": "src/oil_tracker/adapters/vision/phase_frame_detection.py",
+      "sha256": "85777a652891f67941c9d2150588a2efabdd5530ed6f5d1c521945a33d98f564"
+    },
+    {
+      "path": "src/oil_tracker/adapters/vision/oil_interface_diagnostics.py",
+      "sha256": "c49abb50e21bf19b90d8fe4d5159e1d19c2c24468bfb57cd61634e166a043fad"
+    },
+    {
+      "path": "src/oil_tracker/adapters/storage/jsonl_debug_trace_writer.py",
+      "sha256": "62fd82a030af9492f07935299a4ac003992e9cd5cffdc82335b88c5b318a0d33"
+    }
+  ],
+  "scope": "One saved original PNG, baseline preprocessing, fresh real detect entry with all candidates and diagnostics; no static learning, prior temporal frames, session confirmation, completed resolver, report, truth-as-input, model or Windows",
+  "resources": {
+    "seconds": 120,
+    "scratch_bytes": 12000000,
+    "retained_bytes": 500000
+  }
+}

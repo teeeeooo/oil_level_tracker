@@ -1,0 +1,2646 @@
+{
+  "schema": "s11-native-legacy-contact-extension-v1",
+  "plan_sha256": "eda6580a5c9c677a0792c7dc51571bcfebb30781598c6c6fe33db06551597158",
+  "parent": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension.json",
+    "sha256": "be806540510248874c057698703a25a11591559f1ac8ba525919d6681b405d12"
+  },
+  "inputs": {
+    "previous_plan": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension-plan.json",
+      "sha256": "4132a3db1027eba07834ddca1972c35ab550aca23e5264ee366707ecf9cdda69"
+    },
+    "previous_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension.json",
+      "sha256": "be806540510248874c057698703a25a11591559f1ac8ba525919d6681b405d12"
+    },
+    "manifest": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reuse-manifest.json",
+      "sha256": "7fe3f524338695006847fd510e85de5dc5c361a0cb81df6282dc9295814b9c68"
+    },
+    "native_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-native-readout.json",
+      "sha256": "6fc6061e5bc18a2f8e18b548665ad5cf21162fa43b2d3c1da05ad6578c0f8a9a"
+    },
+    "reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reply.json",
+      "sha256": "227994fe7a6af4aa356dd57fc8730e313b615b5474fa6d64f26be60f1484134d"
+    },
+    "legacy_truth": {
+      "path": "sample/base_sample_1.oiltruth",
+      "sha256": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a"
+    }
+  },
+  "qualification": {
+    "schema": "s11-native-liquid-role-qualification-v1",
+    "reply_sha256": "917443a5d581fbf09593ba3b38815132fc215d42fdadfb403d3db8afa139fe68",
+    "proposal": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review-proposal.json",
+      "sha256": "f453085b8ee1a2a4d38298fd8a7d00bfc7daca9d9e3fc03cb4e761a35d390a98"
+    },
+    "display": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review.png",
+      "sha256": "93475e44964bfb8205df6c63c0cd80cbcb5f82482aa8345d7e7e132276988338"
+    },
+    "subjects": [
+      {
+        "id": "fragment-150",
+        "subject_sha256": "0b4552e2b66daa35d772b172be0d3efc1212d39cef79ad106226d8ea9ebf5910",
+        "case_id": "base-f144",
+        "frame": 144,
+        "time_sec": 4.8048,
+        "time_kind": "RECORDED",
+        "source_recording": {
+          "path": "sample/base_sample_1.mp4",
+          "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+        },
+        "geometry_sha256": "3c33b5abefc56e0801b78a1807bcf14bf30ea707cd671ba23b7c1ab2ebce838a",
+        "g0_pointer": [
+          "contexts",
+          0,
+          "rows",
+          0,
+          "incident_fragments",
+          0
+        ],
+        "allowed_interpretations": [
+          "FOAM_LOWER_LIQUID_INTERFACE"
+        ],
+        "capability_target": "LIQUID_UPPER",
+        "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY",
+        "dense_labels": false,
+        "coordinate_tolerance": null,
+        "side_material_labels": null,
+        "inference_metadata_allowed": false,
+        "proposed_context": {
+          "status": "AVAILABLE_PARTIAL_CONTEXT",
+          "sides": {
+            "upper": {
+              "requested_patches": 20,
+              "complete_centers_xy": [
+                [
+                  133,
+                  171
+                ],
+                [
+                  134,
+                  171
+                ],
+                [
+                  135,
+                  171
+                ],
+                [
+                  136,
+                  170
+                ],
+                [
+                  137,
+                  170
+                ],
+                [
+                  138,
+                  170
+                ],
+                [
+                  139,
+                  170
+                ],
+                [
+                  140,
+                  170
+                ],
+                [
+                  141,
+                  170
+                ],
+                [
+                  142,
+                  170
+                ],
+                [
+                  143,
+                  170
+                ],
+                [
+                  144,
+                  170
+                ],
+                [
+                  145,
+                  170
+                ],
+                [
+                  146,
+                  170
+                ],
+                [
+                  147,
+                  170
+                ],
+                [
+                  148,
+                  170
+                ],
+                [
+                  149,
+                  170
+                ],
+                [
+                  150,
+                  170
+                ],
+                [
+                  151,
+                  170
+                ],
+                [
+                  152,
+                  171
+                ]
+              ],
+              "complete_patches": 20,
+              "censored_crop_patches": 0,
+              "censored_mask_patches": 0,
+              "dependency_union_pixels": 194,
+              "reused_pixel_uses": 786,
+              "crossing_or_touching_path_pixels": 0,
+              "outside_reviewed_path_columns": 23
+            },
+            "lower": {
+              "requested_patches": 20,
+              "complete_centers_xy": [
+                [
+                  133,
+                  181
+                ],
+                [
+                  134,
+                  181
+                ],
+                [
+                  135,
+                  181
+                ],
+                [
+                  136,
+                  180
+                ],
+                [
+                  137,
+                  180
+                ],
+                [
+                  138,
+                  180
+                ],
+                [
+                  139,
+                  180
+                ],
+                [
+                  140,
+                  180
+                ],
+                [
+                  141,
+                  180
+                ],
+                [
+                  142,
+                  180
+                ],
+                [
+                  143,
+                  180
+                ],
+                [
+                  144,
+                  180
+                ],
+                [
+                  145,
+                  180
+                ],
+                [
+                  146,
+                  180
+                ],
+                [
+                  147,
+                  180
+                ],
+                [
+                  148,
+                  180
+                ],
+                [
+                  149,
+                  180
+                ],
+                [
+                  150,
+                  180
+                ],
+                [
+                  151,
+                  180
+                ],
+                [
+                  152,
+                  181
+                ]
+              ],
+              "complete_patches": 20,
+              "censored_crop_patches": 0,
+              "censored_mask_patches": 0,
+              "dependency_union_pixels": 194,
+              "reused_pixel_uses": 786,
+              "crossing_or_touching_path_pixels": 0,
+              "outside_reviewed_path_columns": 23
+            }
+          },
+          "shared_upper_lower_pixels": 0,
+          "pure_material_truth": false
+        },
+        "decision": "NOT_EVALUATED",
+        "review_status": "QUALIFIED_ROLE",
+        "path_sha256": "8ebe25868f9917bd402ae2ee3643f4befdfbab4bf1334bf4326ef0d5d9414ccf",
+        "boundary_relation": "Foam lower boundary in contact with bulk liquid",
+        "role_source": "USER_REPLY",
+        "motion_qualified": false,
+        "scalar_qualified": false
+      }
+    ],
+    "qualified_units": 1,
+    "status": "SCOPED_LIQUID_ROLE_BOUND",
+    "model_calls": 0,
+    "training_executed": false,
+    "production_changed": false,
+    "scope": "Displayed contact relation only; no pure-side, motion, scalar or whole-layer truth"
+  },
+  "added_rows": [
+    {
+      "id": "base-f144/fragment-150",
+      "subject_id": "fragment-150",
+      "source_recording": {
+        "path": "sample/base_sample_1.mp4",
+        "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+      },
+      "frame": 144,
+      "frame_key": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e:144",
+      "path_sha256": "8ebe25868f9917bd402ae2ee3643f4befdfbab4bf1334bf4326ef0d5d9414ccf",
+      "qualification": {
+        "reply": {
+          "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reply.json",
+          "sha256": "227994fe7a6af4aa356dd57fc8730e313b615b5474fa6d64f26be60f1484134d"
+        },
+        "result_sha256": "6ae76b42cae23fc2a357d0247e8b24d0dd8c8c49cb741a67cba8e0c301c5a17d"
+      },
+      "subject_sha256": "0b4552e2b66daa35d772b172be0d3efc1212d39cef79ad106226d8ea9ebf5910",
+      "original_interpretations": [
+        "FOAM_LOWER_LIQUID_INTERFACE"
+      ],
+      "allowed_boundary_roles": [
+        "LIQUID_UPPER"
+      ],
+      "certain_boundary_role": "LIQUID_UPPER",
+      "review_state": "QUALIFIED_SINGLE_ROLE",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT",
+      "native_sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              684,
+              389
+            ],
+            [
+              685,
+              389
+            ],
+            [
+              686,
+              389
+            ],
+            [
+              687,
+              388
+            ],
+            [
+              688,
+              388
+            ],
+            [
+              689,
+              388
+            ],
+            [
+              690,
+              388
+            ],
+            [
+              691,
+              388
+            ],
+            [
+              692,
+              388
+            ],
+            [
+              693,
+              388
+            ],
+            [
+              694,
+              388
+            ],
+            [
+              695,
+              388
+            ],
+            [
+              696,
+              388
+            ],
+            [
+              697,
+              388
+            ],
+            [
+              698,
+              388
+            ],
+            [
+              699,
+              388
+            ],
+            [
+              700,
+              388
+            ],
+            [
+              701,
+              388
+            ],
+            [
+              702,
+              388
+            ],
+            [
+              703,
+              389
+            ]
+          ],
+          "shape": [
+            20,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "f525501c39204ca35b25846cf5cd1dbe9f7ca7632502db118d9984b792b7a414"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              684,
+              399
+            ],
+            [
+              685,
+              399
+            ],
+            [
+              686,
+              399
+            ],
+            [
+              687,
+              398
+            ],
+            [
+              688,
+              398
+            ],
+            [
+              689,
+              398
+            ],
+            [
+              690,
+              398
+            ],
+            [
+              691,
+              398
+            ],
+            [
+              692,
+              398
+            ],
+            [
+              693,
+              398
+            ],
+            [
+              694,
+              398
+            ],
+            [
+              695,
+              398
+            ],
+            [
+              696,
+              398
+            ],
+            [
+              697,
+              398
+            ],
+            [
+              698,
+              398
+            ],
+            [
+              699,
+              398
+            ],
+            [
+              700,
+              398
+            ],
+            [
+              701,
+              398
+            ],
+            [
+              702,
+              398
+            ],
+            [
+              703,
+              399
+            ]
+          ],
+          "shape": [
+            20,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "2cf6f33c6df301a5220782623352a47c05131e7114641a1391dc46d385051f3f"
+        }
+      },
+      "support": {},
+      "semantic_observation": null,
+      "native_observation": {
+        "input": {
+          "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-native-readout.json",
+          "sha256": "6fc6061e5bc18a2f8e18b548665ad5cf21162fa43b2d3c1da05ad6578c0f8a9a"
+        },
+        "pointer": "/native_review_packets/0/fragments/0"
+      },
+      "pure_side_material_truth": false,
+      "physical_decision": null,
+      "targets": {
+        "values": {
+          "FOAM_UPPER": null,
+          "LIQUID_UPPER": 1
+        },
+        "native_loss_mask": {
+          "FOAM_UPPER": false,
+          "LIQUID_UPPER": true
+        },
+        "allowed_roles": [
+          "LIQUID_UPPER"
+        ],
+        "disjunction": false
+      }
+    },
+    {
+      "id": "base-f144/fragment-462",
+      "subject_id": "fragment-462",
+      "source_recording": {
+        "path": "sample/base_sample_1.mp4",
+        "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+      },
+      "frame": 144,
+      "frame_key": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e:144",
+      "path_sha256": "799c0dd1e0b8085e8e8614142054688505c160593bde0c77c11805456993fe5a",
+      "qualification": null,
+      "subject_sha256": null,
+      "original_interpretations": [],
+      "allowed_boundary_roles": [],
+      "certain_boundary_role": null,
+      "review_state": "UNREVIEWED",
+      "availability": "UNAVAILABLE_SIDE_CONTEXT",
+      "native_sides": {},
+      "support": {},
+      "semantic_observation": null,
+      "native_observation": {
+        "input": {
+          "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-native-readout.json",
+          "sha256": "6fc6061e5bc18a2f8e18b548665ad5cf21162fa43b2d3c1da05ad6578c0f8a9a"
+        },
+        "pointer": "/native_review_packets/0/fragments/1"
+      },
+      "pure_side_material_truth": false,
+      "physical_decision": null,
+      "targets": {
+        "values": {
+          "FOAM_UPPER": null,
+          "LIQUID_UPPER": null
+        },
+        "native_loss_mask": {
+          "FOAM_UPPER": false,
+          "LIQUID_UPPER": false
+        },
+        "allowed_roles": [],
+        "disjunction": false
+      }
+    }
+  ],
+  "added_frames": {
+    "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e:144": {
+      "source_recording": {
+        "path": "sample/base_sample_1.mp4",
+        "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+      },
+      "frame": 144,
+      "rgb": {
+        "path": "sample/output/s11-truth-audit-20261010-002/base_sample_1/f000144.png",
+        "sha256": "e2ccc4b7195c7870e8df99bce54c38c0e19ce16bebf7bafe37f64e1a681d604d"
+      },
+      "image_origin": [
+        0,
+        0
+      ],
+      "geometry": {
+        "origin": [
+          551,
+          218
+        ],
+        "shape": [
+          296,
+          290
+        ],
+        "scale_xy": [
+          1,
+          1
+        ],
+        "column": 145
+      },
+      "roi_sha256": "abf7549f3b04d9a79b91c88f286ba0e88304dcf11a2d011325bcfb6b7162b403",
+      "units": [
+        "base-f144/fragment-150",
+        "base-f144/fragment-462"
+      ],
+      "legacy_foam_absence_allowed": false
+    }
+  },
+  "counts": {
+    "total": 137,
+    "qualified": 19,
+    "unknown": 118,
+    "native_available": 101,
+    "semantic_available": 39,
+    "recordings": 5,
+    "frames": 8
+  },
+  "contact_coverage": {
+    "FOAM_LOWER_LIQUID_INTERFACE": {
+      "available_paths": [
+        "fragment-1463",
+        "s4-f1140/fragment-708",
+        "base-f144/fragment-150"
+      ],
+      "positive_sources": [
+        "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+        "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+        "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      ],
+      "held_source_coverage": [
+        {
+          "held_source": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "fit_positive_sources": [
+            "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+            "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+          ],
+          "held_positive_paths": [
+            "fragment-1463"
+          ]
+        },
+        {
+          "held_source": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "fit_positive_sources": [
+            "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+            "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+          ],
+          "held_positive_paths": []
+        },
+        {
+          "held_source": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "fit_positive_sources": [
+            "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+            "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+          ],
+          "held_positive_paths": []
+        },
+        {
+          "held_source": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+          "fit_positive_sources": [
+            "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+          ],
+          "held_positive_paths": [
+            "base-f144/fragment-150"
+          ]
+        },
+        {
+          "held_source": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+          "fit_positive_sources": [
+            "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+          ],
+          "held_positive_paths": [
+            "s4-f1140/fragment-708"
+          ]
+        }
+      ],
+      "disjoint_positive_sources_available": true
+    },
+    "LIQUID_AIR_INTERFACE": {
+      "available_paths": [
+        "water-f001643/fragment-1378"
+      ],
+      "positive_sources": [
+        "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      ],
+      "held_source_coverage": [
+        {
+          "held_source": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "fit_positive_sources": [
+            "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+          ],
+          "held_positive_paths": []
+        },
+        {
+          "held_source": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "fit_positive_sources": [
+            "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+          ],
+          "held_positive_paths": []
+        },
+        {
+          "held_source": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "fit_positive_sources": [],
+          "held_positive_paths": [
+            "water-f001643/fragment-1378"
+          ]
+        },
+        {
+          "held_source": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+          "fit_positive_sources": [
+            "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+          ],
+          "held_positive_paths": []
+        },
+        {
+          "held_source": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+          "fit_positive_sources": [
+            "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+          ],
+          "held_positive_paths": []
+        }
+      ],
+      "disjoint_positive_sources_available": false
+    }
+  },
+  "native_input_coverage": {
+    "role_coverage": {
+      "FOAM_UPPER": {
+        "certain_paths": [
+          "N3",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "s7-settled-native/fragment-687"
+        ],
+        "available_certain_paths": [
+          "N3",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "s7-settled-native/fragment-687"
+        ],
+        "available_certain_sources": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "compatible_disjunctions": [
+          "N1"
+        ]
+      },
+      "LIQUID_UPPER": {
+        "certain_paths": [
+          "fragment-1463",
+          "water-f001643/fragment-1378",
+          "s4-f1140/fragment-708",
+          "base-f144/fragment-150"
+        ],
+        "available_certain_paths": [
+          "fragment-1463",
+          "water-f001643/fragment-1378",
+          "s4-f1140/fragment-708",
+          "base-f144/fragment-150"
+        ],
+        "available_certain_sources": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "compatible_disjunctions": [
+          "N1"
+        ]
+      },
+      "INTERNAL_FOAM_CHANGE": {
+        "certain_paths": [
+          "N2",
+          "N4"
+        ],
+        "available_certain_paths": [
+          "N2",
+          "N4"
+        ],
+        "available_certain_sources": [
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "compatible_disjunctions": []
+      },
+      "STRUCTURE_BOUNDARY": {
+        "certain_paths": [
+          "N5",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453"
+        ],
+        "available_certain_paths": [
+          "N5",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453"
+        ],
+        "available_certain_sources": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "compatible_disjunctions": []
+      }
+    },
+    "source_group_folds": [
+      {
+        "held_out_source": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+        "fitting_source_candidates": [
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "fitting_subject_candidates": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096",
+          "water-f001643/fragment-3",
+          "water-f001643/fragment-89",
+          "water-f001643/fragment-1378",
+          "water-f001643/fragment-1631",
+          "water-f001643/fragment-3810",
+          "water-f001643/fragment-3811",
+          "water-f001643/fragment-3821",
+          "water-f001643/fragment-3841",
+          "water-f001643/fragment-3842",
+          "water-f001643/fragment-5829",
+          "water-f001643/fragment-5908",
+          "water-f001643/fragment-5909",
+          "water-f001643/fragment-5910",
+          "water-f001643/fragment-5911",
+          "water-f001643/fragment-5979",
+          "water-f001643/fragment-6216",
+          "water-f001643/fragment-6217",
+          "water-f001643/fragment-6291",
+          "water-f001643/fragment-6984",
+          "water-f001643/fragment-7035",
+          "water-f001643/fragment-7036",
+          "water-f001643/fragment-7037",
+          "water-f001643/fragment-7094",
+          "water-f001643/fragment-7379",
+          "water-f001643/fragment-7942",
+          "water-f001643/fragment-7944",
+          "water-f001643/fragment-7962",
+          "water-f001643/fragment-7963",
+          "water-f001643/fragment-7991",
+          "water-f001643/fragment-7994",
+          "water-f001643/fragment-8409",
+          "water-f001643/fragment-9179",
+          "water-f001643/fragment-9728",
+          "water-f001643/fragment-9916",
+          "water-f001643/fragment-10349",
+          "water-f001643/fragment-10538",
+          "water-f001643/fragment-11387",
+          "water-f001643/fragment-11428",
+          "water-f001643/fragment-11430",
+          "water-f001643/fragment-11431",
+          "water-f001643/fragment-11429",
+          "water-f001643/fragment-11468",
+          "water-f001643/fragment-11540",
+          "water-f001643/fragment-11580",
+          "water-f001643/fragment-11582",
+          "water-f001643/fragment-11583",
+          "water-f001643/fragment-11584",
+          "water-f001643/fragment-11581",
+          "water-f001643/fragment-11585",
+          "water-f001643/fragment-11651",
+          "water-f001643/fragment-11652",
+          "water-f001643/fragment-11958",
+          "water-f001643/fragment-11959",
+          "water-f001643/fragment-12020",
+          "water-f001643/fragment-12021",
+          "water-f001643/fragment-12298",
+          "water-f001643/fragment-12299",
+          "water-f001643/fragment-12361",
+          "water-f001643/fragment-12797",
+          "water-f001643/fragment-12888",
+          "water-f001643/fragment-12889",
+          "s4-f1140/fragment-0",
+          "s4-f1140/fragment-7",
+          "s4-f1140/fragment-36",
+          "s4-f1140/fragment-38",
+          "s4-f1140/fragment-39",
+          "s4-f1140/fragment-37",
+          "s4-f1140/fragment-41",
+          "s4-f1140/fragment-62",
+          "s4-f1140/fragment-63",
+          "s4-f1140/fragment-76",
+          "s4-f1140/fragment-78",
+          "s4-f1140/fragment-79",
+          "s4-f1140/fragment-77",
+          "s4-f1140/fragment-102",
+          "s4-f1140/fragment-169",
+          "s4-f1140/fragment-284",
+          "s4-f1140/fragment-403",
+          "s4-f1140/fragment-595",
+          "s4-f1140/fragment-610",
+          "s4-f1140/fragment-612",
+          "s4-f1140/fragment-1052",
+          "s4-f1140/fragment-708",
+          "s4-f1140/fragment-898",
+          "s4-f1140/fragment-950",
+          "s4-f1140/fragment-979",
+          "s4-f1140/fragment-1050",
+          "base-f144/fragment-150",
+          "base-f144/fragment-462"
+        ],
+        "held_out_subjects": [
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 2,
+            "held_out": 4
+          },
+          "LIQUID_UPPER": {
+            "fit": 3,
+            "held_out": 1
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 2,
+            "held_out": 0
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 3,
+            "held_out": 3
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      },
+      {
+        "held_out_source": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+        "fitting_source_candidates": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "fitting_subject_candidates": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030",
+          "water-f001643/fragment-3",
+          "water-f001643/fragment-89",
+          "water-f001643/fragment-1378",
+          "water-f001643/fragment-1631",
+          "water-f001643/fragment-3810",
+          "water-f001643/fragment-3811",
+          "water-f001643/fragment-3821",
+          "water-f001643/fragment-3841",
+          "water-f001643/fragment-3842",
+          "water-f001643/fragment-5829",
+          "water-f001643/fragment-5908",
+          "water-f001643/fragment-5909",
+          "water-f001643/fragment-5910",
+          "water-f001643/fragment-5911",
+          "water-f001643/fragment-5979",
+          "water-f001643/fragment-6216",
+          "water-f001643/fragment-6217",
+          "water-f001643/fragment-6291",
+          "water-f001643/fragment-6984",
+          "water-f001643/fragment-7035",
+          "water-f001643/fragment-7036",
+          "water-f001643/fragment-7037",
+          "water-f001643/fragment-7094",
+          "water-f001643/fragment-7379",
+          "water-f001643/fragment-7942",
+          "water-f001643/fragment-7944",
+          "water-f001643/fragment-7962",
+          "water-f001643/fragment-7963",
+          "water-f001643/fragment-7991",
+          "water-f001643/fragment-7994",
+          "water-f001643/fragment-8409",
+          "water-f001643/fragment-9179",
+          "water-f001643/fragment-9728",
+          "water-f001643/fragment-9916",
+          "water-f001643/fragment-10349",
+          "water-f001643/fragment-10538",
+          "water-f001643/fragment-11387",
+          "water-f001643/fragment-11428",
+          "water-f001643/fragment-11430",
+          "water-f001643/fragment-11431",
+          "water-f001643/fragment-11429",
+          "water-f001643/fragment-11468",
+          "water-f001643/fragment-11540",
+          "water-f001643/fragment-11580",
+          "water-f001643/fragment-11582",
+          "water-f001643/fragment-11583",
+          "water-f001643/fragment-11584",
+          "water-f001643/fragment-11581",
+          "water-f001643/fragment-11585",
+          "water-f001643/fragment-11651",
+          "water-f001643/fragment-11652",
+          "water-f001643/fragment-11958",
+          "water-f001643/fragment-11959",
+          "water-f001643/fragment-12020",
+          "water-f001643/fragment-12021",
+          "water-f001643/fragment-12298",
+          "water-f001643/fragment-12299",
+          "water-f001643/fragment-12361",
+          "water-f001643/fragment-12797",
+          "water-f001643/fragment-12888",
+          "water-f001643/fragment-12889",
+          "s4-f1140/fragment-0",
+          "s4-f1140/fragment-7",
+          "s4-f1140/fragment-36",
+          "s4-f1140/fragment-38",
+          "s4-f1140/fragment-39",
+          "s4-f1140/fragment-37",
+          "s4-f1140/fragment-41",
+          "s4-f1140/fragment-62",
+          "s4-f1140/fragment-63",
+          "s4-f1140/fragment-76",
+          "s4-f1140/fragment-78",
+          "s4-f1140/fragment-79",
+          "s4-f1140/fragment-77",
+          "s4-f1140/fragment-102",
+          "s4-f1140/fragment-169",
+          "s4-f1140/fragment-284",
+          "s4-f1140/fragment-403",
+          "s4-f1140/fragment-595",
+          "s4-f1140/fragment-610",
+          "s4-f1140/fragment-612",
+          "s4-f1140/fragment-1052",
+          "s4-f1140/fragment-708",
+          "s4-f1140/fragment-898",
+          "s4-f1140/fragment-950",
+          "s4-f1140/fragment-979",
+          "s4-f1140/fragment-1050",
+          "base-f144/fragment-150",
+          "base-f144/fragment-462"
+        ],
+        "held_out_subjects": [
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 5,
+            "held_out": 1
+          },
+          "LIQUID_UPPER": {
+            "fit": 4,
+            "held_out": 0
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 2,
+            "held_out": 0
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 4,
+            "held_out": 2
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      },
+      {
+        "held_out_source": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+        "fitting_source_candidates": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "fitting_subject_candidates": [
+          "N3",
+          "N4",
+          "N5",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096",
+          "s4-f1140/fragment-0",
+          "s4-f1140/fragment-7",
+          "s4-f1140/fragment-36",
+          "s4-f1140/fragment-38",
+          "s4-f1140/fragment-39",
+          "s4-f1140/fragment-37",
+          "s4-f1140/fragment-41",
+          "s4-f1140/fragment-62",
+          "s4-f1140/fragment-63",
+          "s4-f1140/fragment-76",
+          "s4-f1140/fragment-78",
+          "s4-f1140/fragment-79",
+          "s4-f1140/fragment-77",
+          "s4-f1140/fragment-102",
+          "s4-f1140/fragment-169",
+          "s4-f1140/fragment-284",
+          "s4-f1140/fragment-403",
+          "s4-f1140/fragment-595",
+          "s4-f1140/fragment-610",
+          "s4-f1140/fragment-612",
+          "s4-f1140/fragment-1052",
+          "s4-f1140/fragment-708",
+          "s4-f1140/fragment-898",
+          "s4-f1140/fragment-950",
+          "s4-f1140/fragment-979",
+          "s4-f1140/fragment-1050",
+          "base-f144/fragment-150",
+          "base-f144/fragment-462"
+        ],
+        "held_out_subjects": [
+          "N1",
+          "N2",
+          "water-f001643/fragment-3",
+          "water-f001643/fragment-89",
+          "water-f001643/fragment-1378",
+          "water-f001643/fragment-1631",
+          "water-f001643/fragment-3810",
+          "water-f001643/fragment-3811",
+          "water-f001643/fragment-3821",
+          "water-f001643/fragment-3841",
+          "water-f001643/fragment-3842",
+          "water-f001643/fragment-5829",
+          "water-f001643/fragment-5908",
+          "water-f001643/fragment-5909",
+          "water-f001643/fragment-5910",
+          "water-f001643/fragment-5911",
+          "water-f001643/fragment-5979",
+          "water-f001643/fragment-6216",
+          "water-f001643/fragment-6217",
+          "water-f001643/fragment-6291",
+          "water-f001643/fragment-6984",
+          "water-f001643/fragment-7035",
+          "water-f001643/fragment-7036",
+          "water-f001643/fragment-7037",
+          "water-f001643/fragment-7094",
+          "water-f001643/fragment-7379",
+          "water-f001643/fragment-7942",
+          "water-f001643/fragment-7944",
+          "water-f001643/fragment-7962",
+          "water-f001643/fragment-7963",
+          "water-f001643/fragment-7991",
+          "water-f001643/fragment-7994",
+          "water-f001643/fragment-8409",
+          "water-f001643/fragment-9179",
+          "water-f001643/fragment-9728",
+          "water-f001643/fragment-9916",
+          "water-f001643/fragment-10349",
+          "water-f001643/fragment-10538",
+          "water-f001643/fragment-11387",
+          "water-f001643/fragment-11428",
+          "water-f001643/fragment-11430",
+          "water-f001643/fragment-11431",
+          "water-f001643/fragment-11429",
+          "water-f001643/fragment-11468",
+          "water-f001643/fragment-11540",
+          "water-f001643/fragment-11580",
+          "water-f001643/fragment-11582",
+          "water-f001643/fragment-11583",
+          "water-f001643/fragment-11584",
+          "water-f001643/fragment-11581",
+          "water-f001643/fragment-11585",
+          "water-f001643/fragment-11651",
+          "water-f001643/fragment-11652",
+          "water-f001643/fragment-11958",
+          "water-f001643/fragment-11959",
+          "water-f001643/fragment-12020",
+          "water-f001643/fragment-12021",
+          "water-f001643/fragment-12298",
+          "water-f001643/fragment-12299",
+          "water-f001643/fragment-12361",
+          "water-f001643/fragment-12797",
+          "water-f001643/fragment-12888",
+          "water-f001643/fragment-12889"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 6,
+            "held_out": 0
+          },
+          "LIQUID_UPPER": {
+            "fit": 3,
+            "held_out": 1
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 1,
+            "held_out": 1
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 6,
+            "held_out": 0
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      },
+      {
+        "held_out_source": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+        "fitting_source_candidates": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "fitting_subject_candidates": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096",
+          "water-f001643/fragment-3",
+          "water-f001643/fragment-89",
+          "water-f001643/fragment-1378",
+          "water-f001643/fragment-1631",
+          "water-f001643/fragment-3810",
+          "water-f001643/fragment-3811",
+          "water-f001643/fragment-3821",
+          "water-f001643/fragment-3841",
+          "water-f001643/fragment-3842",
+          "water-f001643/fragment-5829",
+          "water-f001643/fragment-5908",
+          "water-f001643/fragment-5909",
+          "water-f001643/fragment-5910",
+          "water-f001643/fragment-5911",
+          "water-f001643/fragment-5979",
+          "water-f001643/fragment-6216",
+          "water-f001643/fragment-6217",
+          "water-f001643/fragment-6291",
+          "water-f001643/fragment-6984",
+          "water-f001643/fragment-7035",
+          "water-f001643/fragment-7036",
+          "water-f001643/fragment-7037",
+          "water-f001643/fragment-7094",
+          "water-f001643/fragment-7379",
+          "water-f001643/fragment-7942",
+          "water-f001643/fragment-7944",
+          "water-f001643/fragment-7962",
+          "water-f001643/fragment-7963",
+          "water-f001643/fragment-7991",
+          "water-f001643/fragment-7994",
+          "water-f001643/fragment-8409",
+          "water-f001643/fragment-9179",
+          "water-f001643/fragment-9728",
+          "water-f001643/fragment-9916",
+          "water-f001643/fragment-10349",
+          "water-f001643/fragment-10538",
+          "water-f001643/fragment-11387",
+          "water-f001643/fragment-11428",
+          "water-f001643/fragment-11430",
+          "water-f001643/fragment-11431",
+          "water-f001643/fragment-11429",
+          "water-f001643/fragment-11468",
+          "water-f001643/fragment-11540",
+          "water-f001643/fragment-11580",
+          "water-f001643/fragment-11582",
+          "water-f001643/fragment-11583",
+          "water-f001643/fragment-11584",
+          "water-f001643/fragment-11581",
+          "water-f001643/fragment-11585",
+          "water-f001643/fragment-11651",
+          "water-f001643/fragment-11652",
+          "water-f001643/fragment-11958",
+          "water-f001643/fragment-11959",
+          "water-f001643/fragment-12020",
+          "water-f001643/fragment-12021",
+          "water-f001643/fragment-12298",
+          "water-f001643/fragment-12299",
+          "water-f001643/fragment-12361",
+          "water-f001643/fragment-12797",
+          "water-f001643/fragment-12888",
+          "water-f001643/fragment-12889",
+          "s4-f1140/fragment-0",
+          "s4-f1140/fragment-7",
+          "s4-f1140/fragment-36",
+          "s4-f1140/fragment-38",
+          "s4-f1140/fragment-39",
+          "s4-f1140/fragment-37",
+          "s4-f1140/fragment-41",
+          "s4-f1140/fragment-62",
+          "s4-f1140/fragment-63",
+          "s4-f1140/fragment-76",
+          "s4-f1140/fragment-78",
+          "s4-f1140/fragment-79",
+          "s4-f1140/fragment-77",
+          "s4-f1140/fragment-102",
+          "s4-f1140/fragment-169",
+          "s4-f1140/fragment-284",
+          "s4-f1140/fragment-403",
+          "s4-f1140/fragment-595",
+          "s4-f1140/fragment-610",
+          "s4-f1140/fragment-612",
+          "s4-f1140/fragment-1052",
+          "s4-f1140/fragment-708",
+          "s4-f1140/fragment-898",
+          "s4-f1140/fragment-950",
+          "s4-f1140/fragment-979",
+          "s4-f1140/fragment-1050"
+        ],
+        "held_out_subjects": [
+          "base-f144/fragment-150",
+          "base-f144/fragment-462"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 6,
+            "held_out": 0
+          },
+          "LIQUID_UPPER": {
+            "fit": 3,
+            "held_out": 1
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 2,
+            "held_out": 0
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 6,
+            "held_out": 0
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      },
+      {
+        "held_out_source": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+        "fitting_source_candidates": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+        ],
+        "fitting_subject_candidates": [
+          "N1",
+          "N2",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096",
+          "water-f001643/fragment-3",
+          "water-f001643/fragment-89",
+          "water-f001643/fragment-1378",
+          "water-f001643/fragment-1631",
+          "water-f001643/fragment-3810",
+          "water-f001643/fragment-3811",
+          "water-f001643/fragment-3821",
+          "water-f001643/fragment-3841",
+          "water-f001643/fragment-3842",
+          "water-f001643/fragment-5829",
+          "water-f001643/fragment-5908",
+          "water-f001643/fragment-5909",
+          "water-f001643/fragment-5910",
+          "water-f001643/fragment-5911",
+          "water-f001643/fragment-5979",
+          "water-f001643/fragment-6216",
+          "water-f001643/fragment-6217",
+          "water-f001643/fragment-6291",
+          "water-f001643/fragment-6984",
+          "water-f001643/fragment-7035",
+          "water-f001643/fragment-7036",
+          "water-f001643/fragment-7037",
+          "water-f001643/fragment-7094",
+          "water-f001643/fragment-7379",
+          "water-f001643/fragment-7942",
+          "water-f001643/fragment-7944",
+          "water-f001643/fragment-7962",
+          "water-f001643/fragment-7963",
+          "water-f001643/fragment-7991",
+          "water-f001643/fragment-7994",
+          "water-f001643/fragment-8409",
+          "water-f001643/fragment-9179",
+          "water-f001643/fragment-9728",
+          "water-f001643/fragment-9916",
+          "water-f001643/fragment-10349",
+          "water-f001643/fragment-10538",
+          "water-f001643/fragment-11387",
+          "water-f001643/fragment-11428",
+          "water-f001643/fragment-11430",
+          "water-f001643/fragment-11431",
+          "water-f001643/fragment-11429",
+          "water-f001643/fragment-11468",
+          "water-f001643/fragment-11540",
+          "water-f001643/fragment-11580",
+          "water-f001643/fragment-11582",
+          "water-f001643/fragment-11583",
+          "water-f001643/fragment-11584",
+          "water-f001643/fragment-11581",
+          "water-f001643/fragment-11585",
+          "water-f001643/fragment-11651",
+          "water-f001643/fragment-11652",
+          "water-f001643/fragment-11958",
+          "water-f001643/fragment-11959",
+          "water-f001643/fragment-12020",
+          "water-f001643/fragment-12021",
+          "water-f001643/fragment-12298",
+          "water-f001643/fragment-12299",
+          "water-f001643/fragment-12361",
+          "water-f001643/fragment-12797",
+          "water-f001643/fragment-12888",
+          "water-f001643/fragment-12889",
+          "base-f144/fragment-150",
+          "base-f144/fragment-462"
+        ],
+        "held_out_subjects": [
+          "N3",
+          "N4",
+          "N5",
+          "s4-f1140/fragment-0",
+          "s4-f1140/fragment-7",
+          "s4-f1140/fragment-36",
+          "s4-f1140/fragment-38",
+          "s4-f1140/fragment-39",
+          "s4-f1140/fragment-37",
+          "s4-f1140/fragment-41",
+          "s4-f1140/fragment-62",
+          "s4-f1140/fragment-63",
+          "s4-f1140/fragment-76",
+          "s4-f1140/fragment-78",
+          "s4-f1140/fragment-79",
+          "s4-f1140/fragment-77",
+          "s4-f1140/fragment-102",
+          "s4-f1140/fragment-169",
+          "s4-f1140/fragment-284",
+          "s4-f1140/fragment-403",
+          "s4-f1140/fragment-595",
+          "s4-f1140/fragment-610",
+          "s4-f1140/fragment-612",
+          "s4-f1140/fragment-1052",
+          "s4-f1140/fragment-708",
+          "s4-f1140/fragment-898",
+          "s4-f1140/fragment-950",
+          "s4-f1140/fragment-979",
+          "s4-f1140/fragment-1050"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 5,
+            "held_out": 1
+          },
+          "LIQUID_UPPER": {
+            "fit": 3,
+            "held_out": 1
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 1,
+            "held_out": 1
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 5,
+            "held_out": 1
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      }
+    ],
+    "missing_disjoint_positive_sources": [],
+    "status": "POSITIVE_SOURCE_COVERAGE_ONLY"
+  },
+  "saved_semantic_coverage": {
+    "role_coverage": {
+      "FOAM_UPPER": {
+        "certain_paths": [
+          "N3",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "s7-settled-native/fragment-687"
+        ],
+        "available_certain_paths": [
+          "N3",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "s7-settled-native/fragment-687"
+        ],
+        "available_certain_sources": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "compatible_disjunctions": [
+          "N1"
+        ]
+      },
+      "LIQUID_UPPER": {
+        "certain_paths": [
+          "fragment-1463",
+          "water-f001643/fragment-1378",
+          "s4-f1140/fragment-708",
+          "base-f144/fragment-150"
+        ],
+        "available_certain_paths": [
+          "fragment-1463"
+        ],
+        "available_certain_sources": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15"
+        ],
+        "compatible_disjunctions": [
+          "N1"
+        ]
+      },
+      "INTERNAL_FOAM_CHANGE": {
+        "certain_paths": [
+          "N2",
+          "N4"
+        ],
+        "available_certain_paths": [
+          "N2",
+          "N4"
+        ],
+        "available_certain_sources": [
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "compatible_disjunctions": []
+      },
+      "STRUCTURE_BOUNDARY": {
+        "certain_paths": [
+          "N5",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453"
+        ],
+        "available_certain_paths": [
+          "N5",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453"
+        ],
+        "available_certain_sources": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "compatible_disjunctions": []
+      }
+    },
+    "source_group_folds": [
+      {
+        "held_out_source": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+        "fitting_source_candidates": [
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "fitting_subject_candidates": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096",
+          "water-f001643/fragment-3",
+          "water-f001643/fragment-89",
+          "water-f001643/fragment-1378",
+          "water-f001643/fragment-1631",
+          "water-f001643/fragment-3810",
+          "water-f001643/fragment-3811",
+          "water-f001643/fragment-3821",
+          "water-f001643/fragment-3841",
+          "water-f001643/fragment-3842",
+          "water-f001643/fragment-5829",
+          "water-f001643/fragment-5908",
+          "water-f001643/fragment-5909",
+          "water-f001643/fragment-5910",
+          "water-f001643/fragment-5911",
+          "water-f001643/fragment-5979",
+          "water-f001643/fragment-6216",
+          "water-f001643/fragment-6217",
+          "water-f001643/fragment-6291",
+          "water-f001643/fragment-6984",
+          "water-f001643/fragment-7035",
+          "water-f001643/fragment-7036",
+          "water-f001643/fragment-7037",
+          "water-f001643/fragment-7094",
+          "water-f001643/fragment-7379",
+          "water-f001643/fragment-7942",
+          "water-f001643/fragment-7944",
+          "water-f001643/fragment-7962",
+          "water-f001643/fragment-7963",
+          "water-f001643/fragment-7991",
+          "water-f001643/fragment-7994",
+          "water-f001643/fragment-8409",
+          "water-f001643/fragment-9179",
+          "water-f001643/fragment-9728",
+          "water-f001643/fragment-9916",
+          "water-f001643/fragment-10349",
+          "water-f001643/fragment-10538",
+          "water-f001643/fragment-11387",
+          "water-f001643/fragment-11428",
+          "water-f001643/fragment-11430",
+          "water-f001643/fragment-11431",
+          "water-f001643/fragment-11429",
+          "water-f001643/fragment-11468",
+          "water-f001643/fragment-11540",
+          "water-f001643/fragment-11580",
+          "water-f001643/fragment-11582",
+          "water-f001643/fragment-11583",
+          "water-f001643/fragment-11584",
+          "water-f001643/fragment-11581",
+          "water-f001643/fragment-11585",
+          "water-f001643/fragment-11651",
+          "water-f001643/fragment-11652",
+          "water-f001643/fragment-11958",
+          "water-f001643/fragment-11959",
+          "water-f001643/fragment-12020",
+          "water-f001643/fragment-12021",
+          "water-f001643/fragment-12298",
+          "water-f001643/fragment-12299",
+          "water-f001643/fragment-12361",
+          "water-f001643/fragment-12797",
+          "water-f001643/fragment-12888",
+          "water-f001643/fragment-12889",
+          "s4-f1140/fragment-0",
+          "s4-f1140/fragment-7",
+          "s4-f1140/fragment-36",
+          "s4-f1140/fragment-38",
+          "s4-f1140/fragment-39",
+          "s4-f1140/fragment-37",
+          "s4-f1140/fragment-41",
+          "s4-f1140/fragment-62",
+          "s4-f1140/fragment-63",
+          "s4-f1140/fragment-76",
+          "s4-f1140/fragment-78",
+          "s4-f1140/fragment-79",
+          "s4-f1140/fragment-77",
+          "s4-f1140/fragment-102",
+          "s4-f1140/fragment-169",
+          "s4-f1140/fragment-284",
+          "s4-f1140/fragment-403",
+          "s4-f1140/fragment-595",
+          "s4-f1140/fragment-610",
+          "s4-f1140/fragment-612",
+          "s4-f1140/fragment-1052",
+          "s4-f1140/fragment-708",
+          "s4-f1140/fragment-898",
+          "s4-f1140/fragment-950",
+          "s4-f1140/fragment-979",
+          "s4-f1140/fragment-1050",
+          "base-f144/fragment-150",
+          "base-f144/fragment-462"
+        ],
+        "held_out_subjects": [
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 2,
+            "held_out": 4
+          },
+          "LIQUID_UPPER": {
+            "fit": 0,
+            "held_out": 1
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 2,
+            "held_out": 0
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 3,
+            "held_out": 3
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      },
+      {
+        "held_out_source": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+        "fitting_source_candidates": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "fitting_subject_candidates": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030",
+          "water-f001643/fragment-3",
+          "water-f001643/fragment-89",
+          "water-f001643/fragment-1378",
+          "water-f001643/fragment-1631",
+          "water-f001643/fragment-3810",
+          "water-f001643/fragment-3811",
+          "water-f001643/fragment-3821",
+          "water-f001643/fragment-3841",
+          "water-f001643/fragment-3842",
+          "water-f001643/fragment-5829",
+          "water-f001643/fragment-5908",
+          "water-f001643/fragment-5909",
+          "water-f001643/fragment-5910",
+          "water-f001643/fragment-5911",
+          "water-f001643/fragment-5979",
+          "water-f001643/fragment-6216",
+          "water-f001643/fragment-6217",
+          "water-f001643/fragment-6291",
+          "water-f001643/fragment-6984",
+          "water-f001643/fragment-7035",
+          "water-f001643/fragment-7036",
+          "water-f001643/fragment-7037",
+          "water-f001643/fragment-7094",
+          "water-f001643/fragment-7379",
+          "water-f001643/fragment-7942",
+          "water-f001643/fragment-7944",
+          "water-f001643/fragment-7962",
+          "water-f001643/fragment-7963",
+          "water-f001643/fragment-7991",
+          "water-f001643/fragment-7994",
+          "water-f001643/fragment-8409",
+          "water-f001643/fragment-9179",
+          "water-f001643/fragment-9728",
+          "water-f001643/fragment-9916",
+          "water-f001643/fragment-10349",
+          "water-f001643/fragment-10538",
+          "water-f001643/fragment-11387",
+          "water-f001643/fragment-11428",
+          "water-f001643/fragment-11430",
+          "water-f001643/fragment-11431",
+          "water-f001643/fragment-11429",
+          "water-f001643/fragment-11468",
+          "water-f001643/fragment-11540",
+          "water-f001643/fragment-11580",
+          "water-f001643/fragment-11582",
+          "water-f001643/fragment-11583",
+          "water-f001643/fragment-11584",
+          "water-f001643/fragment-11581",
+          "water-f001643/fragment-11585",
+          "water-f001643/fragment-11651",
+          "water-f001643/fragment-11652",
+          "water-f001643/fragment-11958",
+          "water-f001643/fragment-11959",
+          "water-f001643/fragment-12020",
+          "water-f001643/fragment-12021",
+          "water-f001643/fragment-12298",
+          "water-f001643/fragment-12299",
+          "water-f001643/fragment-12361",
+          "water-f001643/fragment-12797",
+          "water-f001643/fragment-12888",
+          "water-f001643/fragment-12889",
+          "s4-f1140/fragment-0",
+          "s4-f1140/fragment-7",
+          "s4-f1140/fragment-36",
+          "s4-f1140/fragment-38",
+          "s4-f1140/fragment-39",
+          "s4-f1140/fragment-37",
+          "s4-f1140/fragment-41",
+          "s4-f1140/fragment-62",
+          "s4-f1140/fragment-63",
+          "s4-f1140/fragment-76",
+          "s4-f1140/fragment-78",
+          "s4-f1140/fragment-79",
+          "s4-f1140/fragment-77",
+          "s4-f1140/fragment-102",
+          "s4-f1140/fragment-169",
+          "s4-f1140/fragment-284",
+          "s4-f1140/fragment-403",
+          "s4-f1140/fragment-595",
+          "s4-f1140/fragment-610",
+          "s4-f1140/fragment-612",
+          "s4-f1140/fragment-1052",
+          "s4-f1140/fragment-708",
+          "s4-f1140/fragment-898",
+          "s4-f1140/fragment-950",
+          "s4-f1140/fragment-979",
+          "s4-f1140/fragment-1050",
+          "base-f144/fragment-150",
+          "base-f144/fragment-462"
+        ],
+        "held_out_subjects": [
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 5,
+            "held_out": 1
+          },
+          "LIQUID_UPPER": {
+            "fit": 1,
+            "held_out": 0
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 2,
+            "held_out": 0
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 4,
+            "held_out": 2
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      },
+      {
+        "held_out_source": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+        "fitting_source_candidates": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "fitting_subject_candidates": [
+          "N3",
+          "N4",
+          "N5",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096",
+          "s4-f1140/fragment-0",
+          "s4-f1140/fragment-7",
+          "s4-f1140/fragment-36",
+          "s4-f1140/fragment-38",
+          "s4-f1140/fragment-39",
+          "s4-f1140/fragment-37",
+          "s4-f1140/fragment-41",
+          "s4-f1140/fragment-62",
+          "s4-f1140/fragment-63",
+          "s4-f1140/fragment-76",
+          "s4-f1140/fragment-78",
+          "s4-f1140/fragment-79",
+          "s4-f1140/fragment-77",
+          "s4-f1140/fragment-102",
+          "s4-f1140/fragment-169",
+          "s4-f1140/fragment-284",
+          "s4-f1140/fragment-403",
+          "s4-f1140/fragment-595",
+          "s4-f1140/fragment-610",
+          "s4-f1140/fragment-612",
+          "s4-f1140/fragment-1052",
+          "s4-f1140/fragment-708",
+          "s4-f1140/fragment-898",
+          "s4-f1140/fragment-950",
+          "s4-f1140/fragment-979",
+          "s4-f1140/fragment-1050",
+          "base-f144/fragment-150",
+          "base-f144/fragment-462"
+        ],
+        "held_out_subjects": [
+          "N1",
+          "N2",
+          "water-f001643/fragment-3",
+          "water-f001643/fragment-89",
+          "water-f001643/fragment-1378",
+          "water-f001643/fragment-1631",
+          "water-f001643/fragment-3810",
+          "water-f001643/fragment-3811",
+          "water-f001643/fragment-3821",
+          "water-f001643/fragment-3841",
+          "water-f001643/fragment-3842",
+          "water-f001643/fragment-5829",
+          "water-f001643/fragment-5908",
+          "water-f001643/fragment-5909",
+          "water-f001643/fragment-5910",
+          "water-f001643/fragment-5911",
+          "water-f001643/fragment-5979",
+          "water-f001643/fragment-6216",
+          "water-f001643/fragment-6217",
+          "water-f001643/fragment-6291",
+          "water-f001643/fragment-6984",
+          "water-f001643/fragment-7035",
+          "water-f001643/fragment-7036",
+          "water-f001643/fragment-7037",
+          "water-f001643/fragment-7094",
+          "water-f001643/fragment-7379",
+          "water-f001643/fragment-7942",
+          "water-f001643/fragment-7944",
+          "water-f001643/fragment-7962",
+          "water-f001643/fragment-7963",
+          "water-f001643/fragment-7991",
+          "water-f001643/fragment-7994",
+          "water-f001643/fragment-8409",
+          "water-f001643/fragment-9179",
+          "water-f001643/fragment-9728",
+          "water-f001643/fragment-9916",
+          "water-f001643/fragment-10349",
+          "water-f001643/fragment-10538",
+          "water-f001643/fragment-11387",
+          "water-f001643/fragment-11428",
+          "water-f001643/fragment-11430",
+          "water-f001643/fragment-11431",
+          "water-f001643/fragment-11429",
+          "water-f001643/fragment-11468",
+          "water-f001643/fragment-11540",
+          "water-f001643/fragment-11580",
+          "water-f001643/fragment-11582",
+          "water-f001643/fragment-11583",
+          "water-f001643/fragment-11584",
+          "water-f001643/fragment-11581",
+          "water-f001643/fragment-11585",
+          "water-f001643/fragment-11651",
+          "water-f001643/fragment-11652",
+          "water-f001643/fragment-11958",
+          "water-f001643/fragment-11959",
+          "water-f001643/fragment-12020",
+          "water-f001643/fragment-12021",
+          "water-f001643/fragment-12298",
+          "water-f001643/fragment-12299",
+          "water-f001643/fragment-12361",
+          "water-f001643/fragment-12797",
+          "water-f001643/fragment-12888",
+          "water-f001643/fragment-12889"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 6,
+            "held_out": 0
+          },
+          "LIQUID_UPPER": {
+            "fit": 1,
+            "held_out": 0
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 1,
+            "held_out": 1
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 6,
+            "held_out": 0
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      },
+      {
+        "held_out_source": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e",
+        "fitting_source_candidates": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+        ],
+        "fitting_subject_candidates": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096",
+          "water-f001643/fragment-3",
+          "water-f001643/fragment-89",
+          "water-f001643/fragment-1378",
+          "water-f001643/fragment-1631",
+          "water-f001643/fragment-3810",
+          "water-f001643/fragment-3811",
+          "water-f001643/fragment-3821",
+          "water-f001643/fragment-3841",
+          "water-f001643/fragment-3842",
+          "water-f001643/fragment-5829",
+          "water-f001643/fragment-5908",
+          "water-f001643/fragment-5909",
+          "water-f001643/fragment-5910",
+          "water-f001643/fragment-5911",
+          "water-f001643/fragment-5979",
+          "water-f001643/fragment-6216",
+          "water-f001643/fragment-6217",
+          "water-f001643/fragment-6291",
+          "water-f001643/fragment-6984",
+          "water-f001643/fragment-7035",
+          "water-f001643/fragment-7036",
+          "water-f001643/fragment-7037",
+          "water-f001643/fragment-7094",
+          "water-f001643/fragment-7379",
+          "water-f001643/fragment-7942",
+          "water-f001643/fragment-7944",
+          "water-f001643/fragment-7962",
+          "water-f001643/fragment-7963",
+          "water-f001643/fragment-7991",
+          "water-f001643/fragment-7994",
+          "water-f001643/fragment-8409",
+          "water-f001643/fragment-9179",
+          "water-f001643/fragment-9728",
+          "water-f001643/fragment-9916",
+          "water-f001643/fragment-10349",
+          "water-f001643/fragment-10538",
+          "water-f001643/fragment-11387",
+          "water-f001643/fragment-11428",
+          "water-f001643/fragment-11430",
+          "water-f001643/fragment-11431",
+          "water-f001643/fragment-11429",
+          "water-f001643/fragment-11468",
+          "water-f001643/fragment-11540",
+          "water-f001643/fragment-11580",
+          "water-f001643/fragment-11582",
+          "water-f001643/fragment-11583",
+          "water-f001643/fragment-11584",
+          "water-f001643/fragment-11581",
+          "water-f001643/fragment-11585",
+          "water-f001643/fragment-11651",
+          "water-f001643/fragment-11652",
+          "water-f001643/fragment-11958",
+          "water-f001643/fragment-11959",
+          "water-f001643/fragment-12020",
+          "water-f001643/fragment-12021",
+          "water-f001643/fragment-12298",
+          "water-f001643/fragment-12299",
+          "water-f001643/fragment-12361",
+          "water-f001643/fragment-12797",
+          "water-f001643/fragment-12888",
+          "water-f001643/fragment-12889",
+          "s4-f1140/fragment-0",
+          "s4-f1140/fragment-7",
+          "s4-f1140/fragment-36",
+          "s4-f1140/fragment-38",
+          "s4-f1140/fragment-39",
+          "s4-f1140/fragment-37",
+          "s4-f1140/fragment-41",
+          "s4-f1140/fragment-62",
+          "s4-f1140/fragment-63",
+          "s4-f1140/fragment-76",
+          "s4-f1140/fragment-78",
+          "s4-f1140/fragment-79",
+          "s4-f1140/fragment-77",
+          "s4-f1140/fragment-102",
+          "s4-f1140/fragment-169",
+          "s4-f1140/fragment-284",
+          "s4-f1140/fragment-403",
+          "s4-f1140/fragment-595",
+          "s4-f1140/fragment-610",
+          "s4-f1140/fragment-612",
+          "s4-f1140/fragment-1052",
+          "s4-f1140/fragment-708",
+          "s4-f1140/fragment-898",
+          "s4-f1140/fragment-950",
+          "s4-f1140/fragment-979",
+          "s4-f1140/fragment-1050"
+        ],
+        "held_out_subjects": [
+          "base-f144/fragment-150",
+          "base-f144/fragment-462"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 6,
+            "held_out": 0
+          },
+          "LIQUID_UPPER": {
+            "fit": 1,
+            "held_out": 0
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 2,
+            "held_out": 0
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 6,
+            "held_out": 0
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      },
+      {
+        "held_out_source": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+        "fitting_source_candidates": [
+          "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+          "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+          "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+          "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+        ],
+        "fitting_subject_candidates": [
+          "N1",
+          "N2",
+          "fragment-963",
+          "fragment-995",
+          "fragment-1029",
+          "fragment-1031",
+          "fragment-1769",
+          "fragment-1788",
+          "fragment-1789",
+          "fragment-14",
+          "fragment-15",
+          "fragment-814",
+          "fragment-816",
+          "fragment-817",
+          "fragment-1463",
+          "fragment-1523",
+          "fragment-1546",
+          "fragment-1630",
+          "fragment-1650",
+          "fragment-1652",
+          "fragment-1653",
+          "fragment-1651",
+          "fragment-1685",
+          "fragment-1686",
+          "fragment-1864",
+          "fragment-1920",
+          "fragment-1923",
+          "fragment-1924",
+          "fragment-2030",
+          "s7-settled-native/fragment-444",
+          "s7-settled-native/fragment-453",
+          "s7-settled-native/fragment-687",
+          "s7-settled-native/fragment-1892",
+          "s7-settled-native/fragment-2195",
+          "s7-settled-native/fragment-2449",
+          "s7-settled-native/fragment-3477",
+          "s7-settled-native/fragment-3478",
+          "s7-settled-native/fragment-3479",
+          "s7-settled-native/fragment-3480",
+          "s7-settled-native/fragment-3520",
+          "s7-settled-native/fragment-3521",
+          "s7-settled-native/fragment-3554",
+          "s7-settled-native/fragment-3556",
+          "s7-settled-native/fragment-3852",
+          "s7-settled-native/fragment-4096",
+          "water-f001643/fragment-3",
+          "water-f001643/fragment-89",
+          "water-f001643/fragment-1378",
+          "water-f001643/fragment-1631",
+          "water-f001643/fragment-3810",
+          "water-f001643/fragment-3811",
+          "water-f001643/fragment-3821",
+          "water-f001643/fragment-3841",
+          "water-f001643/fragment-3842",
+          "water-f001643/fragment-5829",
+          "water-f001643/fragment-5908",
+          "water-f001643/fragment-5909",
+          "water-f001643/fragment-5910",
+          "water-f001643/fragment-5911",
+          "water-f001643/fragment-5979",
+          "water-f001643/fragment-6216",
+          "water-f001643/fragment-6217",
+          "water-f001643/fragment-6291",
+          "water-f001643/fragment-6984",
+          "water-f001643/fragment-7035",
+          "water-f001643/fragment-7036",
+          "water-f001643/fragment-7037",
+          "water-f001643/fragment-7094",
+          "water-f001643/fragment-7379",
+          "water-f001643/fragment-7942",
+          "water-f001643/fragment-7944",
+          "water-f001643/fragment-7962",
+          "water-f001643/fragment-7963",
+          "water-f001643/fragment-7991",
+          "water-f001643/fragment-7994",
+          "water-f001643/fragment-8409",
+          "water-f001643/fragment-9179",
+          "water-f001643/fragment-9728",
+          "water-f001643/fragment-9916",
+          "water-f001643/fragment-10349",
+          "water-f001643/fragment-10538",
+          "water-f001643/fragment-11387",
+          "water-f001643/fragment-11428",
+          "water-f001643/fragment-11430",
+          "water-f001643/fragment-11431",
+          "water-f001643/fragment-11429",
+          "water-f001643/fragment-11468",
+          "water-f001643/fragment-11540",
+          "water-f001643/fragment-11580",
+          "water-f001643/fragment-11582",
+          "water-f001643/fragment-11583",
+          "water-f001643/fragment-11584",
+          "water-f001643/fragment-11581",
+          "water-f001643/fragment-11585",
+          "water-f001643/fragment-11651",
+          "water-f001643/fragment-11652",
+          "water-f001643/fragment-11958",
+          "water-f001643/fragment-11959",
+          "water-f001643/fragment-12020",
+          "water-f001643/fragment-12021",
+          "water-f001643/fragment-12298",
+          "water-f001643/fragment-12299",
+          "water-f001643/fragment-12361",
+          "water-f001643/fragment-12797",
+          "water-f001643/fragment-12888",
+          "water-f001643/fragment-12889",
+          "base-f144/fragment-150",
+          "base-f144/fragment-462"
+        ],
+        "held_out_subjects": [
+          "N3",
+          "N4",
+          "N5",
+          "s4-f1140/fragment-0",
+          "s4-f1140/fragment-7",
+          "s4-f1140/fragment-36",
+          "s4-f1140/fragment-38",
+          "s4-f1140/fragment-39",
+          "s4-f1140/fragment-37",
+          "s4-f1140/fragment-41",
+          "s4-f1140/fragment-62",
+          "s4-f1140/fragment-63",
+          "s4-f1140/fragment-76",
+          "s4-f1140/fragment-78",
+          "s4-f1140/fragment-79",
+          "s4-f1140/fragment-77",
+          "s4-f1140/fragment-102",
+          "s4-f1140/fragment-169",
+          "s4-f1140/fragment-284",
+          "s4-f1140/fragment-403",
+          "s4-f1140/fragment-595",
+          "s4-f1140/fragment-610",
+          "s4-f1140/fragment-612",
+          "s4-f1140/fragment-1052",
+          "s4-f1140/fragment-708",
+          "s4-f1140/fragment-898",
+          "s4-f1140/fragment-950",
+          "s4-f1140/fragment-979",
+          "s4-f1140/fragment-1050"
+        ],
+        "certain_available_counts": {
+          "FOAM_UPPER": {
+            "fit": 5,
+            "held_out": 1
+          },
+          "LIQUID_UPPER": {
+            "fit": 1,
+            "held_out": 0
+          },
+          "INTERNAL_FOAM_CHANGE": {
+            "fit": 1,
+            "held_out": 1
+          },
+          "STRUCTURE_BOUNDARY": {
+            "fit": 5,
+            "held_out": 1
+          }
+        },
+        "training_executed": false,
+        "evaluation_executed": false,
+        "untouched_holdout": false
+      }
+    ],
+    "missing_disjoint_positive_sources": [
+      "LIQUID_UPPER"
+    ],
+    "status": "INCOMPLETE_POSITIVE_SOURCE_COVERAGE"
+  },
+  "historical_conflict": {
+    "legacy_truth": {
+      "path": "sample/base_sample_1.oiltruth",
+      "sha256": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a"
+    },
+    "annotation_id": "2876749e-7e85-4e26-bb82-f11ac860af1e",
+    "review_id": "S1-01",
+    "frame": 144,
+    "historical_foam_present": false,
+    "current_relation": "FOAM_LOWER_LIQUID_INTERFACE",
+    "current_reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reply.json",
+      "sha256": "227994fe7a6af4aa356dd57fc8730e313b615b5474fa6d64f26be60f1484134d"
+    },
+    "legacy_foam_absence_allowed": false,
+    "scalar_truth_changed": false,
+    "disposition": "NEW_EXACT_PATH_ROLE_SUPERSEDES_FOAM_ABSENCE_FOR_THIS_FRAME_ONLY",
+    "scope": "No new Foam upper, pure-side material, motion, exact scalar or adjacent-frame truth"
+  },
+  "unchanged_base_rows": 135,
+  "unchanged_base_sha256": "de2d15da14f31fc194caf8895afadac46829c6b974d3cdfc063a3347d721b25b",
+  "model_calls": 0,
+  "training_executed": false,
+  "production_changed": false,
+  "video_decodes": 0,
+  "untouched_holdout_recordings": 0,
+  "status": "SCOPED_CONTACT_EXTENSION_NOT_MODEL_ACCEPTANCE"
+}

@@ -191,6 +191,18 @@ or editing them. Rebuild the parent readout, inspect the exact path, independent
 check all 40 original RGB patches and verify unknown/missing-input masks.
 This stage runs no model or production detector and cannot reopen NCT-1.
 
+At frozen `01f2f1e`, the foreign-cwd entry completed successfully. The
+[second delta](2026-10-14-raw-front-inventory/base-extension.json) now accounts
+for **137 paths / 19 qualified / 118 unknown**, 101 native inputs and 39 saved
+semantic inputs across five recording hashes / eight frames. All 135 prior
+observations remain unchanged. Foam–liquid positives now span three recording
+hashes; liquid–air remains one. Different hashes do not establish independent
+physical filming sessions. [Independent verification](2026-10-14-raw-front-inventory/base-extension-verification.json)
+checks all 40 original RGB patches, the unavailable/unreviewed path 462, partial
+targets and unchanged historical truth bytes. The existing qualifier/corpus/
+extension tests pass **51/51**. Managed run `s11-native-base-contact-20261014-001`
+is closed; all 62 runs pass. No model, environment or media copies were created.
+
 After binding, inspect existing saved current-frame evidence before proposing
 another model or collecting another source. If the saved evidence cannot locate
 the precise newly reviewed contact in current candidate generation, a bounded
@@ -199,12 +211,26 @@ legacy source separate from Windows BASE and distinguish raw/current-frame
 availability from completed-window publication. Do not declare Foam upper recall
 or an episode failure from a newly qualified Foam-lower contact.
 
+The existing overlay comparison retains base f150/f151/f240 frame receipts and
+window fingerprints, not f144's full current-frame candidate provenance. The
+[bounded probe plan](2026-10-14-raw-front-inventory/base-probe-plan.json) therefore
+calls the real `OpenCvPhaseDetector.detect` once on f144's existing original PNG,
+using the established baseline substitution. Save all current candidates, A1/O1
+and Foam component diagnostics with their source identity; compare all four saved
+G0 rasters byte for byte. Use the unchanged Recipe ellipse/margin and settings;
+exclusions/templates/reviewed Artifact reference are empty. A fresh detector has
+no learned static maps or prior temporal observations, Local XY is OFF, and no
+session initial confirmation, completed resolver or report runs. This can locate
+current-frame representation availability, not a final-sequence loss. Reviewed
+path/role coordinates are verification metadata and never detector input. Resource
+limits are 120 seconds, 12 MB owned scratch/cache and 500 KB retained receipt.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
 - First harmful stage: baseline native Canny geometry is absent before role input in A. All 35 pre-mask Canny pixels lie outside the effective region; no valid edge is established as erased. The existing material-path candidate remains available; this does not locate a production candidate, owner, temporal or report loss. Raw plateau graph fragmentation is a separate representation limit, not physical absence.
 - Existing feature coverage: reuse original sample3 and base_sample_1 Recipe ROI/exclusions and baseline glare/digital-overlay preprocessing, with archived/original RGB equality. Artifact templates are not consumed by these raw geometry entries; static learning, initial state, Local XY and temporal ownership are not executed. Completed D2/Local XY/overlay failures remain controls, and no claim is made that those unused features failed or improved.
-- Execution scope: the completed absolute-path CLI reconstructs one saved A PNG/Recipe and unchanged baseline preprocessing, binds the point reply, then composes existing raw-gradient/plateau/graph functions. A separately pinned f144 source preparation reuses one existing original PNG/Recipe and G0/native review owners. The new reply stage composes frozen corpus/extension and native-contact validators and checks original RGB, with no production entry, model fitting, video decode or Windows. A subsequent saved-frame provenance review must state its own entry scope before execution. No point-to-path or source-to-source label transfer is permitted.
+- Execution scope: A representation, f144 source preparation and reply binding reuse their recorded narrow owners. The separately pinned f144 probe invokes real baseline `detect` on one saved PNG with debug projection and no warmed temporal/static state, session confirmation, completed sequence or report. No model fitting, video decode or Windows runs; exact native path truth is not input to the detector or transferred to a candidate.
 - Logic-map impact: NONE — an offline representation adapter has no production caller or authority; existing candidate and native input responsibilities remain separate.
 - Failure-registry impact: NONE — reuses the established raw-representation/role distinction and signed-gap counterexamples; no classifier is promoted or new general failure family asserted.
