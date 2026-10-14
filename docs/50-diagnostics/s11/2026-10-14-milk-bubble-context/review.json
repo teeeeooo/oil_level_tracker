@@ -1,0 +1,42 @@
+{
+  "schema": "s11-milk-bubble-context-review-v1",
+  "source_review_status": "AWAITING_TEMPORAL_CORRESPONDENCE",
+  "plan": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-milk-bubble-context/plan.json",
+    "sha256": "e9876122aa2158e7dd363f8db01c336da3e0b9fe6f79cddb45a7f1e3198904fb"
+  },
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-milk-bubble-context/review.html",
+    "sha256": "397aa34fad8dd8eeb35b2bf971a9d127a2ae574264d38847df320df52dae225a",
+    "atlas_path": "docs/50-diagnostics/s11/2026-10-14-milk-bubble-context/native-atlas.png",
+    "atlas_sha256": "a8bcfafcebbeeff1a26d233ced0263d9c4fa1aac0aeb16da843c579ef2775090"
+  },
+  "existing_qualified_spatial_fact": {
+    "frame_index": 1063,
+    "native_fragment_id": 687,
+    "role": "EXTERNAL_FOAM_UPPER",
+    "user_wording": "foam의 실제 상단임 큰 방울 한개의 상단이네",
+    "scope": "One large bubble top, not a stable whole-layer or neighboring-frame label."
+  },
+  "assistant_visual_observation": "The displayed region varies over the 25 frames. No specific disappearance/merger of an identified film and maintained neighboring cells is independently qualified. This is an uncertainty statement, not proof that no physical event occurred.",
+  "question": "1039→1063 프레임에서 마지막에 확인한 큰 거품이 같은 개체로 유지되는가, 아니면 합쳐짐·터짐·다른 거품으로의 교체가 보이는가? 보이면 프레임도 요청. 이 영상만으로 구분 어려움도 허용.",
+  "options": [
+    "같은 큰 거품이 유지됨",
+    "합쳐짐·터짐·교체가 보임",
+    "이 영상만으로 구분 어려움"
+  ],
+  "why_needed": "The closed spatial reply does not identify the same object across time; a proposed event operator cannot receive physical authority from raw pixel variation.",
+  "human_temporal_reply": null,
+  "event_labels": [],
+  "do_not_infer": [
+    "Absence of Foam from absence of a visible event",
+    "Dense contours or trajectories from the final-frame path",
+    "Stable-layer or episode acceptance from one bubble",
+    "Upper-front selection or Oil/BASE/Accum behavior"
+  ],
+  "next_by_reply": {
+    "same_object": "Keep as a persistence/no-qualified-event control; do not train an event discriminator or require motion. Any successor operator still needs a distinct physical-information contract and four-source controls.",
+    "visible_change": "Bind only the described object relation and indicated frames; distinguish rupture/merger from occlusion/optical alternatives before any operator.",
+    "unassessable": "Close this fixed window without a temporal label or event operation; do not mine a wider window or repeat closed spatial/lower-interface questions."
+  }
+}

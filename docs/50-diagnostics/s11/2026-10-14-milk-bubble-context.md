@@ -68,12 +68,53 @@ their spatial precision. A future general operator must preserve their true
 uppers and oppose structures/internal Foam; a milk-only event cannot substitute
 for those four-source controls or establish Oil/BASE/Accum behavior.
 
+## Executed source review and present limit
+
+The plan/adapter/viewer were frozen at clean **`95ec216`** before the one extraction.
+The actual CLI ran from `/private/tmp` using absolute paths, decoded exactly
+**25 consecutive frames**, and retained one **1,033,408-byte PNG atlas** plus a
+9,812-byte readout. Full f1063 pixels equal the previously reviewed PNG; every
+saved crop roundtrips exactly. Runtime was **0.2144 s**, peak RSS **193,101,824 bytes**.
+These are source-extraction measurements, not detector performance.
+
+[Verification](2026-10-14-milk-bubble-context/verification.json) also checks the
+actual browser: all 25 canvas images equal their native crop hashes, all 25 frame
+and time labels agree, the existing locator loads, stepping clamps at both ends,
+and playback stops at the last frame. The rendered screen was inspected. Existing
+output is refused before decoding and every output hash remains unchanged. The
+browser verification used a temporary localhost server limited to the three
+required assets and an isolated Chrome profile; both were closed. No dependency
+or browser was installed.
+
+The assistant inspected the complete atlas and the rendered anchor context.
+Image variation is visible, but **no particular physical film disappearance or
+merger has been qualified**. That is not an event-absence conclusion. The
+[bounded temporal question](2026-10-14-milk-bubble-context/review.json) is now
+pending: does the final-frame bubble remain the same object through these frames,
+or is there a discernible merger/rupture/replacement? This is a new temporal
+correspondence question; all fifteen spatial roles remain closed.
+
+A “same bubble” answer would preserve a stationary/deforming positive control,
+not authorize an event detector. A reported change needs its stated frame/object
+relationship and optical/occlusion alternatives retained. “Unassessable” closes
+this fixed window without a label. In each case, the failed color/pattern models,
+public temporal screen, and all four source groups remain controls. No search
+for a more favorable window or retraining follows automatically.
+
+Canonical output is this one diagnostics directory. Managed scratch copies,
+verification screenshot and temporary browser-check source are discarded after
+recording the checks; the original media and prior role evidence are referenced.
+All **48 managed runs are closed with zero artifact errors**. The browser receipt
+field `console_errors` records uncaught page errors, not a full network/console
+audit. Governance and whitespace checks pass; no production source or Recipe
+changed and the existing worktree is retained.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F09`, `S11-F10`.
 - First harmful stage: frozen local observations misorder qualified upper/structure controls; the production harmful stage is unchanged and this source-only screen cannot repair it.
 - Existing feature coverage: original sample7 video plus saved frame/path/role pins. Production Recipe setup, static learning, exclusions, Artifact consumers and report are not exercised; Local XY remains OFF. sample4's empty exclusion/template configuration and the closed D2/Local XY comparisons remain separate recorded controls.
-- Execution scope: one planned 25-frame source extraction via the existing reader, exact pixel verification and manual context inspection. No detector/model/optical-flow/segmentation execution, fit, label propagation, sequence inference, Windows run or field acceptance.
+- Execution scope: one completed 25-frame source extraction via the existing reader, exact pixel verification and manual context inspection. No detector/model/optical-flow/segmentation execution, fit, label propagation, sequence inference, Windows run or field acceptance.
 - Logic-map impact: NONE — no production owner, typed observation, candidate selection or setup behavior changes.
 - Failure-registry impact: NONE — the source review supplies no replacement detector and retires none of the existing optical-warp, color or identity counterexamples.

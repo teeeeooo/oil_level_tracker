@@ -1494,3 +1494,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/plan.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/plan.json) | 기존 25프레임·고정 영역·원본 및 source 핀 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/review_source.py](50-diagnostics/s11/2026-10-14-milk-bubble-context/review_source.py) | 기존 디코더를 재사용하는 한정 원본 추출·픽셀 검사 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/review.html](50-diagnostics/s11/2026-10-14-milk-bubble-context/review.html) | 동일 무손실 atlas의 프레임 이동·재생 화면 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/native-atlas.png](50-diagnostics/s11/2026-10-14-milk-bubble-context/native-atlas.png) | 25개 원본 영역을 한 번만 보존한 무손실 배열 이미지 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/readout.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/readout.json) | 25개 프레임·시간·원본/영역 해시 및 추출 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/verification.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/verification.json) | 실제 브라우저 25개 픽셀·표시 시간·동작·덮어쓰기 거부 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/review.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/review.json) | 새 시간 대응 질문과 이벤트 판정 미제공 상태 |
