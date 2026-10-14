@@ -135,7 +135,10 @@ plan을 바꿔 통과시키지 않는다.
 일치한다. 전체 corpus/모든 영상/Windows 환경을 새로 검증했다는 뜻은 아니다.
 철회 후에는 저장된 baseline receipt의 **221개 source 모두 현재 파일 bytes와 직접
 일치**함도 확인했다. 변경 문서의 링크·anchor **379개**, main 통합 범위의 새 문서
-157개 색인 연결, governance·whitespace 검사도 통과했다.
+157개 색인 연결과 governance 검사를 통과했다. 이번 작성 변경의 whitespace 검사는
+통과했다. 전체 통합 범위에서는 frozen `integrity-candidate.txt` 36행의 기존 후행
+공백 한 건이 남는다. 실패 로그 원문은 `421757a`와 byte-identical하게 보존했으며,
+그 원문 파일을 제외한 전체 diff의 whitespace 검사는 통과했다.
 
 직전 구현 단계의 **48 tests PASS**, 368픽셀·9개 채널·8개 눈금의 독립 검산을 해당
 범위에서 재사용한다. source 복원 후 새로 수행한 검증은 다음과 같다.
@@ -171,5 +174,5 @@ main에서 421757a까지의 판독·원인 검증을 재사용하고, 철회한 
 - First harmful stage: 새 판정 없음. f144의 유효 영역에서 raw white/warm membership과 Canny가 없어 cleanup/component 이전에 누락된 기존 결과를 인계한다. private Windows BASE나 전체 sequence 최초 손실로 확대하지 않는다.
 - Existing feature coverage: 최근 probe는 원래 Recipe ellipse/margin/settings, 빈 exclusions/templates/reference와 Local XY OFF를 사용했다. fresh detector에 이전 temporal/static 학습·session 확인·완료 resolver/report는 없었다. 이번 인계는 이 실행 범위와 baseline 치환을 확인하며 설정을 바꾸지 않는다.
 - Execution scope: Git/워크트리·관리 run·기존 40개 pin/221개 source·저장 receipt 확인, baseline source/test 복원, 관련 진단 unit suite와 기존 sequence regression, 문서·색인 및 main 인계. sequence 검사는 기존 engineering regression이며 새 물리 판독·모델·Windows 수용은 없다.
-- Logic-map impact: UPDATED — 실행되지 않는 original-component guard 설명을 제거하고 기준 opened-core 전처리와 현재 source의 일치를 복구한다. owner 연결 순서는 그대로다.
+- Logic-map impact: NONE — 기준 opened-core 전처리의 복원과 map 정정은 `b225dd1`에 완료됐다. 이 최종 인계·원문 보존 기록은 그 source/owner를 참조하며 실행 연결이나 동작을 추가로 바꾸지 않는다.
 - Failure-registry impact: NONE — 기존 입력 누락·provenance·역할 수용 한계를 전달하며 새 실패 family나 개선 수용을 추가하지 않는다.
