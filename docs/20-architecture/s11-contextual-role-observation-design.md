@@ -1105,6 +1105,17 @@ fit and evaluation groups; meeting that necessary condition would still not prov
 adequate calibration, sample size, independent holdout or physical discrimination.
 All four recordings remain exposed development material.
 
+The [liquid-role supplement](../../tests/diagnostics/s11_native_liquid_reply.py)
+reuses the original qualifier's read-only pixel/path inspection. It adds explicit
+`FOAM_LOWER_LIQUID_INTERFACE` and `LIQUID_AIR_INTERFACE` contact roles, both mapping
+to the separate bulk-liquid-upper objective without asserting oscillation.
+Foam lower is an interface relation, not a second interpretation meaning Foam
+upper. Its surrounding model patches remain unqualified mixtures. The old
+qualifier, source pins and historical readiness are immutable. A new receipt
+must match the exact displayed subject and original user words; an optional
+coverage overlay may qualify only previously unknown paths in the complete saved
+population, preserving every observation and previous role.
+
 The [follow-up protocol](../60-evidence/s11/2026-10-14-semantic-context.md#separate-role-readiness-follow-up)
 permits saved-input checks and one bounded missing-role review, not a new fit,
 prompt/crop/checkpoint/threshold search or model restoration. Select review input
@@ -1112,6 +1123,17 @@ by the unqualified role and recorded native-input availability, never by a favor
 semantic score. Existing candidate-level Oil acceptance cannot fill a missing
 native label. Preserve the known BASE initial-FULL and Accum owner-exclusion
 controls; this preparation changes neither consumer and grants no O2/field acceptance.
+
+After the 1463 contact reply, a second-source preparation may reuse the already
+qualified water C/f1643 source interval at X950/Y489–494. It contains one saved
+native fragment, 1378, whose exact path was not previously qualified. Preserve
+the complete fixed-column population and inspect the entire saved path before
+asking its correspondence. C is selected for an unambiguous single-fragment
+interval, not a favorable score or path length. B's interval instead contains
+three junction fragments and an unresolved-orientation fragment; no B role is
+changed. This extends native supervision coverage only: no semantic forward,
+fit, new source acquisition or automatic pure-side labels follows, even if the
+new path is confirmed. Existing regional/position questions stay closed.
 
 ## History Review
 

@@ -193,12 +193,43 @@ remain absent. Governance and whitespace checks pass; the focused documentation
 check finds **282 local links / 54 anchors with no errors**, and all **52 managed
 runs** pass closeout checks. O2 OPEN, FIELD FAIL and Local XY OFF are unchanged.
 
+## Foam-lower/liquid reply and second-source preparation
+
+The user answered **“foam 최하단임 유체랑 경계면”** for the exact 1463 view.
+The [verbatim receipt](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-reply.json)
+binds that statement to the proposal/display hashes. The contact is the Foam
+lower boundary meeting bulk liquid, so it supports the separate liquid-upper
+role, not Foam upper or internal Foam texture. No temporal movement, pure patch
+materials, chemical Oil identity, whole-layer mask or scalar tolerance is inferred.
+The original pending proposal/readout stay as the pre-reply checkpoint.
+
+At preparation time, the new liquid-role adapter and tests reuse the frozen native
+qualifier's actual path/pixel inspection, then apply the contact role without its
+old `OSCILLATING_LIQUID_UPPER` label. The optional readiness overlay revalidates
+the frozen 48-path readout and may change only an exactly matching unreviewed
+path's qualification. All previous roles, prompt vectors and unknown paths remain.
+
+The next bounded source-only preparation is water C/f1643, whose regional water
+surface and X950/Y489–494 interval are already closed. Its G0 inventory has one
+interval-compatible native fragment, 1378. B/f1438 instead has three two-vertex
+junction fragments at Y485 and one unresolved-orientation fragment at Y488;
+none is silently selected or labelled. Use the existing `native_packet` reader
+to reconstruct C's complete column population from saved edges, and the original
+qualifier to inspect the new proposal. A full-location PNG with plain/marked
+native pixels will ask only whether the displayed path corresponds to the known
+water surface. No further inference or training follows from preparation.
+
+One managed run budgets **8 MB scratch / 3 MB retained** for the scoped
+qualification/coverage delta and this review packet. Reuse the old source PNG
+and immutable input plans; keep no copied runtime or model. The artifact receipt
+will retain the actual complete population, source/geometry checks and test results.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `PUBLICATION-PROVENANCE`.
-- Failure-registry entries: `S11-F01`, `S11-F03`, `S11-F09`, `S11-F10`.
+- Failure-registry entries: `S11-F01`, `S11-F03`, `S11-F06`, `S11-F09`, `S11-F10`.
 - First harmful stage: the fixed semantic support reduction ranks both milk cup structures above the qualified Foam upper. Physical-role observation remains unresolved before any candidate consumer or episode stage.
 - Existing feature coverage: all four source controls and the five previously fixed native ROIs; complete local sampling support is verified but transformer dependence spans the entire unmasked ROI. Sample4 exclusions/templates remain empty; Local XY OFF and closed D2/Local XY results are unchanged. Production Recipe defenses, static-learning/reference consumers and report behavior were not exercised.
-- Execution scope: historical SCM-1 performed five saved-ROI pretrained batches and remains closed. The separate-role follow-up is a saved-vector/qualification/source-coverage audit and one new review preparation; it executes no model, fit, decoder, temporal propagation, new physical labels, production changes, sequence/report replay or Windows qualification.
+- Execution scope: historical SCM-1 performed five saved-ROI pretrained batches and remains closed. The separate-role follow-up audits saved vectors/qualification/source coverage. The later liquid adapter binds the actual user reply for 1463 and prepares one exact water-C correspondence using saved pixels/edges. It executes no model, fit, decoder, temporal propagation, machine-created physical labels, production changes, sequence/report replay or Windows qualification.
 - Logic-map impact: NONE — this experiment changes no executing production owner, Recipe setup, candidate selection or typed runtime contract.
 - Failure-registry impact: NONE — the existing appearance/identity limitations remain; this record adds the scoped semantic-union counterexample without claiming a general theorem about all pretrained models.
