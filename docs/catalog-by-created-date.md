@@ -1504,3 +1504,11 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/remote-export.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/remote-export.json) | 기존 입력 핀·내장 이미지·출력 해시 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/remote-verification.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/remote-verification.json) | 단일 파일 오프라인·JS 미사용 표시 및 25프레임 픽셀 검증 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/temporal-reply.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/temporal-reply.json) | 동일 거품의 우측 성장 답변·한정 시간 대응·기존 추적 재사용 범위 |
+
+### 2026-10-14 고정 사전학습 문맥 비교
+
+| 최초 Git 등록일(KST) | 파일 | 역할 |
+|---|---|---|
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-context.md](50-diagnostics/s11/2026-10-14-semantic-context.md) | 기존 4개 촬영원·분석 영역에 대한 사전학습 문맥 비교의 고정 계약 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-context/setup.json](50-diagnostics/s11/2026-10-14-semantic-context/setup.json) | 격리 환경·모델·구현 핀·용량·합성 입력 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-context/manifest.json](50-diagnostics/s11/2026-10-14-semantic-context/manifest.json) | 기존 48개 경로·5개 분석 영역·17개 비교의 재사용 입력 |
