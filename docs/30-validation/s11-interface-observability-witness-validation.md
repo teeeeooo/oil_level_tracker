@@ -1498,6 +1498,14 @@ The next two sample3 questions concern practical representative-point acceptance
 the already qualified regional A/B views. They cannot restore whole-window physical
 accuracy, promote the old track history or convert painted dots to scalar tolerances.
 
+Both sample3 representatives are now practically accepted at their displayed frames.
+The qualification preflight must keep the other 36 candidates unreviewed, reproduce
+saved gray/availability measurements with the original spatial setup, retain all
+floor/ceil input variants and report missing accepted input separately from wrong
+or negative outcomes. Source counts must distinguish positive from opposed coverage;
+three recordings with some qualified candidates do not imply three complete class
+comparisons or unseen-source performance. Existing C/D regional roles stay unchanged.
+
 Required checks for a later calibrated observation/policy are:
 
 - all raw class scores, common support and required floor/ceil variants survive

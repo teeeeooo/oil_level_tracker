@@ -25,6 +25,7 @@ SCHEMA = "s11-existing-material-reuse-v1"
 POLICY_SCHEMA = "s11-oil-support-policy-feasibility-v1"
 PUBLIC_SCHEMA = "s11-public-oil-saved-candidate-audit-v1"
 RIM_SCHEMA = "s11-candidate-rgb-rim-review-audit-v1"
+SOURCE_SCHEMA = "s11-oil-candidate-source-qualification-v1"
 o2 = g0.o2
 
 
@@ -517,6 +518,146 @@ def rgb_rim_audit(root: Path, plan: dict) -> dict:
         "scope": "Candidate-level post-trial human opposition; no neighboring/native-path labels or accuracy estimate."}
 
 
+def source_candidate_acceptance(packet: dict, reply: dict) -> list[dict]:
+    """Qualify only the displayed representatives, preserving the frozen packet."""
+    o2.require(reply["schema"] == SOURCE_SCHEMA and reply["user_text"] == "모두 허용",
+               "unsupported source acceptance reply")
+    o2.require(reply["review_packet_sha256"] == o2.fingerprint_json(packet)
+               and reply["image_sha256"] == packet["image_sha256"], "source review changed")
+    o2.require(reply["scope"] == "DISPLAYED_REPRESENTATIVES_AT_THEIR_FRAMES_ONLY"
+               and reply["native_path_role"] == "NOT_QUALIFIED"
+               and reply["physical_scalar_truth"] == "NOT_QUALIFIED"
+               and reply["global_tolerance_created"] is False, "source reply scope broadened")
+    o2.require(reply["source_recording"] == packet["source_recording"], "source recording changed")
+    keys = ("id", "view", "frame_index", "time_sec", "candidate_input_index",
+            "candidate_sha256", "source", "source_xy")
+    expected = [{k: s[k] for k in keys} for s in packet["subjects"]]
+    o2.require(reply["subjects"] == expected and len(expected) == 2, "source subjects changed")
+    subjects = o2.unique(expected, "id", "reviewed source candidate")
+    population = o2.unique(packet["candidate_population"], "id", "source candidate")
+    o2.require(set(subjects) <= set(population), "reviewed candidate missing")
+    rows = []
+    for unit in packet["candidate_population"]:
+        o2.require(unit["practical_acceptance"] == "UNASSESSED"
+                   and unit["native_path_role"] == "NOT_QUALIFIED", "original source scope changed")
+        if unit["id"] in subjects:
+            s = subjects[unit["id"]]
+            o2.require(all(unit[k] == s[k] for k in keys if k not in {"view", "time_sec"}),
+                       "candidate identity changed")
+        rows.append({**unit, "practical_acceptance": "ACCEPTED_APPROXIMATION"
+                     if unit["id"] in subjects else "UNASSESSED"})
+    return rows
+
+
+def check_saved_visibility(gray, effective, glare, sector, origin) -> int:
+    """Reproduce saved band availability/gray evidence, without material inference."""
+    import numpy as np
+    from oil_tracker.adapters.vision import oil_interface_diagnostics as diagnostics
+    visible = (effective > 0) & (glare == 0)
+    glared = (effective > 0) & (glare > 0)
+    a, b = [x-origin[0] for x in sector["source_x_range"]]
+    o2.require(0 <= a < b <= gray.shape[1], "saved sector outside crop")
+    profile = diagnostics._sector_profile(gray, visible, np.full(gray.shape, np.nan), None, glared, a, b)
+    fields = ("available", "reason", "valid_fraction", "valid_pixel_count", "gray_mean", "gray_std", "glare_fraction")
+    bands = [*sector["bands"].values(), *sector["candidate_center_on_same_sector"]["bands"].values()]
+    for saved in bands:
+        actual = diagnostics._band(profile[2], *saved["local_y_range"], gray.shape[0], b-a)
+        for k in fields:
+            equal = (math.isclose(actual[k], saved[k], rel_tol=0, abs_tol=1e-12)
+                     if type(actual[k]) is float and type(saved[k]) is float else actual[k] == saved[k])
+            o2.require(equal, "saved visibility/gray band changed: " + k)
+    return len(bands)
+
+
+def source_candidate_audit(root: Path, plan: dict) -> dict:
+    """Bind A/B and inspect the old input footprint; never reopen its failed model."""
+    import numpy as np
+    from PIL import Image
+    from oil_tracker.domain.recipe import InspectionRecipe
+    from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
+    from oil_tracker.adapters.vision.preprocessing import preprocess
+    from tests.diagnostics import s11_candidate_rgb_trial as rgb
+    o2.require(plan["schema"] == SOURCE_SCHEMA and plan["operation"] == "QUALIFY_AND_CHECK_EXISTING_FOOTPRINT",
+               "unsupported source audit")
+    for pin in plan["source_pins"]:
+        g0.pinned_path(root, pin)
+    docs = {k: read_pin(root, p) for k, p in plan["inputs"].items()}
+    packet, review_plan, reply = (docs[k] for k in ("review_packet", "review_plan", "reply"))
+    o2.require(packet["plan_sha256"] == o2.fingerprint_json(review_plan), "source review plan changed")
+    subject_keys = ("view", "id", "frame_index", "time_sec", "candidate_input_index", "candidate_sha256", "source", "source_xy")
+    o2.require([{k: s[k] for k in subject_keys} for s in packet["subjects"]] == review_plan["subjects"],
+               "review subjects differ from frozen plan")
+    for pin in review_plan["inputs"].values():
+        g0.pinned_path(root, pin)
+    g0.pinned_path(root, packet["source_recording"])
+    g0.pinned_path(root, plan["regional_opposition_reply"])
+    g0.pinned_path(root, {"path": plan["review_image"], "sha256": packet["image_sha256"]})
+    o2.require(o2.fingerprint_json(packet["candidate_population"]) == plan["population_sha256"],
+               "complete source population changed")
+    rows = source_candidate_acceptance(packet, reply)
+    prior = rgb_rim_audit(root, docs["rim_plan"])
+    o2.require(prior == docs["rim_readout"], "previous rim result changed")
+    o2.require(plan["inputs"]["prepared"] == docs["rim_plan"]["inputs"]["prepared"], "prior population pin changed")
+    prepared = docs["prepared"]
+    sources = {u["source_recording"]["sha256"] for u in prepared["units"]}
+    o2.require(packet["source_recording"]["sha256"] not in sources, "source expansion is not independent recording")
+    recipe = InspectionRecipe.from_dict(docs["recipe"])
+    o2.require(len(recipe.glasses) == 1, "one archived glass required")
+    glass = recipe.glasses[0]
+    o2.require(glass.geometry.ellipse.center_x == plan["geometry"]["source_x"]
+               and not glass.geometry.exclusions and not glass.geometry.artifact_templates,
+               "archived setup changed")
+    frames = {}
+    for subject in packet["subjects"]:
+        source_path = g0.pinned_path(root, subject["source_image"])
+        with Image.open(source_path) as image:
+            source_rgb = np.array(image.convert("RGB"))
+        bundle = build_mask_bundle(source_rgb[:, :, ::-1].copy(), glass)
+        o2.require(list(bundle.crop_origin) == plan["geometry"]["origin"]
+                   and list(bundle.crop.shape[:2]) == plan["geometry"]["shape"], "source geometry changed")
+        pre = preprocess(bundle.crop, bundle.effective_mask, glass.detector_settings)
+        bands = check_saved_visibility(pre.gray, bundle.effective_mask, pre.glare_mask,
+                                       subject["center_sector"], bundle.crop_origin)
+        native_rgb = bundle.crop[:, :, ::-1].copy()
+        visible = (bundle.effective_mask > 0) & (pre.glare_mask == 0)
+        frame_rows = [u for u in rows if u["frame_index"] == subject["frame_index"]]
+        for u in frame_rows:
+            x, y = u["source_xy"]
+            o2.require(float(x).is_integer() and math.isfinite(y), "invalid source coordinate")
+            u["variants"] = [{"source_xy": [x, sy], **rgb.context(native_rgb, visible,
+                [int(x)-bundle.crop_origin[0], sy-bundle.crop_origin[1]])}
+                for sy in sorted({math.floor(y), math.ceil(y)})]
+            u["availability"] = "AVAILABLE" if all(v["status"] == "AVAILABLE" for v in u["variants"]) else "UNAVAILABLE_REQUIRED_VARIANT"
+        frames[str(subject["frame_index"])] = {"source_image": subject["source_image"],
+            "origin": list(bundle.crop_origin), "shape": list(native_rgb.shape[:2]),
+            "rgb_sha256": rgb.native.array_hash(native_rgb), "visible_sha256": rgb.native.array_hash(visible),
+            "saved_band_checks": bands, "candidate_count": len(frame_rows),
+            "scope": "Reconstructed unchanged Recipe/preprocessing; no geometric recalibration or physical visibility label."}
+    o2.require(sum(f["candidate_count"] for f in frames.values()) == len(rows), "source frame coverage incomplete")
+    accepted = [u for u in rows if u["practical_acceptance"] == "ACCEPTED_APPROXIMATION"]
+    missing = [u["id"] for u in accepted if u["availability"] != "AVAILABLE"]
+    coverage = {}
+    for c in prior["controls"]:
+        key = c["source_recording"]["path"]
+        counts = coverage.setdefault(key, {"accepted_or_corresponding": 0, "opposed": 0})
+        counts["accepted_or_corresponding" if c["qualified_target"] == 0 else "opposed"] += 1
+    coverage[packet["source_recording"]["path"]] = {"accepted_or_corresponding": len(accepted), "opposed": 0}
+    return {"schema": SOURCE_SCHEMA, "plan_sha256": o2.fingerprint_json(plan), "inputs": plan["inputs"],
+        "status": "SCOPED_CANDIDATES_QUALIFIED_INPUT_INCOMPLETE" if missing else "SCOPED_CANDIDATES_QUALIFIED_INPUT_AVAILABLE",
+        "counts": {"all_records": len(prepared["units"])+len(rows),
+            "oil_candidates": sum(u["is_oil_candidate"] for u in prepared["units"])+len(rows),
+            "sample3_candidates": len(rows), "new_accepted": len(accepted), "new_opposed": 0,
+            "sample3_unreviewed": len(rows)-len(accepted), "sample3_available": sum(u["availability"] == "AVAILABLE" for u in rows),
+            "total_qualified_controls": len(prior["controls"])+len(accepted), "source_recordings": len(coverage)},
+        "source_coverage": coverage, "missing_accepted_inputs": missing, "frames": frames, "candidate_rows": rows,
+        "regional_opposition": {"reply": plan["regional_opposition_reply"], "candidate_targets_created": 0,
+            "scope": "C external-frame structure remains regional; D remains unassessable. Neither is new whole-candidate truth."},
+        "input_contract": "Existing complete visible 7x7 patches in two +/-12 native strips, floor/ceil required; no new model.",
+        "previous_trial_status": prior["status"], "training_executed": False, "new_model_calls": 0,
+        "production_changed": False, "future_fit": "RESERVED_PENDING_SEPARATE_CONTRACT",
+        "untouched_holdout_recordings": 0, "native_path_labels_created": False, "physical_calibration": "NOT_EVALUATED"}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
@@ -528,6 +669,8 @@ def main() -> None:
                         help="Bind practical candidate replies to saved public-source scores")
     option.add_argument("--rgb-rim-manifest", type=Path,
                         help="Bind post-trial rim review without refitting or relabeling other candidates")
+    option.add_argument("--source-candidate-manifest", type=Path,
+                        help="Qualify reviewed source candidates and check the existing native input footprint")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     o2.require(not args.output.exists(), "refuse overwrite")
@@ -540,6 +683,8 @@ def main() -> None:
         result = public_candidate_audit(args.root.resolve(), o2.read_json(args.public_candidate_manifest))
     if args.rgb_rim_manifest:
         result = rgb_rim_audit(args.root.resolve(), o2.read_json(args.rgb_rim_manifest))
+    if args.source_candidate_manifest:
+        result = source_candidate_audit(args.root.resolve(), o2.read_json(args.source_candidate_manifest))
     elapsed = g0.time.monotonic() - started
     limits = manifest["resources"]
     o2.require(elapsed <= limits["seconds"], "reuse time budget exceeded")

@@ -474,6 +474,18 @@ fit pending a separate contract, not designated as an untouched holdout. Full
 sample3 accuracy/cadence remains quarantined; no Recipe/geometry correction,
 model input, new training or calibration is implied by preparing this question.
 
+The [A/B reply](../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/acceptance.json)
+accepts both displayed representatives as practical Oil approximations. Extend the
+existing reuse owner to bind only those two candidates, preserving the frozen
+38-row packet, and inspect the unchanged RGB input footprint without inference.
+Use the original Recipe's geometry/settings and unchanged `build_mask_bundle` /
+`preprocess` owners; validate reconstructed gray/visibility against the saved
+central path and representative bands before invoking the existing complete 7×7
+patch reader. A failed or unavailable input does not justify moving the point,
+relaxing the mask or retrying the failed model. C remains regional structure
+opposition and D unassessable; neither becomes a candidate label from this reply.
+No fit assignment or successor architecture is adopted by input readiness.
+
 ### Executable saved-contract preflight
 
 [The offline CR1 adapter](../../tests/diagnostics/s11_contextual_role_preflight.py)

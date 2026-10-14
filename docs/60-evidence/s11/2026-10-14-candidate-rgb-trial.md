@@ -204,6 +204,25 @@ Archive renderer는 기존 pin reader와 current/native candidate 결합을 재�
 `NOT_PREPARED`이며 새 판정·추론·학습은 0이다. 관리 실행 33개가 모두 종료됐고
 오류는 0이다. Windows 실행이나 생산 동작의 개선을 주장하지 않는다.
 
+## Sample3 A/B 후보 허용 수신과 입력 점검
+
+사용자의 **“모두 허용”**을
+[두 대표점의 실용적 허용](../../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/acceptance.json)으로
+기록했다. 원래 질문 packet은 변경하지 않는다. 다른 36개 후보, native 경로,
+정확한 픽셀 정답·허용 오차, 프레임 사이 움직임에는 전파하지 않는다.
+
+[고정 점검 계획](../../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/qualification-plan.json)은
+기존 재사용 CLI의 `--source-candidate-manifest`에서 실행한다. Recipe 원본 bytes와
+관련 geometry/preprocessing 소스 5개가 archive pin과 같음을 확인했다. 파싱한
+geometry와 detector settings도 저장 당시 runtime과 같다. 당시 runtime의
+`UNKNOWN_REVIEW`와 Recipe의 `AUTO` 초기 상태 차이는 이번 공간 입력 점검에서
+실행하지 않는 부분이다. Crop·glare 계산과 기존 7×7 patch reader를 재사용하며,
+저장된 path/대표점의 밝기·가시성 band 16개와 먼저 비교한다.
+
+판정 범위·source/frame/index/hash·누락/중복·이웃 후보와 가시성 변경 방어를
+검증한 관련 테스트 97개가 통과했다. 이 단계는 새 모델 학습·점수 비교가 아니며,
+이전 모델의 rim 실패와 기존 판정 정밀도는 유지한다.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION`.
@@ -211,7 +230,7 @@ Archive renderer는 기존 pin reader와 current/native candidate 결합을 재�
 - First harmful stage: a regional role preference loses practically accepted candidates before any selector can preserve them; RGB compatibility must retain both accepted alternatives and opposed controls.
 - Prior mechanisms reviewed: old CR1 category collision and all-four public sign failure; B practical acceptance; original native-head N3 loss; source-qualified candidate bindings and exact floor/ceil support.
 - Difference from prior failures: one fixed native RGB candidate-compatibility trial changes input information and supervision, with sample4-only fit and exposed public transfer. It does not retry native external-surface labels, tune the failed role threshold or choose a new production winner.
-- Existing feature coverage: existing saved candidate population, original RGB, effective/glare masks and source pins; Recipe exclusions/templates unchanged, Local XY OFF, no D2 efficacy claim.
-- Execution scope: completed input preparation and one predeclared offline 1,118-parameter / 1,000-step fit, full-population final inference, mean-color ablation and independent arithmetic verification. The existing reuse CLI executed the explicit rim-reply binding and saved margin check. The separate archive adapter prepares two sample3 candidate questions from existing regional-positive views with complete current/native joins and source-pixel checks. No new inference, training, automatic labels for other candidates, production replay, report reading, O2 acceptance or Windows execution.
+- Existing feature coverage: existing saved candidate population, original RGB, effective/glare masks and source pins; sample3 uses the original Recipe geometry/settings and unchanged `build_mask_bundle` / `preprocess`, checked against saved diagnostic bands. Exclusions/templates remain empty, Local XY OFF. Static/initial-state/sequence owners are not executed; no D2 efficacy claim.
+- Execution scope: completed input preparation and one predeclared offline 1,118-parameter / 1,000-step fit, full-population final inference, mean-color ablation and independent arithmetic verification. The existing reuse CLI executed the explicit rim-reply binding and saved margin check. The archive adapter prepared two sample3 candidate questions with complete current/native joins and source-pixel checks; the new qualification plan binds their acceptance and checks all 38 candidates against the existing native input footprint. No new inference, training, automatic labels for other candidates, production replay, report reading, O2 acceptance or Windows execution.
 - Logic-map impact: NONE — offline diagnostic only; production owners and schemas unchanged.
 - Failure-registry impact: NONE — no new failure family or accepted detector repair; this checks candidate-level input capability under existing evidence boundaries.

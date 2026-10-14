@@ -377,3 +377,70 @@ def test_rgb_review_keeps_all_fractional_variants_and_disagreement():
     controls = reuse.rgb_review_controls(packet, reply, prepared, readout)
     assert controls[2]["margins"] == {"logits": -3, "mean_color_logits": -3}
     assert controls[2]["decisions"]["decision"] == "UNKNOWN"
+
+
+def source_acceptance_fixture():
+    population = [dict(id=f"s3-f{frame}-idx{i}", frame_index=frame, candidate_input_index=i,
+        candidate_sha256=str(i), source="material_path", source_xy=[50, 60.0],
+        practical_acceptance="UNASSESSED", native_path_role="NOT_QUALIFIED")
+        for i, frame in enumerate((10, 20, 10))]
+    subjects = [{**{k: u[k] for k in ("id", "frame_index", "candidate_input_index", "candidate_sha256", "source", "source_xy")},
+                 "view": view, "time_sec": float(i)} for i, (u, view) in enumerate(zip(population, ("A", "B")))]
+    packet = dict(image_sha256="image", source_recording={"path": "source", "sha256": "recording"},
+                  subjects=subjects, candidate_population=population)
+    reply = dict(schema=reuse.SOURCE_SCHEMA, user_text="모두 허용", review_packet_sha256=reuse.o2.fingerprint_json(packet),
+        image_sha256="image", scope="DISPLAYED_REPRESENTATIVES_AT_THEIR_FRAMES_ONLY", native_path_role="NOT_QUALIFIED",
+        physical_scalar_truth="NOT_QUALIFIED", global_tolerance_created=False,
+        source_recording=deepcopy(packet["source_recording"]), subjects=deepcopy(subjects))
+    return packet, reply
+
+
+def test_source_acceptance_keeps_neighbor_unknown_and_frozen_packet_unchanged():
+    packet, reply = source_acceptance_fixture()
+    before = deepcopy(packet)
+    rows = reuse.source_candidate_acceptance(packet, reply)
+    assert [r["practical_acceptance"] for r in rows] == ["ACCEPTED_APPROXIMATION", "ACCEPTED_APPROXIMATION", "UNASSESSED"]
+    assert all(r["native_path_role"] == "NOT_QUALIFIED" for r in rows)
+    assert packet == before
+
+
+@pytest.mark.parametrize("change", ["image", "source", "time", "frame", "index", "hash", "xy", "omission", "duplicate",
+    "population_duplicate", "candidate_identity", "path_role", "physical_truth", "scope", "tolerance", "original_label"])
+def test_source_reply_cannot_extend_to_another_unit_or_precision(change):
+    packet, reply = source_acceptance_fixture()
+    if change == "image": reply["image_sha256"] = "other"
+    elif change == "source": reply["source_recording"]["sha256"] = "other"
+    elif change in {"time", "frame", "index", "hash", "xy"}:
+        key = {"time": "time_sec", "frame": "frame_index", "index": "candidate_input_index", "hash": "candidate_sha256", "xy": "source_xy"}[change]
+        reply["subjects"][0][key] = None
+    elif change == "omission": reply["subjects"].pop()
+    elif change == "duplicate": reply["subjects"][1] = deepcopy(reply["subjects"][0])
+    elif change == "population_duplicate": packet["candidate_population"].append(deepcopy(packet["candidate_population"][0]))
+    elif change == "candidate_identity": packet["candidate_population"][0]["source"] = "neighbor"
+    elif change == "path_role": reply["native_path_role"] = "OIL"
+    elif change == "physical_truth": reply["physical_scalar_truth"] = "EXACT"
+    elif change == "scope": reply["scope"] = "ALL_FRAMES"
+    elif change == "tolerance": reply["global_tolerance_created"] = True
+    else: packet["candidate_population"][-1]["practical_acceptance"] = "ACCEPTED_APPROXIMATION"
+    reply["review_packet_sha256"] = reuse.o2.fingerprint_json(packet)
+    with pytest.raises(ValueError):
+        reuse.source_candidate_acceptance(packet, reply)
+
+
+@pytest.mark.parametrize("change", [None, "mask", "glare", "gray"])
+def test_reconstructed_visibility_must_match_saved_band_evidence(change):
+    import numpy as np
+    gray = np.full((8, 6), 128, np.uint8)
+    effective = np.full_like(gray, 255)
+    glare = np.zeros_like(gray)
+    band = dict(local_y_range=[1, 4], available=True, reason="available", valid_fraction=1.0,
+                valid_pixel_count=12, gray_mean=128/255, gray_std=0.0, glare_fraction=0.0)
+    sector = dict(source_x_range=[12, 16], bands={"near": band}, candidate_center_on_same_sector={"bands": {"near": band}})
+    if change == "mask": effective[2, 3] = 0
+    elif change == "glare": glare[2, 3] = 255
+    elif change == "gray": gray[2, 3] = 0
+    if change is None:
+        assert reuse.check_saved_visibility(gray, effective, glare, sector, [10, 20]) == 2
+    else:
+        with pytest.raises(ValueError, match="band changed"):
+            reuse.check_saved_visibility(gray, effective, glare, sector, [10, 20])
