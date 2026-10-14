@@ -194,3 +194,192 @@ def test_real_cli_from_other_cwd_with_unicode_space_paths_and_no_overwrite(tmp_p
     assert json.loads(output.read_text(encoding='utf-8'))['qualified_units'] == 2
     again = subprocess.run(args, **kwargs)
     assert again.returncode != 0 and 'refuse overwrite' in again.stderr
+
+
+def explicit_reply(tmp_path):
+    root, reply, proposal = fixture_reply(tmp_path)
+    proposal['display'] = reply['display']
+    (root / 'proposal.json').write_text(json.dumps(proposal), encoding='utf-8')
+    reply['proposal']['sha256'] = q.o2.sha256_file(root / 'proposal.json')
+    reply['schema'] = q.REVIEW_SCHEMA
+    for answer in reply['answers']:
+        answer.update(review_status='QUALIFIED_ROLE', context_facets=[])
+    return root, reply, proposal
+
+
+def test_inspection_checks_geometry_without_inventing_human_answers(tmp_path):
+    root, reply, _ = explicit_reply(tmp_path)
+    request = dict(schema=q.INSPECTION_SCHEMA, proposal=reply['proposal'], display=reply['display'])
+    result = q.qualify(root, request)
+    assert result['status'] == 'PROPOSAL_VERIFIED_PENDING_REVIEW'
+    assert result['qualified_units'] == result['new_training_labels'] == 0
+    assert result['accounted_units'] == 2
+    assert result['review_status_counts'] == {'PENDING_REVIEW': 2}
+    assert all(s['capability_target'] is None and s['allowed_interpretations'] == []
+               for s in result['subjects'])
+    assert 'reply_sha256' not in result and result['request_sha256']
+    assert result['same_frame_dependency'][0]['shared_dependency_pixels'] > 0
+    assert not result['same_frame_dependency'][0]['independent_split_allowed']
+
+
+def test_ambiguous_and_unassessable_are_preserved_without_positive_or_negative_targets(tmp_path):
+    root, reply, _ = explicit_reply(tmp_path)
+    first, second = reply['answers']
+    first.update(review_status='AMBIGUOUS_ROLE',
+                 allowed_interpretations=['EXTERNAL_FOAM_UPPER', 'INTERNAL_FOAM_CHANGE'],
+                 statement_ko='N1은 상단인지 내부 변화인지 애매함')
+    second.update(review_status='UNASSESSABLE', allowed_interpretations=[],
+                  statement_ko='N2는 판독 불가')
+    reply['response_ko'] = '\n'.join(a['statement_ko'] for a in reply['answers'])
+    original = copy.deepcopy(reply)
+    result = q.qualify(root, reply)
+    assert result['schema'].endswith('-v3')
+    assert result['qualified_units'] == 0 and result['accounted_units'] == 2
+    assert result['review_status_counts'] == {'AMBIGUOUS_ROLE': 1, 'UNASSESSABLE': 1}
+    assert result['subjects'][0]['allowed_interpretations'] == first['allowed_interpretations']
+    assert all(s['capability_target'] is None and s['decision'] == 'NOT_EVALUATED'
+               for s in result['subjects'])
+    assert reply == original
+
+
+def test_explicit_qualified_alternatives_keep_common_target_but_no_pixel_labels(tmp_path):
+    root, reply, _ = explicit_reply(tmp_path)
+    result = q.qualify(root, reply)
+    assert result['qualified_units'] == result['accounted_units'] == 2
+    assert result['subjects'][0]['capability_target'] == 'EXTERNAL_SURFACE'
+    assert result['subjects'][0]['side_material_labels'] is None
+    assert result['subjects'][0]['coordinate_tolerance'] is None
+
+
+@pytest.mark.parametrize('status,roles,match', [
+    ('QUALIFIED_ROLE', [], 'must have an interpretation'),
+    ('QUALIFIED_ROLE', ['EXTERNAL_FOAM_UPPER', 'INTERNAL_FOAM_CHANGE'], 'ambiguous surface'),
+    ('AMBIGUOUS_ROLE', ['STRUCTURE_BOUNDARY'], 'explicit alternatives'),
+    ('UNASSESSABLE', ['STRUCTURE_BOUNDARY'], 'cannot assert a role'),
+    ('PENDING_REVIEW', [], 'unsupported review status'),
+    ('REJECTED', [], 'unsupported review status'),
+])
+def test_reply_status_cannot_hide_missing_or_incompatible_judgment(tmp_path, status, roles, match):
+    root, reply, _ = explicit_reply(tmp_path)
+    reply['answers'][0].update(review_status=status, allowed_interpretations=roles)
+    with pytest.raises(ValueError, match=match):
+        q.qualify(root, reply)
+
+
+@pytest.mark.parametrize('inspection', [False, True])
+def test_v3_and_inspection_bind_display_to_proposal(tmp_path, inspection):
+    root, reply, _ = explicit_reply(tmp_path)
+    (root / 'another-display.bin').write_bytes(b'valid pin for a different display')
+    reply['display'] = dict(path='another-display.bin', sha256=q.o2.sha256_file(root / 'another-display.bin'))
+    if inspection:
+        reply = {k: reply[k] for k in ['proposal', 'display']}
+        reply['schema'] = q.INSPECTION_SCHEMA
+    with pytest.raises(ValueError, match='display differs'):
+        q.qualify(root, reply)
+
+
+def test_alias_of_one_native_subject_does_not_multiply_review_units(tmp_path):
+    root, reply, proposal = explicit_reply(tmp_path)
+    alias = copy.deepcopy(proposal['subjects'][0])
+    alias['id'] = 'another-name-for-N1'
+    proposal['subjects'].append(alias)
+    (root / 'proposal.json').write_text(json.dumps(proposal), encoding='utf-8')
+    request = dict(schema=q.INSPECTION_SCHEMA,
+                   proposal=dict(path='proposal.json', sha256=q.o2.sha256_file(root / 'proposal.json')),
+                   display=reply['display'])
+    with pytest.raises(ValueError, match='duplicate native subject'):
+        q.qualify(root, request)
+
+
+def test_inspection_real_cli_outside_repo_preserves_pending_status_and_write_once(tmp_path):
+    root, _, _ = explicit_reply(tmp_path)
+    output = root / '검토 전.json'
+    args = [sys.executable, '-B', str(Path(q.__file__).resolve()), '--root', str(root),
+            '--inspect-proposal', str(root / 'proposal.json'), '--output', str(output)]
+    env = os.environ.copy(); env.pop('PYTHONPATH', None)
+    kwargs = dict(cwd=tmp_path, env=env, stdin=subprocess.DEVNULL,
+                  capture_output=True, text=True, encoding='utf-8')
+    done = subprocess.run(args, **kwargs)
+    assert done.returncode == 0, done.stderr
+    result = json.loads(output.read_text(encoding='utf-8'))
+    assert result['qualified_units'] == 0 and result['review_status_counts'] == {'PENDING_REVIEW': 2}
+    again = subprocess.run(args, **kwargs)
+    assert again.returncode != 0 and 'refuse overwrite' in again.stderr
+
+
+def preparation_fixture(tmp_path):
+    root, reply, proposal = explicit_reply(tmp_path)
+    baseline = q.o2.read_json(root / 'baseline.json')
+    context = baseline['contexts'][0]
+    fragments = []
+    for subject, row in zip(proposal['subjects'], context['rows']):
+        fragment = row['incident_fragments'][0]
+        fragments.append(dict(id=f"native/fragment-{fragment['fragment_id']}",
+                              fragment_id=fragment['fragment_id'],
+                              source_path_xy=subject['source_path_xy'],
+                              fixed_column_source_ys=[row['source_xy'][1]],
+                              g0_fragment_sha256=q.o2.fingerprint_json(fragment)))
+    packet = dict(case_id='native', **{k: context[k] for k in ['frame', 'geometry', 'source_recording']},
+                  fragments=fragments, intervals=[
+                      dict(original=dict(id='upper', interval=[220, 220]), compatible_fragments=[fragments[0]['id']]),
+                      dict(original=dict(id='lower', interval=[230, 230]), compatible_fragments=[fragments[1]['id']]),
+                  ])
+    manifest = dict(inputs={k: proposal[k] for k in ['g0_manifest', 'g0_readout']})
+    reused = dict(manifest_sha256=q.o2.fingerprint_json(manifest), native_review_packets=[packet])
+    q.o2.write_new(root / 'reuse-manifest.json', manifest)
+    q.o2.write_new(root / 'reuse-readout.json', reused)
+    plan = dict(schema=q.PREPARATION_SCHEMA,
+                reuse_manifest=dict(path='reuse-manifest.json', sha256=q.o2.sha256_file(root / 'reuse-manifest.json')),
+                reuse_readout=dict(path='reuse-readout.json', sha256=q.o2.sha256_file(root / 'reuse-readout.json')),
+                case_id='native', interval_id='upper', view=proposal['views'][0], display=reply['display'],
+                question='Displayed fragment role?')
+    return root, plan, reused
+
+
+def test_preparation_keeps_other_interval_unreviewed_and_can_be_independently_inspected(tmp_path):
+    root, plan, reused = preparation_fixture(tmp_path)
+    original = copy.deepcopy(reused)
+    proposal = q.prepare_proposal(root, plan)
+    assert proposal['qualified_units'] == 0 and len(proposal['subjects']) == 1
+    assert proposal['complete_saved_fragment_count'] == 2
+    assert proposal['preserved_intervals'] == reused['native_review_packets'][0]['intervals'][1:]
+    q.o2.write_new(root / 'prepared.json', proposal)
+    result = q.qualify(root, dict(schema=q.INSPECTION_SCHEMA, display=proposal['display'],
+                      proposal=dict(path='prepared.json', sha256=q.o2.sha256_file(root / 'prepared.json'))))
+    assert result['qualified_units'] == 0 and result['accounted_units'] == 1
+    assert reused == original
+
+
+@pytest.mark.parametrize('change,match', [
+    ('interval', 'drops or adds'), ('path', 'saved native path changed'),
+    ('geometry', 'geometry changed'), ('source', 'source_recording changed'),
+    ('alias', 'duplicate fragment selection'),
+])
+def test_preparation_cannot_rehash_away_population_or_source_corruption(tmp_path, change, match):
+    root, plan, reused = preparation_fixture(tmp_path)
+    packet = reused['native_review_packets'][0]
+    if change == 'interval': packet['intervals'][0]['original']['interval'][1] = 230
+    if change == 'path': packet['fragments'][0]['source_path_xy'][0][1] += 1
+    if change == 'geometry': packet['geometry']['origin'][0] += 1
+    if change == 'source': packet['source_recording']['sha256'] = '0'*64
+    if change == 'alias': packet['intervals'][0]['compatible_fragments'] *= 2
+    (root / 'reuse-readout.json').write_text(json.dumps(reused), encoding='utf-8')
+    plan['reuse_readout']['sha256'] = q.o2.sha256_file(root / 'reuse-readout.json')
+    with pytest.raises(ValueError, match=match):
+        q.prepare_proposal(root, plan)
+
+
+def test_preparation_real_cli_then_inspection_with_no_human_answer(tmp_path):
+    root, plan, _ = preparation_fixture(tmp_path)
+    q.o2.write_new(root / '준비 plan.json', plan)
+    command = [sys.executable, '-B', str(Path(q.__file__).resolve()), '--root', str(root)]
+    env = os.environ.copy(); env.pop('PYTHONPATH', None)
+    kwargs = dict(cwd=tmp_path, env=env, stdin=subprocess.DEVNULL,
+                  capture_output=True, text=True, encoding='utf-8')
+    proposal = root / '새 proposal.json'
+    done = subprocess.run(command + ['--prepare-plan', str(root / '준비 plan.json'), '--output', str(proposal)], **kwargs)
+    assert done.returncode == 0, done.stderr
+    output = root / 'inspection.json'
+    checked = subprocess.run(command + ['--inspect-proposal', str(proposal), '--output', str(output)], **kwargs)
+    assert checked.returncode == 0, checked.stderr
+    assert json.loads(output.read_text(encoding='utf-8'))['qualified_units'] == 0

@@ -1677,6 +1677,16 @@ judgments may coexist with NOT_READY native correspondence; only a new subject-b
 human response can qualify that new review unit. Partial/approximate/unassessable
 responses are not dense truth, negative success or a learning grant.
 
+The v3 native-role qualifier must retain ambiguous role alternatives and explicitly
+unassessable subjects with null capability targets and separate counts. Qualified
+role sets still require a compatible capability; missing answers, unknown roles
+and silent precision changes fail. Proposal inspection must accept no human-answer
+fields and report zero qualified units. Both inspection and v3 replies bind the
+display to its proposal, verify original pixels/paths and reject aliases of the
+same source/frame/path as duplicate review units. Exercise the inspection CLI from
+another cwd with Unicode/space paths and write-once output; verify existing N1–N5
+v1/v2 results remain logically equal. No new source review is implied by those checks.
+
 The [N1–N3 supplement](../60-evidence/s11/2026-10-13-native-role-qualification.md)
 qualifies only its displayed paths. Preserve N1's set of allowed Foam/liquid-upper
 interpretations; the common surface target cannot become a pure-material label.

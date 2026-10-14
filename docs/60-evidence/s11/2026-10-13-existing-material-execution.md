@@ -221,6 +221,53 @@ detector replay·Windows·독립 report 판독을 수행하지 않았다.
 한 번만 기록한다. 이 검토로 O2/V5, 별도 behavior 수용, 독립 Foam raw/episode 조건이나
 FIELD FAIL을 변경하지 않는다.
 
+## Public native review preparation — 2026-10-14
+
+BASE/Accum의 [기존 차단 지점](2026-10-14-overlay-support-guard.md#existing-bundle-analysis-reuse--planning-correction)은
+재사용한다. 새로운 역할 관측이 실제 경계와 구조/내부 변화를 구분해야 하며,
+admission flag 자체를 정답으로 쓰지 않는다. sample3 C의 원래 답변은 표시 부근의
+구조물 역할이며 전체 후보/경로 정답은 아니다. 이 범위를 넓히거나 C/D·A/B를 다시
+질문하지 않는다. 기존 RGB/native 학습은 종료 상태를 유지한다.
+
+다음 준비는 이미 저장된 미소냉동 f1499의 상단 경로 네 개(963/995/1029/1031)를
+원래 G0와 같은 source/frame/path hash로 묶는 것이다. 같은 Y336에 경로 세 개가
+있어 한 행이나 하나의 긴 경로로 합치지 않는다. 기존 PNG를 그대로 참조하며
+하부 Oil 세 경로는 이번 질문에서 제외하고 보존 대조로 남긴다. 원본 영상이나
+검토 이미지를 복제하지 않는다. scratch 2 MB / 최종 추가 자료 100 KB 범위다.
+
+기존 native qualifier를 확장해 역할 확정·애매함·판독 불가를 구분하고, 답변 전
+proposal 검사에서는 모든 경로를 미판정으로 유지한다. 실제 실행은 저장 raster의
+좌표·가시성·RGB와 검토 이미지 출처를 확인하는 범위다. Recipe 변경, detector
+재실행, 새 학습·추론 또는 Windows 자료 재분석을 포함하지 않는다. 역할 대응이
+필요한 새 경로만 사용자에게 확인하며 기존 상단 Foam/하단 Oil 구간 판정은 닫힌
+채 유지한다.
+
+[준비 계획](../../50-diagnostics/s11/2026-10-14-native-role-review/plan.json),
+[질문 대상](../../50-diagnostics/s11/2026-10-14-native-role-review/proposal.json),
+[실제 검사](../../50-diagnostics/s11/2026-10-14-native-role-review/inspection.json),
+[검증 기록](../../50-diagnostics/s11/2026-10-14-native-role-review/verification.json)을 저장했다.
+기존 qualifier의 `--prepare-plan`이 구간 안의 모든 경로를 보존하고,
+`--inspect-proposal`이 인간 답변 없이 원본 결합을 검사한다. 답변 v3는 확정 역할만
+capability target을 가지며 애매함/판독 불가는 null과 별도 개수로 보존한다.
+같은 원본·프레임·경로를 다른 ID로 중복 집계하거나, 다른 검토 이미지를 연결하는
+입력은 거부한다. 기존 v1/v2 출력은 바꾸지 않는다.
+
+| 검증 | 결과 |
+|---|---|
+| 관련 unit/CLI 테스트 | **149 passed in 2.27 s** |
+| 실제 CLI | `/private/tmp`에서 절대 경로로 준비 → 검사 완료 |
+| 기존 N1–N5 | 원래 qualifier 실행 결과와 저장 결과 5개 모두 논리적으로 동일 |
+| 이번 판정 상태 | 4개 모두 `PENDING_REVIEW`; 새 물리 판정·학습 라벨 0 |
+| 경로/노출 | 원래 27개 참조 유지; 하부 Oil 3개 미판정 보존; 상단 네 경로의 같은-frame 쌍 6개 모두 독립 split 불허 |
+| 준비·검사·기존 결과 대조 | 0.610 s; detector 처리시간 측정이 아님 |
+| 보존·정리 | JSON 4개 30,530 bytes; 기존 PNG 재사용, 임시 JSON 중복 3개 제거 |
+
+관리 실행 `s11-native-role-review-20261014-001` 종료 후 총 38개 실행 오류 0이다.
+실행 당시 Git base는 `45c12e9`이며 변경된 qualifier의 실제 source SHA-256은
+검증 기록과 관리 표식에 남겼다. 새 역할 답변은 아직 수신하지 않았다. 이후
+관측/학습의 선택과 데이터 분리는 별도 계약이며, 이번 준비는 이전 head의 재학습이나
+BASE·Accum 검출 개선을 입증하지 않는다.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.

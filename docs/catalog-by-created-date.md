@@ -1439,3 +1439,12 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/replay-comparison.json](50-diagnostics/s11/2026-10-14-overlay-component-review/replay-comparison.json) | 13개 기존 비교 전체와 37개 changed row 필드 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/integrity-candidate.txt](50-diagnostics/s11/2026-10-14-overlay-component-review/integrity-candidate.txt) | 보호된 sequence barrier 회귀 실패 원문 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-overlay-component-review/verification.json](50-diagnostics/s11/2026-10-14-overlay-component-review/verification.json) | 소스 동결·테스트·행 변화·미채택 판정 |
+
+### 2026-10-14 공개 native 경로 역할 검토 준비
+
+| 최초 Git 등록일(KST) | 파일 | 역할 |
+|---|---|---|
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/plan.json](50-diagnostics/s11/2026-10-14-native-role-review/plan.json) | 기존 상단 네 경로 전체·검토 이미지·원본 결합 범위 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/proposal.json](50-diagnostics/s11/2026-10-14-native-role-review/proposal.json) | 역할 미판정 질문 대상과 하부 Oil 보존 대조 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/inspection.json](50-diagnostics/s11/2026-10-14-native-role-review/inspection.json) | 인간 답변 없는 원본·경로·지원 검사 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/verification.json](50-diagnostics/s11/2026-10-14-native-role-review/verification.json) | 실제 CLI 및 기존 N1–N5 결과 보존 확인 |

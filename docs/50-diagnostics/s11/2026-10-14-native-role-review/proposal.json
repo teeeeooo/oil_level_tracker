@@ -1,0 +1,430 @@
+{
+  "schema": "s11-native-fragment-role-review-proposal-v1",
+  "g0_manifest": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/manifest.json",
+    "sha256": "8bb03c49017181e54e6164a248ac28ff0977d9a0e3af11882417b5a5f431c632"
+  },
+  "g0_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+    "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+  },
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-existing-material-execution/public-native-subject-review.png",
+    "sha256": "f0191b97ba7235f0022b59272863b5b73336ab82dd8cbb419464dab145e61814"
+  },
+  "subjects": [
+    {
+      "id": "fragment-963",
+      "case_id": "public-miso-f1499",
+      "frame": 1499,
+      "view_id": "public-native",
+      "fixed_column_xy": [
+        578.0,
+        332.0
+      ],
+      "native_fragment_id": 963,
+      "source_path_xy": [
+        [
+          575,
+          332
+        ],
+        [
+          576,
+          332
+        ],
+        [
+          577,
+          333
+        ],
+        [
+          578,
+          332
+        ],
+        [
+          579,
+          332
+        ],
+        [
+          580,
+          332
+        ],
+        [
+          581,
+          332
+        ],
+        [
+          582,
+          331
+        ],
+        [
+          583,
+          331
+        ],
+        [
+          584,
+          331
+        ],
+        [
+          585,
+          332
+        ],
+        [
+          586,
+          332
+        ],
+        [
+          587,
+          332
+        ],
+        [
+          588,
+          332
+        ],
+        [
+          589,
+          332
+        ],
+        [
+          590,
+          332
+        ],
+        [
+          591,
+          332
+        ],
+        [
+          592,
+          332
+        ],
+        [
+          593,
+          332
+        ],
+        [
+          594,
+          332
+        ],
+        [
+          595,
+          332
+        ],
+        [
+          596,
+          332
+        ],
+        [
+          597,
+          332
+        ],
+        [
+          598,
+          332
+        ],
+        [
+          599,
+          332
+        ],
+        [
+          600,
+          332
+        ]
+      ],
+      "raster_path_sha256": "7e496c7d6b5b25fa279eacb9d9e29c2a88ea9f7634fa3736b5b07453a7a5100d",
+      "readout_subject_sha256": "4995969d3b400f7f20ad4ae149377bec9f08c4be4eea568ad59955f303ff4dc2",
+      "vertex_count": 26,
+      "junction_incident": true
+    },
+    {
+      "id": "fragment-995",
+      "case_id": "public-miso-f1499",
+      "frame": 1499,
+      "view_id": "public-native",
+      "fixed_column_xy": [
+        578.0,
+        336.0
+      ],
+      "native_fragment_id": 995,
+      "source_path_xy": [
+        [
+          617,
+          335
+        ],
+        [
+          616,
+          335
+        ],
+        [
+          615,
+          335
+        ],
+        [
+          614,
+          335
+        ],
+        [
+          613,
+          335
+        ],
+        [
+          612,
+          335
+        ],
+        [
+          611,
+          336
+        ],
+        [
+          610,
+          335
+        ],
+        [
+          609,
+          336
+        ],
+        [
+          608,
+          335
+        ],
+        [
+          607,
+          335
+        ],
+        [
+          606,
+          335
+        ],
+        [
+          605,
+          336
+        ],
+        [
+          604,
+          336
+        ],
+        [
+          603,
+          335
+        ],
+        [
+          602,
+          335
+        ],
+        [
+          601,
+          335
+        ],
+        [
+          600,
+          335
+        ],
+        [
+          599,
+          336
+        ],
+        [
+          598,
+          336
+        ],
+        [
+          597,
+          336
+        ],
+        [
+          596,
+          336
+        ],
+        [
+          595,
+          336
+        ],
+        [
+          594,
+          336
+        ],
+        [
+          593,
+          336
+        ],
+        [
+          592,
+          336
+        ],
+        [
+          591,
+          336
+        ],
+        [
+          590,
+          336
+        ],
+        [
+          589,
+          336
+        ],
+        [
+          588,
+          336
+        ],
+        [
+          587,
+          336
+        ],
+        [
+          586,
+          336
+        ],
+        [
+          585,
+          335
+        ],
+        [
+          584,
+          335
+        ],
+        [
+          583,
+          335
+        ],
+        [
+          582,
+          335
+        ],
+        [
+          581,
+          335
+        ],
+        [
+          580,
+          335
+        ],
+        [
+          579,
+          336
+        ],
+        [
+          578,
+          336
+        ]
+      ],
+      "raster_path_sha256": "4eeeb472cd20b5b9cbb88bf50ef4f51b80c86a9e7b768eec212250491f4742bc",
+      "readout_subject_sha256": "b61ac293b50b41dbaa31a51fe17c8ad7545cb596808a92e31f3b714f7e15f9b3",
+      "vertex_count": 40,
+      "junction_incident": true
+    },
+    {
+      "id": "fragment-1029",
+      "case_id": "public-miso-f1499",
+      "frame": 1499,
+      "view_id": "public-native",
+      "fixed_column_xy": [
+        578.0,
+        336.0
+      ],
+      "native_fragment_id": 1029,
+      "source_path_xy": [
+        [
+          577,
+          336
+        ],
+        [
+          578,
+          336
+        ]
+      ],
+      "raster_path_sha256": "dec13d29e086a54170f52b3a6a43efb892129c3553c899b88749d7b463ec9cd5",
+      "readout_subject_sha256": "b544980578b9036f76788ecb7af926bc5084146075c1f073ce87f28060804ffe",
+      "vertex_count": 2,
+      "junction_incident": true
+    },
+    {
+      "id": "fragment-1031",
+      "case_id": "public-miso-f1499",
+      "frame": 1499,
+      "view_id": "public-native",
+      "fixed_column_xy": [
+        578.0,
+        336.0
+      ],
+      "native_fragment_id": 1031,
+      "source_path_xy": [
+        [
+          578,
+          336
+        ],
+        [
+          577,
+          337
+        ]
+      ],
+      "raster_path_sha256": "99cd26bfad6f946e76c185e6337a640925ae9883926cea242e51bfa60b420947",
+      "readout_subject_sha256": "81064aec104c84242ac4e1f5d17f5c082abd3c304c03be540194a5a52bf59a73",
+      "vertex_count": 2,
+      "junction_incident": true
+    }
+  ],
+  "views": [
+    {
+      "id": "public-native",
+      "source": {
+        "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/native-at-50.png",
+        "sha256": "280b7869a81edfde722fafc85017fdf45dd6e799978cb6c46b7b9769249a635b"
+      },
+      "image_origin_xy": [
+        0,
+        0
+      ],
+      "display_xyxy": [
+        464,
+        254,
+        692,
+        464
+      ]
+    }
+  ],
+  "preparation_plan_sha256": "2b8a129193c4443c33ee24d95dfec2c57de1f2290509fc878ed9a26bb6739871",
+  "reuse_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-existing-material-execution/readout.json",
+    "sha256": "e1052b1e5bbc7ccc40d71b445157c7f448b83e43d30ab4958261644812d2bb08"
+  },
+  "selection_interval": {
+    "appearance": "R footprint qualified; no type label on each edge",
+    "case_id": "public-miso-f1499",
+    "id": "public-A",
+    "interval": [
+      322.5,
+      338.5
+    ],
+    "precision": "Interval containment only; edges unreviewed",
+    "role": "Foam upper"
+  },
+  "selection": "Every saved fragment intersecting the closed interval; no score or length choice",
+  "preserved_intervals": [
+    {
+      "candidate_negative_ids": [],
+      "candidate_positive_ids": [],
+      "compatible_fragments": [
+        "public-miso-f1499/fragment-1463",
+        "public-miso-f1499/fragment-1523",
+        "public-miso-f1499/fragment-1546"
+      ],
+      "original": {
+        "appearance": "R footprint qualified; no type label on each edge",
+        "case_id": "public-miso-f1499",
+        "id": "public-B",
+        "interval": [
+          420.5,
+          435.5
+        ],
+        "precision": "Interval containment only; edges unreviewed",
+        "role": "Oil upper"
+      },
+      "physical_path_correspondence": "NOT_QUALIFIED"
+    }
+  ],
+  "complete_saved_fragment_count": 27,
+  "question": "상단 네 경로(963/995/1029/1031) 각각이 실제 Foam 상단인지, Foam 내부 변화인지, 구조물 경계인지 판독해 주세요. 애매하면 가능한 해석을, 구분이 어려우면 판독 불가로 남깁니다. 하부 Oil 세 경로와 이미 확인한 상단/하단 구간은 이번 질문 대상이 아닙니다.",
+  "status": "PENDING_PATH_ROLE_REVIEW",
+  "qualified_units": 0,
+  "training_executed": false,
+  "scope": "Displayed path role only; no dense/pure-side/coordinate truth or training grant"
+}

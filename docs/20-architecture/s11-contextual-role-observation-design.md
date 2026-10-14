@@ -930,6 +930,22 @@ correct raw upper opens episode work. Final field/report acceptance stays separa
 
 ### Scoped native replies and a surface/internal feasibility option
 
+The native qualifier's v3 reply adds explicit `QUALIFIED_ROLE`, `AMBIGUOUS_ROLE`
+and `UNASSESSABLE` states. Only a qualified compatible role set has a capability
+target. Ambiguous alternatives and unassessable subjects remain in the denominator
+with a null target; neither is a negative label or a successful rejection. Existing
+v1/v2 replies retain their original output schemas and meaning. A separate proposal
+inspection validates geometry, source pixels and the pinned display without a human
+reply; its subjects remain `PENDING_REVIEW` and its qualified count is zero.
+
+The next public-source packet reuses every one of the four saved native fragments
+within the already closed Foam-upper interval, without choosing by path length or
+model score. Its three lower Oil fragments stay preservation context and unreviewed.
+This preparation may establish the exact question and input availability; it does
+not adopt a successor model, infer all paths positive, re-ask the interval or reopen
+the failed native/RGB trials. The [reuse evidence](../60-evidence/s11/2026-10-13-existing-material-execution.md#public-native-review-preparation--2026-10-14)
+owns execution and the remaining correspondence question.
+
 The [N1–N3 qualification](../60-evidence/s11/2026-10-13-native-role-qualification.md)
 adds subject-bound human roles as a supplement to the immutable G0 snapshot.
 N1 permits both external Foam upper and oscillating-liquid upper interpretations;
