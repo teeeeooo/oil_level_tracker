@@ -1615,3 +1615,9 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 작성일 / Git 상태 | 문서 | 구분 |
 |---|---|---|
 | 2026-10-14 / 미등록 | [60-evidence/s11/2026-10-14-bounded-context-experiment.md](60-evidence/s11/2026-10-14-bounded-context-experiment.md) | DTO-1 실제 영상·정적 광학 반례·독립 검산 및 3–4회 종료 예산 인수인계; 생산 승격 없음 |
+
+### 2026-10-14 round-2 context 작업 추가 — Git 최초 등록일 미확정
+
+| 작성일 / Git 상태 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-14 / 미등록 | [60-evidence/s11/2026-10-14-round2-context-disposition.md](60-evidence/s11/2026-10-14-round2-context-disposition.md) | 기존 report·원본 시퀀스·browser 실행 검증, 간단한 rejection 정책 반례 및 판독 대기 인수인계; 생산 변경 없음 |
