@@ -11,6 +11,38 @@ This file owns **affirmatively retained work that is not the current executable 
 - **Routing owner:** future product/workflow slice selected by the project roadmap.
 - **Current-gate boundary:** this work remains deferred and is **not the current gate**.
 
+## Windows analysis throughput after detector improvement
+
+- **Responsibility:** reduce analysis and result-generation time for practical
+  Windows use while preserving detector outputs and validation requirements.
+- **Classification / priority:** `DEFERRED`; the user explicitly prioritizes
+  detector effectiveness and retains performance work for afterward
+  (2026-10-14).
+- **User-reported workload:** a 1 h 8 min 24 s MP4, 1920 × 1080 at 23.976 fps;
+  analysis from 480–780 s at 2 samples/s with two analysis regions. Reported
+  video-analysis time is about 20 minutes, followed by about 5 minutes of
+  postprocessing.
+- **User-reported host:** AMD Ryzen Threadripper PRO 7945EX, 12 cores (model
+  designation as supplied); NVIDIA RTX 4000 Ada Generation; 128 GB RAM;
+  Windows 11 Enterprise 25H2; source code and video on SSD.
+- **Correction / evidence limit:** the user confirms that analysis was also
+  slow with FULL disabled / NONE selected. FULL-versus-NONE is therefore not
+  the explanation for the underlying usability problem or its accepted fix.
+  A separate NONE timing, producing source version, ROI geometry and per-stage
+  measurements have not been supplied here; the approximate 20 + 5 minutes
+  must not be presented as a measured timing for both modes. Root cause is
+  unconfirmed; this is a user report, not a reproduced benchmark.
+- **Activation / next work:** after the current detector-effectiveness work,
+  reuse the existing profiling approach to separate video seek/decode,
+  per-region detection, diagnostic work, completed-window resolution and
+  bundle/report generation on the isolated Windows ZIP installation. Preserve
+  source/runtime/input identity and compare outputs when optimizing measured
+  bottlenecks. Do not assume trace settings, GPU availability or hardware
+  replacement solve the issue.
+- **Current-gate boundary:** no performance rerun or optimization is requested
+  now. The active detector and Windows diagnostic comparison remain owned by
+  [Work Plan](work-plan.md); this deferred item does not change their order.
+
 ## Explicitly superseded recurring dependency
 
 Repeated replay of the private Windows field video during every S11 source iteration is **SUPERSEDED as a normal development dependency**. The private video may remain diagnostic corroboration when deliberately available, but iterative S11 source work must not depend on repeated private-field replay. This superseded practice is not a retained commitment.
