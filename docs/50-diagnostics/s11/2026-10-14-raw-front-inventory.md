@@ -132,12 +132,55 @@ does not justify recreating A's contour or requesting a new video by default.
 The [source plan](2026-10-14-raw-front-inventory/base-plan.json) pins this one-frame
 scope. This is source preparation, not an independent physical-performance trial.
 
+### Existing native path prepared; physical correspondence pending
+
+At **`c91dd6e`**, the corrected preparation and rendering CLIs reused the existing
+full-frame PNG, verified its original capture's BGR hash, and retained **559 Canny
+vertices / 748 links / 464 graph fragments**. The complete center-X696 population
+has exactly two fragments: **150 at Y393**, and 462 at Y502. Both are retained in
+the [native readout](2026-10-14-raw-front-inventory/base-native-readout.json).
+Path 462 has unavailable side context and is not a negative control.
+
+Only row Y393 lies in the earlier *uncertain display window* 378–394. Path 150
+has **131 observed pixels**, with 20 complete upper and 20 lower RGB patches.
+The [proposal](2026-10-14-raw-front-inventory/base-review-proposal.json) and
+[original qualifier inspection](2026-10-14-raw-front-inventory/base-review-inspection.json)
+check its exact source, frame, path, support and display, returning
+`PROPOSAL_VERIFIED_PENDING_REVIEW`, **zero qualified units**. Selection uses
+neither length nor a classifier. Historical Y386 is not reassigned to Y393.
+
+The [direct PNG](2026-10-14-raw-front-inventory/base-review.png) shows the whole
+original ROI beside its actual path, with a full-frame locator. Pixel verification
+checks every plain/marked panel pixel and all 131 marked source pixels against
+visible saved Canny support. No interpolated or estimated contour is drawn.
+The image was visually inspected; the Korean labels and locator are legible.
+This is a new **path correspondence** question at f144, not another review of
+f156's disputed interpretation or the user's private Windows BASE glass.
+
+The first unpublished source wrapper omitted the `counts` summary required by
+the existing qualifier. Managed run `s11-native-base-review-20261014-001` was
+closed as aborted before review and its twelve owned intermediate/cache files
+discarded. The corrected run `s11-native-base-review-20261014-002` preserves the
+same geometry, completes the real qualifier entry, and retains only canonical
+source bindings, one compact raster and this review. The wrapper repair changes
+no threshold, mask, path, role or learning operation.
+
+The final base preparation retains **482,455 bytes** across 14 canonical files,
+including its two source scripts, and discards six owned cache files. All **61
+managed runs** are closed and pass artifact checks, including the recorded aborted
+attempt. Original media and the retired model/environment state remain unchanged.
+
+**Next human question:** what physical boundary does magenta path 150 follow:
+liquid–empty-space, Foam–liquid, Foam–empty-space, structure, another boundary or
+unassessable? Keep this pending; no source or native label is added in anticipation
+of an answer. The existing 135-path corpus and failed trials remain unchanged.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
-- First harmful stage: baseline native Canny geometry is absent before role input in A. The existing material-path candidate remains available; this does not locate a production candidate, owner, temporal or report loss. The audit will distinguish pre-mask Canny absence from later masking without changing either operation.
-- Existing feature coverage: reuse the original sample3 Recipe ROI/exclusions and baseline glare/digital-overlay preprocessing, with archived RGB/visibility equality. Artifact templates are not consumed by this raw geometry entry; static learning, initial state, Local XY and temporal ownership are not executed. Completed D2/Local XY/overlay failures remain controls, and no claim is made that those unused features failed or improved.
+- First harmful stage: baseline native Canny geometry is absent before role input in A. All 35 pre-mask Canny pixels lie outside the effective region; no valid edge is established as erased. The existing material-path candidate remains available; this does not locate a production candidate, owner, temporal or report loss. Raw plateau graph fragmentation is a separate representation limit, not physical absence.
+- Existing feature coverage: reuse original sample3 and base_sample_1 Recipe ROI/exclusions and baseline glare/digital-overlay preprocessing, with archived/original RGB equality. Artifact templates are not consumed by these raw geometry entries; static learning, initial state, Local XY and temporal ownership are not executed. Completed D2/Local XY/overlay failures remain controls, and no claim is made that those unused features failed or improved.
 - Execution scope: the completed absolute-path CLI reconstructs one saved A PNG/Recipe and unchanged baseline preprocessing, binds the point reply, then composes existing raw-gradient/plateau/graph functions. A separately pinned f144 source preparation reuses one existing original PNG/Recipe and G0/native review owners. Neither invokes production candidate generation, sequence/report consumers, model fitting, video decode or Windows. No point-to-path or source-to-source label transfer is permitted.
 - Logic-map impact: NONE — an offline representation adapter has no production caller or authority; existing candidate and native input responsibilities remain separate.
 - Failure-registry impact: NONE — reuses the established raw-representation/role distinction and signed-gap counterexamples; no classifier is promoted or new general failure family asserted.

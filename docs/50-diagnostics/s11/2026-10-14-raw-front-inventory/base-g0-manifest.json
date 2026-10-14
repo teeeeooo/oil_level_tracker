@@ -1,0 +1,11 @@
+{
+  "schema": "s11-native-source-g0-binding-v1",
+  "inputs": {
+    "foam_preflight": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-source-preflight.json",
+      "sha256": "9468281f73f690e8ddaa8a0914445873fdd7ec3d64ce549ab7a5a7dc72e0bca2"
+    }
+  },
+  "source_plan_sha256": "93676f04f2d139d8d8b8bdd01984e3f9f3479178eac944c182769fa9d4f15d16",
+  "scope": "New one-frame G0 geometry, not the old corpus audit"
+}

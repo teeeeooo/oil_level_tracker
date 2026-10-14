@@ -1,0 +1,270 @@
+{
+  "schema": "s11-native-fragment-proposal-inspection-v1",
+  "g0_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-g0-readout.json",
+    "sha256": "7af3d34ca671728a1fdb7ecf185d4d868086b9bd5a01e4edb0c0973e379b7049"
+  },
+  "baseline_counts": {
+    "contexts": 1,
+    "edges": 2,
+    "new_physical_labels": 0,
+    "fixed_column_fragments": 2
+  },
+  "subjects": [
+    {
+      "id": "fragment-150",
+      "subject_sha256": "0b4552e2b66daa35d772b172be0d3efc1212d39cef79ad106226d8ea9ebf5910",
+      "case_id": "base-f144",
+      "frame": 144,
+      "time_sec": 4.8048,
+      "time_kind": "RECORDED",
+      "source_recording": {
+        "path": "sample/base_sample_1.mp4",
+        "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+      },
+      "geometry_sha256": "3c33b5abefc56e0801b78a1807bcf14bf30ea707cd671ba23b7c1ab2ebce838a",
+      "g0_pointer": [
+        "contexts",
+        0,
+        "rows",
+        0,
+        "incident_fragments",
+        0
+      ],
+      "allowed_interpretations": [],
+      "capability_target": null,
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY",
+      "dense_labels": false,
+      "coordinate_tolerance": null,
+      "side_material_labels": null,
+      "inference_metadata_allowed": false,
+      "proposed_context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 20,
+            "complete_centers_xy": [
+              [
+                133,
+                171
+              ],
+              [
+                134,
+                171
+              ],
+              [
+                135,
+                171
+              ],
+              [
+                136,
+                170
+              ],
+              [
+                137,
+                170
+              ],
+              [
+                138,
+                170
+              ],
+              [
+                139,
+                170
+              ],
+              [
+                140,
+                170
+              ],
+              [
+                141,
+                170
+              ],
+              [
+                142,
+                170
+              ],
+              [
+                143,
+                170
+              ],
+              [
+                144,
+                170
+              ],
+              [
+                145,
+                170
+              ],
+              [
+                146,
+                170
+              ],
+              [
+                147,
+                170
+              ],
+              [
+                148,
+                170
+              ],
+              [
+                149,
+                170
+              ],
+              [
+                150,
+                170
+              ],
+              [
+                151,
+                170
+              ],
+              [
+                152,
+                171
+              ]
+            ],
+            "complete_patches": 20,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 194,
+            "reused_pixel_uses": 786,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 23
+          },
+          "lower": {
+            "requested_patches": 20,
+            "complete_centers_xy": [
+              [
+                133,
+                181
+              ],
+              [
+                134,
+                181
+              ],
+              [
+                135,
+                181
+              ],
+              [
+                136,
+                180
+              ],
+              [
+                137,
+                180
+              ],
+              [
+                138,
+                180
+              ],
+              [
+                139,
+                180
+              ],
+              [
+                140,
+                180
+              ],
+              [
+                141,
+                180
+              ],
+              [
+                142,
+                180
+              ],
+              [
+                143,
+                180
+              ],
+              [
+                144,
+                180
+              ],
+              [
+                145,
+                180
+              ],
+              [
+                146,
+                180
+              ],
+              [
+                147,
+                180
+              ],
+              [
+                148,
+                180
+              ],
+              [
+                149,
+                180
+              ],
+              [
+                150,
+                180
+              ],
+              [
+                151,
+                180
+              ],
+              [
+                152,
+                181
+              ]
+            ],
+            "complete_patches": 20,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 194,
+            "reused_pixel_uses": 786,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 23
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "decision": "NOT_EVALUATED",
+      "review_status": "PENDING_REVIEW"
+    }
+  ],
+  "same_frame_dependency": [],
+  "proposed_context": {
+    "kernel": 7,
+    "side_centers_dy": {
+      "upper": -5,
+      "lower": 5
+    },
+    "columns": "existing G0 observed columns within fixed-X +/-12",
+    "preprocessing": "saved native RGB / 255; no resize, CLAHE or image normalization",
+    "padding": "NONE",
+    "required": "all 49 RGB pixels visible per patch",
+    "aggregation": "mean per side, one loss per fragment; patch count is not a model feature",
+    "semantics": "ordered geometric context, NOT pure material labels"
+  },
+  "status": "PROPOSAL_VERIFIED_PENDING_REVIEW",
+  "decision": "NOT_EVALUATED",
+  "qualified_units": 0,
+  "exposed_recordings": 1,
+  "untouched_holdout_recordings": 0,
+  "model_calls": 0,
+  "production_changed": false,
+  "training_executed": false,
+  "video_decode": false,
+  "remaining": [
+    "only qualified displayed roles can constrain a separately declared comparison",
+    "pending, ambiguous and unassessable subjects supply no target or negative success",
+    "no pure-side truth, learning grant, G1 efficacy, O2/V5 or field acceptance"
+  ],
+  "accounted_units": 1,
+  "review_status_counts": {
+    "PENDING_REVIEW": 1
+  },
+  "new_training_labels": 0,
+  "request_sha256": "f04cbff45e185e076e21916660220d03b7aee5c12770e5c83fc4571d919b0a6f"
+}

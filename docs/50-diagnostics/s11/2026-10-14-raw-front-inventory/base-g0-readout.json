@@ -1,0 +1,358 @@
+{
+  "schema": "s11-native-role-preflight-v1",
+  "manifest_sha256": "1c01aafb08a347d8bab608049d87f4f2bfa20a2f7a977d17bf9563c29356dfc2",
+  "contexts": [
+    {
+      "id": "base-f144",
+      "original_case_ref": {
+        "input": "foam_preflight",
+        "index": 0
+      },
+      "frame": 144,
+      "time_sec": 4.8048,
+      "time_kind": "RECORDED",
+      "source_recording": {
+        "path": "sample/base_sample_1.mp4",
+        "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+      },
+      "geometry": {
+        "origin": [
+          551,
+          218
+        ],
+        "shape": [
+          296,
+          290
+        ],
+        "scale_xy": [
+          1,
+          1
+        ],
+        "column": 145
+      },
+      "geometry_sha256": "3c33b5abefc56e0801b78a1807bcf14bf30ea707cd671ba23b7c1ab2ebce838a",
+      "rows": [
+        {
+          "row": 175,
+          "vertex_id": 163,
+          "degree": 2,
+          "incident_fragments": [
+            {
+              "fragment_id": 150,
+              "vertex_count": 131,
+              "kind": "chain",
+              "path_sha256": "3ef4af4b00afa9e2bedfce145d27c9cbbea87ea55f7b54ee29b803cf8f9bc4e6",
+              "fixed_column_rows": [
+                175
+              ],
+              "orientation": "X_MONOTONE_PARTIAL_PATH",
+              "junction_incident": true,
+              "crop_adjacent": false,
+              "mask_adjacent": false,
+              "support_columns_xy": [
+                [
+                  133,
+                  176
+                ],
+                [
+                  134,
+                  176
+                ],
+                [
+                  135,
+                  176
+                ],
+                [
+                  136,
+                  175
+                ],
+                [
+                  137,
+                  175
+                ],
+                [
+                  138,
+                  175
+                ],
+                [
+                  139,
+                  175
+                ],
+                [
+                  140,
+                  175
+                ],
+                [
+                  141,
+                  175
+                ],
+                [
+                  142,
+                  175
+                ],
+                [
+                  143,
+                  175
+                ],
+                [
+                  144,
+                  175
+                ],
+                [
+                  145,
+                  175
+                ],
+                [
+                  146,
+                  175
+                ],
+                [
+                  147,
+                  175
+                ],
+                [
+                  148,
+                  175
+                ],
+                [
+                  149,
+                  175
+                ],
+                [
+                  150,
+                  175
+                ],
+                [
+                  151,
+                  175
+                ],
+                [
+                  152,
+                  176
+                ]
+              ],
+              "side_support": {
+                "upper": {
+                  "requested": 275,
+                  "observed": 220,
+                  "censored_crop": 0,
+                  "censored_mask": 0,
+                  "missing_path": 55,
+                  "status": "PARTIAL_OR_UNAVAILABLE"
+                },
+                "lower": {
+                  "requested": 275,
+                  "observed": 220,
+                  "censored_crop": 0,
+                  "censored_mask": 0,
+                  "missing_path": 55,
+                  "status": "PARTIAL_OR_UNAVAILABLE"
+                }
+              },
+              "physical_orientation": "NOT_QUALIFIED",
+              "candidate_positive": false
+            }
+          ],
+          "shared_path_support": {
+            "observed_union": {
+              "upper": 220,
+              "lower": 220
+            },
+            "reused_within_side": {
+              "upper": 0,
+              "lower": 0
+            },
+            "shared_upper_lower_pixels": 0,
+            "independent_votes": false
+          },
+          "vertical_context": {
+            "upper": {
+              "requested": 275,
+              "observed": 275,
+              "censored_crop": 0,
+              "censored_mask": 0,
+              "missing_path": 0,
+              "status": "COMPLETE"
+            },
+            "lower": {
+              "requested": 275,
+              "observed": 275,
+              "censored_crop": 0,
+              "censored_mask": 0,
+              "missing_path": 0,
+              "status": "COMPLETE"
+            }
+          },
+          "context_membership": {
+            "columns": [
+              133,
+              158
+            ],
+            "center_y": 175
+          },
+          "rgb_status": "AVAILABLE",
+          "legacy_rl_support_status": "AVAILABLE",
+          "physical_role": "UNREVIEWED",
+          "decision": "NOT_EVALUATED",
+          "source_xy": [
+            696,
+            393
+          ]
+        },
+        {
+          "row": 284,
+          "vertex_id": 552,
+          "degree": 2,
+          "incident_fragments": [
+            {
+              "fragment_id": 462,
+              "vertex_count": 13,
+              "kind": "chain",
+              "path_sha256": "8725737e12c218b0e8cb2ddfdcc0ecab6d8bff53436b9ccd5392cc35b84547cd",
+              "fixed_column_rows": [
+                284
+              ],
+              "orientation": "X_MONOTONE_PARTIAL_PATH",
+              "junction_incident": true,
+              "crop_adjacent": false,
+              "mask_adjacent": true,
+              "support_columns_xy": [
+                [
+                  138,
+                  284
+                ],
+                [
+                  139,
+                  284
+                ],
+                [
+                  140,
+                  284
+                ],
+                [
+                  141,
+                  284
+                ],
+                [
+                  142,
+                  284
+                ],
+                [
+                  143,
+                  284
+                ],
+                [
+                  144,
+                  284
+                ],
+                [
+                  145,
+                  284
+                ],
+                [
+                  146,
+                  284
+                ],
+                [
+                  147,
+                  284
+                ],
+                [
+                  148,
+                  284
+                ],
+                [
+                  149,
+                  284
+                ],
+                [
+                  150,
+                  284
+                ]
+              ],
+              "side_support": {
+                "upper": {
+                  "requested": 275,
+                  "observed": 143,
+                  "censored_crop": 0,
+                  "censored_mask": 0,
+                  "missing_path": 132,
+                  "status": "PARTIAL_OR_UNAVAILABLE"
+                },
+                "lower": {
+                  "requested": 275,
+                  "observed": 0,
+                  "censored_crop": 13,
+                  "censored_mask": 130,
+                  "missing_path": 132,
+                  "status": "PARTIAL_OR_UNAVAILABLE"
+                }
+              },
+              "physical_orientation": "NOT_QUALIFIED",
+              "candidate_positive": false
+            }
+          ],
+          "shared_path_support": {
+            "observed_union": {
+              "upper": 143,
+              "lower": 0
+            },
+            "reused_within_side": {
+              "upper": 0,
+              "lower": 0
+            },
+            "shared_upper_lower_pixels": 0,
+            "independent_votes": false
+          },
+          "vertical_context": {
+            "upper": {
+              "requested": 275,
+              "observed": 275,
+              "censored_crop": 0,
+              "censored_mask": 0,
+              "missing_path": 0,
+              "status": "COMPLETE"
+            },
+            "lower": {
+              "requested": 275,
+              "observed": 0,
+              "censored_crop": 25,
+              "censored_mask": 250,
+              "missing_path": 0,
+              "status": "PARTIAL_OR_UNAVAILABLE"
+            }
+          },
+          "context_membership": {
+            "columns": [
+              133,
+              158
+            ],
+            "center_y": 284
+          },
+          "rgb_status": "AVAILABLE",
+          "legacy_rl_support_status": "UNAVAILABLE_REQUIRED_SUPPORT",
+          "physical_role": "UNREVIEWED",
+          "decision": "NOT_EVALUATED",
+          "source_xy": [
+            696,
+            502
+          ]
+        }
+      ],
+      "graph": {
+        "vertices": 559,
+        "links": 748,
+        "fragments": 464,
+        "spec_id": "observed-edge-fragments-v1"
+      }
+    }
+  ],
+  "counts": {
+    "contexts": 1,
+    "edges": 2,
+    "new_physical_labels": 0,
+    "fixed_column_fragments": 2
+  },
+  "weak_constraints": [],
+  "scope": "One newly reconstructed source; complete fixed-column population, zero roles"
+}

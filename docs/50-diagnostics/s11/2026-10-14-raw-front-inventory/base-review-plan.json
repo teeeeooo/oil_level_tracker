@@ -1,0 +1,38 @@
+{
+  "schema": "s11-native-fragment-review-preparation-v1",
+  "reuse_manifest": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reuse-manifest.json",
+    "sha256": "7fe3f524338695006847fd510e85de5dc5c361a0cb81df6282dc9295814b9c68"
+  },
+  "reuse_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-native-readout.json",
+    "sha256": "6fc6061e5bc18a2f8e18b548665ad5cf21162fa43b2d3c1da05ad6578c0f8a9a"
+  },
+  "case_id": "base-f144",
+  "fixed_column_source_y": 393,
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review.png",
+    "sha256": "93475e44964bfb8205df6c63c0cd80cbcb5f82482aa8345d7e7e132276988338"
+  },
+  "view": {
+    "id": "base-f144-native",
+    "source": {
+      "path": "sample/output/s11-truth-audit-20261010-002/base_sample_1/f000144.png",
+      "sha256": "e2ccc4b7195c7870e8df99bce54c38c0e19ce16bebf7bafe37f64e1a681d604d"
+    },
+    "image_origin_xy": [
+      0,
+      0
+    ],
+    "display_xyxy": [
+      551,
+      218,
+      841,
+      514
+    ]
+  },
+  "question": "보라색 150 경로는 액체–빈공간, 거품–액체, 거품–빈공간, 구조물 중 어느 경계인가요? 다른 경계이거나 판독이 어려우면 그대로 알려주세요.",
+  "selection_reason": "Only existing Canny center row inside prior uncertain 378–394 display window; all incident paths retained. No scalar-to-path truth or length ranking.",
+  "exposure": "Existing local legacy recording, new path correspondence; no untouched holdout",
+  "no_training": true
+}
