@@ -1,0 +1,924 @@
+{
+  "schema": "s11-oil-candidate-source-expansion-review-v1",
+  "plan_sha256": "604161f359dfa59413aef821a6e719bb6dbbeb9049a66829f23d5c1f291d9bd0",
+  "status": "AWAITING_TWO_SCOPED_CANDIDATE_JUDGMENTS",
+  "source_recording": {
+    "path": "sample/sample3.mp4",
+    "sha256": "c2a45b2b3aa025dea405bfecad79228547f80bf8e1a9e337a400cc09f29f3c04"
+  },
+  "subjects": [
+    {
+      "view": "A",
+      "id": "s3-f2249-idx6",
+      "frame_index": 2249,
+      "candidate_input_index": 6,
+      "candidate_sha256": "db0dcd931c1bb71f5b126e31febc30cd6ba8da24e23beb63e3f95ae483090d17",
+      "source": "material_path",
+      "source_xy": [
+        835.0,
+        219.0
+      ],
+      "time_sec": 75.04163333333334,
+      "source_image": {
+        "path": "sample/output/s11-sample3-gap-source-20261010-001/f002249.png",
+        "sha256": "89d645a3d0880f65a7c1db0f37f91d2d2115dff52d1dbd7a7d69c6a0d727ba0f"
+      },
+      "center_sector": {
+        "sector": 2,
+        "source_x_range": [
+          813,
+          858
+        ],
+        "bands": {
+          "near_above": {
+            "local_y_range": [
+              17,
+              20
+            ],
+            "available": true,
+            "reason": "available",
+            "valid_fraction": 1.0,
+            "valid_pixel_count": 135,
+            "gray_mean": 0.24183006535947707,
+            "gray_std": 0.02078938292000532,
+            "material_available": true,
+            "material_mean": 0.2630186292860243,
+            "static_available": true,
+            "static_overlap": 0.0,
+            "glare_fraction": 0.0
+          },
+          "near_below": {
+            "local_y_range": [
+              23,
+              26
+            ],
+            "available": true,
+            "reason": "available",
+            "valid_fraction": 1.0,
+            "valid_pixel_count": 135,
+            "gray_mean": 0.19230210602759606,
+            "gray_std": 0.019935718574558618,
+            "material_available": true,
+            "material_mean": 0.1787322998046875,
+            "static_available": true,
+            "static_overlap": 0.0,
+            "glare_fraction": 0.0
+          },
+          "far_above": {
+            "local_y_range": [
+              11,
+              14
+            ],
+            "available": true,
+            "reason": "available",
+            "valid_fraction": 0.9333333333333333,
+            "valid_pixel_count": 126,
+            "gray_mean": 0.3122626828509182,
+            "gray_std": 0.01658441929050195,
+            "material_available": true,
+            "material_mean": 0.30073508005293587,
+            "static_available": true,
+            "static_overlap": 0.0,
+            "glare_fraction": 0.0
+          },
+          "far_below": {
+            "local_y_range": [
+              29,
+              32
+            ],
+            "available": true,
+            "reason": "available",
+            "valid_fraction": 1.0,
+            "valid_pixel_count": 135,
+            "gray_mean": 0.15689179375453868,
+            "gray_std": 0.016399864038224254,
+            "material_available": true,
+            "material_mean": 0.0967487476490162,
+            "static_available": true,
+            "static_overlap": 0.0,
+            "glare_fraction": 0.0
+          }
+        },
+        "near_signed_contrast": -0.049527959331881005,
+        "far_signed_contrast": -0.1553708890963795,
+        "near_minus_far_abs_contrast": -0.1058429297644985,
+        "peak_source_y": 213,
+        "peak_signed_gradient": -0.011416122004357293,
+        "path_local_y": 21,
+        "path_source_y": 216,
+        "generator_strength": 0.8534988164901733,
+        "generator_signed_contrast": -1.0136008262634277,
+        "generator_contrast_channel": "blurred_gray_dynamic_range",
+        "generator_contrast_scale_px": 10,
+        "candidate_center_on_same_sector": {
+          "sector": 2,
+          "source_x_range": [
+            813,
+            858
+          ],
+          "bands": {
+            "near_above": {
+              "local_y_range": [
+                20,
+                23
+              ],
+              "available": true,
+              "reason": "available",
+              "valid_fraction": 1.0,
+              "valid_pixel_count": 135,
+              "gray_mean": 0.21687726942628885,
+              "gray_std": 0.02131573708327615,
+              "material_available": true,
+              "material_mean": 0.2111347339771412,
+              "static_available": true,
+              "static_overlap": 0.0,
+              "glare_fraction": 0.0
+            },
+            "near_below": {
+              "local_y_range": [
+                26,
+                29
+              ],
+              "available": true,
+              "reason": "available",
+              "valid_fraction": 1.0,
+              "valid_pixel_count": 135,
+              "gray_mean": 0.1706899055918663,
+              "gray_std": 0.016353490650995763,
+              "material_available": true,
+              "material_mean": 0.13484327528211806,
+              "static_available": true,
+              "static_overlap": 0.0,
+              "glare_fraction": 0.0
+            },
+            "far_above": {
+              "local_y_range": [
+                14,
+                17
+              ],
+              "available": true,
+              "reason": "available",
+              "valid_fraction": 1.0,
+              "valid_pixel_count": 135,
+              "gray_mean": 0.27645606390704436,
+              "gray_std": 0.019714302563469704,
+              "material_available": true,
+              "material_mean": 0.3134913409197772,
+              "static_available": true,
+              "static_overlap": 0.0,
+              "glare_fraction": 0.0
+            },
+            "far_below": {
+              "local_y_range": [
+                32,
+                35
+              ],
+              "available": true,
+              "reason": "available",
+              "valid_fraction": 1.0,
+              "valid_pixel_count": 135,
+              "gray_mean": 0.14425562817719698,
+              "gray_std": 0.01482290066550444,
+              "material_available": true,
+              "material_mean": 0.06746148003472222,
+              "static_available": true,
+              "static_overlap": 0.0,
+              "glare_fraction": 0.0
+            }
+          },
+          "near_signed_contrast": -0.04618736383442254,
+          "far_signed_contrast": -0.13220043572984738,
+          "near_minus_far_abs_contrast": -0.08601307189542484,
+          "peak_source_y": 217,
+          "peak_offset_from_candidate_px": -2.0,
+          "peak_signed_gradient": -0.00915032679738563
+        },
+        "peak_offset_from_path_px": -3
+      },
+      "practical_acceptance": "UNASSESSED",
+      "regional_role": "OIL_CONFIRMED_ORIGINAL_SCOPE"
+    },
+    {
+      "view": "B",
+      "id": "s3-f2339-idx5",
+      "frame_index": 2339,
+      "candidate_input_index": 5,
+      "candidate_sha256": "75c4761337fd43c91735fcc1c51e354839199477d29f01ebb31b95940eba10e3",
+      "source": "material_path",
+      "source_xy": [
+        835.0,
+        227.0
+      ],
+      "time_sec": 78.04463333333334,
+      "source_image": {
+        "path": "sample/output/s11-sample3-gap-source-20261010-001/f002339.png",
+        "sha256": "1a95db29287b5d4420d53217c1322d617b1f7bdf165b40f640ed20b76d1f134f"
+      },
+      "center_sector": {
+        "sector": 2,
+        "source_x_range": [
+          813,
+          858
+        ],
+        "bands": {
+          "near_above": {
+            "local_y_range": [
+              28,
+              31
+            ],
+            "available": true,
+            "reason": "available",
+            "valid_fraction": 0.6666666666666666,
+            "valid_pixel_count": 90,
+            "gray_mean": 0.16100217864923752,
+            "gray_std": 0.01837855605102753,
+            "material_available": true,
+            "material_mean": 0.14751816855536568,
+            "static_available": true,
+            "static_overlap": 0.0,
+            "glare_fraction": 0.3333333333333333
+          },
+          "near_below": {
+            "local_y_range": [
+              34,
+              37
+            ],
+            "available": true,
+            "reason": "available",
+            "valid_fraction": 1.0,
+            "valid_pixel_count": 135,
+            "gray_mean": 0.1398983297022513,
+            "gray_std": 0.015168128100483525,
+            "material_available": true,
+            "material_mean": 0.04579459296332465,
+            "static_available": true,
+            "static_overlap": 0.0,
+            "glare_fraction": 0.0
+          },
+          "far_above": {
+            "local_y_range": [
+              22,
+              25
+            ],
+            "available": false,
+            "reason": "insufficient_visible_pixels",
+            "valid_fraction": 0.0,
+            "valid_pixel_count": 0,
+            "gray_mean": null,
+            "gray_std": null,
+            "material_available": false,
+            "material_mean": null,
+            "static_available": false,
+            "static_overlap": null,
+            "glare_fraction": 1.0
+          },
+          "far_below": {
+            "local_y_range": [
+              40,
+              43
+            ],
+            "available": true,
+            "reason": "available",
+            "valid_fraction": 1.0,
+            "valid_pixel_count": 135,
+            "gray_mean": 0.13333333333333333,
+            "gray_std": 0.012046965020210989,
+            "material_available": true,
+            "material_mean": 0.029952720359519677,
+            "static_available": true,
+            "static_overlap": 0.0,
+            "glare_fraction": 0.0
+          }
+        },
+        "near_signed_contrast": -0.02110384894698622,
+        "far_signed_contrast": null,
+        "near_minus_far_abs_contrast": null,
+        "peak_source_y": 225,
+        "peak_signed_gradient": -0.007102396514161224,
+        "path_local_y": 32,
+        "path_source_y": 227,
+        "generator_strength": 0.20825450122356415,
+        "generator_signed_contrast": -0.07703609764575958,
+        "generator_contrast_channel": "raw_combined_material",
+        "generator_contrast_scale_px": 3,
+        "candidate_center_on_same_sector": {
+          "sector": 2,
+          "source_x_range": [
+            813,
+            858
+          ],
+          "bands": {
+            "near_above": {
+              "local_y_range": [
+                28,
+                31
+              ],
+              "available": true,
+              "reason": "available",
+              "valid_fraction": 0.6666666666666666,
+              "valid_pixel_count": 90,
+              "gray_mean": 0.16100217864923752,
+              "gray_std": 0.01837855605102753,
+              "material_available": true,
+              "material_mean": 0.14751816855536568,
+              "static_available": true,
+              "static_overlap": 0.0,
+              "glare_fraction": 0.3333333333333333
+            },
+            "near_below": {
+              "local_y_range": [
+                34,
+                37
+              ],
+              "available": true,
+              "reason": "available",
+              "valid_fraction": 1.0,
+              "valid_pixel_count": 135,
+              "gray_mean": 0.1398983297022513,
+              "gray_std": 0.015168128100483525,
+              "material_available": true,
+              "material_mean": 0.04579459296332465,
+              "static_available": true,
+              "static_overlap": 0.0,
+              "glare_fraction": 0.0
+            },
+            "far_above": {
+              "local_y_range": [
+                22,
+                25
+              ],
+              "available": false,
+              "reason": "insufficient_visible_pixels",
+              "valid_fraction": 0.0,
+              "valid_pixel_count": 0,
+              "gray_mean": null,
+              "gray_std": null,
+              "material_available": false,
+              "material_mean": null,
+              "static_available": false,
+              "static_overlap": null,
+              "glare_fraction": 1.0
+            },
+            "far_below": {
+              "local_y_range": [
+                40,
+                43
+              ],
+              "available": true,
+              "reason": "available",
+              "valid_fraction": 1.0,
+              "valid_pixel_count": 135,
+              "gray_mean": 0.13333333333333333,
+              "gray_std": 0.012046965020210989,
+              "material_available": true,
+              "material_mean": 0.029952720359519677,
+              "static_available": true,
+              "static_overlap": 0.0,
+              "glare_fraction": 0.0
+            }
+          },
+          "near_signed_contrast": -0.02110384894698622,
+          "far_signed_contrast": null,
+          "near_minus_far_abs_contrast": null,
+          "peak_source_y": 225,
+          "peak_offset_from_candidate_px": -2.0,
+          "peak_signed_gradient": -0.007102396514161224
+        },
+        "peak_offset_from_path_px": -2
+      },
+      "practical_acceptance": "UNASSESSED",
+      "regional_role": "OIL_CONFIRMED_ORIGINAL_SCOPE"
+    }
+  ],
+  "candidate_population": [
+    {
+      "id": "s3-f2249-idx0",
+      "frame_index": 2249,
+      "candidate_input_index": 0,
+      "candidate_sha256": "ae8f244a98c5996f5ceb731af77ef3902809598f47694605e29346f1c3b32e5e",
+      "source": "oil_hypothesis:3a7bb16a6058d12d35871875",
+      "source_xy": [
+        835.0,
+        206.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx1",
+      "frame_index": 2249,
+      "candidate_input_index": 1,
+      "candidate_sha256": "b3910d259cad5ed0d888c72a24c7eb75e74d354be39884aaeb710660e55e1fcb",
+      "source": "oil_hypothesis:a8ec473f6bd053d21b02c4f2",
+      "source_xy": [
+        835.0,
+        217.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx2",
+      "frame_index": 2249,
+      "candidate_input_index": 2,
+      "candidate_sha256": "1602999c3c08b5b7ed8b1ddbb83396be7d43f59072535ea60762b3b69d91010e",
+      "source": "oil_hypothesis:77d36ef54c73c1a36ec4e880",
+      "source_xy": [
+        835.0,
+        236.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx3",
+      "frame_index": 2249,
+      "candidate_input_index": 3,
+      "candidate_sha256": "6ac0253b8015c564ca8f6bf3d0e6383776cc19b53d20965be38f98bf7200b321",
+      "source": "oil_hypothesis:8b80ea252a14534597081d7a",
+      "source_xy": [
+        835.0,
+        338.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx4",
+      "frame_index": 2249,
+      "candidate_input_index": 4,
+      "candidate_sha256": "ab9aec130126b3ca1e55ccd766f01efc6a1a69ad683ddc405095547aa7f2d484",
+      "source": "oil_hypothesis:651d22b05d22d0e3dc8054d9",
+      "source_xy": [
+        835.0,
+        369.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx5",
+      "frame_index": 2249,
+      "candidate_input_index": 5,
+      "candidate_sha256": "f7da7c0dd3d04e86648dfa4fbfa797a68b29854ef5f895edd747de21ee478766",
+      "source": "material_path",
+      "source_xy": [
+        835.0,
+        356.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx6",
+      "frame_index": 2249,
+      "candidate_input_index": 6,
+      "candidate_sha256": "db0dcd931c1bb71f5b126e31febc30cd6ba8da24e23beb63e3f95ae483090d17",
+      "source": "material_path",
+      "source_xy": [
+        835.0,
+        219.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx7",
+      "frame_index": 2249,
+      "candidate_input_index": 7,
+      "candidate_sha256": "bfbb104fcb383c7705044b89d5ac43eee65fa7197c6e8c55d3baf859bfd11550",
+      "source": "material_path",
+      "source_xy": [
+        835.0,
+        369.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx8",
+      "frame_index": 2249,
+      "candidate_input_index": 8,
+      "candidate_sha256": "f9a8bd6ca2c55a5f1b51d310c0176b7cf632c03d418cf36666862e1cf15cf79b",
+      "source": "material_path",
+      "source_xy": [
+        835.0,
+        337.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx9",
+      "frame_index": 2249,
+      "candidate_input_index": 9,
+      "candidate_sha256": "e69b866c1d5787b42ce0781f7c4427fd4618fec6e1390e417ae2ca716b54ecdf",
+      "source": "material_path",
+      "source_xy": [
+        835.0,
+        302.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx10",
+      "frame_index": 2249,
+      "candidate_input_index": 10,
+      "candidate_sha256": "ec1fe4d193ef10bd97d3a9ba8cc02f7fa256fb71a3b4177f113b84900388c734",
+      "source": "distributed_sobel_path",
+      "source_xy": [
+        835.0,
+        367.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx11",
+      "frame_index": 2249,
+      "candidate_input_index": 11,
+      "candidate_sha256": "6ef0becd9d8f831f029064eafad3c84f446fe365db7c139287205dc95f47e8d0",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        210.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx12",
+      "frame_index": 2249,
+      "candidate_input_index": 12,
+      "candidate_sha256": "126b4d9b7eab4ccaf20eab445539de077444c68f8543820c99b3b57d13d990e0",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        217.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx13",
+      "frame_index": 2249,
+      "candidate_input_index": 13,
+      "candidate_sha256": "aa61b28d68a0ce6371d15af8c841d2d2ed14da162ced0236a415a16726dd4e40",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        334.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx14",
+      "frame_index": 2249,
+      "candidate_input_index": 14,
+      "candidate_sha256": "16981292e3c6690ae0e0f1d01318aa6018eeceea71df9ac55bf1a7c99376f46e",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        237.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx15",
+      "frame_index": 2249,
+      "candidate_input_index": 15,
+      "candidate_sha256": "22cf03ddd6bbd9830c9048234cb3e15b00bfbca5ec1a119d1493922523afa991",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        340.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx16",
+      "frame_index": 2249,
+      "candidate_input_index": 16,
+      "candidate_sha256": "3eba6ac351e602dc2047fa5f956fd2a6c130e04ef6911ef424df82644332e4b4",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        380.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx17",
+      "frame_index": 2249,
+      "candidate_input_index": 17,
+      "candidate_sha256": "c45ea658d4e427836dc5aec3aa4e6ab416b748a55d3dd85bdf1dfaf69a077f6a",
+      "source": "phase_transition_scan",
+      "source_xy": [
+        835.0,
+        217.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx18",
+      "frame_index": 2249,
+      "candidate_input_index": 18,
+      "candidate_sha256": "fc927c7f2efec99dc06e3a00fb2c4f26b71f1af6df015c7e47abdc2230a03887",
+      "source": "phase_transition_scan",
+      "source_xy": [
+        835.0,
+        353.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2249-idx19",
+      "frame_index": 2249,
+      "candidate_input_index": 19,
+      "candidate_sha256": "222fdd0c1a21a23ac4cad413ac6db0b35b9d745de14b1708fcc12cbaf8467938",
+      "source": "phase_transition_scan",
+      "source_xy": [
+        835.0,
+        374.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx0",
+      "frame_index": 2339,
+      "candidate_input_index": 0,
+      "candidate_sha256": "8e4ee2725dd7398f38ae96defd32af0a86ecd806661cba11af72b3df797a7718",
+      "source": "oil_hypothesis:4f717fa2f29dc4552591c96c",
+      "source_xy": [
+        835.0,
+        214.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx1",
+      "frame_index": 2339,
+      "candidate_input_index": 1,
+      "candidate_sha256": "041a1a2919102cce9c1edd0b229bab8a16903393df9c91d67cf2f3a1616321ad",
+      "source": "oil_hypothesis:a13a9d0d16db4fec0d74026a",
+      "source_xy": [
+        835.0,
+        225.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx2",
+      "frame_index": 2339,
+      "candidate_input_index": 2,
+      "candidate_sha256": "fdaccdda1866629cd387816f20ea631b3d0da8d99c76e4d2941837a76d1298c5",
+      "source": "oil_hypothesis:624c66fd0048b2cbc4d4567a",
+      "source_xy": [
+        835.0,
+        231.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx3",
+      "frame_index": 2339,
+      "candidate_input_index": 3,
+      "candidate_sha256": "55854a55b761ae534b9928a181e5dae823f61a7207a593b0f9484c98c6a69534",
+      "source": "oil_hypothesis:ca8c11cdc12988a3a3da645b",
+      "source_xy": [
+        835.0,
+        238.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx4",
+      "frame_index": 2339,
+      "candidate_input_index": 4,
+      "candidate_sha256": "c1e65fa67b357bba8583d6d667b3e7ba981058e7a707a6974ab632e7d6f95c2a",
+      "source": "oil_hypothesis:7d46eb5d327d8a9fed5f1e61",
+      "source_xy": [
+        835.0,
+        370.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx5",
+      "frame_index": 2339,
+      "candidate_input_index": 5,
+      "candidate_sha256": "75c4761337fd43c91735fcc1c51e354839199477d29f01ebb31b95940eba10e3",
+      "source": "material_path",
+      "source_xy": [
+        835.0,
+        227.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx6",
+      "frame_index": 2339,
+      "candidate_input_index": 6,
+      "candidate_sha256": "54b04b7d32b005bd24c454e812c365f8b81db5accf0aaf5aeb877ecbb29cebab",
+      "source": "material_path",
+      "source_xy": [
+        835.0,
+        364.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx7",
+      "frame_index": 2339,
+      "candidate_input_index": 7,
+      "candidate_sha256": "20b54b06724a6cbdeb378aef37b169baefe40533f022aca40a1c046611a25468",
+      "source": "material_path",
+      "source_xy": [
+        835.0,
+        328.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx8",
+      "frame_index": 2339,
+      "candidate_input_index": 8,
+      "candidate_sha256": "26bcf7335b47e0d748e0ab957ce811f9a56fae6fc9cb57b7a8200e6f8f5b9994",
+      "source": "distributed_sobel_path",
+      "source_xy": [
+        835.0,
+        336.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx9",
+      "frame_index": 2339,
+      "candidate_input_index": 9,
+      "candidate_sha256": "6ac9a5703330f00d7081479bc2a816f097dd44262c790f42b9d1833e8fce0f7f",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        226.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx10",
+      "frame_index": 2339,
+      "candidate_input_index": 10,
+      "candidate_sha256": "010de36516af49d38845e21f31558b27a044ffba623cf0f71be3f0d6b968c3b7",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        336.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx11",
+      "frame_index": 2339,
+      "candidate_input_index": 11,
+      "candidate_sha256": "14453fbecb9c470ffd5cb2438508f5826764e2b6168876ea5981c61aa1d8679f",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        238.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx12",
+      "frame_index": 2339,
+      "candidate_input_index": 12,
+      "candidate_sha256": "458720d1b17ceda2f2ca332da061b57339e07bb634fc3ed1d515355a04de87d3",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        255.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx13",
+      "frame_index": 2339,
+      "candidate_input_index": 13,
+      "candidate_sha256": "7e3d6405a5d81bde340320e534efde0d32b5fc9a11a6739509a370e29171ff96",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        321.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx14",
+      "frame_index": 2339,
+      "candidate_input_index": 14,
+      "candidate_sha256": "f4dc80c2027836b18f6d4b5d7ece7dc2f9b4e262d49f8e63f3a6857d39aa2730",
+      "source": "calibrated_high_recall",
+      "source_xy": [
+        835.0,
+        370.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx15",
+      "frame_index": 2339,
+      "candidate_input_index": 15,
+      "candidate_sha256": "5126dfebd33af30f0eb7799938ba98bc343e5af937a3dd8e1b86525153fcecd2",
+      "source": "phase_transition_scan",
+      "source_xy": [
+        835.0,
+        229.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx16",
+      "frame_index": 2339,
+      "candidate_input_index": 16,
+      "candidate_sha256": "8a3f1a97fd90fcab1c2c6f95584a544b874f69f9d304b409441862a9db15600e",
+      "source": "phase_transition_scan",
+      "source_xy": [
+        835.0,
+        339.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    },
+    {
+      "id": "s3-f2339-idx17",
+      "frame_index": 2339,
+      "candidate_input_index": 17,
+      "candidate_sha256": "f544b0969dfa6cd87b7c43e887bb8b08c11dbf82ab52fce38a5ccbea31242f9d",
+      "source": "phase_transition_scan",
+      "source_xy": [
+        835.0,
+        368.0
+      ],
+      "practical_acceptance": "UNASSESSED",
+      "native_path_role": "NOT_QUALIFIED"
+    }
+  ],
+  "checks": [
+    {
+      "frame_index": 2249,
+      "candidate_joins": 20,
+      "source_crop_equal": true,
+      "closed_review_pixels_equal": true,
+      "old_candidate_and_path_not_reinterpreted": true
+    },
+    {
+      "frame_index": 2339,
+      "candidate_joins": 18,
+      "source_crop_equal": true,
+      "closed_review_pixels_equal": true,
+      "old_candidate_and_path_not_reinterpreted": true
+    }
+  ],
+  "image_sha256": "0055257ac578ff50169a69ad67a99ff95b6e65a090991b7f96506259e5c8ef85",
+  "question": "A/f2249 idx6 at X835/Y219 and B/f2339 idx5 at X835/Y227: is each displayed representative point an acceptable practical Oil-level approximation? The regional Oil-presence judgments are already closed.",
+  "scope": "Two displayed candidates only; no exact contour, all-sector role, calibrated height, whole-window truth, frame interpolation or untouched holdout. sample3 remains unsuitable as a primary whole-window physical benchmark.",
+  "exposure": "EXPOSED_LOCAL_REVIEW_ONLY; reserve these units from any future fit until a separate data/split contract. No model inference or training in this preparation.",
+  "new_labels": 0,
+  "model_calls": 0,
+  "training_executed": false,
+  "video_decode": false,
+  "production_changed": false,
+  "model_specific_input_readiness": "NOT_PREPARED",
+  "resources": {
+    "seconds": 0.8378676249994896,
+    "peak_rss": {
+      "bytes": 607453184,
+      "status": "MEASURED",
+      "method": "process-lifetime peak RSS; one sample per fresh process"
+    },
+    "archive_expanded_bytes": 95879807
+  }
+}

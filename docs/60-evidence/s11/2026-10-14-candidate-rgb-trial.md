@@ -177,7 +177,7 @@ margin은 두 logit의 차이며 확률이 아니다. 필수 변형별 margin의
 [후보 질문 계획](../../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/review-plan.json)은
 옛 archive의 각 A/B 상단 row에 저장된 유일한 material-path 후보를 질문한다:
 **A/f2249 idx6, X835/Y219; B/f2339 idx5, X835/Y227**. Row는 탐색 기준일 뿐 물리
-권한이 아니며, 다른 모든 38개 후보도 분모에 남긴다. 중앙 sector의 별도 pooled
+권한이 아니며, A 20개와 B 18개, 전체 38개 후보를 분모에 남긴다. 중앙 sector의 별도 pooled
 Y는 A216/B227이고 native contour가 아니다. 기존 빨간 점을 좌표·허용 폭으로
 추출하지 않는다. 새 모델 점수 없이 대표값의 실용적 허용만 묻는다.
 
@@ -187,6 +187,22 @@ Archive renderer는 기존 pin reader와 current/native candidate 결합을 재�
 읽는다. 원본 프레임·기존 crop·닫힌 review 화면의 픽셀 동일성을 확인하도록 했다.
 모델 입력의 가시성 계약·학습 split·음성 촬영원 범위는 별도 준비 전까지 미정이다.
 새 학습, candidate score, 영상 decode, 생산·Recipe 변경은 이 준비에 포함되지 않는다.
+
+`5d64853`에서 계획과 renderer를 고정한 뒤 `/private/tmp`에서 절대 경로로 실행했다.
+[검토 화면](../../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/candidate-review.png)과
+[결합 결과](../../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/review.json)는
+38개 current/native 후보 결합, 원본 프레임에서 자른 RGB와 기존 crop의 배열 동일성,
+이전 검토 화면의 원본 영역 동일성을 모두 통과했다. 모델 점수 없이 노란 십자로
+후보 대표점을, 청록선으로 별도 중앙 pooled sample을 표시했다. 실제 PNG의
+표식·원본·설명에 잘림이 없음을 확인했다. 노란 두 대표점의 실용적 Oil 근사 허용은
+**AWAITING_TWO_SCOPED_CANDIDATE_JUDGMENTS**이며 다른 36개는 미판정이다.
+
+실제 준비는 0.837868 s, peak RSS 607,453,184 bytes였다. 관리 실행
+`s11-oil-candidate-source-review-20261014-001`은 PNG 160,336 bytes와 JSON
+29,367 bytes만 위 Git 위치에 보존하고 동일한 작업 사본 둘을 제거했다. 두 노출
+프레임은 별도 데이터·split 계약 전까지 미래 fit에서 보류한다. 모델별 입력 준비는
+`NOT_PREPARED`이며 새 판정·추론·학습은 0이다. 관리 실행 33개가 모두 종료됐고
+오류는 0이다. Windows 실행이나 생산 동작의 개선을 주장하지 않는다.
 
 ## Detector Governance
 
