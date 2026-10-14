@@ -1,0 +1,48 @@
+{
+  "schema": "s11-native-legacy-contact-extension-v1",
+  "inputs": {
+    "previous_plan": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension-plan.json",
+      "sha256": "4132a3db1027eba07834ddca1972c35ab550aca23e5264ee366707ecf9cdda69"
+    },
+    "previous_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension.json",
+      "sha256": "be806540510248874c057698703a25a11591559f1ac8ba525919d6681b405d12"
+    },
+    "manifest": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reuse-manifest.json",
+      "sha256": "7fe3f524338695006847fd510e85de5dc5c361a0cb81df6282dc9295814b9c68"
+    },
+    "native_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-native-readout.json",
+      "sha256": "6fc6061e5bc18a2f8e18b548665ad5cf21162fa43b2d3c1da05ad6578c0f8a9a"
+    },
+    "reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reply.json",
+      "sha256": "227994fe7a6af4aa356dd57fc8730e313b615b5474fa6d64f26be60f1484134d"
+    },
+    "legacy_truth": {
+      "path": "sample/base_sample_1.oiltruth",
+      "sha256": "a4d29b523c9a56ee43f920c9df7e14fb8e957d48fb391ce2ffad7c03e79ebc6a"
+    }
+  },
+  "sources": [
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/bind_base.py",
+      "sha256": "64e573f7b4af73c212f84d418fb974a027056743ab5b7fafb099fcee3712f5ad"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_extension.py",
+      "sha256": "ff574287ec2b80c97c7f9933b26a193b89e72e8f7d2c372de6cb9ef3c81de61a"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_liquid_reply.py",
+      "sha256": "754a11e6fc8c20066789ffdd8f456eaab42cb9e62d7ca7bed2295816869a0d78"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_corpus.py",
+      "sha256": "4358cbb78ccc2d8b59c4e4c1befe54e67a2e5b0c19cfe23f8ad68289523b8cdb"
+    }
+  ],
+  "scope": "Append complete two-path frame to 135 prior observations, bind one exact reply, exclude conflicting legacy Foam-absence label; no model or production change"
+}

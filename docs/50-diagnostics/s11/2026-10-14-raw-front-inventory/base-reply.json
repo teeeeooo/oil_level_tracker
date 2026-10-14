@@ -1,0 +1,21 @@
+{
+  "schema": "s11-native-liquid-role-reply-v1",
+  "proposal": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review-proposal.json",
+    "sha256": "f453085b8ee1a2a4d38298fd8a7d00bfc7daca9d9e3fc03cb4e761a35d390a98"
+  },
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review.png",
+    "sha256": "93475e44964bfb8205df6c63c0cd80cbcb5f82482aa8345d7e7e132276988338"
+  },
+  "response_ko": "거품–액체",
+  "answers": [
+    {
+      "id": "fragment-150",
+      "subject_sha256": "0b4552e2b66daa35d772b172be0d3efc1212d39cef79ad106226d8ea9ebf5910",
+      "statement_ko": "거품–액체",
+      "role": "FOAM_LOWER_LIQUID_INTERFACE",
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY"
+    }
+  ]
+}
