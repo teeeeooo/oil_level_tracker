@@ -1462,3 +1462,14 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [60-evidence/s11/2026-10-14-native-role-order.md](60-evidence/s11/2026-10-14-native-role-order.md) | 별도 source 균형 역할 순서 비교의 고정 계약·검증 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-order/manifest.json](50-diagnostics/s11/2026-10-14-native-role-order/manifest.json) | 32개 경로·source 분리·역할 순서 학습/비교 입력 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-order/preparation-verification.json](50-diagnostics/s11/2026-10-14-native-role-order/preparation-verification.json) | 실제 준비 CLI·167 테스트·합성 loss/gradient 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-order/readout.json](50-diagnostics/s11/2026-10-14-native-role-order/readout.json) | native 순서 실패·평균 RGB 대조군의 전체 32개 경로 결과 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-order/native-weights.npz](50-diagnostics/s11/2026-10-14-native-role-order/native-weights.npz) | 종료된 native 순서 모델의 최종 가중치 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-order/mean_rgb-weights.npz](50-diagnostics/s11/2026-10-14-native-role-order/mean_rgb-weights.npz) | 제한된 고정 평균색 비교군 가중치 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-order/verification.json](50-diagnostics/s11/2026-10-14-native-role-order/verification.json) | 독립 NumPy 계산·52개 추론·덮어쓰기 거부 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/source-manifest.json](50-diagnostics/s11/2026-10-14-native-milk-review/source-manifest.json) | 기존 우유 원본·G0 참조와 역할 검토 범위 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/native-packet.json](50-diagnostics/s11/2026-10-14-native-milk-review/native-packet.json) | 고정 중심열의 우유 native 경로 16개 전체 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/plan.json](50-diagnostics/s11/2026-10-14-native-milk-review/plan.json) | 모델 점수 확인 전 세 행 전체 선택과 고정 가중치 참조 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/proposal.json](50-diagnostics/s11/2026-10-14-native-milk-review/proposal.json) | 새 경로 444·453·687의 역할 질문·원본 결합 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/review.png](50-diagnostics/s11/2026-10-14-native-milk-review/review.png) | 기존 하단 경계 질문과 구분한 세 native 경로 검토 그림 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/inspection.json](50-diagnostics/s11/2026-10-14-native-milk-review/inspection.json) | 인간 역할 판정 없이 실행한 세 경로 원본·지원 검사 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/verification.json](50-diagnostics/s11/2026-10-14-native-milk-review/verification.json) | 원본 동일성·기존 그림 바이트 보존·고정 입력 검증 |

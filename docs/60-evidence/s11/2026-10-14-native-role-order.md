@@ -81,12 +81,89 @@ and its runtime input loader verified the complete pinned tensor hashes.
 offset invariance, three synthetic gradient updates and no access to an unused
 transfer tensor. These are engineering checks, not source efficacy.
 
+## Fixed execution result
+
+**`CLOSED_WITHOUT_PROMOTION`.** The source run used clean
+`432c9b0e959fa72a9e73b325e231f1e073f4e95d`. Both arms completed exactly 1,000
+updates; neither was retried. [Full scores](../../50-diagnostics/s11/2026-10-14-native-role-order/readout.json)
+retain all 32 units, 26 available and 20 unreviewed, per arm.
+
+| Fixed arm | Fit order constraints | Public upper-versus-rim constraints |
+|---|---:|---:|
+| Native spatial patches | 3/3 ordered | **0/12 ordered; all reversed** |
+| Per-patch mean RGB | 3/3 ordered | 12/12 ordered |
+
+The native model ranks **every reviewed public rim above every reviewed public
+Foam upper**. A monotone score cutoff cannot preserve these uppers while excluding
+the rims. No threshold or training-setting adjustment follows. The mean arm's
+limited success neither repairs the failed native trial nor establishes an
+absolute classifier or source-general physical identity. These twelve comparisons
+share one frame and are not twelve independent accuracy cases.
+
+The retained [native weights](../../50-diagnostics/s11/2026-10-14-native-role-order/native-weights.npz)
+and [mean-RGB weights](../../50-diagnostics/s11/2026-10-14-native-role-order/mean_rgb-weights.npz)
+permit arithmetic checks without retraining. [Independent NumPy float64 verification](../../50-diagnostics/s11/2026-10-14-native-role-order/verification.json)
+reproduces all 52 available fragment forwards: maximum absolute logit errors
+0.000005407 / 0.000008546, below the arithmetic tolerance 0.0001. Every pair decision
+agrees. Both arms started from identical weights; overwrite was refused before
+fitting and all result/weight hashes remained unchanged.
+
+The run took 16.795 s with peak RSS 378,208,256 bytes; isolated workspace allocation
+was about 746 MB. This is offline diagnostic cost, not detector throughput.
+Managed run `native-role-order-20261014-001` retained four final files / 53,477 bytes
+and removed four work copies. No source pixels, intermediate checkpoints, decoder,
+production consumer, Windows replay or field acceptance was added.
+
+## Milk path review for the frozen mean-RGB reference
+
+The mean-color result warrants only a separately bounded **fixed-weight** check on
+another existing source, not promotion or a new fit. Select the existing milk
+`s7-settled-native` frame1063 before any model score on that source. Its native
+rows Y373/Y384/Y535 expose three complete paths (444/453/687), all with 25 upper
+and 25 lower patches. The first two lie around the glass mouth and the third
+near the visible upper surface; their exact displayed-path roles are a new question.
+
+The earlier milk reply that the **lower Foam–milk interface is hard to distinguish**
+stays closed. Do not ask for that hidden lower interface, a dense mask, full-frame
+material labels or a revised beer/water judgment. Current 12 native roles also stay
+closed. Reuse the original full-frame PNG and original G0 graph/raster, preserve
+all 16 fixed-column native paths and select every fragment at the three stated
+rows. No score/length mining, new decode, model inference or training occurs in
+this preparation. The mean-RGB weights stay frozen; milk is outside both its fit
+sources and original public evaluation, but remains design-exposed development.
+
+The existing native-packet builder, row preparation, renderer and qualifier own
+these operations. The renderer now accepts a pinned alternative source image and
+multiple rows; its original public layouts retain their bytes. The preparation
+budget is 3 MB scratch / 1 MB retained. Only a new question image and essential
+binding/verification JSONs are retained; original media and captures are references.
+
+Preparation is complete: [review image](../../50-diagnostics/s11/2026-10-14-native-milk-review/review.png),
+[row plan](../../50-diagnostics/s11/2026-10-14-native-milk-review/plan.json),
+[source manifest](../../50-diagnostics/s11/2026-10-14-native-milk-review/source-manifest.json),
+[complete packet](../../50-diagnostics/s11/2026-10-14-native-milk-review/native-packet.json)
+and [proposal](../../50-diagnostics/s11/2026-10-14-native-milk-review/proposal.json).
+The actual [qualifier inspection](../../50-diagnostics/s11/2026-10-14-native-milk-review/inspection.json)
+reports **three pending subjects, zero qualified targets**. Renderer and inspection
+CLIs ran from `/private/tmp`; ROI array equality, path hashes and all 25/25 support
+patches pass. [Verification](../../50-diagnostics/s11/2026-10-14-native-milk-review/verification.json)
+also confirms both previous public PNGs are byte-identical and the frozen NRO-1
+input hashes remain unchanged. The new image was visually checked for complete
+paths and legible crops. Seven canonical files total 457,364 bytes; managed run
+`s11-native-milk-review-20261014-001` removes the seven work copies and two temporary
+legacy-render checks. This preparation closes independently of the pending user
+judgment; it does not authorize assigning a role or scoring the new source yet.
+
+Closeout checks pass: detector governance, whitespace, all 1,302 local links in
+the seven changed Markdown files, and all **44 managed runs closed without
+artifact errors**. No duplicate worktree or retained work copy was created.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F09`, `S11-F10`.
 - First harmful stage: the earlier absolute native classifier rejects N3; this comparison does not repair that classifier or establish a production causal loss. It tests a distinct relative-order capability with newly qualified source opposition.
 - Existing feature coverage: saved original G0 native RGB/masks/path context only. sample4 Recipe exclusions/templates remain empty; Local XY OFF. Run preparation, automatic static learning, Artifact consumers, sequence and report are bypassed. Closed D2/Local XY results remain controls, not new efficacy claims.
-- Execution scope: the planned diagnostic CLI prepares pinned qualified paths and all saved public alternatives, then performs exactly two fixed offline fits with one final exposed evaluation per arm. No video decode, temporal inference, production detector/Recipe, Windows execution or report reading.
+- Execution scope: the diagnostic CLI prepared pinned qualified paths and all saved public alternatives, then completed exactly two fixed offline fits with one final exposed evaluation per arm. The separate milk preparation reuses original saved pixels/paths and leaves roles pending, with no model call. No video decode, temporal inference, production detector/Recipe, Windows execution or report reading.
 - Logic-map impact: NONE — no executing production owner, numeric source, schema or setup feature changes. The diagnostic reuses existing frozen input/model owners with a separate loss/data contract.
 - Failure-registry impact: NONE — source-specific cutoff rescue, unreviewed-winner promotion and field claims remain prohibited; no failure class is retired.

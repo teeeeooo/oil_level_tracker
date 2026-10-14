@@ -1,0 +1,123 @@
+{
+  "schema": "s11-native-multiple-row-review-plan-v1",
+  "rows": [
+    373,
+    384,
+    535
+  ],
+  "row_preparation_plans": [
+    {
+      "schema": "s11-native-fragment-review-preparation-v1",
+      "reuse_manifest": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/source-manifest.json",
+        "sha256": "e4c8ed7d75f1e3dd983ac4095f354bfc9018de566d4fa75301c59412d810aef3"
+      },
+      "reuse_readout": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/native-packet.json",
+        "sha256": "fb18df2fee6ef38a36809a88fbf11cb4579e846b95dbdae544c222a187243800"
+      },
+      "case_id": "s7-settled-native",
+      "display": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/review.png",
+        "sha256": "070060f924e2fc99bc0d100f0275115396875003e22537dc1228b18e6ecf4892"
+      },
+      "view": {
+        "id": "milk-native",
+        "source": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png",
+          "sha256": "35b020932c0c93d278674caecd6641463552ff66ea6cc32cbeca39af1c3ef64c"
+        },
+        "image_origin_xy": [
+          0,
+          0
+        ],
+        "display_xyxy": [
+          760,
+          240,
+          1480,
+          1060
+        ]
+      },
+      "selection_reason": "New exact glass-mouth/upper-area paths; all saved fragments at the stated rows, selected before any model scores; displayed physical roles are unknown.",
+      "question": "우유 영상에서 표시한 세 경로 444/453/687는 각각 무엇의 경계인가요? 구조물(유리 rim), 실제 Foam 상단, 유체 상단, 내부 변화 등 보이는 역할을 알려주세요. 구분이 어려운 경로는 판독 불가로 남깁니다. 이전에 구분이 어렵다고 하신 아래쪽 거품–우유 경계는 이번 질문 대상이 아닙니다.",
+      "fixed_column_source_y": 373
+    },
+    {
+      "schema": "s11-native-fragment-review-preparation-v1",
+      "reuse_manifest": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/source-manifest.json",
+        "sha256": "e4c8ed7d75f1e3dd983ac4095f354bfc9018de566d4fa75301c59412d810aef3"
+      },
+      "reuse_readout": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/native-packet.json",
+        "sha256": "fb18df2fee6ef38a36809a88fbf11cb4579e846b95dbdae544c222a187243800"
+      },
+      "case_id": "s7-settled-native",
+      "display": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/review.png",
+        "sha256": "070060f924e2fc99bc0d100f0275115396875003e22537dc1228b18e6ecf4892"
+      },
+      "view": {
+        "id": "milk-native",
+        "source": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png",
+          "sha256": "35b020932c0c93d278674caecd6641463552ff66ea6cc32cbeca39af1c3ef64c"
+        },
+        "image_origin_xy": [
+          0,
+          0
+        ],
+        "display_xyxy": [
+          760,
+          240,
+          1480,
+          1060
+        ]
+      },
+      "selection_reason": "New exact glass-mouth/upper-area paths; all saved fragments at the stated rows, selected before any model scores; displayed physical roles are unknown.",
+      "question": "우유 영상에서 표시한 세 경로 444/453/687는 각각 무엇의 경계인가요? 구조물(유리 rim), 실제 Foam 상단, 유체 상단, 내부 변화 등 보이는 역할을 알려주세요. 구분이 어려운 경로는 판독 불가로 남깁니다. 이전에 구분이 어렵다고 하신 아래쪽 거품–우유 경계는 이번 질문 대상이 아닙니다.",
+      "fixed_column_source_y": 384
+    },
+    {
+      "schema": "s11-native-fragment-review-preparation-v1",
+      "reuse_manifest": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/source-manifest.json",
+        "sha256": "e4c8ed7d75f1e3dd983ac4095f354bfc9018de566d4fa75301c59412d810aef3"
+      },
+      "reuse_readout": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/native-packet.json",
+        "sha256": "fb18df2fee6ef38a36809a88fbf11cb4579e846b95dbdae544c222a187243800"
+      },
+      "case_id": "s7-settled-native",
+      "display": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/review.png",
+        "sha256": "070060f924e2fc99bc0d100f0275115396875003e22537dc1228b18e6ecf4892"
+      },
+      "view": {
+        "id": "milk-native",
+        "source": {
+          "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png",
+          "sha256": "35b020932c0c93d278674caecd6641463552ff66ea6cc32cbeca39af1c3ef64c"
+        },
+        "image_origin_xy": [
+          0,
+          0
+        ],
+        "display_xyxy": [
+          760,
+          240,
+          1480,
+          1060
+        ]
+      },
+      "selection_reason": "New exact glass-mouth/upper-area paths; all saved fragments at the stated rows, selected before any model scores; displayed physical roles are unknown.",
+      "question": "우유 영상에서 표시한 세 경로 444/453/687는 각각 무엇의 경계인가요? 구조물(유리 rim), 실제 Foam 상단, 유체 상단, 내부 변화 등 보이는 역할을 알려주세요. 구분이 어려운 경로는 판독 불가로 남깁니다. 이전에 구분이 어렵다고 하신 아래쪽 거품–우유 경계는 이번 질문 대상이 아닙니다.",
+      "fixed_column_source_y": 535
+    }
+  ],
+  "purpose": "Qualify only displayed native paths for a later fixed-weight mean-RGB check; no model calls, fit, dense labels or lower-interface reinterpretation.",
+  "frozen_mean_weights": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-role-order/mean_rgb-weights.npz",
+    "sha256": "064fdf34926b08ddaf93b45ea549f186b618b013a27ab7ed91fb544356d6a9b9"
+  }
+}

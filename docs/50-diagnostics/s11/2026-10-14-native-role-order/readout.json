@@ -1,0 +1,1157 @@
+{
+  "schema": "s11-native-role-order-trial-v1",
+  "head": "432c9b0e959fa72a9e73b325e231f1e073f4e95d",
+  "manifest": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-role-order/manifest.json",
+    "sha256": "0a76250dc3a9a76e80c5d612ed0a366bd70ee62a91e72809cac6ed7b5420e03a"
+  },
+  "status": "CLOSED_WITHOUT_PROMOTION",
+  "arms": {
+    "native": {
+      "rows": [
+        {
+          "id": "N1",
+          "partition": "train",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            6.378589630126953,
+            -15.540285110473633
+          ],
+          "order_score": 21.918874740600586,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "N2",
+          "partition": "train",
+          "review_role": "INTERNAL_FOAM_CHANGE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            4.545886993408203,
+            -7.372949123382568
+          ],
+          "order_score": 11.918836116790771,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "N3",
+          "partition": "train",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            9.215989112854004,
+            -17.126468658447266
+          ],
+          "order_score": 26.34245777130127,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "N4",
+          "partition": "train",
+          "review_role": "INTERNAL_FOAM_CHANGE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            2.318596363067627,
+            4.578392505645752
+          ],
+          "order_score": -2.259796142578125,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "N5",
+          "partition": "train",
+          "review_role": "STRUCTURE_BOUNDARY",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            6.822476863861084,
+            -10.861809730529785
+          ],
+          "order_score": 17.68428659439087,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-963",
+          "partition": "transfer",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            7.9396562576293945,
+            -9.832090377807617
+          ],
+          "order_score": 17.77174663543701,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-995",
+          "partition": "transfer",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            8.143568992614746,
+            -8.93681812286377
+          ],
+          "order_score": 17.080387115478516,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-1029",
+          "partition": "transfer",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            7.972287654876709,
+            -8.356261253356934
+          ],
+          "order_score": 16.328548908233643,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-1031",
+          "partition": "transfer",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            7.968689918518066,
+            -8.185979843139648
+          ],
+          "order_score": 16.154669761657715,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-1769",
+          "partition": "transfer",
+          "review_role": "STRUCTURE_BOUNDARY",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            7.136780261993408,
+            -12.98934555053711
+          ],
+          "order_score": 20.126125812530518,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-1788",
+          "partition": "transfer",
+          "review_role": "STRUCTURE_BOUNDARY",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            8.234380722045898,
+            -15.9923734664917
+          ],
+          "order_score": 24.226754188537598,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-1789",
+          "partition": "transfer",
+          "review_role": "STRUCTURE_BOUNDARY",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            7.616025924682617,
+            -14.205587387084961
+          ],
+          "order_score": 21.821613311767578,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-14",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNRESOLVED_PATH_ORIENTATION",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-15",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNAVAILABLE_SIDE_CONTEXT",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-814",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            6.093626022338867,
+            -9.352627754211426
+          ],
+          "order_score": 15.446253776550293,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-816",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            5.889289855957031,
+            -8.614151954650879
+          ],
+          "order_score": 14.50344181060791,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-817",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            6.138980388641357,
+            -9.261219024658203
+          ],
+          "order_score": 15.40019941329956,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1463",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            -1.6149711608886719,
+            14.453215599060059
+          ],
+          "order_score": -16.06818675994873,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1523",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNRESOLVED_PATH_ORIENTATION",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1546",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNRESOLVED_PATH_ORIENTATION",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1630",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            1.9625893831253052,
+            1.680565595626831
+          ],
+          "order_score": 0.2820237874984741,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1650",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            2.517894744873047,
+            0.18638303875923157
+          ],
+          "order_score": 2.3315117061138153,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1652",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNRESOLVED_PATH_ORIENTATION",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1653",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            3.4924097061157227,
+            -2.5485005378723145
+          ],
+          "order_score": 6.040910243988037,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1651",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            3.129729747772217,
+            -1.4845161437988281
+          ],
+          "order_score": 4.614245891571045,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1685",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            4.104244232177734,
+            -4.219398498535156
+          ],
+          "order_score": 8.32364273071289,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1686",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            4.445253372192383,
+            -5.242221832275391
+          ],
+          "order_score": 9.687475204467773,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1864",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            8.090903282165527,
+            -13.795390129089355
+          ],
+          "order_score": 21.886293411254883,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1920",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            7.229440689086914,
+            -11.415982246398926
+          ],
+          "order_score": 18.64542293548584,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1923",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            7.214338302612305,
+            -11.277050971984863
+          ],
+          "order_score": 18.491389274597168,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1924",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            7.1036481857299805,
+            -10.91892147064209
+          ],
+          "order_score": 18.02256965637207,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-2030",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNAVAILABLE_SIDE_CONTEXT",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        }
+      ],
+      "losses": [
+        {
+          "step_before_update": 1,
+          "source_balanced_pair_loss": 0.6938152313232422
+        },
+        {
+          "step_before_update": 1000,
+          "source_balanced_pair_loss": 6.625906098634005e-05
+        }
+      ],
+      "initial_parameter_hashes": {
+        "encoder.0.weight": "ea925d0cc97106aac554af0fcdd3d00088939f83d071ecb06a9bd6ca138818dc",
+        "encoder.0.bias": "82597863e77d2c733ad62c57ab271346b29abed0a61cc91379b0608576ef4c3c",
+        "encoder.2.weight": "b943bd1e6b203d2ee7a3aa53861ec474b9ea013268b502c67182375c98d05c0c",
+        "encoder.2.bias": "b5ae4bb4d6f7a66dc83fd02ba948f716948b41b805f441336c11c9a75a49bec1",
+        "encoder.4.weight": "3d49ce9037a6590463a7ea4e22b15a3afe5021bf672775d29aa820619d304740",
+        "encoder.4.bias": "ac921ceafaf868e4531cf01294acf1ff01584ec71cb13f59349a88c7dfa97d59",
+        "classifier.weight": "228dcdf56d791a26d95de0ed5cef60f97b034b8bb4be5bdb39c320dabc6f4805",
+        "classifier.bias": "878f0c20889cdf4a4d8fb680683c524aaa740649d45bdb49659babe114b29829"
+      },
+      "final_parameter_hashes": {
+        "encoder.0.weight": "7910c622344cde8012a05871f7ed15edbcc1c3f03ae7d3df19a790409fe6bcca",
+        "encoder.0.bias": "3a59aa73b50708053559cd58bdc080b98aa351f39580bbd13f9ba34e444fc272",
+        "encoder.2.weight": "17fbfb008ec68feea9de1c22caa748eb543217832652aedbe97a096e40473f9e",
+        "encoder.2.bias": "8455687f69e125505b6d90278e915ddfca937f9d7b18a74b752ce516739078ba",
+        "encoder.4.weight": "06ae1dfa16b2152292b1ae665029c789d490583d0ad45e331657ef9f95d74cb9",
+        "encoder.4.bias": "0e378daa2ac51467f82a39aada9eb3f75d03ea2dfb000db6b961be73f830891c",
+        "classifier.weight": "924ab36ef224ed162cb20ba6c55b7b91e52f1c160ffb675f39925efd00b3adb9",
+        "classifier.bias": "878f0c20889cdf4a4d8fb680683c524aaa740649d45bdb49659babe114b29829"
+      },
+      "weights_sha256": "26ca114edbc35140833d855d866cc5e1c1deed4d9ce7f89ad3c63d80e5eac61d",
+      "train": {
+        "pairs": 3,
+        "ordered": 3,
+        "ties": 0,
+        "rows": [
+          {
+            "source_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+            "positive": "N1",
+            "opposition": "N2",
+            "score_gap": 10.000038623809814,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+            "positive": "N3",
+            "opposition": "N4",
+            "score_gap": 28.602253913879395,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+            "positive": "N3",
+            "opposition": "N5",
+            "score_gap": 8.6581711769104,
+            "status": "ORDERED"
+          }
+        ],
+        "independent_trials": false,
+        "absolute_accuracy": null
+      },
+      "transfer": {
+        "pairs": 12,
+        "ordered": 0,
+        "ties": 0,
+        "rows": [
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-963",
+            "opposition": "fragment-1769",
+            "score_gap": -2.354379177093506,
+            "status": "REVERSED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-963",
+            "opposition": "fragment-1788",
+            "score_gap": -6.455007553100586,
+            "status": "REVERSED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-963",
+            "opposition": "fragment-1789",
+            "score_gap": -4.049866676330566,
+            "status": "REVERSED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-995",
+            "opposition": "fragment-1769",
+            "score_gap": -3.045738697052002,
+            "status": "REVERSED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-995",
+            "opposition": "fragment-1788",
+            "score_gap": -7.146367073059082,
+            "status": "REVERSED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-995",
+            "opposition": "fragment-1789",
+            "score_gap": -4.7412261962890625,
+            "status": "REVERSED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1029",
+            "opposition": "fragment-1769",
+            "score_gap": -3.797576904296875,
+            "status": "REVERSED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1029",
+            "opposition": "fragment-1788",
+            "score_gap": -7.898205280303955,
+            "status": "REVERSED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1029",
+            "opposition": "fragment-1789",
+            "score_gap": -5.4930644035339355,
+            "status": "REVERSED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1031",
+            "opposition": "fragment-1769",
+            "score_gap": -3.9714560508728027,
+            "status": "REVERSED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1031",
+            "opposition": "fragment-1788",
+            "score_gap": -8.072084426879883,
+            "status": "REVERSED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1031",
+            "opposition": "fragment-1789",
+            "score_gap": -5.666943550109863,
+            "status": "REVERSED"
+          }
+        ],
+        "independent_trials": false,
+        "absolute_accuracy": null
+      }
+    },
+    "mean_rgb": {
+      "rows": [
+        {
+          "id": "N1",
+          "partition": "train",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            11.976351737976074,
+            -24.984882354736328
+          ],
+          "order_score": 36.9612340927124,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "N2",
+          "partition": "train",
+          "review_role": "INTERNAL_FOAM_CHANGE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            10.886770248413086,
+            -13.032896041870117
+          ],
+          "order_score": 23.919666290283203,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "N3",
+          "partition": "train",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            25.46721076965332,
+            -37.73334884643555
+          ],
+          "order_score": 63.20055961608887,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "N4",
+          "partition": "train",
+          "review_role": "INTERNAL_FOAM_CHANGE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            17.70087242126465,
+            -8.429436683654785
+          ],
+          "order_score": 26.130309104919434,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "N5",
+          "partition": "train",
+          "review_role": "STRUCTURE_BOUNDARY",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            23.000520706176758,
+            -32.28491973876953
+          ],
+          "order_score": 55.28544044494629,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-963",
+          "partition": "transfer",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            29.204421997070312,
+            -33.86811447143555
+          ],
+          "order_score": 63.07253646850586,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-995",
+          "partition": "transfer",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            29.337196350097656,
+            -30.203388214111328
+          ],
+          "order_score": 59.540584564208984,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-1029",
+          "partition": "transfer",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            29.533315658569336,
+            -29.90936851501465
+          ],
+          "order_score": 59.442684173583984,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-1031",
+          "partition": "transfer",
+          "review_role": "EXTERNAL_SURFACE",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            29.63141632080078,
+            -29.662002563476562
+          ],
+          "order_score": 59.293418884277344,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-1769",
+          "partition": "transfer",
+          "review_role": "STRUCTURE_BOUNDARY",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            19.254146575927734,
+            -27.270591735839844
+          ],
+          "order_score": 46.52473831176758,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-1788",
+          "partition": "transfer",
+          "review_role": "STRUCTURE_BOUNDARY",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            20.89849281311035,
+            -31.756580352783203
+          ],
+          "order_score": 52.655073165893555,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-1789",
+          "partition": "transfer",
+          "review_role": "STRUCTURE_BOUNDARY",
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            19.811662673950195,
+            -28.74977684020996
+          ],
+          "order_score": 48.561439514160156,
+          "absolute_decision": null,
+          "physical_evaluation": "PAIR_ORDER_ONLY"
+        },
+        {
+          "id": "fragment-14",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNRESOLVED_PATH_ORIENTATION",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-15",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNAVAILABLE_SIDE_CONTEXT",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-814",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            18.381135940551758,
+            -22.431747436523438
+          ],
+          "order_score": 40.812883377075195,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-816",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            18.415246963500977,
+            -22.49100112915039
+          ],
+          "order_score": 40.90624809265137,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-817",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            18.77987289428711,
+            -23.17681312561035
+          ],
+          "order_score": 41.95668601989746,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1463",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            10.088370323181152,
+            9.523436546325684
+          ],
+          "order_score": 0.5649337768554688,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1523",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNRESOLVED_PATH_ORIENTATION",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1546",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNRESOLVED_PATH_ORIENTATION",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1630",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            10.31067943572998,
+            -2.424675703048706
+          ],
+          "order_score": 12.735355138778687,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1650",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            10.989710807800293,
+            -4.674278259277344
+          ],
+          "order_score": 15.663989067077637,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1652",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNRESOLVED_PATH_ORIENTATION",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1653",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            12.022542953491211,
+            -7.653046131134033
+          ],
+          "order_score": 19.675589084625244,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1651",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            11.53951358795166,
+            -6.504599094390869
+          ],
+          "order_score": 18.04411268234253,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1685",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            12.572347640991211,
+            -9.483368873596191
+          ],
+          "order_score": 22.055716514587402,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1686",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            13.315197944641113,
+            -11.618075370788574
+          ],
+          "order_score": 24.933273315429688,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1864",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            24.046321868896484,
+            -34.59321594238281
+          ],
+          "order_score": 58.6395378112793,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1920",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            23.307432174682617,
+            -32.59099197387695
+          ],
+          "order_score": 55.89842414855957,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1923",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            23.504934310913086,
+            -32.33614730834961
+          ],
+          "order_score": 55.841081619262695,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-1924",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "AVAILABLE_PARTIAL_CONTEXT",
+          "logits": [
+            23.404088973999023,
+            -31.555288314819336
+          ],
+          "order_score": 54.95937728881836,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        },
+        {
+          "id": "fragment-2030",
+          "partition": "transfer",
+          "review_role": null,
+          "availability": "UNAVAILABLE_SIDE_CONTEXT",
+          "logits": null,
+          "order_score": null,
+          "absolute_decision": null,
+          "physical_evaluation": "UNREVIEWED"
+        }
+      ],
+      "losses": [
+        {
+          "step_before_update": 1,
+          "source_balanced_pair_loss": 0.6935744285583496
+        },
+        {
+          "step_before_update": 1000,
+          "source_balanced_pair_loss": 9.256695193471387e-05
+        }
+      ],
+      "initial_parameter_hashes": {
+        "encoder.0.weight": "ea925d0cc97106aac554af0fcdd3d00088939f83d071ecb06a9bd6ca138818dc",
+        "encoder.0.bias": "82597863e77d2c733ad62c57ab271346b29abed0a61cc91379b0608576ef4c3c",
+        "encoder.2.weight": "b943bd1e6b203d2ee7a3aa53861ec474b9ea013268b502c67182375c98d05c0c",
+        "encoder.2.bias": "b5ae4bb4d6f7a66dc83fd02ba948f716948b41b805f441336c11c9a75a49bec1",
+        "encoder.4.weight": "3d49ce9037a6590463a7ea4e22b15a3afe5021bf672775d29aa820619d304740",
+        "encoder.4.bias": "ac921ceafaf868e4531cf01294acf1ff01584ec71cb13f59349a88c7dfa97d59",
+        "classifier.weight": "228dcdf56d791a26d95de0ed5cef60f97b034b8bb4be5bdb39c320dabc6f4805",
+        "classifier.bias": "878f0c20889cdf4a4d8fb680683c524aaa740649d45bdb49659babe114b29829"
+      },
+      "final_parameter_hashes": {
+        "encoder.0.weight": "4b81b2caae6b4cdeb9cc05171775196914f775f69290d0643600d75128f5f940",
+        "encoder.0.bias": "728a36ec766eea240ed6c536dc92a301b93d0f2c86e40ac93de3f2d50088f668",
+        "encoder.2.weight": "fc560e9d9b468a4ef5f3784004f84db33df02fa10695f4c1f1222cdc11d9267b",
+        "encoder.2.bias": "b1df83d5bb179105d082325264e63b7c122482546e88bd2b722568ba1b00dbae",
+        "encoder.4.weight": "9e40d1ba5fba2190ed3270204066b3bea585ee923f94fcb5dfb2db3eaa2ac434",
+        "encoder.4.bias": "4d4a75bd97f670a7d40e8c79d05ab83c715727f2c49fc4c90e1498dc24a145fb",
+        "classifier.weight": "50c120b8bc576ba3cea32a18c0cf2a3ec778e9a204ad4ed3177627bf97e676ee",
+        "classifier.bias": "878f0c20889cdf4a4d8fb680683c524aaa740649d45bdb49659babe114b29829"
+      },
+      "weights_sha256": "064fdf34926b08ddaf93b45ea549f186b618b013a27ab7ed91fb544356d6a9b9",
+      "train": {
+        "pairs": 3,
+        "ordered": 3,
+        "ties": 0,
+        "rows": [
+          {
+            "source_sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+            "positive": "N1",
+            "opposition": "N2",
+            "score_gap": 13.0415678024292,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+            "positive": "N3",
+            "opposition": "N4",
+            "score_gap": 37.070250511169434,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892",
+            "positive": "N3",
+            "opposition": "N5",
+            "score_gap": 7.915119171142578,
+            "status": "ORDERED"
+          }
+        ],
+        "independent_trials": false,
+        "absolute_accuracy": null
+      },
+      "transfer": {
+        "pairs": 12,
+        "ordered": 12,
+        "ties": 0,
+        "rows": [
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-963",
+            "opposition": "fragment-1769",
+            "score_gap": 16.54779815673828,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-963",
+            "opposition": "fragment-1788",
+            "score_gap": 10.417463302612305,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-963",
+            "opposition": "fragment-1789",
+            "score_gap": 14.511096954345703,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-995",
+            "opposition": "fragment-1769",
+            "score_gap": 13.015846252441406,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-995",
+            "opposition": "fragment-1788",
+            "score_gap": 6.88551139831543,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-995",
+            "opposition": "fragment-1789",
+            "score_gap": 10.979145050048828,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1029",
+            "opposition": "fragment-1769",
+            "score_gap": 12.917945861816406,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1029",
+            "opposition": "fragment-1788",
+            "score_gap": 6.78761100769043,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1029",
+            "opposition": "fragment-1789",
+            "score_gap": 10.881244659423828,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1031",
+            "opposition": "fragment-1769",
+            "score_gap": 12.768680572509766,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1031",
+            "opposition": "fragment-1788",
+            "score_gap": 6.638345718383789,
+            "status": "ORDERED"
+          },
+          {
+            "source_sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15",
+            "positive": "fragment-1031",
+            "opposition": "fragment-1789",
+            "score_gap": 10.731979370117188,
+            "status": "ORDERED"
+          }
+        ],
+        "independent_trials": false,
+        "absolute_accuracy": null
+      }
+    }
+  },
+  "production_changed": false,
+  "absolute_classification": false,
+  "training_steps": {
+    "native": 1000,
+    "mean_rgb": 1000
+  },
+  "counts": {
+    "units": 32,
+    "available": 26,
+    "qualified": 12,
+    "unreviewed": 20,
+    "untouched_holdout_recordings": 0
+  },
+  "runtime": {
+    "python": "3.14.7",
+    "packages": {
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "pillow": "12.3.0"
+    }
+  },
+  "resources": {
+    "elapsed_seconds": 16.79508741700556,
+    "peak_rss_bytes": 378208256,
+    "workspace_allocated_before": 746463232,
+    "workspace_allocated_after": 746479616
+  },
+  "runtime_guard": {
+    "denied_events": [
+      "socket.getaddrinfo",
+      "open"
+    ],
+    "scope": "Existing Python audit guard, not OS confinement"
+  }
+}
