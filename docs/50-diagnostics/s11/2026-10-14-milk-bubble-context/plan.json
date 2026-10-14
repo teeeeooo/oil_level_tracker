@@ -1,0 +1,54 @@
+{
+  "schema": "s11-milk-bubble-context-plan-v1",
+  "base_head": "33ae1ee380842ce1e90a5ed507b181daaeae57b1",
+  "purpose": "Inspect source-only temporal correspondence around the newly located large bubble; no physical event inferred. All inputs exposed, spatial roles closed.",
+  "source": {
+    "path": "sample/sample7.mp4",
+    "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86",
+    "corpus_id": "sample7",
+    "provenance": "public_milk_fill_pexels_11158788; reuse existing local original"
+  },
+  "anchor": {
+    "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png",
+    "frame_index": 1063
+  },
+  "full_bgr_shape": [
+    1080,
+    1920,
+    3
+  ],
+  "first_frame": 1039,
+  "last_frame_inclusive": 1063,
+  "maximum_decode_count": 25,
+  "seek_second": 43.33495833333333,
+  "fps_numerator": 24000,
+  "fps_denominator": 1001,
+  "crop_source_xyxy": [
+    1000,
+    345,
+    1260,
+    625
+  ],
+  "partition": "EXPOSED_DEVELOPMENT_CONTEXT",
+  "retention": "One native lossless PNG atlas of all 25 crops, full-frame/crop hashes, source-only viewer referring to existing locator. No duplicate full frames, NPZ or video.",
+  "physical_event_labels": "NOT_SUPPLIED",
+  "stop": "No window/crop expansion or event mining. Fail on pins, exact frame/time, anchor, roundtrip or resource mismatch.",
+  "resource": {
+    "seconds_limit": 60,
+    "rss_bytes_limit": 1073741824,
+    "retained_bytes_limit": 10000000
+  },
+  "inputs": {
+    "docs/50-diagnostics/s11/2026-10-14-milk-bubble-context/review_source.py": "870caf1c597437267189be33d6dea6e8efcbbc05618dc933fc1d765acadbc8a5",
+    "docs/50-diagnostics/s11/2026-10-14-milk-bubble-context/review.html": "397aa34fad8dd8eeb35b2bf971a9d127a2ae574264d38847df320df52dae225a",
+    "src/oil_tracker/adapters/vision/opencv_video_reader.py": "b4d3304d37890570b57101418e69546133b9a8317ce18766d52b7ab221b34686",
+    "tests/diagnostics/s11_corpus_access.py": "6c4c5b5f27404158473d4afacdec3ed0ac7dc73ccbe12f13bed609267a6eb800",
+    "docs/50-diagnostics/s11/2026-10-14-native-milk-review/location-reply.json": "8dcd1758f9fed3223325348dcd47e7229d7aa68d75e7ff981be6c4637f9bb924",
+    "docs/50-diagnostics/s11/2026-10-14-native-milk-review/location-qualification.json": "3dd9ecd3e691f616896ecae5dec03f67eaa8201c9e77cc67c9f3f0505f744b3b",
+    "docs/50-diagnostics/s11/2026-10-14-native-milk-review/location-proposal.json": "1fa1ee1f267e747b5732cf2896527ecb07da4faa757682970c2ee110313f6740",
+    "docs/50-diagnostics/s11/2026-10-14-native-milk-review/location.png": "8493c0bb53d1988633b41b0dcc1740d9e7a3867d83236bd3c7bb838ab3cb9e6a",
+    "docs/50-diagnostics/s11/2026-10-14-native-milk-review/qualification.json": "e2659993a085d80d939763297ab72d966e074a7de79f83a425d3611b5077a200",
+    "docs/50-diagnostics/s11/2026-10-09-milk-interface-context.png": "b9ae104c7bded2548ba553ae0fa52b5674e16584734274074dc6dfd605988f20",
+    "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png": "35b020932c0c93d278674caecd6641463552ff66ea6cc32cbeca39af1c3ef64c"
+  }
+}

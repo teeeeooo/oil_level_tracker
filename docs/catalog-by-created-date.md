@@ -1485,3 +1485,12 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-order/preparation-verification.json](50-diagnostics/s11/2026-10-14-native-milk-order/preparation-verification.json) | 21 테스트·실제 qualifier·cwd 독립 준비 및 13 입력 검증 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-order/readout.json](50-diagnostics/s11/2026-10-14-native-milk-order/readout.json) | 고정 평균색 비교군의 우유 구조물 오순위와 16개 경로 전체 결과 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-order/verification.json](50-diagnostics/s11/2026-10-14-native-milk-order/verification.json) | 26개 기존 점수 일치·13개 독립 계산·가중치 보존 검증 |
+
+### 2026-10-14 우유 큰 거품의 고정 시간 문맥
+
+| 최초 Git 등록일(KST) | 파일 | 역할 |
+|---|---|---|
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context.md](50-diagnostics/s11/2026-10-14-milk-bubble-context.md) | 기존 큰 거품의 시간 대응 관측 가능성 검토 범위 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/plan.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/plan.json) | 기존 25프레임·고정 영역·원본 및 source 핀 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/review_source.py](50-diagnostics/s11/2026-10-14-milk-bubble-context/review_source.py) | 기존 디코더를 재사용하는 한정 원본 추출·픽셀 검사 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/review.html](50-diagnostics/s11/2026-10-14-milk-bubble-context/review.html) | 동일 무손실 atlas의 프레임 이동·재생 화면 |
