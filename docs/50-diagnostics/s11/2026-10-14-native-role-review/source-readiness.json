@@ -1,0 +1,162 @@
+{
+  "schema": "s11-native-role-source-readiness-v1",
+  "qualification_pairs": [
+    {
+      "reply": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-role-qualification/review-reply.json",
+        "sha256": "4935309ff2f51c262d0cb9baaa69ff8bd8bcaa77bfedd7104fbee450c67dbfa8"
+      },
+      "readout": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-role-qualification/qualification.json",
+        "sha256": "43363a257ec79c88a647a513a3f107f5b3795e623d8d87029f2c7d062c595eee"
+      }
+    },
+    {
+      "reply": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-surface-trial/review-reply.json",
+        "sha256": "4a663887566dac272f6ecab139318eda43c94b62edd095f122a16eb2f2670a28"
+      },
+      "readout": {
+        "path": "docs/50-diagnostics/s11/2026-10-13-native-surface-trial/qualification.json",
+        "sha256": "9065e9bc888cbc733f31f93dc5c10eac569cc6910eaa4116176cb61869e06d1f"
+      }
+    },
+    {
+      "reply": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-role-review/reply.json",
+        "sha256": "f7a1d9499d4a075ff37639e464ecbfe0a2268717b364bb621a03617c0436b979"
+      },
+      "readout": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-role-review/qualification.json",
+        "sha256": "78a8fb7d593bb45cbb1c585003db504d9b3b9c05e3d16c0f4083c33e4c1cee59"
+      }
+    }
+  ],
+  "counts": {
+    "qualified_native_paths": 9,
+    "source_recordings": 3,
+    "source_frames": 4,
+    "role_counts": {
+      "EXTERNAL_SURFACE": 6,
+      "INTERNAL_FOAM_CHANGE": 2,
+      "STRUCTURE_BOUNDARY": 1
+    },
+    "untouched_holdout_recordings": 0
+  },
+  "source_groups": [
+    {
+      "source_recording": {
+        "path": "sample/public_miso_mHOS1-1ck60.mp4",
+        "sha256": "68ead21680534b7bbc06de9b556f5d3a2c4576dd7eaa85c6d50b90534daecc15"
+      },
+      "subject_ids": [
+        "fragment-963",
+        "fragment-995",
+        "fragment-1029",
+        "fragment-1031"
+      ],
+      "source_frames": [
+        1499
+      ],
+      "role_counts": {
+        "EXTERNAL_SURFACE": 4
+      },
+      "fit_evaluation_split_within_group_allowed": false,
+      "exposure": "EXPOSED_DEVELOPMENT_RECORDING",
+      "unavailable_context_subject_ids": []
+    },
+    {
+      "source_recording": {
+        "path": "sample/sample5.mp4",
+        "sha256": "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79"
+      },
+      "subject_ids": [
+        "N1",
+        "N2"
+      ],
+      "source_frames": [
+        1232
+      ],
+      "role_counts": {
+        "EXTERNAL_SURFACE": 1,
+        "INTERNAL_FOAM_CHANGE": 1
+      },
+      "fit_evaluation_split_within_group_allowed": false,
+      "exposure": "EXPOSED_DEVELOPMENT_RECORDING",
+      "unavailable_context_subject_ids": []
+    },
+    {
+      "source_recording": {
+        "path": "sample/sample4.mp4",
+        "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+      },
+      "subject_ids": [
+        "N3",
+        "N4",
+        "N5"
+      ],
+      "source_frames": [
+        450,
+        1620
+      ],
+      "role_counts": {
+        "EXTERNAL_SURFACE": 1,
+        "INTERNAL_FOAM_CHANGE": 1,
+        "STRUCTURE_BOUNDARY": 1
+      },
+      "fit_evaluation_split_within_group_allowed": false,
+      "exposure": "EXPOSED_DEVELOPMENT_RECORDING",
+      "unavailable_context_subject_ids": []
+    }
+  ],
+  "public_source": {
+    "qualified_external_paths": [
+      "fragment-963",
+      "fragment-995",
+      "fragment-1029",
+      "fragment-1031"
+    ],
+    "qualified_internal_or_structure_paths": [],
+    "unreviewed_lower_oil_preservation_paths": [
+      1463,
+      1523,
+      1546
+    ],
+    "complete_saved_fragment_count": 27,
+    "unreviewed_saved_fragment_count": 23,
+    "independent_split_allowed": false
+  },
+  "readiness": {
+    "public_displayed_external_positive_check": "READY_AT_DISPLAYED_PATH_ROLE_PRECISION",
+    "public_external_versus_internal_or_structure_check": "NOT_READY_NO_QUALIFIED_OPPOSITION",
+    "native_oil_material_or_pure_side_supervision": "NOT_QUALIFIED",
+    "successor_observation_or_training_contract": "NOT_ADOPTED",
+    "production_consumer": "NOT_ENTERED_O2_V5_REQUIRED"
+  },
+  "verification": {
+    "legacy_readouts_requalified_equal": [
+      "N1",
+      "N2",
+      "N3",
+      "N4",
+      "N5"
+    ],
+    "new_readout_requalified_equal": true,
+    "exact_path_identities_unique": true,
+    "qualifier_source": {
+      "path": "tests/diagnostics/s11_native_role_qualification.py",
+      "sha256": "603d19cb8a8d1fa4cf31df1201f9af592cf6eb8df1b9d013773b7311e88f0f02"
+    },
+    "cli_cwd": "/private/tmp",
+    "cli_command": "<repo>/.venv/bin/python <repo>/tests/diagnostics/s11_native_role_qualification.py --root <repo> --reply <repo>/docs/50-diagnostics/s11/2026-10-14-native-role-review/reply.json --output <repo>/sample/output/s11-native-role-reply-20261014-001/work/qualification.json",
+    "runtime": {
+      "python": "3.14.4",
+      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+    }
+  },
+  "scope": "Exact displayed path roles only; no dense pixel, pure-side, coordinate-tolerance or new material labels. Same source/frame overlap is not independent evidence. This summary composes existing qualifier results; no new detector experiment.",
+  "model_calls": 0,
+  "training_executed": false,
+  "video_decode": false,
+  "production_changed": false
+}

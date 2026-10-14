@@ -1448,3 +1448,11 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/proposal.json](50-diagnostics/s11/2026-10-14-native-role-review/proposal.json) | 역할 미판정 질문 대상과 하부 Oil 보존 대조 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/inspection.json](50-diagnostics/s11/2026-10-14-native-role-review/inspection.json) | 인간 답변 없는 원본·경로·지원 검사 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/verification.json](50-diagnostics/s11/2026-10-14-native-role-review/verification.json) | 실제 CLI 및 기존 N1–N5 결과 보존 확인 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/reply.json](50-diagnostics/s11/2026-10-14-native-role-review/reply.json) | 네 상단 경로에 대한 사용자 Foam 상단 답변 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/qualification.json](50-diagnostics/s11/2026-10-14-native-role-review/qualification.json) | 네 Foam 상단 역할의 원본 경로 결합 결과 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/source-readiness.json](50-diagnostics/s11/2026-10-14-native-role-review/source-readiness.json) | 세 촬영원·아홉 native 경로의 역할 대조 준비 상태 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/opposition-plan.json](50-diagnostics/s11/2026-10-14-native-role-review/opposition-plan.json) | 새 Y442 행의 역할 미판정 검토 계획 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/opposition-proposal.json](50-diagnostics/s11/2026-10-14-native-role-review/opposition-proposal.json) | Y442의 모든 경로 세 개와 원본 결합 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/opposition-inspection.json](50-diagnostics/s11/2026-10-14-native-role-review/opposition-inspection.json) | 세 미판정 경로의 실제 픽셀·지원 검사 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/opposition-review.png](50-diagnostics/s11/2026-10-14-native-role-review/opposition-review.png) | 기존 Oil 경로와 구분한 새 하단 경로 검토 그림 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/opposition-verification.json](50-diagnostics/s11/2026-10-14-native-role-review/opposition-verification.json) | 실제 CLI·기존 결과 보존·156 테스트 검증 |

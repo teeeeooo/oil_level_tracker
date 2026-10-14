@@ -1654,6 +1654,9 @@ write-once output and execution outside the repository cwd. Focused controls cov
 - interval containing zero, one or several edges: none becomes a positive bag
   without separately supported native correspondence. Retain source constraints
   when candidate recall or identity is unqualified;
+- exact unlabelled-row questions preserve every incident saved fragment and the
+  original closed intervals, reject conflicting/invalid/empty selectors and keep
+  all targets pending. Reusing a row does not transfer an interval's physical role;
 - component-face reachability separately from raw-edge reachability, branch or
   junction orientation, curved/partial paths, crop/mask censoring, shared faces
   and label zero. No closure/fill/nearest-edge repair;

@@ -268,6 +268,70 @@ capability target을 가지며 애매함/판독 불가는 null과 별도 개수�
 관측/학습의 선택과 데이터 분리는 별도 계약이며, 이번 준비는 이전 head의 재학습이나
 BASE·Accum 검출 개선을 입증하지 않는다.
 
+## Public native Foam-upper reply — 2026-10-14
+
+사용자 답변 **“Foam 상단”**은 바로 앞 질문에 포함한 963/995/1029/1031 네 경로
+각각에 `EXTERNAL_FOAM_UPPER`로 연결한다. [원문 답변](../../50-diagnostics/s11/2026-10-14-native-role-review/reply.json)은
+기존 proposal/display/subject hash를 참조한다. 판정 범위는 표시한 native 경로의
+역할이며 주변 픽셀의 물질, 다른 프레임, 정밀 좌표 또는 하부 Oil 경로로 넓히지 않는다.
+
+실행 범위는 기존 qualifier의 실제 CLI와 이전 N1–N5 결과 대조, 촬영원별 역할
+대조군 집계다. 원래 43 context / 1,335 edge / 164 Oil 기록은 수정하지 않는다.
+네 경로는 같은 프레임의 겹치는 지원을 사용하므로 독립 split이나 네 촬영원으로
+계산하지 않는다. 예산은 scratch 2 MB / 최종 추가 자료 100 KB이며 모델 학습·추론,
+영상 재분석, Windows 실행은 포함하지 않는다.
+
+[실제 qualification](../../50-diagnostics/s11/2026-10-14-native-role-review/qualification.json)은
+네 역할을 원본 경로에 연결했고 기존 N1–N5 재실행 결과도 저장 결과와 동일했다.
+[촬영원별 준비 상태](../../50-diagnostics/s11/2026-10-14-native-role-review/source-readiness.json)는
+9개 native 경로 / 3개 촬영원 / 4개 source-frame을 집계한다. 기존 Oil 후보 대조군
+9개와는 다른 판정 단위다.
+
+| 촬영원 | 외부 상단 경로 | Foam 내부 변화 | 구조물 경계 |
+|---|---:|---:|---:|
+| sample5 / 물 | 1 | 1 | 0 |
+| sample4 | 1 | 1 | 1 |
+| 미소냉동 공개 영상 | 4 | 0 | 0 |
+
+공개 영상의 양성 보존 검사는 이제 가능하지만 내부 변화/구조물과의 구분은 아직
+그 촬영원에서 평가할 수 없다. 네 경로의 같은-frame 쌍 6개 모두 독립 split 불허다.
+하부 Oil 1463/1523/1546은 미판정 보존 대조로 남는다. 관리 실행
+`s11-native-role-reply-20261014-001`은 새 JSON 3개 23,627 bytes를 정본에 남기고
+중복 작업 파일 2개를 제거했다. qualifier source는 `2ed5617`의 bytes로 기록했으며
+모델 호출과 새 학습은 0이다.
+
+### Public lower native row: a new scoped question
+
+공개 영상의 추가 역할 대조를 위해 저장된 **Y442의 모든 경로
+1769/1788/1789**를 새 질문으로 준비한다. 원본 화면상 하단 유리 테두리 부근에
+있는 경로이며 구조물인지 여부 자체가 미확정이다. 기존 Oil 보존 경로의 Y428/431/433,
+방금 확인한 Foam 상단 Y332/336과 다르다. 위치·길이·모델 점수를 정답으로 쓰지
+않고 같은 행의 짧은 갈래도 모두 포함한다. Y263의 상단 테두리 및 Y454의 하단
+경로는 한쪽 지원이 없으므로 이번 양면 관측 대조용으로 선택하지 않는다.
+
+기존 `prepare_proposal`에 정답 없는 행 선택을 추가하고, 기존 원본 경로 renderer의
+행 선택을 재사용한다. 새로운 detector나 병렬 검토 구현을 만들지 않는다.
+원래 RGB 배열 동일성·경로 hash·상하 지원을 검사하며, 답변 전에는 세 경로 모두
+`PENDING_REVIEW`다. 학습/추론/영상 decode는 하지 않는다. scratch 2 MB / 최종 추가
+자료 400 KB 안에서 질문 PNG 하나와 필요한 결합 JSON만 보존한다.
+
+[행 선택 계획](../../50-diagnostics/s11/2026-10-14-native-role-review/opposition-plan.json),
+[질문 대상](../../50-diagnostics/s11/2026-10-14-native-role-review/opposition-proposal.json),
+[검토 그림](../../50-diagnostics/s11/2026-10-14-native-role-review/opposition-review.png),
+[실제 검사](../../50-diagnostics/s11/2026-10-14-native-role-review/opposition-inspection.json),
+[검증 기록](../../50-diagnostics/s11/2026-10-14-native-role-review/opposition-verification.json)을 남겼다.
+원본 ROI와 저장 RGB가 같고, 표시한 세 경로 hash가 원래 G0와 일치한다.
+상하 complete patch 수는 각각 **2/2, 6/6, 2/2**이며 같은-frame 쌍 3개 모두
+독립 split 불허다. 역할은 세 개 모두 미판정이고 새 target은 0이다.
+
+실제 renderer → 준비 → 검사 CLI를 `/private/tmp`에서 실행했다. 확장 후에도
+기존 상단 proposal과 N1–N5 + 공개 상단 네 역할의 qualification 결과가 동일하며,
+기존 일곱 경로 PNG 재생성 bytes도 정본과 동일했다. 관련 테스트는
+**156 passed in 2.66 s**다. 관리 실행 `s11-public-native-opposition-20261014-001`은
+최종 5개 파일 146,822 bytes만 남기고 작업 중복 6개를 제거했다.
+추가 검토는 이 세 경로의 실제 역할에 대한 사용자 판단에서 멈춘다.
+이는 새로운 source-transfer 성능, BASE/Accum 검출률 또는 생산 Foam 개선 결과가 아니다.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.

@@ -1,0 +1,189 @@
+{
+  "schema": "s11-native-fragment-role-review-proposal-v1",
+  "g0_manifest": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/manifest.json",
+    "sha256": "8bb03c49017181e54e6164a248ac28ff0977d9a0e3af11882417b5a5f431c632"
+  },
+  "g0_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+    "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+  },
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-role-review/opposition-review.png",
+    "sha256": "11f5085d5733f140a0c03841aefd098ed0041cc4d009bff4276f9355ac36c2bb"
+  },
+  "subjects": [
+    {
+      "id": "fragment-1769",
+      "case_id": "public-miso-f1499",
+      "frame": 1499,
+      "view_id": "public-native",
+      "fixed_column_xy": [
+        578.0,
+        442.0
+      ],
+      "native_fragment_id": 1769,
+      "source_path_xy": [
+        [
+          579,
+          441
+        ],
+        [
+          578,
+          442
+        ]
+      ],
+      "raster_path_sha256": "d0904b3a5b9f4ca6729d75ef989884d7cee75e8b9dc3d992b418a0a6ab02912b",
+      "readout_subject_sha256": "80001295a45c2a0c9249194b626a8946a668a54afb09a06cdcd3c308f99f5010",
+      "vertex_count": 2,
+      "junction_incident": true
+    },
+    {
+      "id": "fragment-1788",
+      "case_id": "public-miso-f1499",
+      "frame": 1499,
+      "view_id": "public-native",
+      "fixed_column_xy": [
+        578.0,
+        442.0
+      ],
+      "native_fragment_id": 1788,
+      "source_path_xy": [
+        [
+          578,
+          442
+        ],
+        [
+          577,
+          442
+        ],
+        [
+          576,
+          442
+        ],
+        [
+          575,
+          443
+        ],
+        [
+          574,
+          443
+        ],
+        [
+          573,
+          444
+        ]
+      ],
+      "raster_path_sha256": "997627fbd86ba516bf00a1172b38473bb53ad0c12f7988fda595b926d943423f",
+      "readout_subject_sha256": "627e3138678f066afecbb3d9426b9abdcde03ba7c24cdee36d2b5dff04483303",
+      "vertex_count": 6,
+      "junction_incident": true
+    },
+    {
+      "id": "fragment-1789",
+      "case_id": "public-miso-f1499",
+      "frame": 1499,
+      "view_id": "public-native",
+      "fixed_column_xy": [
+        578.0,
+        442.0
+      ],
+      "native_fragment_id": 1789,
+      "source_path_xy": [
+        [
+          578,
+          442
+        ],
+        [
+          579,
+          442
+        ]
+      ],
+      "raster_path_sha256": "19de86e8a70699cb6f26f3bcfe33970ef45b1a9e2fc90eefefe343f39a22ce40",
+      "readout_subject_sha256": "0742732b5e3da0577083e71706d8a0834910d16db4df36d6b712cce62ccdb0ff",
+      "vertex_count": 2,
+      "junction_incident": true
+    }
+  ],
+  "views": [
+    {
+      "id": "public-native",
+      "source": {
+        "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/native-at-50.png",
+        "sha256": "280b7869a81edfde722fafc85017fdf45dd6e799978cb6c46b7b9769249a635b"
+      },
+      "image_origin_xy": [
+        0,
+        0
+      ],
+      "display_xyxy": [
+        464,
+        254,
+        692,
+        464
+      ]
+    }
+  ],
+  "preparation_plan_sha256": "90acd210e8937c1957fe1296ad08a877bc5d29af740ce9313f5b165149d09a15",
+  "reuse_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-existing-material-execution/readout.json",
+    "sha256": "e1052b1e5bbc7ccc40d71b445157c7f448b83e43d30ab4958261644812d2bb08"
+  },
+  "selection": "Every saved fragment at the selected unlabelled row; no score or length choice",
+  "preserved_intervals": [
+    {
+      "candidate_negative_ids": [],
+      "candidate_positive_ids": [],
+      "compatible_fragments": [
+        "public-miso-f1499/fragment-963",
+        "public-miso-f1499/fragment-995",
+        "public-miso-f1499/fragment-1029",
+        "public-miso-f1499/fragment-1031"
+      ],
+      "original": {
+        "appearance": "R footprint qualified; no type label on each edge",
+        "case_id": "public-miso-f1499",
+        "id": "public-A",
+        "interval": [
+          322.5,
+          338.5
+        ],
+        "precision": "Interval containment only; edges unreviewed",
+        "role": "Foam upper"
+      },
+      "physical_path_correspondence": "NOT_QUALIFIED"
+    },
+    {
+      "candidate_negative_ids": [],
+      "candidate_positive_ids": [],
+      "compatible_fragments": [
+        "public-miso-f1499/fragment-1463",
+        "public-miso-f1499/fragment-1523",
+        "public-miso-f1499/fragment-1546"
+      ],
+      "original": {
+        "appearance": "R footprint qualified; no type label on each edge",
+        "case_id": "public-miso-f1499",
+        "id": "public-B",
+        "interval": [
+          420.5,
+          435.5
+        ],
+        "precision": "Interval containment only; edges unreviewed",
+        "role": "Oil upper"
+      },
+      "physical_path_correspondence": "NOT_QUALIFIED"
+    }
+  ],
+  "complete_saved_fragment_count": 27,
+  "question": "하단 보라색 경로 1769/1788/1789는 각각 무엇의 경계인가요? 구조물(유리 rim), 실제 유체 경계, Foam 내부 변화 중 해당하는 역할을 알려주세요. 다른 역할이거나 구분이 어려우면 그대로 남깁니다. 기존 Foam 상단과 Oil 경로는 질문 대상이 아닙니다.",
+  "status": "PENDING_PATH_ROLE_REVIEW",
+  "qualified_units": 0,
+  "training_executed": false,
+  "scope": "Displayed path role only; no dense/pure-side/coordinate truth or training grant",
+  "selection_row": {
+    "source_y": 442,
+    "reason": "New exact paths near the lower glass rim, outside both closed intervals; physical role is unreviewed. Every fragment at this row is retained, without score or length selection.",
+    "physical_role": "UNREVIEWED"
+  }
+}

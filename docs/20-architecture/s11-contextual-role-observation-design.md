@@ -938,13 +938,19 @@ v1/v2 replies retain their original output schemas and meaning. A separate propo
 inspection validates geometry, source pixels and the pinned display without a human
 reply; its subjects remain `PENDING_REVIEW` and its qualified count is zero.
 
-The next public-source packet reuses every one of the four saved native fragments
+The public-source packet reuses every one of the four saved native fragments
 within the already closed Foam-upper interval, without choosing by path length or
 model score. Its three lower Oil fragments stay preservation context and unreviewed.
 This preparation may establish the exact question and input availability; it does
 not adopt a successor model, infer all paths positive, re-ask the interval or reopen
 the failed native/RGB trials. The [reuse evidence](../60-evidence/s11/2026-10-13-existing-material-execution.md#public-native-review-preparation--2026-10-14)
-owns execution and the remaining correspondence question.
+owns execution and the received correspondence, without changing the frozen G0.
+
+A subsequent question can select an exact, unlabelled fixed-column source row
+instead of a closed interval. The same preparation owner retains **every** saved
+fragment at that row and keeps both original intervals as context. Row location
+is not a role or an opposition label; only a later subject-bound reply can supply
+that correspondence. The interval and row selectors are mutually exclusive.
 
 The [N1–N3 qualification](../60-evidence/s11/2026-10-13-native-role-qualification.md)
 adds subject-bound human roles as a supplement to the immutable G0 snapshot.

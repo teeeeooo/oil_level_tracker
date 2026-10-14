@@ -1,4 +1,4 @@
-"""Render all interval-compatible native fragments; no physical labels or pruning.
+"""Render all native fragments in the reviewed intervals or an unlabelled row.
 
 The frozen N1-N5 renderers hard-code those subjects. This adapter only displays
 this supplement's complete interval-compatible roster using original RGB pixels.
@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw, ImageFont
 from tests.diagnostics import s11_existing_material_reuse as reuse
 
 
-def render(root, manifest, readout, output):
+def render(root, manifest, readout, output, row_y=None):
     reuse.o2.require(not output.exists(), "refuse overwrite")
     reuse.o2.require(readout["manifest_sha256"] == reuse.o2.fingerprint_json(manifest), "readout mismatch")
     packet, = readout["native_review_packets"]
@@ -33,15 +33,22 @@ def render(root, manifest, readout, output):
     reuse.o2.require(np.array_equal(np.asarray(image)[oy:oy+height, ox:ox+width], rgb),
                      "native display differs from captured RGB")
     by_id = {f["id"]: f for f in packet["fragments"]}
-    entries = [(band["original"]["role"], by_id[fid]) for band in packet["intervals"]
-               for fid in band["compatible_fragments"]]
-    reuse.o2.require(len(entries) == 7, "review layout needs complete seven-fragment roster")
-    sheet = Image.new("RGB", (1600, 1030), "white")
+    if row_y is None:
+        entries = [(band["original"]["role"], by_id[fid]) for band in packet["intervals"]
+                   for fid in band["compatible_fragments"]]
+        reuse.o2.require(len(entries) == 7, "review layout needs complete seven-fragment roster")
+    else:
+        entries = [("unreviewed row", f) for f in packet["fragments"] if row_y in f["fixed_column_source_ys"]]
+        reuse.o2.require(1 <= len(entries) <= 7, "row review layout needs one to seven fragments")
+    height_px = 570 if row_y is not None and len(entries) <= 3 else 1030
+    sheet = Image.new("RGB", (1600, height_px), "white")
     draw = ImageDraw.Draw(sheet)
     font = ImageFont.load_default(size=17)
     title = ImageFont.load_default(size=22)
     draw.text((20, 12), "Public compressor f1499 | saved native paths | ALL ROLES UNREVIEWED", fill="black", font=title)
-    draw.text((20, 44), "Original reviewed intervals are retained. A path inside an interval is NOT a positive label.", fill="black", font=font)
+    subtitle = ("Original reviewed intervals are retained. A path inside an interval is NOT a positive label."
+                if row_y is None else f"New question: every saved fragment at source Y={row_y:g}. Location alone assigns no physical role.")
+    draw.text((20, 44), subtitle, fill="black", font=font)
     context = image.crop((ox, oy, ox+width, oy+height))
     context.thumbnail((370, 350), Image.Resampling.NEAREST)
     sheet.paste(context, (15, 140))
@@ -75,7 +82,9 @@ def render(root, manifest, readout, output):
         draw.text((xbase, ybase+72), f"X {x0}..{x1-1}; Y {y0}..{y1-1}; zoom {scale}x", fill="black", font=font)
         roster.append({"id": item["id"], "path_sha256": reuse.o2.fingerprint_json(item["source_path_xy"]),
                        "display_crop_xyxy": list(map(int, (x0,y0,x1,y1))), "scale": scale})
-    draw.text((20, 994), "Lower Oil paths are preservation guards, NOT negative labels for an external-surface classifier.", fill="black", font=font)
+    draw.text((20, height_px-36), "Previously reviewed Foam upper and lower Oil paths are outside this new row question."
+              if row_y is not None else "Lower Oil paths are preservation guards, NOT negative labels for an external-surface classifier.",
+              fill="black", font=font)
     with output.open("xb") as stream:
         sheet.save(stream, format="PNG")
     return {"source_sha256": reuse.o2.sha256_file(source), "image_sha256": reuse.o2.sha256_file(output),
@@ -86,5 +95,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for arg in ("root", "manifest", "readout", "output"):
         parser.add_argument("--"+arg, type=Path, required=True)
+    parser.add_argument("--row-y", type=float)
     args = parser.parse_args()
-    print(json.dumps(render(args.root, json.loads(args.manifest.read_text()), json.loads(args.readout.read_text()), args.output)))
+    print(json.dumps(render(args.root, json.loads(args.manifest.read_text(encoding="utf-8")),
+                            json.loads(args.readout.read_text(encoding="utf-8")), args.output, args.row_y)))

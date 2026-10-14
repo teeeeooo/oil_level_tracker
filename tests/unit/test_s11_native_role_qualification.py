@@ -369,8 +369,12 @@ def test_preparation_cannot_rehash_away_population_or_source_corruption(tmp_path
         q.prepare_proposal(root, plan)
 
 
-def test_preparation_real_cli_then_inspection_with_no_human_answer(tmp_path):
+@pytest.mark.parametrize('selection', ['interval', 'row'])
+def test_preparation_real_cli_then_inspection_with_no_human_answer(tmp_path, selection):
     root, plan, _ = preparation_fixture(tmp_path)
+    if selection == 'row':
+        plan.pop('interval_id')
+        plan.update(fixed_column_source_y=230, selection_reason='New exact path role question, not an inferred negative.')
     q.o2.write_new(root / '준비 plan.json', plan)
     command = [sys.executable, '-B', str(Path(q.__file__).resolve()), '--root', str(root)]
     env = os.environ.copy(); env.pop('PYTHONPATH', None)
@@ -383,3 +387,29 @@ def test_preparation_real_cli_then_inspection_with_no_human_answer(tmp_path):
     checked = subprocess.run(command + ['--inspect-proposal', str(proposal), '--output', str(output)], **kwargs)
     assert checked.returncode == 0, checked.stderr
     assert json.loads(output.read_text(encoding='utf-8'))['qualified_units'] == 0
+
+
+def test_unlabelled_row_preserves_closed_intervals_without_inheriting_their_roles(tmp_path):
+    root, plan, reused = preparation_fixture(tmp_path)
+    plan.pop('interval_id')
+    plan.update(fixed_column_source_y=230, selection_reason='Exact row, no physical role inferred.')
+    proposal = q.prepare_proposal(root, plan)
+    assert 'selection_interval' not in proposal
+    assert proposal['selection_row']['physical_role'] == 'UNREVIEWED'
+    assert proposal['preserved_intervals'] == reused['native_review_packets'][0]['intervals']
+    assert [s['fixed_column_xy'][1] for s in proposal['subjects']] == [230]
+    assert proposal['qualified_units'] == 0
+
+
+@pytest.mark.parametrize('row,keep_interval,match', [
+    (230, True, 'exactly one'), (None, False, 'invalid unlabelled row'),
+    (True, False, 'invalid unlabelled row'), (float('nan'), False, 'invalid unlabelled row'),
+    (231, False, 'empty or duplicate fragment selection'),
+])
+def test_unlabelled_row_rejects_conflicting_invalid_or_missing_selection(tmp_path, row, keep_interval, match):
+    root, plan, _ = preparation_fixture(tmp_path)
+    if not keep_interval:
+        plan.pop('interval_id')
+    plan.update(fixed_column_source_y=row, selection_reason='Question only.')
+    with pytest.raises(ValueError, match=match):
+        q.prepare_proposal(root, plan)

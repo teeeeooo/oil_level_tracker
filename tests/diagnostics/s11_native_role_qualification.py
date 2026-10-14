@@ -91,7 +91,7 @@ def context_support(visible, columns, path):
 
 
 def prepare_proposal(root, plan):
-    """Retain every interval-compatible saved fragment without assigning roles."""
+    """Retain every saved fragment in a reviewed interval or an unlabelled row."""
     o2.require(plan["schema"] == PREPARATION_SCHEMA, "unsupported preparation schema")
     reuse_manifest = read_pin(root, plan["reuse_manifest"])
     reused = read_pin(root, plan["reuse_readout"])
@@ -105,11 +105,19 @@ def prepare_proposal(root, plan):
         o2.require(packet[field] == context[field], f"packet {field} changed")
     bands = {b["original"]["id"]: b for b in packet["intervals"]}
     o2.require(len(bands) == len(packet["intervals"]), "duplicate interval")
-    band = bands[plan["interval_id"]]
+    o2.require(("interval_id" in plan) != ("fixed_column_source_y" in plan),
+               "choose exactly one interval or unlabelled row")
+    band = bands[plan["interval_id"]] if "interval_id" in plan else None
     fragments = by_id(packet["fragments"], "fragment")
-    selected = band["compatible_fragments"]
+    if band is not None:
+        lo, hi = band["original"]["interval"]
+        selected = band["compatible_fragments"]
+    else:
+        lo = hi = plan["fixed_column_source_y"]
+        o2.require(type(lo) in (int, float) and np.isfinite(lo), "invalid unlabelled row")
+        o2.text(plan["selection_reason"], "unlabelled row selection reason")
+        selected = [fid for fid, f in fragments.items() if lo in f["fixed_column_source_ys"]]
     o2.require(selected and len(selected) == len(set(selected)), "empty or duplicate fragment selection")
-    lo, hi = band["original"]["interval"]
     expected = {fid for fid, f in fragments.items()
                 if any(lo <= y <= hi for y in f["fixed_column_source_ys"])}
     o2.require(set(selected) == expected, "interval selection drops or adds a saved fragment")
@@ -134,16 +142,22 @@ def prepare_proposal(root, plan):
                              raster_path_sha256=fragment["path_sha256"],
                              readout_subject_sha256=saved["g0_fragment_sha256"],
                              vertex_count=fragment["vertex_count"], junction_incident=fragment["junction_incident"]))
-    return dict(schema="s11-native-fragment-role-review-proposal-v1",
+    result = dict(schema="s11-native-fragment-role-review-proposal-v1",
                 g0_manifest=reuse_manifest["inputs"]["g0_manifest"],
                 g0_readout=reuse_manifest["inputs"]["g0_readout"], display=plan["display"],
                 subjects=subjects, views=[view], preparation_plan_sha256=o2.fingerprint_json(plan),
-                reuse_readout=plan["reuse_readout"], selection_interval=band["original"],
+                reuse_readout=plan["reuse_readout"], selection_interval=band["original"] if band is not None else None,
                 selection="Every saved fragment intersecting the closed interval; no score or length choice",
                 preserved_intervals=[b for b in packet["intervals"] if b is not band],
                 complete_saved_fragment_count=len(fragments), question=plan["question"],
                 status="PENDING_PATH_ROLE_REVIEW", qualified_units=0, training_executed=False,
                 scope="Displayed path role only; no dense/pure-side/coordinate truth or training grant")
+    if band is None:
+        result.pop("selection_interval")
+        result.update(selection="Every saved fragment at the selected unlabelled row; no score or length choice",
+                      selection_row={"source_y": lo, "reason": plan["selection_reason"],
+                                     "physical_role": "UNREVIEWED"})
+    return result
 
 
 def qualify(root, reply):

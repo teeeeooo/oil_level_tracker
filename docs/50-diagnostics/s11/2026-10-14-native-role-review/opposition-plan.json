@@ -1,0 +1,44 @@
+{
+  "schema": "s11-native-fragment-review-preparation-v1",
+  "reuse_manifest": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-existing-material-execution/manifest.json",
+    "sha256": "76dfb1f3de4506efd22c6a802a72b4455cd41e4ea46beb85dd3ae74f197362c1"
+  },
+  "reuse_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-existing-material-execution/readout.json",
+    "sha256": "e1052b1e5bbc7ccc40d71b445157c7f448b83e43d30ab4958261644812d2bb08"
+  },
+  "case_id": "public-miso-f1499",
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-role-review/opposition-review.png",
+    "sha256": "11f5085d5733f140a0c03841aefd098ed0041cc4d009bff4276f9355ac36c2bb"
+  },
+  "view": {
+    "id": "public-native",
+    "source": {
+      "path": "docs/50-diagnostics/s11/2026-10-12-public-compressor-source/native-at-50.png",
+      "sha256": "280b7869a81edfde722fafc85017fdf45dd6e799978cb6c46b7b9769249a635b"
+    },
+    "image_origin_xy": [
+      0,
+      0
+    ],
+    "display_xyxy": [
+      464,
+      254,
+      692,
+      464
+    ]
+  },
+  "exposure": "Previously exposed development recording; one frame, no independent subjects/holdout from its overlapping paths.",
+  "fixed_column_source_y": 442,
+  "selection_reason": "New exact paths near the lower glass rim, outside both closed intervals; physical role is unreviewed. Every fragment at this row is retained, without score or length selection.",
+  "question": "하단 보라색 경로 1769/1788/1789는 각각 무엇의 경계인가요? 구조물(유리 rim), 실제 유체 경계, Foam 내부 변화 중 해당하는 역할을 알려주세요. 다른 역할이거나 구분이 어려우면 그대로 남깁니다. 기존 Foam 상단과 Oil 경로는 질문 대상이 아닙니다.",
+  "purpose": "Qualify public-source comparison roles after the four upper paths were confirmed; no assumed negative, model retry or repeated upper/lower interval question.",
+  "resources": {
+    "scratch_bytes": 2000000,
+    "retained_bytes": 400000,
+    "peak_rss_bytes": 500000000,
+    "seconds": 30
+  }
+}
