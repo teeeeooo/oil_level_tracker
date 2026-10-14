@@ -1033,6 +1033,30 @@ The [completed fixed trial](../60-evidence/s11/2026-10-13-native-surface-trial.m
 retains its N3 positive-loss counterexample. A new data scope cannot recast that
 exposed transfer result as an independent validation success by moving N3 into fit.
 
+### Source-balanced native role ordering (NRO-1)
+
+After the public upper/rim correspondence is qualified, a separate relative-order
+contract can use sample5 N1>N2 and sample4 N3>N4/N5 for fit, reserving the public
+recording's four uppers and three rims for one exposed transfer check. N3 becomes
+an exposed training unit; its old absolute-classification transfer failure stays
+closed. This is neither a new N3 validation success nor an operating-point repair.
+
+Reuse the 1,118-parameter encoder and native 7×7 context unchanged. Optimize the
+mean softplus of negative positive/opposition score differences within each fit
+recording, then average recordings equally. The two-logit difference is an
+unanchored ordering score: zero is not a class boundary, and the maximum does not
+select a physical interface. Source/role metadata constructs the training loss;
+only RGB tensors enter inference. Internal Foam and structure retain distinct roles.
+
+The fixed mean-RGB arm removes within-patch spatial pattern with identical
+architecture/init/schedule and the same order loss. Both arms fit exactly once.
+All 27 public paths remain, including unknown and unavailable paths. Required
+known-role comparisons and the unknown population stay separate. This scoped
+trial can establish exposed order information only; calibrated typed observation,
+native material labels, full G1/O2 and production consumers require their own
+acceptance. The [frozen experiment record](../60-evidence/s11/2026-10-14-native-role-order.md)
+owns exact settings, limits and the measured result, not current gate state.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.

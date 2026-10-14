@@ -332,6 +332,31 @@ BASE·Accum 검출 개선을 입증하지 않는다.
 추가 검토는 이 세 경로의 실제 역할에 대한 사용자 판단에서 멈춘다.
 이는 새로운 source-transfer 성능, BASE/Accum 검출률 또는 생산 Foam 개선 결과가 아니다.
 
+### Public lower rim reply — 2026-10-14
+
+사용자 답변 **“구조물(유리 rim)”**을 하단 1769/1788/1789 세 경로 각각에
+`STRUCTURE_BOUNDARY`와 확인된 rim 문맥으로 연결한다. [원문](../../50-diagnostics/s11/2026-10-14-native-role-review/opposition-reply.json)은
+기존 proposal/display/subject hash를 고정한다. 실제 경로의 역할만 확정하며
+주변 재질·다른 경로·프레임·dense mask로 전파하지 않는다.
+
+기존 qualifier의 실제 CLI를 `/private/tmp`에서 실행하고 이전 9개 판정과
+촬영원별 양성/내부/구조 대조를 검증한다. 원래 G0/CR1 결과와 기존 그림은
+참조로 재사용한다. scratch 2 MB / 최종 추가 자료 100 KB이며 모델 호출,
+학습, 영상 decode 또는 생산 동작 변경은 이 답변 결합에 포함하지 않는다.
+
+[실제 qualification](../../50-diagnostics/s11/2026-10-14-native-role-review/opposition-qualification.json)과
+[갱신된 source 집계](../../50-diagnostics/s11/2026-10-14-native-role-review/qualified-source-readiness.json)는
+12개 경로 / 3개 촬영원 / 4개 source-frame을 확인했다. 외부 상단 6개,
+내부 변화 2개, 구조물 4개다. 기존 9개 판정은 원래 결과와 동일하다.
+같은-frame dependency 쌍 23개는 모두 독립 split 불허이며, 공개 영상의 27개
+경로 중 7개만 판정됐고 20개는 미판정이다. 하부 Oil 1463/1523/1546도 포함한다.
+공개 영상의 외부 상단 대 rim 비교가 이제 가능하지만 내부 Foam 판정이나
+독립 holdout, Oil 재질 학습, 생산 관측 수용으로 확대하지 않는다.
+
+관리 실행 `s11-public-rim-reply-20261014-001`은 정본 JSON 3개 22,454 bytes를
+남기고 중복 2개를 제거했다. 다음 별도 연산은 [역할 순서 비교 계약](2026-10-14-native-role-order.md)이
+기록하며 원래 실패한 native 분류 시험은 닫힌 상태로 보존한다.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.

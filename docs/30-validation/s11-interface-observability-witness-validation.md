@@ -1768,6 +1768,20 @@ compatibility and V4 resources; then V5 Windows shadow precedes O2 acceptance.
 G1 cannot substitute for it. WP05 suppression and WP06 independently supported
 admission have separate ablations. WP07 raw-upper work is independent of final
 Oil; WP08 still requires a qualified correct raw upper actually lost downstream.
+
+For the separately declared [NRO-1 role-order comparison](../60-evidence/s11/2026-10-14-native-role-order.md),
+verify source-disjoint fit/public partitions and exact qualified-role bindings,
+including all original public paths. Unknown paths cannot acquire opposition
+targets, and missing inputs cannot count as successful rejection. Preserve N3's
+old failed transfer while explicitly counting it as fit in the new contract.
+Validate per-source loss averaging, score-offset invariance of comparisons,
+tie/reversal failure, mean-RGB spatial ablation and gradients on synthetic inputs
+before the real fit. Exercise preparation outside the repo cwd and record frozen
+source/input pins, actual complete updates and both full score tables.
+Twelve same-frame public comparisons are dependent constraints, not accuracy over
+twelve independent cases. No raw winner, cutoff, probability, model necessity or
+field benefit follows from correct ordering; equal mean-RGB success supplies no
+native-pattern advantage. Any native required-pair failure closes the fixed run.
 Use P0 A/B/C/U for G2, the complete sample4 0–56 s baseline and all nine canonical
 Windows segments at their original precision. Protect rapid refill, stationary
 interfaces and real reversals. No new scalar/time tolerance, interpolation,

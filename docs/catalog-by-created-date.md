@@ -1456,3 +1456,9 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/opposition-inspection.json](50-diagnostics/s11/2026-10-14-native-role-review/opposition-inspection.json) | 세 미판정 경로의 실제 픽셀·지원 검사 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/opposition-review.png](50-diagnostics/s11/2026-10-14-native-role-review/opposition-review.png) | 기존 Oil 경로와 구분한 새 하단 경로 검토 그림 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/opposition-verification.json](50-diagnostics/s11/2026-10-14-native-role-review/opposition-verification.json) | 실제 CLI·기존 결과 보존·156 테스트 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/opposition-reply.json](50-diagnostics/s11/2026-10-14-native-role-review/opposition-reply.json) | 하단 세 경로의 유리 rim 판정 원문 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/opposition-qualification.json](50-diagnostics/s11/2026-10-14-native-role-review/opposition-qualification.json) | 세 구조물 역할의 원본 경로 결합 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-review/qualified-source-readiness.json](50-diagnostics/s11/2026-10-14-native-role-review/qualified-source-readiness.json) | 12개 native 역할·촬영원·같은-frame dependency 집계 |
+| 2026-10-14 | [60-evidence/s11/2026-10-14-native-role-order.md](60-evidence/s11/2026-10-14-native-role-order.md) | 별도 source 균형 역할 순서 비교의 고정 계약·검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-order/manifest.json](50-diagnostics/s11/2026-10-14-native-role-order/manifest.json) | 32개 경로·source 분리·역할 순서 학습/비교 입력 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-role-order/preparation-verification.json](50-diagnostics/s11/2026-10-14-native-role-order/preparation-verification.json) | 실제 준비 CLI·167 테스트·합성 loss/gradient 검증 |

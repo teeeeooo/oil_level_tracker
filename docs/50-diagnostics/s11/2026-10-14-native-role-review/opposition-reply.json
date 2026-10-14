@@ -1,0 +1,65 @@
+{
+  "schema": "s11-native-fragment-role-reply-v3",
+  "proposal": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-role-review/opposition-proposal.json",
+    "sha256": "45bfcc0f3b294d0e32736da38566dabe66de6a056192449be7270298d4be93bb"
+  },
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-role-review/opposition-review.png",
+    "sha256": "11f5085d5733f140a0c03841aefd098ed0041cc4d009bff4276f9355ac36c2bb"
+  },
+  "response_ko": "구조물(유리 rim)",
+  "answers": [
+    {
+      "id": "fragment-1769",
+      "subject_sha256": "1f17d375bf4ad273555af21281695abd65cdcdf20402f93a45ff1b6b2bc86765",
+      "statement_ko": "구조물(유리 rim)",
+      "allowed_interpretations": [
+        "STRUCTURE_BOUNDARY"
+      ],
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY",
+      "context_facets": [
+        {
+          "kind": "CIRCULAR_RIM",
+          "certainty": "USER_CONFIRMED_CONTEXT",
+          "statement_ko": "유리 rim"
+        }
+      ],
+      "review_status": "QUALIFIED_ROLE"
+    },
+    {
+      "id": "fragment-1788",
+      "subject_sha256": "76ffacdc39cfabc23cee63c0b0adf3f9edd9d37b7a6cd5c29feb4ee6a5eadf38",
+      "statement_ko": "구조물(유리 rim)",
+      "allowed_interpretations": [
+        "STRUCTURE_BOUNDARY"
+      ],
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY",
+      "context_facets": [
+        {
+          "kind": "CIRCULAR_RIM",
+          "certainty": "USER_CONFIRMED_CONTEXT",
+          "statement_ko": "유리 rim"
+        }
+      ],
+      "review_status": "QUALIFIED_ROLE"
+    },
+    {
+      "id": "fragment-1789",
+      "subject_sha256": "bb2fe78eb8df3a21d0bd05e49d595cf03e0e08f7acf1d6abce4cf4ab86c65474",
+      "statement_ko": "구조물(유리 rim)",
+      "allowed_interpretations": [
+        "STRUCTURE_BOUNDARY"
+      ],
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY",
+      "context_facets": [
+        {
+          "kind": "CIRCULAR_RIM",
+          "certainty": "USER_CONFIRMED_CONTEXT",
+          "statement_ko": "유리 rim"
+        }
+      ],
+      "review_status": "QUALIFIED_ROLE"
+    }
+  ]
+}
