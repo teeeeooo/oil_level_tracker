@@ -1218,6 +1218,26 @@ the joint term. A source-only sample4/f1140 correspondence review may qualify a
 new contact example at its original path precision; it neither explains away
 these failures nor reopens this fixed model/regularization/operating point.
 
+The subsequent 708 reply confirms Foam lower meeting liquid. The
+[append-only extension](../../tests/diagnostics/s11_native_role_extension.py)
+reuses frozen validators and retains only the complete new frame plus a base pin:
+135 paths / 18 qualified / 117 unknown, with 100 native inputs. The original 109
+observations and NCT-1 results remain immutable. Foam-contact has two positive
+recordings; air-contact has one. Source diversity is still an input property,
+not a trained-model or field acceptance condition.
+
+The next narrow source check reuses already exposed sample3 A/f2249, with original
+Recipe and baseline preprocessing. Available candidate RGB patches do not imply
+an available native contour: this frame's reconstructed native graph is empty.
+Keep that absence explicit instead of deriving a line from the approved Y219
+candidate. A pending contact-type reply is candidate/regional evidence only;
+B's liquid–empty-space reply does not transfer across frames. No new clip mining,
+Canny threshold change or closed-model retry follows. After that reply, a successor
+must separately address representation availability and contact-role observation;
+even a confirmed air contact cannot fill the missing native-path label. Existing
+sample3 full-window restrictions, closed C/D replies and reserve-from-fit status
+stay intact.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
@@ -1228,5 +1248,5 @@ these failures nor reopens this fixed model/regularization/operating point.
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no production executing owner, schema or detector behavior changes.
 - Existing feature coverage: the receiving review reuses pinned CR1/O1/A1 captures and native geometry. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. No new Recipe or static-learning efficacy claim follows from saved-input binding.
-- Execution scope: preceding saved-score audits and separately frozen RGB/native trials retain their recorded outcomes. The October 14 runtime retirement is complete. Separate-role input binding is complete without inference. The distinct NCT-1 contract permits exactly 24 CPU kernel-ridge solves over the fixed native corpus, with two independent partial-role objectives and predeclared interaction/pattern ablations. It executes no production frame/sequence/report run or Windows qualification. Historical trial instructions are not current execution authority.
+- Execution scope: preceding saved-score audits and frozen RGB/native trials retain their recorded outcomes. Runtime retirement is complete. NCT-1 completed exactly 24 CPU kernel-ridge solves and is closed. The 708 append-only role binding and A-only source/contact preparation add no inference or fitting. A reuses baseline preprocessing of one existing PNG, not a production frame/sequence/report run or Windows qualification. Historical trial instructions are not current execution authority.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.

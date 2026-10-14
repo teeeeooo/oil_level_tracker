@@ -1,0 +1,44 @@
+{
+  "schema": "s11-native-role-extension-verification-v1",
+  "source_head": "f4339e845644dc686781e3d1c84f5d7a2cb06e35",
+  "status": "VERIFIED",
+  "method": "Independent JSON joins and original PNG slices; no extension patch helper, model, fitting or second trial run",
+  "extension_sha256": "be806540510248874c057698703a25a11591559f1ac8ba525919d6681b405d12",
+  "old_corpus_sha256": "35e458186f50a046776fd30452deae902a80282433efc19883518c53a6c1ac67",
+  "unchanged_old_rows": 109,
+  "added_paths": 26,
+  "qualified_added_paths": 1,
+  "unknown_added_paths": 25,
+  "native_added_inputs": 16,
+  "unavailable_added_inputs": 10,
+  "original_image_patch_tensors_checked": 264,
+  "side_hashes_checked": 32,
+  "counts": {
+    "total": 135,
+    "qualified": 18,
+    "unknown": 117,
+    "native_available": 100,
+    "semantic_available": 39,
+    "recordings": 4,
+    "frames": 7
+  },
+  "contact_positive_recordings": {
+    "FOAM_LOWER_LIQUID_INTERFACE": 2,
+    "LIQUID_AIR_INTERFACE": 1
+  },
+  "sample4_all_frames_held_together": true,
+  "semantic_vectors_added": 0,
+  "model_calls": 0,
+  "training_executed": false,
+  "tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -B -m pytest -q tests/unit/test_s11_native_role_extension.py tests/unit/test_s11_native_role_corpus.py tests/unit/test_s11_native_liquid_reply.py",
+    "passed": 51,
+    "seconds": 1.35
+  },
+  "runtime": {
+    "python": "3.14.4",
+    "numpy": "2.5.1",
+    "platform": "Darwin"
+  },
+  "cwd": "/private/tmp (actual extension CLI)"
+}

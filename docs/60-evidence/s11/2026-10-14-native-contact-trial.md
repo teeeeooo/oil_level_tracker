@@ -151,7 +151,7 @@ product scalar or a whole-layer label. The original proposal/inspection above
 remain the pre-reply checkpoint. The new [reply](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-reply.json)
 pins that subject and display; the candidate's Y844 remains separate from native Y841.
 
-The [extension reader](../../tests/diagnostics/s11_native_role_extension.py)
+The [extension reader](../../../tests/diagnostics/s11_native_role_extension.py)
 reuses the frozen corpus reconstruction, native-packet validator and liquid reply
 qualifier. A separate append entry is necessary because the original corpus and
 NCT-1 source pins are frozen. It retains only the new frame's complete population
@@ -168,12 +168,86 @@ the original image and all earlier rows against the pinned corpus. Count positiv
 recordings separately for Foam-contact and air-contact, grouping every sample4
 frame together. This binding is not a new fitting operation or NCT-1 retry.
 
+Execution at **`f4339e8`** completed from `/private/tmp`. The
+[delta](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension.json)
+adds all **26 paths**, with exactly one qualified contact and 25 unknowns. The
+combined population has **135 paths / 18 qualified / 117 unknown**, 100 available
+native inputs and the same 39 saved semantic inputs, in four recordings / seven
+frames. The 18 are 6 certain Foam uppers, 3 certain liquid uppers, 2 internal
+changes, 6 structures and N1's original disjunction. Sample4 f450/f1140/f1620
+stay in one source group; adding a frame does not add a recording.
+
+[Independent verification](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension-verification.json)
+checks all **264 new native patches / 32 side hashes** directly against the original
+PNG, all 109 earlier rows unchanged, complete new-frame inventory and source-group
+separation. **51 focused tests pass**. The delta and receipt total 130,918 bytes;
+managed run `s11-native-contact-bind-20261014-001` retains only canonical references.
+No model was loaded, fitted or scored, and no detector behavior changed.
+
+Foam–liquid contact now has **two positive recordings** (Miso and sample4).
+Liquid–air contact still has **one** (water), even though water A/C are two frames.
+This clears only the first contact type's source-diversity gap. It neither certifies
+native training readiness nor changes NCT-1's failed result. The next bounded
+reuse check concerns the already exposed sample3 A/f2249, whose baseline input
+was available; B/f2339's missing baseline input and unadopted overlay guard are
+not a substitute. Existing regional/candidate replies do not supply an exact
+native-path contact label. No new clip, whole-window benchmark or automatic fit
+is authorized by this source check.
+
+### A contact-type review and native representation limit
+
+The bounded read-only A/f2249 check reproduces the archived RGB and visibility
+hashes using the baseline preprocessor from `747c1bcc` (SHA-256 `55e33486…`),
+the unchanged saved Recipe and original full-frame PNG. The resulting Canny
+raster has **no visible vertices or fixed-column fragment**. This differs from
+the existing candidate's available 95/95 RGB patches: candidate context availability
+does not imply that the native-edge representation contains a boundary. It is
+not a new claim that the production detector has no candidate or output.
+
+The [source-only preparation](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-plan.json)
+therefore asks only the **contact type at the already accepted A point**. The
+rendered yellow cross is a point, never a fabricated horizontal edge. The complete
+original ROI and full-frame locator retain context; all existing A/B candidate
+acceptance, B's fluid–empty-space reply, C/D judgments and whole-window quarantine
+remain intact. No user label is transferred from B to A. The question is whether
+liquid there meets empty space or Foam, another boundary, or cannot be assessed.
+
+This is a narrow source-qualification extension of the Work Plan, not routine
+sample3 development or tuning. A reply can constrain the contact scope of a
+separate representation design; it still cannot supply a missing native path.
+Do not lower Canny thresholds, invent a contour from Y219, apply the unadopted
+overlay guard or retrain a closed operation to clear the gap. Once contact scope
+is known, distinguish existing candidate-level observations from a separately
+designed/tested native representation before any future model contract.
+
+The [review record](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-review.json)
+and [direct PNG](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-review.png)
+retain the exact source/candidate pins and empty native population. There are
+38,311 visible ROI pixels but zero Canny pixels; available candidate-side context
+therefore must not be reported as a ready native-path input. The original baseline
+preprocessor is loaded by the existing comparison helper, not substituted with
+the unadopted current guard. This question creates **zero new native labels**.
+[Independent verification](../../50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-verification.json)
+checks every plain/point-panel pixel and reproduces the zero Canny raster directly
+from original pixels, unchanged Recipe thresholds and baseline operations.
+The image was visually inspected with its full-frame locator. The actual CLI
+ran from `/private/tmp`; owned font caches and temporary plans are removed at
+managed closeout. Only the physical contact-type reply is pending.
+
+The first artifact check found 6,437,055 scratch bytes against the 5 MB plan:
+imported reporting dependencies had generated font caches. After the writer
+stopped, those owned caches were removed without losing scientific payload or
+changing the original budget record. Managed run
+`s11-native-contact-a-review-20261014-001` retains 142,284 bytes in five canonical
+files. Both new runs are closed; all **58 managed runs** pass with no remaining
+artifact errors. No retired model/runtime or duplicate source media was restored.
+
 ## Detector Governance
 
-- Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `PUBLICATION-PROVENANCE`.
-- Failure-registry entries: `S11-F01`, `S11-F06`, `S11-F09`, `S11-F10`.
-- First harmful stage: the prior shared surface observations fail qualified uppers versus structure before candidate consumption. This trial tests ordered-side interaction and separate role support at that observation boundary; it does not assert that downstream admission/ownership is repaired.
-- Existing feature coverage: reuse all six pinned native frame geometries, visible-support decisions and both 7×7 side footprints from the complete corpus. No enlarged crop, new edge, semantic forward or inherited score enters the regressor. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. Recipe/session/static-learning, production candidate/episode and report paths are bypassed, so this run cannot establish their efficacy or failure.
-- Execution scope: the completed offline trial performed the 24 predeclared kernel solves; it stays closed. Subsequent source-only preparation reconstructed sample4/f1140's entire saved native inventory and inspected the single Y841 fragment. The new extension CLI reuses the original qualifier to bind the user's exact 708 contact reply and append the complete frame population while preserving the frozen corpus and scores. No additional model call, fit, source video decode, temporal propagation, model download, GUI, production sequence/report replay or Windows qualification. Existing physical replies are never expanded to pure-side labels or unknown-path negatives.
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `PUBLICATION-PROVENANCE`.
+- Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F06`, `S11-F09`, `S11-F10`.
+- First harmful stage: prior shared surface observations fail qualified uppers versus structure before candidate consumption. In the later A-only check, native-edge geometry is already absent before role input, although the original material-path candidate exists. These are separate representation and observation limits; neither establishes a repair or loss of the production candidate/owner/report path.
+- Existing feature coverage: the closed NCT trial reused six pinned native frames and fixed 7×7 side footprints. The 708 extension adds one complete saved frame. The subsequent A-only check reconstructs baseline preprocessing/Recipe masks and matches archived RGB/visibility; it finds no native edge and changes no threshold, mask or candidate. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. Session/static-learning, production candidate/episode and report paths are bypassed, so these operations cannot establish their efficacy or failure.
+- Execution scope: the completed offline trial performed the 24 predeclared kernel solves; it stays closed. The extension CLI reuses the original qualifier to bind 708 and append the entire frame population without changing frozen observations. The separate A contact preparation reuses one original PNG, baseline preprocessing and the existing graph owner, then renders a point-only contact question; the empty native population remains empty. No additional model call, fit, source video decode, temporal propagation, model download, GUI, production sequence/report replay or Windows qualification. Existing replies are never expanded to native paths, pure-side labels or unknown-path negatives.
 - Logic-map impact: NONE — this adds an offline research operation; no executing production owner, setup parameter or runtime schema changes.
 - Failure-registry impact: NONE — separate-head/support testing refines the existing appearance and coupling risks; no accepted repair or new general failure theorem is claimed.
