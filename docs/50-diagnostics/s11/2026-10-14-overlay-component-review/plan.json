@@ -1,0 +1,106 @@
+{
+  "schema": "s11-overlay-component-audit-v1",
+  "base_head": "747c1bccaa8dab18d6cb3a2b3dc3e549bcfc668f",
+  "reply": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-reply.json",
+    "sha256": "665caee35adfb268879bc3c4cc7e7183c1ac772aac0a1680c08be93078f76f57"
+  },
+  "source_pins": [
+    {
+      "path": "tests/diagnostics/s11_overlay_component_audit.py",
+      "sha256": "a30ab2c685eb70732bf717436bbb160ad78d96912c0b1bf3567a99bb57d67a7b"
+    },
+    {
+      "path": "src/oil_tracker/adapters/vision/preprocessing.py",
+      "sha256": "55e33486cf34e709ccaf1930720f41978f74c3448baa69eceac8bb570233236e"
+    },
+    {
+      "path": "src/oil_tracker/adapters/vision/geometry_masks.py",
+      "sha256": "8c9bbbed8e3a9c3abb5f1c97832fc1ab8d34d5cc4b7b07f706626d4653244820"
+    },
+    {
+      "path": "src/oil_tracker/domain/recipe.py",
+      "sha256": "2ded05b7b5db1f44e394bd0aead92a3cdd74efe655361911cffb1a16e448e039"
+    },
+    {
+      "path": "tests/diagnostics/s11_candidate_rgb_trial.py",
+      "sha256": "5a539ce86358ba482cd916d1d1c9dde6950787c16cfd6c093c60f87d18efbc9a"
+    }
+  ],
+  "frames": [
+    {
+      "id": "sample3-A",
+      "frame_index": 2249,
+      "input": {
+        "path": "sample/output/s11-sample3-gap-source-20261010-001/f002249.png",
+        "sha256": "89d645a3d0880f65a7c1db0f37f91d2d2115dff52d1dbd7a7d69c6a0d727ba0f"
+      },
+      "recipe": {
+        "path": "sample/sample3.oilrecipe",
+        "sha256": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43"
+      },
+      "source_xy": [
+        835,
+        219
+      ]
+    },
+    {
+      "id": "sample3-B",
+      "frame_index": 2339,
+      "input": {
+        "path": "sample/output/s11-sample3-gap-source-20261010-001/f002339.png",
+        "sha256": "1a95db29287b5d4420d53217c1322d617b1f7bdf165b40f640ed20b76d1f134f"
+      },
+      "recipe": {
+        "path": "sample/sample3.oilrecipe",
+        "sha256": "66a5ba8cc01933349e02e463b8155463610c658afbfc0893340c62197a715b43"
+      },
+      "source_xy": [
+        835,
+        227
+      ]
+    },
+    {
+      "id": "base-150",
+      "frame_index": 150,
+      "input": {
+        "path": "sample/base_sample_1.mp4",
+        "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+      },
+      "recipe": {
+        "path": "sample/base_sample_1.oilrecipe",
+        "sha256": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7"
+      }
+    },
+    {
+      "id": "base-151",
+      "frame_index": 151,
+      "input": {
+        "path": "sample/base_sample_1.mp4",
+        "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+      },
+      "recipe": {
+        "path": "sample/base_sample_1.oilrecipe",
+        "sha256": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7"
+      }
+    },
+    {
+      "id": "base-240",
+      "frame_index": 240,
+      "input": {
+        "path": "sample/base_sample_1.mp4",
+        "sha256": "96cb3339cb90e8f5e7c4f71f5e5890cb12caa8996a432977413e15fe214b2c7e"
+      },
+      "recipe": {
+        "path": "sample/base_sample_1.oilrecipe",
+        "sha256": "4e0a0ad729562dac0bc1e75fbdee0c80ff51aaeda0e07d450f15ff878a637ca7"
+      }
+    }
+  ],
+  "hypothesis": "Horizontal opening can truncate a thick chromatic component into a thin wide HUD-looking core. Inspect ancestry only; no alternative mask, fitting, or threshold search.",
+  "resource_limits": {
+    "seconds": 60,
+    "scratch_bytes": 1000000,
+    "retained_bytes": 1000000
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "s11-source-upper-mask-role-reply-v1",
+  "received_date": "2026-10-14",
+  "user_text": "유체-빈공간의 경계, 지속적인 유체의 유입으로 경계면이 흔들리는중",
+  "authority": "Direct user reply to the B upper-region review question.",
+  "review": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-review.json",
+    "sha256": "4593088d6eec1279e855ac9eed95fb0749678826500b81abafd1b4fd4a5b0412"
+  },
+  "image": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-review.png",
+    "sha256": "3e49ff53f9fe32c10a8b53baac680f36638af5a532c474e3f599cbda312c5b6e"
+  },
+  "subject_id": "s3-f2339-idx5",
+  "candidate_sha256": "75c4761337fd43c91735fcc1c51e354839199477d29f01ebb31b95940eba10e3",
+  "qualified_candidate_sha256": "5440d9b3c0ff85c6eb0316e83cd1b251c4125a07b84cf257c90d4b4aaf925949",
+  "source_image": {
+    "path": "sample/output/s11-sample3-gap-source-20261010-001/f002339.png",
+    "sha256": "1a95db29287b5d4420d53217c1322d617b1f7bdf165b40f640ed20b76d1f134f"
+  },
+  "frame_index": 2339,
+  "time_sec": 78.04463333333334,
+  "source_upper_xyxy": [
+    823,
+    215,
+    848,
+    226
+  ],
+  "role": "FLUID_EMPTY_SPACE_INTERFACE",
+  "motion_context": "Interface wobbling during continuous fluid inflow; qualitative user observation, not measured motion.",
+  "scope": "Regional role only; not all-pixel material truth, exact contour, Foam subtype, native-path supervision or whole-window qualification. Preserve accepted A/B representatives, closed C/D and sample3 quarantine."
+}
