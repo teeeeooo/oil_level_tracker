@@ -1473,3 +1473,9 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/review.png](50-diagnostics/s11/2026-10-14-native-milk-review/review.png) | 기존 하단 경계 질문과 구분한 세 native 경로 검토 그림 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/inspection.json](50-diagnostics/s11/2026-10-14-native-milk-review/inspection.json) | 인간 역할 판정 없이 실행한 세 경로 원본·지원 검사 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/verification.json](50-diagnostics/s11/2026-10-14-native-milk-review/verification.json) | 원본 동일성·기존 그림 바이트 보존·고정 입력 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/reply.json](50-diagnostics/s11/2026-10-14-native-milk-review/reply.json) | 컵 상단 두 구조물·687 확대 위치 불명확·원근 설명의 원문 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/qualification.json](50-diagnostics/s11/2026-10-14-native-milk-review/qualification.json) | 444·453 구조물 결합과 687 무정답 상태 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/location.png](50-diagnostics/s11/2026-10-14-native-milk-review/location.png) | 동일 687 확대 경로의 원본 위치 표시 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/location-proposal.json](50-diagnostics/s11/2026-10-14-native-milk-review/location-proposal.json) | 위치를 보강한 동일 687 경로의 한정 추가 질문 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/location-inspection.json](50-diagnostics/s11/2026-10-14-native-milk-review/location-inspection.json) | 위치 검토 경로의 원본·지원 무정답 검사 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/location-verification.json](50-diagnostics/s11/2026-10-14-native-milk-review/location-verification.json) | 경로·확대 픽셀 동일성 및 이전 검토 그림 보존 검사 |

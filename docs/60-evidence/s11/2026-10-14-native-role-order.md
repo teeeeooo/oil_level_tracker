@@ -158,12 +158,46 @@ Closeout checks pass: detector governance, whitespace, all 1,302 local links in
 the seven changed Markdown files, and all **44 managed runs closed without
 artifact errors**. No duplicate worktree or retained work copy was created.
 
+### Milk reply and location clarification
+
+The user identifies 444/453 as the cup's upper structural boundary. These two
+displayed roles can be bound as structure. For 687, the user cannot locate the
+crop and tentatively sees an upper fluid boundary, explaining that the oblique
+view can show one fluid boundary as two lines. This is not an exact-path role
+confirmation or evidence of two material interfaces. Retain the complete reply;
+use `UNASSESSABLE` for 687 **at this display-identification stage**, with no target
+or invented role alternatives. This status is not a permanent visibility verdict.
+
+Prepare a location clarification of **the same saved 687 path**, showing its
+unchanged crop and magenta path beside the original ROI with a red crop-location
+box. Reuse the existing renderer through an optional locator mode; keep the first
+question, confirmed structures and prior lower-interface reply closed. No model
+score, retraining, new frame or new path selection follows. This reply/locator run
+has 3 MB scratch / 1 MB retained limits and uses existing source pixels and G0.
+
+The [verbatim reply](../../50-diagnostics/s11/2026-10-14-native-milk-review/reply.json)
+and [actual qualification](../../50-diagnostics/s11/2026-10-14-native-milk-review/qualification.json)
+bind **two structure paths and one unqualified path**. Together with the prior
+twelve roles this is fourteen qualified paths in four recordings: six external,
+two internal and six structure. No positive milk path has been qualified.
+
+The [location image](../../50-diagnostics/s11/2026-10-14-native-milk-review/location.png)
+and [single-path proposal](../../50-diagnostics/s11/2026-10-14-native-milk-review/location-proposal.json)
+clarify 687 only. Its [inspection](../../50-diagnostics/s11/2026-10-14-native-milk-review/location-inspection.json)
+is pending, not a replacement answer. [Checks](../../50-diagnostics/s11/2026-10-14-native-milk-review/location-verification.json)
+prove identical subject bytes and identical RGB-plus-magenta crop at 8× zoom;
+the red box locates source rectangle `[1092,518,1170,555]`. Both previous public
+images and the first milk image remain byte-identical under their original CLI
+conditions. Actual qualifier/renderer/inspection CLIs ran from `/private/tmp`.
+Managed run `s11-native-milk-location-20261014-001` retains six canonical files /
+356,707 bytes, removes ten temporary copies/checks and makes zero model calls.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F09`, `S11-F10`.
 - First harmful stage: the earlier absolute native classifier rejects N3; this comparison does not repair that classifier or establish a production causal loss. It tests a distinct relative-order capability with newly qualified source opposition.
 - Existing feature coverage: saved original G0 native RGB/masks/path context only. sample4 Recipe exclusions/templates remain empty; Local XY OFF. Run preparation, automatic static learning, Artifact consumers, sequence and report are bypassed. Closed D2/Local XY results remain controls, not new efficacy claims.
-- Execution scope: the diagnostic CLI prepared pinned qualified paths and all saved public alternatives, then completed exactly two fixed offline fits with one final exposed evaluation per arm. The separate milk preparation reuses original saved pixels/paths and leaves roles pending, with no model call. No video decode, temporal inference, production detector/Recipe, Windows execution or report reading.
+- Execution scope: the diagnostic CLI prepared pinned qualified paths and all saved public alternatives, then completed exactly two fixed offline fits with one final exposed evaluation per arm. The separate milk preparation and reply/locator work reuse original saved pixels/paths, bind only explicitly confirmed roles and keep 687 unqualified, with no model call. No video decode, temporal inference, production detector/Recipe, Windows execution or report reading.
 - Logic-map impact: NONE — no executing production owner, numeric source, schema or setup feature changes. The diagnostic reuses existing frozen input/model owners with a separate loss/data contract.
 - Failure-registry impact: NONE — source-specific cutoff rescue, unreviewed-winner promotion and field claims remain prohibited; no failure class is retired.

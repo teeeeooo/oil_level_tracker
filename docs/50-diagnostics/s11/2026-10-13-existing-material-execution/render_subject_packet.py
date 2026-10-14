@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw, ImageFont
 from tests.diagnostics import s11_existing_material_reuse as reuse
 
 
-def render(root, manifest, readout, output, row_y=None, row_ys=None):
+def render(root, manifest, readout, output, row_y=None, row_ys=None, locate_fragment=None):
     reuse.o2.require(not output.exists(), "refuse overwrite")
     reuse.o2.require(readout["manifest_sha256"] == reuse.o2.fingerprint_json(manifest), "readout mismatch")
     packet, = readout["native_review_packets"]
@@ -48,8 +48,13 @@ def render(root, manifest, readout, output, row_y=None, row_ys=None):
         entries = [("unreviewed row", f) for f in packet["fragments"]
                    if any(y in f["fixed_column_source_ys"] for y in selected_rows)]
         reuse.o2.require(1 <= len(entries) <= 7, "row review layout needs one to seven fragments")
+    if locate_fragment is not None:
+        reuse.o2.require(custom_source is not None and selected_rows is not None,
+                         "location review needs a pinned source and selected row")
+        entries = [(role, item) for role, item in entries if item["fragment_id"] == locate_fragment]
+        reuse.o2.require(len(entries) == 1, "location subject absent or duplicated")
     columns, column_width, row_height = (2, 720, 550) if custom_source else (4, 400, 460)
-    height_px = 1220 if custom_source else 570 if selected_rows is not None and len(entries) <= 3 else 1030
+    height_px = 1000 if locate_fragment is not None else 1220 if custom_source else 570 if selected_rows is not None and len(entries) <= 3 else 1030
     reuse.o2.require(not custom_source or len(entries) <= 3, "custom source layout supports at most three paths")
     sheet = Image.new("RGB", (columns*column_width, height_px), "white")
     draw = ImageDraw.Draw(sheet)
@@ -60,11 +65,21 @@ def render(root, manifest, readout, output, row_y=None, row_ys=None):
     subtitle = ("Original reviewed intervals are retained. A path inside an interval is NOT a positive label."
                 if selected_rows is None else f"New question: every saved fragment at source Y={row_y:g}. Location alone assigns no physical role."
                 if row_y is not None else f"New question: every saved fragment at source rows {selected_rows}. No inferred role.")
+    if locate_fragment is not None:
+        subtitle = f"Fragment {locate_fragment}: the red box locates the original crop shown at right. Magenta = the SAME saved path."
     draw.text((20, 44), subtitle, fill="black", font=font)
     context = image.crop((ox, oy, ox+width, oy+height))
-    context.thumbnail((680, 430) if custom_source else (370, 350), Image.Resampling.NEAREST)
+    context.thumbnail((680, 780) if locate_fragment is not None else (680, 430) if custom_source else (370, 350), Image.Resampling.NEAREST)
+    if locate_fragment is not None:
+        xy = np.asarray(entries[0][1]["source_path_xy"])
+        x0, y0 = np.maximum(xy.min(0)-16, [ox, oy])
+        x1, y1 = np.minimum(xy.max(0)+17, [ox+width, oy+height])
+        box = ((x0-ox)*context.width/width, (y0-oy)*context.height/height,
+               (x1-1-ox)*context.width/width, (y1-1-oy)*context.height/height)
+        ImageDraw.Draw(context).rectangle(box, outline="red", width=3)
     sheet.paste(context, (15, 140))
-    draw.text((15, 86), "Original RGB context (no overlay)", fill="black", font=font)
+    draw.text((15, 86), "Original RGB context (red box = crop location)" if locate_fragment is not None
+              else "Original RGB context (no overlay)", fill="black", font=font)
     draw.text((15, 111), f"X={ox}..{ox+width-1} Y={oy}..{oy+height-1}", fill="black", font=font)
     baseline = reuse.read_pin(root, manifest["inputs"]["g0_readout"])
     case_context = next(c for c in baseline["contexts"] if c["id"] == packet["case_id"])
@@ -112,6 +127,8 @@ if __name__ == "__main__":
     selection = parser.add_mutually_exclusive_group()
     selection.add_argument("--row-y", type=float)
     selection.add_argument("--rows", type=float, nargs="+")
+    parser.add_argument("--locate-fragment", type=int)
     args = parser.parse_args()
     print(json.dumps(render(args.root, json.loads(args.manifest.read_text(encoding="utf-8")),
-                            json.loads(args.readout.read_text(encoding="utf-8")), args.output, args.row_y, args.rows)))
+                            json.loads(args.readout.read_text(encoding="utf-8")), args.output,
+                            args.row_y, args.rows, args.locate_fragment)))

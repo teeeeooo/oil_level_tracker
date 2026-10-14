@@ -1,0 +1,256 @@
+{
+  "schema": "s11-native-fragment-role-review-proposal-v1",
+  "g0_manifest": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/manifest.json",
+    "sha256": "8bb03c49017181e54e6164a248ac28ff0977d9a0e3af11882417b5a5f431c632"
+  },
+  "g0_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-13-native-role-readiness/readout.json.gz",
+    "sha256": "f1891db108be3f366c84d6e204a5ef2461217bf387ae6d56e4250148968645fd"
+  },
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/location.png",
+    "sha256": "8493c0bb53d1988633b41b0dcc1740d9e7a3867d83236bd3c7bb838ab3cb9e6a"
+  },
+  "subjects": [
+    {
+      "id": "s7-settled-native/fragment-687",
+      "case_id": "s7-settled-native",
+      "frame": 1063,
+      "view_id": "milk-native",
+      "fixed_column_xy": [
+        1120.0,
+        535.0
+      ],
+      "native_fragment_id": 687,
+      "source_path_xy": [
+        [
+          1153,
+          537
+        ],
+        [
+          1152,
+          537
+        ],
+        [
+          1151,
+          536
+        ],
+        [
+          1150,
+          536
+        ],
+        [
+          1149,
+          536
+        ],
+        [
+          1148,
+          536
+        ],
+        [
+          1147,
+          535
+        ],
+        [
+          1146,
+          535
+        ],
+        [
+          1145,
+          535
+        ],
+        [
+          1144,
+          535
+        ],
+        [
+          1143,
+          535
+        ],
+        [
+          1142,
+          535
+        ],
+        [
+          1141,
+          535
+        ],
+        [
+          1140,
+          534
+        ],
+        [
+          1139,
+          535
+        ],
+        [
+          1138,
+          535
+        ],
+        [
+          1137,
+          534
+        ],
+        [
+          1136,
+          535
+        ],
+        [
+          1135,
+          535
+        ],
+        [
+          1134,
+          535
+        ],
+        [
+          1133,
+          535
+        ],
+        [
+          1132,
+          534
+        ],
+        [
+          1131,
+          534
+        ],
+        [
+          1130,
+          534
+        ],
+        [
+          1129,
+          535
+        ],
+        [
+          1128,
+          535
+        ],
+        [
+          1127,
+          535
+        ],
+        [
+          1126,
+          535
+        ],
+        [
+          1125,
+          535
+        ],
+        [
+          1124,
+          535
+        ],
+        [
+          1123,
+          535
+        ],
+        [
+          1122,
+          535
+        ],
+        [
+          1121,
+          535
+        ],
+        [
+          1120,
+          535
+        ],
+        [
+          1119,
+          535
+        ],
+        [
+          1118,
+          535
+        ],
+        [
+          1117,
+          535
+        ],
+        [
+          1116,
+          535
+        ],
+        [
+          1115,
+          536
+        ],
+        [
+          1114,
+          536
+        ],
+        [
+          1113,
+          536
+        ],
+        [
+          1112,
+          537
+        ],
+        [
+          1111,
+          537
+        ],
+        [
+          1110,
+          537
+        ],
+        [
+          1109,
+          538
+        ],
+        [
+          1108,
+          538
+        ]
+      ],
+      "raster_path_sha256": "ae55dace112f9795d1986c124db490a72fbb50e89cc761f1cad3870e63d7c4b0",
+      "readout_subject_sha256": "fb8f669028c69f42492d4e7679dc61c768d9a87d55da3397442b552e0790b706",
+      "vertex_count": 46,
+      "junction_incident": true
+    }
+  ],
+  "views": [
+    {
+      "id": "milk-native",
+      "source": {
+        "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png",
+        "sha256": "35b020932c0c93d278674caecd6641463552ff66ea6cc32cbeca39af1c3ef64c"
+      },
+      "image_origin_xy": [
+        0,
+        0
+      ],
+      "display_xyxy": [
+        760,
+        240,
+        1480,
+        1060
+      ]
+    }
+  ],
+  "prior_proposal": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/proposal.json",
+    "sha256": "7e61367539b8edbf0e5df3d69e868f9a7ed3b7a0b3646b93c7924ce582db8bc2"
+  },
+  "prior_reply": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/reply.json",
+    "sha256": "e7196842e8015e0e7a3d8a9e3fa06acddcf0205071501312814134d3db17fd51"
+  },
+  "reuse_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/native-packet.json",
+    "sha256": "fb18df2fee6ef38a36809a88fbf11cb4579e846b95dbdae544c222a187243800"
+  },
+  "complete_saved_fragment_count": 16,
+  "selection": "Same 687 path and identical 8x crop; red rectangle only locates that crop in original context. No new subject or alternatives selected.",
+  "question": "왼쪽 원본의 빨간 상자가 687의 확대 위치이고, 오른쪽 보라색 선은 앞서 보신 것과 같은 경로입니다. 이 위치를 확인했을 때 687은 실제 Foam 상단, 거품 없이 보이는 유체 상단, 내부 변화 중 어느 경계인가요? 다른 역할이거나 여전히 구분이 어려우면 그대로 알려주세요. 대각선 촬영으로 보이는 두 선을 별개 물질 경계라고 가정하지 않습니다. 444·453과 아래쪽 거품–우유 경계는 다시 판정하지 않습니다.",
+  "status": "PENDING_PATH_ROLE_REVIEW",
+  "qualified_units": 0,
+  "training_executed": false,
+  "scope": "Clarify only the previously unlocated displayed 687 path. No dense labels, optical-mechanism truth, coordinate truth or inference grant."
+}
