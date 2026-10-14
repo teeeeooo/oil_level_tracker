@@ -223,14 +223,40 @@ geometry와 detector settings도 저장 당시 runtime과 같다. 당시 runtime
 검증한 관련 테스트 97개가 통과했다. 이 단계는 새 모델 학습·점수 비교가 아니며,
 이전 모델의 rim 실패와 기존 판정 정밀도는 유지한다.
 
+`566f1d0`에서 고정한 후 `/private/tmp`에서 절대 경로 CLI를 실행했다.
+[결과](../../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/qualification.json)는
+**SCOPED_CANDIDATES_QUALIFIED_INPUT_INCOMPLETE**이다. 밝기·가시성 band 16개가
+모두 저장값과 일치했다. A는 상/하 각각 완전한 7×7 patch 95개를 확보하지만,
+B는 상단 0개·하단 95개다. B의 실용적 허용은 유지되며 입력 부족을 오판정이나
+성공적 거부로 세지 않는다. 전체 38개 중 30개 입력이 가용하고 8개가 부족하다.
+
+| 촬영원 | 대응/실용적 허용 후보 | 반대 후보 |
+|---|---:|---:|
+| sample4 | 7 | 6 |
+| 공개 미소냉동 | 4 | 1 |
+| sample3 | 2 | 0 |
+
+전체 기존 187개와 새 38개, 총 225개 기록/Oil 220개를 유지하며 후보 대조는
+20개다. sample3 C는 지역 구조물 대조이며 후보 단위 라벨로 확대하지 않았고,
+D는 계속 판별 불가다. 세 촬영원 모두에서 양·음성을 검증했다는 뜻은 아니다.
+실행 1.254437 s, peak RSS 214,040,576 bytes, 결과 101,106 bytes. 관리 실행
+`s11-oil-candidate-source-qualification-20261014-001`은 결과 하나만 canonical
+위치에 보존하고 동일 사본을 제거했다.
+
+다음 [상단 검토 계획](../../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-review-plan.json)은
+유일하게 입력이 부족한 허용 후보 B의 원래 upper strip만 보여준다. 판정 대상은
+이미 허용된 유면 대표점이 아니라, 그 위에서 마스크가 제거한 영역의 물리적 역할이다.
+변경 없는 glare와 digital-overlay/saturation 영역의 겹침을 기록한다. 코드의
+분류 원인과 물리적 타당성은 다르므로 대체 마스크나 threshold는 적용하지 않는다.
+
 ## Detector Governance
 
-- Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION`.
-- Failure-registry entries: `S11-F09`, `S11-F10`.
-- First harmful stage: a regional role preference loses practically accepted candidates before any selector can preserve them; RGB compatibility must retain both accepted alternatives and opposed controls.
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION`.
+- Failure-registry entries: `S11-F02`, `S11-F09`, `S11-F10`.
+- First harmful stage: a regional role preference loses practically accepted candidates before any selector can preserve them; RGB compatibility must retain both accepted alternatives and opposed controls. The later B input audit locates missing complete upper patches at unchanged `FRAME-EVIDENCE` visibility, before model inference; the physical correctness of removal remains unqualified.
 - Prior mechanisms reviewed: old CR1 category collision and all-four public sign failure; B practical acceptance; original native-head N3 loss; source-qualified candidate bindings and exact floor/ceil support.
 - Difference from prior failures: one fixed native RGB candidate-compatibility trial changes input information and supervision, with sample4-only fit and exposed public transfer. It does not retry native external-surface labels, tune the failed role threshold or choose a new production winner.
 - Existing feature coverage: existing saved candidate population, original RGB, effective/glare masks and source pins; sample3 uses the original Recipe geometry/settings and unchanged `build_mask_bundle` / `preprocess`, checked against saved diagnostic bands. Exclusions/templates remain empty, Local XY OFF. Static/initial-state/sequence owners are not executed; no D2 efficacy claim.
-- Execution scope: completed input preparation and one predeclared offline 1,118-parameter / 1,000-step fit, full-population final inference, mean-color ablation and independent arithmetic verification. The existing reuse CLI executed the explicit rim-reply binding and saved margin check. The archive adapter prepared two sample3 candidate questions with complete current/native joins and source-pixel checks; the new qualification plan binds their acceptance and checks all 38 candidates against the existing native input footprint. No new inference, training, automatic labels for other candidates, production replay, report reading, O2 acceptance or Windows execution.
+- Execution scope: completed input preparation and one predeclared offline 1,118-parameter / 1,000-step fit, full-population final inference, mean-color ablation and independent arithmetic verification. The reuse CLI executed the rim-reply check and the 38-candidate sample3 qualification/input audit. The upper-mask review renders the sole missing accepted upper strip and measures unchanged mask-predicate overlap; no alternative mask is applied. No new inference, training, automatic labels for other candidates, production replay, report reading, O2 acceptance or Windows execution.
 - Logic-map impact: NONE — offline diagnostic only; production owners and schemas unchanged.
 - Failure-registry impact: NONE — no new failure family or accepted detector repair; this checks candidate-level input capability under existing evidence boundaries.

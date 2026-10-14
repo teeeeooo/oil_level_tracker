@@ -486,6 +486,12 @@ relaxing the mask or retrying the failed model. C remains regional structure
 opposition and D unassessable; neither becomes a candidate label from this reply.
 No fit assignment or successor architecture is adopted by input readiness.
 
+The completed A/B input audit finds the accepted B upper side unavailable. Reuse
+the original pixels and exact unchanged mask to ask the missing regional role
+only. Predicate overlap can identify why pixels were removed, but cannot certify
+reflection, fluid or a correct exclusion. The accepted position stays closed;
+no crop displacement, glare relaxation or successor fitting follows automatically.
+
 ### Executable saved-contract preflight
 
 [The offline CR1 adapter](../../tests/diagnostics/s11_contextual_role_preflight.py)

@@ -1413,5 +1413,8 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/review.json](50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/review.json) | 38개 후보·원본 픽셀 결합 및 두 후보의 미판정 범위 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/acceptance.json](50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/acceptance.json) | A/B 두 노란 대표점의 실용적 Oil 근사 허용 답변 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/qualification-plan.json](50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/qualification-plan.json) | 38개 후보를 유지하는 판정 결합·기존 입력 footprint 점검 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/qualification.json](50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/qualification.json) | 20개 대조의 세 촬영원 범위와 sample3 B 상단 입력 부족 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-review-plan.json](50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-review-plan.json) | B의 제거된 상단 영역만 묻는 새 역할 검토 범위 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/prepare_mask_review.py](50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/prepare_mask_review.py) | 원본/기존 마스크 동일성·기여 영역 검토 재현기 |
 | 2026-10-14 | [60-evidence/s11/2026-10-14-candidate-rgb-trial.md](60-evidence/s11/2026-10-14-candidate-rgb-trial.md) | 후보 RGB 실제 준비·고정 단일 비교·검증 기록 |
 | 2026-10-14 | [60-evidence/s11/2026-10-14-oil-policy-feasibility.md](60-evidence/s11/2026-10-14-oil-policy-feasibility.md) | 필요조건 실제 실행·한계 및 다른 촬영원 연결 |
