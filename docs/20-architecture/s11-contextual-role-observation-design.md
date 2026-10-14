@@ -1071,6 +1071,48 @@ native material labels, full G1/O2 and production consumers require their own
 acceptance. The [frozen experiment record](../60-evidence/s11/2026-10-14-native-role-order.md)
 owns exact settings, limits and the measured result, not current gate state.
 
+### Separate Foam/liquid role readiness after SCM-1
+
+SCM-1's fixed foreground union and all earlier learned scores stay closed. The
+next objective is to observe **Foam upper** and **bulk-liquid upper boundary**
+separately on an already observed native path, while preserving internal-Foam
+and structural opposition. A bulk-liquid upper may meet air or Foam; the name
+does not certify chemical Oil identity, an exact scalar, a complete layer or
+pure material patches. Neither channel supplies authority for the other.
+
+Before choosing a new fitting operation, bind the existing saved semantic
+components to the original **allowed role interpretations**. A qualified
+Foam/fluid disjunction supplies an external-surface constraint but does not
+become a definite positive or negative for either separate channel. Structure
+and internal Foam keep their distinct labels; unreviewed paths never become
+negative examples. A qualified Foam upper is not automatically an Oil-negative
+training example. No new pixel/material label follows from a path-level reply.
+
+The [separate-role reader](../../tests/diagnostics/s11_semantic_role_preflight.py)
+reuses SCM-1's complete 48-path input reconstruction and NRO/MRO's immutable
+source/path/RGB and qualification validators. It verifies every saved three-prompt
+patch mean, then exposes the ordered upper/lower `foam`, `liquid` and `glass rim`
+means independently, with the original vector pointer. These are uncalibrated
+model observations, not material truth, a new weighted score or a physical winner.
+Its separate entry is needed because the existing inference/fit runners own frozen
+source and model contracts; no historical runner or source pin is changed.
+
+Report certain, disjunctive, unknown and unavailable paths separately. Group every
+frame/view by source-recording hash and enumerate source-held-out coverage without
+fitting. A channel with no available certain positive cannot supply definite-role
+supervision. Fewer than two positive source groups cannot supply disjoint positive
+fit and evaluation groups; meeting that necessary condition would still not prove
+adequate calibration, sample size, independent holdout or physical discrimination.
+All four recordings remain exposed development material.
+
+The [follow-up protocol](../60-evidence/s11/2026-10-14-semantic-context.md#separate-role-readiness-follow-up)
+permits saved-input checks and one bounded missing-role review, not a new fit,
+prompt/crop/checkpoint/threshold search or model restoration. Select review input
+by the unqualified role and recorded native-input availability, never by a favorable
+semantic score. Existing candidate-level Oil acceptance cannot fill a missing
+native label. Preserve the known BASE initial-FULL and Accum owner-exclusion
+controls; this preparation changes neither consumer and grants no O2/field acceptance.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
@@ -1081,5 +1123,5 @@ owns exact settings, limits and the measured result, not current gate state.
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no production executing owner, schema or detector behavior changes.
 - Existing feature coverage: the receiving review reuses pinned CR1/O1/A1 captures and native geometry. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. No new Recipe or static-learning efficacy claim follows from saved-input binding.
-- Execution scope: preceding saved-score audits and separately frozen RGB/native trials retain their recorded outcomes. The October 14 change retires their isolated runtime after all consumers close and verifies preserved inputs through saved-data readers; it executes no model, training, production frame/sequence/report run or Windows qualification. Historical trial instructions are not current execution authority.
+- Execution scope: preceding saved-score audits and separately frozen RGB/native trials retain their recorded outcomes. The October 14 runtime retirement is complete. The separate-role follow-up checks saved semantic vectors, original partial-role qualifications and source-group coverage, and prepares one unreviewed native path without granting its role. It executes no model, training, production frame/sequence/report run or Windows qualification. Historical trial instructions are not current execution authority.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.
