@@ -1,0 +1,21 @@
+{
+  "schema": "s11-native-liquid-role-reply-v1",
+  "proposal": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-proposal.json",
+    "sha256": "232f590ca3693fff0a3ef63eae757dfb4463c125fd106a217cf084f61c4f385a"
+  },
+  "display": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review.png",
+    "sha256": "5fe52e14bdf307de0a75b2c5a7fdb0b47dc2dc0261b528f3f102841d3eeab9eb"
+  },
+  "response_ko": "수면의 윗경계에 해당함",
+  "answers": [
+    {
+      "id": "fragment-1378",
+      "subject_sha256": "b8aa779e1ed6de87631a6a4ddf4213159d1171d00e3cdd854896706916b8019e",
+      "statement_ko": "수면의 윗경계에 해당함",
+      "role": "LIQUID_AIR_INTERFACE",
+      "scope": "DISPLAYED_FRAGMENT_ROLE_ONLY"
+    }
+  ]
+}

@@ -1135,6 +1135,28 @@ changed. This extends native supervision coverage only: no semantic forward,
 fit, new source acquisition or automatic pure-side labels follows, even if the
 new path is confirmed. Existing regional/position questions stay closed.
 
+After the exact C reply, the [native corpus reader](../../tests/diagnostics/s11_native_role_corpus.py)
+joins the original 48 paths with C's **entire** 61-path inventory. It reuses
+the saved-input, native-packet and liquid-contact validators; a separate reader
+is necessary because the frozen SCM roster cannot absorb a new frame. Preserve
+the old observations and all unknown/unavailable rows. Pin each native RGB
+footprint and expose absent semantic observations explicitly, without computing
+or fabricating new model vectors. Water A and C belong to one recording group.
+
+The two supervised objectives are Foam upper and bulk-liquid upper. A certain
+positive supplies only its own target; internal-Foam and structural paths are
+oppositions for both. N1's original disjunction supplies neither a definite
+positive nor a negative for an individual channel. Unknown paths have no target;
+unavailable RGB has no native loss mask. These are path-level target descriptors,
+never pixel materials, chemical Oil labels or a trained decision rule.
+
+Enumerate source-held-out coverage independently for native RGB and saved semantic
+input. Two native liquid-positive recordings must not conceal a missing semantic
+input in the second one. This operation finishes the data binding stage without
+selecting a model, loss, aggregation, operating point or fitting split. Any future
+trial must address the milk and N3/N4 counterexamples in its own frozen contract;
+it cannot claim training readiness from the source-count condition alone.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.

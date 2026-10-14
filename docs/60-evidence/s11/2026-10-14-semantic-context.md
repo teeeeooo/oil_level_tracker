@@ -253,12 +253,29 @@ Governance and whitespace checks pass; 291 local links / 53 anchors have no
 errors, and all 53 managed runs pass closeout checks. The next necessary user
 judgment is only water-C 1378's native correspondence.
 
+## Water-upper reply and complete native corpus
+
+The user answered **“수면의 윗경계에 해당함”** for water C/f1643's exact
+fragment 1378. The [verbatim receipt](../../50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-reply.json)
+maps it to `LIQUID_AIR_INTERFACE`, without a motion or pure-side assertion.
+The previous pending PNG/inspection remain the original review checkpoint.
+
+Pre-execution scope: the existing liquid-contact adapter will revalidate the
+proposal against source pixels and bind that receipt. The successor native corpus
+reader then joins **all 48 old paths and all 61 water-C paths**, preserving every
+original observation and the sixteen preceding roles. It records native RGB
+footprints, independently masked Foam/liquid targets and whole-recording coverage.
+It must not extend SCM's frozen vector roster. No model, training, decoder,
+production consumer or Windows execution is part of this operation. Scratch
+and retained budgets are 8 MB and 3 MB; keep one canonical corpus with input
+references instead of duplicate image/tensor payloads.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F03`, `S11-F06`, `S11-F09`, `S11-F10`.
 - First harmful stage: the fixed semantic support reduction ranks both milk cup structures above the qualified Foam upper. Physical-role observation remains unresolved before any candidate consumer or episode stage.
 - Existing feature coverage: all four source controls and the five previously fixed native ROIs; complete local sampling support is verified but transformer dependence spans the entire unmasked ROI. Sample4 exclusions/templates remain empty; Local XY OFF and closed D2/Local XY results are unchanged. Production Recipe defenses, static-learning/reference consumers and report behavior were not exercised.
-- Execution scope: historical SCM-1 performed five saved-ROI pretrained batches and remains closed. The separate-role follow-up audits saved vectors/qualification/source coverage. The later liquid adapter binds the actual user reply for 1463 and prepares one exact water-C correspondence using saved pixels/edges. It executes no model, fit, decoder, temporal propagation, machine-created physical labels, production changes, sequence/report replay or Windows qualification.
+- Execution scope: historical SCM-1 performed five saved-ROI pretrained batches and remains closed. The separate-role follow-up audits saved vectors/qualification/source coverage. The liquid adapter binds the actual replies for 1463 and water-C 1378 using saved pixels/edges. The successor corpus reader combines the complete old and water-C populations and distinguishes native RGB from saved semantic availability. It executes no model, fit, decoder, temporal propagation, machine-created physical labels, production changes, sequence/report replay or Windows qualification.
 - Logic-map impact: NONE — this experiment changes no executing production owner, Recipe setup, candidate selection or typed runtime contract.
 - Failure-registry impact: NONE — the existing appearance/identity limitations remain; this record adds the scoped semantic-union counterexample without claiming a general theorem about all pretrained models.

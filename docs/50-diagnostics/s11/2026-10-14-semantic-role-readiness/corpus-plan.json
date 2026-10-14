@@ -1,0 +1,56 @@
+{
+  "schema": "s11-native-role-corpus-v1",
+  "scope": "NATIVE_INPUT_AND_ROLE_BINDING_ONLY",
+  "inputs": {
+    "base_plan": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/plan.json",
+      "sha256": "da5bec7982aa2fb420d4cedb187acc22593faecdc6f26037bba72676d8aaecca"
+    },
+    "base_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/readout.json",
+      "sha256": "235ca19922ddce04fa254eaaf8a0f61ad922ddf4e2cbdee4f01abd25f77dae97"
+    },
+    "contact_reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-reply.json",
+      "sha256": "12f35a6af8f792aa250c3d3446a18e178ea35393968887bfe09b1934e44860fa"
+    },
+    "water_reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-reply.json",
+      "sha256": "efada9d354261d01f86c03da251430e032155b4d7b56e2d072e9c49dd97e8a54"
+    },
+    "water_manifest": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-manifest.json",
+      "sha256": "8656cb22e63f24ce1612927e20eda611fc2cd6c0bb9f4bdd5733fdf8f4ffb57b"
+    },
+    "water_readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-native-readout.json",
+      "sha256": "d5bcad4df1226c7d9ec0618c709cc862cda1f41eb70d9cd933d1ee2bd0995e4b"
+    }
+  },
+  "sources": [
+    {
+      "path": "tests/diagnostics/s11_native_role_corpus.py",
+      "sha256": "4358cbb78ccc2d8b59c4e4c1befe54e67a2e5b0c19cfe23f8ad68289523b8cdb"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_liquid_reply.py",
+      "sha256": "754a11e6fc8c20066789ffdd8f456eaab42cb9e62d7ca7bed2295816869a0d78"
+    },
+    {
+      "path": "tests/diagnostics/s11_semantic_role_preflight.py",
+      "sha256": "9ee75898cf5f6a44f9d9ef1838893d1dbdb6b18b1712ca7661ee93e48b591f67"
+    },
+    {
+      "path": "tests/diagnostics/s11_existing_material_reuse.py",
+      "sha256": "0b79efc1429c6f861c27f270baccd46ca4642089bef1438b22bf716f26834a84"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_qualification.py",
+      "sha256": "e91062e9696464e5d7a990f54e3aa1046e15467603d01b26bcfa2fb14110c5d6"
+    },
+    {
+      "path": "tests/unit/test_s11_native_role_corpus.py",
+      "sha256": "c3efafaf3fd9cf44c38d590447e7cb9a64540d372f5cc9913e82c1880d2bb419"
+    }
+  ]
+}
