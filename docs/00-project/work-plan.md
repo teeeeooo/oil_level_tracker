@@ -8,6 +8,15 @@
 **Latest checkpoint:** The [B reply](../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-reply.json) closes its upper-region role as a fluid–empty-space interface wobbling under continuous inflow. The [paired result](../60-evidence/s11/2026-10-14-overlay-support-guard.md) restores B from 0/95 to 95/95 patches and preserves A/Base masks. 341 focused tests pass; the explicit legacy sequence check fails on candidate and passes on baseline. All 299 rows/13 historical cases are retained: the 13-case comparator passes, while sample3 has 37 changed tracking rows and Oil 29→17. Other three sources and numeric Foam coordinates remain unchanged. The existing 20 candidate controls retain their scoped roles; the old RGB model stays FALSIFIED_BY_REVIEWED_RIM. **O2 OPEN, FIELD FAIL and Local XY OFF remain unchanged.**
 
 This is the sole current state, authorization, unknowns and next-action owner.
+
+**Windows execution constraint:** the user's Windows host is isolated and uses
+downloaded GitHub source ZIPs in separate folders, without Git clone. Reuse the
+existing baseline bundle after checking its producing source and run conditions;
+the user can run the candidate in the GUI under the same conditions and provide
+both completed bundles for comparison. The [updated handoff](../40-operations/s11-overlay-support-windows-comparison.md)
+separates GUI launch, manual analysis and bundle audit. No Windows result has yet
+been received; unknown source/trace limits remain explicit rather than forcing
+automatic reruns or claiming the prescribed A/B pair was verified.
 The [post-CR1 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
 retains the preceding saved-score audit. Original CR1 remains
 `CLOSED_WITHOUT_PROMOTION` for the first trial and `SCOPE_LIMITED_USEFULNESS`

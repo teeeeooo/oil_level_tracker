@@ -16,6 +16,17 @@ Before running private media:
 
 If source, candidate identity, or reviewed-truth authority is ambiguous, stop before execution rather than blending revision evidence.
 
+An isolated Windows machine may use a GitHub source ZIP extracted into a folder;
+Git installation, cloning and network access on that machine are not prerequisites.
+Bind the archive to its published commit and verify extracted source-file hashes.
+An existing completed bundle may be reused when its actual producing source,
+video, Recipe and session conditions are established. Review an uncertain older
+bundle as historical output first; do not silently label it the designated baseline
+or require a rerun solely because `.git` or complete debug trace is absent.
+The [overlay comparison handoff](s11-overlay-support-windows-comparison.md) gives
+the current ZIP/manual-GUI/bundle workflow. A GUI launch alone does not start an
+analysis; a manual run requires the operator to complete setup and start analysis.
+
 ## 2. Private source identity
 
 For `windows_sample1_heating_coldstart`, record without exposing the real filename:
