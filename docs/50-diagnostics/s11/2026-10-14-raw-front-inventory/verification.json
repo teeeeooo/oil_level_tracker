@@ -1,0 +1,28 @@
+{
+  "schema": "s11-raw-front-independent-verification-v1",
+  "readout_sha256": "6a382c86f7d4c4cfecad978f51202a705713f6d0a9173d672292241a11644dfe",
+  "status": "PASS",
+  "checks": {
+    "falling": {
+      "plateaus": 3830,
+      "vertices": 6524,
+      "links": 11625,
+      "fragments": 10589,
+      "center_fragments": 121
+    },
+    "rising": {
+      "plateaus": 2151,
+      "vertices": 3751,
+      "links": 6670,
+      "fragments": 6240,
+      "center_fragments": 80
+    }
+  },
+  "complete_original_gray_equal": true,
+  "complete_stencil_equal": true,
+  "complete_plateaus_equal": true,
+  "complete_graph_counts_equal": true,
+  "complete_fixed_column_paths_equal": true,
+  "baseline_stages_equal": true,
+  "native_labels_created": 0
+}

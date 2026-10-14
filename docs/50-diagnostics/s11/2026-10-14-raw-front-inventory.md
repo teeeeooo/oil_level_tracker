@@ -70,12 +70,74 @@ Keep only the complete compact inventory, source-point qualification, verifier
 receipt and any actual correspondence review that becomes necessary. Original
 media are referenced. Remove caches/temporary plans at managed closeout.
 
+## Executed result
+
+At frozen **`89bf0c5`**, the absolute-path CLI completed in **23.016 s** including
+first import/font-cache creation, with **150,716,416 bytes** peak RSS. This is
+diagnostic preparation time, not detector throughput. The
+[complete inventory](2026-10-14-raw-front-inventory/inventory.json) has zero new
+native labels; the exact A reply is bound at candidate precision.
+
+Canny produced **35 pixels before the effective mask, zero inside it, and zero
+after glare**. Thus all existing Canny pixels are outside the allowed ROI; this
+does not prove that valid interface pixels were erased by the mask. In particular,
+changing the glare/overlay guard cannot restore a Canny edge already absent from
+the effective region. Raw visible photometry is still present.
+
+| Raw sign | Complete plateaus | Graph vertices | Graph links | Graph fragments | Center-incident fragments |
+|---|---:|---:|---:|---:|---:|
+| Falling | 3,830 | 6,524 | 11,625 | 10,589 | 121 |
+| Rising | 2,151 | 3,751 | 6,670 | 6,240 | 80 |
+
+Of the 201 center fragments, **186 have only two vertices**. At center X835,
+the candidate's existing +/-12-row context contains five falling plateaus:
+Y[211,213), [217,218), [222,223), [226,227), [229,231); no rising plateau.
+These are multiple photometric alternatives, not five liquid surfaces. Broad
+ties and adjacent pixels create many graph junctions; a lossless graph is not
+itself a useful physical contour. Neither a longest path nor the nearest peak
+to Y219 is selected. This closes the attempt to treat raw peak pixels as
+immediately ready native paths, without an amplitude/width/graph-pairing rescue.
+
+[Independent verification](2026-10-14-raw-front-inventory/verification.json)
+rebuilds all **5,981 plateaus / 10,275 vertices / 18,295 links / 16,829 fragments**
+with separate integer-run enumeration and graph walks, and checks every one of
+the 201 center paths against original pixels. **59 unique focused tests pass**
+(11 adapter/reply, 28 existing peak/gap, 20 graph tests). The canonical inventory,
+plan, verifier and receipt total **615,096 bytes**; managed run
+`s11-raw-front-inventory-20261014-001` discards six owned cache files and closes.
+All 59 managed runs pass. No media copy or model runtime was retained.
+
+Do not ask the user to assign precise edges to A's diffuse transition. A remains
+a useful candidate-level contact control. The existing corpus's native path
+counts and every prior model result remain unchanged.
+
+## Bounded reuse of a different existing source
+
+The nine-recording inventory includes legacy recordings outside the native corpus.
+Bounded recall found an already retained original **base_sample_1/f144**, the
+first S1-01 approved Oil approximation in the [truth audit](../../60-evidence/s11/2026-10-10-local-truth-and-evaluation-audit.md).
+The historical range 378–394 is uncertain regional context, not an exact native
+label. F156's later Foam conflict remains quarantined and is not transferred to
+f144. This local legacy video is distinct from the user's private Windows BASE
+glass. Sample2/f30 has separate Foam-gap/ruler limits and is not a clean air control.
+
+Prepare only f144 from that existing PNG and unchanged Recipe/baseline, before
+inspecting new edge results. Reuse G0 edge binding, native packet construction
+and the original review qualifier. Keep the complete fixed-center population.
+If a concrete native path is reviewable, show its actual pixels and ask only its
+unresolved physical correspondence. Do not inherit the scalar as a path, use a
+neighbor frame to evade missing input, tune thresholds or fit a classifier.
+If this frame lacks a reviewable path, preserve the limitation; source shortage
+does not justify recreating A's contour or requesting a new video by default.
+The [source plan](2026-10-14-raw-front-inventory/base-plan.json) pins this one-frame
+scope. This is source preparation, not an independent physical-performance trial.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
 - First harmful stage: baseline native Canny geometry is absent before role input in A. The existing material-path candidate remains available; this does not locate a production candidate, owner, temporal or report loss. The audit will distinguish pre-mask Canny absence from later masking without changing either operation.
 - Existing feature coverage: reuse the original sample3 Recipe ROI/exclusions and baseline glare/digital-overlay preprocessing, with archived RGB/visibility equality. Artifact templates are not consumed by this raw geometry entry; static learning, initial state, Local XY and temporal ownership are not executed. Completed D2/Local XY/overlay failures remain controls, and no claim is made that those unused features failed or improved.
-- Execution scope: the planned absolute-path CLI reconstructs one saved PNG/Recipe and unchanged baseline preprocessing, binds the point reply, then composes existing raw-gradient/plateau/graph functions. It does not invoke production candidate generation, sequence/report consumers, model fitting, video decode or Windows. No point-to-path or source-to-source label transfer is permitted.
+- Execution scope: the completed absolute-path CLI reconstructs one saved A PNG/Recipe and unchanged baseline preprocessing, binds the point reply, then composes existing raw-gradient/plateau/graph functions. A separately pinned f144 source preparation reuses one existing original PNG/Recipe and G0/native review owners. Neither invokes production candidate generation, sequence/report consumers, model fitting, video decode or Windows. No point-to-path or source-to-source label transfer is permitted.
 - Logic-map impact: NONE — an offline representation adapter has no production caller or authority; existing candidate and native input responsibilities remain separate.
 - Failure-registry impact: NONE — reuses the established raw-representation/role distinction and signed-gap counterexamples; no classifier is promoted or new general failure family asserted.
