@@ -1483,3 +1483,5 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/location-qualification.json](50-diagnostics/s11/2026-10-14-native-milk-review/location-qualification.json) | 동일 687 경로의 명시적 Foam 상단 판정 결합 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-order/manifest.json](50-diagnostics/s11/2026-10-14-native-milk-order/manifest.json) | 재학습 없는 평균색 비교군·16개 경로·두 순서 비교의 고정 입력 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-order/preparation-verification.json](50-diagnostics/s11/2026-10-14-native-milk-order/preparation-verification.json) | 21 테스트·실제 qualifier·cwd 독립 준비 및 13 입력 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-order/readout.json](50-diagnostics/s11/2026-10-14-native-milk-order/readout.json) | 고정 평균색 비교군의 우유 구조물 오순위와 16개 경로 전체 결과 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-order/verification.json](50-diagnostics/s11/2026-10-14-native-milk-order/verification.json) | 26개 기존 점수 일치·13개 독립 계산·가중치 보존 검증 |

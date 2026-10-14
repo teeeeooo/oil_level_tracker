@@ -236,12 +236,64 @@ tests pass in 0.15 s** (10 new followup checks plus 11 order checks); actual pre
 CLIs from the repository and `/private/tmp` produce identical bytes. No model was
 called during reply binding or preparation.
 
+### Fixed milk result and next design boundary
+
+**`FALSIFIED_ON_MILK_ORDER`**, executed once at clean
+`cd75c64` with **zero training updates**. The [complete readout](../../50-diagnostics/s11/2026-10-14-native-milk-order/readout.json)
+keeps all sixteen paths, including thirteen unreviewed and three without resolved
+input orientation. Only the two qualified same-frame comparisons are evaluated:
+
+| Displayed path | Confirmed role | Fixed order score |
+|---|---|---:|
+| 444 | Cup-top structure | 68.266380 |
+| 453 | Cup-top structure | 38.158553 |
+| 687 | Actual top of one large Foam bubble | 64.058252 |
+
+687 > 444 is **reversed**, gap −4.208128; 687 > 453 is ordered, gap +25.899699.
+This is not a 50% accuracy estimate. The required order fails: no monotone cutoff
+can retain the bubble top while excluding the higher-scoring confirmed rim.
+The formerly limited mean-RGB reference is therefore closed without promotion or
+retraining. Neither the native nor mean-RGB arm supports a production consumer.
+
+All **26 prior scores reproduce exactly**, with maximum logit error zero, before
+the first milk inference. [Independent verification](../../50-diagnostics/s11/2026-10-14-native-milk-order/verification.json)
+also computes all thirteen milk forwards in NumPy float64 using the algebra of
+spatially constant patches: maximum logit error 0.000011340 < 0.0001 and identical
+pair decisions. Parameter hashes and weight-file bytes stay unchanged; an attempted
+overwrite is refused before model loading. Runtime is 4.374 s / peak RSS
+371,408,896 bytes, with about 746 MB of aggregate workspace allocation. This is
+offline diagnostic cost, not production throughput. The managed run retains two
+files / 8,001 bytes and removes its two work copies; no new weight copy exists.
+
+The failure is now localized to **the learned observation score** on available,
+correctly bound input. It is not missing side patches, a misunderstood 687 label,
+weight-loading drift or a downstream ownership/gate decision. This does not prove
+all possible local-RGB models incapable, but these frozen models are not usable
+role evidence. Do not route them into BASE admission, Accum ownership or raw Foam
+front logic; relaxing those consumers would hide the demonstrated wrong ordering.
+
+The next stage is an observation-design review against these retained controls,
+before another fit: name additional physical information and its existing input
+owner, show how it differs from the closed local RGB/pattern and ambiguous temporal
+texture trials, and account for true uppers together with structures/internal
+changes on all four exposed recordings. Neither a larger crop, a different seed,
+more iterations nor a changed cutoff is by itself a new hypothesis. Reuse the
+current exact roles; ask only for genuinely missing new correspondence if the
+chosen information needs it. Single-bubble truth stays distinct from stable-layer
+and episode acceptance. No additional Windows replay is needed for this closure;
+the later O2/V5 and integrated field gates remain unchanged.
+
+Final closeout passes detector governance, whitespace and all 1,326 local links
+in the changed Markdown files. All **47 managed runs are closed with zero artifact
+errors**. Only the existing worktree remains; production source and Recipe files
+were not changed in this followup. No failed model was merged into the detector.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F09`, `S11-F10`.
 - First harmful stage: the earlier absolute native classifier rejects N3; this comparison does not repair that classifier or establish a production causal loss. It tests a distinct relative-order capability with newly qualified source opposition.
 - Existing feature coverage: saved original G0 native RGB/masks/path context only. sample4 Recipe exclusions/templates remain empty; Local XY OFF. Run preparation, automatic static learning, Artifact consumers, sequence and report are bypassed. Closed D2/Local XY results remain controls, not new efficacy claims.
-- Execution scope: NRO-1 completed exactly two fixed offline fits. Milk reply/locator preparation uses no model; the located reply now qualifies 687. The separately frozen MRO-1 followup will load only the existing mean-RGB weights, reproduce prior scores and compare the complete milk roster without fitting. No video decode, temporal inference, production detector/Recipe, Windows execution or report reading.
+- Execution scope: NRO-1 completed exactly two fixed offline fits. Milk reply/locator preparation used no model and the located reply qualified 687. MRO-1 then loaded only existing mean-RGB weights once, reproduced 26 prior scores and evaluated all 13 available milk paths without fitting; one required order failed. No video decode, temporal inference, production detector/Recipe, Windows execution or report reading.
 - Logic-map impact: NONE — no executing production owner, numeric source, schema or setup feature changes. The diagnostic reuses existing frozen input/model owners with a separate loss/data contract.
 - Failure-registry impact: NONE — source-specific cutoff rescue, unreviewed-winner promotion and field claims remain prohibited; no failure class is retired.
