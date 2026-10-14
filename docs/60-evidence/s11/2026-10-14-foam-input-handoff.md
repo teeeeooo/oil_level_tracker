@@ -11,8 +11,9 @@
 |---|---|
 | 저장소 | `/Users/sunjaekim/Developer/oil_level_tracker` |
 | 인계 위치 | `main` — 미채택 guard를 철회한 뒤 진단 도구·판정·증거를 통합 |
-| 인계 대상 연구 HEAD | **`421757afd58776a5e13d4ee226e4a2a317f5a858`** — 실제 원격 작업 브랜치와 일치 |
-| 확인한 원격 main | `747c1bccaa8dab18d6cb3a2b3dc3e549bcfc668f` |
+| 인계 대상 연구 HEAD | **`421757afd58776a5e13d4ee226e4a2a317f5a858`** — 인계 시작 시 원격 작업 브랜치와 일치 |
+| 인계 시작 시 원격 main | `747c1bccaa8dab18d6cb3a2b3dc3e549bcfc668f` |
+| 구현 철회·증거 통합 커밋 | **`b225dd1297839dea1651ace087fe7d4bf479f848`**, main에 fast-forward 반영 |
 | 인계 시작 상태 | 변경 파일 없음; 등록 worktree는 현재 checkout 하나; 관리 run 66개 모두 종료·오류 0 |
 | 수용 상태 | S11 ACTIVE, R22 behavior / R22-3·O1 diagnostics, **O2 OPEN / FIELD FAIL / Local XY OFF** |
 | 대기 중인 작업 | 미응답 판독 질문·진행 중 실험·요청해 둔 Windows 실행 없음. 사용자 요청에 따라 여기서 인계 |
@@ -32,8 +33,9 @@ Git commit `0073def`에서, 모든 측정은 기존 readout에서 복구 가능�
 새 patch/ZIP이나 다른 생산 구현 사본은 만들지 않는다.
 
 검증된 진단 도구·판정·실패 기록·후속 설계를 main에 fast-forward로 통합해 이력을
-보존한다. 원격 main 게시를 확인한 뒤 `work/s11-overlay-component-20261014`의 로컬·
-원격 branch ref를 정리한다. 다른 기존 브랜치는 이번 후보 정리 대상이 아니다.
+보존했다. 원격 main 게시와 `work/s11-overlay-component-20261014`의 원격 ref 제거를
+한 atomic push로 처리하고, main에 병합된 로컬 ref도 삭제했다. 다른 기존 브랜치는
+이번 후보 정리 대상이 아니다. 저장소 작업 위치는 main이고 추가 worktree는 없다.
 
 ## 재개 시 읽을 범위
 

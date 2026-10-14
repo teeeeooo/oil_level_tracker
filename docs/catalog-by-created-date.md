@@ -1606,4 +1606,6 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-proposal.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-proposal.json) | 분리 역할·corpus 준비: s11-native-fragment-role-review-proposal-v1 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review.png](50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review.png) | 물리 역할 검토에 사용한 원본 경로 표시 |
 | 2026-10-14 | [60-evidence/s11/2026-10-14-native-contact-trial.md](60-evidence/s11/2026-10-14-native-contact-trial.md) | NCT-1 — ordered native-side contact interaction |
-| Git 미등록 (작성 2026-10-14) | [60-evidence/s11/2026-10-14-foam-input-handoff.md](60-evidence/s11/2026-10-14-foam-input-handoff.md) | 421757a 연구 체크포인트·상단 입력 누락·후속 설계 인수인계 |
+| 2026-10-14 | [60-evidence/s11/2026-10-14-foam-input-handoff.md](60-evidence/s11/2026-10-14-foam-input-handoff.md) | b225dd1 main 통합·미채택 guard 철회·Foam 입력 조사 인수인계 |
+
+인수인계 문서의 최초 Git 추가일은 `b225dd1297839dea1651ace087fe7d4bf479f848` author 시각의 KST 날짜로 확정했다.
