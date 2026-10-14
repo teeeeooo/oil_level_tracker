@@ -1,8 +1,9 @@
-# A contact reply and raw-front representation audit — 2026-10-14
+# Contact roles and native/candidate representation audit — 2026-10-14
 
 The [Work Plan](../../00-project/work-plan.md) owns current status. This is a
-bounded input/representation investigation of the already exposed sample3 A/f2249.
-It neither reopens sample3 clip mining nor changes a production detector.
+bounded input/representation investigation of already exposed sample3 A/f2249
+and existing base_sample_1/f144. It neither reopens sample3 clip mining nor
+changes a production detector.
 
 ## Contact scope and existing responsibilities
 
@@ -225,12 +226,60 @@ current-frame representation availability, not a final-sequence loss. Reviewed
 path/role coordinates are verification metadata and never detector input. Resource
 limits are 120 seconds, 12 MB owned scratch/cache and 500 KB retained receipt.
 
+### Real frame entry result and next physical unknown
+
+At frozen **`07c4d65`**, the [complete compressed receipt](2026-10-14-raw-front-inventory/base-frame-entry.json.gz)
+retains all **22 Oil candidates**, their A1/O1 records and Foam components. Four
+original/G0 rasters match the real entry byte for byte. The current frame selects
+Oil hypothesis index 2 at **source Y395**; current Foam is null, with **zero Foam
+candidates**. This was one fresh detector call, not the private Windows BASE
+case or a completed window. The measured detect call took 0.1913 s, excluding
+imports/cache preparation; it is not an end-to-end throughput benchmark.
+
+The family roster is seven Oil hypotheses, six material paths, six calibrated
+high-recall candidates and three phase-transition candidates. Six material paths
+retain pooled-sector samples; the other sixteen have no captured generator path.
+For example material Y396 has sector sample rows 395/396/396/396/394. Those samples
+and the selected Y395 are **not** the reviewed 131-pixel contour merely because
+their Y values are close. Exact native-contact-to-candidate identity remains
+unestablished. No role target is assigned to any current candidate in this run.
+
+Both retained Foam components are `weak_rejected`, with bounding boxes
+[705,457,795,503] and [800,446,804,450], wholly below the known path's Y392–397.
+This demonstrates what the current material/component stage retained, not a
+physical negative label for those components. The true Foam **upper** location
+is not yet qualified in this frame; its first physical loss cannot be assigned
+to a particular threshold or episode gate from the lower-contact reply.
+[Independent verification](2026-10-14-raw-front-inventory/base-frame-entry-verification.json)
+checks the complete candidate/index/source/Y joins, all 131 original Canny pixels,
+the four rasters and selected current output. The managed entry run is closed,
+with six owned import/font cache files discarded; all 63 runs pass.
+
+Prepare only a regional upper-location question on the **same complete ROI**.
+The [display plan](2026-10-14-raw-front-inventory/base-foam-upper-plan.json) adds
+an exterior source-Y ruler and marks only the already qualified lower path. It
+does not draw or propose an upper line, select a new image, or request exact
+pixels. A rough visible upper range at Recipe center X696, or an explicit
+unassessable reply, is needed before evaluating Foam-upper representation.
+This is the next human judgment boundary. Do not modify a gate, fit a classifier,
+transfer the old Foam-absence label or run Windows while awaiting it.
+
+The [direct PNG](2026-10-14-raw-front-inventory/base-foam-upper-review.png) and
+[pending review](2026-10-14-raw-front-inventory/base-foam-upper-review.json) are
+prepared and visually checked. The entire 3× panel equals original ROI pixels
+except the 131 already qualified magenta pixels; zero upper pixels are proposed.
+The X696 locator is outside the image and aligns exactly with the source column.
+An unpublished display draft was discarded after aligning the marker separately
+from the text. Both display runs are closed; all **65 managed runs** pass. The
+only new physical question is the regional upper boundary, with unassessability
+an allowed result. No precision or new role is inferred from the ruler.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
 - First harmful stage: baseline native Canny geometry is absent before role input in A. All 35 pre-mask Canny pixels lie outside the effective region; no valid edge is established as erased. The existing material-path candidate remains available; this does not locate a production candidate, owner, temporal or report loss. Raw plateau graph fragmentation is a separate representation limit, not physical absence.
-- Existing feature coverage: reuse original sample3 and base_sample_1 Recipe ROI/exclusions and baseline glare/digital-overlay preprocessing, with archived/original RGB equality. Artifact templates are not consumed by these raw geometry entries; static learning, initial state, Local XY and temporal ownership are not executed. Completed D2/Local XY/overlay failures remain controls, and no claim is made that those unused features failed or improved.
+- Existing feature coverage: reuse original sample3 and base_sample_1 Recipe ROI/exclusions and baseline glare/digital-overlay preprocessing, with archived/original RGB equality. Artifact templates are not consumed by raw geometry entries. The later real f144 entry uses its unchanged ellipse/margin/settings; exclusions, templates and reviewed Artifact reference are empty, Local XY OFF. Fresh current temporal owners execute without prior frames; learned static maps, session confirmation and completed-window consumers are absent. Completed D2/Local XY/overlay failures remain controls; no efficacy claim follows for unused features.
 - Execution scope: A representation, f144 source preparation and reply binding reuse their recorded narrow owners. The separately pinned f144 probe invokes real baseline `detect` on one saved PNG with debug projection and no warmed temporal/static state, session confirmation, completed sequence or report. No model fitting, video decode or Windows runs; exact native path truth is not input to the detector or transferred to a candidate.
 - Logic-map impact: NONE — an offline representation adapter has no production caller or authority; existing candidate and native input responsibilities remain separate.
 - Failure-registry impact: NONE — reuses the established raw-representation/role distinction and signed-gap counterexamples; no classifier is promoted or new general failure family asserted.

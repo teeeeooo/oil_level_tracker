@@ -1239,6 +1239,25 @@ even a confirmed air contact cannot fill the missing native-path label. Existing
 sample3 full-window restrictions, closed C/D replies and reserve-from-fit status
 stay intact.
 
+The subsequent first legacy source frame, base_sample_1/f144, supplies one exact
+Foam–liquid native contact, path 150. Its two-path append-only delta preserves
+the original 135 observations: **137 paths / 19 qualified / 118 unknown** and
+101 native / 39 saved semantic inputs. Foam-contact now spans three recording
+hashes; air-contact remains one. This is not proof of independent filming sessions
+or model transfer. The latest exact reply supersedes historical f144 Foam absence
+for new physical targets, without rewriting the original scalar truth file or
+borrowing f156's observation. Source-role counting is complete at this scope;
+do not continue source collection or reopen a classifier merely to increase it.
+The bounded successor checks the known contact against the real baseline frame
+entry and complete candidate diagnostics. Native Canny geometry, candidate pooled
+support and physical candidate identity must remain separate; only their existing
+provenance can connect them. No matching-by-nearest-Y or early gate bypass follows. The completed fresh-frame
+entry selects Oil395 from 22 Oil candidates with zero Foam candidates. This
+neither identifies the reviewed contour with Oil395 nor locates a sequence loss.
+Its two rejected material components are below the known lower contact; obtain
+only the same-frame regional Foam-upper location or unassessability before a
+physical upper-representation claim. Do not extend source collection or fit again.
+
 ## History Review
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
@@ -1249,5 +1268,5 @@ stay intact.
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no production executing owner, schema or detector behavior changes.
 - Existing feature coverage: the receiving review reuses pinned CR1/O1/A1 captures and native geometry. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. No new Recipe or static-learning efficacy claim follows from saved-input binding.
-- Execution scope: preceding saved-score audits and frozen RGB/native trials retain their recorded outcomes. Runtime retirement is complete. NCT-1 completed exactly 24 CPU kernel-ridge solves and is closed. The 708 append-only role binding and A-only source/contact preparation add no inference or fitting. A reuses baseline preprocessing of one existing PNG, not a production frame/sequence/report run or Windows qualification. Historical trial instructions are not current execution authority.
+- Execution scope: preceding saved-score audits and frozen RGB/native trials retain their recorded outcomes. Runtime retirement is complete. NCT-1 completed exactly 24 CPU kernel-ridge solves and is closed. The 708/f144 append-only roles and A source/contact preparation add no inference or fitting. A reuses baseline preprocessing of one existing PNG. The f144 follow-up invokes real baseline current-frame detection and debug projection once with fresh temporal/static state; no completed-window/report run, model or Windows qualification. Its same-frame regional Foam-upper question remains pending. Historical trial instructions are not current execution authority.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.

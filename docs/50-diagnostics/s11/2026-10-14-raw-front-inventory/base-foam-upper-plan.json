@@ -1,0 +1,29 @@
+{
+  "schema": "s11-regional-foam-location-preparation-v1",
+  "inputs": {
+    "proposal": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review-proposal.json",
+      "sha256": "f453085b8ee1a2a4d38298fd8a7d00bfc7daca9d9e3fc03cb4e761a35d390a98"
+    },
+    "reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reply.json",
+      "sha256": "227994fe7a6af4aa356dd57fc8730e313b615b5474fa6d64f26be60f1484134d"
+    }
+  },
+  "sources": [
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory/render_foam_extent.py",
+      "sha256": "c83c3abd119533871c73b7e51421eaf929eb5ad8c1e2cf4d39175f879fd26185"
+    }
+  ],
+  "source_roi_xywh": [
+    551,
+    218,
+    290,
+    296
+  ],
+  "font": "/System/Library/Fonts/AppleSDGothicNeo.ttc",
+  "destination": "docs/50-diagnostics/s11/2026-10-14-raw-front-inventory",
+  "scope": "Full same original ROI with exterior Y ruler and existing lower contact; no upper contour proposed or new labels inferred",
+  "display_repair": "Place the locator tip at exact X696 independently of text width; no source pixels or proposed role changed"
+}
