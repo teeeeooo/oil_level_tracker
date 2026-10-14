@@ -308,11 +308,75 @@ brightness/texture threshold change, morphology repair, new frame, closed model
 retry, episode relaxation or Windows run is part of this inspection. Use the
 existing environment, 120 seconds, 12 MB owned scratch/cache and 500 KB retained.
 
+### Marked upper: loss before material components
+
+At frozen **`2673c09`**, the [bound reply](2026-10-14-raw-front-inventory/base-foam-upper-reply.json)
+retains all six marks. The local upper is around **source Y367 (approximately
+370)** near X696; the marked arc extends down to about Y379. These are display
+coordinates, not newly qualified scalar or native-path truth. The fixed query
+is **X[687,710), Y[365,381)**, 368 original pixels, covering the complete ink
+envelope plus padding. It is not a rectangular Foam label or a tolerance for
+judging a predicted scalar. The corpus remains **137 / 19 qualified / 118 unknown**.
+
+The [unchanged-owner capture](2026-10-14-raw-front-inventory/base-foam-upper-stages.json.gz)
+preserves all queried values and the entire X696 column. Its complete real-frame
+result equals the previous 22-candidate receipt after excluding elapsed time.
+No annotation coordinates enter detection.
+
+| Existing stage | Observation in the 368-pixel query | Supported conclusion |
+|---|---|---|
+| Effective ROI / glare | 368 valid; zero glare pixels | The marked region is available to the current frame owner |
+| Gray / Lab lightness | Gray 21–60; Lab L 16–64 | All are below the unchanged white-support L floor 125 |
+| Raw whiteness / warm chroma | Both zero everywhere | Neither raw material-membership route supports the marked region |
+| Canny | Zero pixels | An existing-Canny-only role head has no geometry here |
+| Texture | 0.00537–0.20847, nonzero at all 368 pixels | Some texture exists; this alone supplies no physical role |
+| White / chromatic / recovered support | All zero, including pre-arbitration chromatic support | White-priority arbitration or cleanup is not the first observed loss |
+| Combined support / labels | Both zero everywhere | No material component is constructed at the marked upper |
+
+This local case misses support **before component selection or episode tracking**.
+The white lightness predicate supplies a concrete cause for its white-route
+absence; warm chroma and Canny are also absent. Lowering one threshold is not
+demonstrated recovery, and weak/relative brightness, texture or raw peaks are
+not certified Foam identity. In contrast, the earlier water case retained raw
+edges. A native-path classifier cannot recover either an absent native input or
+a material region by relabeling a nearby Oil candidate.
+
+The [independent verifier](2026-10-14-raw-front-inventory/verify_foam_upper.py) uses
+the exterior ruler instead of the panel transform, reconstructs nine source
+channels, and computes the texture stencil directly from source pixels. The
+[receipt](2026-10-14-raw-front-inventory/base-foam-upper-verification.json) records
+eight ruler ticks (maximum mapping disagreement 0.307 source pixels), all 368
+query pixels and texture agreement within 7.1e-7. These numbers verify mapping
+and arithmetic, not physical annotation precision. Related geometry, Foam
+component and Foam-evidence tests pass **48/48**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -B -m pytest -q \
+  tests/unit/test_geometry.py tests/test_foam_component_diagnostics.py \
+  tests/test_foam_evidence.py
+```
+
+The absolute-path `inspect_foam_upper.py --plan <base-foam-stage-plan.json>
+--work <managed-work>` entry ran from `/private/tmp`, with `MPLCONFIGDIR` and
+`XDG_CACHE_HOME` below its owned work directory. Run `verify_foam_upper.py
+--readout <base-foam-upper-stages.json.gz> --output <new-receipt.json>` for the
+independent check. Use a fresh managed directory; both entries refuse overwrites.
+Managed run `s11-base-foam-stages-20261014-001` is closed: seven canonical files
+total **99,276 bytes**, including the supplied JPEG, pinned plan and two scripts;
+the three new result files total **15,784 bytes**. Six owned cache files were
+discarded. All **66 managed runs** pass the artifact check.
+
+The same-frame upper question is closed. The [successor input contract](../../20-architecture/s11-contextual-role-observation-design.md#raw-foam-representation-prerequisite)
+separates raw proposal coverage from physical-role evidence. No additional contact
+question, source collection, model restoration, production change or Windows run
+is needed to close this investigation. This is local base_sample_1, not the
+private Windows BASE video, and it does not measure whole-sequence effectiveness.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
-- First harmful stage: baseline native Canny geometry is absent before role input in A. All 35 pre-mask Canny pixels lie outside the effective region; no valid edge is established as erased. The existing material-path candidate remains available; this does not locate a production candidate, owner, temporal or report loss. Raw plateau graph fragmentation is a separate representation limit, not physical absence.
+- First harmful stage: A has no valid baseline Canny geometry; its material-path candidate remains available and raw graph fragmentation is a separate limit. At the newly marked f144 Foam upper, all queried pixels are valid but raw white/warm membership and Canny are absent, before cleanup/component construction. These current-frame findings do not locate a completed-sequence or report loss.
 - Existing feature coverage: reuse original sample3 and base_sample_1 Recipe ROI/exclusions and baseline glare/digital-overlay preprocessing, with archived/original RGB equality. Artifact templates are not consumed by raw geometry entries. The later real f144 entry uses its unchanged ellipse/margin/settings; exclusions, templates and reviewed Artifact reference are empty, Local XY OFF. Fresh current temporal owners execute without prior frames; learned static maps, session confirmation and completed-window consumers are absent. Completed D2/Local XY/overlay failures remain controls; no efficacy claim follows for unused features.
 - Execution scope: A representation, f144 source preparation and reply binding reuse their recorded narrow owners. The separately pinned f144 probe invokes real baseline `detect` on one saved PNG with debug projection and no warmed temporal/static state, session confirmation, completed sequence or report. The red-marked regional reply adds a coordinate-bound query; the saved water observer reads unchanged Foam locals during the same real entry and requires complete receipt equality. No model fitting, video decode or Windows runs; reviewed geometry never enters detector inference or transfers a role to a candidate.
 - Logic-map impact: NONE — an offline representation adapter has no production caller or authority; existing candidate and native input responsibilities remain separate.

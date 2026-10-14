@@ -1254,9 +1254,44 @@ support and physical candidate identity must remain separate; only their existin
 provenance can connect them. No matching-by-nearest-Y or early gate bypass follows. The completed fresh-frame
 entry selects Oil395 from 22 Oil candidates with zero Foam candidates. This
 neither identifies the reviewed contour with Oil395 nor locates a sequence loss.
-Its two rejected material components are below the known lower contact; obtain
-only the same-frame regional Foam-upper location or unassessability before a
-physical upper-representation claim. Do not extend source collection or fit again.
+Its two rejected material components are below the known lower contact. The
+[marked regional upper and stage audit](../50-diagnostics/s11/2026-10-14-raw-front-inventory.md#marked-upper-loss-before-material-components)
+now closes the location question: current raw material membership and Canny are
+absent in a valid region around that upper. This supplies no exact new path or
+dense target and does not reopen source collection or the closed fits.
+
+### Raw Foam representation prerequisite
+
+A successor must expose proposals from valid current ROI pixels even where the
+existing white/chromatic masks and Canny supply no input. This is a necessary
+coverage property, not a direction to accept all raw contrast or create a second
+production detector. Keep ownership at `FRAME-EVIDENCE` / `FOAM-CANDIDATE`; a
+diagnostic implementation must first explain what new physical information
+distinguishes the upper from internal Foam changes and glass structures.
+
+Use the existing qualified sample4, public-compressor, milk and water controls,
+plus the marked base region, at their original precision. Separate these checks:
+
+1. **Input coverage:** preserve complete proposals, native provenance and missing
+   support. Do not require Canny, a white component or a published candidate as
+   the seed; do not generate a line from the reviewed Y or snap a regional mark
+   to the nearest existing path. Regional intersection alone cannot pass exact
+   contour accuracy or physical-role discrimination.
+2. **Role discrimination:** retain N3, all four public uppers and the milk bubble
+   while opposing qualified internal paths and rims. Missing inputs, all-reject
+   and regional overlap are not successful negative classification. The local
+   base upper remains a regional recovery control, not a pure-side mask or
+   precise scalar target. Its lower contact is a separate known role.
+3. **Integration:** only after a distinct observation passes the existing
+   two-sided acceptance may it reach current-frame candidates, the episode owner
+   and complete-sequence checks. The existing O2/Windows/report boundaries apply.
+
+Changing exposure/brightness, Canny, morphology, raw-peak linkage or a failed
+head alone supplies no new physical information. S1–S3, raw plateau graph,
+CR-1, native heads and NCT-1 remain closed at their tested scope. A new operation
+needs a concrete distinction from those failures and fixed data/control/resource
+conditions before execution; this prerequisite does not authorize another fit
+merely because the regional location is now known.
 
 ## History Review
 
@@ -1268,5 +1303,5 @@ physical upper-representation claim. Do not extend source collection or fit agai
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no production executing owner, schema or detector behavior changes.
 - Existing feature coverage: the receiving review reuses pinned CR1/O1/A1 captures and native geometry. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. No new Recipe or static-learning efficacy claim follows from saved-input binding.
-- Execution scope: preceding saved-score audits and frozen RGB/native trials retain their recorded outcomes. Runtime retirement is complete. NCT-1 completed exactly 24 CPU kernel-ridge solves and is closed. The 708/f144 append-only roles and A source/contact preparation add no inference or fitting. A reuses baseline preprocessing of one existing PNG. The f144 follow-up invokes real baseline current-frame detection and debug projection once with fresh temporal/static state; no completed-window/report run, model or Windows qualification. Its same-frame regional Foam-upper question remains pending. Historical trial instructions are not current execution authority.
+- Execution scope: preceding saved-score audits and frozen RGB/native trials retain their recorded outcomes; NCT-1 and runtime retirement are closed. The 708/f144 roles and A preparation add no fitting. The f144 real baseline current-frame entry and saved stage observer verify regional input availability with fresh temporal/static state, without a completed-window/report run or Windows qualification. The marked upper question is closed at regional scope. The raw-representation prerequisite is a design constraint, not an executed successor or a reopening of historical trials.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.

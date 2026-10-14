@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "audit_sha256": "776dbd0971c3be7d56ea6ba11d1694c031b7f44a593be7da52aa1b94b83dd740",
+  "original_query_pixels": 368,
+  "independently_checked_source_channels": 9,
+  "independent_texture_max_abs_error": 7.090479548499395e-07,
+  "exterior_ruler_ticks": 8,
+  "ruler_max_residual_source_pixels": 0.10382474471362002,
+  "ruler_panel_disagreement_source_pixels": 0.3064197617903801,
+  "all_six_marks_retained": true,
+  "complete_previous_frame_result_unchanged": true,
+  "no_new_native_or_dense_truth": true,
+  "model_calls": 0,
+  "production_changed": false
+}
