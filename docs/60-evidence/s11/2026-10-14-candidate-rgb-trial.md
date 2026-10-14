@@ -126,6 +126,19 @@ worktree는 main 한 개이며 이 작업의 임시 plan/선택표/산술 script
 표식과 검증 기록을 남긴 뒤 제거했다. 고정된 기존 환경·원본·다른 작업 자료는
 복제하거나 삭제하지 않았다.
 
+## Rim 답변 수신 — 같은 날 후속
+
+사용자는 **“노란 하단 후보는 구조물이야 glass 주변 rim임.”**이라고 답했다.
+[답변 결합](../../50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-reply.json)은
+f1140의 idx7/10/22를 glass-rim 구조물 및 Oil 근사 거부로만 기록한다. 하위 유형은
+사용자가 직접 제시했다. 질문 밖의 다른 15개, native 경로 전체, 주변 픽셀이나
+Recipe 제외 영역에는 확장하지 않는다. 초록 idx9 판정은 유지한다.
+
+[저장 결과 검사 계획](../../50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-plan.json)은
+기존 재사용 실행기를 확장해 표시 이미지·원본·후보·변형을 결합하고, 새 반대
+대조의 원본/평균 색 결정을 확인한다. 단일 margin cutoff의 필요조건만 조사하며
+학습·추론·임계값 선택을 하지 않는다. 원래 limited readout은 수정하지 않는다.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION`.
@@ -134,6 +147,6 @@ worktree는 main 한 개이며 이 작업의 임시 plan/선택표/산술 script
 - Prior mechanisms reviewed: old CR1 category collision and all-four public sign failure; B practical acceptance; original native-head N3 loss; source-qualified candidate bindings and exact floor/ceil support.
 - Difference from prior failures: one fixed native RGB candidate-compatibility trial changes input information and supervision, with sample4-only fit and exposed public transfer. It does not retry native external-surface labels, tune the failed role threshold or choose a new production winner.
 - Existing feature coverage: existing saved candidate population, original RGB, effective/glare masks and source pins; Recipe exclusions/templates unchanged, Local XY OFF, no D2 efficacy claim.
-- Execution scope: completed input preparation and one predeclared offline 1,118-parameter / 1,000-step fit, full-population final inference, mean-color ablation and independent arithmetic verification. The next scoped review reuses the pinned RGB/candidate reader, with a separate renderer for three same-frame unreviewed representative points; no new inference or labels. No production replay, report reading, O2 acceptance or Windows execution.
+- Execution scope: completed input preparation and one predeclared offline 1,118-parameter / 1,000-step fit, full-population final inference, mean-color ablation and independent arithmetic verification. The three-point review is prepared and its explicit rim reply is received. The existing reuse CLI binds that scoped reply to saved logits and checks monotone margin feasibility; no new inference, training or automatic labels for other candidates. No production replay, report reading, O2 acceptance or Windows execution.
 - Logic-map impact: NONE — offline diagnostic only; production owners and schemas unchanged.
 - Failure-registry impact: NONE — no new failure family or accepted detector repair; this checks candidate-level input capability under existing evidence boundaries.

@@ -447,6 +447,16 @@ retain the complete set, and ask only the earliest affected frame first. This is
 post-outcome error discovery, not independent validation; do not propagate its
 answer to another candidate, frame, path or subtype without a scoped binding.
 
+The subsequent explicit reply identifies the three yellow f1140 candidates as
+glass-rim structures. The [received reply](../50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-reply.json)
+adds candidate-level Oil opposition and that user-supplied subtype only. Bind it
+through the existing reuse audit, keep original fit/transfer metadata immutable,
+and check saved full/mean-color outcomes and the monotone margin order without
+choosing a threshold or fitting again. Other 15 disjoint candidates stay unreviewed.
+Before another learning contract, expand the candidate-level source/control audit
+using existing scoped evidence; do not turn sample3's two regional positives into
+whole-window truth or infer scalar acceptability from its red marks.
+
 ### Executable saved-contract preflight
 
 [The offline CR1 adapter](../../tests/diagnostics/s11_contextual_role_preflight.py)

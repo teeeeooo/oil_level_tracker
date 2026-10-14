@@ -1,0 +1,45 @@
+{
+  "schema": "s11-candidate-rgb-rim-review-audit-v1",
+  "operation": "BIND_REVIEW_AND_CHECK_SAVED_ORDER_ONLY",
+  "inputs": {
+    "review_packet": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-candidate-rgb-trial/opposition-review.json",
+      "sha256": "a735b922505ea68c94ef19ad61ee25f622076d99715c5355745840588749000b"
+    },
+    "reply": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-candidate-rgb-trial/rim-reply.json",
+      "sha256": "2decb09f79538cc3743bc8c87ce935cad327f9889f44a9e0fd2d19629dbe5947"
+    },
+    "prepared": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-candidate-rgb-trial/prepared.json",
+      "sha256": "95af399faaf64f0f07a2ffd486af604527cb0225f6f140414613b7e3f24f7ad0"
+    },
+    "readout": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-candidate-rgb-trial/readout.json",
+      "sha256": "5dccc6065c5b3bb674a0403b17230a1ade33610e89c460c5c8844a4ba060483b"
+    },
+    "trial_plan": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-candidate-rgb-trial/plan.json",
+      "sha256": "d22fecc413fed6fb011254e35e55884a4f3e9556fb4f550011937f67ecd97095"
+    },
+    "review_plan": {
+      "path": "docs/50-diagnostics/s11/2026-10-14-candidate-rgb-trial/opposition-review-plan.json",
+      "sha256": "d48fb8574d618b1535819a85bd4db2074555a0639a9f6525861a3f599092a5e0"
+    }
+  },
+  "review_image": "docs/50-diagnostics/s11/2026-10-14-candidate-rgb-trial/opposition-review.png",
+  "review_ids": [
+    "s4-f1140-idx7",
+    "s4-f1140-idx10",
+    "s4-f1140-idx22"
+  ],
+  "selection": "Exact user-reviewed set only; no further source or score selection.",
+  "margin_family": "Keep if minimum required-variant class-0 minus class-1 logit > tau. Check whether every opposed control can be removed while at least one known positive survives. No tau selected.",
+  "stop": "Any reviewed rim accepted closes candidate RGB physical-discrimination claim; retain original limited comparison unchanged. No new inference or fit.",
+  "resource_limits": {
+    "seconds": 30,
+    "peak_rss_bytes": 1000000000,
+    "scratch_bytes": 1000000,
+    "retained_bytes": 100000
+  }
+}

@@ -285,3 +285,95 @@ def test_native_shape_reduction_is_not_silently_upscaled(tmp_path):
     baseline = {"contexts": [{"id": "test", "geometry": {"scale_xy": [2, 2]}}]}
     with pytest.raises(ValueError, match="reduced"):
         reuse.native_packet(tmp_path, {}, baseline, "test")
+
+
+def rgb_rim_fixture():
+    source = {"path": "source.mp4", "sha256": "source"}
+    image = {"path": "frame.png", "sha256": "pixels"}
+    units, rows = [], []
+    for i in range(6):
+        query = {"id": f"q{i}", "frame": 10, "candidate_index": i,
+                 "source_xy": [52, 40 if i in (2, 5) else 30+i], "source": f"family-{i}"}
+        target = i if i < 2 else None
+        partition = "fit" if i < 2 else "unreviewed"
+        units.append({"id": query["id"], "query": query, "query_sha256": reuse.o2.fingerprint_json(query),
+            "frame_id": "f10", "source_recording": source, "is_oil_candidate": True,
+            "partition": partition, "target": target, "availability": "AVAILABLE", "variants": [{}]})
+        values = [[-3, 2]] if target == 1 else [[3, -2]]
+        decision = "OPPOSED_OIL_CANDIDATE" if target == 1 else "OIL_CANDIDATE_COMPATIBLE"
+        rows.append({"id": query["id"], "target": target, "partition": partition, "availability": "AVAILABLE",
+                     "logits": values, "mean_color_logits": deepcopy(values),
+                     "decision": decision, "mean_color_decision": decision})
+    prepared = {"units": units, "frames": {"f10": {"rgb": image}}}
+    packet = {"frame_id": "f10", "image_sha256": "display", "source_image": image, "source_recording": source,
+        "subjects": [{k: u[k] for k in ("id", "query", "query_sha256")} for u in units[2:5]]}
+    reply = {"schema": "s11-candidate-rgb-rim-reply-v1", "frame_id": "f10", "image_sha256": "display",
+        "review_packet_sha256": reuse.o2.fingerprint_json(packet),
+        "scope": "DISPLAYED_CANDIDATES_AT_THIS_FRAME_ONLY",
+        "user_text": "노란 하단 후보는 구조물이야 glass 주변 rim임.",
+        "subjects": [{"id": s["id"], "query_sha256": s["query_sha256"], "physical_role": "GLASS_RIM_STRUCTURE",
+                      "oil_acceptance": "REJECTED_APPROXIMATION"} for s in packet["subjects"]]}
+    return packet, reply, prepared, {"rows": rows}
+
+
+def test_rgb_rim_reply_preserves_original_trial_and_same_y_unknown():
+    args = rgb_rim_fixture()
+    before = deepcopy(args)
+    controls = reuse.rgb_review_controls(*args)
+    assert len(controls) == 5
+    assert [c["id"] for c in controls if c["evaluation_group"] == "POST_TRIAL_REVIEW"] == ["q2", "q3", "q4"]
+    assert controls[2]["original_target"] is None and controls[2]["qualified_target"] == 1
+    assert controls[2]["physical_role"] == "GLASS_RIM_STRUCTURE"
+    assert controls[2]["native_path_role"] == "NOT_EXTENDED"
+    assert all(c["id"] != "q5" for c in controls)
+    assert args == before
+
+
+@pytest.mark.parametrize("change", ["image", "scope", "source", "frame", "subject_omitted", "duplicate_subject",
+    "neighbor_query", "population_omitted", "original_target", "missing_variant", "nan", "decision", "unavailable"])
+def test_rgb_rim_binding_fails_on_corrupt_or_broadened_evidence(change):
+    packet, reply, prepared, readout = rgb_rim_fixture()
+    if change == "image":
+        reply["image_sha256"] = "changed"
+    elif change == "scope":
+        reply["scope"] = "ALL_LOWER_CANDIDATES"
+    elif change == "source":
+        prepared["units"][2]["source_recording"] = {"path": "other.mp4", "sha256": "other"}
+    elif change == "frame":
+        prepared["units"][2]["frame_id"] = "f11"
+    elif change == "subject_omitted":
+        reply["subjects"].pop()
+    elif change == "duplicate_subject":
+        packet["subjects"].append(deepcopy(packet["subjects"][0]))
+        reply["subjects"].append(deepcopy(reply["subjects"][0]))
+        reply["review_packet_sha256"] = reuse.o2.fingerprint_json(packet)
+    elif change == "neighbor_query":
+        packet["subjects"][0]["query"] = deepcopy(prepared["units"][5]["query"])
+        reply["review_packet_sha256"] = reuse.o2.fingerprint_json(packet)
+    elif change == "population_omitted":
+        readout["rows"].pop()
+    elif change == "original_target":
+        readout["rows"][2]["target"] = 1
+    elif change == "missing_variant":
+        prepared["units"][2]["variants"].append({})
+    elif change == "nan":
+        readout["rows"][2]["logits"][0][0] = float("nan")
+    elif change == "decision":
+        readout["rows"][2]["decision"] = "OPPOSED_OIL_CANDIDATE"
+    else:
+        prepared["units"][2]["availability"] = "UNAVAILABLE_REQUIRED_VARIANT"
+        readout["rows"][2]["availability"] = "UNAVAILABLE_REQUIRED_VARIANT"
+    with pytest.raises(ValueError):
+        reuse.rgb_review_controls(packet, reply, prepared, readout)
+
+
+def test_rgb_review_keeps_all_fractional_variants_and_disagreement():
+    packet, reply, prepared, readout = rgb_rim_fixture()
+    prepared["units"][2]["variants"].append({})
+    row = readout["rows"][2]
+    for field, decision in (("logits", "decision"), ("mean_color_logits", "mean_color_decision")):
+        row[field].append([-2, 1])
+        row[decision] = "UNKNOWN"
+    controls = reuse.rgb_review_controls(packet, reply, prepared, readout)
+    assert controls[2]["margins"] == {"logits": -3, "mean_color_logits": -3}
+    assert controls[2]["decisions"]["decision"] == "UNKNOWN"

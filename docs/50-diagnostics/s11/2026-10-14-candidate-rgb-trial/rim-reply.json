@@ -1,0 +1,37 @@
+{
+  "schema": "s11-candidate-rgb-rim-reply-v1",
+  "review_packet_sha256": "b0b2f8f4948c4bd461175076efd82b28027b664daaa3f0b8f62a9de230aabfa7",
+  "image_sha256": "e9482201104ef813a8da268239ce980d808e4742d1f79e5ef37c0502e90453d9",
+  "frame_id": "sample4-f1140",
+  "scope": "DISPLAYED_CANDIDATES_AT_THIS_FRAME_ONLY",
+  "user_text": "노란 하단 후보는 구조물이야 glass 주변 rim임.",
+  "authority": "Direct user reply to the three yellow candidate representatives; structure subtype supplied explicitly by the user.",
+  "subjects": [
+    {
+      "id": "s4-f1140-idx7",
+      "query_sha256": "69268e8ece9243fe1e3a6d743f7b12e49eca13a061f33e26da20e96c24387298",
+      "physical_role": "GLASS_RIM_STRUCTURE",
+      "oil_acceptance": "REJECTED_APPROXIMATION"
+    },
+    {
+      "id": "s4-f1140-idx10",
+      "query_sha256": "f0bb1e77f5fb0cd37d72eb8a368861438ca705836db42c5c91b7bb243201d108",
+      "physical_role": "GLASS_RIM_STRUCTURE",
+      "oil_acceptance": "REJECTED_APPROXIMATION"
+    },
+    {
+      "id": "s4-f1140-idx22",
+      "query_sha256": "e47318568bf98a29a4e069ab606076658ccdaf4b6df21892264ef515e4768426",
+      "physical_role": "GLASS_RIM_STRUCTURE",
+      "oil_acceptance": "REJECTED_APPROXIMATION"
+    }
+  ],
+  "not_extended_to": [
+    "other 15 potential candidates",
+    "native contours",
+    "surrounding pure-material pixels",
+    "other frames",
+    "Recipe exclusion geometry"
+  ],
+  "existing_green_reference": "UNCHANGED"
+}

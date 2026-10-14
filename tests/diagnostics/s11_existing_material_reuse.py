@@ -24,6 +24,7 @@ from tests.diagnostics import s11_native_role_qualification as roles
 SCHEMA = "s11-existing-material-reuse-v1"
 POLICY_SCHEMA = "s11-oil-support-policy-feasibility-v1"
 PUBLIC_SCHEMA = "s11-public-oil-saved-candidate-audit-v1"
+RIM_SCHEMA = "s11-candidate-rgb-rim-review-audit-v1"
 o2 = g0.o2
 
 
@@ -411,6 +412,111 @@ def public_candidate_audit(root: Path, plan: dict) -> dict:
             "untouched_holdout_recordings": 0}
 
 
+def rgb_review_controls(packet: dict, reply: dict, prepared: dict, readout: dict) -> list[dict]:
+    """Add scoped post-trial truth without changing the original fit/evaluation."""
+    from tests.diagnostics import s11_candidate_rgb_trial as rgb
+    o2.require(reply["schema"] == "s11-candidate-rgb-rim-reply-v1", "unsupported rim reply")
+    o2.require(reply["review_packet_sha256"] == o2.fingerprint_json(packet)
+               and reply["image_sha256"] == packet["image_sha256"], "review display changed")
+    o2.require(reply["scope"] == "DISPLAYED_CANDIDATES_AT_THIS_FRAME_ONLY"
+               and reply["frame_id"] == packet["frame_id"], "reply scope/frame changed")
+    o2.require(reply["user_text"] == "노란 하단 후보는 구조물이야 glass 주변 rim임.", "unsupported received reply")
+    expected = [{"id": s["id"], "query_sha256": s["query_sha256"],
+                 "physical_role": "GLASS_RIM_STRUCTURE", "oil_acceptance": "REJECTED_APPROXIMATION"}
+                for s in packet["subjects"]]
+    o2.require(expected and reply["subjects"] == expected, "reply subject roster changed")
+    subjects = o2.unique(packet["subjects"], "id", "review subject")
+    units = o2.unique(prepared["units"], "id", "prepared candidate")
+    rows = o2.unique(readout["rows"], "id", "saved model candidate")
+    o2.require(list(units) == list(rows) and set(subjects) <= set(units), "complete population changed")
+    frame = prepared["frames"][packet["frame_id"]]
+    o2.require(packet["source_image"] == frame["rgb"], "review source image changed")
+    controls = []
+    for sid, unit in units.items():
+        row = rows[sid]
+        o2.require(all(row[k] == unit[k] for k in ("partition", "target", "availability")), "original trial row changed")
+        o2.require(o2.fingerprint_json(unit["query"]) == unit["query_sha256"], "candidate query changed")
+        if sid in subjects:
+            s = subjects[sid]
+            o2.require(s["query"] == unit["query"] and s["query_sha256"] == unit["query_sha256"]
+                       and unit["frame_id"] == packet["frame_id"]
+                       and unit["source_recording"] == packet["source_recording"], "exact review binding failed")
+            o2.require(unit["is_oil_candidate"] and unit["target"] is None
+                       and unit["partition"] == "unreviewed", "review cannot replace existing truth")
+        measured = unit["availability"] == "AVAILABLE"
+        margins = {}
+        for field, decision_field in (("logits", "decision"), ("mean_color_logits", "mean_color_decision")):
+            if measured:
+                values = row[field]
+                o2.require(len(values) == len(unit["variants"]), "required variants changed")
+                o2.require(rgb.decision(values) == row[decision_field], "saved decision differs from logits")
+                margins[field] = min(v[0]-v[1] for v in values)
+            else:
+                o2.require(field not in row and row[decision_field] ==
+                           ("UNAVAILABLE" if unit["is_oil_candidate"] else "NOT_EVALUATED"), "missing input became a decision")
+        if unit["target"] is not None or sid in subjects:
+            o2.require(measured, "required reviewed control unavailable")
+            controls.append({"id": sid, "query_sha256": unit["query_sha256"],
+                "source_recording": unit["source_recording"], "query": unit["query"],
+                "original_partition": unit["partition"], "original_target": unit["target"],
+                "evaluation_group": "POST_TRIAL_REVIEW" if sid in subjects else unit["partition"],
+                "qualified_target": 1 if sid in subjects else unit["target"],
+                "physical_role": "GLASS_RIM_STRUCTURE" if sid in subjects else "UNCHANGED_ORIGINAL_SCOPE",
+                "native_path_role": "NOT_EXTENDED", "margins": margins,
+                "decisions": {k: row[k] for k in ("decision", "mean_color_decision")}})
+    return controls
+
+
+def rgb_rim_audit(root: Path, plan: dict) -> dict:
+    from tests.diagnostics import s11_candidate_rgb_trial as rgb
+    o2.require(plan["schema"] == RIM_SCHEMA and plan["operation"] == "BIND_REVIEW_AND_CHECK_SAVED_ORDER_ONLY", "unsupported rim audit")
+    docs = {k: read_pin(root, p) for k, p in plan["inputs"].items()}
+    packet, reply, prepared, readout = (docs[k] for k in ("review_packet", "reply", "prepared", "readout"))
+    o2.require(packet["plan_sha256"] == o2.fingerprint_json(docs["review_plan"]), "review plan changed")
+    o2.require(prepared["plan"] == plan["inputs"]["trial_plan"]
+               and readout["manifest"] == plan["inputs"]["prepared"], "saved trial input changed")
+    o2.require(readout["schema"] == prepared["schema"] == rgb.SCHEMA, "trial schema changed")
+    o2.require(readout["configuration"] == prepared["configuration"] == docs["trial_plan"]["configuration"]
+               and readout["training_steps"] == prepared["configuration"]["steps"], "fixed trial changed")
+    rgb.validate_units(prepared["units"], docs["trial_plan"])
+    for pin in [packet["source_image"], packet["source_recording"]] + prepared["sources"]:
+        g0.pinned_path(root, pin)
+    g0.pinned_path(root, {"path": plan["review_image"], "sha256": packet["image_sha256"]})
+    controls = rgb_review_controls(packet, reply, prepared, readout)
+    new = [c for c in controls if c["evaluation_group"] == "POST_TRIAL_REVIEW"]
+    o2.require([c["id"] for c in new] == plan["review_ids"] == docs["review_plan"]["review_ids"], "reviewed set changed")
+    o2.require(rgb.summarize(readout["rows"]) == readout["accounting"]
+               and rgb.summarize(readout["rows"], "mean_color_decision") == readout["mean_color_ablation"], "old accounting changed")
+    order = {}
+    for field, decision_field in (("logits", "decision"), ("mean_color_logits", "mean_color_decision")):
+        positives = [c for c in controls if c["qualified_target"] == 0]
+        oppositions = [c for c in controls if c["qualified_target"] == 1]
+        o2.require(positives and oppositions, "both control types required")
+        strongest_positive = max(positives, key=lambda c: c["margins"][field])
+        strongest_opposition = max(oppositions, key=lambda c: c["margins"][field])
+        lower = strongest_opposition["margins"][field]
+        upper = strongest_positive["margins"][field]
+        order[field] = {"family": "KEEP iff minimum required-variant class-0 minus class-1 logit > tau",
+            "tau": None, "scope": "Necessary condition only, no threshold chosen or prediction changed",
+            "strongest_opposition": {"id": strongest_opposition["id"], "margin": lower},
+            "strongest_positive": {"id": strongest_positive["id"], "margin": upper},
+            "can_reject_all_opposition_and_keep_any_known_positive": lower < upper,
+            "new_rim_false_acceptances": [c["id"] for c in new if c["decisions"][decision_field] == rgb.CLASSES[0]]}
+    failed = any(v["new_rim_false_acceptances"] for v in order.values())
+    oil = [u for u in prepared["units"] if u["is_oil_candidate"]]
+    return {"schema": RIM_SCHEMA, "plan_sha256": o2.fingerprint_json(plan),
+        "status": "FALSIFIED_BY_REVIEWED_RIM" if failed else "NO_NEW_RIM_FALSE_ACCEPTANCE",
+        "inputs": plan["inputs"], "original_trial_status": readout["status"],
+        "counts": {"all_records": len(prepared["units"]), "oil_candidates": len(oil),
+            "original_controls": len(controls)-len(new), "new_scoped_controls": len(new),
+            "unreviewed_oil_candidates": len(oil)-len(controls),
+            "unavailable_oil_candidates": sum(u["availability"] != "AVAILABLE" for u in oil),
+            "still_unreviewed_other_potential_candidates": len(packet["all_disjoint_unreviewed_compatible"])-len(new)},
+        "controls": controls, "margin_order": order,
+        "training_executed": False, "new_model_calls": 0, "production_changed": False,
+        "scope": "Candidate-level post-trial human opposition; no neighboring/native-path labels or accuracy estimate."}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
@@ -420,6 +526,8 @@ def main() -> None:
                         help="Optional frozen necessary-condition audit; no threshold selection")
     option.add_argument("--public-candidate-manifest", type=Path,
                         help="Bind practical candidate replies to saved public-source scores")
+    option.add_argument("--rgb-rim-manifest", type=Path,
+                        help="Bind post-trial rim review without refitting or relabeling other candidates")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     o2.require(not args.output.exists(), "refuse overwrite")
@@ -430,6 +538,8 @@ def main() -> None:
         result = policy_audit(args.root.resolve(), manifest, result, o2.read_json(args.policy_manifest))
     if args.public_candidate_manifest:
         result = public_candidate_audit(args.root.resolve(), o2.read_json(args.public_candidate_manifest))
+    if args.rgb_rim_manifest:
+        result = rgb_rim_audit(args.root.resolve(), o2.read_json(args.rgb_rim_manifest))
     elapsed = g0.time.monotonic() - started
     limits = manifest["resources"]
     o2.require(elapsed <= limits["seconds"], "reuse time budget exceeded")
