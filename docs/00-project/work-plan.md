@@ -5,7 +5,7 @@
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior.
 **Next transition:** Design the next raw Foam observation against the [input prerequisite](../20-architecture/s11-contextual-role-observation-design.md#raw-foam-representation-prerequisite): valid current ROI pixels must remain observable without existing Canny/white/chromatic seeds, with physical-role discrimination tested separately. The user's red marks close f144's regional upper question around source Y367 (approximately 370). The [unchanged-owner audit](../50-diagnostics/s11/2026-10-14-raw-front-inventory.md#marked-upper-loss-before-material-components) finds valid pixels but zero raw white/warm support and Canny there, before cleanup/components. This is an input-generation problem in this frame, not demonstrated episode loss or private Windows BASE causality. No repeat location question or automatic fit follows; first specify new physical information against the closed failures and all existing positive/internal/rim controls. Native corpus 137 / 19 qualified / 118 unknown, historical scalar bytes, O2 OPEN, FIELD FAIL and Local XY OFF are unchanged.
-**Latest checkpoint:** User-reported final tracking is unchanged; Accum effective state-aware coverage changes from 69.88% to 5.99% with `R17_OBSERVATION_UNAVAILABLE`. This resembles the already adopted October 7 legacy Oil compatibility correction, not proof of an overlay-induced regression. The original [local pair](../60-evidence/s11/2026-10-14-overlay-support-guard.md) independently restores B's input but changes 37 sample3 rows and fails a sequence test; that failure remains unresolved. The old RGB model stays FALSIFIED_BY_REVIEWED_RIM. **O2 OPEN, FIELD FAIL and Local XY OFF remain unchanged.** Detector effectiveness remains the priority; [performance work](retained-commitments.md#windows-analysis-throughput-after-detector-improvement) stays deferred.
+**Latest checkpoint:** [October 14 main handoff](../60-evidence/s11/2026-10-14-foam-input-handoff.md) preserves the research through `421757a`, closed upper-location review, verified early input loss and local dependencies. At the user's request, the unadopted overlay guard and its two candidate-only expectations are retired; production source is restored exactly to accepted main `747c1bc`. Continue from main with the retained diagnostic/evidence work, not the rejected behavior. No outstanding user judgment or requested Windows run remains. S11/O2/field acceptance is unchanged; [performance work](retained-commitments.md#windows-analysis-throughput-after-detector-improvement) stays deferred.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -20,6 +20,12 @@ is retained as a qualification limit, not a reason to reject output comparison
 or request a rerun. Follow the user's instruction to set aside the baseline
 manifest mismatch; use existing files and distinguish reported from locally
 verified evidence.
+The received comparison leaves final tracking unchanged; Accum effective
+state-aware coverage changes 69.88% → 5.99% with `R17_OBSERVATION_UNAVAILABLE`.
+This resembles the adopted October 7 legacy Oil compatibility correction and
+does not prove overlay causality. The [local pair](../60-evidence/s11/2026-10-14-overlay-support-guard.md)
+restores B's input but changes 37 sample3 rows and fails a sequence test; that
+failure remains unresolved. The RGB model remains FALSIFIED_BY_REVIEWED_RIM.
 The [post-CR1 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
 retains the preceding saved-score audit. Original CR1 remains
 `CLOSED_WITHOUT_PROMOTION` for the first trial and `SCOPE_LIMITED_USEFULNESS`

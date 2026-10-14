@@ -1,6 +1,15 @@
 # Chromatic overlay support guard
 
-This bounded candidate changes only `_digital_overlay_mask` in the shared
+**RETIRED WITHOUT ADOPTION — 2026-10-14.** At the user's main-handoff request,
+the candidate implementation and its two candidate-only synthetic expectations
+were removed from the active tree. `preprocessing.py` and
+`test_optics_preprocessing.py` are byte-identical to baseline `747c1bc`.
+The contract below describes frozen experiment `0073def`, not an active feature.
+Complete candidate code/tests and results remain in Git history; no duplicate
+patch or alternate production implementation is retained. The
+[main handoff](../60-evidence/s11/2026-10-14-foam-input-handoff.md) owns this closeout.
+
+This bounded candidate changed only `_digital_overlay_mask` in the shared
 preprocessor. The accepted baseline and adoption decision remain in the
 [Work Plan](../00-project/work-plan.md). It does not promote the closed RGB model.
 
@@ -67,7 +76,7 @@ change the frozen acceptance criteria, relabel sample3 or authorize threshold re
 - Prior mechanisms rejected: no global glare relaxation, sample-specific exception, crop/scale or cutoff search, RGB retraining, Artifact/exclusion retry or role transfer from patch availability.
 - Preserved contracts: one generic mask; independent Oil/Foam authority; original same-frame candidates; fail-closed missing/ambiguous evidence; frozen previous results and original Recipes.
 - Existing feature coverage: ellipse/margin and existing default preprocessing run for original Recipes. A/B and Base have no exclusions or Artifact templates. Four-window setup uses existing session/initial-state confirmation and static-reference preparation; Local XY is OFF. D2/Local XY are not reopened.
-- Execution scope: planned synthetic and actual-frame preprocessing/detect checks plus the existing completed-window pipeline/report engineering replay. Baseline substitution is confined to the two preprocessing call sites; no private Windows media or new model is executed.
+- Execution scope: original synthetic/frame and window comparison retains its frozen scope. Retirement restores the baseline source and tests, checks unchanged production bytes, and runs the retained diagnostic unit suites plus the previously failing existing sequence regression under its explicit legacy purpose. No new hypothesis, private Windows run, model or physical requalification.
 - Difference from prior failures: the additional check retains the original component's geometry before morphology discards its body; it supplies no candidate identity, trained representation or tracker authority.
-- Logic-map impact: UPDATED — describes the original-component prerequisite inside the existing shared evidence owner; routing/order is unchanged.
+- Logic-map impact: UPDATED — removes the retired original-component prerequisite from the executing shared evidence owner; the baseline opened-core rule and owner order are restored.
 - Failure-registry impact: NONE — this bounded representation repair tests F02/F09 while preserving F06/F10; it supplies no new field verdict.

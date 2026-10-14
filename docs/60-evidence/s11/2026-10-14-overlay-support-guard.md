@@ -7,6 +7,25 @@ acceptance, model revival or Windows PASS follows. The
 unchanged final tracking and different downstream interpretation. Further field
 inspection uses those saved files; no new video run is requested.
 
+## Active implementation retirement — 2026-10-14
+
+The user explicitly requested cleanup of the unadopted branch and handoff from
+main. The guard and its two candidate-only test expectations are therefore
+removed from the active tree; both files are restored exactly to `747c1bc`.
+The original candidate commit `0073def`, paired measurements and failed sequence
+log remain immutable. This is withdrawal, not a repaired or accepted candidate.
+Retained diagnostics and qualified roles are integrated separately from behavior;
+the [main handoff](2026-10-14-foam-input-handoff.md) records verification and source
+identity. Historical source-pinned candidate commands require their original Git
+state and must not be silently repointed to restored main.
+
+After restoration, the unchanged sequence integrity test passes **1/1 in 21.13 s**
+under explicit `legacy-regression` access. The retained diagnostic and baseline
+optics/Foam suites pass **254/254 in 6.67 s**. All production source and the
+original optics test file are byte-identical to baseline `747c1bc`. This verifies
+withdrawal and engineering preservation; the candidate's original failure and
+the field FAIL remain unchanged.
+
 ## Received role and causal evidence
 
 The [direct reply](../../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-reply.json)
@@ -242,6 +261,6 @@ evidence is deleted.
 - Failure-registry entries: `S11-F02`, `S11-F06`, `S11-F09`, `S11-F10`
 - First harmful stage: B's valid regional input is removed by chromatic-overlay classification after opening loses parent thickness. Restoring that input changes later sample3 ownership; its cause is not established by row counts. The received private report shows unchanged tracking and a separate interpretation difference consistent with the prior compatibility repair. Prior R22/D1 evidence already identifies BASE hard-gate and Accum allowed-owner losses at reviewed checkpoints; whole-window first physical loss remains unlocalized. This reconciliation adds no detector execution or new physical labels.
 - Existing feature coverage: original Recipe ellipse/margin/default settings execute; A/B/Base have empty exclusions/templates. Four-window sessions and static preparation execute with unchanged settings/initial-state confirmation. Local XY OFF and D2/Local XY closures remain. The received private comparison reports identical Recipe/session and FULL trace with confirmed FULL/EMPTY; exact ROI/exclusion/template values are unavailable in the relayed text and are not inferred.
-- Execution scope: direct preprocessing and real frame detection, then four-window analysis/resolution/report construction with serial fresh workers. sample3 is engineering/legacy reproduction, not physical scoring. Receipt review adds source inspection and 47 existing event/retrospective tests; private bundle values remain user-reported. No new Windows, private-video or training execution. The local sequence failure remains unresolved and blocks adoption.
-- Logic-map impact: NONE — receipt review changes no route, authority or input semantics. The map already records the original-support HUD prerequisite introduced at `0073def`; the earlier implementation updated that entry. Existing publication/retrospective owners explain the received scope.
+- Execution scope: original direct preprocessing/frame checks and four-window replay retain their frozen scope. Receipt review adds source inspection and 47 event/retrospective tests. Retirement restores baseline source, verifies 254 diagnostic/optics/Foam tests and the one existing sequence test with explicit legacy access. No new Windows/private-video/training execution or physical scoring; the failed candidate is withdrawn rather than repaired.
+- Logic-map impact: UPDATED — removes the retired original-support HUD prerequisite from current execution and records restored baseline preprocessing. Existing publication/retrospective owners and downstream order remain unchanged.
 - Failure-registry impact: NONE — this scoped input/sequence tradeoff is retained as a candidate result, not a newly accepted field mechanism; current failures and no-tuning rules still apply.

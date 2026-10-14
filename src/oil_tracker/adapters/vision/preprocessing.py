@@ -153,32 +153,12 @@ def _digital_overlay_mask(crop: np.ndarray, valid: np.ndarray) -> np.ndarray:
     result = np.zeros(valid.shape, dtype=np.uint8)
     maximum_height = max(3, int(round(valid.shape[0] * 0.065)))
     minimum_width = max(horizontal_length, int(round(effective_width * 0.32)))
-    # Opening may retain only a thin cap of a thick material region. A HUD
-    # stroke must be thin and wide in its original connected support as well.
-    _parent_count, parent_labels, parent_stats, _parent_centroids = cv2.connectedComponentsWithStats(
-        colorful.astype(np.uint8),
-        connectivity=8,
-    )
-    parent_widths = parent_stats[:, cv2.CC_STAT_WIDTH]
-    parent_heights = np.maximum(1, parent_stats[:, cv2.CC_STAT_HEIGHT])
-    stroke_parents = (
-        (parent_widths >= minimum_width)
-        & (parent_heights <= maximum_height)
-        & (parent_widths / parent_heights >= 5.0)
-    )
     for label in range(1, count):
         width = int(stats[label, cv2.CC_STAT_WIDTH])
         height = max(1, int(stats[label, cv2.CC_STAT_HEIGHT]))
         if width < minimum_width or height > maximum_height or width / height < 5.0:
             continue
-        support = labels == label
-        parents = np.unique(parent_labels[support])
-        # Even-width morphology can shift a boundary pixel into background;
-        # it is not another supporting component.
-        parents = parents[parents != 0]
-        if not parents.size or not np.all(stroke_parents[parents]):
-            continue
-        result[support] = 255
+        result[labels == label] = 255
     if np.any(result):
         # Mask the antialiased/blurred edge around the encoded stroke as well;
         # otherwise the line itself disappears and its two halo edges become

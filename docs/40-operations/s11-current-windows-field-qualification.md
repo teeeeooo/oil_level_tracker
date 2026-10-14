@@ -23,9 +23,11 @@ An existing completed bundle may be reused when its actual producing source,
 video, Recipe and session conditions are established. Review an uncertain older
 bundle as historical output first; do not silently label it the designated baseline
 or require a rerun solely because `.git` or complete debug trace is absent.
-The [overlay comparison handoff](s11-overlay-support-windows-comparison.md) gives
-the current ZIP/manual-GUI/bundle workflow. A GUI launch alone does not start an
-analysis; a manual run requires the operator to complete setup and start analysis.
+The [retired overlay comparison](s11-overlay-support-windows-comparison.md)
+records the ZIP/manual-GUI/bundle workflow, not a current candidate request.
+A GUI launch alone does not start an analysis; a manual run requires the
+operator to complete setup and start analysis. Use the Work Plan for current
+candidate identity, not the retired comparison's commit or branch.
 
 ## 2. Private source identity
 

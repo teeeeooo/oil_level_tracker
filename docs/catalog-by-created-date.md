@@ -1516,3 +1516,94 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-context/verification.json](50-diagnostics/s11/2026-10-14-semantic-context/verification.json) | 78개 지원·724개 패치 평균·17개 판정·덮어쓰기 거부 검증 |
 | 2026-10-14 | [60-evidence/s11/2026-10-14-semantic-context.md](60-evidence/s11/2026-10-14-semantic-context.md) | 15/17 순서·우유 실패·미채택 결론과 분리 관측 설계 한계 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-context/closeout.json](50-diagnostics/s11/2026-10-14-semantic-context/closeout.json) | 추가 모델·14개 의존성 정리와 기존 환경·체크포인트 보존 확인 |
+
+### 2026-10-14 main 인수인계의 증거 색인 보완
+
+이번 main 통합 범위에서 누락된 기존 증거의 색인을 보완했다. 기존 파일 날짜는
+각 파일의 `git log --follow --diff-filter=A` 최초 author 시각을 KST로 변환했다.
+파일이나 frozen 결과는 이동·변경하지 않았다.
+
+| 최초 Git 등록일(KST) | 파일 | 역할 |
+|---|---|---|
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory.md](50-diagnostics/s11/2026-10-14-raw-front-inventory.md) | A 원시 표현·base 접촉·상단 입력 누락의 원인 기록 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-12-cr1-context-comparison/runtime-retirement-20261014.json](50-diagnostics/s11/2026-10-12-cr1-context-comparison/runtime-retirement-20261014.json) | CR-1 모델·source·공유 연구 환경 정리의 보존 기록 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/plan.json](50-diagnostics/s11/2026-10-14-native-contact-trial/plan.json) | NCT-1·접촉 판독: s11-native-contact-trial-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/prepare_sample3_contact.py](50-diagnostics/s11/2026-10-14-native-contact-trial/prepare_sample3_contact.py) | 기존 sample3 A의 후보 접촉 검토 준비 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/readout.json](50-diagnostics/s11/2026-10-14-native-contact-trial/readout.json) | NCT-1·접촉 판독: s11-native-contact-trial-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-plan.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-plan.json) | NCT-1·접촉 판독: s11-source-contact-type-preparation-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-reply.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-reply.json) | NCT-1·접촉 판독: s11-source-contact-type-reply-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-review.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-review.json) | NCT-1·접촉 판독: s11-source-contact-type-review-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-review.png](50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-review.png) | 물리 역할 검토에 사용한 원본 경로 표시 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-verification.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample3-contact-verification.json) | NCT-1·접촉 판독: s11-source-contact-display-verification-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension-plan.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension-plan.json) | NCT-1·접촉 판독: s11-native-role-extension-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension-verification.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension-verification.json) | NCT-1·접촉 판독: s11-native-role-extension-verification-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-extension.json) | NCT-1·접촉 판독: s11-native-role-extension-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-native-readout.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-native-readout.json) | NCT-1·접촉 판독: s11-native-review-source-readout-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-reply.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-reply.json) | NCT-1·접촉 판독: s11-native-liquid-role-reply-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-inspection.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-inspection.json) | NCT-1·접촉 판독: s11-native-fragment-proposal-inspection-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-manifest.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-manifest.json) | NCT-1·접촉 판독: s11-native-review-source-reuse-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-plan.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-plan.json) | NCT-1·접촉 판독: s11-native-fragment-review-preparation-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-proposal.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-proposal.json) | NCT-1·접촉 판독: s11-native-fragment-role-review-proposal-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-verification.json](50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review-verification.json) | NCT-1·접촉 판독: s11-native-contact-review-verification-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review.png](50-diagnostics/s11/2026-10-14-native-contact-trial/sample4-review.png) | 물리 역할 검토에 사용한 원본 경로 표시 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-contact-trial/verification.json](50-diagnostics/s11/2026-10-14-native-contact-trial/verification.json) | NCT-1·접촉 판독: s11-native-contact-verification-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-extension-plan.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-extension-plan.json) | base 경로·판독을 기존 corpus에 붙이는 계획 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-extension-verification.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-extension-verification.json) | base delta와 원본 RGB patch 독립 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-extension.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-extension.json) | base 두 경로의 append-only corpus delta |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-stage-plan.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-stage-plan.json) | 사용자 표시·단계 검사 source/입력·예산 핀 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-plan.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-plan.json) | 지역 Foam 상단 검토 이미지의 고정 계획 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-reply.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-reply.json) | 빨간 점 6개의 지역 상단 판독·원본 좌표 대응 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-review.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-review.json) | 동일 f144 지역 상단 질문의 원래 검토 기록 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-review.png](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-review.png) | 전체 원본 ROI·Y 눈금·기존 하단 경로 검토 이미지 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-stages.json.gz](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-stages.json.gz) | 표시 영역·중앙열의 기존 Foam 단계 값 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-user.jpg](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-user.jpg) | 사용자가 직접 빨간 점을 표시한 JPEG 원본 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-verification.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-foam-upper-verification.json) | 상단 표시 대응·9채널·368픽셀 독립 검증 결과 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-frame-entry-verification.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-frame-entry-verification.json) | 실제 기준 출력·후보·원본 raster 일치 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-frame-entry.json.gz](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-frame-entry.json.gz) | 실제 기준 프레임의 모든 후보·A1/O1·Foam 결과 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-g0-manifest.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-g0-manifest.json) | 기준 native G0 입력 manifest |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-g0-readout.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-g0-readout.json) | base G0 native 입력·경로 결과 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-native-readout.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-native-readout.json) | base 전체 native 경로·원본 지원 결과 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-plan.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-plan.json) | 기존 base f144 원본·설정·준비 source 핀 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-probe-plan.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-probe-plan.json) | 기준 실제 detect 한 프레임 실행 계획 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-raster.npz](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-raster.npz) | base 원본 ROI·effective/glare/Canny 기준 배열 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reply.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reply.json) | 150 거품–액체 접촉 원문 판독 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reuse-manifest.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-reuse-manifest.json) | base 경로·자료 재사용 연결 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review-inspection.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review-inspection.json) | base native 경로 검토 진입 검사 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review-plan.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review-plan.json) | base 경로 검토의 고정 입력·계획 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review-proposal.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review-proposal.json) | base 두 native 경로의 무정답 검토 제안 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review-verification.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review-verification.json) | base 검토 이미지·원본 픽셀 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review.png](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-review.png) | base 원본과 native 150/462 검토 이미지 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/base-source-preflight.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/base-source-preflight.json) | base 원본·Recipe·native 준비 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/bind_base.py](50-diagnostics/s11/2026-10-14-raw-front-inventory/bind_base.py) | 기존 corpus에 base 판독만 결합하는 조합기 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/inspect_foam_upper.py](50-diagnostics/s11/2026-10-14-raw-front-inventory/inspect_foam_upper.py) | 기존 observer·probe를 연결한 표시 위치 단계 검사 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/inventory.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/inventory.json) | A 전체 raw plateau·native graph 재현 결과 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/plan.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/plan.json) | A raw plateau/graph 입력·고정 실행 계획 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/prepare_base.py](50-diagnostics/s11/2026-10-14-raw-front-inventory/prepare_base.py) | 기존 준비·qualifier를 재사용하는 base 입력 구성 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/probe_base.py](50-diagnostics/s11/2026-10-14-raw-front-inventory/probe_base.py) | 기준 전처리를 사용한 실제 detect/debug 진입 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/render_base.py](50-diagnostics/s11/2026-10-14-raw-front-inventory/render_base.py) | 원본 base native 경로의 검토 표시 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/render_foam_extent.py](50-diagnostics/s11/2026-10-14-raw-front-inventory/render_foam_extent.py) | 전체 ROI·원본 Y 눈금을 보존하는 상단 검토 표시 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/verification.json](50-diagnostics/s11/2026-10-14-raw-front-inventory/verification.json) | A 표현 inventory의 독립 계산 검증 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/verify.py](50-diagnostics/s11/2026-10-14-raw-front-inventory/verify.py) | A 원본 photometry·plateau·graph 검산기 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-raw-front-inventory/verify_foam_upper.py](50-diagnostics/s11/2026-10-14-raw-front-inventory/verify_foam_upper.py) | 원본 채널·texture·외부 눈금의 독립 검산기 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus-plan.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus-plan.json) | 분리 역할·corpus 준비: s11-native-role-corpus-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus-verification.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus-verification.json) | 분리 역할·corpus 준비: s11-native-role-corpus-verification-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/corpus.json) | 분리 역할·corpus 준비: s11-native-role-corpus-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-qualification.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-qualification.json) | 분리 역할·corpus 준비: s11-native-liquid-role-qualification-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-reply.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-reply.json) | 분리 역할·corpus 준비: s11-native-liquid-role-reply-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-verification.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/liquid-verification.json) | 분리 역할·corpus 준비: s11-liquid-role-reply-verification-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/plan.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/plan.json) | 분리 역할·corpus 준비: s11-semantic-role-readiness-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/readout.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/readout.json) | 분리 역할·corpus 준비: s11-semantic-role-readiness-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-inspection.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-inspection.json) | 분리 역할·corpus 준비: s11-native-fragment-proposal-inspection-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-plan.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-plan.json) | 분리 역할·corpus 준비: s11-native-fragment-review-preparation-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-proposal.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/review-proposal.json) | 분리 역할·corpus 준비: s11-native-fragment-role-review-proposal-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/review.png](50-diagnostics/s11/2026-10-14-semantic-role-readiness/review.png) | 물리 역할 검토에 사용한 원본 경로 표시 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/verification.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/verification.json) | 분리 역할·corpus 준비: s11-semantic-role-readiness-verification-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-native-readout.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-native-readout.json) | 분리 역할·corpus 준비: s11-native-review-source-readout-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-reply.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-reply.json) | 분리 역할·corpus 준비: s11-native-liquid-role-reply-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-inspection.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-inspection.json) | 분리 역할·corpus 준비: s11-native-fragment-proposal-inspection-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-manifest.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-manifest.json) | 분리 역할·corpus 준비: s11-native-review-source-reuse-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-plan.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-plan.json) | 분리 역할·corpus 준비: s11-native-fragment-review-preparation-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-proposal.json](50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review-proposal.json) | 분리 역할·corpus 준비: s11-native-fragment-role-review-proposal-v1 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review.png](50-diagnostics/s11/2026-10-14-semantic-role-readiness/water-review.png) | 물리 역할 검토에 사용한 원본 경로 표시 |
+| 2026-10-14 | [60-evidence/s11/2026-10-14-native-contact-trial.md](60-evidence/s11/2026-10-14-native-contact-trial.md) | NCT-1 — ordered native-side contact interaction |
+| Git 미등록 (작성 2026-10-14) | [60-evidence/s11/2026-10-14-foam-input-handoff.md](60-evidence/s11/2026-10-14-foam-input-handoff.md) | 421757a 연구 체크포인트·상단 입력 누락·후속 설계 인수인계 |

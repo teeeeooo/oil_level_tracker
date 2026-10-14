@@ -1,5 +1,11 @@
 # Windows ZIP 설치 환경: 기존/후보 bundle 비교
 
+**후보 실행 절차 종료 — 2026-10-14.** 사용자의 main 인계 요청에 따라 미채택 guard를
+활성 source에서 제거했다. 아래 commit/hash와 실행 단계는 과거 비교의 재현 정보이며
+현재 main을 그 후보로 실행하지 않는다. 저장 bundle의 판독 범위는 유지하고,
+다음 실행은 [Work Plan](../00-project/work-plan.md)과
+[main 인수인계](../60-evidence/s11/2026-10-14-foam-input-handoff.md)를 따른다.
+
 **기존 bundle 비교 보고 수신. 후보는 미채택 상태다.**
 [수신 검토](../60-evidence/s11/2026-10-14-overlay-support-guard.md#received-bundle-comparison--2026-10-14)는
 최종 tracking 1,202행 동일과 Accum 해석 차이를 구분한다. 이후 작업은
