@@ -1479,3 +1479,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/location-proposal.json](50-diagnostics/s11/2026-10-14-native-milk-review/location-proposal.json) | 위치를 보강한 동일 687 경로의 한정 추가 질문 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/location-inspection.json](50-diagnostics/s11/2026-10-14-native-milk-review/location-inspection.json) | 위치 검토 경로의 원본·지원 무정답 검사 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/location-verification.json](50-diagnostics/s11/2026-10-14-native-milk-review/location-verification.json) | 경로·확대 픽셀 동일성 및 이전 검토 그림 보존 검사 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/location-reply.json](50-diagnostics/s11/2026-10-14-native-milk-review/location-reply.json) | 위치 확인 후 687을 큰 방울 하나의 실제 Foam 상단으로 확정한 원문 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-review/location-qualification.json](50-diagnostics/s11/2026-10-14-native-milk-review/location-qualification.json) | 동일 687 경로의 명시적 Foam 상단 판정 결합 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-order/manifest.json](50-diagnostics/s11/2026-10-14-native-milk-order/manifest.json) | 재학습 없는 평균색 비교군·16개 경로·두 순서 비교의 고정 입력 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-native-milk-order/preparation-verification.json](50-diagnostics/s11/2026-10-14-native-milk-order/preparation-verification.json) | 21 테스트·실제 qualifier·cwd 독립 준비 및 13 입력 검증 |

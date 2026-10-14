@@ -1,0 +1,29 @@
+{
+  "schema": "s11-frozen-mean-followup-preparation-verification-v1",
+  "status": "READY_FOR_FIXED_WEIGHT_INFERENCE",
+  "focused_tests": {
+    "passed": 21,
+    "seconds": 0.15,
+    "files": [
+      "tests/unit/test_s11_native_role_order_followup.py",
+      "tests/unit/test_s11_native_role_order_trial.py"
+    ]
+  },
+  "actual_prepare_cli_from_repo_and_tmp_byte_identical": true,
+  "actual_qualification_cli_cwd": "/private/tmp",
+  "input_loader_arrays": 13,
+  "total_paths": 16,
+  "unresolved_orientation_paths": 3,
+  "qualified_paths": 3,
+  "unreviewed_paths": 13,
+  "pairs": 2,
+  "new_role_687": "EXTERNAL_FOAM_UPPER",
+  "new_role_context": "Actual top of one large bubble, not a stable whole-layer front.",
+  "same_subject_hash_as_original_and_location_proposals": true,
+  "qualified_native_paths_total": 15,
+  "qualified_source_recordings": 4,
+  "model_calls": 0,
+  "training_updates": 0,
+  "weights_sha256": "064fdf34926b08ddaf93b45ea549f186b618b013a27ab7ed91fb544356d6a9b9",
+  "prior_source_hashes_verified": true
+}

@@ -192,12 +192,56 @@ conditions. Actual qualifier/renderer/inspection CLIs ran from `/private/tmp`.
 Managed run `s11-native-milk-location-20261014-001` retains six canonical files /
 356,707 bytes, removes ten temporary copies/checks and makes zero model calls.
 
+### Located reply and fixed mean-RGB milk protocol
+
+The user then confirms 687: **“foam의 실제 상단임 큰 방울 한개의 상단이네”**.
+Bind only this exact path as `EXTERNAL_FOAM_UPPER`. Its single-large-bubble context
+does not establish a stable Foam layer, dense front, episode boundary or two
+material interfaces. The previous location-unassessable status stays historical;
+the explicit located reply supersedes it for the same subject hash.
+
+**MRO-1** is a fixed-weight falsification check of the limited NRO-1 **mean-RGB**
+reference, not another fit or a revival of the failed native arm. Before scoring:
+
+- Freeze source/input manifest and the saved weight hash
+  `064fdf34926b08ddaf93b45ea549f186b618b013a27ab7ed91fb544356d6a9b9`.
+- Use the existing mean-patch transform, ordered side pooling and encoder without
+  any updates, calibration, crop/score selection or alternative arm. Reproduce all
+  26 prior mean-RGB scores within arithmetic tolerance 0.0001 before milk inference.
+- Retain all 16 milk paths: 13 available, 3 unresolved orientations; 3 qualified
+  and 13 unreviewed. The only physical comparisons are **687 > 444** and **687 > 453**.
+  Missing/unreviewed paths supply no target or negative success; no highest-score
+  winner or absolute cutoff is selected.
+- A nonpositive gap falsifies this reference on the milk order. Both positive
+  gaps yield only `LIMITED_EXPOSED_ORDER_ONLY`, not source-general accuracy or a
+  production promotion. Both comparisons share one already exposed frame.
+- Require unchanged parameters and saved weight bytes. Limit execution to 60 s,
+  500 MB RSS, 3 MB scratch / 1 MB retained within the existing 3 GB workspace.
+  Preserve small scores and checks; do not copy weights, source pixels or tensors.
+
+The [followup entry](../../../tests/diagnostics/s11_native_role_order_followup.py)
+reuses the existing encoder, pin/patch helpers, transform, comparison and offline
+guard. A separate inference-only entry preserves the frozen runner's original
+fitting contract; it loads its final weights strictly and has no optimizer path.
+The qualifier binds the newly confirmed path before any model call. The original
+failed trials and production/Windows gates remain unchanged.
+
+The [located reply](../../50-diagnostics/s11/2026-10-14-native-milk-review/location-reply.json)
+is bound by the [original qualifier](../../50-diagnostics/s11/2026-10-14-native-milk-review/location-qualification.json).
+All fifteen roles are now closed at displayed-path precision. The
+[followup manifest](../../50-diagnostics/s11/2026-10-14-native-milk-order/manifest.json)
+and [preparation checks](../../50-diagnostics/s11/2026-10-14-native-milk-order/preparation-verification.json)
+verify 13 exact input tensors and the full sixteen-path denominator. **21 focused
+tests pass in 0.15 s** (10 new followup checks plus 11 order checks); actual prepare
+CLIs from the repository and `/private/tmp` produce identical bytes. No model was
+called during reply binding or preparation.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F09`, `S11-F10`.
 - First harmful stage: the earlier absolute native classifier rejects N3; this comparison does not repair that classifier or establish a production causal loss. It tests a distinct relative-order capability with newly qualified source opposition.
 - Existing feature coverage: saved original G0 native RGB/masks/path context only. sample4 Recipe exclusions/templates remain empty; Local XY OFF. Run preparation, automatic static learning, Artifact consumers, sequence and report are bypassed. Closed D2/Local XY results remain controls, not new efficacy claims.
-- Execution scope: the diagnostic CLI prepared pinned qualified paths and all saved public alternatives, then completed exactly two fixed offline fits with one final exposed evaluation per arm. The separate milk preparation and reply/locator work reuse original saved pixels/paths, bind only explicitly confirmed roles and keep 687 unqualified, with no model call. No video decode, temporal inference, production detector/Recipe, Windows execution or report reading.
+- Execution scope: NRO-1 completed exactly two fixed offline fits. Milk reply/locator preparation uses no model; the located reply now qualifies 687. The separately frozen MRO-1 followup will load only the existing mean-RGB weights, reproduce prior scores and compare the complete milk roster without fitting. No video decode, temporal inference, production detector/Recipe, Windows execution or report reading.
 - Logic-map impact: NONE — no executing production owner, numeric source, schema or setup feature changes. The diagnostic reuses existing frozen input/model owners with a separate loss/data contract.
 - Failure-registry impact: NONE — source-specific cutoff rescue, unreviewed-winner promotion and field claims remain prohibited; no failure class is retired.

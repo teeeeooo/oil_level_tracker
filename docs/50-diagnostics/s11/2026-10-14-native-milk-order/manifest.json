@@ -1,0 +1,4399 @@
+{
+  "schema": "s11-frozen-mean-role-followup-v1",
+  "sources": [
+    {
+      "path": "tests/diagnostics/s11_native_role_order_trial.py",
+      "sha256": "98e8657981474063067a2b22db8ae991b6fc3d526352b33e94da40600cf80cc2"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_surface_trial.py",
+      "sha256": "144159d66f0c7863b6d18346f13b43337b415cefc400a827da7fc7f4d7f6ffa3"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_qualification.py",
+      "sha256": "e91062e9696464e5d7a990f54e3aa1046e15467603d01b26bcfa2fb14110c5d6"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_preflight.py",
+      "sha256": "cd8aa6dfaa6bff27290b7133313887873b2249f488b54baec49460bd69ab4dbe"
+    },
+    {
+      "path": "tests/diagnostics/s11_contextual_role_preflight.py",
+      "sha256": "0f35cb158c2db130d98e36f13412cf8f5d3780aae9fd49ca6788b0dcbcd588f5"
+    },
+    {
+      "path": "tests/diagnostics/s11_contour_contact_probe.py",
+      "sha256": "5b623820083d94219bee6fe5f4ec476361e2454ece4749689f47c0f38cf29d24"
+    },
+    {
+      "path": "tests/diagnostics/s11_foam_material_sides.py",
+      "sha256": "1873322ab1ddadd9dfdaa508d6002f9e8d728e5733ec181c6962c200e177e5ef"
+    },
+    {
+      "path": "tests/diagnostics/s11_foam_support_geometry.py",
+      "sha256": "2524861754d56f6004eff310bdf841226f19e4f069b89f19733d3583923a8a40"
+    },
+    {
+      "path": "tests/diagnostics/s11_interface_shadow_evaluation.py",
+      "sha256": "5909c468871ed3c5cd2095c7c4a4a88df4d08569b10985c22e999aff0f42c808"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-12-cr1-context-comparison/probe.py",
+      "sha256": "3ccbaad1c8791cdf7770ffa49d33b59af53f53fbb6038a53b159a2d9a3ed5037"
+    },
+    {
+      "path": "src/oil_tracker/application/services/truth_identity.py",
+      "sha256": "5835e2ab1ebf490a80d852819ad1d522a8f1451fb0e454cfef6723817e433556"
+    },
+    {
+      "path": "src/oil_tracker/domain/detector_benchmark.py",
+      "sha256": "e520b82eaa820ec83397fab33cc56e44f48110523a9c77f798451ac73360382d"
+    },
+    {
+      "path": "tests/diagnostics/s11_native_role_order_followup.py",
+      "sha256": "8fb923bc9e0e82f6349b2a8db4e337455169a445984d284424fb958598c8a39a"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-role-order/manifest.json",
+      "sha256": "0a76250dc3a9a76e80c5d612ed0a366bd70ee62a91e72809cac6ed7b5420e03a"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-role-order/readout.json",
+      "sha256": "a01574c6f444fd15d4d9167b8798753952ff08bbc8ac64f8d17433a2a2b30770"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-role-order/mean_rgb-weights.npz",
+      "sha256": "064fdf34926b08ddaf93b45ea549f186b618b013a27ab7ed91fb544356d6a9b9"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/source-manifest.json",
+      "sha256": "e4c8ed7d75f1e3dd983ac4095f354bfc9018de566d4fa75301c59412d810aef3"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/native-packet.json",
+      "sha256": "fb18df2fee6ef38a36809a88fbf11cb4579e846b95dbdae544c222a187243800"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/reply.json",
+      "sha256": "e7196842e8015e0e7a3d8a9e3fa06acddcf0205071501312814134d3db17fd51"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/qualification.json",
+      "sha256": "e2659993a085d80d939763297ab72d966e074a7de79f83a425d3611b5077a200"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/proposal.json",
+      "sha256": "7e61367539b8edbf0e5df3d69e868f9a7ed3b7a0b3646b93c7924ce582db8bc2"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/location-reply.json",
+      "sha256": "8dcd1758f9fed3223325348dcd47e7229d7aa68d75e7ff981be6c4637f9bb924"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/location-qualification.json",
+      "sha256": "3dd9ecd3e691f616896ecae5dec03f67eaa8201c9e77cc67c9f3f0505f744b3b"
+    },
+    {
+      "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/location-proposal.json",
+      "sha256": "1fa1ee1f267e747b5732cf2896527ecb07da4faa757682970c2ee110313f6740"
+    }
+  ],
+  "previous_manifest": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-role-order/manifest.json",
+    "sha256": "0a76250dc3a9a76e80c5d612ed0a366bd70ee62a91e72809cac6ed7b5420e03a"
+  },
+  "previous_readout": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-role-order/readout.json",
+    "sha256": "a01574c6f444fd15d4d9167b8798753952ff08bbc8ac64f8d17433a2a2b30770"
+  },
+  "weights": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-role-order/mean_rgb-weights.npz",
+    "sha256": "064fdf34926b08ddaf93b45ea549f186b618b013a27ab7ed91fb544356d6a9b9"
+  },
+  "rgb": {
+    "path": "sample/output/s11-public-video-intake-20261009-001/public_milk_fill_pexels_11158788/f001063.png",
+    "sha256": "35b020932c0c93d278674caecd6641463552ff66ea6cc32cbeca39af1c3ef64c"
+  },
+  "packet": {
+    "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/native-packet.json",
+    "sha256": "fb18df2fee6ef38a36809a88fbf11cb4579e846b95dbdae544c222a187243800"
+  },
+  "units": [
+    {
+      "id": "s7-settled-native/fragment-444",
+      "native_fragment_id": 444,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "16785c82c7ec763d0a2decea64eeb5a32f9ea043679bf16e4d4c127f8afe87d4",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                348,
+                129
+              ],
+              [
+                349,
+                129
+              ],
+              [
+                350,
+                129
+              ],
+              [
+                351,
+                129
+              ],
+              [
+                352,
+                129
+              ],
+              [
+                353,
+                129
+              ],
+              [
+                354,
+                129
+              ],
+              [
+                355,
+                129
+              ],
+              [
+                356,
+                129
+              ],
+              [
+                357,
+                129
+              ],
+              [
+                358,
+                129
+              ],
+              [
+                359,
+                129
+              ],
+              [
+                360,
+                128
+              ],
+              [
+                361,
+                128
+              ],
+              [
+                362,
+                128
+              ],
+              [
+                363,
+                128
+              ],
+              [
+                364,
+                128
+              ],
+              [
+                365,
+                128
+              ],
+              [
+                366,
+                128
+              ],
+              [
+                367,
+                128
+              ],
+              [
+                368,
+                128
+              ],
+              [
+                369,
+                128
+              ],
+              [
+                370,
+                128
+              ],
+              [
+                371,
+                128
+              ],
+              [
+                372,
+                128
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 223,
+            "reused_pixel_uses": 1002,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          },
+          "lower": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                348,
+                139
+              ],
+              [
+                349,
+                139
+              ],
+              [
+                350,
+                139
+              ],
+              [
+                351,
+                139
+              ],
+              [
+                352,
+                139
+              ],
+              [
+                353,
+                139
+              ],
+              [
+                354,
+                139
+              ],
+              [
+                355,
+                139
+              ],
+              [
+                356,
+                139
+              ],
+              [
+                357,
+                139
+              ],
+              [
+                358,
+                139
+              ],
+              [
+                359,
+                139
+              ],
+              [
+                360,
+                138
+              ],
+              [
+                361,
+                138
+              ],
+              [
+                362,
+                138
+              ],
+              [
+                363,
+                138
+              ],
+              [
+                364,
+                138
+              ],
+              [
+                365,
+                138
+              ],
+              [
+                366,
+                138
+              ],
+              [
+                367,
+                138
+              ],
+              [
+                368,
+                138
+              ],
+              [
+                369,
+                138
+              ],
+              [
+                370,
+                138
+              ],
+              [
+                371,
+                138
+              ],
+              [
+                372,
+                138
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 223,
+            "reused_pixel_uses": 1002,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": "STRUCTURE_BOUNDARY",
+      "qualification": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/qualification.json",
+        "sha256": "e2659993a085d80d939763297ab72d966e074a7de79f83a425d3611b5077a200"
+      },
+      "subject_sha256": "44e1a38937640f662b285599a1f671bc464cc1e4b1f1dc04405da2aafbd73ab7",
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1108,
+              369
+            ],
+            [
+              1109,
+              369
+            ],
+            [
+              1110,
+              369
+            ],
+            [
+              1111,
+              369
+            ],
+            [
+              1112,
+              369
+            ],
+            [
+              1113,
+              369
+            ],
+            [
+              1114,
+              369
+            ],
+            [
+              1115,
+              369
+            ],
+            [
+              1116,
+              369
+            ],
+            [
+              1117,
+              369
+            ],
+            [
+              1118,
+              369
+            ],
+            [
+              1119,
+              369
+            ],
+            [
+              1120,
+              368
+            ],
+            [
+              1121,
+              368
+            ],
+            [
+              1122,
+              368
+            ],
+            [
+              1123,
+              368
+            ],
+            [
+              1124,
+              368
+            ],
+            [
+              1125,
+              368
+            ],
+            [
+              1126,
+              368
+            ],
+            [
+              1127,
+              368
+            ],
+            [
+              1128,
+              368
+            ],
+            [
+              1129,
+              368
+            ],
+            [
+              1130,
+              368
+            ],
+            [
+              1131,
+              368
+            ],
+            [
+              1132,
+              368
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "a3793f2ff60da987ed68d4d3ef22bee165b8d60711f9e9447c010b4fd70913ca"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1108,
+              379
+            ],
+            [
+              1109,
+              379
+            ],
+            [
+              1110,
+              379
+            ],
+            [
+              1111,
+              379
+            ],
+            [
+              1112,
+              379
+            ],
+            [
+              1113,
+              379
+            ],
+            [
+              1114,
+              379
+            ],
+            [
+              1115,
+              379
+            ],
+            [
+              1116,
+              379
+            ],
+            [
+              1117,
+              379
+            ],
+            [
+              1118,
+              379
+            ],
+            [
+              1119,
+              379
+            ],
+            [
+              1120,
+              378
+            ],
+            [
+              1121,
+              378
+            ],
+            [
+              1122,
+              378
+            ],
+            [
+              1123,
+              378
+            ],
+            [
+              1124,
+              378
+            ],
+            [
+              1125,
+              378
+            ],
+            [
+              1126,
+              378
+            ],
+            [
+              1127,
+              378
+            ],
+            [
+              1128,
+              378
+            ],
+            [
+              1129,
+              378
+            ],
+            [
+              1130,
+              378
+            ],
+            [
+              1131,
+              378
+            ],
+            [
+              1132,
+              378
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "7aa97c1c8742f469af1d0b0bb39050f956df912ae639bb439362df4c99065436"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-453",
+      "native_fragment_id": 453,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "b3dd080278a4321e586a98206b4a3ab7524cbe7f595bc34e367ed0a0fc729300",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                372,
+                138
+              ],
+              [
+                371,
+                138
+              ],
+              [
+                370,
+                138
+              ],
+              [
+                369,
+                138
+              ],
+              [
+                368,
+                138
+              ],
+              [
+                367,
+                138
+              ],
+              [
+                366,
+                138
+              ],
+              [
+                365,
+                138
+              ],
+              [
+                364,
+                138
+              ],
+              [
+                363,
+                138
+              ],
+              [
+                362,
+                138
+              ],
+              [
+                361,
+                139
+              ],
+              [
+                360,
+                139
+              ],
+              [
+                359,
+                139
+              ],
+              [
+                358,
+                139
+              ],
+              [
+                357,
+                139
+              ],
+              [
+                356,
+                139
+              ],
+              [
+                355,
+                139
+              ],
+              [
+                354,
+                139
+              ],
+              [
+                353,
+                139
+              ],
+              [
+                352,
+                139
+              ],
+              [
+                351,
+                139
+              ],
+              [
+                350,
+                139
+              ],
+              [
+                349,
+                139
+              ],
+              [
+                348,
+                139
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 223,
+            "reused_pixel_uses": 1002,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          },
+          "lower": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                372,
+                148
+              ],
+              [
+                371,
+                148
+              ],
+              [
+                370,
+                148
+              ],
+              [
+                369,
+                148
+              ],
+              [
+                368,
+                148
+              ],
+              [
+                367,
+                148
+              ],
+              [
+                366,
+                148
+              ],
+              [
+                365,
+                148
+              ],
+              [
+                364,
+                148
+              ],
+              [
+                363,
+                148
+              ],
+              [
+                362,
+                148
+              ],
+              [
+                361,
+                149
+              ],
+              [
+                360,
+                149
+              ],
+              [
+                359,
+                149
+              ],
+              [
+                358,
+                149
+              ],
+              [
+                357,
+                149
+              ],
+              [
+                356,
+                149
+              ],
+              [
+                355,
+                149
+              ],
+              [
+                354,
+                149
+              ],
+              [
+                353,
+                149
+              ],
+              [
+                352,
+                149
+              ],
+              [
+                351,
+                149
+              ],
+              [
+                350,
+                149
+              ],
+              [
+                349,
+                149
+              ],
+              [
+                348,
+                149
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 223,
+            "reused_pixel_uses": 1002,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": "STRUCTURE_BOUNDARY",
+      "qualification": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/qualification.json",
+        "sha256": "e2659993a085d80d939763297ab72d966e074a7de79f83a425d3611b5077a200"
+      },
+      "subject_sha256": "230f9361b3a6d8dbbd7660d44efba352dd81e101296201cd6376f8b78c54de99",
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1132,
+              378
+            ],
+            [
+              1131,
+              378
+            ],
+            [
+              1130,
+              378
+            ],
+            [
+              1129,
+              378
+            ],
+            [
+              1128,
+              378
+            ],
+            [
+              1127,
+              378
+            ],
+            [
+              1126,
+              378
+            ],
+            [
+              1125,
+              378
+            ],
+            [
+              1124,
+              378
+            ],
+            [
+              1123,
+              378
+            ],
+            [
+              1122,
+              378
+            ],
+            [
+              1121,
+              379
+            ],
+            [
+              1120,
+              379
+            ],
+            [
+              1119,
+              379
+            ],
+            [
+              1118,
+              379
+            ],
+            [
+              1117,
+              379
+            ],
+            [
+              1116,
+              379
+            ],
+            [
+              1115,
+              379
+            ],
+            [
+              1114,
+              379
+            ],
+            [
+              1113,
+              379
+            ],
+            [
+              1112,
+              379
+            ],
+            [
+              1111,
+              379
+            ],
+            [
+              1110,
+              379
+            ],
+            [
+              1109,
+              379
+            ],
+            [
+              1108,
+              379
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "a6305b2c69414746daf33044a666cc5a29af6f43a9558cb400a467e171bef801"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1132,
+              388
+            ],
+            [
+              1131,
+              388
+            ],
+            [
+              1130,
+              388
+            ],
+            [
+              1129,
+              388
+            ],
+            [
+              1128,
+              388
+            ],
+            [
+              1127,
+              388
+            ],
+            [
+              1126,
+              388
+            ],
+            [
+              1125,
+              388
+            ],
+            [
+              1124,
+              388
+            ],
+            [
+              1123,
+              388
+            ],
+            [
+              1122,
+              388
+            ],
+            [
+              1121,
+              389
+            ],
+            [
+              1120,
+              389
+            ],
+            [
+              1119,
+              389
+            ],
+            [
+              1118,
+              389
+            ],
+            [
+              1117,
+              389
+            ],
+            [
+              1116,
+              389
+            ],
+            [
+              1115,
+              389
+            ],
+            [
+              1114,
+              389
+            ],
+            [
+              1113,
+              389
+            ],
+            [
+              1112,
+              389
+            ],
+            [
+              1111,
+              389
+            ],
+            [
+              1110,
+              389
+            ],
+            [
+              1109,
+              389
+            ],
+            [
+              1108,
+              389
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "f696f2303ac34e136942adac6426e2d8a748f51863ef1d153f2921f3c1b70f10"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-687",
+      "native_fragment_id": 687,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "730545634e4cc92f526939cfd13525e2396e98128e0a2d04aabfe46f3c9b69e0",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                372,
+                289
+              ],
+              [
+                371,
+                289
+              ],
+              [
+                370,
+                289
+              ],
+              [
+                369,
+                290
+              ],
+              [
+                368,
+                290
+              ],
+              [
+                367,
+                290
+              ],
+              [
+                366,
+                290
+              ],
+              [
+                365,
+                290
+              ],
+              [
+                364,
+                290
+              ],
+              [
+                363,
+                290
+              ],
+              [
+                362,
+                290
+              ],
+              [
+                361,
+                290
+              ],
+              [
+                360,
+                290
+              ],
+              [
+                359,
+                290
+              ],
+              [
+                358,
+                290
+              ],
+              [
+                357,
+                290
+              ],
+              [
+                356,
+                290
+              ],
+              [
+                355,
+                291
+              ],
+              [
+                354,
+                291
+              ],
+              [
+                353,
+                291
+              ],
+              [
+                352,
+                292
+              ],
+              [
+                351,
+                292
+              ],
+              [
+                350,
+                292
+              ],
+              [
+                349,
+                293
+              ],
+              [
+                348,
+                293
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 241,
+            "reused_pixel_uses": 984,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 22
+          },
+          "lower": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                372,
+                299
+              ],
+              [
+                371,
+                299
+              ],
+              [
+                370,
+                299
+              ],
+              [
+                369,
+                300
+              ],
+              [
+                368,
+                300
+              ],
+              [
+                367,
+                300
+              ],
+              [
+                366,
+                300
+              ],
+              [
+                365,
+                300
+              ],
+              [
+                364,
+                300
+              ],
+              [
+                363,
+                300
+              ],
+              [
+                362,
+                300
+              ],
+              [
+                361,
+                300
+              ],
+              [
+                360,
+                300
+              ],
+              [
+                359,
+                300
+              ],
+              [
+                358,
+                300
+              ],
+              [
+                357,
+                300
+              ],
+              [
+                356,
+                300
+              ],
+              [
+                355,
+                301
+              ],
+              [
+                354,
+                301
+              ],
+              [
+                353,
+                301
+              ],
+              [
+                352,
+                302
+              ],
+              [
+                351,
+                302
+              ],
+              [
+                350,
+                302
+              ],
+              [
+                349,
+                303
+              ],
+              [
+                348,
+                303
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 241,
+            "reused_pixel_uses": 984,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 22
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": "EXTERNAL_SURFACE",
+      "qualification": {
+        "path": "docs/50-diagnostics/s11/2026-10-14-native-milk-review/location-qualification.json",
+        "sha256": "3dd9ecd3e691f616896ecae5dec03f67eaa8201c9e77cc67c9f3f0505f744b3b"
+      },
+      "subject_sha256": "7834a70ef9e2f83104da5eac7e92bd0ebb2e998647cf912c98af64ce705a6dff",
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1132,
+              529
+            ],
+            [
+              1131,
+              529
+            ],
+            [
+              1130,
+              529
+            ],
+            [
+              1129,
+              530
+            ],
+            [
+              1128,
+              530
+            ],
+            [
+              1127,
+              530
+            ],
+            [
+              1126,
+              530
+            ],
+            [
+              1125,
+              530
+            ],
+            [
+              1124,
+              530
+            ],
+            [
+              1123,
+              530
+            ],
+            [
+              1122,
+              530
+            ],
+            [
+              1121,
+              530
+            ],
+            [
+              1120,
+              530
+            ],
+            [
+              1119,
+              530
+            ],
+            [
+              1118,
+              530
+            ],
+            [
+              1117,
+              530
+            ],
+            [
+              1116,
+              530
+            ],
+            [
+              1115,
+              531
+            ],
+            [
+              1114,
+              531
+            ],
+            [
+              1113,
+              531
+            ],
+            [
+              1112,
+              532
+            ],
+            [
+              1111,
+              532
+            ],
+            [
+              1110,
+              532
+            ],
+            [
+              1109,
+              533
+            ],
+            [
+              1108,
+              533
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "d76189637abc07b4f6cefb9e8a73fb58d50b03fb37c923d243b65326f137ee48"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1132,
+              539
+            ],
+            [
+              1131,
+              539
+            ],
+            [
+              1130,
+              539
+            ],
+            [
+              1129,
+              540
+            ],
+            [
+              1128,
+              540
+            ],
+            [
+              1127,
+              540
+            ],
+            [
+              1126,
+              540
+            ],
+            [
+              1125,
+              540
+            ],
+            [
+              1124,
+              540
+            ],
+            [
+              1123,
+              540
+            ],
+            [
+              1122,
+              540
+            ],
+            [
+              1121,
+              540
+            ],
+            [
+              1120,
+              540
+            ],
+            [
+              1119,
+              540
+            ],
+            [
+              1118,
+              540
+            ],
+            [
+              1117,
+              540
+            ],
+            [
+              1116,
+              540
+            ],
+            [
+              1115,
+              541
+            ],
+            [
+              1114,
+              541
+            ],
+            [
+              1113,
+              541
+            ],
+            [
+              1112,
+              542
+            ],
+            [
+              1111,
+              542
+            ],
+            [
+              1110,
+              542
+            ],
+            [
+              1109,
+              543
+            ],
+            [
+              1108,
+              543
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "f6e7f9801ceb70e0158187797a26317a28de0fc06d4c4a83a5523e69f13fe3b1"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-1892",
+      "native_fragment_id": 1892,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "f79196042e0d592d25ef7503a4d7273c86b100d666b036250f0938296723e2f3",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                348,
+                662
+              ],
+              [
+                349,
+                662
+              ],
+              [
+                350,
+                662
+              ],
+              [
+                351,
+                662
+              ],
+              [
+                352,
+                662
+              ],
+              [
+                353,
+                662
+              ],
+              [
+                354,
+                662
+              ],
+              [
+                355,
+                662
+              ],
+              [
+                356,
+                662
+              ],
+              [
+                357,
+                662
+              ],
+              [
+                358,
+                662
+              ],
+              [
+                359,
+                662
+              ],
+              [
+                360,
+                662
+              ],
+              [
+                361,
+                662
+              ],
+              [
+                362,
+                662
+              ],
+              [
+                363,
+                662
+              ],
+              [
+                364,
+                662
+              ],
+              [
+                365,
+                662
+              ],
+              [
+                366,
+                662
+              ],
+              [
+                367,
+                662
+              ],
+              [
+                368,
+                662
+              ],
+              [
+                369,
+                662
+              ],
+              [
+                370,
+                662
+              ],
+              [
+                371,
+                662
+              ],
+              [
+                372,
+                662
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 217,
+            "reused_pixel_uses": 1008,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          },
+          "lower": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                348,
+                672
+              ],
+              [
+                349,
+                672
+              ],
+              [
+                350,
+                672
+              ],
+              [
+                351,
+                672
+              ],
+              [
+                352,
+                672
+              ],
+              [
+                353,
+                672
+              ],
+              [
+                354,
+                672
+              ],
+              [
+                355,
+                672
+              ],
+              [
+                356,
+                672
+              ],
+              [
+                357,
+                672
+              ],
+              [
+                358,
+                672
+              ],
+              [
+                359,
+                672
+              ],
+              [
+                360,
+                672
+              ],
+              [
+                361,
+                672
+              ],
+              [
+                362,
+                672
+              ],
+              [
+                363,
+                672
+              ],
+              [
+                364,
+                672
+              ],
+              [
+                365,
+                672
+              ],
+              [
+                366,
+                672
+              ],
+              [
+                367,
+                672
+              ],
+              [
+                368,
+                672
+              ],
+              [
+                369,
+                672
+              ],
+              [
+                370,
+                672
+              ],
+              [
+                371,
+                672
+              ],
+              [
+                372,
+                672
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 217,
+            "reused_pixel_uses": 1008,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1108,
+              902
+            ],
+            [
+              1109,
+              902
+            ],
+            [
+              1110,
+              902
+            ],
+            [
+              1111,
+              902
+            ],
+            [
+              1112,
+              902
+            ],
+            [
+              1113,
+              902
+            ],
+            [
+              1114,
+              902
+            ],
+            [
+              1115,
+              902
+            ],
+            [
+              1116,
+              902
+            ],
+            [
+              1117,
+              902
+            ],
+            [
+              1118,
+              902
+            ],
+            [
+              1119,
+              902
+            ],
+            [
+              1120,
+              902
+            ],
+            [
+              1121,
+              902
+            ],
+            [
+              1122,
+              902
+            ],
+            [
+              1123,
+              902
+            ],
+            [
+              1124,
+              902
+            ],
+            [
+              1125,
+              902
+            ],
+            [
+              1126,
+              902
+            ],
+            [
+              1127,
+              902
+            ],
+            [
+              1128,
+              902
+            ],
+            [
+              1129,
+              902
+            ],
+            [
+              1130,
+              902
+            ],
+            [
+              1131,
+              902
+            ],
+            [
+              1132,
+              902
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "a5d4d5d29684562f0ab02fe50180b5c3818494bb341443aa49939c6193980cf0"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1108,
+              912
+            ],
+            [
+              1109,
+              912
+            ],
+            [
+              1110,
+              912
+            ],
+            [
+              1111,
+              912
+            ],
+            [
+              1112,
+              912
+            ],
+            [
+              1113,
+              912
+            ],
+            [
+              1114,
+              912
+            ],
+            [
+              1115,
+              912
+            ],
+            [
+              1116,
+              912
+            ],
+            [
+              1117,
+              912
+            ],
+            [
+              1118,
+              912
+            ],
+            [
+              1119,
+              912
+            ],
+            [
+              1120,
+              912
+            ],
+            [
+              1121,
+              912
+            ],
+            [
+              1122,
+              912
+            ],
+            [
+              1123,
+              912
+            ],
+            [
+              1124,
+              912
+            ],
+            [
+              1125,
+              912
+            ],
+            [
+              1126,
+              912
+            ],
+            [
+              1127,
+              912
+            ],
+            [
+              1128,
+              912
+            ],
+            [
+              1129,
+              912
+            ],
+            [
+              1130,
+              912
+            ],
+            [
+              1131,
+              912
+            ],
+            [
+              1132,
+              912
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "8c00bb56f3be10a35b2851ce30040b6c53520671a5fc663ef28860112149ed34"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-2195",
+      "native_fragment_id": 2195,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "b7a74d697016b1240b7da6f1f20af9fa536a9481f678f8cebbef19b7fc5b06b5",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                348,
+                673
+              ],
+              [
+                349,
+                673
+              ],
+              [
+                350,
+                673
+              ],
+              [
+                351,
+                673
+              ],
+              [
+                352,
+                673
+              ],
+              [
+                353,
+                673
+              ],
+              [
+                354,
+                673
+              ],
+              [
+                355,
+                673
+              ],
+              [
+                356,
+                673
+              ],
+              [
+                357,
+                673
+              ],
+              [
+                358,
+                673
+              ],
+              [
+                359,
+                673
+              ],
+              [
+                360,
+                673
+              ],
+              [
+                361,
+                674
+              ],
+              [
+                362,
+                674
+              ],
+              [
+                363,
+                674
+              ],
+              [
+                364,
+                673
+              ],
+              [
+                365,
+                674
+              ],
+              [
+                366,
+                674
+              ],
+              [
+                367,
+                674
+              ],
+              [
+                368,
+                673
+              ],
+              [
+                369,
+                673
+              ],
+              [
+                370,
+                673
+              ],
+              [
+                371,
+                673
+              ],
+              [
+                372,
+                673
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 230,
+            "reused_pixel_uses": 995,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          },
+          "lower": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                348,
+                683
+              ],
+              [
+                349,
+                683
+              ],
+              [
+                350,
+                683
+              ],
+              [
+                351,
+                683
+              ],
+              [
+                352,
+                683
+              ],
+              [
+                353,
+                683
+              ],
+              [
+                354,
+                683
+              ],
+              [
+                355,
+                683
+              ],
+              [
+                356,
+                683
+              ],
+              [
+                357,
+                683
+              ],
+              [
+                358,
+                683
+              ],
+              [
+                359,
+                683
+              ],
+              [
+                360,
+                683
+              ],
+              [
+                361,
+                684
+              ],
+              [
+                362,
+                684
+              ],
+              [
+                363,
+                684
+              ],
+              [
+                364,
+                683
+              ],
+              [
+                365,
+                684
+              ],
+              [
+                366,
+                684
+              ],
+              [
+                367,
+                684
+              ],
+              [
+                368,
+                683
+              ],
+              [
+                369,
+                683
+              ],
+              [
+                370,
+                683
+              ],
+              [
+                371,
+                683
+              ],
+              [
+                372,
+                683
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 230,
+            "reused_pixel_uses": 995,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1108,
+              913
+            ],
+            [
+              1109,
+              913
+            ],
+            [
+              1110,
+              913
+            ],
+            [
+              1111,
+              913
+            ],
+            [
+              1112,
+              913
+            ],
+            [
+              1113,
+              913
+            ],
+            [
+              1114,
+              913
+            ],
+            [
+              1115,
+              913
+            ],
+            [
+              1116,
+              913
+            ],
+            [
+              1117,
+              913
+            ],
+            [
+              1118,
+              913
+            ],
+            [
+              1119,
+              913
+            ],
+            [
+              1120,
+              913
+            ],
+            [
+              1121,
+              914
+            ],
+            [
+              1122,
+              914
+            ],
+            [
+              1123,
+              914
+            ],
+            [
+              1124,
+              913
+            ],
+            [
+              1125,
+              914
+            ],
+            [
+              1126,
+              914
+            ],
+            [
+              1127,
+              914
+            ],
+            [
+              1128,
+              913
+            ],
+            [
+              1129,
+              913
+            ],
+            [
+              1130,
+              913
+            ],
+            [
+              1131,
+              913
+            ],
+            [
+              1132,
+              913
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "05fe83163bfaf74381b9eb7f4a36a0762e47bf5c60ef854e7d39dfb60d053804"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1108,
+              923
+            ],
+            [
+              1109,
+              923
+            ],
+            [
+              1110,
+              923
+            ],
+            [
+              1111,
+              923
+            ],
+            [
+              1112,
+              923
+            ],
+            [
+              1113,
+              923
+            ],
+            [
+              1114,
+              923
+            ],
+            [
+              1115,
+              923
+            ],
+            [
+              1116,
+              923
+            ],
+            [
+              1117,
+              923
+            ],
+            [
+              1118,
+              923
+            ],
+            [
+              1119,
+              923
+            ],
+            [
+              1120,
+              923
+            ],
+            [
+              1121,
+              924
+            ],
+            [
+              1122,
+              924
+            ],
+            [
+              1123,
+              924
+            ],
+            [
+              1124,
+              923
+            ],
+            [
+              1125,
+              924
+            ],
+            [
+              1126,
+              924
+            ],
+            [
+              1127,
+              924
+            ],
+            [
+              1128,
+              923
+            ],
+            [
+              1129,
+              923
+            ],
+            [
+              1130,
+              923
+            ],
+            [
+              1131,
+              923
+            ],
+            [
+              1132,
+              923
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "f978df29a938dcb943c8d6b95f7a59c21bd04167c7f23c8b4dd7b16c40c6f416"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-2449",
+      "native_fragment_id": 2449,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "8ae29966a121e52b56610eb40bf2f7e711887a4ef57db83b363437f7aad0d6ae",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 19,
+            "complete_centers_xy": [
+              [
+                354,
+                689
+              ],
+              [
+                355,
+                689
+              ],
+              [
+                356,
+                689
+              ],
+              [
+                357,
+                689
+              ],
+              [
+                358,
+                689
+              ],
+              [
+                359,
+                690
+              ],
+              [
+                360,
+                691
+              ],
+              [
+                361,
+                691
+              ],
+              [
+                362,
+                691
+              ],
+              [
+                363,
+                692
+              ],
+              [
+                364,
+                692
+              ],
+              [
+                365,
+                692
+              ],
+              [
+                366,
+                693
+              ],
+              [
+                367,
+                692
+              ],
+              [
+                368,
+                692
+              ],
+              [
+                369,
+                692
+              ],
+              [
+                370,
+                693
+              ],
+              [
+                371,
+                694
+              ],
+              [
+                372,
+                694
+              ]
+            ],
+            "complete_patches": 19,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 209,
+            "reused_pixel_uses": 722,
+            "crossing_or_touching_path_pixels": 4,
+            "outside_reviewed_path_columns": 21
+          },
+          "lower": {
+            "requested_patches": 19,
+            "complete_centers_xy": [
+              [
+                354,
+                699
+              ],
+              [
+                355,
+                699
+              ],
+              [
+                356,
+                699
+              ],
+              [
+                357,
+                699
+              ],
+              [
+                358,
+                699
+              ],
+              [
+                359,
+                700
+              ],
+              [
+                360,
+                701
+              ],
+              [
+                361,
+                701
+              ],
+              [
+                362,
+                701
+              ],
+              [
+                363,
+                702
+              ],
+              [
+                364,
+                702
+              ],
+              [
+                365,
+                702
+              ],
+              [
+                366,
+                703
+              ],
+              [
+                367,
+                702
+              ],
+              [
+                368,
+                702
+              ],
+              [
+                369,
+                702
+              ],
+              [
+                370,
+                703
+              ],
+              [
+                371,
+                704
+              ],
+              [
+                372,
+                704
+              ]
+            ],
+            "complete_patches": 19,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 209,
+            "reused_pixel_uses": 722,
+            "crossing_or_touching_path_pixels": 5,
+            "outside_reviewed_path_columns": 21
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1114,
+              929
+            ],
+            [
+              1115,
+              929
+            ],
+            [
+              1116,
+              929
+            ],
+            [
+              1117,
+              929
+            ],
+            [
+              1118,
+              929
+            ],
+            [
+              1119,
+              930
+            ],
+            [
+              1120,
+              931
+            ],
+            [
+              1121,
+              931
+            ],
+            [
+              1122,
+              931
+            ],
+            [
+              1123,
+              932
+            ],
+            [
+              1124,
+              932
+            ],
+            [
+              1125,
+              932
+            ],
+            [
+              1126,
+              933
+            ],
+            [
+              1127,
+              932
+            ],
+            [
+              1128,
+              932
+            ],
+            [
+              1129,
+              932
+            ],
+            [
+              1130,
+              933
+            ],
+            [
+              1131,
+              934
+            ],
+            [
+              1132,
+              934
+            ]
+          ],
+          "shape": [
+            19,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "e6658a779a14af855725d2c246986233904f2105b1407b323dbc62a876d44aed"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1114,
+              939
+            ],
+            [
+              1115,
+              939
+            ],
+            [
+              1116,
+              939
+            ],
+            [
+              1117,
+              939
+            ],
+            [
+              1118,
+              939
+            ],
+            [
+              1119,
+              940
+            ],
+            [
+              1120,
+              941
+            ],
+            [
+              1121,
+              941
+            ],
+            [
+              1122,
+              941
+            ],
+            [
+              1123,
+              942
+            ],
+            [
+              1124,
+              942
+            ],
+            [
+              1125,
+              942
+            ],
+            [
+              1126,
+              943
+            ],
+            [
+              1127,
+              942
+            ],
+            [
+              1128,
+              942
+            ],
+            [
+              1129,
+              942
+            ],
+            [
+              1130,
+              943
+            ],
+            [
+              1131,
+              944
+            ],
+            [
+              1132,
+              944
+            ]
+          ],
+          "shape": [
+            19,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "4bd8a45b040a67b41c9b761c293dc666017dbfba9fc2c92df6efc998e7b7a1bc"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-3477",
+      "native_fragment_id": 3477,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "42f911baa7e09ceca5fe75307e72c039cbc9de5795ba439416fc50a28e75126a",
+      "context": {
+        "status": "UNRESOLVED_PATH_ORIENTATION"
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {},
+      "partition": "followup",
+      "availability": "UNRESOLVED_PATH_ORIENTATION"
+    },
+    {
+      "id": "s7-settled-native/fragment-3478",
+      "native_fragment_id": 3478,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "f20ca418384a37c54b7b04cae16e919145c7c961cd6853ce49670e5c7963398c",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 2,
+            "complete_centers_xy": [
+              [
+                360,
+                745
+              ],
+              [
+                361,
+                745
+              ]
+            ],
+            "complete_patches": 2,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 56,
+            "reused_pixel_uses": 42,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 42
+          },
+          "lower": {
+            "requested_patches": 2,
+            "complete_centers_xy": [
+              [
+                360,
+                755
+              ],
+              [
+                361,
+                755
+              ]
+            ],
+            "complete_patches": 2,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 56,
+            "reused_pixel_uses": 42,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 42
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1120,
+              985
+            ],
+            [
+              1121,
+              985
+            ]
+          ],
+          "shape": [
+            2,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "3ec98e5ed529d1493f9bdad2899c131c9d05a8cf14e824e0b986adaf1eb8444f"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1120,
+              995
+            ],
+            [
+              1121,
+              995
+            ]
+          ],
+          "shape": [
+            2,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "996ecdab489b7da7ba2aee2982d3ade66c311d036ac89157b3e446ec53f4982d"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-3479",
+      "native_fragment_id": 3479,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "7145c06ffe960982c1b09b204d484e3d13b4165b110e68157806cbcc1023e911",
+      "context": {
+        "status": "UNRESOLVED_PATH_ORIENTATION"
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {},
+      "partition": "followup",
+      "availability": "UNRESOLVED_PATH_ORIENTATION"
+    },
+    {
+      "id": "s7-settled-native/fragment-3480",
+      "native_fragment_id": 3480,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "24a4bdc4073c09e330e8c22dbf144aec1e0a2970339c7e919d4bae0286aae44b",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 2,
+            "complete_centers_xy": [
+              [
+                361,
+                745
+              ],
+              [
+                360,
+                746
+              ]
+            ],
+            "complete_patches": 2,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 62,
+            "reused_pixel_uses": 36,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 46
+          },
+          "lower": {
+            "requested_patches": 2,
+            "complete_centers_xy": [
+              [
+                361,
+                755
+              ],
+              [
+                360,
+                756
+              ]
+            ],
+            "complete_patches": 2,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 62,
+            "reused_pixel_uses": 36,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 46
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1121,
+              985
+            ],
+            [
+              1120,
+              986
+            ]
+          ],
+          "shape": [
+            2,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "378d0059583087fb3b006508867d4fe08631a7b66297e5deef57367e65f40a11"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1121,
+              995
+            ],
+            [
+              1120,
+              996
+            ]
+          ],
+          "shape": [
+            2,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "8ee87bf6c790e45e140272ef5e1c2470509fc7dfad78d614739968256f750714"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-3520",
+      "native_fragment_id": 3520,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "cb6cd0ee8363af4b404f479b5eef869b87420b611ee0ae1571e8d597a15d045c",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 2,
+            "complete_centers_xy": [
+              [
+                360,
+                746
+              ],
+              [
+                359,
+                747
+              ]
+            ],
+            "complete_patches": 2,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 62,
+            "reused_pixel_uses": 36,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 46
+          },
+          "lower": {
+            "requested_patches": 2,
+            "complete_centers_xy": [
+              [
+                360,
+                756
+              ],
+              [
+                359,
+                757
+              ]
+            ],
+            "complete_patches": 2,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 62,
+            "reused_pixel_uses": 36,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 46
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1120,
+              986
+            ],
+            [
+              1119,
+              987
+            ]
+          ],
+          "shape": [
+            2,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "1b3a9c797005762dfdc0e5dedc1688a9989309abb9a22aebf501cdfdd704151d"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1120,
+              996
+            ],
+            [
+              1119,
+              997
+            ]
+          ],
+          "shape": [
+            2,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "5956496ce13233398fa8cf6e0636f0f93920ce4c67cbb2eb6483893a7e11d2ae"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-3521",
+      "native_fragment_id": 3521,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "40403af24eba8f26d467ace8c52483c8b43d341ad3a66c9f922c976534a42695",
+      "context": {
+        "status": "UNRESOLVED_PATH_ORIENTATION"
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {},
+      "partition": "followup",
+      "availability": "UNRESOLVED_PATH_ORIENTATION"
+    },
+    {
+      "id": "s7-settled-native/fragment-3554",
+      "native_fragment_id": 3554,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "0e740ff736dc42a351515dabce654527d087c2c0e54d0f01925ff8e7fe74777f",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 2,
+            "complete_centers_xy": [
+              [
+                359,
+                747
+              ],
+              [
+                360,
+                747
+              ]
+            ],
+            "complete_patches": 2,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 56,
+            "reused_pixel_uses": 42,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 42
+          },
+          "lower": {
+            "requested_patches": 2,
+            "complete_centers_xy": [
+              [
+                359,
+                757
+              ],
+              [
+                360,
+                757
+              ]
+            ],
+            "complete_patches": 2,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 56,
+            "reused_pixel_uses": 42,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 42
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1119,
+              987
+            ],
+            [
+              1120,
+              987
+            ]
+          ],
+          "shape": [
+            2,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "b43d9a67a0c47326d9600842761511a44efe31282231c56e8b9d039db2ebbce6"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1119,
+              997
+            ],
+            [
+              1120,
+              997
+            ]
+          ],
+          "shape": [
+            2,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "f2ff68f16669b4750eb6b55ebadcf82d994a0ec0f879106fcad4249935a52f11"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-3556",
+      "native_fragment_id": 3556,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "6157b8a8a3ecf79375781f5aa5c14a437267d7d49377859ca1b7d839016a4f2d",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 2,
+            "complete_centers_xy": [
+              [
+                360,
+                747
+              ],
+              [
+                359,
+                748
+              ]
+            ],
+            "complete_patches": 2,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 62,
+            "reused_pixel_uses": 36,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 46
+          },
+          "lower": {
+            "requested_patches": 2,
+            "complete_centers_xy": [
+              [
+                360,
+                757
+              ],
+              [
+                359,
+                758
+              ]
+            ],
+            "complete_patches": 2,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 62,
+            "reused_pixel_uses": 36,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 46
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1120,
+              987
+            ],
+            [
+              1119,
+              988
+            ]
+          ],
+          "shape": [
+            2,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "ae27c407e9b262f3fa0c5ab3abb6fc5b629d2c19cbf8566e498f184cd5f59ae3"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1120,
+              997
+            ],
+            [
+              1119,
+              998
+            ]
+          ],
+          "shape": [
+            2,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "7d3a51f1f3b5d9afd59f209ab1a0e8638176995350ba327bbe04dfbc4b2ab044"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-3852",
+      "native_fragment_id": 3852,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "f56bcef7bf0b33dd495f97509bfeb429c786821de805d79629aa5dc4d070b742",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                372,
+                786
+              ],
+              [
+                371,
+                786
+              ],
+              [
+                370,
+                786
+              ],
+              [
+                369,
+                786
+              ],
+              [
+                368,
+                787
+              ],
+              [
+                367,
+                787
+              ],
+              [
+                366,
+                787
+              ],
+              [
+                365,
+                787
+              ],
+              [
+                364,
+                788
+              ],
+              [
+                363,
+                788
+              ],
+              [
+                362,
+                788
+              ],
+              [
+                361,
+                788
+              ],
+              [
+                360,
+                788
+              ],
+              [
+                359,
+                789
+              ],
+              [
+                358,
+                789
+              ],
+              [
+                357,
+                789
+              ],
+              [
+                356,
+                789
+              ],
+              [
+                355,
+                790
+              ],
+              [
+                354,
+                790
+              ],
+              [
+                353,
+                790
+              ],
+              [
+                352,
+                790
+              ],
+              [
+                351,
+                790
+              ],
+              [
+                350,
+                791
+              ],
+              [
+                349,
+                791
+              ],
+              [
+                348,
+                791
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 247,
+            "reused_pixel_uses": 978,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          },
+          "lower": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                372,
+                796
+              ],
+              [
+                371,
+                796
+              ],
+              [
+                370,
+                796
+              ],
+              [
+                369,
+                796
+              ],
+              [
+                368,
+                797
+              ],
+              [
+                367,
+                797
+              ],
+              [
+                366,
+                797
+              ],
+              [
+                365,
+                797
+              ],
+              [
+                364,
+                798
+              ],
+              [
+                363,
+                798
+              ],
+              [
+                362,
+                798
+              ],
+              [
+                361,
+                798
+              ],
+              [
+                360,
+                798
+              ],
+              [
+                359,
+                799
+              ],
+              [
+                358,
+                799
+              ],
+              [
+                357,
+                799
+              ],
+              [
+                356,
+                799
+              ],
+              [
+                355,
+                800
+              ],
+              [
+                354,
+                800
+              ],
+              [
+                353,
+                800
+              ],
+              [
+                352,
+                800
+              ],
+              [
+                351,
+                800
+              ],
+              [
+                350,
+                801
+              ],
+              [
+                349,
+                801
+              ],
+              [
+                348,
+                801
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 247,
+            "reused_pixel_uses": 978,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1132,
+              1026
+            ],
+            [
+              1131,
+              1026
+            ],
+            [
+              1130,
+              1026
+            ],
+            [
+              1129,
+              1026
+            ],
+            [
+              1128,
+              1027
+            ],
+            [
+              1127,
+              1027
+            ],
+            [
+              1126,
+              1027
+            ],
+            [
+              1125,
+              1027
+            ],
+            [
+              1124,
+              1028
+            ],
+            [
+              1123,
+              1028
+            ],
+            [
+              1122,
+              1028
+            ],
+            [
+              1121,
+              1028
+            ],
+            [
+              1120,
+              1028
+            ],
+            [
+              1119,
+              1029
+            ],
+            [
+              1118,
+              1029
+            ],
+            [
+              1117,
+              1029
+            ],
+            [
+              1116,
+              1029
+            ],
+            [
+              1115,
+              1030
+            ],
+            [
+              1114,
+              1030
+            ],
+            [
+              1113,
+              1030
+            ],
+            [
+              1112,
+              1030
+            ],
+            [
+              1111,
+              1030
+            ],
+            [
+              1110,
+              1031
+            ],
+            [
+              1109,
+              1031
+            ],
+            [
+              1108,
+              1031
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "7215020d9e023ed62c7c6f4f26c77a554f6d86f1f76354434eb5ed856ba27260"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1132,
+              1036
+            ],
+            [
+              1131,
+              1036
+            ],
+            [
+              1130,
+              1036
+            ],
+            [
+              1129,
+              1036
+            ],
+            [
+              1128,
+              1037
+            ],
+            [
+              1127,
+              1037
+            ],
+            [
+              1126,
+              1037
+            ],
+            [
+              1125,
+              1037
+            ],
+            [
+              1124,
+              1038
+            ],
+            [
+              1123,
+              1038
+            ],
+            [
+              1122,
+              1038
+            ],
+            [
+              1121,
+              1038
+            ],
+            [
+              1120,
+              1038
+            ],
+            [
+              1119,
+              1039
+            ],
+            [
+              1118,
+              1039
+            ],
+            [
+              1117,
+              1039
+            ],
+            [
+              1116,
+              1039
+            ],
+            [
+              1115,
+              1040
+            ],
+            [
+              1114,
+              1040
+            ],
+            [
+              1113,
+              1040
+            ],
+            [
+              1112,
+              1040
+            ],
+            [
+              1111,
+              1040
+            ],
+            [
+              1110,
+              1041
+            ],
+            [
+              1109,
+              1041
+            ],
+            [
+              1108,
+              1041
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "5d001a2d3cbcdbd289050f32a27be47d094b6448298cb350a4df62fb264a5127"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    },
+    {
+      "id": "s7-settled-native/fragment-4096",
+      "native_fragment_id": 4096,
+      "source_recording": {
+        "path": "sample/sample7.mp4",
+        "sha256": "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86"
+      },
+      "frame": 1063,
+      "path_sha256": "b8f4cdc70a63630d8b3959bcdfc01d831d0deba1e58f2f9aa73e6e3526bebcbe",
+      "context": {
+        "status": "AVAILABLE_PARTIAL_CONTEXT",
+        "sides": {
+          "upper": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                348,
+                796
+              ],
+              [
+                349,
+                796
+              ],
+              [
+                350,
+                796
+              ],
+              [
+                351,
+                796
+              ],
+              [
+                352,
+                796
+              ],
+              [
+                353,
+                795
+              ],
+              [
+                354,
+                795
+              ],
+              [
+                355,
+                795
+              ],
+              [
+                356,
+                795
+              ],
+              [
+                357,
+                795
+              ],
+              [
+                358,
+                795
+              ],
+              [
+                359,
+                795
+              ],
+              [
+                360,
+                795
+              ],
+              [
+                361,
+                795
+              ],
+              [
+                362,
+                795
+              ],
+              [
+                363,
+                795
+              ],
+              [
+                364,
+                795
+              ],
+              [
+                365,
+                794
+              ],
+              [
+                366,
+                794
+              ],
+              [
+                367,
+                794
+              ],
+              [
+                368,
+                794
+              ],
+              [
+                369,
+                794
+              ],
+              [
+                370,
+                794
+              ],
+              [
+                371,
+                794
+              ],
+              [
+                372,
+                794
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 229,
+            "reused_pixel_uses": 996,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          },
+          "lower": {
+            "requested_patches": 25,
+            "complete_centers_xy": [
+              [
+                348,
+                806
+              ],
+              [
+                349,
+                806
+              ],
+              [
+                350,
+                806
+              ],
+              [
+                351,
+                806
+              ],
+              [
+                352,
+                806
+              ],
+              [
+                353,
+                805
+              ],
+              [
+                354,
+                805
+              ],
+              [
+                355,
+                805
+              ],
+              [
+                356,
+                805
+              ],
+              [
+                357,
+                805
+              ],
+              [
+                358,
+                805
+              ],
+              [
+                359,
+                805
+              ],
+              [
+                360,
+                805
+              ],
+              [
+                361,
+                805
+              ],
+              [
+                362,
+                805
+              ],
+              [
+                363,
+                805
+              ],
+              [
+                364,
+                805
+              ],
+              [
+                365,
+                804
+              ],
+              [
+                366,
+                804
+              ],
+              [
+                367,
+                804
+              ],
+              [
+                368,
+                804
+              ],
+              [
+                369,
+                804
+              ],
+              [
+                370,
+                804
+              ],
+              [
+                371,
+                804
+              ],
+              [
+                372,
+                804
+              ]
+            ],
+            "complete_patches": 25,
+            "censored_crop_patches": 0,
+            "censored_mask_patches": 0,
+            "dependency_union_pixels": 229,
+            "reused_pixel_uses": 996,
+            "crossing_or_touching_path_pixels": 0,
+            "outside_reviewed_path_columns": 0
+          }
+        },
+        "shared_upper_lower_pixels": 0,
+        "pure_material_truth": false
+      },
+      "review_role": null,
+      "qualification": null,
+      "subject_sha256": null,
+      "sides": {
+        "upper": {
+          "centers_image_xy": [
+            [
+              1108,
+              1036
+            ],
+            [
+              1109,
+              1036
+            ],
+            [
+              1110,
+              1036
+            ],
+            [
+              1111,
+              1036
+            ],
+            [
+              1112,
+              1036
+            ],
+            [
+              1113,
+              1035
+            ],
+            [
+              1114,
+              1035
+            ],
+            [
+              1115,
+              1035
+            ],
+            [
+              1116,
+              1035
+            ],
+            [
+              1117,
+              1035
+            ],
+            [
+              1118,
+              1035
+            ],
+            [
+              1119,
+              1035
+            ],
+            [
+              1120,
+              1035
+            ],
+            [
+              1121,
+              1035
+            ],
+            [
+              1122,
+              1035
+            ],
+            [
+              1123,
+              1035
+            ],
+            [
+              1124,
+              1035
+            ],
+            [
+              1125,
+              1034
+            ],
+            [
+              1126,
+              1034
+            ],
+            [
+              1127,
+              1034
+            ],
+            [
+              1128,
+              1034
+            ],
+            [
+              1129,
+              1034
+            ],
+            [
+              1130,
+              1034
+            ],
+            [
+              1131,
+              1034
+            ],
+            [
+              1132,
+              1034
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "c0174625776669793ed747676bae3ebd7781094d6c77a31a2dd3aaef4829a779"
+        },
+        "lower": {
+          "centers_image_xy": [
+            [
+              1108,
+              1046
+            ],
+            [
+              1109,
+              1046
+            ],
+            [
+              1110,
+              1046
+            ],
+            [
+              1111,
+              1046
+            ],
+            [
+              1112,
+              1046
+            ],
+            [
+              1113,
+              1045
+            ],
+            [
+              1114,
+              1045
+            ],
+            [
+              1115,
+              1045
+            ],
+            [
+              1116,
+              1045
+            ],
+            [
+              1117,
+              1045
+            ],
+            [
+              1118,
+              1045
+            ],
+            [
+              1119,
+              1045
+            ],
+            [
+              1120,
+              1045
+            ],
+            [
+              1121,
+              1045
+            ],
+            [
+              1122,
+              1045
+            ],
+            [
+              1123,
+              1045
+            ],
+            [
+              1124,
+              1045
+            ],
+            [
+              1125,
+              1044
+            ],
+            [
+              1126,
+              1044
+            ],
+            [
+              1127,
+              1044
+            ],
+            [
+              1128,
+              1044
+            ],
+            [
+              1129,
+              1044
+            ],
+            [
+              1130,
+              1044
+            ],
+            [
+              1131,
+              1044
+            ],
+            [
+              1132,
+              1044
+            ]
+          ],
+          "shape": [
+            25,
+            3,
+            7,
+            7
+          ],
+          "uint8_sha256": "99e998a4671534c018838aadd4bea1636632bd6eb00d63decd6a088c2180f6f6"
+        }
+      },
+      "partition": "followup",
+      "availability": "AVAILABLE_PARTIAL_CONTEXT"
+    }
+  ],
+  "pairs": {
+    "7ebe66b72859250ee1ea170960c09be64a6901b8d58b632e19fdba7eac663a86": [
+      [
+        "s7-settled-native/fragment-687",
+        "s7-settled-native/fragment-444"
+      ],
+      [
+        "s7-settled-native/fragment-687",
+        "s7-settled-native/fragment-453"
+      ]
+    ]
+  },
+  "fit_sources": [
+    "8c5d2708d602bfb5b1d6f8ff12757255a86d607caf6914b153ea6e39c4457e79",
+    "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+  ],
+  "limits": {
+    "seconds": 60,
+    "peak_rss_bytes": 500000000,
+    "scratch_bytes": 3000000,
+    "retained_bytes": 1000000,
+    "aggregate_workspace_bytes": 3000000000
+  },
+  "python": "3.14.7",
+  "packages": {
+    "torch": "2.14.1",
+    "numpy": "2.5.4",
+    "pillow": "12.3.0"
+  },
+  "arm": "mean_rgb",
+  "training_updates": 0,
+  "absolute_classification": false,
+  "physical_winner": null,
+  "scope": "Two same-frame constraints: one large bubble's actual top above two cup-top structures. Unknowns are not truth; no stable-layer/front/episode or independent accuracy claim."
+}
