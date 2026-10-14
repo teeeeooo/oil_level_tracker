@@ -2,8 +2,10 @@
 
 **Local disposition: NOT ADOPTED.** B's native input is restored, but one existing
 sequence integration test fails. No production merge, detector-effectiveness
-acceptance, model revival or Windows PASS follows. The next permitted field work
-is a diagnostic A/B comparison, with this known failure visible to the operator.
+acceptance, model revival or Windows PASS follows. The
+[received bundle comparison](#received-bundle-comparison--2026-10-14) reports
+unchanged final tracking and different downstream interpretation. Further field
+inspection uses those saved files; no new video run is requested.
 
 ## Received role and causal evidence
 
@@ -84,7 +86,86 @@ Thus input availability and sequence preservation are separate outcomes. The
 guard remains on an unmerged candidate branch for [Windows diagnostic comparison](../../40-operations/s11-overlay-support-windows-comparison.md).
 That comparison must expose this local failure and evaluate the existing nine
 reviewed private-field segments. It cannot erase the local failure or qualify
-production adoption by aggregate counts. No private video was run on this Mac.
+production adoption by aggregate counts. No private video was run as part of
+that local paired experiment.
+
+## Received bundle comparison — 2026-10-14
+
+**Scope:** user-supplied text, not locally re-read bundles or a new execution.
+The user explicitly sets aside the baseline-manifest mismatch for this output
+comparison. Both runs reportedly use the same 1920×1080, 23.976 fps,
+98,413-frame H.264 source, byte-identical Recipe, 480–780 s at 2 Hz, compressor
+start 485 s, BASE FULL / Accum EMPTY confirmations and FULL trace. The report
+lists Darwin/arm64 metadata; retain that qualification limit without rejecting
+the output comparison or requiring a rerun. Private files remain on Windows;
+permitted text can be relayed.
+
+| Reported result | Baseline → candidate | Supported reading |
+|---|---|---|
+| Tracking | 1,202 rows, all 22 non-run-ID columns equal, including flags and validity | No final-output improvement reported; internal masks/candidates are not proven equal |
+| Events | 123 → 124; 117 common, 6 baseline-only, 7 candidate-only | Three Foam differences are capture numbering only |
+| New event occurrences | Minimum 669.50 s; maximum 678.51 s; drop 715.51–717.01 s | Existing event types, not newly introduced definitions or new detector observations |
+| BASE retrospective | ACCEPTED FULL, effective coverage 100% in both | Same reported interpretation, not proof of correct drain/refill tracking |
+| Accum retrospective | ACCEPTED EMPTY / 69.88% → UNRESOLVED / 5.99%; `R17_OBSERVATION_UNAVAILABLE` | State-aware coverage changed, not a measured boundary-accuracy loss |
+| Baseline Accum prefix | EMPTY through 677.01 s; appearance at 677.51 s | Conflicts with reviewed inflow from about 653 s; higher coverage is not a restoration target |
+| Trace | 1,202 records, 601 per Glass; same capture reasons; 1,763 → 1,895 MB reported | File size does not establish that overlay support caused the extra 132 MB |
+
+The cited 13-case PASS is the existing four-source local comparison, not new
+private-field acceptance. The local sequence failure is sample3 f2413 with 37
+changed tracking rows, **not** this Accum retrospective difference.
+
+### Source-based interpretation of the difference
+
+Read-only review at `73ad051` found the already adopted
+[October 7 compatibility repair](2026-10-07-event-compatibility.md), `ccfb6fa`:
+unrelated `R7_FOAM_*` flags previously selected legacy Oil handling. Restricting
+that handling to actual Oil markers changes extrema/drop eligibility and
+retrospective hard-barrier handling while preserving tracking samples. The
+received baseline's R7-anchor explanation and candidate's unavailable barrier
+are consistent with this known correction. This is a supported explanation to
+check, not a verified causal attribution for the private bundles. Do not undo
+that repair or call the difference an overlay-induced regression.
+
+The current [`CsvExporter`](../../../src/oil_tracker/adapters/reporting/csv_exporter.py)
+exports all 23 `TrackingSample` fields. The
+[`outcome assembler`](../../../src/oil_tracker/application/services/analysis_outcome.py)
+uses those samples, the Recipe and initial confirmation; no hidden candidate or
+mask state enters this derivation. Identical ordered inputs under the same
+outcome code produce the same semantic result apart from run identifiers. Those
+outcome owners are identical in the specified local `747c1bc` / `0073def` pair.
+Thus identical CSV plus different interpretation is not evidence of a mask-only
+cause. This does not make a repeated baseline-manifest audit a prerequisite.
+
+Existing event and retrospective suites pass **47 tests in 0.34 s** during this
+receipt review. They verify local contracts, not private bundle contents. No
+production code, threshold, Recipe, stored result or truth was changed.
+
+### Physical acceptance and next evidence
+
+The [reviewed source](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
+remains the oracle. No per-segment numeric runs, Y direction or missing/wrong
+durations were supplied. Preserve the nine segment assessments explicitly:
+
+| Segment ID | Receipt assessment |
+|---|---|
+| `WS1-BASE-FULL-PREFIX` | NOT_EVALUATED; per-segment output absent |
+| `WS1-BASE-DRAIN` | NOT_EVALUATED; overall coverage is not interface-tracking evidence |
+| `WS1-BASE-RAPID-REFILL` | NOT_EVALUATED; per-segment output absent |
+| `WS1-BASE-FULL-SUFFIX` | NOT_EVALUATED; per-segment output absent |
+| `WS1-ACCUM-EMPTY` | NOT_EVALUATED; per-segment output absent |
+| `WS1-ACCUM-ENTRY-SPLASH` | Tracking NOT_EVALUATED; baseline EMPTY extension conflicts with reviewed inflow |
+| `WS1-ACCUM-FOAM-LAYERED` | Tracking NOT_EVALUATED; the same EMPTY extension overlaps this interval |
+| `WS1-ACCUM-POST-FOAM` | NOT_EVALUATED; per-segment output absent |
+| `WS1-ACCUM-DRAIN` | NOT_EVALUATED; a drop event alone cannot establish continuous tracking |
+
+Disposition remains **NOT ADOPTED; no reported final-output gain**. Next locate
+the first missing/wrong physical Oil/Foam observation in the saved candidate
+trace, starting with Accum entry/layering while retaining all nine segments.
+The [saved-output follow-up](../../40-operations/s11-overlay-support-windows-comparison.md#5-수신-결과-이후-기존-bundle만으로-확인)
+requests permitted text, not another GUI analysis or private-file transfer.
+Do not restore EMPTY through 677 s or relax barriers to raise coverage. The
+local sample3 failure, closed model trials and deferred performance work retain
+their existing dispositions.
 
 ## Reproduction and retention
 
@@ -124,10 +205,10 @@ evidence is deleted.
 
 ## Detector Governance
 
-- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `OIL-TRACKLET`, `OIL-PROJECTION`
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `FOAM-CANDIDATE`, `OIL-TRACKLET`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`, `RESULT-PRESENTATION`
 - Failure-registry entries: `S11-F02`, `S11-F06`, `S11-F09`, `S11-F10`
-- First harmful stage: B's valid regional input is removed by chromatic-overlay classification after opening loses parent thickness. Restoring that input also changes later sample3 Oil ownership; the exact cause of those sequence changes is not established by row counts.
-- Existing feature coverage: original Recipe ellipse/margin/default settings execute; A/B/Base have empty exclusions/templates. Existing four-window sessions and static-reference preparation execute in the paired pipeline, with unchanged settings/initial-state confirmation. Local XY OFF and D2/Local XY closures are preserved; no new Artifact setup, crop or model is used.
-- Execution scope: direct preprocessing and real frame detection, then original four-window analysis/resolution/report construction with serial fresh workers. sample3 is explicit engineering/legacy reproduction, not new physical scoring. No Windows or new training execution. One local sequence test fails and blocks adoption.
-- Logic-map impact: UPDATED — records original connected support as an additional HUD prerequisite inside shared preprocessing; routes and independent role owners remain unchanged.
+- First harmful stage: B's valid regional input is removed by chromatic-overlay classification after opening loses parent thickness. Restoring that input changes later sample3 ownership; its cause is not established by row counts. The received private report shows unchanged tracking and a separate interpretation difference consistent with the prior compatibility repair; its first physical detector loss remains unlocalized.
+- Existing feature coverage: original Recipe ellipse/margin/default settings execute; A/B/Base have empty exclusions/templates. Four-window sessions and static preparation execute with unchanged settings/initial-state confirmation. Local XY OFF and D2/Local XY closures remain. The received private comparison reports identical Recipe/session and FULL trace with confirmed FULL/EMPTY; exact ROI/exclusion/template values are unavailable in the relayed text and are not inferred.
+- Execution scope: direct preprocessing and real frame detection, then four-window analysis/resolution/report construction with serial fresh workers. sample3 is engineering/legacy reproduction, not physical scoring. Receipt review adds source inspection and 47 existing event/retrospective tests; private bundle values remain user-reported. No new Windows, private-video or training execution. The local sequence failure remains unresolved and blocks adoption.
+- Logic-map impact: NONE — receipt review changes no route, authority or input semantics. The map already records the original-support HUD prerequisite introduced at `0073def`; the earlier implementation updated that entry. Existing publication/retrospective owners explain the received scope.
 - Failure-registry impact: NONE — this scoped input/sequence tradeoff is retained as a candidate result, not a newly accepted field mechanism; current failures and no-tuning rules still apply.
