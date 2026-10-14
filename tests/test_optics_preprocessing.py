@@ -55,3 +55,31 @@ def test_wide_chromatic_material_patch_is_not_treated_as_thin_overlay() -> None:
     result = preprocess(frame, _mask(frame.shape[:2]), DetectorSettings())
 
     assert np.count_nonzero(result.glare_mask[42:82, 22:138]) == 0
+
+
+def test_thick_chromatic_region_with_thin_wide_cap_is_not_overlay() -> None:
+    frame = np.full((120, 160, 3), 80, dtype=np.uint8)
+    # A wide edge belongs to a deeper, connected material region. Horizontal
+    # opening removes the narrower body; the surviving cap is not a HUD line.
+    frame[38:43, 30:130] = (35, 145, 205)
+    frame[43:72, 68:88] = (35, 145, 205)
+
+    result = preprocess(frame, _mask(frame.shape[:2]), DetectorSettings())
+
+    assert not np.any(result.glare_mask[38:72, 30:130])
+
+
+def test_material_component_does_not_disable_separate_hud_or_optical_glare() -> None:
+    frame = np.full((160, 200, 3), 80, dtype=np.uint8)
+    frame[30:35, 45:155] = (35, 145, 205)
+    frame[35:67, 88:108] = (35, 145, 205)
+    frame[100:104, 20:180] = (20, 220, 30)
+    frame[130:135, 20:40] = 255
+    cv2.line(frame, (180, 15), (180, 65), (210, 210, 210), 5)
+
+    result = preprocess(frame, _mask(frame.shape[:2]), DetectorSettings())
+
+    assert not np.any(result.glare_mask[30:67, 45:155])
+    assert np.all(result.glare_mask[100:104, 20:180] == 255)
+    assert np.all(result.glare_mask[130:135, 20:40] == 255)
+    assert result.glare_mask[40, 180] == 255

@@ -190,6 +190,12 @@ All decision owners and lifecycle transitions below retain R22 behavior.
 5. Static Foam overlap and `FoamTemporalGate.evaluate` create a current Foam candidate; Artifact templates may reject that candidate.
 6. `CurrentFrameResultProjector.project` classifies compatibility fill state, applies the online `TemporalTracker` to raw Oil/Foam coordinates, computes px/mm fields, attaches candidates/flags/metrics and returns a `PhaseDetection`.
 
+Within shared preprocessing, chromatic HUD opposition requires thin/wide support
+both after horizontal opening and in each original connected component supplying
+that core. This prevents an opened cap of thick colorful material from acquiring
+overlay authority. Saturation/caustic opposition and all downstream routes stay
+independent; see the [bounded guard contract](s11-chromatic-overlay-support-design.md).
+
 The tracker’s `raw_*`/`smoothed_*` fields and the current `fill_state` are not the completed-window selection. The completed resolver uses the stored candidates and detection evidence again. The accepted-Foam context parameters exist in the Oil pipeline API, but the current `observe` call runs Oil before it has a current accepted Foam component and therefore invokes it without that context.
 
 The optional [`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py)
