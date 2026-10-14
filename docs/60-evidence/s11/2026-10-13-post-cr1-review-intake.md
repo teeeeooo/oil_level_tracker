@@ -10,6 +10,9 @@
 Local XY OFF`다. FIELD FAIL은 기존 사용자 보고의 유지이며 새 Windows 결과가
 아니다. 현재 상태와 다음 실행은 [Work Plan](../../00-project/work-plan.md)이 소유한다.
 
+10월 13일의 환경 보존 판단은 아래 [10월 14일 명시적 CR-1 정리](#cr1-runtime-retirement-2026-10-14)로
+종료됐다. 앞선 인수·실험 기록과 machine receipt는 당시의 결과를 유지한다.
+
 ## 원본과 배치
 
 - [원문 명세](../../70-reference/s11-post-cr1-review-2026-10-12/S11-program-review-and-work-spec-post-CR1-2026-10-12.md),
@@ -167,10 +170,67 @@ Torch 2.14.1 / NumPy 2.5.4 / Pillow 12.3.0 import와 기존 5개 managed run 검
 receipt를 덮어쓰지 않았고 임시 복원본은 즉시 제거했다. 이는 현재 문서를 과거 pin과 같다고 주장하는
 검증이 아니다. 변경 문서 local 링크 81개, governance, whitespace 검사도 통과했다.
 
+## CR1 runtime retirement (2026-10-14)
+
+**판정: `CR1_RUNTIME_RETIRED_NO_DETECTOR_PROMOTION`.** 기준 HEAD는
+`07d309531053b9805876b447e8e13ccf9ea6ba24`이며, 사용자가 CR-1 정리부터 단계적으로
+진행하도록 명시적으로 요청했다. 10월 12일의 환경 보존 지시와 위 10월 13일의
+후속 정책용 보존 판단은 이번 요청으로 대체한다.
+
+고정 CR-1의 제한적 유용성과 첫 실험 실패는 유지된다. 후속
+[연속 정책의 공개 자료 보존 실패](2026-10-14-oil-policy-feasibility.md), 종료된
+RGB/native 비교 및 [SCM-1 결과](2026-10-14-semantic-context.md)를 확인했다.
+이 환경의 모든 실행은 종료됐고 사용 중인 프로세스는 없었다. 다음 역할별 관측
+설계는 저장된 벡터를 사용하므로 현 환경·모델을 유지할 구체적인 실행 수요가 없다.
+사전학습 표현 전체의 가능성을 부정하거나 새 역할별 실험을 채택한 판정은 아니다.
+
+| 제거 범위 | 일반 파일 | symlink | 논리 bytes | 할당 bytes |
+|---|---:|---:|---:|---:|
+| CR-1 DINOv2 weight 및 source | 159 | 0 | 89,088,284 | 102,916,096 |
+| 종료된 실험들이 공유한 격리 `env/` | 16,824 | 3 | 601,459,145 | 643,264,512 |
+| 비어 있던 `cache/` | 0 | 0 | 0 | 0 |
+| 진단 `probe.py`의 파생 bytecode | 1 | 0 | 39,358 | 40,960 |
+| 합계 | **16,984** | **3** | **690,586,787** | **746,221,568** |
+
+[정리 receipt](../../50-diagnostics/s11/2026-10-12-cr1-context-comparison/runtime-retirement-20261014.json)는
+범위별 inventory hash, 설치 package 버전, upstream source/weight pin, 보존 가치
+5항목과 검증 결과를 기록한다. 논리 bytes에는 링크 자체의 길이가 포함되며,
+할당 bytes는 제거한 파일들의 할당량 합계다. 파일시스템 전체 여유 공간 증가는
+별도로 측정하지 않았다. 삭제 직전 inventory 전체를 다시 대조했고 weight hash와
+추출 source 158개 pin도 일치했다. 설치 파일에 외부 hardlink는 없었으며 Python
+symlink 3개는 링크 자체만 제거했다.
+
+보존한 `runs/`의 26개 marker/준비 파일은 **250,219 논리 bytes / 319,488 할당 bytes**이며
+삭제 전후 bytes가 같다. 기존 전체 점수·최신 역할 판정·반례·진단 코드·lock을
+복제하지 않고 원래 위치에 남겼다. 기존 tracked 비-Markdown 파일 1,256개의
+hash도 모두 같고 앱 `.venv`와 그 Python 실행 파일은 변경하지 않았다.
+원본 영상·앱 bundle·생산 코드·Recipe는 제거 범위에 포함되지 않는다. 워크트리는
+현재 branch의 primary checkout 하나이며 추가 삭제나 병합 대상은 없다.
+
+과거 문서의 `sample/output/s11-cr1-workspace/env/bin/python` 재현 명령은 이제
+직접 실행할 수 없다. 다시 추론하려면 별도로 정당화한 실행 계약에 따라 기존
+lock, Python/package 버전, upstream source commit과 weight hash를 복원해야 한다.
+환경의 파일시스템 bytes를 백업하지 않았고 자동 복원·재추론은 하지 않는다.
+저장된 점수와 입력 연결 검토에는 이 환경이 필요하지 않다.
+
+제거 후 앱 환경에서 `s11_existing_material_reuse.audit`를 실행한 결과는 기존
+readout과 구조적으로 완전히 같았다: 전체 164개 기록, 정확한 지원 연결 160개,
+9개 원본 / 43개 context / 31개 source-frame과 기존 N1–N5 판정이 유지됐다.
+후속 semantic 입력 검증도 48개 경로 / 39개 사용 가능 / 15개 판정 / 33개 미판정,
+4개 촬영원 / 5개 frame / 17개 비교를 그대로 확인했다. 이 검증에서 Torch를
+import하지 않았으며 모델 호출·영상 decode는 0회다.
+
+관련 기존 단위테스트 3개 파일에서 **120 passed in 1.24 s**, 관리 실행 종료 검사
+**51개 / 오류 0**, S11 governance와 whitespace 검사가 통과했다. 앱 의존성과
+생산 detector 동작을 변경한 작업은 아니며 `O2 OPEN / FIELD FAIL / Local XY OFF`를
+유지한다. 임시 삭제 inventory와 검증 stdout 사본은 이 receipt로 요약한 뒤 제거한다.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
 - First harmful stage: existing joins place sample4/public Foam upper loss at component-to-front reduction and public Oil false selection at anchor admission despite retained lower candidates. Saved-score verification identifies information lost by category-only interpretation, not a newly verified physical classifier or a private Windows first cause.
+- Existing feature coverage: retirement concerns the optional isolated Torch/DINO research runtime only. `pyproject.toml` and application imports have no dependency on it; saved CR1/O1/A1 and native-role inputs remain at their original paths. No Recipe, mask, Artifact, Local XY or initial-state configuration is changed or newly assessed.
+- Execution scope: inventory/hash preservation, removal of the explicitly selected runtime/model/cache directories and saved-data verification in the application environment. No model inference, fitting, video decode, detector replay, report run or Windows execution occurs; field disposition remains with Work Plan.
 - Logic-map impact: NONE — source intake, planning compaction and proposal/acceptance clarification only; all 221 production Python sources remain unchanged and no new runtime schema/consumer is introduced.
 - Failure-registry impact: NONE — existing authority, representation, coupling and provenance risks cover this evidence; no new failure mechanism, promoted repair or field result is asserted.

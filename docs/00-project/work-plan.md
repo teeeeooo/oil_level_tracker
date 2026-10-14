@@ -24,9 +24,12 @@ The [post-CR1 intake](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md)
 retains the preceding saved-score audit. Original CR1 remains
 `CLOSED_WITHOUT_PROMOTION` for the first trial and `SCOPE_LIMITED_USEFULNESS`
 for the complete review. The fixed R/L operation is closed without promotion;
-no crop/scale/reference/cutoff retry follows. Keep one pinned environment/weight
-set under the existing 3 GB contract; the G0 input work needs no encoder rerun.
-Reassess that retained set when its research use is explicitly replaced or ended.
+no crop/scale/reference/cutoff retry follows. The user explicitly requested CR-1
+cleanup; its [runtime retirement](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md#cr1-runtime-retirement-2026-10-14)
+removes the sole DINO model/source set and the isolated environment shared by now-closed
+research trials. Complete scores, role bindings, diagnostic code and minimal readiness
+inputs remain. Saved-vector design needs no encoder; historical inference commands
+require deliberate restoration of their pinned runtime before any separately justified run.
 
 ## S11 work-item ledger
 
@@ -79,7 +82,7 @@ The public candidate scope, fixed comparisons and rim-reply binding are complete
 | Separate native-source qualification and order trial | COMPLETE: public upper/rim roles bound; NRO-1 native order failed all 12 public comparisons | 32 units / 26 available retained, including all 27 public paths and 20 unknowns. Exactly two fits at frozen `432c9b0`; 167 tests and independent 52-forward arithmetic checks pass. Mean-RGB success supplies a limited frozen reference, not a promoted detector |
 | New milk path correspondence and frozen check | COMPLETE; mean reference FALSIFIED_ON_MILK_ORDER at clean `cd75c64` | 16 paths / 13 available / 13 unknown. 687 > 444 fails; 687 > 453 passes. Prior 26 scores reproduce exactly, independent arithmetic agrees, zero updates. 21 focused tests pass; no absolute winner or production promotion |
 | Located milk bubble temporal context | CLOSED: same bubble gradually grows toward image right | One qualitative object relation in 1039–1063; no new point/path or rupture/merger labels. Old LK already used the same frames; no bulk restore/replay. Preserve the deforming positive without a motion/event gate |
-| Pretrained semantic ROI context (SCM-1) | CLOSED WITHOUT PROMOTION at clean `6735985`; 15/17 orders, milk 0/2 | All 48 paths retained; shared fluid-union score fails on both cup structures. Separate prompt means remain design evidence, not a selected replacement or physical classification. New optional runtime/model retired after verification; prior CR1 set preserved |
+| Pretrained semantic ROI context (SCM-1) | CLOSED WITHOUT PROMOTION at clean `6735985`; 15/17 orders, milk 0/2 | All 48 paths retained; shared fluid-union score fails on both cup structures. Separate prompt means remain design evidence, not a selected replacement or physical classification. SCM assets were retired at closeout; the remaining CR1 model/shared research runtime is now retired by explicit user request |
 
 Keep the nine-source inventory as exposure routing. It does not supply nine labeled
 Oil sources or an untouched holdout. A future training option still requires its own
@@ -184,8 +187,11 @@ cleanup or user continuation checkpoint remains outstanding.
 The [CR-1 complete readout](../50-diagnostics/s11/2026-10-12-cr1-context-comparison.md)
 retains all 164 records, original exposure groups, first-trial failure and the
 scope-limited follow-up. The [latest worktree check](../60-evidence/s11/2026-10-13-existing-material-execution.md#receiving-integration-2026-10-14)
-finds one primary checkout and no eligible sibling merge. Retain one existing CR-1
-environment/model set under its [3 GB contract](../20-architecture/s11-contextual-role-observation-design.md#local-footprint-and-removal-contract); unused installer cache was removed.
+finds one primary checkout and no eligible sibling merge. The explicit October 14
+[CR-1 cleanup](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md#cr1-runtime-retirement-2026-10-14)
+retires its model/source and the closed trials' isolated shared environment, reclaiming
+746,221,568 allocated bytes including one generated probe bytecode file. The 26 local run marker/readiness files and canonical
+readouts survive unchanged; no duplicate worktree remains to remove.
 Use [managed artifact closeout](../40-operations/experiment-artifact-lifecycle.md)
 for new outputs; do not restore retired bulk runs or duplicate source/media.
 
@@ -296,12 +302,15 @@ Assistant image interpretation may precede a targeted question but is not human 
 The earlier isolated frozen DINOv2 exception and completed native-surface trial
 remain historical. The current adoption covered **one separately specified
 candidate-local RGB trial**, now completed, with its own frozen population/supervision/split and
-the existing 1,118-parameter architecture/resources in the local Torch environment.
+the existing 1,118-parameter architecture/resources in the then-available local Torch environment.
 It does not authorize fine-tuning DINOv2, model search, retries after this fixed
 outcome or default product/package adoption. Post-CR1 policy and Foam
 inference still need their executable gates; production consumption cannot precede
-O2/V5 and separate behavior acceptance. Retain the existing CR-1 environment/weights/
-caches; general duplicate cleanup does not request their removal.
+O2/V5 and separate behavior acceptance. The user's explicit CR-1 cleanup request now
+supersedes the earlier environment-retention instruction. Its environment/weights/cache
+are retired; completed records and saved-data checks remain available. A successor
+must specify its role objective, source grouping and required resources before any
+new fit or inference; this cleanup does not authorize restoring a closed trial.
 
 **Security-PC boundary:** private videos/images/transfer ZIPs stay on Windows;
 the user may manually relay permitted reports/text. No Mac pixel access or artifact

@@ -181,6 +181,19 @@ inference. Retention does not imply production adoption. The
 [cleanup evidence](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md#추가-정리와-cr1-환경-판단)
 records the removal scope and surviving checks; historical receipts remain frozen.
 
+**October 14 runtime retirement:** the user's explicit CR-1 cleanup request
+supersedes the October 12 retention override and October 13 pending-use decision.
+The fixed CR1/continuous-policy operations and every consumer of this isolated
+research environment have closed. Remove its dedicated DINO model/source set and
+the shared research `env/` and empty `cache/`; preserve `runs/`, complete saved
+scores, qualified roles, diagnostic code and package/source/weight pins. The
+[retirement evidence](../60-evidence/s11/2026-10-13-post-cr1-review-intake.md#cr1-runtime-retirement-2026-10-14)
+records preservation checks and the restored-runtime requirement for historical
+inference commands. Saved-data analysis uses the existing application environment;
+the next role-specific observation design has no current model-runtime dependency.
+Do not automatically reinstall assets or rerun a closed trial. A separately justified
+successor must state its objective, source groups and resources before execution.
+
 ## Progression and stop conditions
 
 1. Verify the preceding repository cleanup, freeze WP1, and satisfy footprint/
@@ -725,8 +738,9 @@ or episode change is part of this comparison. Its result may reject this operati
 or justify a separately qualified calibration step; it cannot replace that step.
 Freeze resource/stop conditions and the complete comparison before execution;
 an unfavourable result does not authorize reference, scale, crop or margin rescue.
-Until then, the retained environment has a concrete pending use, and the existing
-3 GB footprint/removal contract applies.
+That historical pre-execution retention condition ended with the closed fixed
+comparisons. Runtime removal follows the October 14 decision in the footprint
+contract above; frozen comparison records retain their original scope.
 
 ### Frozen material-side operation
 
@@ -1063,9 +1077,9 @@ owns exact settings, limits and the measured result, not current gate state.
 - Failure-registry entries: `S11-F01`, `S11-F02`, `S11-F03`, `S11-F04`, `S11-F06`, `S11-F07`, `S11-F09`, `S11-F10`.
 - Prior mechanisms reviewed: the October 13 G0 full-population binding, N1–N3 scoped replies, qualified N4/N5 roles with separate tentative glass-pattern influence and the fixed source-separated capability trial, unavailable upper-rim contexts and complete proposed RGB context with same-frame shared pixels, native-feature dependency canary, weak annotation precision and support-face versus raw-edge reachability; current max-peer support and authority source; zero-support continuation counterexamples; CR-1 complete raw vectors, category collision and unreviewed score maxima; the f1485 user clarification distinguishing fine-Foam physical extent from a practically accepted B approximation; closed S1/row-distribution/mean comparisons; Foam component reduction, side-context and correspondence failures; current witness and story acceptance.
 - Prior mechanisms rejected: threshold/peer-distance rescue, anchor-only fix, cost/maturity-based identity, appearance matching as physical authority, component-extreme Foam replacement and episode relaxation without a correct raw front.
-- Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies, a bounded local footprint and preservation before removal keep the experiment reversible.
+- Preserved contracts: same-frame native candidate provenance, independent Oil/Foam, bounded ownership, fail-closed ambiguity, sample3 retirement, closed source judgments and O2/V5/O3/field separation; isolated dependencies and a bounded footprint. Runtime retirement preserves complete decision evidence and pinned reproduction metadata without promising an immediately executable environment.
 - Difference from prior failures: NSR-1 first qualifies native binding, complete feature footprints and weak-role supervision without assuming a trainable classifier; the follow-up preserves local absolute support plus signed role competition rather than categorical fusion, max-score selection or a universal texture veto. Physical truth and scoped practical acceptance remain distinct, correcting the initial B false-negative and A physical-alternative claims. The separate Foam proposal keeps fine/large appearance references and internal appearance transitions explicit; similarity to one appearance cannot define universal Foam absence or an upper front. Independent calibration, native linkage, two separate Oil consumption slices and raw-first Foam remain required; no physical success is asserted.
 - Logic-map impact: NONE — this contract adds native-role input/readiness obligations and an operating-policy proposal to offline research; no production executing owner, schema or detector behavior changes.
 - Existing feature coverage: the receiving review reuses pinned CR1/O1/A1 captures and native geometry. Sample4 exclusions/templates remain empty and Local XY OFF; completed D2/Local XY failures remain controls. No new Recipe or static-learning efficacy claim follows from saved-input binding.
-- Execution scope: saved-score necessary-condition audits reuse the binding CLI and CR1 minima, including exact public candidate-to-anchor joins after the scoped reply. The successor plan separately prepares native RGB dependencies and permits one frozen candidate-level fit/transfer trial with mean-color ablation, conditional on complete required input. No production frame/sequence/report execution, O2 acceptance or Windows qualification is implied.
+- Execution scope: preceding saved-score audits and separately frozen RGB/native trials retain their recorded outcomes. The October 14 change retires their isolated runtime after all consumers close and verifies preserved inputs through saved-data readers; it executes no model, training, production frame/sequence/report run or Windows qualification. Historical trial instructions are not current execution authority.
 - Failure-registry impact: NONE — the evidence refines existing role/continuation and Foam-reduction failures; no new failure family or accepted repair is claimed.
