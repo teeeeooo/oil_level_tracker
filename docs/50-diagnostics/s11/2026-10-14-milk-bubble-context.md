@@ -109,6 +109,30 @@ field `console_errors` records uncaught page errors, not a full network/console
 audit. Governance and whitespace checks pass; no production source or Recipe
 changed and the existing worktree is retained.
 
+## Remote delivery repair
+
+The user reports that the linked HTML opens remotely without its video/images.
+The frozen viewer loads sibling PNG assets; the earlier localhost check did not
+exercise single-file delivery. The export adapter packages those exact pinned
+bytes in a self-contained HTML and adds a static comparison of the same first,
+middle and last frames. The static image remains visible without JavaScript.
+This is a delivery fix, with no new video decode, changed crop or temporal label.
+The original plan, viewer, readout and closed-run pins remain untouched.
+
+Use the [standalone HTML](2026-10-14-milk-bubble-context/review-standalone.html)
+(**2,252,214 bytes**) for remote transfer; it embeds the existing locator, complete
+25-frame atlas and [three-frame comparison PNG](2026-10-14-milk-bubble-context/remote-contact-sheet.png).
+It makes no sibling-file or external-image requests. [Export receipt](2026-10-14-milk-bubble-context/remote-export.json)
+and [verification](2026-10-14-milk-bubble-context/remote-verification.json) record:
+all three embedded PNG byte streams equal their inputs; all 25 browser canvas
+images and time labels equal the frozen readout; normal/slow playback works.
+The browser opened **only this HTML in an otherwise empty directory with networking
+offline**. With JavaScript disabled, the locator and static comparison still load.
+The user's actual remote client has not been inspected. The reported delivery
+failure is not a physical unassessability answer; the temporal question remains
+pending. This necessary transfer package is a deliberate small duplicate of the
+canonical images, not a second research result. Reassess it after the reply is bound.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `PUBLICATION-PROVENANCE`.

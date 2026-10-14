@@ -1498,3 +1498,8 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/readout.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/readout.json) | 25개 프레임·시간·원본/영역 해시 및 추출 검증 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/verification.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/verification.json) | 실제 브라우저 25개 픽셀·표시 시간·동작·덮어쓰기 거부 검증 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/review.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/review.json) | 새 시간 대응 질문과 이벤트 판정 미제공 상태 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/export_portable.py](50-diagnostics/s11/2026-10-14-milk-bubble-context/export_portable.py) | 고정 검토 입력을 재디코딩 없이 단일 HTML로 포장 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/review-standalone.html](50-diagnostics/s11/2026-10-14-milk-bubble-context/review-standalone.html) | 이미지·25프레임·정적 비교를 내장한 원격 전달 파일 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/remote-contact-sheet.png](50-diagnostics/s11/2026-10-14-milk-bubble-context/remote-contact-sheet.png) | 처음·중간·마지막 원본의 동일 영역 비교 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/remote-export.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/remote-export.json) | 기존 입력 핀·내장 이미지·출력 해시 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-milk-bubble-context/remote-verification.json](50-diagnostics/s11/2026-10-14-milk-bubble-context/remote-verification.json) | 단일 파일 오프라인·JS 미사용 표시 및 25프레임 픽셀 검증 |
