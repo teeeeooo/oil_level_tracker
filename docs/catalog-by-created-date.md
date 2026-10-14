@@ -1512,3 +1512,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-context.md](50-diagnostics/s11/2026-10-14-semantic-context.md) | 기존 4개 촬영원·분석 영역에 대한 사전학습 문맥 비교의 고정 계약 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-context/setup.json](50-diagnostics/s11/2026-10-14-semantic-context/setup.json) | 격리 환경·모델·구현 핀·용량·합성 입력 검증 |
 | 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-context/manifest.json](50-diagnostics/s11/2026-10-14-semantic-context/manifest.json) | 기존 48개 경로·5개 분석 영역·17개 비교의 재사용 입력 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-context/readout.json](50-diagnostics/s11/2026-10-14-semantic-context/readout.json) | 고정 사전학습 문맥의 48개 경로 전체 점수·우유 두 반례 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-context/verification.json](50-diagnostics/s11/2026-10-14-semantic-context/verification.json) | 78개 지원·724개 패치 평균·17개 판정·덮어쓰기 거부 검증 |
+| 2026-10-14 | [60-evidence/s11/2026-10-14-semantic-context.md](60-evidence/s11/2026-10-14-semantic-context.md) | 15/17 순서·우유 실패·미채택 결론과 분리 관측 설계 한계 |
+| 2026-10-14 | [50-diagnostics/s11/2026-10-14-semantic-context/closeout.json](50-diagnostics/s11/2026-10-14-semantic-context/closeout.json) | 추가 모델·14개 의존성 정리와 기존 환경·체크포인트 보존 확인 |

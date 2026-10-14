@@ -115,12 +115,19 @@ ROIs, their pixel hashes and scales, all 48 path identities by reference, the
 17 comparisons, implementation, model and runtime. Scored inference has not run
 at this preparation checkpoint.
 
+## Completed execution
+
+The [fixed source result](../../60-evidence/s11/2026-10-14-semantic-context.md)
+closes SCM-1 without promotion: 15/17 orders, with both milk upper/rim comparisons
+reversed. It owns measured results and verification; the protocol above is the
+pre-execution contract and has not been adjusted to the outcomes.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `FOAM-CANDIDATE`, `FOAM-IDENTITY`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F01`, `S11-F03`, `S11-F09`, `S11-F10`.
 - First harmful stage: known local appearance observations misorder qualified physical upper/structure paths; SCM-1 tests whether pretrained ROI semantics supply a different bounded order signal. Production's earlier loss remains unchanged.
 - Existing feature coverage: pinned native RGB/geometry and all four source-role controls, including N1's compatible fluid interpretation and sample4's existing 104×104 ROI. Recipe learning, static templates, exclusions, downstream Artifact consumers and Local XY are not executed; sample4 exclusions/templates remain empty, Local XY OFF, and the completed D2/Local XY comparisons stay closed. Semantic context sees the unmasked existing ROI; this is not evidence about unexercised Recipe defenses.
-- Execution scope: planned isolated CLIPSeg load and five saved-ROI forwards through `tests/diagnostics/s11_semantic_context_trial.py`, with existing qualification/input loaders and 17 bounded order comparisons. No video decode, temporal propagation, new physical labels, production consumer, sequence/report replay, Windows qualification or field acceptance.
+- Execution scope: completed isolated CLIPSeg load and five saved-ROI forwards through `tests/diagnostics/s11_semantic_context_trial.py`, with existing qualification/input loaders and 17 bounded order comparisons. No video decode, temporal propagation, new physical labels, production consumer, sequence/report replay, Windows qualification or field acceptance.
 - Logic-map impact: NONE — the optional offline diagnostic is not imported or registered by the application and changes no production executing owner or data contract.
 - Failure-registry impact: NONE — the proposed pretrained observation does not retire local appearance, optical-warp or wrong-boundary counterexamples; its own result must retain any new failure.
