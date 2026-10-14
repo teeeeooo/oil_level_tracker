@@ -1,0 +1,229 @@
+{
+  "schema": "s11-source-upper-mask-review-v1",
+  "plan_sha256": "3da2134ad618a414f8420014f6606efe43d63f86f318ff2fccaf741235e8f7f0",
+  "subject": {
+    "view": "B",
+    "id": "s3-f2339-idx5",
+    "frame_index": 2339,
+    "candidate_input_index": 5,
+    "candidate_sha256": "75c4761337fd43c91735fcc1c51e354839199477d29f01ebb31b95940eba10e3",
+    "source": "material_path",
+    "source_xy": [
+      835.0,
+      227.0
+    ],
+    "time_sec": 78.04463333333334,
+    "source_image": {
+      "path": "sample/output/s11-sample3-gap-source-20261010-001/f002339.png",
+      "sha256": "1a95db29287b5d4420d53217c1322d617b1f7bdf165b40f640ed20b76d1f134f"
+    },
+    "center_sector": {
+      "sector": 2,
+      "source_x_range": [
+        813,
+        858
+      ],
+      "bands": {
+        "near_above": {
+          "local_y_range": [
+            28,
+            31
+          ],
+          "available": true,
+          "reason": "available",
+          "valid_fraction": 0.6666666666666666,
+          "valid_pixel_count": 90,
+          "gray_mean": 0.16100217864923752,
+          "gray_std": 0.01837855605102753,
+          "material_available": true,
+          "material_mean": 0.14751816855536568,
+          "static_available": true,
+          "static_overlap": 0.0,
+          "glare_fraction": 0.3333333333333333
+        },
+        "near_below": {
+          "local_y_range": [
+            34,
+            37
+          ],
+          "available": true,
+          "reason": "available",
+          "valid_fraction": 1.0,
+          "valid_pixel_count": 135,
+          "gray_mean": 0.1398983297022513,
+          "gray_std": 0.015168128100483525,
+          "material_available": true,
+          "material_mean": 0.04579459296332465,
+          "static_available": true,
+          "static_overlap": 0.0,
+          "glare_fraction": 0.0
+        },
+        "far_above": {
+          "local_y_range": [
+            22,
+            25
+          ],
+          "available": false,
+          "reason": "insufficient_visible_pixels",
+          "valid_fraction": 0.0,
+          "valid_pixel_count": 0,
+          "gray_mean": null,
+          "gray_std": null,
+          "material_available": false,
+          "material_mean": null,
+          "static_available": false,
+          "static_overlap": null,
+          "glare_fraction": 1.0
+        },
+        "far_below": {
+          "local_y_range": [
+            40,
+            43
+          ],
+          "available": true,
+          "reason": "available",
+          "valid_fraction": 1.0,
+          "valid_pixel_count": 135,
+          "gray_mean": 0.13333333333333333,
+          "gray_std": 0.012046965020210989,
+          "material_available": true,
+          "material_mean": 0.029952720359519677,
+          "static_available": true,
+          "static_overlap": 0.0,
+          "glare_fraction": 0.0
+        }
+      },
+      "near_signed_contrast": -0.02110384894698622,
+      "far_signed_contrast": null,
+      "near_minus_far_abs_contrast": null,
+      "peak_source_y": 225,
+      "peak_signed_gradient": -0.007102396514161224,
+      "path_local_y": 32,
+      "path_source_y": 227,
+      "generator_strength": 0.20825450122356415,
+      "generator_signed_contrast": -0.07703609764575958,
+      "generator_contrast_channel": "raw_combined_material",
+      "generator_contrast_scale_px": 3,
+      "candidate_center_on_same_sector": {
+        "sector": 2,
+        "source_x_range": [
+          813,
+          858
+        ],
+        "bands": {
+          "near_above": {
+            "local_y_range": [
+              28,
+              31
+            ],
+            "available": true,
+            "reason": "available",
+            "valid_fraction": 0.6666666666666666,
+            "valid_pixel_count": 90,
+            "gray_mean": 0.16100217864923752,
+            "gray_std": 0.01837855605102753,
+            "material_available": true,
+            "material_mean": 0.14751816855536568,
+            "static_available": true,
+            "static_overlap": 0.0,
+            "glare_fraction": 0.3333333333333333
+          },
+          "near_below": {
+            "local_y_range": [
+              34,
+              37
+            ],
+            "available": true,
+            "reason": "available",
+            "valid_fraction": 1.0,
+            "valid_pixel_count": 135,
+            "gray_mean": 0.1398983297022513,
+            "gray_std": 0.015168128100483525,
+            "material_available": true,
+            "material_mean": 0.04579459296332465,
+            "static_available": true,
+            "static_overlap": 0.0,
+            "glare_fraction": 0.0
+          },
+          "far_above": {
+            "local_y_range": [
+              22,
+              25
+            ],
+            "available": false,
+            "reason": "insufficient_visible_pixels",
+            "valid_fraction": 0.0,
+            "valid_pixel_count": 0,
+            "gray_mean": null,
+            "gray_std": null,
+            "material_available": false,
+            "material_mean": null,
+            "static_available": false,
+            "static_overlap": null,
+            "glare_fraction": 1.0
+          },
+          "far_below": {
+            "local_y_range": [
+              40,
+              43
+            ],
+            "available": true,
+            "reason": "available",
+            "valid_fraction": 1.0,
+            "valid_pixel_count": 135,
+            "gray_mean": 0.13333333333333333,
+            "gray_std": 0.012046965020210989,
+            "material_available": true,
+            "material_mean": 0.029952720359519677,
+            "static_available": true,
+            "static_overlap": 0.0,
+            "glare_fraction": 0.0
+          }
+        },
+        "near_signed_contrast": -0.02110384894698622,
+        "far_signed_contrast": null,
+        "near_minus_far_abs_contrast": null,
+        "peak_source_y": 225,
+        "peak_offset_from_candidate_px": -2.0,
+        "peak_signed_gradient": -0.007102396514161224
+      },
+      "peak_offset_from_path_px": -2
+    },
+    "practical_acceptance": "UNASSESSED",
+    "regional_role": "OIL_CONFIRMED_ORIGINAL_SCOPE"
+  },
+  "qualified_candidate_sha256": "5440d9b3c0ff85c6eb0316e83cd1b251c4125a07b84cf257c90d4b4aaf925949",
+  "source_upper_xyxy": [
+    823,
+    215,
+    848,
+    226
+  ],
+  "counts": {
+    "upper_pixels": 275,
+    "outside_effective": 0,
+    "removed_glare": 225,
+    "remaining_visible": 50,
+    "digital_overlay_overlap": 225,
+    "saturation_overlap": 0,
+    "other_glare_only": 0
+  },
+  "removed_mask_sha256": "69d070c68236d1faf2589048cc3148fe1d338435d6082f1b95a3cfce4a279b37",
+  "qualified_rgb_and_visibility_equal": true,
+  "image_sha256": "3e49ff53f9fe32c10a8b53baac680f36638af5a532c474e3f599cbda312c5b6e",
+  "question": "sample3 B/f2339 (78.044633 s), source X823:848/Y215:226: what physical feature occupies the bright upper-input pixels removed by the unchanged glare mask? Fluid/Foam, reflection/structure, mixed, or cannot assess. The accepted Oil representative is not reopened.",
+  "physical_role": "UNASSESSED",
+  "status": "AWAITING_UPPER_REGION_ROLE",
+  "new_model_calls": 0,
+  "training_executed": false,
+  "mask_changed": false,
+  "production_changed": false,
+  "resources": {
+    "seconds": 0.08023012499324977,
+    "peak_rss": {
+      "bytes": 107905024,
+      "status": "MEASURED",
+      "method": "process-lifetime peak RSS; one sample per fresh process"
+    }
+  }
+}

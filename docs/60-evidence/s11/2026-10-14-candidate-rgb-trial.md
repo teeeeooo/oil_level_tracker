@@ -249,6 +249,26 @@ D는 계속 판별 불가다. 세 촬영원 모두에서 양·음성을 검증�
 변경 없는 glare와 digital-overlay/saturation 영역의 겹침을 기록한다. 코드의
 분류 원인과 물리적 타당성은 다르므로 대체 마스크나 threshold는 적용하지 않는다.
 
+`ce8e61f`에서 고정한 후 실행한
+[검토 화면](../../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-review.png)과
+[결합 결과](../../50-diagnostics/s11/2026-10-14-oil-candidate-source-expansion/upper-mask-review.json)는
+qualification의 RGB·가시성 배열 hash와 patch 의존성에 일치했다. 원래 upper strip
+X823:848/Y215:226의 275픽셀 중 effective 밖은 0개, glare로 제거된 것은 225개,
+남은 가시 픽셀은 50개다. 제거된 225개 모두 기존 `_digital_overlay_mask`와 겹치며
+saturation과 겹치는 픽셀은 0개다. 이는 표시선 억제 분기의 기여를 확인하며,
+해당 영역이 실제 표시선·반사라는 물리 판정을 제공하지 않는다. 다른 광학 분기와
+중복되는 기여를 별도로 배제했다는 주장도 하지 않는다.
+
+같은 원본 문맥과 마스크 표시를 나란히 놓고, 동일한 25×25 native 영역을 화면에서만
+10배 확대했다. 원본 문맥·표시 영역·설명 모두 화면에 들어감을 직접 확인했다.
+판정은 **AWAITING_UPPER_REGION_ROLE**이다. 기존 노란 Oil 대표점의 허용을 다시
+묻지 않으며, 이 지역의 유체/거품·반사/구조물·혼합·판별 불가 역할만 필요하다.
+
+실행 0.080230 s, peak RSS 107,905,024 bytes. 관리 실행
+`s11-source-upper-mask-review-20261014-001`은 PNG 122,489 bytes와 JSON 7,361 bytes만
+canonical 위치에 보존하고 작업 사본 둘을 제거했다. 관리 실행 35개 오류 0.
+새 모델 호출·학습·대체 마스크·생산 변경·Windows 실행은 모두 0이다.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION`.
