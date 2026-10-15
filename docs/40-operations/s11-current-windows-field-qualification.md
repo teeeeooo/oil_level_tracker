@@ -34,8 +34,8 @@ candidate identity, not the retired comparison's commit or branch.
 This is the first exploratory OFF/ON comparison named by the Work Plan, before
 cost-first assignment, candidate RGB or Local XY. False positives are permitted
 for inspection and must be reported. Formal field acceptance still follows the
-nine-segment procedure below. The [local readout](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md)
-records implementation, local limits and verification; it is not a Windows result.
+nine-segment procedure below. The [comparison record](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md)
+separates local implementation/verification from subsequent qualitative Windows feedback.
 
 Windows 담당자는 다음 순서로 진행한다.
 
@@ -89,6 +89,45 @@ Mac에 전달할 최소 결과는 **소스/ROI/설정 동일 여부, 구간별 O
 복원된 움직임, 오검출과 긴 공백, 보고서 해석 가능 여부, 실제 runtime**의 텍스트
 요약이다. 비공개 영상·이미지·bundle을 Mac으로 전송할 필요는 없다. 이 결과를
 받아 첫 수정의 효과와 남은 실패를 판단한 뒤 조건부 후보 순서를 적용한다.
+
+### October 15 completed-bundle inspection
+
+FULL+ON의 BASE 출력은 확인됐지만, 첫 하강 등장 누락과 중간 하강·상승의 추가
+누락이 남았다. 사용자가 정정한 실제 상단 이탈 후 상태는 **기존/ON 모두
+`UNKNOWN_REVIEW`**다. 원하는 동작은 실제 상승 계면을 상단까지 추적한 뒤
+계면이 밖으로 사라지면 좌표 없는 `FULL_NO_INTERFACE`로 전환하는 것이다.
+이 단계에서는 Windows에 있는 **완료 bundle을 읽고 텍스트 결과를 전달**한다.
+
+1. 기존 R22-3 초기 UNKNOWN 결과와 초기 FULL+ON 결과의 manifest/session/Recipe를
+   읽고 소스, ROI, 분석 창, FPS, 초기 상태와 설정 차이를 기록한다. 초기 조건이
+   다르므로 같은 조건의 OFF/ON이라고 부르지 않는다. ON은
+   `analysis_manifest.json`의 Glass별 `sequence_resolver` 버전 접미사
+   `+initial-full-observation-v1`로 확인한다. HTML 상단 버전만으로 판정하지 않는다.
+2. `tracking_data.csv`를 Glass와 실제 frame/time으로 맞춘다. 첫 하강 등장,
+   중간 하강·상승에서 추가로 누락되는 첫 지점, 상승의 마지막 실제 관측과
+   직후 UNKNOWN 구간을 찾는다. 각 지점과 앞뒤 인접 표본에 대해 두 결과의
+   `raw_oil_air_level_y`, `fill_state`, `oil_is_valid`/`is_valid`, confidence,
+   flags를 작은 표로 남긴다. 숫자 관측 없음과 숫자는 있지만 유효하지 않음을
+   구분한다. CSV 차이 자체를 실제 유면의 정답으로 삼지 않는다.
+3. 해당 frame/time이 저장된 `debug/debug_trace.jsonl`에 있으면 원시 `state`와
+   완료 결과 `sequence.state`를 함께 읽는다. 실제 저장된
+   `sequence_decision_witness`의 phase/reason/allowed IDs, row admission/
+   publishability, selected candidate와
+   `sequence_material_phase_diagnostics.initial_full_observation`의 실패 조건을
+   옮긴다. 원시 `oil_no_interface_full_likelihood`도 함께 기록한다. 상단 이탈은
+   **재충전 종료 자체가 안 됨 / 종료됐지만 FULL 상태 후보가 없음 / 상태 후보가
+   있어도 허용 집합이나 선택 단계에서 차단됨**을 구분하고, 저장 증거가 없는
+   분기는 `UNAVAILABLE`로 남긴다. BASIC trace에 해당 행이 없는 것은 원시 후보가
+   없었다는 뜻이 아니다. 가까운 trace 행을 같은 프레임의 결정으로 대체하지 않는다.
+4. 아래의 9개 정답 구간 표에 CSV 관측 범위·Oil/Foam 수·공백과 실제로 확인한
+   판정만 기록한다. 아직 시각 검토하지 않은 부분은 `NOT_EVALUATED`로 남기고,
+   끝에는 처음 확인 가능한 손실 단계와 부족한 증거를 적는다. 원본·이미지·bundle은
+   Windows에 유지하며, 이 점검만을 위해 영상을 다시 분석하거나 옵션을 바꾸지 않는다.
+
+새 스크립트나 별도 검출 경로는 필요하지 않다. 기존 CSV/JSONL과 저장된 결정
+기록을 사용한다. 점검 결과로 다음 수정 범위를 정한 뒤 추가 실행 필요성을
+판단한다. 대용량 점검 출력을 만드는 경우 기존 [관리 출력 규칙](experiment-artifact-lifecycle.md)을
+따라 `sample/output/` 안에 보관한다.
 
 ## 2. Private source identity
 

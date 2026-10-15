@@ -1,8 +1,9 @@
 # Initial-FULL observation comparison
 
-Status: local implementation and OFF/ON analysis complete; interim Windows operator
-feedback received, initial-FULL ON comparison still pending.
-The option remains default OFF. No Windows result or physical acceptance is claimed.
+Status: local implementation and OFF/ON analysis complete; qualitative Windows
+FULL+ON result received with partial recovery and unresolved transition/coverage losses.
+The option remains default OFF. Windows feedback is operator-reported; no completed
+bundle audit or physical acceptance is claimed.
 
 The [fixed Work Plan order](../../00-project/work-plan.md#fixed-execution-order--2026-10-15)
 and [bounded design](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-15-initial-full-observation-comparison)
@@ -141,7 +142,12 @@ and seeing BASE follow actual Oil movement closely, with two exceptions:
 | Operator observation | Comparison focus |
 |---|---|
 | The interface is missed when it first descends into view from a full Glass | FULL-to-visible entry, corresponding to the reviewed BASE drain onset |
-| The rising interface is classified as EMPTY when it exits the Glass at the top | Refill closure and subsequent FULL/no-interface meaning |
+| The rising interface becomes `UNKNOWN_REVIEW` when it exits the Glass at the top | Refill closure and subsequent FULL/no-interface meaning |
+
+The operator subsequently clarified that the earlier description as “empty” meant
+the missing FULL interpretation: the actual state was already `UNKNOWN_REVIEW`.
+This correction supersedes the initial EMPTY wording. It does not establish an
+EMPTY-to-UNKNOWN improvement in ON.
 
 These are attributable qualitative observations, not locally inspected pixels or
 measured frame coverage. The report supplies no exact timestamps, Y anchors,
@@ -154,18 +160,85 @@ publication; it does not prove that the initial-FULL barrier is the only loss or
 that all raw candidates are correct. The two transition symptoms remain distinct.
 UNKNOWN is an exploratory control, not a replacement for the reviewed FULL start.
 
-The operator is now running the ON comparison. Its result and BASE initial state
-have not yet been received. The new option requires an explicit initial FULL:
-leaving UNKNOWN selected does not exercise `_observe_initial_full_interface`.
-The ON run must be interpreted using its actual initial state and resolver version.
-No detector change or additional candidate experiment follows from this intake.
+At this interim checkpoint the operator was running ON, with its result and BASE
+initial state still pending. The subsequent result is recorded below. The new
+option requires explicit initial FULL; leaving UNKNOWN selected does not exercise
+`_observe_initial_full_interface`.
+
+## Windows FULL+ON result — operator report
+
+The operator now confirms ON with BASE initially FULL and reports:
+
+- BASE Oil is detected, unlike the previously reported zero-detection ordinary
+  FULL launch. This establishes partial usefulness at operator-report scope.
+- The first descending interface after a full/no-interface period is still missed.
+- When the rising interface leaves the top, the display says `직접 유면 확인 어려움`.
+  The operator clarifies that the preceding run also had `UNKNOWN_REVIEW` there.
+- Detection rate is lower than the preceding R22-3 run without an initial value.
+  Follow-up confirms additional real-interface misses during middle downward and
+  upward movement as well, not only at first appearance.
+
+The renderer maps `직접 유면 확인 어려움` to `UNKNOWN_REVIEW`; it is not FULL.
+Both runs therefore leave the expected refill-to-FULL interpretation unmet; no
+state-classification improvement is established. The requested behavior is to
+track the rising real interface while visible and report coordinate-free
+`FULL_NO_INTERFACE` when it reaches and disappears beyond the vessel top. This
+agrees with the [reviewed BASE rapid-refill/suffix truth](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#reviewed-timeline).
+Ordinary loss partway up the vessel does not establish top exit. No exact exit
+frame or state duration is supplied. First descent appearance, middle-motion
+misses and top-exit FULL publication remain separate failures.
+
+The UNKNOWN-start/R22-3 comparison and FULL+ON comparison change initial condition
+as well as mode. They do not by themselves isolate a same-condition ON regression.
+No exact percentages, metric definition, matched ROI/session receipt, counts or
+lost-frame intervals are available yet. The follow-up establishes additional
+true-interface loss qualitatively; it cannot be dismissed as removal of false
+observations or a coverage-denominator difference. Existing completed runs are
+needed to locate the first additional loss and distinguish absent numeric output
+from a present but confidence-invalid observation. No repeat analysis or extra
+candidate run is requested solely for this inspection.
+
+Source inspection explains why the paths can differ, without claiming the first
+harmful Windows predicate: UNKNOWN starts OPEN; FULL starts FILLED_BARRIER. The ON
+route adds only current confirmed anchor/direct-or-ordered-lower candidates with
+strict identity/material clearance, outside current no-interface opposition and
+release ambiguity. It does not change the motion runtime to OPEN and stops applying
+after an ordinary drain/refill transition. Candidate creation, association and
+confirmation are unchanged. Actual lost-frame diagnostics are still needed to
+decide whether cost-first association addresses the next observed loss.
+
+There is also a separate source-backed refill/publication distinction:
+
+- `_drain_refill_closure` / `_drain_refill_handoff` can close the phase owner to
+  `FILLED_BARRIER` after a qualifying topward trajectory; they do not emit a final
+  `FULL_NO_INTERFACE` result.
+- `_state_and_unknown_nodes` creates a `full` node only from current
+  `oil_no_interface_full_likelihood` meeting the state evidence threshold.
+- `_constrain_layer` reduces an empty allowed-owner set to UNKNOWN, including
+  when a `full` node existed before that filter. After the terminal owner is gone,
+  `_transition_barrier` can produce this empty set with `FILLED_CAP_VETO`.
+- Projection publishes FULL only when the selected node is `full`. The initial-
+  FULL ON option does not modify these ordinary refill/state paths.
+
+These facts explain how internal closure and the user's required FULL display can
+diverge. They do not prove that the Windows trajectory reached closure: the saved
+trace must distinguish missing closure from a closed phase blocked at state-node
+creation or selection. Use the [completed-bundle inspection handoff](../../40-operations/s11-current-windows-field-qualification.md#october-15-completed-bundle-inspection)
+before choosing the repair; reporting all UNKNOWN as FULL would erase that
+distinction and does not meet the request.
+
+This is a qualitative intake, not a complete nine-segment qualification. Other
+canonical segments, Foam, exact position accuracy and physical false-positive
+counts remain unassessed here. Source and runtime identity are operator-reported
+rather than verified from a new bundle. The candidate stays opt-in and FIELD FAIL;
+the detector source, canonical truth and optional-candidate order are unchanged.
 
 ## Detector Governance
 
-- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PHASE-INITIAL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`.
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: reviewed Windows checkpoints establish initial-FULL allowed-set exclusion; earliest whole-window physical loss remains unknown. ROI contamination is separately demonstrated in saved local inputs.
+- First harmful stage: earlier reviewed Windows checkpoints establish initial-FULL allowed-set exclusion; the new operator report confirms middle-motion misses and absent top-exit FULL publication, but their first harmful stages remain unknown pending saved trace inspection. Source shows distinct refill closure, state-node creation and allowed-set filtering. ROI contamination is separately demonstrated in saved local inputs.
 - Existing feature coverage: existing ellipse/margin masks and shared preprocessing are active; exclusions/templates remain empty and Local XY OFF. New comparison ROI is separate from immutable regression inputs. Static learning, session FULL confirmation, completed resolution, event/report/CSV and GUI construction are exercised; private Windows setup remains unverified.
-- Execution scope: source/ROI inspection, bounded local real-entry analysis and focused synthetic/integration controls, followed by attributable interim Windows feedback under initial UNKNOWN. No raw Windows pixels, private-video replay, new learning operation or field acceptance. Complete local observations and source/input/runtime identity are retained above; the Windows report has only the stated qualitative scope.
-- Logic-map impact: NONE — this update records operator feedback and pending run conditions without changing the pinned source. The optional observation projection and GUI/event/report consumers were already mapped in implementation commit `6d2f069`; that earlier source change had impact UPDATED.
+- Execution scope: source/ROI inspection, bounded local real-entry analysis and focused synthetic/integration controls, followed by attributable UNKNOWN-start and FULL+ON Windows feedback plus read-only lifecycle/report/coverage-owner inspection. No raw Windows pixels, private-video replay, new learning operation or field acceptance. Complete local observations and source/input/runtime identity are retained above; Windows reports have only the stated qualitative scope.
+- Logic-map impact: NONE — this update corrects operator feedback and traces the already-mapped lifecycle, state-node and allowed-set selection responsibilities without changing the pinned source. The optional observation projection and GUI/event/report consumers were already mapped in implementation commit `6d2f069`; that earlier source change had impact UPDATED.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.
