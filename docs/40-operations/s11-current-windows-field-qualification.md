@@ -220,25 +220,12 @@ boundary/ambiguous이므로 FULL likelihood 0은 기본값이다. 상세 근거�
    새로운 실패가 나타날 때만 해당 판정의 false predicate 키를 덧붙인다.
    전체 JSON이나 66행 후보 표를 반복 전송할 필요는 없다.
 
-추가 점검: 사용자는 **영상 721.01초부터 실제 Oil이 아닌 대상을 추적**하며,
-아지랑이처럼 보이고 **OFF에서도 이미 발생**했다고 보고했다. v2 신규 회귀로
-단정하지 않고, 같은 구간의 기존 OFF·③ v1·④ v2를 원본과 대조한다.
-721.01초는 영상 시각이며 CSV 표본과 정확히 일치한다고 가정하지 않는다.
-시작 직전과 이후의 실제 표본을 확인하고, 다음만 짧게 기록한다:
-
-- 대상 Glass, 해당 OFF 번들/초기 상태, 표시 경로(미리보기·오버레이·최종 CSV).
-  앞선 ① FULL+OFF BASE 최종 CSV는 숫자 출력 0건으로 보고됐으므로, 어느
-  OFF 결과와 어느 출력인지 확인해 기존 기록과 구분한다. 이를 위한 재실행은 없다.
-- 오검출 시작/끝과 후보 위치, 원본상 Oil이 아닌 근거. 아지랑이는 사용자
-  추정으로 유지하고 영상만으로 원인을 확정할 수 없으면 미확인으로 적는다.
-- OFF→v1→v2에서 유지·증가·감소 여부. 같은 잘못된 대상인지 좌표만으로
-  단정하지 말고 영상/후보를 대조한다. 필요한 대표 표본에 한해 최종 선택
-  여부와 authority/tracklet/phase 허용 근거를 확인한다. 통과한 오검출은
-  false predicate가 없을 수 있으므로 실패 키만 요구하지 않는다.
-
-BASE라면 기존 정답상 ~663.6–780초 FULL 구간의 오검출 사례다. 다른 Glass라면
-그 Glass의 해당 구간 정답으로 판단한다. 기존 오검출도 후보 식별 문제로
-남기되, 그 사실만으로 v2가 악화시켰거나 아지랑이가 원인이라고 결론내리지 않는다.
+721.01초에 대한 후속 표는 대상이 BASE이며 네 bundle 모두 같은
+`oil-tracklet:000474:0424` 후보를 가진다고 보고한다. 후보 범위는 약
+717–750.5초/Y675–748, 116회이며 여러 source의 같은 프레임 후보를 포함한다.
+최종 출력의 첫/마지막 시각이나 116개 유효 관측으로 해석하지 않는다.
+아래 [721초 후보/최종 출력 확인](#721-second-candidate-and-output-check)에
+남은 항목을 좁혔다. 기존 전체 트랙릿 비교나 대상 Glass 확인을 반복하지 않는다.
 
 ```powershell
 $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
@@ -282,6 +269,35 @@ FULL로 바꾸거나 663.6초를 코드에 넣어서는 안 된다. 정식 FIELD
 723초·771초의 재질/동일성 차단은 BASE FULL 구간의 오검출 억제일 수 있으므로
 실패 조건이라는 이유만으로 완화하지 않는다. Accum/Foam 최종 동일성도 이후
 최종 CSV 좌표/유효성으로 비교하며 원시 상태·후보 개수만으로 확정하지 않는다.
+
+### 721-second candidate and output check
+
+네 bundle의 BASE 후보 추적이 같다는 답변을 받았다. BASE는 이 구간에서
+정답상 FULL이므로 비유면 후보라는 판단은 기존 정답과 사용자 영상 관찰에
+근거한다. 궤적의 비단조성이나 direction 0↔1만으로 아지랑이를 확정하지 않는다.
+현재 확인 중인 최종 CSV 점검에 아래 항목만 추가한다.
+
+1. ①/②/③/④ 각각 **721초·723초에 대응하는 실제 표본**을 8행으로 정리한다.
+   frame/time, `record.sequence.state.sequence_material_phase`,
+   `sequence_material_phase_diagnostics.allowed_tracklet_ids`,
+   `sequence_decision_witness.selection.selected_candidate`의 tracklet ID/Y,
+   CSV `raw_oil_air_level_y`, `fill_state`, `oil_is_valid`를 적는다.
+   두 diagnostics/witness 경로는 모두 `record.sequence.state` 아래다.
+   선택 후보가 없으면 null을 보존하고, 후보 트랙릿의 Y로 대신 채우지 않는다.
+2. ③에서 이 트랙릿이 처음 admitted 됐다고 보고한 **720초 표본 하나**의
+   `record.sequence.candidates`에서 `tracklet_confirmation_profile`,
+   `tracklet_confirmation_start_frame`, `tracklet_confirmation_end_frame`,
+   `tracklet_direction`, `tracklet_recent_direction`,
+   `tracklet_net_progress_px`, `tracklet_recent_net_progress_px`만 덧붙인다.
+   기준 source/row를 함께 적고 같은 트랙릿의 중복 후보 표는 반복하지 않는다.
+
+해석 주의: +1은 source Y 증가(하강), -1이 상승이다. 0↔1은 상하 반전의
+증거가 아니다. 기존 direction/net progress는 최초 확정 창에서 유지될 수
+있으며, 제시된 support 0.36/coverage 0.44만으로 motion 확정 기준
+(각각 0.50)을 통과했다고 말할 수 없다. 앵커 확정/유지 경로와 구분한다.
+723초 재질 veto가 오검출을 차단했다면 보존한다. 재실행·해시 비교·전체 JSON이나
+전체 궤적 재추출은 필요 없다. 영상에서 아지랑이인지 식별하지 못하면 광학적
+원인은 미확인으로 남긴다.
 
 ## 2. Private source identity
 

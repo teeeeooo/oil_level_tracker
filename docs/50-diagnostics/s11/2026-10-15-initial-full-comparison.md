@@ -467,33 +467,62 @@ FULL replay needs a larger explicit allowance or a smaller trace window.
 
 ## Operator-reported non-Oil tracking from 721.01 s
 
-During the v2 Windows comparison, the operator added a previously omitted
-observation: from source-video time **721.01 s**, the detector tracks something
-other than actual Oil; it looks like heat shimmer, and the same false tracking
-also occurred with OFF. Treat the non-Oil identification and prior OFF occurrence
-as operator-reported evidence. Heat shimmer is a suspected visual explanation,
-not a verified optical cause or a locally inspected image.
+The operator reports actual non-Oil tracking from source-video time 721.01 s,
+visually suspected to be heat shimmer, including with OFF. A subsequent Windows
+readout binds the candidate-level observation to **BASE** and
+`oil-tracklet:000474:0424` in all four bundles. These are transferred observations;
+private images and complete tracks have not been inspected locally.
 
-The specific OFF bundle/initial state, affected Glass, output surface, final
-selected candidate and interval end are not yet bound. The earlier ① FULL+OFF
-BASE CSV count was zero, so do not silently assign this observation to ① final
-BASE output. The current Windows review can identify the relevant saved OFF run
-and compare its preview/overlay/final output with v1/v2 at actual sampled times
-around 721.01 s; no new run or whole-JSON transfer is requested for this addendum.
+| Candidate-level checkpoint | Reported result in all four bundles |
+|---|---|
+| Extent | f17191 at ~717.0 s through f17994 at ~750.5 s; Y675–748 |
+| Candidate occurrences | 116, including multiple source members per frame; not 116 distinct final-output frames |
+| ~721 s | two admitted members, material_path Y694 and calibrated_high_recall Y690; the material row is ANCHOR_ELIGIBLE/direct_interface |
+| ~723 s | three admitted members at Y705–707; continuing lifecycle |
+| Reported stored motion fields | direction in {0, 1}, net progress 19 px, motion support 0.36 and coverage 0.44 |
 
-If this is BASE, it lies in the canonical ~663.6–780 s FULL suffix and supplies an
-additional reported false-observation checkpoint, not a new physical truth period.
-If another Glass is affected, use its own reviewed interval. Compare whether the
-same non-Oil target persists, grows or diminishes across modes and inspect the
-admission/selection evidence of a representative false positive. A wrongly
-accepted candidate may pass every current predicate; false-key extraction alone
-cannot establish its cause. The earliest harmful stage and the heat-shimmer
-mechanism remain unknown until that evidence is returned.
+The transferred extent starts before the user's noticed 721.01 s onset. It is a
+candidate-track extent, not proof of continuous selected output throughout
+717–750.5 s. Same tracklet/member evidence in OFF/v1/v2 establishes a non-Oil
+candidate shared by the compared modes; it does not establish identical final
+Oil publication. In particular, the earlier ① FULL+OFF BASE final CSV count was
+zero. The IFO `motion_phase=filled_barrier` also describes the underlying motion
+runtime, not necessarily the final frame phase after the observation projection.
 
-This supplements the ongoing comparison without changing the v2 source, the
-fixed optional-mechanism order or field disposition. A pre-existing false
-positive is still a candidate-discrimination problem; pre-existence alone does
-not prove v2 preserves its extent or that a particular later mechanism will fix it.
+This entire BASE interval is inside canonical `WS1-BASE-FULL-SUFFIX`: no actual
+Oil interface is visible after ~663.6 s. That reviewed truth and the user's source
+observation support treating these as non-Oil candidates. A non-monotonic sampled
+Y sequence alone is not proof of a nonphysical boundary or of heat shimmer. The
+optical cause and the exact candidate-to-visible-object correspondence remain
+unverified. No new physical truth interval or automatic shimmer classifier follows.
+
+Source review corrects the motion interpretation:
+
+- Stored direction 0/+1 is not an up/down reversal: source Y increases downward,
+  +1 is down and -1 would be up; zero carries no signed direction in that field.
+- `_finalize_track` writes the first confirmation witness's `net_progress_px`,
+  direction and agreement onto admitted witness/continuation observations.
+  Repeated 19 px can therefore describe that bounded confirmation window rather
+  than each current movement or the whole 33.5 s track. Separate `recent_*` fields
+  describe newer windows; do not read one historical sign as instantaneous motion.
+- Current motion-confirmation thresholds are support >=0.50 and coverage >=0.50.
+  Reported 0.36/0.44 do not by themselves prove motion-confirmation passed. The
+  builder also supports ANCHOR_CORRIDOR and ANCHOR_TRAJECTORY; continuation can use
+  anchor grace, a bounded anchor corridor or aggregate motion under other criteria.
+  The actual saved confirmation profile/window is needed to identify the route;
+  current continuation metrics alone cannot exclude an earlier motion confirmation.
+- Members from several source families are grouped into one row hypothesis. Their
+  count is neither multiple independent physical observations nor proof of a
+  duplicate-counting bug. No source-family veto or monotonicity filter is justified
+  by this summary.
+
+Retain the pending final-output check, adding only ~721/~723 s final selected
+tracklet/Y, allowed phase/IDs and CSV state for the four saved bundles, plus the
+v1 first-admitted ~720 s confirmation profile/window. See the
+[bounded 721 s follow-up](../../40-operations/s11-current-windows-field-qualification.md#721-second-candidate-and-output-check).
+This can distinguish a shared false candidate from an actually published false
+line and explain admission without replay or a whole-track JSON dump. The 723 s
+material veto may be a correct protection and is not relaxed by this intake.
 
 ## Windows v2 summary — final output reconciliation
 
@@ -537,8 +566,8 @@ counted from final `fill_state`, not ambiguous/reacquisition statuses.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: v1 observation barriers are localized and the first Windows v2 summary reports their predicates passing. A remaining v2 final-output failure is not yet established or localized: supplied candidate/raw-status aggregates omit final CSV/sequence decisions. For the 721.01 s non-Oil observation, output binding and the earliest harmful stage remain unknown; heat shimmer is a hypothesis.
+- First harmful stage: v1 observation barriers are localized and the first Windows v2 summary reports their predicates passing. A remaining v2 final-output failure is not yet established or localized: supplied candidate/raw-status aggregates omit final CSV/sequence decisions. The 721.01 s report is now bound to BASE and a shared admitted candidate tracklet in all four modes, but final publication and the actual confirmation route remain unknown; heat shimmer is a hypothesis.
 - Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
-- Execution scope: earlier v2 implementation/local verification remain recorded above. Current work reviews the relayed Windows v1/v2 summary against existing serializer/projection code and saved local controls, then requests a bounded final-output reconciliation. No private media are inspected locally, no source changes or new experiments run, and no physical improvement or optical cause is inferred from raw aggregates.
+- Execution scope: earlier v2 implementation/local verification remain recorded above. Current work reviews the relayed v1/v2 summary and four-bundle 721 s tracklet readout against existing serializer, projection and tracklet confirmation code, then narrows the pending output/confirmation checks. No private media are inspected locally, no source changes or new experiments run, and no physical improvement or optical cause is inferred from raw aggregates.
 - Logic-map impact: NONE — this intake distinguishes the existing raw, phase, selector and final-publication responsibilities; v2 ownership and the map updated in `4c72ebb` remain unchanged.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.
