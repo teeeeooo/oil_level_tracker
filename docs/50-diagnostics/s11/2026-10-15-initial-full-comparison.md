@@ -553,13 +553,15 @@ including later samples in the confirmation witness. Their opposite signs are
 not two consecutive instantaneous measurements or proof of a physical Oil
 reversal. Exact window times come from the corresponding saved sample timestamps.
 
-One narrow provenance discrepancy remains: the reply says ④'s selected-candidate
-object at f17287 contains only the tracklet ID and lacks `y`. The current
-`build_oil_decision_witness` always writes `y`, source, candidate offset and row
-ID for a non-null selected ref; the sequence JSON serializer preserves them.
-The reported CSV Y694 is retained, but selected-Y/CSV equality at this checkpoint
-is not claimed until that one original nested object is returned. No source/hash
-audit or rerun follows from this extraction discrepancy.
+The f17287 provenance discrepancy is **closed by the follow-up**. The original
+selected-candidate object is:
+
+```json
+{"candidate_offset":9,"source":"material_path","y":694.0,"tracklet_id":"oil-tracklet:000474:0424","row_hypothesis_id":"oil-row:000482:002"}
+```
+
+Selected Y694 equals final CSV Y694. The previous claim that `y` was absent was
+an extraction omission, not a serializer defect. Do not request this object again.
 
 ## Windows v2 summary — final output reconciliation
 
@@ -640,19 +642,103 @@ the final projected path, after bounded selection and trajectory-spike suppressi
 Do not remove a veto or force selection just to reduce the 298 empty rows. Keep
 the 723/771 s no-interface controls. The remaining bounded Windows work is the
 [refill owner and false-output follow-up](../../40-operations/s11-current-windows-field-qualification.md#refill-owner-and-false-output-follow-up):
-segment-specific final output deltas, original-video correspondence around
-662–664.5 s, and one selected-candidate object. Current code already has
+correctly segmented final output deltas and original-video correspondence around
+662–664.5 s. The selected-candidate object is now reconciled above. Current code already has
 `_drain_refill_closure` / `_drain_refill_handoff` for established drain owners;
 IFO v2 only changes the frame observation decision and creates no motion runtime
 owner. A future repair must reuse that ownership boundary with verified evidence,
 not treat every disappearance or the known 663.6 s timestamp as FULL.
 
+### Refill follow-up received — corrections and remaining evidence
+
+The transferred follow-up reports 119 newly numeric frames and one lost frame,
+giving the already established net increase of 118. Its physical segment labels
+are **not accepted**: they use 480–663.5 / 663.5–665 / 665–670 / 670–780 s,
+which differ from the canonical reviewed 480–~550 / ~550–662 / 662–~663.6 /
+~663.6–780 s. No new direct source-video review is supplied to replace that truth.
+An operator clarification is pending; until then the canonical owner is unchanged.
+
+Retain the numbers as reported time buckets, not as corrected physical segments:
+
+| Returned interval | Returned label (unqualified) | Rows | v1 numeric | v2 numeric | New / lost |
+|---|---|---|---|---|---|
+| 480–663.5 s | FULL PREFIX | 367 | 143 | 194 | 52 / 1 |
+| 663.5–665 s | DRAIN | 3 | 1 | 3 | 2 / 0 |
+| 665–670 s | RAPID REFILL | 9 | 5 | 9 | 4 / 0 |
+| 670–780 s | FULL SUFFIX | 221 | 36 | 97 | 61 / 0 |
+| Reported total | not a complete physical segmentation | 600 | 185 | 303 | 119 / 1 |
+
+The 600 bucketed rows versus the earlier 601 total are consistent with the first
+sample at 479.98 s falling outside a strict 480 s start, but the excluded row has
+not been explicitly returned. Keep an outside-interval row in the corrected
+accounting. The one lost frame lies in the mixed 480–663.5 s bucket; it cannot be
+called a FULL-prefix loss without its frame/time and source correspondence.
+Under unchanged reviewed truth, the entire reported 670–780 s bucket is inside
+the FULL suffix: its numeric 36→97 increase is **61 added false Oil outputs**.
+Thus at least 61 of the reported 119 newly numeric frames are in that no-interface
+subinterval; this inference uses the transferred counts and is not a local CSV audit.
+
+The six returned samples bind selected values and final CSV, but contain no
+original-video visibility, actual interface Y, or match judgment:
+
+| Frame / actual time | Selected tracklet | Selected Y = CSV Y | Final state |
+|---|---|---|---|
+| f15872 / 661.995 s | `000357:0309` | 433.5 | PARTIAL_VISIBLE / observed_interface |
+| f15884 / 662.495 s | `000357:0309` | 409 | PARTIAL_VISIBLE / observed_interface |
+| f15896 / 662.996 s | none | null / empty | UNKNOWN_REVIEW / INITIAL_FULL_BARRIER |
+| f15908 / 663.496 s | `000366:0319` | 418 | PARTIAL_VISIBLE / observed_interface |
+| f15920 / 663.997 s | `000366:0319` | 425 | PARTIAL_VISIBLE / observed_interface |
+| f15932 / 664.497 s | `000366:0319` | 411 | PARTIAL_VISIBLE / observed_interface |
+
+433.5→409 decreases source Y; 409→418 **increases** it. The latter is not an
+upward trajectory, and it also crosses two selected tracklet IDs. A selected-ID
+switch is not proof of a legitimate material-phase handoff or of the same real
+interface. The final two rows fall after the canonical approximate top exit;
+they cannot be counted as restored refill solely from their observed-interface
+label. 664.497 s is only the last row in this requested six-sample window, not
+the final numeric observation of the run. The last physically visible interface
+and the Glass top remain unreviewed in this reply.
+
+At f15896 the returned candidate-level evidence localizes an earlier rejection:
+
+| Tracklet | Returned candidate Y values | Admission / failure |
+|---|---|---|
+| `000366:0319` | 417, 419, 407 | all 0 / INCOMPATIBLE_BRANCH |
+| `000366:0320` | 420 | 0 / INCOMPATIBLE_BRANCH |
+| `000357:0308` | 397, 393, 402 | all 0 / INCOMPATIBLE_BRANCH |
+
+`build_interface_layers` requires `_phase_admitted(ref)`, which excludes both
+unadmitted and incompatible tracklet members. `_rows` and IFO evaluate only the
+remaining phase-layer rows. These seven candidates therefore do **not** pass IFO;
+they are excluded before it. `ifo.evaluated=true` means that the initial-FULL
+context was evaluated, not that every raw candidate was evaluated. No false keys
+in an empty evaluations array must be recorded as no evaluated rows, not all-pass.
+For an actual evaluated row, v2 `passed=true` would add its ID to the qualifying
+set and expose OBSERVED_INTERFACE. The raw evaluations count, current-state block
+flag and qualifying IDs are the only missing summary needed to resolve the
+reported “all pass but still barrier” wording.
+
+This localizes the supplied candidates' loss to tracklet branch compatibility;
+it does not yet identify a rejected **real** refill interface or establish which
+association alternative should win. `_ambiguities` runs before assignment order
+is chosen. Cost-first sorting would not directly undo the same current-frame
+conflicted set; different preceding associations could change that set, but this
+requires a separate comparison. Preserve the optional mechanism order without
+treating INCOMPATIBLE_BRANCH as evidence that cost-first must solve the case.
+No compatibility veto, IFO predicate or selector is relaxed on this readout.
+
+The next handoff corrects the mechanical interval aggregation, requests only the
+small f15896 IFO summary, and separates actual video inspection from trace lookup.
+If the Windows agent cannot view the original, record that access limit and leave
+the physical match to the operator; another candidate table cannot substitute for
+it. No new run, source revision, hash check or complete JSON transfer is needed.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: v1's three observation-barrier losses reach final sequence/CSV under v2. The shared non-Oil candidate is confirmed through anchor_corridor in the returned v2 record and is newly published at 721 s versus v1; its exact raw authority/identity error and optical cause remain unknown. Zero final FULL rows and the 663 s gap remain, but a physically verified refill owner is not yet supplied. Preliminary witness membership does not establish a new selector defect at 720/771 s.
+- First harmful stage: v1's three observation-barrier losses reach final sequence/CSV under v2. The shared non-Oil candidate is confirmed through anchor_corridor and is newly published at 721 s versus v1, with selected/CSV equality now confirmed. The f15896 seven-candidate loss is before IFO at tracklet branch compatibility; which candidate is the actual refill interface remains unknown. Zero final FULL rows remain. Incorrect transferred segment labels are not physical truth, and no new selector defect is established at 720/771 s.
 - Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
-- Execution scope: earlier v2 implementation/local verification remain recorded above. Current work reconciles transferred final CSV/sequence tables, the 721/723 s publication comparison and the v2 confirmation record against source and canonical truth. No private media are inspected locally, no source changes or new experiments run, and numeric recovery is distinguished from physical accuracy. Existing ROI/Artifact coverage unknowns remain unchanged; the next private-video correspondence check belongs on Windows.
+- Execution scope: earlier v2 implementation/local verification remain recorded above. Current work reconciles the transferred refill readout, incorrect time-bucket labels, seven incompatible candidates and original selected-candidate object against source and canonical truth. No private media are inspected locally, no source changes or new experiments run, and no physical interface is inferred from a selected tracklet. Existing ROI/Artifact coverage unknowns remain unchanged; physical correspondence still requires actual private-video inspection.
 - Logic-map impact: NONE — this intake distinguishes the existing raw, phase, selector and final-publication responsibilities; v2 ownership and the map updated in `4c72ebb` remain unchanged.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.
