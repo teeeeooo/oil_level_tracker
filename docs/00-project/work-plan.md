@@ -4,9 +4,9 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** Default R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The initial-FULL comparison has quantified Windows output recovery and a newly exposed false-output checkpoint, remains opt-in and is not a promoted baseline. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior.
-**Next transition:** Send one updated [Windows follow-up](../40-operations/s11-current-windows-field-qualification.md#refill-owner-and-false-output-follow-up), replacing the not-yet-forwarded df00806 questions. Match unique BASE frame pairs once and assign each to one fixed-time segment or OUTSIDE; preserve the global 601 / 185→303 / 119 new−1 lost=118 invariants. The same handoff retains the small f15896 IFO cardinality/block/qualifying-ID check and source-video access/correspondence check. Do not request the reconciled f17287 object or candidate tables again. Retain v2 opt-in, protected vetoes and the established optional-mechanism order; no rerun or hash audit.
-**Windows comparison source:** Initial-FULL observation **v2**, commit [`4c72ebbf038d577290aedcf29a7d33345c5de628`](https://github.com/teeeeooo/oil_level_tracker/commit/4c72ebbf038d577290aedcf29a7d33345c5de628) / [source ZIP](https://github.com/teeeeooo/oil_level_tracker/archive/4c72ebbf038d577290aedcf29a7d33345c5de628.zip), launched with `--initial-full-observation`. Existing ③ is v1 from `6d2f069`; preserve it as the comparison reference. Default launch remains OFF. Later handoff-only documentation does not change this candidate.
-**Latest checkpoint:** The operator confirms the earlier segment boundaries were arbitrary, not revised physical truth. The [second recount](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md#boundary-recount--overlapping-totals-not-accepted) overlaps boundary rows and returns 603 / 187→306 / +119; those totals are not accepted. Fixed-cohort totals remain 601 / 185→303 / +118. Correct segment counts, including the reported 68 new suffix rows, remain pending; distinguish additions from all v2 numeric observations. The lost frame is reported in DRAIN without a frame/time. The df00806 questions have not yet been sent, so IFO cardinality and actual video correspondence remain unrequested/pending rather than completed. Source, R22/O2/FIELD FAIL/Local XY OFF remain unchanged.
+**Next transition:** Finish the bounded [CSV reconciliation and image review](../40-operations/s11-current-windows-field-qualification.md#refill-owner-and-false-output-follow-up): one disjoint segment table, the lost frame and small f15896 IFO summary, then the existing six refill frames with plain images, candidate guides and persisted human replies. Next prepare and verify the three [individual Windows comparisons](../40-operations/s11-current-windows-field-qualification.md#three-candidate-windows-comparisons) in order: cost-first assignment → candidate-local RGB → Oil-only Local XY. Top-exit FULL repair follows those comparisons; it is not their entry requirement. No exhaustive empty-frame investigation, repeated completed judgments or automatic fourth experiment.
+**Windows comparison source:** Initial-FULL observation **v2**, commit [`4c72ebbf038d577290aedcf29a7d33345c5de628`](https://github.com/teeeeooo/oil_level_tracker/commit/4c72ebbf038d577290aedcf29a7d33345c5de628) / [source ZIP](https://github.com/teeeeooo/oil_level_tracker/archive/4c72ebbf038d577290aedcf29a7d33345c5de628.zip), launched with `--initial-full-observation`. Existing ③ v1 from `6d2f069` is the reference for the pending v1/v2 reconciliation; **④ FULL+ON v2 is the common reference for all three candidate trials**, not an accepted baseline or physical truth. Their runnable options/source pins are not yet prepared. Default launch remains OFF.
+**Latest checkpoint:** The user adopted bounded CSV closeout → image/idx review → all three individual Windows comparisons → evidence-backed FULL closure and integrated report validation. The [overlapping recount](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md#boundary-recount--overlapping-totals-not-accepted) remains rejected: fixed-cohort totals are 601 / 185→303 / 119 new−1 lost=118. Correct segment counts, the lost frame/time, f15896 IFO cardinality and physical refill correspondence remain pending. This planning update supplies no new Windows result; R22/O2/FIELD FAIL/Local XY OFF remain unchanged.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -14,8 +14,8 @@ This is the sole current state, authorization, unknowns and next-action owner.
 downloaded GitHub source ZIPs in separate folders, without Git clone. Reuse the
 existing baseline bundle after checking its producing source and run conditions;
 the user can run the candidate in the GUI under the same conditions and provide
-both completed bundles for comparison. The [current handoff](../40-operations/s11-current-windows-field-qualification.md#october-15-first-initial-full-comparison)
-separates GUI launch, manual analysis and output review. A user-reported older overlay
+both completed bundles for comparison. The [current handoff](../40-operations/s11-current-windows-field-qualification.md#refill-owner-and-false-output-follow-up)
+bounds saved CSV and image review before the next GUI comparison. A user-reported older overlay
 comparison was received before this initial-FULL trial. Its runtime metadata says Darwin/arm64, which
 is retained as a qualification limit, not a reason to reject output comparison
 or request a rerun. Follow the user's instruction to set aside the baseline
@@ -40,16 +40,24 @@ require deliberate restoration of their pinned runtime before any separately jus
 
 ## Bounded completion budget — 2026-10-14
 
-The October 14 instruction requires detector work to converge within **3–4 work rounds**, counting the DTO-1 run as round 1. This is a scope/stop budget, not a promise of field acceptance. It does not authorize relabeling failures, excluding difficult source families, new report UI or silently removing existing gates.
+The October 14 instruction bounded the preceding work to **3–4 work rounds**, counting the DTO-1 run as round 1. The subsequently approved comparison extension below now owns the remaining finite scope. Neither is a promise of field acceptance or authority to relabel failures, exclude difficult source families, add report UI or silently remove existing gates.
 
 **October 15 sequencing update:** the user's explicit BASE/report failure feedback and subsequent instruction fix initial-FULL repair and its first Windows comparison ahead of the three optional mechanisms. This supersedes report-reading-first sequencing, the old report-context-only round-4 reservation and the blanket exclusion of previously rejected variants from exploratory consideration. The ROI review and this plan update use saved evidence rather than consuming another experiment round. This feedback is an attributable product-use assessment, not a completed blind reading of the retained Mac sample4 report; do not fill its blank response record. No new fit, model search or production adoption follows automatically.
+
+**Adopted comparison closeout:** after the v2 result, the user explicitly approved
+one Windows comparison of each of the three existing mechanisms below. This
+supersedes their former conditional/skip-on-early-success sequencing and placing
+FULL closure before them. It is a finite extension of the execution scope, not
+another open research cycle: finish the current CSV readout, reuse image review,
+compare each mechanism separately, then select the supported follow-up or report
+no useful candidate. No automatic fourth mechanism, model search or retuning.
 
 | Round | Deliverable | Stop / acceptance boundary |
 |---|---|---|
 | 1 — completed local work | Current-state and Mac/Windows evidence reconciliation; one frozen raw-observation experiment, independent verification and handoff | DTO-1 remains diagnostic. No production behavior promotion; use its retained evidence rather than rerunning the same family |
 | 2 — engineering checks done; actual reading PENDING | Saved report/role/crop integrity and actual offline browser controls verified; no eligible repair from the tested confidence/authority policies; production unchanged | The actual report-only response is still missing. Source availability and 96 passing tests are not comprehension acceptance. Preserve genuine motion; no new feature search, blanket censoring or cosmetic extrema removal |
 | 3 — local verification and handoff complete; acceptance PENDING | Browser-checker stale-canvas false pass repaired; normal/stale/blank/styled controls and retained-report pixels checked. Combined round-1–3 recovery handoff prepared; production unchanged | No integrated candidate or actual reader response exists. Eight displayed-state checks and 117 passing tests do not close human/Windows acceptance. Do not repeat the audit or consume a new research round merely to reproduce it |
-| 4 — initial-FULL v2 local verification and Windows output reconciliation complete; physical follow-up PENDING | Three observation-barrier losses now reach final CSV; BASE numeric rows increase 185→303, with newly exposed false Oil at 721 s and no FULL transition | Verify the actual rapid-refill owner/top exit and separate visible-interval gains from FULL-interval false outputs. The three-candidate list remains conditional. Record limited capability and residuals; formal S11 DONE still requires existing acceptance/publication conditions |
+| 4 — initial-FULL v2 local verification and Windows output reconciliation complete; bounded follow-up PENDING | Three observation-barrier losses reach final CSV; BASE numeric rows increase 185→303, with newly exposed false Oil at 721 s and no FULL transition | Close CSV arithmetic and image correspondence at the scope below. The user-approved three-comparison extension follows; FULL closure and integrated acceptance remain later gates, with no automatic fourth experiment |
 
 A false global extremum, invented fill/drain reversal, wrong long-lived owner, missing entire material episode, or confusion of Foam disappearance with unobservable height is a **context blocker**. Isolated misses, local jitter or small gaps are not blockers when the actual reader can still recover the reviewed movement and uncertainty. Do not turn the 19 path labels or 16 pairwise orders into a 100%-required detector benchmark. Conversely, all-UNKNOWN cannot establish useful report comprehension.
 
@@ -72,10 +80,10 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | V2/V3 / WP03 — qualification and evaluation | Nineteen exact roles CLOSED; A candidate contact CLOSED | [Second immutable extension](../50-diagnostics/s11/2026-10-14-raw-front-inventory/base-extension.json): 6 Foam / 4 liquid / 2 internal / 6 structures plus N1. All 137 paths retained, 118 unknown. f144 Foam–liquid reply excludes old Foam-absence targets; no scalar rewrite. A remains candidate-level; no training-readiness claim |
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
-| O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | Default-OFF v2 observation-to-CSV recovery CONFIRMED by Windows tables; physical lifecycle acceptance OPEN | Verify actual refill correspondence before adapting the existing closure/handoff owner to top-exit FULL. Keep the 721 s newly exposed false output and 723/771 s protective rejections as controls; preserve FULL/EMPTY/refill/drain semantics |
+| O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | Default-OFF v2 observation-to-CSV recovery CONFIRMED by Windows tables; three individual Windows comparisons AUTHORIZED, not yet prepared; physical lifecycle acceptance OPEN | Bind refill correspondence through image review, compare each candidate against v2, then adapt existing closure/handoff responsibilities using the supported result. Top-exit FULL is not a candidate-comparison prerequisite. Keep 721 s false output and 723/771 s protective rejections as controls |
 | P5-a → P5-b / D5 / WP07 — Foam upper and raw input | Earlier trials CLOSED WITHOUT PROMOTION; f144 regional input-loss audit COMPLETE; full G1 NOT SATISFIED | Marked upper lacks raw white/warm support and Canny despite valid ROI. A successor must address raw proposal availability and role discrimination separately; native-head or downstream repair alone cannot recover this input. Existing positives/internal/rims remain required |
 | P5-c / WP08 — Foam episode | ENTRY NOT MET | Open only for an independently qualified correct raw upper lost downstream; separate onset/stable-layer versus splash/residue controls |
-| O5/W7/P6/D6 / WP09 — integrated Windows and report | Local engineering verified; qualitative feedback received, matched comparison/acceptance PENDING | Reconcile existing run settings and BASE descent/refill failures, then assess output gaps, false positives and readable Oil/Foam uncertainty before any optional mechanism. Preserve exact runtime, the nine canonical segments for formal acceptance and output limitations; exploratory false-positive tolerance does not itself establish field acceptance |
+| O5/W7/P6/D6 / WP09 — integrated Windows and report | Local engineering verified; qualitative feedback received, integrated acceptance PENDING after individual trials and lifecycle repair | Validate the selected final configuration across all nine canonical segments, Oil/Foam independence, FULL closure and report comprehension. Per-candidate CSV/review results precede this integrated gate; exploratory false-positive tolerance does not establish field acceptance |
 | P7 / WP10 — disposition and closeout | PENDING acceptance evidence | Record accepted/limited/rejected/unassessed scope and residual impact; retain minimal evidence. S11-M/S12 follow the roadmap, not partial local success |
 
 Detailed acceptance is in [Witness Validation](../30-validation/s11-interface-observability-witness-validation.md#post-cr1-operating-policy-and-consumer-acceptance)
@@ -93,30 +101,32 @@ FULL+ON feedback, the corrected three-bundle audit and the three-record extracti
 are complete. V2 repairs the redundant observation-admission conditions locally;
 the final Windows comparison confirms three restored sequence/CSV observations
 and a net 118 additional numeric rows, including a newly exposed false output
-at 721 s. Top-exit FULL remains absent. The next Windows check binds the actual
-refill owner and last visible interface before a separate lifecycle repair.
-No optional candidate comparison has begun.
+at 721 s. Top-exit FULL remains absent. The user has now approved the finite
+sequence below; none of the three candidate comparisons has begun. The current
+work prepares the comparison basis without requiring every missing observation
+or lifecycle defect to be repaired first.
 
 | Order | Deliverable | Comparison and completion boundary |
 |---|---|---|
-| 1 — Local ROI complete; Windows ROI pending | Verify and freeze each video's vessel-interior detection area across the full visible movement range | Use vessel structure before detector outputs, including applicable exclusions. Keep the same ROI in each comparison; do not crop to instantaneous fluid height or transfer sample4 coordinates to Windows |
-| 2 — Initial-FULL v2 locally verified | Let an eligible current interface observation reach output while keeping movement direction unresolved until supported | Reuse the [direction-neutral observation proposal](../20-architecture/s11-physical-interface-evidence-repair-design.md#4-direction-neutral-visible-interface-ownership) and its validation owner. Keep selected candidate Y, sequence raw Y and CSV raw Y consistent; do not infer drain/fill merely from visibility. Verify current-candidate publication, loss/ambiguity, FULL/EMPTY and refill controls, and independent Foam. Prepare this repair without combining the optional mechanisms |
-| 3 — V2 output reconciled; corrected segmentation and physical refill review pending | Re-bin saved BASE CSV against canonical boundaries; separate raw candidate admission from actual source-video correspondence | Numeric repair at three checkpoints and a 721 s false output are established. Returned six-row selection data are not a visual refill review; seven f15896 candidates fail before IFO. Correct the segment labels and record source-video access before choosing a lifecycle repair. Accum/Foam and formal all-segment acceptance remain open |
-| 4 — Conditional additional comparisons | For remaining failures, test cost-first assignment → candidate-local RGB → Oil-only Local XY in that priority order | Match each option to the remaining failure and change one mechanism at a time against a fixed reference containing the initial-FULL repair. Record any skipped option and its reason. Do not stack unreviewed variants. If the first repair supplies usable movement context, stop without running all three; otherwise use each result to decide whether the next option is needed |
+| 1 — CSV closeout | One disjoint BASE segment table including OUTSIDE, the lost frame/time and the small f15896 IFO summary | Reconcile 601 / 185→303 / 119 new−1 lost=118; report rather than force unresolved mismatches. Stop at the table and bounded notes. Do not trace all 298 blank rows or repeatedly request full candidate/predicate tables |
+| 2 — Image/idx review | Start with the existing six 662–664.5 s samples; show plain source and candidate guides, record actual visibility/correspondence and last visible top exit where assessable | Reuse [O2 review persistence](../40-operations/s11-o2-local-shadow-evaluation.md#3-에이전트-질문--사용자-회신--기록재개). Reuse closed first-appearance/drain/721 s judgments after exact correspondence; add only decision-bearing unreviewed cases. Record uncertainty or access limits without turning them into truth or an exhaustive labeling prerequisite |
+| 3 — Common reference and local preparation | Use FULL+ON v2 for all three trials; verify vessel-interior ROI once and freeze video, Recipe, ROI, 480–780 s, 2 fps, BASE FULL and Accum EMPTY | If ROI/settings must change, produce the matched v2 reference under those same conditions. Prepare each default-OFF comparison option and focused verification before its Windows handoff; source pins/options are not yet ready. Send the procedure and a short prompt together |
+| 4 — Three individual Windows comparisons | Cost-first assignment → candidate-local RGB → Oil-only Local XY; each applied separately to the common v2 reference | Each returns segment CSV changes, changed-scene review, true-interface recovery/loss, false outputs, Accum/Foam effects and an effect/no-effect-or-regression/insufficient-evidence disposition. Retain failed results and proceed to the next candidate. No stacking, outcome-led model/scope tuning or automatic fourth experiment |
+| 5 — FULL closure and integrated validation | After individual comparisons, use the supported candidate result to repair existing refill closure/handoff, then validate the selected final configuration | Require actual interface evidence for top-exit FULL; no timestamp rule or disappearance-only inference. Check all nine BASE/Accum segments and readable Oil/Foam motion/uncertainty. If no useful candidate emerges, record the limits and return the next-direction decision to the user |
 
 The [reviewed Windows causal record](../50-diagnostics/s11/s11-r22-reviewed-interface-causal-findings.md)
 includes a real interface candidate blocked only by `downward_direction` at one
 direct-release checkpoint, with association history contributing to the wrong direction.
 This supports prioritizing the publication barrier; it does not establish the sole
-cause of BASE's whole-window loss. Cost-first association is the first additional
-comparison if incorrect linkage/direction remains. RGB addresses candidate discrimination;
+cause of BASE's whole-window loss. Cost-first association is the first individual
+comparison. RGB addresses candidate discrimination;
 Local XY addresses localized structural interference. Current-frame evidence requirements
 and formal acceptance stay with their design/validation owners. Exploratory false positives
 are permitted and reported, without reclassifying them as correct physical interfaces.
 
 **Current ROI and candidate review:** [Cup path execution](../50-diagnostics/s11/2026-10-09-public-path-representation.md#existing-owner-and-fixed-execution) used full rectangular crops. The original four Recipes and executing `build_mask_bundle` establish ellipse/margin configuration, not verified removal of every physical rim. The [sample4 rim review](../60-evidence/s11/2026-10-14-candidate-rgb-trial.md#rim-답변-수신--같은-날-후속) retains all three false positives inside the saved visible mask. Earlier [D2 registration](../60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md) and [Local XY](../60-evidence/s11/2026-10-09-local-xy-implementation.md) tested particular local interventions, not a universal correctly fitted interior ROI. Interior geometry must cover the full visible movement range and be set from vessel structure before outputs; do not silently use instantaneous fluid height or copy sample4 coordinates into Windows.
 
-The three conditional mechanisms retain their prior evidence: (1) [cost-first assignment](../50-diagnostics/s11/2026-10-10-cadence-owner-causality.md#one-frozen-attribution-counterfactual), which recovered the reviewed 43.5 s location but introduced an upper-texture selection later; (2) [candidate-local RGB](../60-evidence/s11/2026-10-14-candidate-rgb-trial.md#단일-학습과-비교-결과), with retained weights and limited positive transfer but rim false positives; (3) [Oil-only Local XY](../60-evidence/s11/2026-10-09-local-xy-implementation.md#outcome-local-withdrawal-works-target-selection-remains-unsafe), which changed full-window outputs with unchanged raw Foam but retained topology/association failures. Their conditional priority is fixed above; none has completed a Windows comparison or demonstrated a BASE repair. Existing Accum allowed-owner losses remain separate: adding a score only after a hard exclusion cannot restore those outputs. No historical failure is relabeled PASS. The implemented initial-FULL option must receive its first Windows comparison before these optional mechanisms are prepared.
+The three mechanisms retain their prior evidence: (1) [cost-first assignment](../50-diagnostics/s11/2026-10-10-cadence-owner-causality.md#one-frozen-attribution-counterfactual), which recovered the reviewed 43.5 s location but introduced an upper-texture selection later; (2) [candidate-local RGB](../60-evidence/s11/2026-10-14-candidate-rgb-trial.md#단일-학습과-비교-결과), with retained weights and limited positive transfer but rim false positives; (3) [Oil-only Local XY](../60-evidence/s11/2026-10-09-local-xy-implementation.md#outcome-local-withdrawal-works-target-selection-remains-unsafe), which changed full-window outputs with unchanged raw Foam but retained topology/association failures. Their individual Windows order is fixed above; none has completed that comparison or demonstrated a BASE repair. Existing Accum allowed-owner losses remain separate: adding a score only after a hard exclusion cannot restore those outputs. No historical failure is relabeled PASS. The initial-FULL comparison prerequisite has been exercised; bounded CSV/image closeout now precedes the trials, not a complete FULL-closure repair.
 
 <a id="adopted-program-and-immediate-p5-source-checkpoint"></a>
 
@@ -381,11 +391,12 @@ The earlier isolated frozen DINOv2 exception and completed native-surface trial
 remain historical. The current adoption covered **one separately specified
 candidate-local RGB trial**, now completed, with its own frozen population/supervision/split and
 the existing 1,118-parameter architecture/resources in the then-available local Torch environment.
-It does not authorize fine-tuning DINOv2, model search, retries after this fixed
-outcome or default product/package adoption. Post-CR1 policy and Foam
+The newly approved Windows RGB comparison reuses that trial's frozen weights and
+preserved failure controls; it does not authorize refitting, DINOv2 fine-tuning,
+model search, outcome-led retries or default product/package adoption. Post-CR1 policy and Foam
 inference still need their executable gates; production consumption cannot precede
 O2/V5 and separate behavior acceptance. The user's explicit CR-1 cleanup request now
-supersedes the earlier environment-retention instruction. Its environment/weights/cache
+supersedes the earlier environment-retention instruction. CR-1's encoder environment/weights/cache
 are retired; completed records and saved-data checks remain available. A successor
 must specify its role objective, source grouping and required resources before any
 new fit or inference; this cleanup does not authorize restoring a closed trial.
@@ -434,8 +445,9 @@ The [physical-interface proposal](../20-architecture/s11-physical-interface-evid
 and [Witness Validation](../30-validation/s11-interface-observability-witness-validation.md)
 retain their responsibilities. The [contextual-role supplement](../20-architecture/s11-contextual-role-observation-design.md#native-side-role-observation-and-g0-binding-contract)
 owns the NSR input delta and preceding CR1 hypotheses; the ledger owns entry and sequencing. Closed
-research is not reopened by an old pending sentence. Initial-FULL observation/publication
-is now the prioritized repair under the fixed sequence above. The broader independent-support,
+research is not reopened by an old pending sentence. Initial-FULL v2 now supplies
+the common reference for the explicitly approved three-comparison sequence above;
+FULL closure follows the individual results. The broader independent-support,
 association and committed-handoff proposal retains its separate implementation and acceptance gates.
 Failed descriptors do not prove physical unobservability or justify product-scope reduction.
 
