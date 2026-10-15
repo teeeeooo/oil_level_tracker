@@ -4,8 +4,8 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior.
-**Next transition:** Obtain the actual report-only response using the retained report and blank reading record; no new baseline/Windows run. [Round 3](../60-evidence/s11/2026-10-15-round3-handoff-validation.md) repairs a browser-checker false pass and prepares the combined handoff, not a production detector candidate. Keep the [3–4-round budget](#bounded-completion-budget--2026-10-14): no default feature/model/crop/window search, artificial all-UNKNOWN or report-side coordinate repair. Without a mechanism-bounded candidate, use the actual reading to decide explicit limited/rejected/unassessed capability and user-approved scope rather than extending research or claiming S11 DONE.
-**Latest checkpoint:** Round-3 focused checks pass (117 tests); the retained report's actual canvas matches its selected source tile in eight states across seven source frames, with original pixels restored and HTML bytes unchanged. This closes a diagnostic assurance gap, not physical accuracy or human comprehension. The [round-2 saved-evidence results](../60-evidence/s11/2026-10-14-round2-context-disposition.md) and [round-1 DTO-1 result](../60-evidence/s11/2026-10-14-bounded-context-experiment.md) remain unchanged. Production behavior, S11/O2/FIELD FAIL/Local XY OFF and the pending actual reading are preserved.
+**Next transition:** The October 15 user has fixed the order: verify and freeze vessel-interior ROI → repair initial-FULL publication blocking → compare the current version with that repair on Windows → consider cost-first tracklet assignment, candidate-local RGB, then opt-in Oil-only Local XY only for remaining failures. The first goal is readable BASE movement and uncertainty. False positives are acceptable for exploratory review and must be recorded alongside recovered movement. The [fixed sequence below](#fixed-execution-order--2026-10-15) owns the deliverables and comparison boundaries; this update fixes the plan without implementing or executing it.
+**Latest checkpoint:** The read-only ROI review finds four local Recipes with ellipse geometry, 8% margin and no exclusion zones/templates; sample4's reviewed rim points at source Y880/882/887 remain inside the stored model-input mask. Water/beer/milk path studies used entire rectangular display crops with no calibrated vessel-interior mask. Public Miso used an agent-prepared ellipse for isolated frame calls; Cold117 had source screening only. Thus prior rim failures do not establish failure after properly configured interior ROI. The [round-3 verification](../60-evidence/s11/2026-10-15-round3-handoff-validation.md), [round 2](../60-evidence/s11/2026-10-14-round2-context-disposition.md) and [round 1](../60-evidence/s11/2026-10-14-bounded-context-experiment.md) remain unchanged; no new detector execution, physical labels or Windows result is claimed. R22/O2/FIELD FAIL/Local XY OFF remain unchanged.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
@@ -39,18 +39,20 @@ require deliberate restoration of their pinned runtime before any separately jus
 
 ## Bounded completion budget — 2026-10-14
 
-The latest user instruction requires detector work to converge within **3–4 work rounds**, counting the present review/DTO-1 run as round 1. This is a scope/stop budget, not a promise of field acceptance. It does not authorize relabeling failures, excluding difficult source families, new report UI or silently removing existing gates.
+The October 14 instruction requires detector work to converge within **3–4 work rounds**, counting the DTO-1 run as round 1. This is a scope/stop budget, not a promise of field acceptance. It does not authorize relabeling failures, excluding difficult source families, new report UI or silently removing existing gates.
+
+**October 15 sequencing update:** the user's explicit BASE/report failure feedback and subsequent instruction fix initial-FULL repair and its first Windows comparison ahead of the three optional mechanisms. This supersedes report-reading-first sequencing, the old report-context-only round-4 reservation and the blanket exclusion of previously rejected variants from exploratory consideration. The ROI review and this plan update use saved evidence rather than consuming another experiment round. This feedback is an attributable product-use assessment, not a completed blind reading of the retained Mac sample4 report; do not fill its blank response record. No new fit, model search or production adoption follows automatically.
 
 | Round | Deliverable | Stop / acceptance boundary |
 |---|---|---|
 | 1 — completed local work | Current-state and Mac/Windows evidence reconciliation; one frozen raw-observation experiment, independent verification and handoff | DTO-1 remains diagnostic. No production behavior promotion; use its retained evidence rather than rerunning the same family |
 | 2 — engineering checks done; actual reading PENDING | Saved report/role/crop integrity and actual offline browser controls verified; no eligible repair from the tested confidence/authority policies; production unchanged | The actual report-only response is still missing. Source availability and 96 passing tests are not comprehension acceptance. Preserve genuine motion; no new feature search, blanket censoring or cosmetic extrema removal |
 | 3 — local verification and handoff complete; acceptance PENDING | Browser-checker stale-canvas false pass repaired; normal/stale/blank/styled controls and retained-report pixels checked. Combined round-1–3 recovery handoff prepared; production unchanged | No integrated candidate or actual reader response exists. Eight displayed-state checks and 117 passing tests do not close human/Windows acceptance. Do not repeat the audit or consume a new research round merely to reproduce it |
-| 4 — reserve only | At most one correction of a demonstrated report-context blocker, relevant revalidation, packaging and handoff | Freeze research afterward. Record accepted/limited/rejected/unassessed capability and residuals. Formal S11 DONE still requires the existing acceptance/publication conditions; otherwise explicitly distinguish engineering freeze from milestone completion |
+| 4 — re-scoped; PENDING | One bounded initial-FULL publication repair, relevant local verification, packaging and the first Windows comparison under the fixed sequence below | Review that result before preparing any additional mechanism. The three-candidate list is conditional, not three mandatory new research rounds. Record accepted/limited/rejected/unassessed capability and residuals; formal S11 DONE still requires the existing acceptance/publication conditions |
 
 A false global extremum, invented fill/drain reversal, wrong long-lived owner, missing entire material episode, or confusion of Foam disappearance with unobservable height is a **context blocker**. Isolated misses, local jitter or small gaps are not blockers when the actual reader can still recover the reviewed movement and uncertainty. Do not turn the 19 path labels or 16 pairwise orders into a 100%-required detector benchmark. Conversely, all-UNKNOWN cannot establish useful report comprehension.
 
-Report-only intake uses the existing report first, without supplying its expected story. Ask the reader to record: Oil direction/major reversals and full/empty periods; Foam onset/layer/disappearance or unknown visibility; trustworthy versus misleading extremes; and what prevents an overall interpretation. Only afterward compare against the qualified source evidence. Preserve actual responses and distinguish developer inspection from independent reading. No new Windows analysis is requested merely to obtain this baseline response.
+Report-only intake remains pending and is not a prerequisite to the fixed repair/comparison sequence. When resumed, use the existing report without supplying its expected story. Ask the reader to record: Oil direction/major reversals and full/empty periods; Foam onset/layer/disappearance or unknown visibility; trustworthy versus misleading extremes; and what prevents an overall interpretation. Only afterward compare against the qualified source evidence. Preserve actual responses and distinguish developer inspection from independent reading. No new Windows analysis is requested merely to obtain this baseline response.
 
 ## S11 work-item ledger
 
@@ -69,10 +71,10 @@ W5/W6/W7, and D5/P5 remains the independent Foam path.
 | V2/V3 / WP03 — qualification and evaluation | Nineteen exact roles CLOSED; A candidate contact CLOSED | [Second immutable extension](../50-diagnostics/s11/2026-10-14-raw-front-inventory/base-extension.json): 6 Foam / 4 liquid / 2 internal / 6 structures plus N1. All 137 paths retained, 118 unknown. f144 Foam–liquid reply excludes old Foam-absence targets; no scalar rewrite. A remains candidate-level; no training-readiness claim |
 | O2 / WP04 — typed observation and shadow | OPEN; gated on WP02–03 | Versioned existing Witness delta, controls/holdouts, V4 exact equality/resources, then **V5 Windows shadow before O2 acceptance**; no production consumer |
 | O3/W5/P3/D4a / WP05 — same-frame role condition | PROPOSED; gated on O2 and separate behavior plan | Apply the same role contract to anchor and continuation; full-window wrong-output suppression versus true-observation loss and new winners |
-| O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | PROPOSED; separate from WP05 | Explicit route for independently role-supported native candidates; name the replaced heuristic. Repair association/lifecycle only if saved earliest-loss evidence identifies that owner; preserve FULL/EMPTY/refill/drain |
+| O3 follow-up, then O4/W6/P4/D4b / WP06 — positive admission and later loss | Initial-FULL repair PRIORITIZED; implementation PENDING | Separate current interface observation from confirmed drain/fill motion under the fixed sequence. Isolate this repair before testing cost-first association or other optional mechanisms. Broader admission/handoff and formal behavior acceptance remain separate; preserve FULL/EMPTY/refill/drain semantics |
 | P5-a → P5-b / D5 / WP07 — Foam upper and raw input | Earlier trials CLOSED WITHOUT PROMOTION; f144 regional input-loss audit COMPLETE; full G1 NOT SATISFIED | Marked upper lacks raw white/warm support and Canny despite valid ROI. A successor must address raw proposal availability and role discrimination separately; native-head or downstream repair alone cannot recover this input. Existing positives/internal/rims remain required |
 | P5-c / WP08 — Foam episode | ENTRY NOT MET | Open only for an independently qualified correct raw upper lost downstream; separate onset/stable-layer versus splash/residue controls |
-| O5/W7/P6/D6 / WP09 — integrated Windows and report | PENDING integrated candidate and actual report reading | Round-3 rendered-frame checks supplement the completed round-2 report audit; neither is human acceptance. No unchanged candidate Windows rerun. For a justified candidate, retain exact runtime, nine canonical segments, resources and report reading; V5 and final field acceptance remain separate |
+| O5/W7/P6/D6 / WP09 — integrated Windows and report | PENDING initial-FULL repair and first Windows comparison | First compare the current version with the initial-FULL repair under the same verified ROI and run settings. Assess BASE descent/refill, output gaps, false positives and readable Oil/Foam uncertainty before any optional mechanism. Preserve exact runtime, the nine canonical segments for formal acceptance and output limitations; exploratory false-positive tolerance does not itself establish field acceptance |
 | P7 / WP10 — disposition and closeout | PENDING acceptance evidence | Record accepted/limited/rejected/unassessed scope and residual impact; retain minimal evidence. S11-M/S12 follow the roadmap, not partial local success |
 
 Detailed acceptance is in [Witness Validation](../30-validation/s11-interface-observability-witness-validation.md#post-cr1-operating-policy-and-consumer-acceptance)
@@ -80,7 +82,30 @@ and the [parent behavior contract](../30-validation/s11-physical-interface-evide
 
 ## Next transition
 
-**Round-3 checkpoint:** [Rendered-frame verification and combined handoff](../60-evidence/s11/2026-10-15-round3-handoff-validation.md) complete the available local assurance work. The actual reader response is still missing; no eligible production candidate exists. Do not repeat the browser/source audit, confidence/authority-only rejection or DTO-1. The detailed research/behavior paths below remain conditional and do not override the remaining one-round reserve. Obtain the report reading, then settle explicit capability/scope disposition; do not substitute another diagnostics-only round for missing human acceptance or claim S11 DONE.
+### Fixed execution order — 2026-10-15
+
+The user has adopted this order. Implementation and Windows execution are still pending.
+
+| Order | Deliverable | Comparison and completion boundary |
+|---|---|---|
+| 1 — ROI preparation | Verify and freeze each video's vessel-interior detection area across the full visible movement range | Use vessel structure before detector outputs, including applicable exclusions. Keep the same ROI in each comparison; do not crop to instantaneous fluid height or transfer sample4 coordinates to Windows |
+| 2 — Initial-FULL repair | Let an eligible current interface observation reach output while keeping movement direction unresolved until supported | Reuse the [direction-neutral observation proposal](../20-architecture/s11-physical-interface-evidence-repair-design.md#4-direction-neutral-visible-interface-ownership) and its validation owner. Keep selected candidate Y, sequence raw Y and CSV raw Y consistent; do not infer drain/fill merely from visibility. Verify current-candidate publication, loss/ambiguity, FULL/EMPTY and refill controls, and independent Foam. Prepare this repair without combining the optional mechanisms |
+| 3 — First Windows comparison | Compare the current version with the initial-FULL repair using identical verified ROI, analysis window and run settings | Reuse a saved baseline only when its source/setup/run conditions match; a changed ROI requires a matching current-version run. Review BASE descent and rapid refill, continuity/gaps, FULL prefix/suffix false positives and whether Oil/Foam movement and uncertainty can be read. More numeric rows alone do not establish improvement; keep recovered movement and false detections visible in the result |
+| 4 — Conditional additional comparisons | For remaining failures, test cost-first assignment → candidate-local RGB → Oil-only Local XY in that priority order | Match each option to the remaining failure and change one mechanism at a time against a fixed reference containing the initial-FULL repair. Record any skipped option and its reason. Do not stack unreviewed variants. If the first repair supplies usable movement context, stop without running all three; otherwise use each result to decide whether the next option is needed |
+
+The [reviewed Windows causal record](../50-diagnostics/s11/s11-r22-reviewed-interface-causal-findings.md)
+includes a real interface candidate blocked only by `downward_direction` at one
+direct-release checkpoint, with association history contributing to the wrong direction.
+This supports prioritizing the publication barrier; it does not establish the sole
+cause of BASE's whole-window loss. Cost-first association is the first additional
+comparison if incorrect linkage/direction remains. RGB addresses candidate discrimination;
+Local XY addresses localized structural interference. Current-frame evidence requirements
+and formal acceptance stay with their design/validation owners. Exploratory false positives
+are permitted and reported, without reclassifying them as correct physical interfaces.
+
+**Current ROI and candidate review:** [Cup path execution](../50-diagnostics/s11/2026-10-09-public-path-representation.md#existing-owner-and-fixed-execution) used full rectangular crops. The original four Recipes and executing `build_mask_bundle` establish ellipse/margin configuration, not verified removal of every physical rim. The [sample4 rim review](../60-evidence/s11/2026-10-14-candidate-rgb-trial.md#rim-답변-수신--같은-날-후속) retains all three false positives inside the saved visible mask. Earlier [D2 registration](../60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md) and [Local XY](../60-evidence/s11/2026-10-09-local-xy-implementation.md) tested particular local interventions, not a universal correctly fitted interior ROI. Interior geometry must cover the full visible movement range and be set from vessel structure before outputs; do not silently use instantaneous fluid height or copy sample4 coordinates into Windows.
+
+The three conditional mechanisms retain their prior evidence: (1) [cost-first assignment](../50-diagnostics/s11/2026-10-10-cadence-owner-causality.md#one-frozen-attribution-counterfactual), which recovered the reviewed 43.5 s location but introduced an upper-texture selection later; (2) [candidate-local RGB](../60-evidence/s11/2026-10-14-candidate-rgb-trial.md#단일-학습과-비교-결과), with retained weights and limited positive transfer but rim false positives; (3) [Oil-only Local XY](../60-evidence/s11/2026-10-09-local-xy-implementation.md#outcome-local-withdrawal-works-target-selection-remains-unsafe), which changed full-window outputs with unchanged raw Foam but retained topology/association failures. Their conditional priority is fixed above; none has completed a Windows comparison or demonstrated a BASE repair. Existing Accum allowed-owner losses remain separate: adding a score only after a hard exclusion cannot restore those outputs. No historical failure is relabeled PASS. The next implementation addresses initial-FULL publication before preparing these optional comparisons.
 
 <a id="adopted-program-and-immediate-p5-source-checkpoint"></a>
 
@@ -90,7 +115,8 @@ and the [parent behavior contract](../30-validation/s11-physical-interface-evide
 
 The receiving review accepts the reuse implementation at its evidence-binding scope.
 The continuous-family necessary-condition run adds no new feature or learning operation.
-The public candidate scope, fixed comparisons and rim-reply binding are complete; extend only the necessary source/control qualification:
+The public candidate scope, fixed comparisons and rim-reply binding are complete.
+The following table retains those checkpoints; it does not precede the fixed execution order above:
 
 | Order | Next deliverable | Entry and completion boundary |
 |---|---|---|
@@ -117,6 +143,9 @@ adopted data/split/loss/aggregation/operating-point/resource contract. After a q
 observation, the WP04 → WP05/06 and separate WP07/08 → WP09/10 gates below apply.
 
 ### Direction decision and staged follow-up
+
+This retained learned-observation sequence applies to that separate development path;
+it does not defer the prioritized initial-FULL repair or its first exploratory Windows comparison.
 
 Adopt the [NSR-1 binding/readiness design](../20-architecture/s11-contextual-role-observation-design.md#native-side-role-observation-and-g0-binding-contract)
 from the latest intake. Its new information must be qualified roles attached to
@@ -307,6 +336,14 @@ prevent repeated questions and unsafe reuse of previously exposed controls.
 
 ## Current authorization boundary
 
+**October 15 current request:** proceed through the fixed sequence with autonomous
+local implementation, verification, commits and pushes. Stop and report when an
+actual user judgment or work on the isolated Windows host is required. The
+preceding plan update did not execute or adopt a detector. The follow-up starts with ROI preparation and the
+bounded initial-FULL repair, then its Windows comparison; optional mechanisms follow
+only when the observed remaining failures warrant them. Earlier report-reading-first
+or learned-observation-first wording does not override this order.
+
 The October 14 request authorizes attachment/worktree reconciliation, validity review,
 follow-up planning, duplicate cleanup, necessary integration and autonomous commits/pushes.
 The intake itself did not execute a successor observation. The user's subsequent
@@ -386,8 +423,9 @@ The [physical-interface proposal](../20-architecture/s11-physical-interface-evid
 and [Witness Validation](../30-validation/s11-interface-observability-witness-validation.md)
 retain their responsibilities. The [contextual-role supplement](../20-architecture/s11-contextual-role-observation-design.md#native-side-role-observation-and-g0-binding-contract)
 owns the NSR input delta and preceding CR1 hypotheses; the ledger owns entry and sequencing. Closed
-research is not reopened by an old pending sentence. Independent support,
-association, committed handoff and initial-FULL observation remain later gates.
+research is not reopened by an old pending sentence. Initial-FULL observation/publication
+is now the prioritized repair under the fixed sequence above. The broader independent-support,
+association and committed-handoff proposal retains its separate implementation and acceptance gates.
 Failed descriptors do not prove physical unobservability or justify product-scope reduction.
 
 ## Current authority links
