@@ -6,8 +6,8 @@
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
 is unknown; post-transition FULL counts start at 675 s. The bounded
 [Refill owner and false-output follow-up](#refill-owner-and-false-output-follow-up)
-is now CLOSED. The next handoff is [priority 1 cost-first](#priority-1-cost-first-comparison),
-after local verification and publication of the candidate named in the Work Plan.
+is now CLOSED. Local priority 1 preparation is complete; use the published handoff
+source and [cost-first comparison](#priority-1-cost-first-comparison) below.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
@@ -426,11 +426,11 @@ docs/40-operations/s11-current-windows-field-qualification.md의
 
 ### Three-candidate Windows comparisons
 
-**승인된 순서:** 현재 CSV/review 마무리 → 공통 기준·로컬 옵션 준비 → 아래 세
+**승인된 순서:** 완료된 CSV/review 재사용 → 공통 기준·로컬 옵션 준비 → 아래 세
 후보를 각각 Windows에서 비교 → 유효한 결과에 근거한 FULL 전환·통합 검증.
 이 절은 실행 순서이며 세 후보 옵션이 이미 준비됐거나 합격했다는 뜻은 아니다.
 
-공통 기준은 **④ FULL+ON v2**다. ③ v1은 현재 CSV 정정용, ② UNKNOWN+OFF는
+공통 기준은 **④ FULL+ON v2**다. ③ v1은 완료된 CSV 비교용, ② UNKNOWN+OFF는
 누락 위치 참고용으로 보존한다. v2도 오검출을 포함하므로 물리 정답으로 쓰지 않는다.
 Windows의 유체 이동 범위를 포함하는 용기 내부 ROI를 한 번 확인한 뒤 영상,
 Recipe/ROI, 480–780초, 2fps, BASE FULL/Accum EMPTY를 고정한다. ROI나 공통
@@ -462,6 +462,10 @@ review, 실제 유면 회복·소실과 비유면 출력 변화, Accum/Oil·Foam
 결정한다. 현재 accepted baseline과 O2/FIELD FAIL은 실제 승인 근거 전까지 유지한다.
 
 ### Priority 1 cost-first comparison
+
+**준비 완료 / Windows 결과 대기.** 구현은 `2083277`이며, 이 checkpoint와 같은
+검출기 소스를 담은 게시 ZIP을 사용한다. 후속 문서 커밋이 포함돼도 검출 옵션은
+동일하다. 현재 절차는 이 절이며 이전 initial-FULL/CSV 요청은 완료된 이력이다.
 
 이번 비교는 **④ FULL+ON v2 ↔ ⑤ FULL+ON v2 + cost-first**다. 여기서 OFF/ON은
 cost-first만 뜻하며, 두 조건 모두 초기 FULL 관측 옵션 v2를 켠다. 초기 FULL+OFF나
