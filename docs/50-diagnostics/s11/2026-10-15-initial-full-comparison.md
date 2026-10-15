@@ -426,6 +426,7 @@ incompatible controls, same-frame Y and direction uncertainty. The related
 lifecycle/tracklet/authority/JSONL/event/report suites pass (181 tests): **264 total**.
 GUI wiring is unchanged and its earlier propagation checks remain applicable.
 
+The verified v2 source is commit `4c72ebbf038d577290aedcf29a7d33345c5de628`.
 The managed run `sample/output/s11-initial-full-v2-20261015-001` is closed. It reuses
 `tests.diagnostics.s11_initial_full_comparison`, the frozen ROI inputs from the
 first comparison and both prior windows, at 2 Hz with explicit FULL as a mechanism
