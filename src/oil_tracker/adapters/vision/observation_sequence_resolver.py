@@ -8,7 +8,7 @@ from oil_tracker.domain.enums import InitialObservationState
 from oil_tracker.domain.recipe import GlassInspectionConfig
 
 from .foam_episode_resolver import FoamEpisodeResolver
-from .oil_observation_resolver import OilObservationResolver
+from .oil_observation_resolver import OilObservationResolver, OilObservationResolverConfig
 
 
 OBSERVATION_SEQUENCE_VERSION = "r22-oil-ownership-evidence-replacement-v1"
@@ -64,8 +64,12 @@ class ObservationSequenceResolver:
 
     version = OBSERVATION_SEQUENCE_VERSION
 
-    def __init__(self) -> None:
-        self._oil = OilObservationResolver()
+    def __init__(self, *, initial_full_observation: bool = False) -> None:
+        self._oil = OilObservationResolver(OilObservationResolverConfig(
+            initial_full_observation_enabled=initial_full_observation,
+        ))
+        if initial_full_observation:
+            self.version += "+initial-full-observation-v1"
         self._foam = FoamEpisodeResolver()
 
     def resolve(

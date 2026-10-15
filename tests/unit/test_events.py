@@ -75,6 +75,23 @@ def test_single_step_oil_jitter_does_not_start_drop_event():
     assert EventType.OIL_DROP_START not in [event.event_type for event in events]
 
 
+def test_direction_unconfirmed_observations_do_not_invent_drop_event():
+    samples = [s(i * .5, level=20 - i * 4) for i in range(7)]
+    assert EventType.OIL_DROP_START in {e.event_type for e in detect_events_for_glass("r", "g", samples)}
+    for sample in samples:
+        sample.flags.append("OIL_DIRECTION_UNCONFIRMED")
+    events = detect_events_for_glass("r", "g", samples)
+    assert EventType.OIL_DROP_START not in {e.event_type for e in events}
+    assert EventType.MINIMUM_OIL_LEVEL in {e.event_type for e in events}
+
+
+def test_confirmed_motion_after_unconfirmed_interval_can_still_start_drop():
+    samples = [s(i * .5, level=40 - i * 4, flags=("OIL_DIRECTION_UNCONFIRMED",) if i < 3 else ()) for i in range(10)]
+    drops = [e for e in detect_events_for_glass("r", "g", samples) if e.event_type is EventType.OIL_DROP_START]
+    assert len(drops) == 1
+    assert drops[0].start_time_sec >= 1.5
+
+
 def test_semantic_flag_events_are_emitted():
     samples = [s(0), s(.5), s(1.0)]
     for sample in samples:

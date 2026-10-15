@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from functools import partial
+
 from oil_tracker.adapters.presentation.qt_debug_artifact_presenter import QtDebugArtifactPresenter
 from oil_tracker.adapters.presentation.qt_frame_image_converter import QtFrameImageConverter
 from oil_tracker.adapters.presentation.review_frame_presenter import (
@@ -55,8 +57,12 @@ from oil_tracker.ui.same_profile_analysis_coordinator import SameProfileAnalysis
 from oil_tracker.ui.truth_annotation_coordinator import TruthAnnotationCoordinator
 
 
-def build_main_window() -> MainWindow:
+def build_main_window(*, initial_full_observation: bool = False) -> MainWindow:
     configure_logging()
+    detector_factory = (
+        partial(OpenCvPhaseDetector, initial_full_observation=True)
+        if initial_full_observation else OpenCvPhaseDetector
+    )
     repository = JsonRecipeRepository()
     validator = RecipeValidationService()
     workbench = WorkbenchController(
@@ -65,9 +71,9 @@ def build_main_window() -> MainWindow:
         ValidateWorkbenchUseCase(validator),
         reader_factory=OpenCvVideoReader,
     )
-    preview_detector = OpenCvPhaseDetector()
+    preview_detector = detector_factory()
     preview_controller = PreviewController(PreviewDetectionUseCase(preview_detector))
-    analysis_detector = OpenCvPhaseDetector()
+    analysis_detector = detector_factory()
     pipeline = AnalysisPipeline(
         lambda path: OpenCvVideoReader(path),
         analysis_detector,
@@ -86,12 +92,14 @@ def build_main_window() -> MainWindow:
         artifact_proposer=OpenCvArtifactProposalService(),
         reference_reviewer=OpenCvArtifactReferenceReviewer(),
     )
+    if initial_full_observation:
+        window.setWindowTitle(window.windowTitle() + " — 초기 FULL 관측 비교")
     analysis_controller.setParent(window)
     window.destroyed.connect(lambda: analysis_controller.shutdown())
     window.settings_copy_coordinator = ObservationSettingsCopyCoordinator(window)
     preflight_use_case = PreflightCheckUseCase(
         lambda path: OpenCvVideoReader(path),
-        OpenCvPhaseDetector,
+        detector_factory,
         validator,
     )
     preflight_controller = PreflightController(preflight_use_case, window)
@@ -103,7 +111,7 @@ def build_main_window() -> MainWindow:
     window.recent_result_history = RecentResultHistory(bundle_reader=bundle_reader)
     window.redetection_service = PartialRedetectionService(
         lambda path: OpenCvVideoReader(path),
-        OpenCvPhaseDetector,
+        detector_factory,
         RedetectionWorkspace.create,
     )
 

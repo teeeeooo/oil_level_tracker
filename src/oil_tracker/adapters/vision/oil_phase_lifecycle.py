@@ -23,6 +23,7 @@ class OilMaterialPhase(str, Enum):
     FILLING = "filling"
     FILLED_BARRIER = "filled_barrier"
     DRAINING = "draining"
+    OBSERVED_INTERFACE = "observed_interface"
 
 
 class OilFillConfirmationProfile(str, Enum):
@@ -51,6 +52,7 @@ class OilMaterialPhasePolicy:
     drain_minimum_progress_ratio: float
     drain_minimum_directional_agreement: float
     material_conflict_limit: float
+    initial_full_observation_enabled: bool = False
 
     @property
     def initial_empty(self) -> bool:
@@ -301,6 +303,7 @@ class _OilFrameRecord:
     )
     transient_owner_chain: tuple[str, ...] = ()
     barrier_state_override: str | None = None
+    initial_full_observation: dict[str, object] | None = None
 
 
 @dataclass(frozen=True)
@@ -377,6 +380,10 @@ class OilMaterialPhaseLifecycleOwner:
                     or _selected_owner_chain(state.chains, record.allowed_tracklet_ids)
                 )
             self._capture_frame_runtime(record, state, frame)
+            if self.policy.initial_full_observation_enabled:
+                self._observe_initial_full_interface(
+                    record, state, rows_by_frame[frame], layers[frame]
+                )
         decisions = tuple(
             (
                 OilFrameDecision(
@@ -401,6 +408,78 @@ class OilMaterialPhaseLifecycleOwner:
             diagnostics=tuple((self._serialize_frame(r) for r in records)),
             frame_decisions=decisions,
         )
+
+    def _observe_initial_full_interface(
+        self,
+        record: _OilFrameRecord,
+        state: OilPhaseRuntimeState,
+        rows: tuple[_ObservedRow, ...],
+        layer: tuple[OilSequenceNode, ...],
+    ) -> None:
+        """Expose current observations without certifying or changing motion.
+
+        This opt-in comparison leaves the motion lifecycle and recovery leases
+        untouched. The selector still resolves competing confirmed owners; no
+        owner chain is synthesized between them.
+        """
+        evaluated = bool(
+            self.policy.initial_full
+            and state.phase is OilMaterialPhase.FILLED_BARRIER
+            and not state.filled_chain
+            and record.reason == "INITIAL_FULL_BARRIER"
+        )
+        diagnostics: dict[str, object] = {
+            "enabled": True,
+            "evaluated": evaluated,
+            "motion_phase": state.phase.value,
+            "motion_reason": record.reason,
+            "blocked_by_current_state": False,
+            "qualifying_tracklet_ids": [],
+            "evaluations": [],
+        }
+        record.initial_full_observation = diagnostics
+        if not evaluated:
+            return
+        if any(node.kind in {"full", "empty"} for node in layer):
+            diagnostics["blocked_by_current_state"] = True
+            return
+        qualifying: set[str] = set()
+        evaluations = []
+        for row in rows:
+            predicates = {
+                "bounded_confirmed": _bounded_confirmed_observation(row.ref),
+                "current_confirmed_owner": row.ref.tracklet_lifecycle
+                in {TrackletLifecycle.CONFIRMED, TrackletLifecycle.CONTINUING},
+                "compatible": not row.ref.tracklet_incompatible,
+                "anchor_eligible": row.ref.authority
+                is OilCandidateAuthority.ANCHOR_ELIGIBLE,
+                "interface_identity": row.ref.phase_identity
+                in {OilPhaseIdentity.DIRECT_INTERFACE, OilPhaseIdentity.ORDERED_LOWER_INTERFACE},
+                "identity_contradiction_clear": row.tracklet_id
+                not in record.identity_contradictions
+                and not _row_has_identity_contradiction(row),
+                "current_material_veto_clear": not row.current_material_veto,
+                "tracklet_material_conflict": row.ref.tracklet_material_conflict
+                < self.policy.material_conflict_limit,
+                "current_material_conflict": row.current_material_conflict
+                < self.policy.material_conflict_limit,
+            }
+            passed = all(predicates.values())
+            evaluations.append({
+                "tracklet_id": row.tracklet_id,
+                "row_hypothesis_id": row.row_hypothesis_id,
+                "predicates": predicates,
+                "passed": passed,
+            })
+            if passed:
+                qualifying.add(row.tracklet_id)
+        diagnostics["evaluations"] = evaluations
+        diagnostics["qualifying_tracklet_ids"] = sorted(qualifying)
+        if qualifying:
+            record.phase = OilMaterialPhase.OBSERVED_INTERFACE
+            record.reason = "INITIAL_FULL_INTERFACE_OBSERVED"
+            record.allowed_tracklet_ids = frozenset(qualifying)
+            record.owner_chain = tuple(sorted(qualifying)) if len(qualifying) == 1 else ()
 
     def _transition_open(
         self,
@@ -1350,6 +1429,8 @@ class OilMaterialPhaseLifecycleOwner:
         allowed = record.allowed_tracklet_ids
         established = record.established_fill_snapshot
         return {
+            **({"initial_full_observation": record.initial_full_observation}
+               if record.initial_full_observation is not None else {}),
             "schema_version": "r21-truth-preserving-detector-repair-v1",
             "legacy_schema_version": "r20-delayed-drain-reacquisition-v1",
             "initial_state": None

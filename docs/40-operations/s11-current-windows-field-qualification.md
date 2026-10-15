@@ -29,6 +29,67 @@ A GUI launch alone does not start an analysis; a manual run requires the
 operator to complete setup and start analysis. Use the Work Plan for current
 candidate identity, not the retired comparison's commit or branch.
 
+### October 15 first initial-FULL comparison
+
+This is the first exploratory OFF/ON comparison named by the Work Plan, before
+cost-first assignment, candidate RGB or Local XY. False positives are permitted
+for inspection and must be reported. Formal field acceptance still follows the
+nine-segment procedure below. The [local readout](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md)
+records implementation, local limits and verification; it is not a Windows result.
+
+Windows 담당자는 다음 순서로 진행한다.
+
+1. Work Plan에 지정된 커밋의 소스 ZIP을 별도 폴더에 풀고 기존 Windows Python
+   환경을 사용한다. 원본 영상과 bundle은 Windows에 보관한다. ZIP 커밋/URL,
+   실제 import 경로, Python/OpenCV/NumPy 버전을 기록한다.
+2. 원본을 보며 **BASE와 Accum 각각 유체가 움직일 수 있는 용기 내부 전체**로
+   ROI를 확인한다. 시작·하강·재충전·종료 장면을 확인하고 외부 rim/컵 테두리를
+   제외한다. 순간적인 액면 높이에 맞춰 ROI를 줄이지 않는다. Recipe를 한 번
+   저장한 뒤 OFF/ON에 동일하게 사용한다. Mac sample4 좌표를 옮겨 쓰지 않는다.
+3. 기준 비교는 기존 480–780초 창, 같은 FPS·영점·스케일·초기 상태·판정 설정을
+   사용한다. BASE는 FULL, Accum은 EMPTY 초기 확인을 유지한다. ROI가 바뀌면
+   이전 bundle을 같은 조건의 OFF 결과로 간주하지 말고 OFF부터 실행한다.
+   기존 bundle은 생성 소스와 입력/설정이 같은 경우 재사용할 수 있다.
+4. 아래 OFF 실행으로 GUI에서 직접 분석을 시작하고 완료 bundle을 보존한다.
+   GUI를 닫은 뒤 ON으로 다시 열어 같은 조건으로 분석한다. 결과 경로/이름을
+   구분하고, 실행 중 설정을 조정하지 않는다. 두 실행의 debug 수준도 같게
+   두며 기본 BASIC이면 충분하다. 원인 추적에 필요한 추가 상세 실행은 결과를
+   읽은 다음 결정한다.
+
+ZIP 루트에서 PowerShell로 실행한다. `python`은 기존 Windows 환경의 Python을
+가리켜야 한다. `PYTHONPATH`는 다른 ZIP의 editable 설치가 선택되는 것을 막는다.
+
+```powershell
+$env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+python -c "import oil_tracker; print(oil_tracker.__file__)"
+python -m oil_tracker
+```
+
+OFF GUI를 닫은 후 같은 터미널에서 실행한다.
+
+```powershell
+python -m oil_tracker --initial-full-observation
+```
+
+ON 창 제목에는 `초기 FULL 관측 비교`, detector/resolver 버전에는
+`+initial-full-observation-v1`이 붙어야 한다. 이 옵션은 Recipe 초기 상태를
+자동 변경하지 않는다. 원시 후보·association·기존 drain/refill 규칙을 유지하면서
+초기 FULL에서 허용되는 현재 계면 후보만 방향 미확정으로 출력한다. 새 출력의
+CSV flag는 `OIL_DIRECTION_UNCONFIRMED`이고 보고서는 이를 방향 요약/하강 시작
+판정에 사용하지 않는다고 설명한다. 후보가 없거나 다른 hard gate에 막힌 지점,
+이미 drain/refill 상태로 전환한 뒤의 손실은 이 옵션의 해결 범위가 아니다.
+
+먼저 BASE의 약 550–662초 하강과 662–663.6초 급속 재충전이 원본과 대조해
+얼마나 드러나는지, 앞뒤 FULL 구간에 잘못된 선이 생기는지 확인한다. 보고서만
+읽은 판단과 원본 대조 결과를 구분한다. Accum과 Foam 변화도 함께 기록하되
+정확한 Y truth가 없는 곳은 위치 정확도를 단정하지 않는다. 아래 9개 구간을
+모두 열거하고 아직 보지 않은 곳은 `NOT_EVALUATED`로 남긴다.
+
+Mac에 전달할 최소 결과는 **소스/ROI/설정 동일 여부, 구간별 OFF→ON 관측 변화,
+복원된 움직임, 오검출과 긴 공백, 보고서 해석 가능 여부, 실제 runtime**의 텍스트
+요약이다. 비공개 영상·이미지·bundle을 Mac으로 전송할 필요는 없다. 이 결과를
+받아 첫 수정의 효과와 남은 실패를 판단한 뒤 조건부 후보 순서를 적용한다.
+
 ## 2. Private source identity
 
 For `windows_sample1_heating_coldstart`, record without exposing the real filename:

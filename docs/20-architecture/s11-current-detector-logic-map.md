@@ -35,6 +35,7 @@ owns the record, not a second feature inventory in each experiment.
 | Learned static artifacts | [`DetectionRunCoordinator.run`](../../src/oil_tracker/application/services/detection_run.py) resets the detector and calls [`learn_static_artifacts`](../../src/oil_tracker/application/services/detection_processing.py) before target detection | Prepared static frames/maps versus a fresh direct `detect` call; this automatic preparation is separate from user Artifact templates and ML-head training. |
 | Run window, cadence and initial state | [`AnalysisSession`](../../src/oil_tracker/domain/session.py) → [`AnalysisPipeline.run`](../../src/oil_tracker/application/services/analysis_pipeline.py) schedules frames and forwards matching session confirmations to completed resolution | Actual sampling and confirmed state versus Recipe intent or standalone frame identity; neither static preparation nor initial-state confirmation may be assumed from a helper test. |
 | Experimental Local XY | Explicit [`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py) constructor input → selected Oil measurement lanes | Default OFF; it is not the Recipe exclusion mask. State scope/digest if used; historical rejection does not authorize enabling or tuning it. |
+| Initial-FULL observation comparison | GUI `--initial-full-observation` → `build_main_window` detector factory → `OpenCvPhaseDetector` / resolver policy | Default OFF; current anchor observations may reach selection without a drain release. Trial version/title and direction-uncertainty flags distinguish it from baseline. It does not enable Local XY or change Recipe initial state. |
 | Completed analysis and report | [`DetectionRunCoordinator`](../../src/oil_tracker/application/services/detection_run.py) → sequence composition → sample/event/judgment/export owners below | Raw helper, current-frame output, completed Oil/Foam, and report are different execution scopes. Recipe judgment/scale and report rendering do not establish physical accuracy. |
 
 For structure/exclusion hypotheses, the [recall index](../00-project/recall-index.md)
@@ -273,6 +274,19 @@ R18/R19/R20 predecessor behavior plus the R21 bounded repairs are source-backed 
 - Existing drain continuation, successor handoff, loss and phase re-entry remain bounded and material-checked. R21 additionally closes a rapid topward refill either on the same owner or, after ordinary downward continuation/successor fails, through exactly one distinct fresh owner that independently proves anchor authority, strong motion, recent topward progress, top entrance and strict material support. Multiple fresh refill owners remain ambiguous; phase ownership appends the new ID without copying tracklet observations or coordinates.
 - Direct, near-snapshot, delayed and refill source details plus `r21-decision-witness-v1` are additive diagnostics. The witness serializes the already-built phase/publishable layers and existing predicate records; selector, projection and publication remain downstream authorities.
 
+The optional [October 15 comparison](s11-physical-interface-evidence-repair-design.md#october-15-initial-full-observation-comparison)
+adds `_observe_initial_full_interface` after ordinary motion-state processing.
+Only an unresolved `INITIAL_FULL_BARRIER` with no current no-interface state or
+release ambiguity can expose current confirmed anchor/direct-or-ordered-lower rows
+with strict material and identity clearance. Their IDs bound selection; competing
+owners still use the existing selector's ambiguity test, without a fabricated handoff.
+The frame result is `OBSERVED_INTERFACE`, while the constrained motion runtime and
+all drain/recovery leases remain unchanged. Missing/invalid rows receive no new
+allowance. EMPTY, post-fill/refill and already-released drain contexts are unaffected.
+Actual predicates and the original motion reason are under `initial_full_observation`
+in phase diagnostics. This is an exploratory publication mode, not accepted physical
+discrimination or implementation of the full raster-witness proposal.
+
 ### 4.4 Bounded selection and same-frame projection (`OIL-SELECTOR`, `OIL-PROJECTION`)
 
 `build_interface_layers` creates two layers per frame: phase-oil plus state/unknown nodes for lifecycle reasoning, and publishable Oil members plus state/unknown nodes for final selection. `BoundedOilInterfaceSelector.resolve` first filters each layer by the lifecycle’s allowed IDs, then scores a six-frame lookahead. Oil transitions require the same tracklet or an adjacent ID in the explicit owner chain. Competing physical owners inside `ambiguity_margin` produce an unknown node. `assert_publishable_path` asserts that every chosen Oil member passes phase admission, tracklet admission, trajectory support and candidate confidence (or the explicit continuing-anchor witness).
@@ -284,6 +298,13 @@ R18/R19/R20 predecessor behavior plus the R21 bounded repairs are source-backed 
 - `unknown`: no Oil coordinate; barrier/initial-state/tracklet reasons are retained in flags/metrics.
 
 The projection uses the selected nested candidate, not a path-interpolated Y. The current code’s compatibility flags still use several `R17_*` names while the resolver/version is `r21-truth-preserving-detector-repair-v1`; those labels are storage/readability details, not an alternate R17 owner.
+
+For optional `OBSERVED_INTERFACE` rows, projection uses `PARTIAL_VISIBLE` plus
+`OIL_DIRECTION_UNCONFIRMED`, not a direction derived from unqualified track history.
+`domain/events.py` splits drain-start evidence at these rows. Existing report
+presentation retains their coordinates and extrema but excludes them from direction
+summaries and explicitly states their uncertainty/false-positive risk. Other rows
+retain the ordinary event/report semantics; Foam still resolves independently.
 
 ## 5. Independent Foam path and composition
 
@@ -398,7 +419,7 @@ bounded expiry and one-attempt semantics.
 - Logic-map nodes: `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`,
   `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`,
   `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `TRACE-PUBLICATION`.
-- Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F08`, `S11-F09`,
+- Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`,
   `S11-F10`.
 - Prior mechanisms reviewed: R16/R18 ownership and lifecycle closure, R19
   absolute recovery expiry, R20 delayed reacquisition, and R21 recent
@@ -412,10 +433,12 @@ bounded expiry and one-attempt semantics.
 - Existing feature coverage: the quick index now connects Recipe settings/geometry/exclusions,
   Artifact templates, scoped reference diagnostics, static preparation, run state,
   optional Local XY and completed publication to their existing source owners.
-  No actual Recipe, constructor option or feature state is changed by this map update.
-- Execution scope: source/caller and prior-record review only; no detector, video,
-  training or report replay. The diagram exposes routes, not proof that any specific
-  experiment exercised them.
+  The October 15 comparison adds a default-OFF constructor/GUI option; local interior
+  ROI is frozen separately from original Recipes, static preparation remains active,
+  and private Windows ROI remains operator-verified there.
+- Execution scope: current source/caller review and focused lifecycle/resolver/GUI/event/report
+  tests for the optional initial-FULL route; bounded local analysis replay is recorded
+  in its comparison record. No Windows execution or physical acceptance is implied.
 - Difference from prior failures: typed competing-identity contradiction is
   propagated before member selection, and only one independently reaffirmed
   same-owner initial-FULL lease may extend within a fixed total horizon. R22-2

@@ -348,7 +348,11 @@ def _numeric_sample_runs(
     runs: list[tuple[TrackingSample, ...]] = []
     current: list[TrackingSample] = []
     for sample in samples:
-        if _oil_level(sample) is None or sample.fill_state is FillState.UNKNOWN_REVIEW:
+        if (
+            _oil_level(sample) is None
+            or sample.fill_state is FillState.UNKNOWN_REVIEW
+            or "OIL_DIRECTION_UNCONFIRMED" in sample.flags
+        ):
             if current:
                 runs.append(tuple(current))
                 current = []

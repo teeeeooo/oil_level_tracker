@@ -61,6 +61,7 @@ from .oil_phase_identity import (
 OIL_OBSERVATION_RESOLVER_VERSION = "r22-oil-ownership-evidence-replacement-v1"
 
 _OIL_REPLACED_FLAGS = {
+    "OIL_DIRECTION_UNCONFIRMED",
     "LOW_CONFIDENCE",
     "OIL_EVIDENCE_AMBIGUOUS",
     "OIL_PIPELINE_UNAVAILABLE",
@@ -158,6 +159,7 @@ class OilObservationResolverConfig:
     tracklet_continuation_min_motion_energy: float = 0.08
     tracklet_continuation_min_motion_coverage: float = 0.12
     tracklet_ambiguity_margin: float = 0.08
+    initial_full_observation_enabled: bool = False
 
     @property
     def end_to_end_commit_lag_frames(self) -> int:
@@ -1368,7 +1370,11 @@ class OilResolutionProjectionOwner:
             px = None if zero is None else float(zero) - y
             mm = None if px is None or glass.mm_per_pixel is None else px * glass.mm_per_pixel
             confidence = _oil_confidence(node.candidate_ref)
-            state = _visible_state(path, frame_offset)
+            if material_phase is OilMaterialPhase.OBSERVED_INTERFACE:
+                state = FillState.PARTIAL_VISIBLE
+                flags.append("OIL_DIRECTION_UNCONFIRMED")
+            else:
+                state = _visible_state(path, frame_offset)
             flags.extend(
                 (
                     "R17_RESOLVED_OIL",
@@ -1451,6 +1457,8 @@ class OilObservationResolver:
 
     def __init__(self, config: OilObservationResolverConfig | None = None) -> None:
         self.config = config or OilObservationResolverConfig()
+        if self.config.initial_full_observation_enabled:
+            self.version += "+initial-full-observation-v1"
         self.admission_evidence = OilAdmissionEvidenceOwner(self.config)
         self.tracklet_opposition = OilTrackletOppositionOwner(
             self.config
@@ -2166,6 +2174,7 @@ def _material_phase_policy(
         material_conflict_limit=(
             config.completed_fill_material_conflict_min
         ),
+        initial_full_observation_enabled=config.initial_full_observation_enabled,
     )
 
 

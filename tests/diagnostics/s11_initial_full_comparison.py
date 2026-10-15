@@ -5,9 +5,12 @@ Use a managed experiment's work directory. Original Recipes are never changed.
 from __future__ import annotations
 
 import argparse
+from dataclasses import asdict
 import hashlib
 import json
 from pathlib import Path
+from tempfile import TemporaryDirectory
+import time
 
 import cv2
 import numpy as np
@@ -74,8 +77,104 @@ def prepare(output: Path) -> None:
     (output / "roi-inputs.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
+def compare(output: Path, roi_inputs: Path, sample: str, *, debug_full: bool = False) -> None:
+    from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
+    from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
+    from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+    from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
+    from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
+    from oil_tracker.application.services.report_presentation import build_report_presentation
+    from oil_tracker.domain.enums import BoundaryKind, InitialObservationState
+    from oil_tracker.domain.session import DebugTraceLevel, InitialStateConfirmation
+    from tests.diagnostics.s11_local_xy_replay import Recorder, stable
+    from tests.diagnostics.s11_report_observability_replay import _session, QUALIFICATION_WINDOWS
+    from tests.diagnostics.s11_replay_provenance import capture_runtime_provenance
+    import csv
+
+    output.mkdir(parents=True, exist_ok=False)
+    video = ROOT / "sample" / f"{sample}.mp4"
+    recipe_path = (roi_inputs / "sample4.oilrecipe" if sample == "sample4"
+                   else ROOT / "sample/base_sample_1.oilrecipe")
+    frozen = json.loads((roi_inputs / "roi-inputs.json").read_text(encoding="utf-8"))
+    hash_key = "comparison_recipe_sha256" if sample == "sample4" else "original_recipe_sha256"
+    assert _sha(recipe_path) == frozen["recipes"][sample][hash_key]
+    variants = {}
+    raw_inputs = []
+    for enabled in (False, True):
+        mode = "observation" if enabled else "baseline"
+        with TemporaryDirectory(prefix=f"{sample}-{mode}-", dir=output) as scratch:
+            scratch_path = Path(scratch)
+            _, session = _session(sample, video, scratch_path, *QUALIFICATION_WINDOWS[sample],
+                                  run_label="Initial FULL comparison", run_note=mode)
+            if debug_full:
+                session.debug_trace_level = DebugTraceLevel.FULL
+            recipe = JsonRecipeRepository().load(recipe_path)
+            for glass in recipe.glasses:
+                glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
+                session.initial_state_confirmations[glass.id] = InitialStateConfirmation(
+                    InitialObservationState.FULL_NO_INTERFACE, str(video), session.analysis_start_sec,
+                )
+            detector = Recorder(initial_full_observation=enabled)
+            started = time.monotonic()
+            result = AnalysisPipeline(
+                OpenCvVideoReader, detector, RecipeValidationService(),
+                JsonlDebugTraceWriterFactory(scratch_path) if debug_full else None,
+            ).run(recipe, session)
+            analysis_seconds = time.monotonic() - started
+            assert not result.errors, result.errors
+            raw_inputs.append(detector.raw)
+            rows = stable([asdict(s) for g in result.glass_results for s in g.samples])
+            assert len(rows) == len(detector.raw) == len(detector.completed)
+            bundle = OutputBundleStore().write_bundle(result, recipe, session, scratch_path)
+            with (bundle / "tracking_data.csv").open(encoding="utf-8-sig", newline="") as stream:
+                csv_rows = list(csv.DictReader(stream))
+            for sample_row, detection, csv_row in zip(rows, detector.completed, csv_rows, strict=True):
+                y = sample_row["raw_oil_air_level_y"]
+                assert y == detection["raw_oil_air_level_y"]
+                assert (None if not csv_row["raw_oil_air_level_y"] else float(csv_row["raw_oil_air_level_y"])) == y
+                if y is not None:
+                    selected = [c for c in detection["candidates"] if c["kind"] == BoundaryKind.OIL_AIR and c["selected"]]
+                    assert len(selected) == 1 and selected[0]["y"] == y
+            report = build_report_presentation(result, recipe).glasses[0]
+            if any("OIL_DIRECTION_UNCONFIRMED" in row["flags"] for row in rows):
+                assert "이동 방향이 미확정" in report.observation_note
+                assert "이동 방향이 미확정" in (bundle / "report.html").read_text(encoding="utf-8")
+            variants[mode] = {
+                "detector_version": detector.version,
+                "analysis_seconds": analysis_seconds,
+                "raw_input_sha256": hashlib.sha256(json.dumps(detector.raw, sort_keys=True, allow_nan=False).encode()).hexdigest(),
+                "rows": rows,
+                "phase": [{"frame_index": d["frame_index"], "phase": d["debug_metrics"]["sequence_material_phase"],
+                           "reason": d["debug_metrics"]["sequence_material_phase_reason"],
+                           "observation": d["debug_metrics"]["sequence_material_phase_diagnostics"].get("initial_full_observation")}
+                          for d in detector.completed],
+                "events": stable([asdict(e) for g in result.glass_results for e in g.events]),
+                "report": asdict(report),
+                "csv_and_selected_candidate_equality": "PASS",
+            }
+            print(json.dumps({"sample": sample, "mode": mode, "rows": len(rows),
+                              "numeric_oil": sum(row["raw_oil_air_level_y"] is not None for row in rows),
+                              "numeric_foam": sum(row["raw_foam_front_y"] is not None for row in rows)}, ensure_ascii=False), flush=True)
+    assert raw_inputs[0] == raw_inputs[1], "Comparison changed current-frame detector inputs"
+    result = {"sample": sample, "initial_state": "FULL mechanism stress condition; not physical truth",
+              "debug_trace_level": "FULL" if debug_full else "NONE",
+              "recipe_sha256": _sha(recipe_path), "runtime": capture_runtime_provenance(video),
+              "raw_inputs_equal": True, "variants": variants}
+    (output / "comparison.json").write_text(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False, default=str) + "\n", encoding="utf-8")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--prepare-roi", type=Path, required=True)
+    modes = parser.add_mutually_exclusive_group(required=True)
+    modes.add_argument("--prepare-roi", type=Path)
+    modes.add_argument("--compare", type=Path)
+    parser.add_argument("--roi-inputs", type=Path)
+    parser.add_argument("--sample", choices=("base_sample_1", "sample4"))
+    parser.add_argument("--debug-full", action="store_true")
     args = parser.parse_args()
-    prepare(args.prepare_roi)
+    if args.prepare_roi:
+        prepare(args.prepare_roi)
+    else:
+        if args.roi_inputs is None or args.sample is None:
+            parser.error("--compare requires --roi-inputs and --sample")
+        compare(args.compare, args.roi_inputs, args.sample, debug_full=args.debug_full)

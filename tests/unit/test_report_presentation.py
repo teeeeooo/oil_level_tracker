@@ -46,6 +46,21 @@ def _sample(
     )
 
 
+def test_report_explains_direction_uncertainty_without_claiming_reversal():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    samples = [
+        _sample(config.id, i * .5, oil=value, flags=("OIL_DIRECTION_UNCONFIRMED",))
+        for i, value in enumerate((0., 20., -20., 0.))
+    ]
+    glass = GlassAnalysisResult(config.id, config.name, ResultState.REVIEW_REQUIRED, samples=samples)
+    report = build_glass_report_presentation(glass, config)
+    assert report.finite_oil_count == 4
+    assert "계면 후보 위치 4개" in report.movement_summary
+    assert "방향은 미확정" in report.movement_summary
+    assert "상승과 하강이 모두 관측" not in report.movement_summary
+    assert "오검출 가능성" in report.observation_note
+
+
 def test_report_presentation_selects_extrema_and_consolidated_foam_without_debug_rows():
     config = InspectionRecipe.default_glass(320, 240, 1)
     values = {

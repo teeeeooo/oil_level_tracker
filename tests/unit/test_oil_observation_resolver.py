@@ -711,6 +711,45 @@ def test_confirmed_full_is_context_only_until_image_state_or_oil_evidence() -> N
     assert any(member["selected"] for member in selected_row["members"])
 
 
+def test_initial_full_comparison_publishes_exact_current_y_with_uncertain_direction():
+    from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+    glass = glass_config()
+    ys = (150., 147., 144., 141., 138., 135., 132., 129.)
+    detections = tuple(
+        _detection(i, _candidate(y, boundary=.85, broad=.85, selected=True), ambiguity=.1)
+        for i, y in enumerate(ys)
+    )
+    baseline = OpenCvPhaseDetector().resolve_sequence(detections, glass, InitialObservationState.FULL_NO_INTERFACE)
+    trial_detector = OpenCvPhaseDetector(initial_full_observation=True)
+    trial = trial_detector.resolve_sequence(detections, glass, InitialObservationState.FULL_NO_INTERFACE)
+    assert all(d.raw_oil_air_level_y is None for d in baseline.detections)
+    assert [d.raw_oil_air_level_y for d in trial.detections] == [None, None, *ys[2:]]
+    assert "initial-full-observation-v1" in trial_detector.version
+    for detection, expected in zip(trial.detections[2:], ys[2:], strict=True):
+        assert detection.fill_state is FillState.PARTIAL_VISIBLE
+        assert "OIL_DIRECTION_UNCONFIRMED" in detection.flags
+        selected = [c for c in detection.candidates if c.kind is BoundaryKind.OIL_AIR and c.selected]
+        assert len(selected) == 1
+        assert selected[0].y == detection.raw_oil_air_level_y == expected
+        assert detection.debug_metrics["sequence_material_phase"] == "observed_interface"
+    assert [d.raw_foam_front_y for d in trial.detections] == [d.raw_foam_front_y for d in baseline.detections]
+
+
+def test_initial_full_comparison_cannot_publish_a_hard_unavailable_frame():
+    glass = glass_config()
+    detections = tuple(
+        _detection(i, _candidate(130., boundary=.85, broad=.85), ambiguity=.1,
+                   flags=("FRAME_UNAVAILABLE",) if i == 4 else ())
+        for i in range(8)
+    )
+    trial = OilObservationResolver(OilObservationResolverConfig(initial_full_observation_enabled=True)).resolve(
+        detections, glass, InitialObservationState.FULL_NO_INTERFACE,
+    )
+    assert trial.detections[3].raw_oil_air_level_y == 130.
+    assert trial.detections[4].raw_oil_air_level_y is None
+    assert "OIL_DIRECTION_UNCONFIRMED" not in trial.detections[4].flags
+
+
 def test_confirmed_empty_does_not_lock_out_a_sustained_late_visible_path() -> None:
     glass = glass_config()
     ellipse = glass.geometry.ellipse

@@ -42,7 +42,10 @@ from .temporal_tracker import TemporalTracker
 class OpenCvPhaseDetector:
     version = "opencv-phase-detector-r22-3-interface-witness-diagnostics-v1"
 
-    def __init__(self, *, oil_measurement_scopes: Sequence[OilMeasurementScope] = ()) -> None:
+    def __init__(
+        self, *, oil_measurement_scopes: Sequence[OilMeasurementScope] = (),
+        initial_full_observation: bool = False,
+    ) -> None:
         scopes = tuple(oil_measurement_scopes)
         if len(scopes) > MAX_SCOPES or any(not isinstance(s, OilMeasurementScope) for s in scopes):
             raise ValueError("Invalid or excessive Oil measurement scopes.")
@@ -52,6 +55,8 @@ class OpenCvPhaseDetector:
         self.measurement_scope_manifest = tuple(s.manifest for s in sorted(self._measurement_scopes.values(), key=lambda s: s.glass_id))
         if self.measurement_scope_manifest:
             self.version += "+oil-local-xy-v1:" + fingerprint(self.measurement_scope_manifest)
+        if initial_full_observation:
+            self.version += "+initial-full-observation-v1"
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
         self._static_foam_maps: dict[str, np.ndarray] = {}
@@ -59,7 +64,9 @@ class OpenCvPhaseDetector:
         self._oil_pipeline = OilHypothesisPipeline()
         self._foam_motion_tracker = RegisteredFoamMotionTracker()
         self._oil_motion_tracker = RegisteredOilMotionTracker()
-        self._observation_sequence_resolver = ObservationSequenceResolver()
+        self._observation_sequence_resolver = ObservationSequenceResolver(
+            initial_full_observation=initial_full_observation,
+        )
         self._frame_evidence_owner = CurrentFrameEvidenceOwner(
             evaluate_oil=self._evaluate_oil_pipeline,
             foam_gate=self._foam_gate,

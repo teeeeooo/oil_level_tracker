@@ -90,8 +90,9 @@ builder. Post-fill/refill barriers and initial EMPTY are outside this route.
 
 Published trial observations use `PARTIAL_VISIBLE` and an explicit
 `OIL_DIRECTION_UNCONFIRMED` flag, with the same-frame selected candidate's exact Y.
-They must not be used to assert a drain-start event. Other samples retain their
-existing event semantics. Trace records the trial mode and actual observation
+They must not be used to assert a drain-start event or a report direction summary.
+The existing report observation note explains their uncertainty and false-positive risk.
+Other samples retain their existing event semantics. Trace records the trial mode and actual observation
 admission predicates separately from the unchanged failed drain predicates.
 Detector version and GUI title identify trial use; normal launch remains baseline.
 
@@ -354,5 +355,5 @@ as the serialized array index. Diagnostic detail must not change output.
 - Existing feature coverage: normal Recipe ellipse/margin/exclusions, static preparation and session initial-state confirmation remain active. The October 15 local comparison freezes separate interior-ROI inputs before outputs; original regression Recipes are preserved. Artifact templates remain at their recorded input state, Local XY is OFF, and the new constructor/GUI option is default OFF. Private Windows ROI is operator-verified on Windows before comparison.
 - Execution scope: the October 15 work covers initial-FULL lifecycle admission, selector/projection, actual GUI construction and event propagation, with local mechanism/integration tests and a bounded real analysis replay. ROI inspection precedes replay. No private Windows execution or physical acceptance is inferred from local checks.
 - Difference from prior failures: the full raster-witness proposal still requires independent identity evidence. The authorized exploratory comparison instead isolates current-candidate publication from motion certification, explicitly tolerates existing identity false positives, and never calls a stationary/upward row a drain release. It leaves confirmation, candidate scores, association and formal acceptance unchanged.
-- Logic-map impact: NONE — this preflight defines the optional initial-FULL comparison; executing R22 control flow is unchanged until the separately verified implementation step.
+- Logic-map impact: UPDATED — optional initial-FULL observation projection, GUI construction, uncertainty publication and event/report consumption are mapped; default motion behavior is preserved.
 - Failure-registry impact: NONE — F05/F08 already own permanent barriers and unsafe release; this trial deliberately measures remaining identity errors without declaring those failures repaired.

@@ -1,6 +1,7 @@
 # Initial-FULL observation comparison
 
-Status: local ROI preparation complete; implementation next. No Windows run or field acceptance.
+Status: local implementation and OFF/ON analysis complete; Windows comparison pending.
+The option remains default OFF. No Windows result or physical acceptance is claimed.
 
 The [fixed Work Plan order](../../00-project/work-plan.md#fixed-execution-order--2026-10-15)
 and [bounded design](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-15-initial-full-observation-comparison)
@@ -38,12 +39,89 @@ and excludes the reviewed rim Y880/882/887; geometry validation passes. These ar
 mask-membership checks, not new physical labels or proof of complete interface recall.
 The unchanged base Recipe is reused; its duplicate copy was discarded.
 
+## Local mechanism result
+
+The optional `--initial-full-observation` mode reuses existing confirmed current
+anchors and the bounded selector. It publishes a current candidate under unresolved
+initial FULL without asserting drainage. It does not change raw candidates,
+association, motion state, recovery leases or existing drain/refill transitions.
+`PARTIAL_VISIBLE` plus `OIL_DIRECTION_UNCONFIRMED` preserves location and uncertainty;
+these points cannot create drain-start events or assert direction in the report.
+The full physical-witness redesign remains unaccepted.
+
+Both comparisons use the frozen ROI above, 2 Hz, ordinary static preparation and
+explicit initial FULL as a mechanism stress condition. The local `base_sample_1`
+recording is **not** the private Windows BASE recording. The managed run
+`sample/output/s11-initial-full-replay-20261015-002` retains the complete OFF/ON
+rows, lifecycle predicates, events, report presentation and input/runtime identity.
+
+| Local input / window | Rows | Oil OFF → ON | New direction-unconfirmed points | Foam OFF → ON |
+|---|---:|---:|---:|---:|
+| base_sample_1 / 0–14.4 s | 30 | 3 → 9 | 6 | 0 → 0 |
+| sample4 interior / 0–56 s | 113 | 0 → 10 | 10 | 76 → 76 |
+
+All raw candidate inputs are exactly equal between OFF/ON. Existing numeric Oil
+points remain unchanged. Every numeric final Y equals the selected current
+candidate and exported CSV raw Y. Foam raw Y, confidence and validity match on
+every row of these two comparisons. There is no new Oil drain-start event.
+Base has seven observed-interface phase rows but six numeric outputs: downstream
+selection still rejects one. The phase mode is not an unconditional numeric bypass.
+
+The report retains numeric candidates and their extrema. Base's direction summary
+still uses its original three direction-supported observations, with an added
+uncertainty note for six candidates. sample4 states that ten candidate positions
+are shown and direction is unresolved. Full bundles were generated and their CSV
+and HTML checked, then discarded after extracting the compact evidence.
+
+**Remaining limits:** the new base points are at 2.0–5.5 s; sample4's are at
+3.5–17.0 s. This does not establish recovery of sample4's later reviewed interface,
+the true identity of these newly selected points, or readable Windows motion.
+No new physical labels were assigned. Excluding the previously reviewed rim
+coordinates from the ROI does not exclude every internal artifact. Long output
+gaps remain. More numeric rows are mechanism evidence, not a correctness score.
+
+Runtime: macOS arm64, CPython 3.14.4, OpenCV 4.14.0 / package 4.14.0.94,
+NumPy 2.5.1, PySide6 6.11.1, Matplotlib 3.11.1; FFMPEG backend.
+Analysis-only times were 6.64/6.59 s (base OFF/ON) and 8.95/8.35 s (sample4).
+These four local runs are not a Windows performance qualification.
+
+| Retained comparison file | SHA-256 |
+|---|---|
+| `evidence/base_sample_1/comparison.json` | `825d5b8033a663e2e483226061b5ad2d8cfbe99ec086125d70bb59f44b0eb7ce` |
+| `evidence/sample4/comparison.json` | `994ade8224ee16536a511df2d8363a662380be1570ad8a2f3f1074baa05a864a` |
+
+The preceding replay `001` aborted before detector execution because the harness
+compared the canonical base Recipe bytes to its discarded reserialization hash.
+It was closed with no output. Replay `002` uses the original input hash; no source
+Recipe or detector parameter was changed to recover the run.
+
+## Verification and Windows handoff
+
+Focused lifecycle/publication/event/report tests: **113 passed**. Additional
+tracklet, Foam, lifecycle, identity, facade/decomposition, trace/bundle and Windows
+bootstrap regression tests: **181 passed**. Actual Qt bootstrap/argument routing:
+**4 passed**, including preview, analysis, preflight and redetection factories.
+These are local engineering checks, not a Windows execution or reader acceptance.
+
+Required debug NONE/FULL comparison also passes: **286 rows**, covering both
+videos and both OFF/ON variants, have identical raw input hashes, complete tracking
+rows, phases, events and report semantics (run IDs excluded). Each FULL run used
+the real trace writer and bundle publication. Managed run
+`sample/output/s11-initial-full-debug-20261015-001` retains only
+`evidence/debug-equivalence.json`; identical FULL outputs are discarded and the
+complete NONE records are reused. Governance, changed-document links, artifact
+closeout and whitespace checks pass.
+
+Use the [current Windows procedure](../../40-operations/s11-current-windows-field-qualification.md#october-15-first-initial-full-comparison)
+for the two GUI launches, frozen interior ROI and segment readout. Stop here for
+Windows work. Cost-first, RGB and Local XY remain conditional on that result.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PHASE-INITIAL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: reviewed Windows checkpoints establish initial-FULL allowed-set exclusion; earliest whole-window physical loss remains unknown. ROI contamination is separately demonstrated in saved local inputs.
-- Existing feature coverage: existing ellipse/margin masks and shared preprocessing are active; exclusions/templates remain empty and Local XY OFF. New comparison ROI is separate from immutable regression inputs. Static learning, session FULL confirmation and completed resolution are included in planned replay; private Windows setup remains unverified.
-- Execution scope: source/ROI inspection followed by bounded local real-entry analysis and focused synthetic/integration controls. No raw Windows pixels, private-video replay, new learning operation or field acceptance. Results will be recorded after execution with exact inputs/source and runtime.
-- Logic-map impact: NONE — ROI preparation and comparison preflight do not yet change the executing detector; update its optional route with the implementation step.
+- Existing feature coverage: existing ellipse/margin masks and shared preprocessing are active; exclusions/templates remain empty and Local XY OFF. New comparison ROI is separate from immutable regression inputs. Static learning, session FULL confirmation, completed resolution, event/report/CSV and GUI construction are exercised; private Windows setup remains unverified.
+- Execution scope: source/ROI inspection, bounded local real-entry analysis and focused synthetic/integration controls. No raw Windows pixels, private-video replay, new learning operation or field acceptance. Complete observations and source/input/runtime identity are retained at the stated scope above.
+- Logic-map impact: UPDATED — the optional observation projection and its GUI/event/report consumers are documented alongside unchanged default motion routes.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.

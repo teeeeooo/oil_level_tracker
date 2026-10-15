@@ -168,12 +168,21 @@ def build_glass_report_presentation(
         and glass.retrospective.provenance
         == "confirmed_initial_state_hold_v1"
     )
+    motion_numeric = tuple(
+        item for item in numeric if "OIL_DIRECTION_UNCONFIRMED" not in item[0].flags
+    )
+    direction_unconfirmed_count = len(numeric) - len(motion_numeric)
     movement_summary = _movement_summary(
         config,
-        numeric,
+        motion_numeric,
         len(foam_episodes),
-        has_missing_oil,
+        has_missing_oil or bool(direction_unconfirmed_count),
     )
+    if direction_unconfirmed_count and not motion_numeric:
+        movement_summary = (
+            f"계면 후보 위치 {direction_unconfirmed_count}개를 표시했으며, "
+            "상승·하강 방향은 미확정입니다."
+        )
     observation_note = _observation_note(
         unavailable,
         has_missing_oil,
@@ -183,6 +192,12 @@ def build_glass_report_presentation(
         initial_state_hold=initial_state_hold,
         has_long_gap=bool(scenes),
     )
+    if direction_unconfirmed_count:
+        observation_note += (
+            f" 이동 방향이 미확정인 계면 후보 관측 {direction_unconfirmed_count}개가 포함되어 있습니다. "
+            "이 관측은 방향 요약과 하강 시작 판정에 사용하지 않습니다. "
+            "오검출 가능성을 원본 장면과 함께 확인해야 합니다."
+        )
     return ReportGlassPresentation(
         glass_id=glass.glass_id,
         glass_name=glass.glass_name,
