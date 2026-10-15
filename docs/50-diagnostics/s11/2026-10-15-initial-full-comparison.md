@@ -97,6 +97,22 @@ Recipe or detector parameter was changed to recover the run.
 
 ## Verification and Windows handoff
 
+The complete implementation/tests/handbook scope is committed and pushed as
+`6d2f06950ea091f769c72435f873cdcc39de3b27`, reviewed against
+`7d224fe66b7c809bb277688446e7b9e1ce219614`. Ten runtime source files captured by
+the debug-equivalence run match that commit byte-for-byte. The worktree was clean
+at publication. Subsequent handoff-only documentation pins this source without
+changing the detector. The [source ZIP](https://github.com/teeeeooo/oil_level_tracker/archive/6d2f06950ea091f769c72435f873cdcc39de3b27.zip)
+supports both OFF and ON; no Windows Git installation is needed.
+
+Key extracted-file identity checks, under `src/oil_tracker/adapters/vision/`:
+
+| File | SHA-256 |
+|---|---|
+| `oil_phase_lifecycle.py` | `35ba5017a20fadc5040586aab6a6becd5e5f9450b4326b6a004ffd4a044f11a9` |
+| `oil_observation_resolver.py` | `143c54a3ecdc5b5cbb46b18ae51e74eb27f6ac44f418cb16aab6a37b3cc46039` |
+| `opencv_phase_detector.py` | `167ef8c3f9bbb69a2639d664c870403f4e7adaa0ba7ea80fc7708a86a8e88e2d` |
+
 Focused lifecycle/publication/event/report tests: **113 passed**. Additional
 tracklet, Foam, lifecycle, identity, facade/decomposition, trace/bundle and Windows
 bootstrap regression tests: **181 passed**. Actual Qt bootstrap/argument routing:
@@ -123,5 +139,5 @@ Windows work. Cost-first, RGB and Local XY remain conditional on that result.
 - First harmful stage: reviewed Windows checkpoints establish initial-FULL allowed-set exclusion; earliest whole-window physical loss remains unknown. ROI contamination is separately demonstrated in saved local inputs.
 - Existing feature coverage: existing ellipse/margin masks and shared preprocessing are active; exclusions/templates remain empty and Local XY OFF. New comparison ROI is separate from immutable regression inputs. Static learning, session FULL confirmation, completed resolution, event/report/CSV and GUI construction are exercised; private Windows setup remains unverified.
 - Execution scope: source/ROI inspection, bounded local real-entry analysis and focused synthetic/integration controls. No raw Windows pixels, private-video replay, new learning operation or field acceptance. Complete observations and source/input/runtime identity are retained at the stated scope above.
-- Logic-map impact: UPDATED — the optional observation projection and its GUI/event/report consumers are documented alongside unchanged default motion routes.
+- Logic-map impact: NONE — this handoff-only delta pins the published source. The optional observation projection and GUI/event/report consumers were already mapped in implementation commit `6d2f069`; that earlier source change had impact UPDATED.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.
