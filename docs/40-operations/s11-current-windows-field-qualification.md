@@ -98,14 +98,26 @@ FULL+ON의 BASE 출력은 확인됐지만, 첫 하강 등장 누락과 중간 �
 계면이 밖으로 사라지면 좌표 없는 `FULL_NO_INTERFACE`로 전환하는 것이다.
 이 단계에서는 Windows에 있는 **완료 bundle을 읽고 텍스트 결과를 전달**한다.
 
-1. 기존 R22-3 초기 UNKNOWN 결과와 초기 FULL+ON 결과의 manifest/session/Recipe를
-   읽고 소스, ROI, 분석 창, FPS, 초기 상태와 설정 차이를 기록한다. 초기 조건이
-   다르므로 같은 조건의 OFF/ON이라고 부르지 않는다. ON은
+사용자는 **① 초기 FULL+OFF, ② 초기 UNKNOWN+OFF, ③ 초기 FULL+ON**의 세 bundle을
+보유하고 있다고 확인했다. 기존 ②↔③ 점검을 다음 세 비교로 보완한다.
+
+| 비교 | 점검 목적 |
+|---|---|
+| **①↔③ — 주 비교** | 초기 FULL을 고정하고 ON으로 복원된 관측과 추가 손실 확인 |
+| ①↔② | OFF를 고정하고 초기 상태 FULL/UNKNOWN에 따른 추적 차이 확인 |
+| ②↔③ | UNKNOWN+OFF에서 보였지만 FULL+ON에서 놓친 실제 유면 구간과 최초 차단 단계 확인 |
+
+①↔③에서 옵션 외 소스·설정이 같아야 ON의 효과를 분리할 수 있고, ①↔②에서도
+초기 상태 외 조건이 같아야 한다. ②↔③은 초기 상태와 옵션을 함께 바꾸므로
+그 차이를 ON만의 회귀로 해석하지 않는다. 세 비교 모두 기존 결과를 재사용한다.
+
+1. 세 결과의 manifest/session/Recipe를 읽고 소스, ROI, 분석 창, FPS, 초기 상태와
+   설정 차이를 기록한다. 사용자 번호 ①②③을 결과 표에도 유지한다. ON은
    `analysis_manifest.json`의 Glass별 `sequence_resolver` 버전 접미사
    `+initial-full-observation-v1`로 확인한다. HTML 상단 버전만으로 판정하지 않는다.
 2. `tracking_data.csv`를 Glass와 실제 frame/time으로 맞춘다. 첫 하강 등장,
    중간 하강·상승에서 추가로 누락되는 첫 지점, 상승의 마지막 실제 관측과
-   직후 UNKNOWN 구간을 찾는다. 각 지점과 앞뒤 인접 표본에 대해 두 결과의
+   직후 UNKNOWN 구간을 찾는다. 각 지점과 앞뒤 인접 표본에 대해 세 결과의
    `raw_oil_air_level_y`, `fill_state`, `oil_is_valid`/`is_valid`, confidence,
    flags를 작은 표로 남긴다. 숫자 관측 없음과 숫자는 있지만 유효하지 않음을
    구분한다. CSV 차이 자체를 실제 유면의 정답으로 삼지 않는다.

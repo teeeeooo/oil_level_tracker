@@ -198,6 +198,14 @@ needed to locate the first additional loss and distinguish absent numeric output
 from a present but confidence-invalid observation. No repeat analysis or extra
 candidate run is requested solely for this inspection.
 
+The operator subsequently confirms three completed bundles are available:
+① initial FULL+OFF, ② initial UNKNOWN+OFF and ③ initial FULL+ON. Inspect all three.
+Use ①↔③ as the primary mode comparison with initial FULL held fixed, ①↔② for the
+initial-state difference under OFF, and ②↔③ to locate the reported extra visible-
+interface misses. Other source/ROI/session conditions still require verification
+before attributing either controlled comparison to its single changed factor.
+Bundle availability is confirmed; their contents have not been inspected on Mac.
+
 Source inspection explains why the paths can differ, without claiming the first
 harmful Windows predicate: UNKNOWN starts OPEN; FULL starts FILLED_BARRIER. The ON
 route adds only current confirmed anchor/direct-or-ordered-lower candidates with
