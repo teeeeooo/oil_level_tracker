@@ -252,6 +252,37 @@ v2는 이미 승인된 현재 관측에 매번 새 앵커를 요구하던 조건
 FULL로 바꾸거나 663.6초를 코드에 넣어서는 안 된다. 정식 FIELD PASS는 여전히
 아래의 전체 9개 구간과 현재 acceptance owner가 판단한다.
 
+### V2 final output reconciliation
+
+첫 v1/v2 비교 답변은 세 기준 프레임의 IFO 조건 통과를 확인했지만,
+후보 수·tracklet admitted 수와 `ambiguous/reacquisition_pending` 분포로
+최종 출력이 같다고 결론냈다. 이 값들은 최종 숫자 Oil 또는 FULL 상태의
+집계가 아니다. 아래 **기존 bundle의 최종 결과 확인을 먼저** 수행하고,
+721.01초 추가 오검출 검토는 그 다음으로 유지한다. 소스 변경·재실행·해시
+검증·전체 JSON 전달은 요청하지 않는다.
+
+1. ③/④ 각각 `tracking_data.csv`에서 BASE `glass_id`만 골라 전체 행 수,
+   `raw_oil_air_level_y`가 비어 있지 않은 행 수와 그 첫/마지막 시각,
+   `fill_state=FULL_NO_INTERFACE` 행 수를 적는다. 빈 칸을 숫자 0으로
+   바꾸거나 두 Glass를 합치지 않는다. `oil_is_valid`와 숫자 존재도 구분한다.
+2. f13271/f15884/f15908을 버전별 6행 표로 적는다:
+   `record.sequence.state.sequence_material_phase`,
+   `record.sequence.state.sequence_material_phase_diagnostics.allowed_tracklet_ids`,
+   `record.sequence.state.sequence_resolved_kind`,
+   `record.sequence.positions.raw_oil_y`, CSV의 `raw_oil_air_level_y`,
+   `fill_state`, `oil_is_valid`. 없음과 null/빈 값을 그대로 구분한다.
+3. v2 CSV Oil이 계속 비어 있는 프레임에 한해서만
+   `record.sequence.state.sequence_decision_witness`에서 해당 tracklet 행의
+   `phase_admitted`/`publishable`과 `selection`을 덧붙인다. 이전의 모든
+   후보 표를 다시 보내지 않는다.
+
+기준 프레임이 실제 허용되고 최종 Oil도 생겼다면 관측 단계 수정 효과가 있는
+것이다. 최종 값이 계속 없다면 witness로 그 다음 차단 지점을 좁힌다. 어느
+경우에도 숫자 출력만으로 실제 유면 복원이라고 판정하지 않는다.
+723초·771초의 재질/동일성 차단은 BASE FULL 구간의 오검출 억제일 수 있으므로
+실패 조건이라는 이유만으로 완화하지 않는다. Accum/Foam 최종 동일성도 이후
+최종 CSV 좌표/유효성으로 비교하며 원시 상태·후보 개수만으로 확정하지 않는다.
+
 ## 2. Private source identity
 
 For `windows_sample1_heating_coldstart`, record without exposing the real filename:

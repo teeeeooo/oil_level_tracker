@@ -1,8 +1,9 @@
 # Initial-FULL observation comparison
 
-Status: version 1 local comparison and corrected Windows audit received; the
-three-record intake now closes the requested predicate/outcome questions.
-Version 2 reuses bounded tracklet admission; local checks pass and Windows comparison is next.
+Status: version 1 causal intake and version 2 local checks are complete. The first
+Windows v1/v2 summary confirms the three observation-predicate corrections, but
+does not yet establish final output equality or physical restoration. Reconcile
+BASE final CSV/sequence outputs before interpreting unchanged candidate counts.
 The option remains default OFF. Private bundles were not inspected on Mac;
 no complete physical qualification is claimed.
 
@@ -494,12 +495,50 @@ fixed optional-mechanism order or field disposition. A pre-existing false
 positive is still a candidate-discrimination problem; pre-existence alone does
 not prove v2 preserves its extent or that a particular later mechanism will fix it.
 
+## Windows v2 summary — final output reconciliation
+
+The operator relayed the first v1/v2 comparison and asked to check it before the
+separate 721.01 s observation. Its supported result is that all reported IFO
+predicates pass at f13271/f15884/f15908 under v2, versus the previously identified
+v1 failures. The returned summary additionally reports these unchanged values:
+
+| Reported quantity | Same v1/v2 value | Evidence limit |
+|---|---|---|
+| Record extent | f11508 at 479.98 s through f18701 at 779.99 s, 1,202 rows | Record bounds are not the first/last numeric BASE observation; filter by Glass and final Oil value |
+| Refill candidate/tracklet summary | `000357:0309`, `000366:0319/0320`; admitted counts `3+0+1+4` | Existing association/admission counts do not establish selected Oil Y or physical refill continuity |
+| BASE 663.6–780 s | 233 rows, ambiguous 218 / reacquisition 15; Oil candidates 5,233 / admitted 303 | Raw outcomes and candidate counts do not count final numeric observations or final FULL states |
+| Accum | ambiguous 568 / boundary 17 / reacquisition 15; Foam count 591 | Final Foam coordinates/validity equality is not supplied by these totals |
+| Remaining IFO false keys in FULL suffix | material veto at 723 s/f17335; identity contradiction at 771 s/f18486 | These can be correct protection against false positives in a no-interface interval; do not relax them merely because they fail |
+
+The conclusion “only predicates changed; no numeric or physical restoration” is
+not established by these aggregates. `oil_decision_status` is a raw hypothesis
+outcome; final projection retains raw metrics while separately writing
+`sequence_resolved_kind`, final positions and `fill_state`. In the current source,
+a qualifying IFO row changes the frame's actual phase to `OBSERVED_INTERFACE` and
+its allowed tracklet IDs. Publishability, bounded selection and projection can
+still prevent a number, but the summary supplies no selected-output evidence to
+localize such a downstream failure. This is not a trace-text-only change.
+
+Existing local v1/v2 comparison records have identical raw-input fingerprints but
+different numeric counts (9→12 and 10→16), illustrating why unchanged raw inputs
+cannot prove final output equality. This is an interpretation check, not evidence
+that Windows improves. No new experiment is run for this reconciliation.
+
+Request only the final BASE CSV counts/first-last numeric times/FULL count and six
+v1/v2 rows at the three known checkpoints, as specified in the
+[output check](../../40-operations/s11-current-windows-field-qualification.md#v2-final-output-reconciliation).
+If v2 still has no number there, its saved witness can distinguish phase allowance,
+publishability and selection without another full JSON extraction or replay.
+Final physical correctness still needs original-video comparison. The top-exit
+FULL transition remains outside v2, but the claim of zero final FULL rows must be
+counted from final `fill_state`, not ambiguous/reacquisition statuses.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: transferred ON predicates identify repeated anchor/direct-identity/current-confirmation checks at 553.5/662.5/663.5 s despite existing tracklet admission. The raw outcomes also establish default FULL zero, not a measured no-interface likelihood. For the added 721.01 s non-Oil observation, output binding and the earliest harmful stage are unknown; heat shimmer remains a hypothesis. Physical identity, top-reaching continuity and full-state publication remain separate unresolved questions.
+- First harmful stage: v1 observation barriers are localized and the first Windows v2 summary reports their predicates passing. A remaining v2 final-output failure is not yet established or localized: supplied candidate/raw-status aggregates omit final CSV/sequence decisions. For the 721.01 s non-Oil observation, output binding and the earliest harmful stage remain unknown; heat shimmer is a hypothesis.
 - Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
-- Execution scope: the earlier v2 implementation and local runner verification remain recorded above. This addendum records the operator's 721.01 s observation and narrows the ongoing Windows source/bundle comparison. No private media are inspected locally, no source changes or new experiments run, and no new physical/optical cause is inferred from text alone.
-- Logic-map impact: NONE — this addendum adds a reported opposition checkpoint to the existing comparison; v2 ownership and the map updated in `4c72ebb` remain unchanged.
+- Execution scope: earlier v2 implementation/local verification remain recorded above. Current work reviews the relayed Windows v1/v2 summary against existing serializer/projection code and saved local controls, then requests a bounded final-output reconciliation. No private media are inspected locally, no source changes or new experiments run, and no physical improvement or optical cause is inferred from raw aggregates.
+- Logic-map impact: NONE — this intake distinguishes the existing raw, phase, selector and final-publication responsibilities; v2 ownership and the map updated in `4c72ebb` remain unchanged.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.
