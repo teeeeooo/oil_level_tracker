@@ -188,6 +188,32 @@ motion runtime은 계속 초기 `filled_barrier`일 수 있다.
 반대인 663.6초 이후 숫자 출력은 실제 상승 복원으로 집계하지 않는다. 첫 점검의
 전체 observed 0/0.514/0.308과 회고적 ACCEPTED 홀드는 물리적 정답률이 아니다.
 
+### Remaining three-record extraction
+
+후속 답변으로 첫 3개 표본의 ON 차단은 `current_confirmed_owner=false`와
+`anchor_eligible=false`로 확인됐다. 중간/재충전의 빈 allowed 집합만으로는
+같은 원인인지 알 수 없으므로 **③의 다음 세 행만** 저장된 JSONL에서 추출한다:
+553.5초/f13271, 662.5초/f15884, 663.5초/f15908.
+
+- `record.state`의 `oil_decision_status`, `oil_decision_reason`,
+  `oil_no_interface_reason`, `oil_no_interface_full_likelihood`.
+- `record.sequence.state.sequence_material_phase_diagnostics.initial_full_observation`
+  객체 전체. `evaluations`의 tracklet/row ID와 각 predicate 값을 생략하지 않는다.
+- 같은 `diag`의 `recovery_qualifying_tracklet_ids`,
+  `recovery_selected_tracklet_id`, `recovery_ambiguous`와 최종 phase/reason.
+- `record.sequence.candidates`의 Oil 후보별 `canonical_y`, `tracklet_id`,
+  `row_hypothesis_id`, `authority`, `authority_failed_gates`, `phase_identity`,
+  `tracklet_lifecycle`, `tracklet_admitted`, `tracklet_failure_reason`.
+
+이번에는 해석문 대신 세 행의 위 필드를 JSON 그대로 전달한다. 빈 목록과 null은
+그대로 보존하고 키 자체가 없는 경우만 누락으로 적는다. 새 분석·해시 비교·환경
+검증이나 전체 구간 재점검은 필요하지 않다.
+
+주의: `oil_no_interface_full_likelihood=0`은 raw outcome이 `NoInterfaceOutcome`이
+아닐 때의 기본값일 수도 있다. `oil_no_interface_reason=not_available` 등 상태와
+함께 읽으며, 숫자 0만으로 실제 FULL 가능도 평가가 수행됐다고 결론내리지 않는다.
+`established_fill_present=false`도 모든 재충전 경로가 평가됐다는 뜻은 아니다.
+
 ## 2. Private source identity
 
 For `windows_sample1_heating_coldstart`, record without exposing the real filename:
