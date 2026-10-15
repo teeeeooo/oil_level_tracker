@@ -225,7 +225,8 @@ boundary/ambiguous이므로 FULL likelihood 0은 기본값이다. 상세 근거�
 717–750.5초/Y675–748, 116회이며 여러 source의 같은 프레임 후보를 포함한다.
 최종 출력의 첫/마지막 시각이나 116개 유효 관측으로 해석하지 않는다.
 아래 [721초 후보/최종 출력 확인](#721-second-candidate-and-output-check)에
-남은 항목을 좁혔다. 기존 전체 트랙릿 비교나 대상 Glass 확인을 반복하지 않는다.
+후속 최종 출력 수신 결과를 기록했다. 기존 전체 트랙릿 비교나 대상 Glass
+확인을 반복하지 않는다.
 
 ```powershell
 $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
@@ -241,63 +242,80 @@ FULL로 바꾸거나 663.6초를 코드에 넣어서는 안 된다. 정식 FIELD
 
 ### V2 final output reconciliation
 
-첫 v1/v2 비교 답변은 세 기준 프레임의 IFO 조건 통과를 확인했지만,
-후보 수·tracklet admitted 수와 `ambiguous/reacquisition_pending` 분포로
-최종 출력이 같다고 결론냈다. 이 값들은 최종 숫자 Oil 또는 FULL 상태의
-집계가 아니다. 아래 **기존 bundle의 최종 결과 확인을 먼저** 수행하고,
-721.01초 추가 오검출 검토는 그 다음으로 유지한다. 소스 변경·재실행·해시
-검증·전체 JSON 전달은 요청하지 않는다.
+**수신 완료.** BASE 최종 CSV는 ③ 185/601행 → ④ 303/601행 숫자 Oil,
+첫 출력 550.01→548.51초, FULL_NO_INTERFACE는 모두 0행이다.
+f13271/f15884/f15908도 v1의 빈 값에서 v2의 sequence/CSV Y364/409/418로
+복원됐다. 관측 허용 수정이 최종 출력에 도달했으므로 이전의 “숫자 출력 변화
+없음” 결론은 폐기한다. 집계와 여섯 기준 행을 다시 추출할 필요는 없다.
 
-1. ③/④ 각각 `tracking_data.csv`에서 BASE `glass_id`만 골라 전체 행 수,
-   `raw_oil_air_level_y`가 비어 있지 않은 행 수와 그 첫/마지막 시각,
-   `fill_state=FULL_NO_INTERFACE` 행 수를 적는다. 빈 칸을 숫자 0으로
-   바꾸거나 두 Glass를 합치지 않는다. `oil_is_valid`와 숫자 존재도 구분한다.
-2. f13271/f15884/f15908을 버전별 6행 표로 적는다:
-   `record.sequence.state.sequence_material_phase`,
-   `record.sequence.state.sequence_material_phase_diagnostics.allowed_tracklet_ids`,
-   `record.sequence.state.sequence_resolved_kind`,
-   `record.sequence.positions.raw_oil_y`, CSV의 `raw_oil_air_level_y`,
-   `fill_state`, `oil_is_valid`. 없음과 null/빈 값을 그대로 구분한다.
-3. v2 CSV Oil이 계속 비어 있는 프레임에 한해서만
-   `record.sequence.state.sequence_decision_witness`에서 해당 tracklet 행의
-   `phase_admitted`/`publishable`과 `selection`을 덧붙인다. 이전의 모든
-   후보 표를 다시 보내지 않는다.
-
-기준 프레임이 실제 허용되고 최종 Oil도 생겼다면 관측 단계 수정 효과가 있는
-것이다. 최종 값이 계속 없다면 witness로 그 다음 차단 지점을 좁힌다. 어느
-경우에도 숫자 출력만으로 실제 유면 복원이라고 판정하지 않는다.
-723초·771초의 재질/동일성 차단은 BASE FULL 구간의 오검출 억제일 수 있으므로
-실패 조건이라는 이유만으로 완화하지 않는다. Accum/Foam 최종 동일성도 이후
-최종 CSV 좌표/유효성으로 비교하며 원시 상태·후보 개수만으로 확정하지 않는다.
++118은 순증가이며, 실제 유면을 118행 더 맞췄다는 뜻은 아니다. 298개 빈 행도
+FULL 구간을 포함하므로 전부 누락으로 세지 않는다. 검토된 물리 구간별 결과와
+실제 재충전 위치 대응은 아래 후속 절차로 구분한다. 상세 수신값은
+[진단 기록](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md#final-base-csv-reconciliation-received)에 둔다.
 
 ### 721-second candidate and output check
 
-네 bundle의 BASE 후보 추적이 같다는 답변을 받았다. BASE는 이 구간에서
-정답상 FULL이므로 비유면 후보라는 판단은 기존 정답과 사용자 영상 관찰에
-근거한다. 궤적의 비단조성이나 direction 0↔1만으로 아지랑이를 확정하지 않는다.
-현재 확인 중인 최종 CSV 점검에 아래 항목만 추가한다.
+**수신 완료.** 721.012초 BASE는 ①/③이 빈 값, ②/④가 최종 CSV Y694를
+출력한다. 723.014초에는 ②만 Y707을 출력하고 ①/③/④는 빈 값이다.
+따라서 후보는 공통이지만, v2는 721초에 v1이 차단하던 비유면 출력을 허용했다.
+723초 재질 veto는 유지한다. 8행 비교나 전체 트랙릿 궤적을 다시 요청하지 않는다.
 
-1. ①/②/③/④ 각각 **721초·723초에 대응하는 실제 표본**을 8행으로 정리한다.
-   frame/time, `record.sequence.state.sequence_material_phase`,
-   `sequence_material_phase_diagnostics.allowed_tracklet_ids`,
-   `sequence_decision_witness.selection.selected_candidate`의 tracklet ID/Y,
-   CSV `raw_oil_air_level_y`, `fill_state`, `oil_is_valid`를 적는다.
-   두 diagnostics/witness 경로는 모두 `record.sequence.state` 아래다.
-   선택 후보가 없으면 null을 보존하고, 후보 트랙릿의 Y로 대신 채우지 않는다.
-2. ③에서 이 트랙릿이 처음 admitted 됐다고 보고한 **720초 표본 하나**의
-   `record.sequence.candidates`에서 `tracklet_confirmation_profile`,
-   `tracklet_confirmation_start_frame`, `tracklet_confirmation_end_frame`,
-   `tracklet_direction`, `tracklet_recent_direction`,
-   `tracklet_net_progress_px`, `tracklet_recent_net_progress_px`만 덧붙인다.
-   기준 source/row를 함께 적고 같은 트랙릿의 중복 후보 표는 반복하지 않는다.
+확정 정보는 ④의 720초 후보에서 `anchor_corridor`로 수신했다.
+`confirmation_start/end_frame=480/485`는 분석 표본 순번이므로 2fps에서
+약 2.5초 창이다. 과거 확정 창의 +1과 최근 창의 -1을 연속 시점의 물리적
+방향 반전으로 읽지 않는다. `phase_admitted`/`publishable`은 최종 phase 제한
+이전 후보 목록의 표시이며, True여도 최종 선택은 보장되지 않는다. FULL 구간의
+720/771초 빈 출력을 새 결함으로 간주해 차단을 해제하지 않는다.
 
-해석 주의: +1은 source Y 증가(하강), -1이 상승이다. 0↔1은 상하 반전의
-증거가 아니다. 기존 direction/net progress는 최초 확정 창에서 유지될 수
-있으며, 제시된 support 0.36/coverage 0.44만으로 motion 확정 기준
-(각각 0.50)을 통과했다고 말할 수 없다. 앵커 확정/유지 경로와 구분한다.
-723초 재질 veto가 오검출을 차단했다면 보존한다. 재실행·해시 비교·전체 JSON이나
-전체 궤적 재추출은 필요 없다. 영상에서 아지랑이인지 식별하지 못하면 광학적
-원인은 미확인으로 남긴다.
+### Refill owner and false-output follow-up
+
+관측 출력 복원 확인은 끝났다. 다음 목적은 **실제 상승 계면과 상단 소실을
+확인해 FULL 전이의 근거를 확보**하고, 출력 증가 중 비유면 출력을 분리하는
+것이다. 기존 ③/④ bundle과 원본 영상만 사용한다. 재실행·해시 비교·전체 JSON은
+필요 없다. 이 단계는 BASE의 제한된 진단이며 전체 9구간 FIELD 승인이 아니다.
+
+1. 기존 BASE CSV를 정답의 네 구간(FULL prefix / DRAIN / RAPID REFILL /
+   FULL suffix)별로 집계한다. 구간별 ③·④ 숫자 Oil 행 수와 프레임 매칭한
+   **v2 새 출력 / v2 소실** 수만 표로 전달한다. 첫/마지막 경계 반올림으로
+   구간 밖인 표본은 별도 표기하고, 새 출력−소실의 전체 합이 순증가 118과
+   맞는지 확인한다. ~550/~663.6초는 근사 경계다. 경계 부근 개별 정오 판정은
+   원본으로 확인하며, DRAIN 구간의 숫자라는 이유만으로 정확한 유면으로 세지 않는다.
+2. **④ BASE 명목 표본 시각 662/662.5/663/663.5/664/664.5초**에 대응하는
+   실제 저장 표본 6개를 원본과 대조한다. 반올림한 시각 대신 아래에는 실제
+   frame/time, 원본상 계면 `보임/안 보임/판별 불가`, 식별 가능한 실제 source Y
+   또는 범위, 최종 선택 tracklet ID와 CSV Y/fill_state, 선택 선이 실제 계면과
+   일치하는지 `일치/불일치/판별 불가`, 최종 phase/reason을 적는다.
+   실제 계면의 마지막 가시 시각·위치와 Glass 내부 상단 위치를 확인할 수 있으면
+   함께 적는다. 설정 ROI 상단과 물리적 상단은 구분한다. 검출 선을 정답으로
+   대입하거나 영상으로 구분하지 못한 값을 추정해 채우지 않는다.
+   특히 f15884의 Y409와 f15908의 Y418이 같은 실제 상승 계면인지 확인한다.
+3. 원본에서 계면이 보이는데 출력이 없는 **663초 f15896**에 한해서, 그 실제
+   위치에 대응하는 후보가 식별되면 후보 Y/tracklet ID와 IFO의 false predicate
+   키만 덧붙인다. 대응 후보가 없거나 식별 불가이면 그대로 적고 전체 후보를
+   다시 옮기지 않는다. 720/771초 비유면 후보의 선택을 강제하는 점검은 하지 않는다.
+4. ④ f17287의
+   `record.sequence.state.sequence_decision_witness.selection.selected_candidate`
+   **원문 객체 하나만** 추가한다. 소스는 선택 후보에 `y`를 함께 기록하므로,
+   “tracklet_id만 있음”이 추출 과정의 생략인지 확인하기 위한 것이다. 필드가
+   실제로 없으면 그대로 보존하며 CSV Y를 그 객체에 보충하지 않는다.
+
+상단 소실이 확인되면 기존 lifecycle의 refill closure/handoff 책임을 재사용해
+후속 수정을 준비한다. IFO는 현재 관측만 허용하고 motion owner를 만들지 않는다.
+중간 관측 소실·오검출의 소실·정답의 고정 시각을 FULL 근거로 사용하지 않는다.
+Accum/Foam의 최종 동일성 및 전체 구간 승인은 아직 별도 미확인으로 남긴다.
+
+전달용 짧은 프롬프트:
+
+```text
+③ v1: <v1 번들 경로>
+④ v2: <v2 번들 경로>
+docs/40-operations/s11-current-windows-field-qualification.md의
+“Refill owner and false-output follow-up” 절을 확인해줘.
+BASE 네 구간의 최종 출력 증감과, v2 662–664.5초 실제 유면/선택 선의 대응을
+짧은 표로 정리해줘. 663초의 실제 계면 누락은 해당 후보의 실패 키만 추가하고,
+v2 f17287 selected_candidate 원문 객체 하나도 확인해줘.
+기존 집계·721/723초 표는 반복하지 말고 재실행·해시 비교·전체 JSON은 생략해줘.
+```
 
 ## 2. Private source identity
 

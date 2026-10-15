@@ -509,20 +509,57 @@ Source review corrects the motion interpretation:
   Reported 0.36/0.44 do not by themselves prove motion-confirmation passed. The
   builder also supports ANCHOR_CORRIDOR and ANCHOR_TRAJECTORY; continuation can use
   anchor grace, a bounded anchor corridor or aggregate motion under other criteria.
-  The actual saved confirmation profile/window is needed to identify the route;
-  current continuation metrics alone cannot exclude an earlier motion confirmation.
+  Current continuation metrics alone cannot exclude an earlier motion confirmation;
+  the later profile reply below identifies the anchor route for v2.
 - Members from several source families are grouped into one row hypothesis. Their
   count is neither multiple independent physical observations nor proof of a
   duplicate-counting bug. No source-family veto or monotonicity filter is justified
   by this summary.
 
-Retain the pending final-output check, adding only ~721/~723 s final selected
-tracklet/Y, allowed phase/IDs and CSV state for the four saved bundles, plus the
-v1 first-admitted ~720 s confirmation profile/window. See the
-[bounded 721 s follow-up](../../40-operations/s11-current-windows-field-qualification.md#721-second-candidate-and-output-check).
-This can distinguish a shared false candidate from an actually published false
-line and explain admission without replay or a whole-track JSON dump. The 723 s
-material veto may be a correct protection and is not relaxed by this intake.
+### Final output and confirmation reply received
+
+The subsequent eight-row Windows reply resolves publication at the two requested
+samples. A number below is the final CSV Oil Y, with `oil_is_valid=True`; a blank
+is `UNKNOWN_REVIEW`, invalid, with no selected candidate.
+
+| Bundle | f17287 / 721.012 s | f17335 / 723.014 s |
+|---|---|---|
+| ① FULL+OFF | blank; `filled_barrier`, allowed `[]` | blank; `filled_barrier`, allowed `[]` |
+| ② UNKNOWN+OFF | Y694; `open`, unconstrained; PARTIAL_VISIBLE | Y707; `open`, unconstrained; DRAINING_VISIBLE |
+| ③ FULL+ON v1 | blank; `filled_barrier`, allowed `[]` | blank; `filled_barrier`, allowed `[]` |
+| ④ FULL+ON v2 | Y694; `observed_interface`, allowed `000474:0424`; PARTIAL_VISIBLE | blank; `filled_barrier`, allowed `[]` |
+
+The nonempty selections are reported as `000474:0424`. Thus v2 exposes a false
+Oil output at 721 s that v1 blocked, while the UNKNOWN+OFF reference already
+published it. Shared upstream candidates do not imply unchanged false-output
+extent. At 723 s v2 retains the reported material veto and correctly withholds a
+number. This establishes the two checkpoints, not the whole 717–750.5 s output
+extent. Heat shimmer remains an unverified optical explanation.
+
+The confirmation extraction was returned for **④**, rather than the requested
+③: f17263 at ~720 s, `material_path`, row `oil-row:000480:003`, profile
+`anchor_corridor`, confirmation start/end `480/485`, established direction `+1`,
+recent direction `-1`, established progress 19 px and recent progress 10 px.
+Record that bundle attribution rather than silently treating it as a v1 result.
+It identifies an anchor-confirmation route, not a motion-threshold bypass.
+
+The source assigns these start/end values from `hypothesis.frame_offset`, a
+zero-based index in the per-Glass analysis sequence, not a source-video frame
+number. At the reported 2 fps, indices 480–485 span **five intervals / about
+2.5 s**, approximately 720–722.5 s, not 0.5 s. `_finalize_track` can admit the
+earlier members of that bounded witness retrospectively. Established direction
+and `recent_direction` describe different windows, potentially overlapping and
+including later samples in the confirmation witness. Their opposite signs are
+not two consecutive instantaneous measurements or proof of a physical Oil
+reversal. Exact window times come from the corresponding saved sample timestamps.
+
+One narrow provenance discrepancy remains: the reply says ④'s selected-candidate
+object at f17287 contains only the tracklet ID and lacks `y`. The current
+`build_oil_decision_witness` always writes `y`, source, candidate offset and row
+ID for a non-null selected ref; the sequence JSON serializer preserves them.
+The reported CSV Y694 is retained, but selected-Y/CSV equality at this checkpoint
+is not claimed until that one original nested object is returned. No source/hash
+audit or rerun follows from this extraction discrepancy.
 
 ## Windows v2 summary — final output reconciliation
 
@@ -539,35 +576,83 @@ v1 failures. The returned summary additionally reports these unchanged values:
 | Accum | ambiguous 568 / boundary 17 / reacquisition 15; Foam count 591 | Final Foam coordinates/validity equality is not supplied by these totals |
 | Remaining IFO false keys in FULL suffix | material veto at 723 s/f17335; identity contradiction at 771 s/f18486 | These can be correct protection against false positives in a no-interface interval; do not relax them merely because they fail |
 
-The conclusion “only predicates changed; no numeric or physical restoration” is
-not established by these aggregates. `oil_decision_status` is a raw hypothesis
+The initial conclusion “only predicates changed; no numeric restoration” is
+superseded by the final CSV reply below. `oil_decision_status` is a raw hypothesis
 outcome; final projection retains raw metrics while separately writing
 `sequence_resolved_kind`, final positions and `fill_state`. In the current source,
 a qualifying IFO row changes the frame's actual phase to `OBSERVED_INTERFACE` and
 its allowed tracklet IDs. Publishability, bounded selection and projection can
-still prevent a number, but the summary supplies no selected-output evidence to
-localize such a downstream failure. This is not a trace-text-only change.
+still prevent a number. This is not a trace-text-only change.
 
 Existing local v1/v2 comparison records have identical raw-input fingerprints but
 different numeric counts (9→12 and 10→16), illustrating why unchanged raw inputs
 cannot prove final output equality. This is an interpretation check, not evidence
 that Windows improves. No new experiment is run for this reconciliation.
 
-Request only the final BASE CSV counts/first-last numeric times/FULL count and six
-v1/v2 rows at the three known checkpoints, as specified in the
-[output check](../../40-operations/s11-current-windows-field-qualification.md#v2-final-output-reconciliation).
-If v2 still has no number there, its saved witness can distinguish phase allowance,
-publishability and selection without another full JSON extraction or replay.
-Final physical correctness still needs original-video comparison. The top-exit
-FULL transition remains outside v2, but the claim of zero final FULL rows must be
-counted from final `fill_state`, not ambiguous/reacquisition statuses.
+### Final BASE CSV reconciliation received
+
+| Final CSV quantity | ③ v1 | ④ v2 |
+|---|---|---|
+| BASE rows | 601 | 601 |
+| Nonempty raw Oil Y | 185 | 303 |
+| `oil_is_valid=True` | 185 | 303 |
+| First numeric Oil time | 550.01 s | 548.51 s |
+| Last numeric Oil time | 773.98 s | 775.48 s |
+| `FULL_NO_INTERFACE` | 0 | 0 |
+
+The increase is **118 net numeric rows**, not necessarily 118 newly recovered
+frames: newly nonempty and newly empty frames require a paired comparison. V2's
+303 numeric rows are reported as PARTIAL_VISIBLE; 298 rows remain empty. Neither
+these empties nor the reported 154 empties within 548–776 s are all misses: that
+range includes the no-interface FULL suffix. Similarly, later numeric output in
+that suffix is false output, not improved tracking. The approximate ~550 s truth
+boundary alone cannot classify the first 548.51 s observation as correct or false.
+
+The six-row checkpoint table now establishes actual sequence-to-CSV recovery:
+
+| Frame / time | Allowed v2 tracklet | v1 final result | v2 final result |
+|---|---|---|---|
+| f13271 / 553.5 s | `000132:0124` | filled_barrier, allowed `[]`, unknown, Y null, UNKNOWN_REVIEW, invalid | observed_interface, oil, sequence/CSV Y364, PARTIAL_VISIBLE, valid |
+| f15884 / 662.5 s | `000357:0309` | filled_barrier, allowed `[]`, unknown, Y null, UNKNOWN_REVIEW, invalid | observed_interface, oil, sequence/CSV Y409, PARTIAL_VISIBLE, valid |
+| f15908 / 663.5 s | `000366:0319` | filled_barrier, allowed `[]`, unknown, Y null, UNKNOWN_REVIEW, invalid | observed_interface, oil, sequence/CSV Y418, PARTIAL_VISIBLE, valid |
+
+This closes the question of whether the observation repair reaches final output.
+It does not establish that Y409/418 are the actual rising interface. Taken alone,
+409→418 increases source Y, and 663.0 s is missing; neither a continuous rise nor
+a verified top exit follows. Original-video correspondence and the last visible
+interface remain necessary before implementing a FULL transition from this path.
+Final Accum/Foam equality is also not supplied by the earlier raw candidate totals.
+
+### Empty-output witness interpretation
+
+`OilPathLifecycleOwner.resolve` stores `phase_admitted`/`publishable` row-ID sets
+from the layers built **before** `OilMaterialPhaseLifecycleOwner` applies its
+allowed-ID decision. These names describe preliminary layer membership, not the
+final phase's permission or a promise of selection. The witness `selection` is
+the final projected path, after bounded selection and trajectory-spike suppression.
+
+| Returned examples | Supported interpretation |
+|---|---|
+| f13139 / 548 s; f13367 / 557.5 s; f15896 / 663 s; f17239 / 719 s; f17251 / 719.5 s | Barrier with no preliminary eligible/publishable row reported. A physical miss needs visible-interface correspondence; 663 s is in the actual refill review window, while 719 s is FULL. |
+| f17263 / 720 s | OBSERVED_INTERFACE and preliminary eligibility coexist with final unknown. Scores/ambiguity or later suppression can still abstain; the returned fields do not identify the exact stage. This is a no-interface interval, so its empty output is not a recovery target. |
+| f18486–18509 / 771–772 s | Preliminary eligible/publishable rows can coexist with the final barrier. An empty allowed set makes `_constrain_layer` return only unknown. The reported identity contradiction at 771 s is consistent with protective rejection, not proof of a newly broken selector. |
+
+Do not remove a veto or force selection just to reduce the 298 empty rows. Keep
+the 723/771 s no-interface controls. The remaining bounded Windows work is the
+[refill owner and false-output follow-up](../../40-operations/s11-current-windows-field-qualification.md#refill-owner-and-false-output-follow-up):
+segment-specific final output deltas, original-video correspondence around
+662–664.5 s, and one selected-candidate object. Current code already has
+`_drain_refill_closure` / `_drain_refill_handoff` for established drain owners;
+IFO v2 only changes the frame observation decision and creates no motion runtime
+owner. A future repair must reuse that ownership boundary with verified evidence,
+not treat every disappearance or the known 663.6 s timestamp as FULL.
 
 ## Detector Governance
 
-- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: v1 observation barriers are localized and the first Windows v2 summary reports their predicates passing. A remaining v2 final-output failure is not yet established or localized: supplied candidate/raw-status aggregates omit final CSV/sequence decisions. The 721.01 s report is now bound to BASE and a shared admitted candidate tracklet in all four modes, but final publication and the actual confirmation route remain unknown; heat shimmer is a hypothesis.
+- First harmful stage: v1's three observation-barrier losses reach final sequence/CSV under v2. The shared non-Oil candidate is confirmed through anchor_corridor in the returned v2 record and is newly published at 721 s versus v1; its exact raw authority/identity error and optical cause remain unknown. Zero final FULL rows and the 663 s gap remain, but a physically verified refill owner is not yet supplied. Preliminary witness membership does not establish a new selector defect at 720/771 s.
 - Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
-- Execution scope: earlier v2 implementation/local verification remain recorded above. Current work reviews the relayed v1/v2 summary and four-bundle 721 s tracklet readout against existing serializer, projection and tracklet confirmation code, then narrows the pending output/confirmation checks. No private media are inspected locally, no source changes or new experiments run, and no physical improvement or optical cause is inferred from raw aggregates.
+- Execution scope: earlier v2 implementation/local verification remain recorded above. Current work reconciles transferred final CSV/sequence tables, the 721/723 s publication comparison and the v2 confirmation record against source and canonical truth. No private media are inspected locally, no source changes or new experiments run, and numeric recovery is distinguished from physical accuracy. Existing ROI/Artifact coverage unknowns remain unchanged; the next private-video correspondence check belongs on Windows.
 - Logic-map impact: NONE — this intake distinguishes the existing raw, phase, selector and final-publication responsibilities; v2 ownership and the map updated in `4c72ebb` remain unchanged.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.
