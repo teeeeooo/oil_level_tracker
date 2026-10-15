@@ -849,6 +849,25 @@ question. Cost-first assignment → candidate-local RGB → Oil-only Local XY st
 the approved individual trial order, followed by FULL closure and integrated
 validation. No source behavior or field disposition changes in this correction.
 
+### Historical truth reference preservation
+
+The publication hook detected that closed browser-review run
+`sample/output/s11-round2-browser-20261014-002` reused the editable truth JSON
+with its pre-correction digest. To preserve that historical dependency, its exact
+6,304 bytes were restored from Git `7a57064046b0c650f552f6e4d9e2ceb73002972f`
+to `sample/output/s11-reviewed-truth-preservation-20261015-001/evidence/reviewed-truth-20260825.json`.
+SHA-256 remains `278e4ecaf6820d5952fff81f597044b8fb5efa2f0c27f1dcd3bf25d671518a2e`.
+That managed maintenance run also retains `reference-relocation.json` with the
+original reuse entry, original marker digest, replacement path and reason.
+
+The closed browser marker changes only the reuse path and adds explicit
+`reuse_reference_history`; its expected truth bytes/hash, retained payloads,
+measurements and verdict remain unchanged. This is a historical snapshot, not
+current truth or a browser rerun. The redundant scratch marker copy was removed
+by the normal closeout; no historical evidence was deleted. All 78 managed runs
+pass the artifact check. The snapshot is local/ignored; the pinned Git object
+remains the source for recovering its exact bytes.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
