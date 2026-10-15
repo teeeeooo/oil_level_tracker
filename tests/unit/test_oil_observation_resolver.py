@@ -723,9 +723,9 @@ def test_initial_full_comparison_publishes_exact_current_y_with_uncertain_direct
     trial_detector = OpenCvPhaseDetector(initial_full_observation=True)
     trial = trial_detector.resolve_sequence(detections, glass, InitialObservationState.FULL_NO_INTERFACE)
     assert all(d.raw_oil_air_level_y is None for d in baseline.detections)
-    assert [d.raw_oil_air_level_y for d in trial.detections] == [None, None, *ys[2:]]
-    assert "initial-full-observation-v1" in trial_detector.version
-    for detection, expected in zip(trial.detections[2:], ys[2:], strict=True):
+    assert [d.raw_oil_air_level_y for d in trial.detections] == list(ys)
+    assert "initial-full-observation-v2" in trial_detector.version
+    for detection, expected in zip(trial.detections, ys, strict=True):
         assert detection.fill_state is FillState.PARTIAL_VISIBLE
         assert "OIL_DIRECTION_UNCONFIRMED" in detection.flags
         selected = [c for c in detection.candidates if c.kind is BoundaryKind.OIL_AIR and c.selected]

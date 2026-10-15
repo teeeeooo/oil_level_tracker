@@ -48,20 +48,78 @@ def test_current_interface_can_be_observed_without_certifying_drain(direction, p
 
 
 @pytest.mark.parametrize("changes", [
-    {"authority": OilCandidateAuthority.CONTINUATION_ELIGIBLE},
-    {"phase_identity": OilPhaseIdentity.CONTINUATION_ONLY},
+    {"authority": OilCandidateAuthority.CANDIDATE_ONLY},
+    {"authority": OilCandidateAuthority.HARD_INVALID},
     {"tracklet_incompatible": True},
     {"material_conflict": .9},
     {"tracklet_material_conflict": .9},
     {"confirmation_profile": TrackletConfirmationProfile.NONE},
-    {"lifecycle": TrackletLifecycle.PROVISIONAL},
+    {"lifecycle": TrackletLifecycle.PROVISIONAL,
+     "confirmation_profile": TrackletConfirmationProfile.NONE},
     {"lifecycle": TrackletLifecycle.LOST},
+    {"lifecycle": TrackletLifecycle.TERMINATED},
 ])
 def test_observation_does_not_promote_unsupported_current_rows(changes):
     layers = ((_interface(**changes), _unknown(0)),)
     trial = _owner().resolve(layers)
     assert trial.allowed_tracklet_ids == (frozenset(),)
     assert _select(layers, trial)[0].y is None
+
+
+@pytest.mark.parametrize("identity,lifecycle", [
+    (OilPhaseIdentity.CONTINUATION_ONLY, TrackletLifecycle.CONTINUING),
+    (OilPhaseIdentity.DIRECT_INTERFACE, TrackletLifecycle.CONTINUING),
+    (OilPhaseIdentity.DIRECT_INTERFACE, TrackletLifecycle.PROVISIONAL),
+])
+def test_bounded_admitted_observation_does_not_need_a_fresh_anchor(identity, lifecycle):
+    # The three transferred Windows losses have these distinct evidence shapes.
+    # The helper tests admission/provenance, not the physical identity of that video.
+    row = _interface(authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+                     phase_identity=identity, lifecycle=lifecycle)
+    layers = ((row, _unknown(0)),)
+    baseline, trial = (_owner(enabled).resolve(layers) for enabled in (False, True))
+    assert baseline.allowed_tracklet_ids == (frozenset(),)
+    assert trial.phases == (OilMaterialPhase.OBSERVED_INTERFACE,)
+    assert _select(layers, trial)[0].candidate_ref is row.candidate_ref
+    evaluation = trial.diagnostics[0]["initial_full_observation"]["evaluations"][0]
+    assert evaluation["passed"]
+    assert evaluation["observation_evidence"]["authority"] == "CONTINUATION_ELIGIBLE"
+
+
+def test_unadmitted_provisional_row_cannot_borrow_confirmation():
+    row = _interface(lifecycle=TrackletLifecycle.PROVISIONAL)
+    row = replace(row, candidate_ref=replace(row.candidate_ref, tracklet_admitted=False))
+    layers = ((row, _unknown(0)),)
+    trial = _owner().resolve(layers)
+    assert trial.allowed_tracklet_ids == (frozenset(),)
+    assert _select(layers, trial)[0].y is None
+
+
+def test_continuation_uses_current_measurement_and_loss_cannot_create_full():
+    layers = (
+        (_interface(0, y=55.), _unknown(0)),
+        (_interface(1, y=35., authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+                    phase_identity=OilPhaseIdentity.CONTINUATION_ONLY), _unknown(1)),
+        (_interface(2, y=5., authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE), _unknown(2)),
+        (_unknown(3),),
+    )
+    trial = _owner().resolve(layers)
+    selected = _select(layers, trial)
+    assert [node.y for node in selected] == [55., 35., 5., None]
+    assert selected[-1].kind == "unknown"
+    assert all(d["initial_full_observation"]["motion_phase"] == "filled_barrier"
+               for d in trial.diagnostics)
+
+
+def test_incompatible_anchor_cannot_supply_identity_to_another_owner():
+    observed = _interface(tracklet="observed", authority=OilCandidateAuthority.CONTINUATION_ELIGIBLE,
+                          lifecycle=TrackletLifecycle.PROVISIONAL)
+    incompatible = _interface(tracklet="incompatible", y=56., tracklet_incompatible=True)
+    layers = ((observed, incompatible, _unknown(0)),)
+    trial = _owner().resolve(layers)
+    assert trial.allowed_tracklet_ids == (frozenset({"observed"}),)
+    assert trial.owner_chains == (("observed",),)
+    assert _select(layers, trial)[0].candidate_ref is observed.candidate_ref
 
 
 @pytest.mark.parametrize("kind", ["full", "empty"])

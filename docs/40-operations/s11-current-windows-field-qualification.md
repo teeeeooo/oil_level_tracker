@@ -190,29 +190,47 @@ motion runtime은 계속 초기 `filled_barrier`일 수 있다.
 
 ### Remaining three-record extraction
 
-후속 답변으로 첫 3개 표본의 ON 차단은 `current_confirmed_owner=false`와
-`anchor_eligible=false`로 확인됐다. 중간/재충전의 빈 allowed 집합만으로는
-같은 원인인지 알 수 없으므로 **③의 다음 세 행만** 저장된 JSONL에서 추출한다:
-553.5초/f13271, 662.5초/f15884, 663.5초/f15908.
+**완료.** 표 A/C와 별도 false-key 답변으로 필요한 세 행을 확보했다.
+표 B의 누락 열은 원문 false-key 목록으로 바로잡았다. f13271은
+`anchor_eligible, interface_identity`, f15884는 `anchor_eligible`, f15908은
+`current_confirmed_owner, anchor_eligible`에서 실패한다. 세 raw outcome은
+boundary/ambiguous이므로 FULL likelihood 0은 기본값이다. 상세 근거는
+[진단 기록](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md#three-record-predicate-intake)에
+보존했다. 전체 JSON·후보 표·동일 세 행을 다시 요청하지 않는다.
 
-- `record.state`의 `oil_decision_status`, `oil_decision_reason`,
-  `oil_no_interface_reason`, `oil_no_interface_full_likelihood`.
-- `record.sequence.state.sequence_material_phase_diagnostics.initial_full_observation`
-  객체 전체. `evaluations`의 tracklet/row ID와 각 predicate 값을 생략하지 않는다.
-- 같은 `diag`의 `recovery_qualifying_tracklet_ids`,
-  `recovery_selected_tracklet_id`, `recovery_ambiguous`와 최종 phase/reason.
-- `record.sequence.candidates`의 Oil 후보별 `canonical_y`, `tracklet_id`,
-  `row_hypothesis_id`, `authority`, `authority_failed_gates`, `phase_identity`,
-  `tracklet_lifecycle`, `tracklet_admitted`, `tracklet_failure_reason`.
+### October 15 v2 Windows comparison
 
-이번에는 해석문 대신 세 행의 위 필드를 JSON 그대로 전달한다. 빈 목록과 null은
-그대로 보존하고 키 자체가 없는 경우만 누락으로 적는다. 새 분석·해시 비교·환경
-검증이나 전체 구간 재점검은 필요하지 않다.
+로컬 검증과 게시를 마친 v2 소스는 Work Plan의 현재 ZIP 링크를 사용한다.
+이번에는 **기존 ③ FULL+ON v1과 새 ④ FULL+ON v2**를 비교한다.
+① FULL+OFF와 ② UNKNOWN+OFF는 보존하고, ②는 누락 위치를 찾는 참고로만 쓴다.
+추가 해시 비교·환경 감사나 기존 세 실행의 재분석은 요청하지 않는다.
 
-주의: `oil_no_interface_full_likelihood=0`은 raw outcome이 `NoInterfaceOutcome`이
-아닐 때의 기본값일 수도 있다. `oil_no_interface_reason=not_available` 등 상태와
-함께 읽으며, 숫자 0만으로 실제 FULL 가능도 평가가 수행됐다고 결론내리지 않는다.
-`established_fill_present=false`도 모든 재충전 경로가 평가됐다는 뜻은 아니다.
+1. 새 소스 폴더에서 기존 Windows Python으로 아래 GUI를 실행한다. 창 제목은
+   `초기 FULL 관측 비교`, 실행 결과의 resolver 접미사는
+   `+initial-full-observation-v2`다. 옵션 없이 실행하면 계속 OFF다.
+2. 기존과 같은 영상·Recipe·ROI·480–780초·2 fps를 사용하고, BASE 초기 FULL과
+   Accum 초기 EMPTY를 유지한다. GUI에서 직접 분석을 시작하고 새 bundle에 저장한다.
+   BASIC trace면 이번 수치 비교에 충분하다. 원본 영상으로 위치/움직임을 대조한다.
+3. 기존 ③과 새 ④의 첫 등장, 553.5/662.5/663.5초 출력, 실제 662–663.6초 재충전
+   궤적을 비교한다. 숫자가 늘어난 것과 실제 유면이 복원된 것을 구분한다.
+   663.6–780초의 숫자 후보는 정답상 FULL 구간의 오검출로 별도 집계한다.
+   774초를 상단 이탈로 해석하지 않으며 source Y 감소가 상승이다.
+4. 결과는 짧은 표로 전달한다: 구간별 유효한 복원/오검출/남은 공백,
+   실제 상단에 닿는 마지막 계면의 시각과 위치, Accum/Foam 변화.
+   새로운 실패가 나타날 때만 해당 판정의 false predicate 키를 덧붙인다.
+   전체 JSON이나 66행 후보 표를 반복 전송할 필요는 없다.
+
+```powershell
+$env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+python -m oil_tracker --initial-full-observation
+```
+
+v2는 이미 승인된 현재 관측에 매번 새 앵커를 요구하던 조건을 수정한다.
+방향 라벨은 계속 `PARTIAL_VISIBLE + OIL_DIRECTION_UNCONFIRMED`다.
+**상단 소실 → FULL 전이는 이번 변경에 포함되지 않는다.** 이 결과에서 실제
+재충전 owner의 연속성이 확인되면 그 전이를 별도로 구현한다. 중간 소실을
+FULL로 바꾸거나 663.6초를 코드에 넣어서는 안 된다. 정식 FIELD PASS는 여전히
+아래의 전체 9개 구간과 현재 acceptance owner가 판단한다.
 
 ## 2. Private source identity
 

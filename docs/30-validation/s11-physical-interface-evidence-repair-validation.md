@@ -17,7 +17,7 @@ or justify a classifier threshold.
 
 This bounded comparison is authorized separately from full physical-witness acceptance.
 Default launch must preserve R22 outputs. With the option enabled, cover current
-stationary/upward anchor publication under initial FULL, normal downward release,
+stationary/upward bounded-confirmed observation under initial FULL, normal downward release,
 loss and reacquisition, multiple-owner ambiguity and permutation, typed identity
 contradiction, material/Artifact/hard-invalid opposition, image-supported no-interface
 states, initial EMPTY and post-fill/refill barriers. Existing stationary **drain-release**
@@ -36,6 +36,17 @@ is insufficient. On Windows, compare BASE descent/refill and FULL prefix/suffix 
 then decide whether residual failures warrant cost-first/RGB/Local XY. The canonical
 nine segments remain required for formal field acceptance. No further model fit or
 physical-witness acceptance is implied by this comparison.
+
+Version 2 additionally covers all three transferred evidence shapes: confirmed
+continuation-only rows, confirmed direct rows below anchor authority, and provisional
+rows already admitted by bounded confirmation. Verify a never-admitted provisional
+row still fails, and an incompatible anchor cannot lend identity to another row.
+Current observations may extend toward the top but ordinary loss must still be
+UNKNOWN; this stage does not add top-exit FULL inference. Retain the v1 local
+comparisons and compare v2 on the same frozen inputs without relabeling gains as
+physical recall. GUI wiring is unchanged; its passing propagation checks are
+reusable, while actual detector/resolver construction and output provenance run
+on the changed source.
 
 ## Validation layers
 
@@ -158,5 +169,7 @@ focused tests before the broader candidate suite.
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: BASE association across a reviewed location mismatch and Accum boundary-owner exclusion are distinct targets; private physical-identity continuity remains unresolved. The local polarity-only association prototype failed protected truth and photometric positive controls.
-- Logic-map impact: NONE — this is acceptance for proposed changes, not a change to the executing R22 map.
-- Failure-registry impact: UPDATED — F04 records the failed polarity-only association attempt; these controls prevent repetition without weakening protected truth or enabling the initial-FULL extension.
+- Existing feature coverage: the default-OFF initial-FULL option reuses existing Recipe/ROI, static preparation, tracklet confirmation and final publication. Frozen local comparison inputs retain empty exclusions/templates and Local XY OFF; Windows input details remain attributed operator evidence.
+- Execution scope: focused v2 admission/resolver tests and the existing bounded real analysis runner cover changed observation publication, with exact candidate/CSV provenance and debug equivalence; private Windows physical review remains separate.
+- Logic-map impact: UPDATED — the current map now distinguishes v2 bounded tracklet admission from the former per-frame anchor requirement.
+- Failure-registry impact: NONE — existing F03/F04/F05/F08/F09/F10 controls cover the widened exploratory mode; earlier polarity-only failures and full physical-witness acceptance remain unchanged.

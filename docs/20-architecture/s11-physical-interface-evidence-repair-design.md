@@ -73,9 +73,13 @@ confirmation, drain thresholds and Foam owners are unchanged. Cost-first/RGB/Loc
 are separate later comparisons.
 
 At an `INITIAL_FULL_BARRIER` frame only, after the ordinary direct/recovery routes,
-the lifecycle may admit current anchor-grade, direct/ordered-lower interface rows
-with existing bounded confirmation, compatible identity and strict current/history
-material support. Current no-interface state evidence, typed contradictions and
+the lifecycle may admit current rows already admitted by a bounded confirmed
+tracklet, with at least continuation authority, compatible identity and strict
+current/history material support. Version 2 reuses that existing confirmation for
+continuation-only rows and for provisional witness frames already admitted within
+the builder's bounded confirmation window. A provisional row without admission or
+a confirmation profile still fails. LOST/TERMINATED rows remain ineligible.
+Current no-interface state evidence, typed contradictions and
 release ambiguity still block the route. The allowed set contains only these current
 tracklets; the existing selector retains its competing-owner ambiguity check and
 same-owner/explicit-handoff transition rules. No unconstrained OPEN or copied owner
@@ -102,6 +106,32 @@ the full section-4 witness contract. Measure recoveries and false positives toge
 neither more numeric values nor local mechanism tests establish field PASS.
 The [validation supplement](../30-validation/s11-physical-interface-evidence-repair-validation.md#october-15-exploratory-comparison)
 owns mechanical checks and the first Windows review.
+
+### Version 2 admission correction
+
+The [three-record Windows intake](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md#three-record-predicate-intake)
+identifies version 1's repeated anchor/direct-identity check as an additional
+publication barrier, even after tracklet admission. Version 2 removes only that
+duplicate requirement and the current-lifecycle confirmation delay. It does not
+alter candidate authority, confirmation windows or phase motion transitions, and
+does not make every UNKNOWN-start output available under initial FULL. The
+existing material/identity vetoes and final publishability/ambiguity rules still
+apply. Evaluations separate required predicates from descriptive authority,
+phase identity, lifecycle and confirmation-profile values.
+
+This intentionally widens an exploratory observation mode, including any false
+identities already admitted by the existing tracklet builder. It is not a new
+physical identity witness or a motion-only drain release. No pixels, coordinates,
+timestamps or Glass IDs from the Windows reply enter production rules.
+Version 1 remains reproducible at its pinned commit; version 2 is identified by
+`+initial-full-observation-v2` in detector and resolver metadata. The launch option
+and default OFF remain unchanged.
+
+Top-exit FULL publication is a separate unresolved transition. The three raw
+outcomes are boundary/ambiguous, so their FULL likelihood zero is a default rather
+than positive no-interface evidence. This correction creates neither a FULL node
+from that zero nor a FULL hold from an ordinary missing observation. Verify the
+recovered topward owner against the actual refill before designing that transition.
 
 ## 1. Interface evidence and independence
 
@@ -354,6 +384,6 @@ as the serialized array index. Diagnostic detail must not change output.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
 - Existing feature coverage: normal Recipe ellipse/margin/exclusions, static preparation and session initial-state confirmation remain active. The October 15 local comparison freezes separate interior-ROI inputs before outputs; original regression Recipes are preserved. Artifact templates remain at their recorded input state, Local XY is OFF, and the new constructor/GUI option is default OFF. Private Windows ROI is operator-verified on Windows before comparison.
 - Execution scope: the October 15 work covers initial-FULL lifecycle admission, selector/projection, actual GUI construction and event propagation, with local mechanism/integration tests and a bounded real analysis replay. ROI inspection precedes replay. No private Windows execution or physical acceptance is inferred from local checks.
-- Difference from prior failures: the full raster-witness proposal still requires independent identity evidence. The authorized exploratory comparison instead isolates current-candidate publication from motion certification, explicitly tolerates existing identity false positives, and never calls a stationary/upward row a drain release. It leaves confirmation, candidate scores, association and formal acceptance unchanged.
+- Difference from prior failures: the full raster-witness proposal still requires independent identity evidence. The authorized exploratory comparison instead isolates current-candidate publication from motion certification, explicitly tolerates existing identity false positives, and never calls a stationary/upward row a drain release. V2 additionally consumes already-admitted continuation and provisional witnesses without adding a handoff or re-confirming a tracklet. It leaves confirmation windows, candidate scores, association and formal acceptance unchanged.
 - Logic-map impact: UPDATED — optional initial-FULL observation projection, GUI construction, uncertainty publication and event/report consumption are mapped; default motion behavior is preserved.
 - Failure-registry impact: NONE — F05/F08 already own permanent barriers and unsafe release; this trial deliberately measures remaining identity errors without declaring those failures repaired.

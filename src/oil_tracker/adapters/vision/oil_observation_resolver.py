@@ -1458,7 +1458,7 @@ class OilObservationResolver:
     def __init__(self, config: OilObservationResolverConfig | None = None) -> None:
         self.config = config or OilObservationResolverConfig()
         if self.config.initial_full_observation_enabled:
-            self.version += "+initial-full-observation-v1"
+            self.version += "+initial-full-observation-v2"
         self.admission_evidence = OilAdmissionEvidenceOwner(self.config)
         self.tracklet_opposition = OilTrackletOppositionOwner(
             self.config

@@ -69,7 +69,7 @@ class ObservationSequenceResolver:
             initial_full_observation_enabled=initial_full_observation,
         ))
         if initial_full_observation:
-            self.version += "+initial-full-observation-v1"
+            self.version += "+initial-full-observation-v2"
         self._foam = FoamEpisodeResolver()
 
     def resolve(

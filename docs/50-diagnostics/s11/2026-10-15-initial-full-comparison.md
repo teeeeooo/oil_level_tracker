@@ -1,8 +1,8 @@
 # Initial-FULL observation comparison
 
-Status: local implementation and OFF/ON analysis complete; corrected Windows
-three-bundle audit received. Early admission delay is localized; middle/refill
-observation predicates and raw no-interface outcome type remain unreported.
+Status: version 1 local comparison and corrected Windows audit received; the
+three-record intake now closes the requested predicate/outcome questions.
+Version 2 reuses bounded tracklet admission; local checks pass and Windows comparison is next.
 The option remains default OFF. Private bundles were not inspected on Mac;
 no complete physical qualification is claimed.
 
@@ -43,6 +43,8 @@ mask-membership checks, not new physical labels or proof of complete interface r
 The unchanged base Recipe is reused; its duplicate copy was discarded.
 
 ## Local mechanism result
+
+This subsection records the frozen **version 1** result. The v2 comparison is below.
 
 The optional `--initial-full-observation` mode reuses existing confirmed current
 anchors and the bounded selector. It publishes a current candidate under unresolved
@@ -319,6 +321,9 @@ FIELD FAIL, the generic detector contract and the optional-candidate order remai
 
 ## Corrected Windows checkpoint intake
 
+This checkpoint precedes the completed three-record reply below; its outstanding
+requests are retained as the diagnosis sequence, not new requests.
+
 The subsequent Windows reply corrects the 774 s interpretation, source-Y direction
 and field paths. It reports that ③ first publishes at 550 s after three missing
 sampled rows at 548.5/549/549.5 s where ② publishes Y363/367/367. At 548.5 s,
@@ -366,12 +371,104 @@ candidate metadata and raw outcome status/reason. This uses existing serializers
 no new helper, video analysis, hash/environment verification or threshold change
 is needed. No detector behavior is changed from this incomplete causal record.
 
+## Three-record predicate intake
+
+The operator transferred three tables from the existing ③ FULL+ON JSONL, then
+confirmed the exact false predicate keys separately. The initial table B had ten
+boolean headers but nine values per row, so it was not used to align predicates.
+The corrected key lists below supersede that malformed alignment. Table C has
+66 Oil candidates (21/22/23); the following retains the relevant admitted rows,
+not a physical truth label or a local inspection of the private JSONL.
+
+| Source record | Evaluated tracklet / row | Confirmed false ON predicates | Current candidate evidence |
+|---|---|---|---|
+| f13271, 553.5113 s, `f000013271_921e1a1dece0` | `oil-tracklet:000132:0124` / `oil-row:000147:000` | `anchor_eligible`, `interface_identity` | Y364/365/356/364; CONTINUATION_ELIGIBLE, continuation_only, continuing, admitted=1; no tracklet failure |
+| f15884, 662.4952 s, `f000015884_9f631e05c5c9` | `oil-tracklet:000357:0309` / `oil-row:000365:001` | `anchor_eligible` | Y421/420/409; CONTINUATION_ELIGIBLE, continuing, admitted=1; Y409 is direct_interface with no authority failed gates |
+| f15908, 663.4962 s, `f000015908_9c682a88811b` | `oil-tracklet:000366:0319` / `oil-row:000367:002` | `current_confirmed_owner`, `anchor_eligible` | Y418; CONTINUATION_ELIGIBLE, direct_interface, provisional but admitted=1; no authority/tracklet failure |
+
+At f15908 the separate Y413.5 anchor belongs to `oil-tracklet:000366:0320` /
+`oil-row:000367:001`, which is unadmitted with `INCOMPATIBLE_BRANCH`. Its authority
+must not be combined with the Y418 row. Provisional lifecycle plus admitted=1 is
+consistent with an earlier witness admitted by the builder's bounded later
+confirmation, not permission to publish a never-confirmed provisional row.
+
+All three records have IFO evaluated=true, blocked_by_current_state=false,
+qualifying IDs=[], and motion `filled_barrier / INITIAL_FULL_BARRIER`.
+Recovery stage is `initial_full`, with qualifying IDs=[], selected ID=null and
+ambiguous=false in all three. Reset reason is `evidence_window_expired` at f15884
+and null at the others. Thus no recovery release was committed at these points.
+
+Raw outcomes are ambiguous / `competing_boundary_artifact_or_no_interface_evidence`
+at f13271/f15908, and boundary_accepted / `continuous_shadow_boundary` at f15884.
+All three have `oil_no_interface_reason=not_available` and FULL likelihood 0.
+Against `oil_runtime_metrics`, this establishes the zero as the default for a raw
+outcome other than `NoInterfaceOutcome`. It does not establish that every upstream
+no-interface calculation was skipped, or that the physical scene is not FULL.
+At the existing state threshold it supplies no FULL node.
+
+The requested read-only intake is complete; no further JSON/table extraction is
+needed for these three losses. It supports the
+[v2 admission correction](../../20-architecture/s11-physical-interface-evidence-repair-design.md#version-2-admission-correction),
+not a claim that all 51 differences are real interfaces or that admitting them
+alone repairs the actual ~663.6 s top exit. Exact physical owner continuity and
+post-FULL false observations still require Windows source review.
+
+## Version 2 local verification
+
+The existing lifecycle observation branch now consumes bounded confirmation and
+continuation authority instead of requiring a fresh anchor/direct identity and
+current confirmation in every frame. Existing motion runtime, recovery leases,
+candidate generation, association, FULL/EMPTY state rules and Foam owners are
+unchanged. Version suffix is `+initial-full-observation-v2`; default OFF is unchanged.
+Focused admission and actual detector/resolver tests pass (83 tests), including
+all three reported evidence shapes, bounded provisional admission, unsupported and
+incompatible controls, same-frame Y and direction uncertainty. The related
+lifecycle/tracklet/authority/JSONL/event/report suites pass (181 tests): **264 total**.
+GUI wiring is unchanged and its earlier propagation checks remain applicable.
+
+The managed run `sample/output/s11-initial-full-v2-20261015-001` is closed. It reuses
+`tests.diagnostics.s11_initial_full_comparison`, the frozen ROI inputs from the
+first comparison and both prior windows, at 2 Hz with explicit FULL as a mechanism
+stress condition. The local base video is not the private Windows BASE video.
+
+| Local input | Rows | Oil OFF / v1 / v2 | v1→v2 added / removed / changed Y | Foam OFF / v2 |
+|---|---:|---:|---:|---:|
+| base_sample_1, 0–14.4 s | 30 | 3 / 9 / 12 | 4 / 1 / 4 | 0 / 0 |
+| sample4 interior, 0–56 s | 113 | 0 / 10 / 16 | 6 / 0 / 0 | 76 / 76 |
+
+The 143 OFF rows equal v1 exactly. All original OFF numeric Oil points survive
+unchanged under v2. Both modes have identical raw inputs. Every numeric result
+matches its current selected candidate and exported CSV Y. All Foam coordinate,
+confidence and validity fields match; neither comparison adds a drain event.
+NONE and FULL debug runs have identical rows, phase predicates and events on all
+286 mode/sample rows, with equal raw-input fingerprints. Full bundles/CSV/HTML
+were produced through the real analysis/export owners before temporary cleanup.
+
+The widened allowed set can change the selector's competition. V2 is **not a
+superset of v1**: local base loses the old Y367 point at 4.004 s and changes four
+other coordinates while adding four points. Its changed times span 1.001–5.005 s;
+sample4 adds points at 12, 15, 16.5, 37, 37.5 and 38 s. Complete changed-row values
+are retained in `evidence/summary.json`; physical identity is `NOT_EVALUATED` for
+every changed point. Counts establish publication behavior, not recovery/accuracy.
+The trial remains opt-in; Windows must assess the real refill and FULL-suffix
+oppositions before further motion/state work or promotion.
+
+Only two complete NONE comparison JSONs, the exact source patch and the summary
+are retained under ignored `sample/output/` (867,301 bytes total). The summary
+SHA-256 is `5fc13d51b75eacadbbe47106a990b5e467c692f63e6bbeb0ba2202f4508b482d`.
+FULL duplicate comparison files and
+temporary bundles/images were removed. One mid-run check observed 753,909,667
+bytes of temporary FULL output against the planned 350,000,000-byte budget; the
+writer then completed and cleaned that output. The final artifact check passes
+for all 77 managed runs. This does not establish peak-budget compliance; a later
+FULL replay needs a larger explicit allowance or a smaller trace window.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: corrected transferred 548.5 s data identifies direct release direction/progress and ON current-confirmation/anchor failures. The first reported middle gap is 553.5 s; its actual ON predicates and those at 662.5/663.5 s remain unreported. FULL likelihood zero prevents a current full node, but its default-versus-no-interface-outcome origin is unknown. Source separates motion runtime, frame projection and state publication; physical identity/onset remain separately unverified.
+- First harmful stage: transferred ON predicates identify repeated anchor/direct-identity/current-confirmation checks at 553.5/662.5/663.5 s despite existing tracklet admission. The raw outcomes also establish default FULL zero, not a measured no-interface likelihood. Physical identity, top-reaching continuity and full-state publication remain separate unresolved questions.
 - Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
-- Execution scope: earlier bounded local real-entry analysis and controls, followed by operator feedback and a relayed Windows agent CSV/trace audit. Current work reconciles that text against source, serializer paths and canonical reviewed truth without loading private media, replaying analysis, running new experiments or changing detector code. Returned counts/checkpoints are attributed transferred evidence, not locally verified bundle contents.
-- Logic-map impact: NONE — this update corrects operator feedback and traces the already-mapped lifecycle, state-node and allowed-set selection responsibilities without changing the pinned source. The optional observation projection and GUI/event/report consumers were already mapped in implementation commit `6d2f069`; that earlier source change had impact UPDATED.
+- Execution scope: transferred Windows tables and corrected predicate keys are reconciled against source, not locally inspected private media. V2 changes the existing observation branch; focused lifecycle/resolver checks run through actual detector construction. The existing frozen local analysis/export runner verifies default/OFF preservation, same-frame candidate/CSV provenance, independent Foam and debug equivalence; all changed physical positions remain unreviewed. GUI construction is unchanged and its earlier propagation evidence is reused.
+- Logic-map impact: UPDATED — v2 observation admission reuses the builder's bounded confirmation and continuation eligibility; the map distinguishes that from v1's repeated anchor requirement. No state-transition or owner graph is added.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.

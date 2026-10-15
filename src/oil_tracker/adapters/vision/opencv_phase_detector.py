@@ -56,7 +56,7 @@ class OpenCvPhaseDetector:
         if self.measurement_scope_manifest:
             self.version += "+oil-local-xy-v1:" + fingerprint(self.measurement_scope_manifest)
         if initial_full_observation:
-            self.version += "+initial-full-observation-v1"
+            self.version += "+initial-full-observation-v2"
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
         self._static_foam_maps: dict[str, np.ndarray] = {}

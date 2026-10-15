@@ -418,9 +418,10 @@ class OilMaterialPhaseLifecycleOwner:
     ) -> None:
         """Expose current observations without certifying or changing motion.
 
-        This opt-in comparison leaves the motion lifecycle and recovery leases
-        untouched. The selector still resolves competing confirmed owners; no
-        owner chain is synthesized between them.
+        Reuse bounded tracklet admission, including its already-confirmed prefix
+        and continuation rows, without requiring a fresh anchor in every frame.
+        This opt-in comparison leaves motion and recovery leases untouched. The
+        selector still resolves competing owners; no chain is synthesized.
         """
         evaluated = bool(
             self.policy.initial_full
@@ -448,13 +449,14 @@ class OilMaterialPhaseLifecycleOwner:
         for row in rows:
             predicates = {
                 "bounded_confirmed": _bounded_confirmed_observation(row.ref),
-                "current_confirmed_owner": row.ref.tracklet_lifecycle
-                in {TrackletLifecycle.CONFIRMED, TrackletLifecycle.CONTINUING},
+                "current_owner_observation": row.ref.tracklet_lifecycle in {
+                    TrackletLifecycle.PROVISIONAL,
+                    TrackletLifecycle.CONFIRMED,
+                    TrackletLifecycle.CONTINUING,
+                },
                 "compatible": not row.ref.tracklet_incompatible,
-                "anchor_eligible": row.ref.authority
-                is OilCandidateAuthority.ANCHOR_ELIGIBLE,
-                "interface_identity": row.ref.phase_identity
-                in {OilPhaseIdentity.DIRECT_INTERFACE, OilPhaseIdentity.ORDERED_LOWER_INTERFACE},
+                "continuation_eligible": row.ref.authority
+                >= OilCandidateAuthority.CONTINUATION_ELIGIBLE,
                 "identity_contradiction_clear": row.tracklet_id
                 not in record.identity_contradictions
                 and not _row_has_identity_contradiction(row),
@@ -469,6 +471,12 @@ class OilMaterialPhaseLifecycleOwner:
                 "tracklet_id": row.tracklet_id,
                 "row_hypothesis_id": row.row_hypothesis_id,
                 "predicates": predicates,
+                "observation_evidence": {
+                    "authority": row.ref.authority.name,
+                    "phase_identity": row.ref.phase_identity.value,
+                    "tracklet_lifecycle": row.ref.tracklet_lifecycle.value,
+                    "confirmation_profile": row.ref.tracklet_confirmation_profile.value,
+                },
                 "passed": passed,
             })
             if passed:
