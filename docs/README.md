@@ -354,6 +354,8 @@ conditions; only Work Plan owns sequencing and current state.
 
 새 연구 출력의 생성·예산·보존 목록·즉시 정리와 로컬 push 검사는
 [실험 산출물 관리 절차](40-operations/experiment-artifact-lifecycle.md)가 소유한다.
+앞으로 생성하는 대용량 출력의 저장 위치와 기존 자료 보존 범위는 해당 절차의
+[새 대용량 출력 규칙](40-operations/experiment-artifact-lifecycle.md#새-대용량-출력의-저장-위치)을 따른다.
 `start → work에서 실행 → finish → check`를 사용하며 새 규칙을 기존 frozen
 폴더의 자동 삭제 권한으로 해석하지 않는다.
 
