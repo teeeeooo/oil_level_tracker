@@ -1,6 +1,7 @@
 # Initial-FULL observation comparison
 
-Status: local implementation and OFF/ON analysis complete; Windows comparison pending.
+Status: local implementation and OFF/ON analysis complete; interim Windows operator
+feedback received, initial-FULL ON comparison still pending.
 The option remains default OFF. No Windows result or physical acceptance is claimed.
 
 The [fixed Work Plan order](../../00-project/work-plan.md#fixed-execution-order--2026-10-15)
@@ -132,12 +133,39 @@ Use the [current Windows procedure](../../40-operations/s11-current-windows-fiel
 for the two GUI launches, frozen interior ROI and segment readout. Stop here for
 Windows work. Cost-first, RGB and Local XY remain conditional on that result.
 
+## Windows interim feedback — initial UNKNOWN
+
+The operator reports temporarily selecting initial `UNKNOWN_REVIEW` (알 수 없음)
+and seeing BASE follow actual Oil movement closely, with two exceptions:
+
+| Operator observation | Comparison focus |
+|---|---|
+| The interface is missed when it first descends into view from a full Glass | FULL-to-visible entry, corresponding to the reviewed BASE drain onset |
+| The rising interface is classified as EMPTY when it exits the Glass at the top | Refill closure and subsequent FULL/no-interface meaning |
+
+These are attributable qualitative observations, not locally inspected pixels or
+measured frame coverage. The report supplies no exact timestamps, Y anchors,
+false-positive counts, run manifest or confirmed OFF/ON setting for that UNKNOWN
+run. Other canonical segments and Foam are unassessed by this interim feedback.
+The canonical physical truth and field FAIL remain unchanged.
+
+Improved tracking with UNKNOWN is evidence to investigate state-dependent
+publication; it does not prove that the initial-FULL barrier is the only loss or
+that all raw candidates are correct. The two transition symptoms remain distinct.
+UNKNOWN is an exploratory control, not a replacement for the reviewed FULL start.
+
+The operator is now running the ON comparison. Its result and BASE initial state
+have not yet been received. The new option requires an explicit initial FULL:
+leaving UNKNOWN selected does not exercise `_observe_initial_full_interface`.
+The ON run must be interpreted using its actual initial state and resolver version.
+No detector change or additional candidate experiment follows from this intake.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PHASE-INITIAL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: reviewed Windows checkpoints establish initial-FULL allowed-set exclusion; earliest whole-window physical loss remains unknown. ROI contamination is separately demonstrated in saved local inputs.
 - Existing feature coverage: existing ellipse/margin masks and shared preprocessing are active; exclusions/templates remain empty and Local XY OFF. New comparison ROI is separate from immutable regression inputs. Static learning, session FULL confirmation, completed resolution, event/report/CSV and GUI construction are exercised; private Windows setup remains unverified.
-- Execution scope: source/ROI inspection, bounded local real-entry analysis and focused synthetic/integration controls. No raw Windows pixels, private-video replay, new learning operation or field acceptance. Complete observations and source/input/runtime identity are retained at the stated scope above.
-- Logic-map impact: NONE — this handoff-only delta pins the published source. The optional observation projection and GUI/event/report consumers were already mapped in implementation commit `6d2f069`; that earlier source change had impact UPDATED.
+- Execution scope: source/ROI inspection, bounded local real-entry analysis and focused synthetic/integration controls, followed by attributable interim Windows feedback under initial UNKNOWN. No raw Windows pixels, private-video replay, new learning operation or field acceptance. Complete local observations and source/input/runtime identity are retained above; the Windows report has only the stated qualitative scope.
+- Logic-map impact: NONE — this update records operator feedback and pending run conditions without changing the pinned source. The optional observation projection and GUI/event/report consumers were already mapped in implementation commit `6d2f069`; that earlier source change had impact UPDATED.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.
