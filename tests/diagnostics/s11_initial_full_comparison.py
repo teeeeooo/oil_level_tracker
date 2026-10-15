@@ -1,4 +1,4 @@
-"""Frozen local inputs for the optional initial-FULL observation comparison.
+"""Frozen local inputs for initial-FULL and paired cost-first comparisons.
 
 Use a managed experiment's work directory. Original Recipes are never changed.
 """
@@ -77,7 +77,10 @@ def prepare(output: Path) -> None:
     (output / "roi-inputs.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def compare(output: Path, roi_inputs: Path, sample: str, *, debug_full: bool = False) -> None:
+def compare(
+    output: Path, roi_inputs: Path, sample: str, *, debug_full: bool = False,
+    cost_first_comparison: bool = False,
+) -> None:
     from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
     from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
     from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
@@ -101,7 +104,8 @@ def compare(output: Path, roi_inputs: Path, sample: str, *, debug_full: bool = F
     variants = {}
     raw_inputs = []
     for enabled in (False, True):
-        mode = "observation" if enabled else "baseline"
+        mode = (("cost_first" if enabled else "observation") if cost_first_comparison
+                else ("observation" if enabled else "baseline"))
         with TemporaryDirectory(prefix=f"{sample}-{mode}-", dir=output) as scratch:
             scratch_path = Path(scratch)
             _, session = _session(sample, video, scratch_path, *QUALIFICATION_WINDOWS[sample],
@@ -114,7 +118,10 @@ def compare(output: Path, roi_inputs: Path, sample: str, *, debug_full: bool = F
                 session.initial_state_confirmations[glass.id] = InitialStateConfirmation(
                     InitialObservationState.FULL_NO_INTERFACE, str(video), session.analysis_start_sec,
                 )
-            detector = Recorder(initial_full_observation=enabled)
+            detector = Recorder(
+                initial_full_observation=cost_first_comparison or enabled,
+                cost_first_assignment=cost_first_comparison and enabled,
+            )
             started = time.monotonic()
             result = AnalysisPipeline(
                 OpenCvVideoReader, detector, RecipeValidationService(),
@@ -129,6 +136,7 @@ def compare(output: Path, roi_inputs: Path, sample: str, *, debug_full: bool = F
             with (bundle / "tracking_data.csv").open(encoding="utf-8-sig", newline="") as stream:
                 csv_rows = list(csv.DictReader(stream))
             for sample_row, detection, csv_row in zip(rows, detector.completed, csv_rows, strict=True):
+                assert ("+cost-first-assignment-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (cost_first_comparison and enabled)
                 y = sample_row["raw_oil_air_level_y"]
                 assert y == detection["raw_oil_air_level_y"]
                 assert (None if not csv_row["raw_oil_air_level_y"] else float(csv_row["raw_oil_air_level_y"])) == y
@@ -156,7 +164,8 @@ def compare(output: Path, roi_inputs: Path, sample: str, *, debug_full: bool = F
                               "numeric_oil": sum(row["raw_oil_air_level_y"] is not None for row in rows),
                               "numeric_foam": sum(row["raw_foam_front_y"] is not None for row in rows)}, ensure_ascii=False), flush=True)
     assert raw_inputs[0] == raw_inputs[1], "Comparison changed current-frame detector inputs"
-    result = {"sample": sample, "initial_state": "FULL mechanism stress condition; not physical truth",
+    result = {"sample": sample, "comparison": "cost_first" if cost_first_comparison else "initial_full",
+              "initial_state": "FULL mechanism stress condition; not physical truth",
               "debug_trace_level": "FULL" if debug_full else "NONE",
               "recipe_sha256": _sha(recipe_path), "runtime": capture_runtime_provenance(video),
               "raw_inputs_equal": True, "variants": variants}
@@ -171,10 +180,13 @@ if __name__ == "__main__":
     parser.add_argument("--roi-inputs", type=Path)
     parser.add_argument("--sample", choices=("base_sample_1", "sample4"))
     parser.add_argument("--debug-full", action="store_true")
+    parser.add_argument("--cost-first-comparison", action="store_true",
+                        help="Compare FULL+observation v2 with/without cost-first assignment")
     args = parser.parse_args()
     if args.prepare_roi:
         prepare(args.prepare_roi)
     else:
         if args.roi_inputs is None or args.sample is None:
             parser.error("--compare requires --roi-inputs and --sample")
-        compare(args.compare, args.roi_inputs, args.sample, debug_full=args.debug_full)
+        compare(args.compare, args.roi_inputs, args.sample, debug_full=args.debug_full,
+                cost_first_comparison=args.cost_first_comparison)

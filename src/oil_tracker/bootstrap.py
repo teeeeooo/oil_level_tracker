@@ -57,11 +57,18 @@ from oil_tracker.ui.same_profile_analysis_coordinator import SameProfileAnalysis
 from oil_tracker.ui.truth_annotation_coordinator import TruthAnnotationCoordinator
 
 
-def build_main_window(*, initial_full_observation: bool = False) -> MainWindow:
+def build_main_window(
+    *, initial_full_observation: bool = False, cost_first_assignment: bool = False,
+) -> MainWindow:
     configure_logging()
+    comparison_options = {}
+    if initial_full_observation:
+        comparison_options["initial_full_observation"] = True
+    if cost_first_assignment:
+        comparison_options["cost_first_assignment"] = True
     detector_factory = (
-        partial(OpenCvPhaseDetector, initial_full_observation=True)
-        if initial_full_observation else OpenCvPhaseDetector
+        partial(OpenCvPhaseDetector, **comparison_options)
+        if comparison_options else OpenCvPhaseDetector
     )
     repository = JsonRecipeRepository()
     validator = RecipeValidationService()
@@ -94,6 +101,8 @@ def build_main_window(*, initial_full_observation: bool = False) -> MainWindow:
     )
     if initial_full_observation:
         window.setWindowTitle(window.windowTitle() + " — 초기 FULL 관측 비교")
+    if cost_first_assignment:
+        window.setWindowTitle(window.windowTitle() + " — Oil cost-first 비교")
     analysis_controller.setParent(window)
     window.destroyed.connect(lambda: analysis_controller.shutdown())
     window.settings_copy_coordinator = ObservationSettingsCopyCoordinator(window)

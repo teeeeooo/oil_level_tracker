@@ -21,6 +21,8 @@ from oil_tracker.adapters.vision.oil_sequence_types import (
 from oil_tracker.adapters.vision.oil_candidate_evidence import OilCandidateEvidence
 from dataclasses import replace
 
+import pytest
+
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
 from oil_tracker.domain.enums import BoundaryKind, FillState, InitialObservationState
 from oil_tracker.domain.geometry import ArtifactTemplate
@@ -711,7 +713,8 @@ def test_confirmed_full_is_context_only_until_image_state_or_oil_evidence() -> N
     assert any(member["selected"] for member in selected_row["members"])
 
 
-def test_initial_full_comparison_publishes_exact_current_y_with_uncertain_direction():
+@pytest.mark.parametrize("cost_first", [False, True])
+def test_initial_full_comparison_publishes_exact_current_y_with_uncertain_direction(cost_first):
     from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
     glass = glass_config()
     ys = (150., 147., 144., 141., 138., 135., 132., 129.)
@@ -720,12 +723,15 @@ def test_initial_full_comparison_publishes_exact_current_y_with_uncertain_direct
         for i, y in enumerate(ys)
     )
     baseline = OpenCvPhaseDetector().resolve_sequence(detections, glass, InitialObservationState.FULL_NO_INTERFACE)
-    trial_detector = OpenCvPhaseDetector(initial_full_observation=True)
+    trial_detector = OpenCvPhaseDetector(
+        initial_full_observation=True, cost_first_assignment=cost_first,
+    )
     trial = trial_detector.resolve_sequence(detections, glass, InitialObservationState.FULL_NO_INTERFACE)
     assert all(d.raw_oil_air_level_y is None for d in baseline.detections)
     assert [d.raw_oil_air_level_y for d in trial.detections] == list(ys)
     assert "initial-full-observation-v2" in trial_detector.version
     for detection, expected in zip(trial.detections, ys, strict=True):
+        assert ("+cost-first-assignment-v1" in detection.debug_metrics["sequence_resolver_version"]) is cost_first
         assert detection.fill_state is FillState.PARTIAL_VISIBLE
         assert "OIL_DIRECTION_UNCONFIRMED" in detection.flags
         selected = [c for c in detection.candidates if c.kind is BoundaryKind.OIL_AIR and c.selected]
@@ -735,14 +741,17 @@ def test_initial_full_comparison_publishes_exact_current_y_with_uncertain_direct
     assert [d.raw_foam_front_y for d in trial.detections] == [d.raw_foam_front_y for d in baseline.detections]
 
 
-def test_initial_full_comparison_cannot_publish_a_hard_unavailable_frame():
+@pytest.mark.parametrize("cost_first", [False, True])
+def test_initial_full_comparison_cannot_publish_a_hard_unavailable_frame(cost_first):
     glass = glass_config()
     detections = tuple(
         _detection(i, _candidate(130., boundary=.85, broad=.85), ambiguity=.1,
                    flags=("FRAME_UNAVAILABLE",) if i == 4 else ())
         for i in range(8)
     )
-    trial = OilObservationResolver(OilObservationResolverConfig(initial_full_observation_enabled=True)).resolve(
+    trial = OilObservationResolver(OilObservationResolverConfig(
+        initial_full_observation_enabled=True, cost_first_assignment_enabled=cost_first,
+    )).resolve(
         detections, glass, InitialObservationState.FULL_NO_INTERFACE,
     )
     assert trial.detections[3].raw_oil_air_level_y == 130.
@@ -1603,7 +1612,8 @@ def test_weak_anchor_witness_requires_continuing_noncontradicted_track() -> None
         assert not any(node.kind == "oil" for node in publishable)
 
 
-def test_selector_output_is_prefix_invariant_after_its_fixed_lag_commit() -> None:
+@pytest.mark.parametrize("cost_first", [False, True])
+def test_selector_output_is_prefix_invariant_after_its_fixed_lag_commit(cost_first) -> None:
     lookahead = (
         OilObservationResolverConfig().tracklet_confirmation_window_frames
     )
@@ -1635,11 +1645,12 @@ def test_selector_output_is_prefix_invariant_after_its_fixed_lag_commit() -> Non
         for index in range(len(prefix), len(prefix) + 10)
     )
 
-    committed = OilObservationResolver().resolve(
+    config = OilObservationResolverConfig(cost_first_assignment_enabled=cost_first)
+    committed = OilObservationResolver(config).resolve(
         prefix,
         glass_config(),
     ).detections[target]
-    extended = OilObservationResolver().resolve(
+    extended = OilObservationResolver(config).resolve(
         prefix + suffix,
         glass_config(),
     ).detections[target]

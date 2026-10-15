@@ -352,7 +352,15 @@ def test_detector_normalizes_pre_owner_preparation_failure_and_preserves_foam(
 def test_production_constructor_surfaces_have_no_oil_injection_callbacks():
     detector_parameters = inspect.signature(OpenCvPhaseDetector).parameters
     pipeline_parameters = inspect.signature(OilHypothesisPipeline).parameters
-    assert not detector_parameters
+    # Explicit comparison data/options are allowed; executable injection hooks
+    # remain forbidden. This also guards against accepting arbitrary **kwargs.
+    assert set(detector_parameters) == {
+        "oil_measurement_scopes", "initial_full_observation", "cost_first_assignment",
+    }
+    assert all(p.kind is inspect.Parameter.KEYWORD_ONLY for p in detector_parameters.values())
+    assert detector_parameters["oil_measurement_scopes"].default == ()
+    assert detector_parameters["initial_full_observation"].default is False
+    assert detector_parameters["cost_first_assignment"].default is False
     assert set(pipeline_parameters) == {"bounds"}
     for forbidden in (
         "oil_runner",

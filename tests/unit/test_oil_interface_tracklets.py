@@ -796,7 +796,8 @@ def test_anchor_trajectory_does_not_yield_to_weak_continuation_drift() -> None:
     )
 
 
-def test_crossing_branches_terminate_instead_of_hopping_or_merging() -> None:
+@pytest.mark.parametrize("cost_first", [False, True])
+def test_crossing_branches_terminate_instead_of_hopping_or_merging(cost_first) -> None:
     first = (80.0, 90.0, 100.0, 110.0, 120.0, 130.0)
     second = (140.0, 130.0, 120.0, 110.0, 100.0, 90.0)
     frames = tuple(
@@ -819,7 +820,9 @@ def test_crossing_branches_terminate_instead_of_hopping_or_merging() -> None:
         for frame in range(len(first))
     )
 
-    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(frames)
+    result = DirectedInterfaceTrackletBuilder(
+        replace(_policy(), cost_first_assignment_enabled=cost_first)
+    ).resolve(frames)
 
     assert 3 in result.incompatible_frames
     assert not any(item.tracklet_admitted for item in result.refs_by_frame[3])
@@ -840,7 +843,8 @@ def test_crossing_branches_terminate_instead_of_hopping_or_merging() -> None:
     )
 
 
-def test_established_track_split_terminates_without_choosing_a_child() -> None:
+@pytest.mark.parametrize("cost_first", [False, True])
+def test_established_track_split_terminates_without_choosing_a_child(cost_first) -> None:
     frames = tuple(
         (
             _ref(
@@ -871,7 +875,9 @@ def test_established_track_split_terminates_without_choosing_a_child() -> None:
         ),
     )
 
-    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(frames)
+    result = DirectedInterfaceTrackletBuilder(
+        replace(_policy(), cost_first_assignment_enabled=cost_first)
+    ).resolve(frames)
     old_id = result.refs_by_frame[2][0].tracklet_id
     children = result.refs_by_frame[3]
 
@@ -1060,8 +1066,31 @@ def _established_and_provisional_predecessor_frames(
     return frames + (children,)
 
 
-def test_assignment_obeys_clear_predecessor_despite_established_first_order() -> None:
+@pytest.mark.parametrize("cost_first", [None, False, True])
+def test_cost_first_single_child_uses_lower_cost_without_borrowing_confirmation(cost_first) -> None:
+    frames = _established_and_provisional_predecessor_frames(96.0, 103.0)
+    frames = frames[:-1] + ((frames[-1][1],),)
     policy = replace(_policy(), ambiguity_margin=0.02)
+    if cost_first is not None:
+        policy = replace(policy, cost_first_assignment_enabled=cost_first)
+    result = DirectedInterfaceTrackletBuilder(policy).resolve(frames)
+    established, provisional = result.refs_by_frame[2]
+    child, = result.refs_by_frame[3]
+
+    # One child cannot trigger a reciprocal exchange. The old priority assigns
+    # it to the established track; cost-only uses the nearer provisional track.
+    assert child.tracklet_id == (provisional if cost_first else established).tracklet_id
+    assert child.candidate is frames[-1][0].candidate
+    assert child.tracklet_admitted is (not bool(cost_first))
+    if cost_first:
+        assert child.tracklet_lifecycle is TrackletLifecycle.PROVISIONAL
+        assert child.tracklet_confirmation_profile is TrackletConfirmationProfile.NONE
+        assert child.tracklet_failure_reason == "INSUFFICIENT_NET_PROGRESS"
+
+
+@pytest.mark.parametrize("cost_first", [False, True])
+def test_assignment_obeys_clear_predecessor_despite_established_first_order(cost_first) -> None:
+    policy = replace(_policy(), ambiguity_margin=0.02, cost_first_assignment_enabled=cost_first)
 
     results = tuple(
         DirectedInterfaceTrackletBuilder(policy).resolve(
@@ -1224,7 +1253,8 @@ def test_sparse_motion_supports_continuation_without_a_per_frame_gate() -> None:
     assert refs[5].tracklet_lifecycle is TrackletLifecycle.CONTINUING
 
 
-def test_lost_frame_has_no_observation_and_reacquisition_retains_identity() -> None:
+@pytest.mark.parametrize("cost_first", [False, True])
+def test_lost_frame_has_no_observation_and_reacquisition_retains_identity(cost_first) -> None:
     frames = (
         (
             _ref(
@@ -1256,7 +1286,9 @@ def test_lost_frame_has_no_observation_and_reacquisition_retains_identity() -> N
         ),
     )
 
-    result = DirectedInterfaceTrackletBuilder(_policy()).resolve(frames)
+    result = DirectedInterfaceTrackletBuilder(
+        replace(_policy(), cost_first_assignment_enabled=cost_first)
+    ).resolve(frames)
     refs = _by_source(result, "gap-track")
 
     assert result.refs_by_frame[2] == ()
@@ -1265,7 +1297,8 @@ def test_lost_frame_has_no_observation_and_reacquisition_retains_identity() -> N
     assert TrackletLifecycle.LOST in result.summaries[0].lifecycle_history
 
 
-def test_tracklet_assignment_is_permutation_stable_and_incrementally_bounded() -> None:
+@pytest.mark.parametrize("cost_first", [False, True])
+def test_tracklet_assignment_is_permutation_stable_and_incrementally_bounded(cost_first) -> None:
     def rows(reverse: bool):
         output = []
         for frame in range(100):
@@ -1290,7 +1323,9 @@ def test_tracklet_assignment_is_permutation_stable_and_incrementally_bounded() -
             output.append(tuple(refs))
         return tuple(output)
 
-    builder = DirectedInterfaceTrackletBuilder(_policy())
+    builder = DirectedInterfaceTrackletBuilder(
+        replace(_policy(), cost_first_assignment_enabled=cost_first)
+    )
     forward = builder.resolve(rows(False))
     reverse = builder.resolve(rows(True))
 

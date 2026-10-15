@@ -45,6 +45,7 @@ class OpenCvPhaseDetector:
     def __init__(
         self, *, oil_measurement_scopes: Sequence[OilMeasurementScope] = (),
         initial_full_observation: bool = False,
+        cost_first_assignment: bool = False,
     ) -> None:
         scopes = tuple(oil_measurement_scopes)
         if len(scopes) > MAX_SCOPES or any(not isinstance(s, OilMeasurementScope) for s in scopes):
@@ -57,6 +58,8 @@ class OpenCvPhaseDetector:
             self.version += "+oil-local-xy-v1:" + fingerprint(self.measurement_scope_manifest)
         if initial_full_observation:
             self.version += "+initial-full-observation-v2"
+        if cost_first_assignment:
+            self.version += "+cost-first-assignment-v1"
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
         self._static_foam_maps: dict[str, np.ndarray] = {}
@@ -66,6 +69,7 @@ class OpenCvPhaseDetector:
         self._oil_motion_tracker = RegisteredOilMotionTracker()
         self._observation_sequence_resolver = ObservationSequenceResolver(
             initial_full_observation=initial_full_observation,
+            cost_first_assignment=cost_first_assignment,
         )
         self._frame_evidence_owner = CurrentFrameEvidenceOwner(
             evaluate_oil=self._evaluate_oil_pipeline,

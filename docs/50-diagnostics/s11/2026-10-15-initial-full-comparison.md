@@ -8,6 +8,8 @@ user's explicit visual ambiguity and practical tolerance; they are not exact-Y
 truth or a binary accuracy score. Earlier timing/interpretations below are historical.
 The option remains default OFF. Private bundles were not inspected on Mac;
 no complete physical qualification is claimed.
+The subsequent [cost-first local preparation](#cost-first-option-local-verification)
+is complete; its separate Windows comparison remains pending.
 
 The [fixed Work Plan order](../../00-project/work-plan.md#fixed-execution-order--2026-10-15)
 and [bounded design](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-15-initial-full-observation-comparison)
@@ -929,12 +931,81 @@ Y annotation. Retain original answers/history and attach this clarification when
 reusing review-004; do not silently overwrite earlier replies. Proceed to the
 authorized individual cost-first trial preparation, followed by RGB and Local XY.
 
+## Cost-first option local verification
+
+Following the bounded intake closeout, the first authorized candidate is available
+as `--oil-cost-first-assignment`, default OFF. The Windows pair enables
+`--initial-full-observation` in both conditions and adds cost-first only to the
+trial. It changes only `_established_first_pairs`, exactly matching the October 10
+probe; existing reciprocal reservations and their later ordering are unchanged.
+The GUI factory carries the option to preview, analysis, preflight and redetection.
+Detector and both resolver identities append `+cost-first-assignment-v1` when ON.
+
+Local preparation used base `4734fe0`. No review-004 private files or Windows video
+were transferred. The existing `tests.diagnostics.s11_initial_full_comparison`
+runner now has `--cost-first-comparison`; it reuses the frozen October 15 ROI
+Recipes, 2 fps, static preparation and complete AnalysisPipeline/bundle path.
+Initial FULL in these local clips is a mechanism stress condition, not physical truth.
+Artifact templates/exclusions remain empty; RGB and Local XY are OFF.
+
+| Local clip / requested window | Rows | v2 Oil | Cost-first Oil | New | Lost | Both numeric, Y changed | Numeric Foam |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| base_sample_1 / 0–14.4 s | 30 | 12 | 24 | 13 | 1 | 6 | 0→0 |
+| sample4 interior / 0–56 s | 113 | 16 | 12 | 3 | 7 | 0 | 76→76 |
+
+All 143 OFF rows, phase records, events and raw-input hashes match the retained v2
+comparison. Report contents also match after excluding only generated `run_id`
+fields; an initial exact-report comparison exposed those nested UUID differences,
+not an observation change. Raw inputs match across OFF/ON. Selected candidate Y,
+completed Y and CSV Y are equal in every numeric result. The seven final Foam
+measurement/confidence/validity fields are equal for all 143 rows; this is not a
+claim of general Foam invariance under changed final Oil composition.
+
+sample4 FULL/NONE debug pairs match in raw-input hashes, final rows, phases, events
+and normalized report contents for both options. All 30 changed Oil rows across
+the two clips are retained with `physical_identity=NOT_EVALUATED`; counts are not
+recall or accuracy. In particular, a numeric gain in one clip and loss in the other
+does not establish Windows benefit or overturn the earlier probe's failure.
+
+Focused validation covers **243 distinct tests**: 45 tracklet/GUI checks plus
+198 resolver/initial-FULL/detector/cutover/lifecycle checks. The latter first ran
+197 passing with one stale constructor assertion; that assertion was corrected
+and passed separately. It previously required no detector constructor arguments
+despite the already present Local XY/initial-FULL options. The replacement allows
+only the three explicit keyword options with preserved defaults and still forbids
+callback injection. The GUI check also corrects its stale v1 suffix to existing v2.
+No physical golden or protected observed outcome was rewritten.
+
+The managed run is `sample/output/s11-cost-first-comparison-20261015-001`.
+The closeout retains two complete NONE comparison tables, `verification.json`
+(all changed rows, equality checks, debug hashes and test accounting), and the
+small implementation patch against the stated base. Duplicate FULL outputs and
+temporary bundles are discarded after equality checks. Historical v2 and frozen
+ROI inputs are reused by path/hash. Large outputs remain ignored; no weights or
+Mac replay inputs are needed to run the Windows candidate.
+
+Closeout keeps four files (1,179,565 bytes); the one duplicate FULL comparison is
+discarded only after its equality checks. SHA-256 under the run's `evidence/`:
+
+| Retained path | SHA-256 |
+|---|---|
+| `implementation.patch` | `533bad5725c9f989a532dd484a9087e82b2ab65674fcfaa15ee3dfbaab20718b` |
+| `verification.json` | `12fdf50dced64bf1fe8dccc04e7a8dd30f6f0bf3bcc70c364430bf276c32d651` |
+| `none/base_sample_1/comparison.json` | `a99f6d712327786422c85d463b026342218c9d2afa7d563f221468f4152e1541` |
+| `none/sample4/comparison.json` | `b5d325d3a8d930cbe91015e5d0006e70c0843e5d2291088a8badf279e49c204c` |
+
+**Local engineering COMPLETE; Windows comparison PENDING; no promotion.** Use
+[Priority 1 cost-first comparison](../../40-operations/s11-current-windows-field-qualification.md#priority-1-cost-first-comparison)
+and the accompanying short prompt. Preserve practical candidate tolerance, f15896,
+721 s, FULL suffix and 723/771 s controls. Top-exit FULL and candidates 2/3 remain
+separate; no additional tuning or automatic fourth experiment is authorized.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: v1's three observation-barrier losses reach final sequence/CSV under v2. The 721 s non-Oil selection remains an adverse control. At f15896, three human-allowed alternatives correspond to previously reported INCOMPATIBLE_BRANCH/admitted=0 candidates excluded before IFO; no unique exact physical owner is established. The user qualifies review-004's two differing preferences as visually ambiguous/practically tolerated, not definitive false-interface labels. Zero final FULL rows remain, and no new selector defect is established at 720/771 s.
 - Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
-- Execution scope: earlier v2 implementation/local verification remain recorded above. This receipt closes corrected segment arithmetic and the six-frame human review at its explicitly qualified preference scope. Historical bucket measurements stay intact; obsolete phase/false-output interpretations are superseded. No private media, bundle or review packet is inspected locally, no runtime is exercised for this receipt, and no exact truth is inferred from a selected candidate or LVLM estimate. Existing ROI/Artifact coverage unknowns and integrated field acceptance remain separate.
-- Logic-map impact: NONE — this intake distinguishes the existing raw, phase, selector and final-publication responsibilities; v2 ownership and the map updated in `4c72ebb` remain unchanged.
+- Execution scope: the bounded CSV/review receipt is documentation-only at its qualified preference scope. The subsequent cost-first preparation exercises real GUI construction, unit/integration controls and complete local AnalysisPipeline → CSV/report on two frozen clips, with sample4 debug equivalence. Private media/bundles/review-004 are not inspected locally and physical acceptance remains pending. Retained-v2 comparison excludes only generated report run IDs; all changed outputs and claim limits are recorded above.
+- Logic-map impact: UPDATED — the separate cost-first constructor/GUI route and first-sort intervention are mapped at OIL-TRACKLET; existing lifecycle/selector/publication ownership is preserved.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.

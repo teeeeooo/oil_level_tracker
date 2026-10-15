@@ -36,6 +36,7 @@ owns the record, not a second feature inventory in each experiment.
 | Run window, cadence and initial state | [`AnalysisSession`](../../src/oil_tracker/domain/session.py) → [`AnalysisPipeline.run`](../../src/oil_tracker/application/services/analysis_pipeline.py) schedules frames and forwards matching session confirmations to completed resolution | Actual sampling and confirmed state versus Recipe intent or standalone frame identity; neither static preparation nor initial-state confirmation may be assumed from a helper test. |
 | Experimental Local XY | Explicit [`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py) constructor input → selected Oil measurement lanes | Default OFF; it is not the Recipe exclusion mask. State scope/digest if used; historical rejection does not authorize enabling or tuning it. |
 | Initial-FULL observation comparison | GUI `--initial-full-observation` → `build_main_window` detector factory → `OpenCvPhaseDetector` / resolver policy | Default OFF; bounded tracklet-admitted current observations may reach selection without a drain release (v2 includes continuation rows and already-confirmed provisional witnesses). Trial version/title and direction-uncertainty flags distinguish it from baseline. It does not enable Local XY or change Recipe initial state. |
+| Cost-first assignment comparison | GUI `--oil-cost-first-assignment` → same detector factory → `OpenCvPhaseDetector` / `ObservationSequenceResolver` → Oil config and `DirectedTrackletPolicy` | Default OFF, independent of initial-FULL. Only the first assignment sort removes established-status precedence; existing reciprocal reservation ordering and all eligibility/ambiguity/confirmation rules remain. ON adds `+cost-first-assignment-v1`; intended Windows pair uses FULL+observation v2 in both runs. |
 | Completed analysis and report | [`DetectionRunCoordinator`](../../src/oil_tracker/application/services/detection_run.py) → sequence composition → sample/event/judgment/export owners below | Raw helper, current-frame output, completed Oil/Foam, and report are different execution scopes. Recipe judgment/scale and report rendering do not establish physical accuracy. |
 
 For structure/exclusion hypotheses, the [recall index](../00-project/recall-index.md)
@@ -242,6 +243,13 @@ Per frame, ordinary refs are sorted by authority/quality/Y/source and limited by
 
 The builder writes tracklet ID, row hypothesis ID, lifecycle, admission, confirmation profile/support, established direction/progress, additive bounded recent direction/progress, motion, material conflict, incompatibility and failure reason back into every member ref. The established fields retain their historical confirmation-witness meaning; only explicit R21 transition owners consume `recent_*`. A ref with no confirmed/continuing physical proof remains non-publishable even if its current-frame emission is high.
 
+The default-OFF cost-first comparison changes only `_established_first_pairs` to
+`(cost, tracklet ID, row ID)` order. `_ordered_assignment_pairs` still applies the
+existing reciprocal reservations and its reserved/established/cost order when
+reservations exist. Cost, pair eligibility, conflict detection and confirmation
+are unchanged. This repeats the bounded historical probe, not a new identity rule;
+downstream ownership and final outputs can change and need separate comparison.
+
 ### 4.3 Material phase ownership (`OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`)
 
 `OilPathLifecycleOwner.resolve` makes phase layers from refs, then runs `OilMaterialPhaseLifecycleOwner` over physical rows. The lifecycle returns a phase, reason, owner chain and allowed physical-ID set for every frame; `None` means unconstrained ordinary selection, singleton means one owner, and empty means the selector must fail closed.
@@ -436,11 +444,11 @@ bounded expiry and one-attempt semantics.
 - Existing feature coverage: the quick index now connects Recipe settings/geometry/exclusions,
   Artifact templates, scoped reference diagnostics, static preparation, run state,
   optional Local XY and completed publication to their existing source owners.
-  The October 15 comparison adds a default-OFF constructor/GUI option; local interior
+  The October 15 comparisons add independent default-OFF constructor/GUI options; local interior
   ROI is frozen separately from original Recipes, static preparation remains active,
   and private Windows ROI remains operator-verified there.
 - Execution scope: current source/caller review and focused lifecycle/resolver/GUI/event/report
-  tests for the optional initial-FULL route; bounded local analysis replay is recorded
+  tests for initial-FULL and cost-first routes; bounded local analysis replay is recorded
   in its comparison record. No Windows execution or physical acceptance is implied.
 - Difference from prior failures: typed competing-identity contradiction is
   propagated before member selection, and only one independently reaffirmed
@@ -450,9 +458,11 @@ bounded expiry and one-attempt semantics.
   branch decisions without changing their thresholds or identity/authority.
   Initial-FULL observation v2 consumes existing bounded admission rather than
   requiring a new anchor every frame; motion state and phase release stay unchanged.
+  The cost-first option repeats only the October 10 first-sort intervention under
+  an explicit GUI/resolver option; its known false-identity risk is not resolved.
 - Logic-map impact: UPDATED — this section records the R22 current owners and
   transition/evidence boundaries plus the R22-2 debug-only capture/measurement route
-  and complete branch-specific phase failure reasons, plus A1 pure spatial
+  and complete branch-specific phase failure reasons, cost-first setup/first-sort scope, plus A1 pure spatial
   diagnostic reproduction with exact candidate binding, and D2 scoped reference/measurement-footprint comparison in the existing debug projector. The quick index and graph now expose existing setup and auxiliary inputs before detector experimentation.
 - Failure-registry impact: NONE — historical mechanisms remain unchanged.
 

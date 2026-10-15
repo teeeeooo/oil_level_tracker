@@ -30,6 +30,7 @@ class DirectedTrackletPolicy:
     continuation_min_motion_energy: float
     continuation_min_motion_coverage: float
     ambiguity_margin: float = 0.08
+    cost_first_assignment_enabled: bool = False
 
     def __post_init__(self) -> None:
         if not math.isfinite(self.geometry_top_y):
@@ -759,6 +760,10 @@ class DirectedInterfaceTrackletBuilder:
         self,
         pairs: list[_AssignmentPair],
     ) -> tuple[_AssignmentPair, ...]:
+        if self.policy.cost_first_assignment_enabled:
+            # Same intervention as the frozen cost-order-only probe. Reciprocal
+            # reservations in _ordered_assignment_pairs retain their own order.
+            return tuple(sorted(pairs, key=lambda item: (item[0], item[1], item[2])))
         return tuple(
             sorted(
                 pairs,

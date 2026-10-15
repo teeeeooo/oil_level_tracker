@@ -160,6 +160,7 @@ class OilObservationResolverConfig:
     tracklet_continuation_min_motion_coverage: float = 0.12
     tracklet_ambiguity_margin: float = 0.08
     initial_full_observation_enabled: bool = False
+    cost_first_assignment_enabled: bool = False
 
     @property
     def end_to_end_commit_lag_frames(self) -> int:
@@ -1459,6 +1460,8 @@ class OilObservationResolver:
         self.config = config or OilObservationResolverConfig()
         if self.config.initial_full_observation_enabled:
             self.version += "+initial-full-observation-v2"
+        if self.config.cost_first_assignment_enabled:
+            self.version += "+cost-first-assignment-v1"
         self.admission_evidence = OilAdmissionEvidenceOwner(self.config)
         self.tracklet_opposition = OilTrackletOppositionOwner(
             self.config
@@ -2119,6 +2122,7 @@ def _tracklet_policy(
             config.tracklet_continuation_min_motion_coverage
         ),
         ambiguity_margin=config.tracklet_ambiguity_margin,
+        cost_first_assignment_enabled=config.cost_first_assignment_enabled,
     )
 
 

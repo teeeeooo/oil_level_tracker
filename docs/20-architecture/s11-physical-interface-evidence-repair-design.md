@@ -1,7 +1,8 @@
 # S11 Physical Interface Evidence Repair Design
 
 **Design status:** full physical-witness proposal remains unaccepted; the separately
-bounded October 15 initial-FULL comparison below is authorized for exploratory implementation.
+bounded October 15 initial-FULL and cost-first comparisons below are authorized
+for exploratory implementation.
 Revision naming and runtime promotion are not assigned
 by this document. The [work plan](../00-project/work-plan.md) owns execution state.
 
@@ -132,6 +133,43 @@ outcomes are boundary/ambiguous, so their FULL likelihood zero is a default rath
 than positive no-interface evidence. This correction creates neither a FULL node
 from that zero nor a FULL hold from an ordinary missing observation. Verify the
 recovered topward owner against the actual refill before designing that transition.
+
+## Cost-first assignment comparison
+
+The first of the three authorized Windows candidates reuses the exact intervention
+from the [October 10 frozen cost-order-only probe](../50-diagnostics/s11/2026-10-10-cadence-owner-causality.md#one-frozen-attribution-counterfactual).
+Add a default-OFF `cost_first_assignment` constructor option and GUI launch flag
+`--oil-cost-first-assignment`. For the intended Windows pair, enable
+`--initial-full-observation` in both runs and add the cost-first flag only to the
+trial. The options are independent; cost-first does not change the Recipe's initial
+state or silently enable initial-FULL observation.
+
+Only `DirectedInterfaceTrackletBuilder._established_first_pairs` changes when ON:
+sort by `(cost, tracklet ID, row ID)` instead of giving established tracks priority
+before cost. Existing reciprocal reservations, including their subsequent ordering,
+are unchanged. Match-cost terms, eligible pairs, ambiguity, confirmation, authority,
+phase release, final selection and Foam ownership retain their existing policies.
+This is not a global reassignment solver or a removal of `INCOMPATIBLE_BRANCH`.
+Changed associations may still alter later motion, phase and final Foam composition;
+those effects must be measured rather than presumed absent.
+
+Reuse the existing GUI detector factory for preview, analysis, preflight and partial
+redetection. ON appends `+cost-first-assignment-v1` to detector and both resolver
+versions and shows `Oil cost-first 비교` in the window title. The same-frame raw
+proposals are unchanged; the comparison acts during completed Oil resolution.
+OFF must retain the pre-change outputs and runtime identities.
+
+The qualified review-004 alternatives and f15896 pre-IFO exclusion are comparison
+cases, not new thresholds or unique target coordinates. No private frame/time/Glass
+rule enters code. Preserve the 721 s non-Oil output, FULL suffix, and 723/771 s
+protective rejections as controls. The earlier local probe's upper-texture error
+remains a failure; this option is not adopted and does not implement top-exit FULL.
+
+Local verification covers the real launch/factory path, bounded tracklet
+controls, resolver/publication integration, and a paired real-video replay using
+the already frozen initial-FULL interior ROI inputs. Reuse the existing replay
+runner and managed artifact entry; do not reconstruct the retired October 10 raw
+inputs or refit a model. Windows effectiveness remains pending.
 
 ## 1. Interface evidence and independence
 
@@ -379,11 +417,11 @@ as the serialized array index. Diagnostic detail must not change output.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples.
+- Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples; the October 10 cost-order-only probe and qualified October 15 review-004 return.
 - Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
-- Existing feature coverage: normal Recipe ellipse/margin/exclusions, static preparation and session initial-state confirmation remain active. The October 15 local comparison freezes separate interior-ROI inputs before outputs; original regression Recipes are preserved. Artifact templates remain at their recorded input state, Local XY is OFF, and the new constructor/GUI option is default OFF. Private Windows ROI is operator-verified on Windows before comparison.
-- Execution scope: the October 15 work covers initial-FULL lifecycle admission, selector/projection, actual GUI construction and event propagation, with local mechanism/integration tests and a bounded real analysis replay. ROI inspection precedes replay. No private Windows execution or physical acceptance is inferred from local checks.
-- Difference from prior failures: the full raster-witness proposal still requires independent identity evidence. The authorized exploratory comparison instead isolates current-candidate publication from motion certification, explicitly tolerates existing identity false positives, and never calls a stationary/upward row a drain release. V2 additionally consumes already-admitted continuation and provisional witnesses without adding a handoff or re-confirming a tracklet. It leaves confirmation windows, candidate scores, association and formal acceptance unchanged.
-- Logic-map impact: UPDATED — optional initial-FULL observation projection, GUI construction, uncertainty publication and event/report consumption are mapped; default motion behavior is preserved.
+- Existing feature coverage: normal Recipe ellipse/margin/exclusions, static preparation and session initial-state confirmation remain active. Cost-first reuses the frozen initial-FULL interior ROI Recipes; templates/exclusions retain their recorded empty state, Local XY stays OFF and no RGB head is enabled. Both paired runs use explicit FULL plus observation v2; only the default-OFF cost-first option differs. Private Windows ROI/Artifact/static settings remain operator evidence, checked for matching conditions there.
+- Execution scope: initial-FULL implementation/replays retain their recorded scope. Cost-first verification covers the existing GUI factory through detector/resolver/tracklet policy, bounded association controls and real AnalysisPipeline → completed resolution → CSV/report comparison on two local videos, with sample4 repeated under FULL debug. It reuses frozen inputs and the managed artifact entry; no private Windows media or physical acceptance is inferred from local checks.
+- Difference from prior failures: the full raster-witness proposal still requires independent identity evidence. Initial-FULL v2 isolates current-candidate publication from motion certification without changing association. The separate cost-first option repeats only the earlier first-sort intervention on this v2 reference; it is not a new physical witness or a repair of the earlier upper-texture failure. Confirmation windows, candidate scores, motion release and formal acceptance remain unchanged; no threshold or source-specific rescue is added.
+- Logic-map impact: UPDATED — default-OFF cost-first setup propagation and the precisely bounded first-assignment sort are added to the existing feature and OIL-TRACKLET entries; initial-FULL ownership and default behavior are preserved.
 - Failure-registry impact: NONE — F05/F08 already own permanent barriers and unsafe release; this trial deliberately measures remaining identity errors without declaring those failures repaired.

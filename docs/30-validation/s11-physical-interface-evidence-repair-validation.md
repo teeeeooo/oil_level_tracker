@@ -32,8 +32,8 @@ change goldens or relabel a skipped/quarantined source as a pass.
 Freeze vessel-interior ROI before replay and keep it identical across OFF/ON. Existing
 baseline results are reusable only for matching source/setup/run conditions. Local
 physical review records both recoveries and false positives; numeric-row gain alone
-is insufficient. On Windows, compare BASE descent/refill and FULL prefix/suffix first,
-then decide whether residual failures warrant cost-first/RGB/Local XY. The canonical
+is insufficient. The bounded Windows CSV/review-004 intake is now closed; the
+authorized order is cost-first, RGB, then Local XY as separate comparisons. The canonical
 nine segments remain required for formal field acceptance. No further model fit or
 physical-witness acceptance is implied by this comparison.
 
@@ -47,6 +47,34 @@ comparisons and compare v2 on the same frozen inputs without relabeling gains as
 physical recall. GUI wiring is unchanged; its passing propagation checks are
 reusable, while actual detector/resolver construction and output provenance run
 on the changed source.
+
+## Cost-first comparison checks
+
+The option repeats the frozen first-sort intervention; it does not claim physical
+identity or full acceptance. Verify these boundaries before the Windows handoff:
+
+- Default/explicit OFF preserve R22 and FULL+observation-v2 behavior and versions.
+  The new flag is independent of the initial-FULL flag and reaches all four GUI
+  detector factories, Oil config, tracklet policy and serialized runtime versions.
+- A competing established/provisional predecessor case changes the chosen
+  association under ON, but does not give the provisional track anchor evidence
+  or numeric authority. Reciprocal matching, split/crossing abstention, loss bounds,
+  permutation and commit horizon retain their established controls in both modes.
+- Exercise the completed resolver and existing publication contracts. A lower
+  assignment cost cannot bypass material/identity vetoes or turn missing evidence
+  into FULL; final values remain same-frame selected candidates.
+- Reuse the initial-FULL replay runner and frozen ROI inputs for base_sample_1 and
+  sample4. Compare v2 against v2+cost-first with raw-input equality, candidate/CSV
+  provenance, all changed rows and final Foam effects. Keep previous v2 records
+  as OFF equality controls; debug capture must not change observations.
+- On Windows use the corrected buckets and qualified multiple-choice review-004
+  evidence, not a unique-Y accuracy score. Check f15896, 721 s and the FULL suffix
+  along with changed scenes and Accum/Foam. Do not reopen the full CSV audit or
+  promise to repair every blank frame. Source/ROI/settings must match the pair.
+
+Top-exit FULL is after the three comparisons, not an entry requirement. Windows
+results can close this candidate as effect, no effect/regression, or insufficient
+evidence; no follow-up threshold tuning or default promotion is automatic.
 
 ## Validation layers
 
@@ -169,7 +197,7 @@ focused tests before the broader candidate suite.
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: BASE association across a reviewed location mismatch and Accum boundary-owner exclusion are distinct targets; private physical-identity continuity remains unresolved. The local polarity-only association prototype failed protected truth and photometric positive controls.
-- Existing feature coverage: the default-OFF initial-FULL option reuses existing Recipe/ROI, static preparation, tracklet confirmation and final publication. Frozen local comparison inputs retain empty exclusions/templates and Local XY OFF; Windows input details remain attributed operator evidence.
-- Execution scope: focused v2 admission/resolver tests and the existing bounded real analysis runner cover changed observation publication, with exact candidate/CSV provenance and debug equivalence; private Windows physical review remains separate.
-- Logic-map impact: UPDATED — the current map now distinguishes v2 bounded tracklet admission from the former per-frame anchor requirement.
+- Existing feature coverage: independent default-OFF initial-FULL and cost-first options reuse existing Recipe/ROI, static preparation, tracklet confirmation and final publication. Frozen local comparison inputs retain empty exclusions/templates and Local XY OFF; Windows input details remain attributed operator evidence.
+- Execution scope: focused admission/association/resolver/GUI tests and the existing bounded real analysis runner cover v2 vs v2+cost-first, with retained-v2 equality, exact candidate/CSV provenance and debug equivalence; private Windows physical review remains separate.
+- Logic-map impact: UPDATED — the current map distinguishes v2 admission and the separate cost-first first-sort option, including its unchanged reciprocal-reservation ordering.
 - Failure-registry impact: NONE — existing F03/F04/F05/F08/F09/F10 controls cover the widened exploratory mode; earlier polarity-only failures and full physical-witness acceptance remain unchanged.

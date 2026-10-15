@@ -6,7 +6,8 @@
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
 is unknown; post-transition FULL counts start at 675 s. The bounded
 [Refill owner and false-output follow-up](#refill-owner-and-false-output-follow-up)
-is now CLOSED. No new Windows execution is requested until a candidate is prepared.
+is now CLOSED. The next handoff is [priority 1 cost-first](#priority-1-cost-first-comparison),
+after local verification and publication of the candidate named in the Work Plan.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
@@ -38,6 +39,9 @@ operator to complete setup and start analysis. Use the Work Plan for current
 candidate identity, not the retired comparison's commit or branch.
 
 ### October 15 first initial-FULL comparison
+
+**Completed historical procedure.** Use the cost-first handoff below for the current
+comparison; its OFF/ON refers to a different option and keeps observation v2 ON.
 
 This is the first exploratory OFF/ON comparison named by the Work Plan, before
 cost-first assignment, candidate RGB or Local XY. False positives are permitted
@@ -456,6 +460,77 @@ review, 실제 유면 회복·소실과 비유면 출력 변화, Accum/Oil·Foam
 721초 오검출과 723/771초 보호 조건을 보존하며, 개별 성공을 조합의 성공으로
 간주하지 않는다. 유효 후보가 없으면 결과와 한계를 기록하고 다음 방향은 사용자와
 결정한다. 현재 accepted baseline과 O2/FIELD FAIL은 실제 승인 근거 전까지 유지한다.
+
+### Priority 1 cost-first comparison
+
+이번 비교는 **④ FULL+ON v2 ↔ ⑤ FULL+ON v2 + cost-first**다. 여기서 OFF/ON은
+cost-first만 뜻하며, 두 조건 모두 초기 FULL 관측 옵션 v2를 켠다. 초기 FULL+OFF나
+UNKNOWN+OFF, v1과 비교하는 작업이 아니다. 후보 2·3은 아직 준비 전이다.
+
+1. Work Plan의 이번 후보 소스를 사용한다. 기존 ④ bundle은 영상·Recipe/ROI·
+   480–780초·2fps·BASE FULL/Accum EMPTY·debug 수준이 같으면 재사용한다.
+   용기 내부 ROI가 전체 유면 이동 범위를 포함하는지 한 번 확인한다. ROI나
+   설정을 바꾸면 새 소스에서 두 조건을 모두 실행하고 옛 수치와 섞지 않는다.
+   초기 상태는 GUI에서 별도로 확인하며 실행 옵션이 자동으로 바꾸지 않는다.
+2. 새 소스 폴더에서 아래 PowerShell 명령으로 GUI를 연다. 기존 Windows Python
+   환경을 사용하고 분석 시작부터 완료 bundle 생성까지 수행한다. 같은 조건에서
+   cost-first만 바꾸며, 기본 BASIC debug로 충분하다. 별도 가중치나 대용량
+   Mac 실험 자료는 필요 없다. 결과는 `sample/output/` 아래 서로 다른 폴더에 둔다.
+
+   ```powershell
+   $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+   python -m oil_tracker --initial-full-observation --oil-cost-first-assignment
+   ```
+
+   기준 v2를 재실행할 필요가 있을 때는 GUI를 닫고 같은 폴더에서 실행한다.
+
+   ```powershell
+   python -m oil_tracker --initial-full-observation
+   ```
+
+   후보 창에는 `초기 FULL 관측 비교`와 `Oil cost-first 비교`가 함께 표시된다.
+   trace의 `record.sequence.state.sequence_resolver_version`에는
+   `+initial-full-observation-v2+cost-first-assignment-v1`이 붙는다.
+   기준에는 cost-first 접미사가 없다. raw `record.state`와 completed `sequence`
+   를 혼동하지 않는다. cost-first는 모든 Glass의 Oil 연결에 적용되므로 Accum도
+   비교한다. Foam의 직접 정책은 그대로지만 최종 합성 결과까지 같다고 가정하지 않는다.
+3. 두 최종 `tracking_data.csv`를 Glass/frame으로 대응시키고 실제 timestamp를
+   사용한다. BASE는 480–550 / 550–652 / 652–674 / 674–675 / 675–780초의
+   서로 겹치지 않는 구간과 OUTSIDE로 집계한다. 새 출력·소실·양쪽 숫자이나 Y가
+   달라진 행을 구분하고 총합을 맞춘다. Accum은 기존 canonical 구간별 Oil/Foam
+   최종 수치·유효성·가시 구간 변화를 함께 요약한다. 후보/admitted 수를 최종 출력으로
+   대체하지 않는다. 기준의 기존 601/303은 동일 조건일 때만 대조 수치로 쓴다.
+4. 변경 장면만 기존 O2 review 절차로 확인한다. review-004의 여섯 프레임과 사용자
+   설명을 재사용하고, 새 후보 idx는 새 packet의 frame/source Y로 연결한다.
+   **복수 후보 허용·대략적 일치·판단 불가**를 보존하고 단일 Y를 강제로 고르거나
+   기존 두 선호 차이를 확정 오검출로 바꾸지 않는다. 필요한 새 review/reply는
+   별도 review 폴더에 기록하고 review-004를 덮어쓰지 않는다.
+5. 우선 확인점은 첫 하강, 652–674초 재충전(특히 f15896@662.996초의 누락),
+   721초 비유면 출력, 723/771초 보호 조건, FULL 구간의 새 숫자 출력이다.
+   현재 선택·CSV와 실제 장면을 함께 보고 유면 회복/소실, 다른 경계로 연결됨,
+   판단 불가를 구분한다. 달라지지 않은 프레임은 재판정을 요구하지 않는다.
+   원인 확인은 중요한 변경 사례의 최초 확인 가능한 단계까지로 제한하며
+   전체 빈 프레임 분석이나 추가 상세 재실행을 자동으로 시작하지 않는다.
+6. 간단한 집계표와 변경 장면 판정, Accum/Foam 영향, **효과 있음 / 효과 없음·악화 /
+   판단 근거 부족**을 반환한다. 상단 소실→FULL은 이번 변경의 구현 범위가 아니다.
+   결과를 보며 임계값·ROI·모델을 조정하거나 다음 후보를 누적하지 않는다.
+
+전달용 짧은 프롬프트:
+
+```text
+기준 ④ FULL+ON v2 bundle: <기준 번들 경로>
+새 cost-first 소스: <새 소스 폴더>
+기존 review-004: <review-004 폴더>
+
+docs/40-operations/s11-current-windows-field-qualification.md의
+“Priority 1 cost-first comparison”과 work-plan의 현재 후보를 읽고 진행해줘.
+기준과 같은 조건으로 FULL+ON v2 + cost-first를 GUI에서 실행해 비교해줘.
+두 조건 모두 --initial-full-observation을 켜고, 후보에만
+--oil-cost-first-assignment를 추가해줘. 설정이 같으면 기존 기준 bundle을 재사용해줘.
+최종 CSV 구간별 변화와 달라진 장면, Accum/Foam 영향을 간단히 정리해줘.
+review-004의 복수 허용 후보와 불확실성을 유지하고, 추가 판단이 필요할 때만
+O2 review로 질문·회신을 저장해줘. 임계값 조정이나 다음 후보 실행은 하지 말아줘.
+```
 
 ## 2. Private source identity
 
