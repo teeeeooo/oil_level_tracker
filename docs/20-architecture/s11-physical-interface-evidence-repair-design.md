@@ -1,7 +1,8 @@
 # S11 Physical Interface Evidence Repair Design
 
-**Design status:** proposal for implementation and validation; not an accepted
-runtime architecture. Revision naming and runtime promotion are not assigned
+**Design status:** full physical-witness proposal remains unaccepted; the separately
+bounded October 15 initial-FULL comparison below is authorized for exploratory implementation.
+Revision naming and runtime promotion are not assigned
 by this document. The [work plan](../00-project/work-plan.md) owns execution state.
 
 [R22-2 native path diagnostics](s11-r22-2-interface-path-diagnostics-architecture.md)
@@ -56,8 +57,50 @@ The design covers four changes, in this order:
 4. Add a separately validated direction-neutral visible-interface phase for
    initial-FULL reacquisition and established-fill stabilization.
 
-Items 1--3 must work before item 4 can be enabled. None is a claim that all
+Items 1--3 must work before the full item-4 acceptance can be claimed. The October 15
+comparison below isolates publication under existing evidence with false positives
+explicitly allowed; it does not claim those stronger witnesses exist. None is a claim that all
 reported Windows gaps will be repaired.
+
+## October 15 initial-FULL observation comparison
+
+The user prioritizes making BASE movement and uncertainty readable and accepts
+false positives during the first Windows comparison. Implement a default-OFF
+`initial_full_observation` option through the existing detector/resolver construction
+and GUI launch path. The baseline and trial use one source version, one frozen
+Recipe/ROI and identical run settings. Candidate generation, scores, association,
+confirmation, drain thresholds and Foam owners are unchanged. Cost-first/RGB/Local XY
+are separate later comparisons.
+
+At an `INITIAL_FULL_BARRIER` frame only, after the ordinary direct/recovery routes,
+the lifecycle may admit current anchor-grade, direct/ordered-lower interface rows
+with existing bounded confirmation, compatible identity and strict current/history
+material support. Current no-interface state evidence, typed contradictions and
+release ambiguity still block the route. The allowed set contains only these current
+tracklets; the existing selector retains its competing-owner ambiguity check and
+same-owner/explicit-handoff transition rules. No unconstrained OPEN or copied owner
+history is introduced. Missing/unconfirmed/currently invalid rows cannot be carried.
+
+This is a per-frame observation projection from the constrained initial-FULL motion
+context, named `OBSERVED_INTERFACE`; it creates no new motion chain, lease or reseed.
+Ordinary motion lifecycle and recovery diagnostics continue unchanged. A later
+qualified downward release still takes its normal route. Closure/absence suppresses
+observation immediately; an expired tracklet must qualify again through the existing
+builder. Post-fill/refill barriers and initial EMPTY are outside this route.
+
+Published trial observations use `PARTIAL_VISIBLE` and an explicit
+`OIL_DIRECTION_UNCONFIRMED` flag, with the same-frame selected candidate's exact Y.
+They must not be used to assert a drain-start event. Other samples retain their
+existing event semantics. Trace records the trial mode and actual observation
+admission predicates separately from the unchanged failed drain predicates.
+Detector version and GUI title identify trial use; normal launch remains baseline.
+
+Existing anchor/phase flags admit some reviewed non-interface candidates, including
+the D1 opposition. This comparison does not solve physical discrimination or satisfy
+the full section-4 witness contract. Measure recoveries and false positives together;
+neither more numeric values nor local mechanism tests establish field PASS.
+The [validation supplement](../30-validation/s11-physical-interface-evidence-repair-validation.md#october-15-exploratory-comparison)
+owns mechanical checks and the first Windows review.
 
 ## 1. Interface evidence and independence
 
@@ -308,6 +351,8 @@ as the serialized array index. Diagnostic detail must not change output.
 - Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples.
 - Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
-- Difference from prior failures: new local raster witnesses must establish spatial interface identity before support, association and ownership; direction-neutral observation is a separately gated proposed phase. It explicitly changes the old assumption that initial-FULL numeric admission requires drain evidence, without calling a stationary row a drain release. F05/F08 negative controls remain mandatory and this extension is not enabled or accepted by this document.
-- Logic-map impact: NONE — the map describes executing R22; this proposal names future changes without representing them as implemented.
-- Failure-registry impact: NONE — the registry already records the rejected R23 polarity-only association veto and paired raster counterexamples; this added routing link does not change that mechanism history.
+- Existing feature coverage: normal Recipe ellipse/margin/exclusions, static preparation and session initial-state confirmation remain active. The October 15 local comparison freezes separate interior-ROI inputs before outputs; original regression Recipes are preserved. Artifact templates remain at their recorded input state, Local XY is OFF, and the new constructor/GUI option is default OFF. Private Windows ROI is operator-verified on Windows before comparison.
+- Execution scope: the October 15 work covers initial-FULL lifecycle admission, selector/projection, actual GUI construction and event propagation, with local mechanism/integration tests and a bounded real analysis replay. ROI inspection precedes replay. No private Windows execution or physical acceptance is inferred from local checks.
+- Difference from prior failures: the full raster-witness proposal still requires independent identity evidence. The authorized exploratory comparison instead isolates current-candidate publication from motion certification, explicitly tolerates existing identity false positives, and never calls a stationary/upward row a drain release. It leaves confirmation, candidate scores, association and formal acceptance unchanged.
+- Logic-map impact: NONE — this preflight defines the optional initial-FULL comparison; executing R22 control flow is unchanged until the separately verified implementation step.
+- Failure-registry impact: NONE — F05/F08 already own permanent barriers and unsafe release; this trial deliberately measures remaining identity errors without declaring those failures repaired.

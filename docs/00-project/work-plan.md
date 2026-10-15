@@ -4,7 +4,7 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior.
-**Next transition:** The October 15 user has fixed the order: verify and freeze vessel-interior ROI → repair initial-FULL publication blocking → compare the current version with that repair on Windows → consider cost-first tracklet assignment, candidate-local RGB, then opt-in Oil-only Local XY only for remaining failures. The first goal is readable BASE movement and uncertainty. False positives are acceptable for exploratory review and must be recorded alongside recovered movement. The [fixed sequence below](#fixed-execution-order--2026-10-15) owns the deliverables and comparison boundaries; this update fixes the plan without implementing or executing it.
+**Next transition:** Local comparison ROI is frozen; implement and verify the default-OFF initial-FULL observation comparison, then stop for the operator's Windows ROI check and OFF/ON runs. The October 15 fixed order remains ROI → initial-FULL repair → first Windows comparison → cost-first/RGB/Local XY only for remaining failures. The first goal is readable BASE movement and uncertainty. False positives are acceptable for exploratory review and must be recorded alongside recovered movement. The [fixed sequence below](#fixed-execution-order--2026-10-15) owns the deliverables and comparison boundaries.
 **Latest checkpoint:** The read-only ROI review finds four local Recipes with ellipse geometry, 8% margin and no exclusion zones/templates; sample4's reviewed rim points at source Y880/882/887 remain inside the stored model-input mask. Water/beer/milk path studies used entire rectangular display crops with no calibrated vessel-interior mask. Public Miso used an agent-prepared ellipse for isolated frame calls; Cold117 had source screening only. Thus prior rim failures do not establish failure after properly configured interior ROI. The [round-3 verification](../60-evidence/s11/2026-10-15-round3-handoff-validation.md), [round 2](../60-evidence/s11/2026-10-14-round2-context-disposition.md) and [round 1](../60-evidence/s11/2026-10-14-bounded-context-experiment.md) remain unchanged; no new detector execution, physical labels or Windows result is claimed. R22/O2/FIELD FAIL/Local XY OFF remain unchanged.
 
 This is the sole current state, authorization, unknowns and next-action owner.
@@ -84,7 +84,10 @@ and the [parent behavior contract](../30-validation/s11-physical-interface-evide
 
 ### Fixed execution order — 2026-10-15
 
-The user has adopted this order. Implementation and Windows execution are still pending.
+The user has adopted this order and authorized local implementation, verification,
+commits and pushes until user judgment or Windows work is needed. Local ROI preparation
+is [complete](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md#roi-preparation);
+detector implementation and Windows execution are still pending.
 
 | Order | Deliverable | Comparison and completion boundary |
 |---|---|---|

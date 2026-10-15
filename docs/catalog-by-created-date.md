@@ -1627,3 +1627,9 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 작성일 / Git 상태 | 문서 | 구분 |
 |---|---|---|
 | 2026-10-15 / 미등록 | [60-evidence/s11/2026-10-15-round3-handoff-validation.md](60-evidence/s11/2026-10-15-round3-handoff-validation.md) | 실제 canvas 프레임 검증 보완, 회귀 대조군과 1–3회차 통합 인수인계; detector·현장 인수와 구분 |
+
+### 2026-10-15 초기 FULL 비교 준비
+
+| 최초 등록 기준 | 문서 | 범위 |
+|---|---|---|
+| 2026-10-15 / 미등록 | [50-diagnostics/s11/2026-10-15-initial-full-comparison.md](50-diagnostics/s11/2026-10-15-initial-full-comparison.md) | 내부 ROI 고정과 초기 FULL 관측 경로 비교; 실제 Windows 판정은 별도 |

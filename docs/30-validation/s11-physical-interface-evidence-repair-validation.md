@@ -4,7 +4,7 @@
 [physical-interface design](../20-architecture/s11-physical-interface-evidence-repair-design.md).
 The cases below are required future checks, not completed PASS results.
 
-The next implementation stage is the trace-only
+The original extraction stage is the trace-only
 [Interface Observability Witness Architecture](../20-architecture/s11-interface-observability-witness-architecture.md).
 Its [public baseline probe](../50-diagnostics/s11/s11-transparent-interface-detector-direction-assessment.md)
 completed only candidate/descriptor characterization: every one of 13 usable
@@ -12,6 +12,30 @@ truth frames retained a candidate within 8 px under seven photometric variants,
 while a median 23–24 Oil candidates and 3–4 near-truth candidates remained per
 frame. This does not satisfy Evidence gate A, label remote candidates as false,
 or justify a classifier threshold.
+
+## October 15 exploratory comparison
+
+This bounded comparison is authorized separately from full physical-witness acceptance.
+Default launch must preserve R22 outputs. With the option enabled, cover current
+stationary/upward anchor publication under initial FULL, normal downward release,
+loss and reacquisition, multiple-owner ambiguity and permutation, typed identity
+contradiction, material/Artifact/hard-invalid opposition, image-supported no-interface
+states, initial EMPTY and post-fill/refill barriers. Existing stationary **drain-release**
+negative tests remain unchanged; the added observation mode does not classify drainage.
+
+Exercise actual resolver and detector construction, GUI factory propagation,
+same-frame selected-candidate/sequence/CSV equality, explicit direction uncertainty,
+absence of invented drain-start events and independent Foam. Debug ON/OFF must give
+the same observations. Reuse existing regressions at their qualified scopes; do not
+change goldens or relabel a skipped/quarantined source as a pass.
+
+Freeze vessel-interior ROI before replay and keep it identical across OFF/ON. Existing
+baseline results are reusable only for matching source/setup/run conditions. Local
+physical review records both recoveries and false positives; numeric-row gain alone
+is insufficient. On Windows, compare BASE descent/refill and FULL prefix/suffix first,
+then decide whether residual failures warrant cost-first/RGB/Local XY. The canonical
+nine segments remain required for formal field acceptance. No further model fit or
+physical-witness acceptance is implied by this comparison.
 
 ## Validation layers
 
