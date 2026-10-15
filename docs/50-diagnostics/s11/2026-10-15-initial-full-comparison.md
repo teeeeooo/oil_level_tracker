@@ -1,9 +1,9 @@
 # Initial-FULL observation comparison
 
-Status: local implementation and OFF/ON analysis complete; qualitative Windows
-FULL+ON result received with partial recovery and unresolved transition/coverage losses.
-The option remains default OFF. Windows feedback is operator-reported; no completed
-bundle audit or physical acceptance is claimed.
+Status: local implementation and OFF/ON analysis complete; Windows three-bundle
+audit text received, with timing/direction and trace-path interpretation requiring
+reconciliation. The option remains default OFF. Private bundles were not inspected
+on Mac; no complete physical qualification is claimed.
 
 The [fixed Work Plan order](../../00-project/work-plan.md#fixed-execution-order--2026-10-15)
 and [bounded design](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-15-initial-full-observation-comparison)
@@ -241,12 +241,87 @@ counts remain unassessed here. Source and runtime identity are operator-reported
 rather than verified from a new bundle. The candidate stays opt-in and FIELD FAIL;
 the detector source, canonical truth and optional-candidate order are unchanged.
 
+## Windows three-bundle audit intake — reconciliation required
+
+The user relayed a Windows agent's read-only CSV/trace inspection. Reported setup
+is the same video, Glass IDs, 480–780 s window and 2 FPS; Accum starts EMPTY in all
+three. Debug levels are FULL / FULL / BASIC. The ON resolver suffix was found in
+the third trace. Hash/environment checks were deliberately excluded by the user;
+none are requested to reconcile these contents. No private pixels or bundles were
+transferred to Mac and no analysis was rerun.
+
+| Bundle | Reported BASE numeric / UNKNOWN rows (601 total) | Reported visible states | Retrospective interpretation |
+|---|---|---|---|
+| ① FULL+OFF — `R22-3개선_add_artifact_20260918` | 0 / 601 | None | ACCEPTED initial FULL hold; observed 0, effective 1 |
+| ② UNKNOWN+OFF — `initial_modify-BASE_non-initial-condition_20261015` | 309 / 292 | DRAINING 68, FILLING 77, PARTIAL 164 | NOT_APPLICABLE; observed approximately 0.514 |
+| ③ FULL+ON — `initial_ON_20261015` | 185 / 416 | PARTIAL 185 | UNRESOLVED; observed approximately 0.308 |
+
+These establish reported numerical publication, not physical recall. In particular,
+①'s retrospective ACCEPTED/effective 1 is a prior-state hold with no coordinates;
+it is not successful tracking or field acceptance. The returned 143/91 segment
+counts have no supplied segmentation definition and are not used as a continuity
+improvement metric. Accum is reported ACCEPTED in ① (two entrance observations)
+and UNRESOLVED in ②/③; no Foam or nine-segment readout was returned.
+
+At 548.5 s/frame 13151, ① reportedly retains a row at Y363, tracklet
+`oil-tracklet:000132:0124`, with `phase_admitted=true` and `publishable=true`, but
+direct release fails `downward_direction` and `minimum_progress`; allowed IDs are
+empty. ② publishes Y363 there. At 550 s/frame 13187, ③ publishes Y367 through
+`INITIAL_FULL_INTERFACE_OBSERVED` with direction uncertainty. This supports partial
+early publication recovery. It does not close the user's first-appearance miss:
+the cited ON point is 1.5 s later than the cited UNKNOWN point, and the first
+physical appearance has no frame-exact annotation in this intake.
+
+The returned interpretation requires the following corrections before a repair:
+
+1. **Physical timing:** the existing reviewed BASE refill is 662–about 663.6 s;
+   about 663.6–780 s is FULL with no visible interface. The reported numerical
+   outputs at 774/775.5 s belong to that no-interface suffix under the supplied
+   time/Glass binding. They cannot establish the real rising interface's top exit.
+   Their presence conflicts with reviewed absence; their exact structure identity
+   is unreviewed. Inspect 662–664 s for the requested FULL transition instead of
+   substituting the last numerical row in the whole CSV.
+2. **Coordinate/direction:** source Y increases downward. `dir=+1` and Y367→735
+   do not prove ascent; `dir=-1` is topward track history. Track history and final
+   FILLING/DRAINING labels can disagree because `_visible_state` uses neighbouring
+   selected points. Neither label certifies that the row is the real interface.
+3. **Runtime versus frame projection:** `_observe_initial_full_interface` changes
+   the current record's phase/allowed IDs, not the underlying motion runtime.
+   `observed_interface` followed by `INITIAL_FULL_BARRIER` is not proof that a
+   real refill closed and then re-entered the initial state. The unresolved initial
+   motion barrier can have persisted throughout both frames. Ordinary refill
+   closure branches exist, but their execution at the real transition is not shown.
+4. **Trace field paths:** `release_stage`, `release_evaluated`, `established_fill_*`
+   and `recovery_*` are siblings of `initial_full_observation` under
+   `sequence.state.sequence_material_phase_diagnostics`, not inside it. Raw FULL
+   likelihood is under `state.oil_no_interface_full_likelihood`, outside the final
+   `sequence` snapshot. Missing values at the wrong path do not establish a BASIC
+   storage limitation. The writer uses the same metadata/sequence serialization
+   for captured BASIC and FULL records; captured frames/images can differ.
+5. **Gate meaning:** `sequence_selected_authority_tier=HARD_INVALID` is also the
+   default when there is no selected candidate; it does not prove every raw
+   candidate is invalid. A passed recovery subpredicate is not a committed release;
+   check qualifying/selected IDs, ambiguity and the final reason. An empty allowed
+   set explains final UNKNOWN at that frame but not why the eligible observation
+   set was empty or whether a real top-exit interface was lost there.
+
+The user's earlier report of additional real middle-motion misses remains recorded.
+The aggregate 309→185 difference cannot measure those misses separately from
+false observations in no-interface intervals. The actual first missing middle row
+and its failing ON predicate were not supplied. The whole-window rates therefore
+do not choose cost-first association or a FULL-state change on their own.
+
+Next use the [bounded saved-record recheck](../../40-operations/s11-current-windows-field-qualification.md#october-15-audit-reconciliation)
+at early appearance, one middle-drain loss and the real 662–664 s refill. No detector
+change, new replay or adoption follows from the unsupported 774 s top-exit reading.
+FIELD FAIL, the generic detector contract and the optional-candidate order remain.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: earlier reviewed Windows checkpoints establish initial-FULL allowed-set exclusion; the new operator report confirms middle-motion misses and absent top-exit FULL publication, but their first harmful stages remain unknown pending saved trace inspection. Source shows distinct refill closure, state-node creation and allowed-set filtering. ROI contamination is separately demonstrated in saved local inputs.
-- Existing feature coverage: existing ellipse/margin masks and shared preprocessing are active; exclusions/templates remain empty and Local XY OFF. New comparison ROI is separate from immutable regression inputs. Static learning, session FULL confirmation, completed resolution, event/report/CSV and GUI construction are exercised; private Windows setup remains unverified.
-- Execution scope: source/ROI inspection, bounded local real-entry analysis and focused synthetic/integration controls, followed by attributable UNKNOWN-start and FULL+ON Windows feedback plus read-only lifecycle/report/coverage-owner inspection. No raw Windows pixels, private-video replay, new learning operation or field acceptance. Complete local observations and source/input/runtime identity are retained above; Windows reports have only the stated qualitative scope.
+- First harmful stage: transferred 548.5 s data locates a reported publishable row's exclusion at initial-FULL direct release/allowed-set selection. Earliest physical onset and middle-motion losses remain unknown. The 774 s UNKNOWN record is not the reviewed top-exit interval; no earliest refill failure is established by that record. Source separates motion runtime, per-frame observation allowance, state nodes and selection.
+- Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
+- Execution scope: earlier bounded local real-entry analysis and controls, followed by operator feedback and a relayed Windows agent CSV/trace audit. Current work reconciles that text against source, serializer paths and canonical reviewed truth without loading private media, replaying analysis, running new experiments or changing detector code. Returned counts/checkpoints are attributed transferred evidence, not locally verified bundle contents.
 - Logic-map impact: NONE — this update corrects operator feedback and traces the already-mapped lifecycle, state-node and allowed-set selection responsibilities without changing the pinned source. The optional observation projection and GUI/event/report consumers were already mapped in implementation commit `6d2f069`; that earlier source change had impact UPDATED.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.

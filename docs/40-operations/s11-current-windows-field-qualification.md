@@ -97,6 +97,8 @@ FULL+ON의 BASE 출력은 확인됐지만, 첫 하강 등장 누락과 중간 �
 `UNKNOWN_REVIEW`**다. 원하는 동작은 실제 상승 계면을 상단까지 추적한 뒤
 계면이 밖으로 사라지면 좌표 없는 `FULL_NO_INTERFACE`로 전환하는 것이다.
 이 단계에서는 Windows에 있는 **완료 bundle을 읽고 텍스트 결과를 전달**한다.
+사용자 요청에 따라 이번 저장 결과 점검에서는 해시 비교와 실행환경 검증을
+생략한다. 이 생략을 이유로 재실행이나 추가 환경 확인을 요구하지 않는다.
 
 사용자는 **① 초기 FULL+OFF, ② 초기 UNKNOWN+OFF, ③ 초기 FULL+ON**의 세 bundle을
 보유하고 있다고 확인했다. 기존 ②↔③ 점검을 다음 세 비교로 보완한다.
@@ -111,8 +113,8 @@ FULL+ON의 BASE 출력은 확인됐지만, 첫 하강 등장 누락과 중간 �
 초기 상태 외 조건이 같아야 한다. ②↔③은 초기 상태와 옵션을 함께 바꾸므로
 그 차이를 ON만의 회귀로 해석하지 않는다. 세 비교 모두 기존 결과를 재사용한다.
 
-1. 세 결과의 manifest/session/Recipe를 읽고 소스, ROI, 분석 창, FPS, 초기 상태와
-   설정 차이를 기록한다. 사용자 번호 ①②③을 결과 표에도 유지한다. ON은
+1. 세 결과에 저장된 ROI, 분석 창, FPS, 초기 상태와 설정 차이를 기록한다.
+   사용자 번호 ①②③을 결과 표에도 유지한다. ON은
    `analysis_manifest.json`의 Glass별 `sequence_resolver` 버전 접미사
    `+initial-full-observation-v1`로 확인한다. HTML 상단 버전만으로 판정하지 않는다.
 2. `tracking_data.csv`를 Glass와 실제 frame/time으로 맞춘다. 첫 하강 등장,
@@ -140,6 +142,51 @@ FULL+ON의 BASE 출력은 확인됐지만, 첫 하강 등장 누락과 중간 �
 기록을 사용한다. 점검 결과로 다음 수정 범위를 정한 뒤 추가 실행 필요성을
 판단한다. 대용량 점검 출력을 만드는 경우 기존 [관리 출력 규칙](experiment-artifact-lifecycle.md)을
 따라 `sample/output/` 안에 보관한다.
+
+### October 15 audit reconciliation
+
+전달된 첫 점검문은 BASE의 774초 숫자 관측을 실제 상단 이탈로 해석했지만,
+기존 정답에서는 BASE가 약 663.6초에 FULL이 된 뒤 780초까지 계면이 없다.
+또 source Y는 아래로 증가하므로 `dir=+1`을 상승으로 해석할 수 없다.
+[수신 기록의 정정 사항](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md#windows-three-bundle-audit-intake--reconciliation-required)을
+읽고 기존 세 bundle에서 다음 내용만 다시 추출한다. 새 분석·해시 비교·환경
+검증은 하지 않는다.
+
+1. **548.5–550초:** ②의 Y363 출력과 ③의 Y367 출력 사이에 ③이 처음 허용되는
+   시점과 앞선 누락 조건을 확인한다. 550초 한 점이 있다는 사실만으로 첫 등장
+   누락 전체가 해결됐다고 판정하지 않는다.
+2. **약 550–662초 하강 구간:** ②에 숫자 Oil이 있고 ③에는 없는 첫 지점과
+   바로 앞뒤 표본을 찾는다. 실제 후보와 실패 조건을 기록하고, ②의 출력이라는
+   이유만으로 물리적으로 옳은 유면이라고 확정하지 않는다.
+3. **662–664초와 바로 앞뒤 표본:** 실제 재충전/상단 이탈에 해당하는 CSV와
+   저장 trace를 비교한다. 774초 같은 분석창의 마지막 숫자 출력으로 대체하지
+   않는다. 후보 Y·상태·허용 ID·선택·초기 FULL 관측 조건을 함께 읽는다.
+
+원본 JSONL 한 행을 `record`라고 할 때 필드 위치는 다음과 같다.
+
+| 내용 | 실제 저장 경로 |
+|---|---|
+| 원시 FULL 가능도 | `record.state.oil_no_interface_full_likelihood` |
+| 최종 상태/좌표 | `record.sequence.fill_state`, `record.sequence.positions.raw_oil_y` |
+| 최종 결정 | `record.sequence.state.sequence_decision_witness` |
+| motion/허용 집합 진단 객체 (`diag`) | `record.sequence.state.sequence_material_phase_diagnostics` |
+| release / recovery / established fill | `diag.release_stage`, `diag.release_evaluated`, `diag.release_evaluations`, `diag.recovery_qualifying_tracklet_ids`, `diag.recovery_selected_tracklet_id`, `diag.recovery_ambiguous`, `diag.established_fill_present` 등 |
+| ON 관측 조건 | `diag.initial_full_observation`의 `motion_phase`, `motion_reason`, `blocked_by_current_state`, `evaluations`, `qualifying_tracklet_ids` |
+
+release 계열은 `initial_full_observation`의 **상위 객체**에 있다. 원시 가능도는
+`sequence.state`가 아니라 원시 `state`에 있다. BASIC/FULL은 저장 프레임·이미지가
+다를 수 있지만, 저장된 행의 메타데이터/sequence 직렬화에는 별도 필드 생략 분기가
+없다. 올바른 경로에도 값이 없을 때만 해당 경로와 함께 `UNAVAILABLE`로 남긴다.
+
+`selected_authority_tier=HARD_INVALID`는 선택 후보가 없을 때의 기본값이기도 하며,
+모든 원시 후보가 hard-invalid라는 증거가 아니다. recovery의 일부 `passed=true`도
+최종 release 성공과 다르므로 qualifying/selected ID와 최종 phase reason을 함께
+기록한다. `observed_interface`는 현재 프레임의 관측 허용 결과이며, 그 전후의
+motion runtime은 계속 초기 `filled_barrier`일 수 있다.
+
+결과는 세 구간의 작은 표와 최초 확인 가능한 차단 조건으로 요약한다. 기존 정답과
+반대인 663.6초 이후 숫자 출력은 실제 상승 복원으로 집계하지 않는다. 첫 점검의
+전체 observed 0/0.514/0.308과 회고적 ACCEPTED 홀드는 물리적 정답률이 아니다.
 
 ## 2. Private source identity
 
