@@ -36,6 +36,12 @@ Every future Windows field report must enumerate all of its segment IDs.
   boundary, so `foam_y < oil_y` in source coordinates.
 - This review establishes interval behavior and material identity. It does not
   invent exact source-Y anchors where none were directly re-reviewed.
+- The user's review-004 clarification says the visible interface itself is
+  ambiguous and several detector/LVLM candidates are practically acceptable.
+  A forced preference among candidates is not unique exact-Y truth; an
+  unchosen nearby candidate is not automatically a false interface. Preserve
+  multiple accepted alternatives and uncertainty without inventing a pixel
+  tolerance or broadening these six frames into whole-track labels.
 - BASE reaches FULL somewhere within 674--675 s; the exact transition frame is
   unknown. Keep this window separate in counts and do not assign every numeric
   row inside it a true/false label from time alone.

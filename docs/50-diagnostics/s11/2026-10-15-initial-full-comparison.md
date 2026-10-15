@@ -1,10 +1,11 @@
 # Initial-FULL observation comparison
 
-Status: version 1 causal intake and version 2 local checks are complete. The
-returned final CSV comparison confirms 185→303 numeric BASE outputs across 601
-matched rows. The [latest return and user timing correction](#reconciled-return-and-user-timeline-correction--2026-10-15)
-close aggregate/IFO checks and supersede earlier physical timing interpretations
-below. New phase-specific counts and human candidate correspondence remain pending.
+Status: the [corrected segment table and review-004 return](#corrected-segment-counts-and-review-004-closeout)
+close this bounded CSV/image intake. The final comparison confirms 185→303
+numeric BASE outputs across 601 matched rows, including 36→91 outputs in the
+post-transition FULL suffix. Human candidate preferences are qualified by the
+user's explicit visual ambiguity and practical tolerance; they are not exact-Y
+truth or a binary accuracy score. Earlier timing/interpretations below are historical.
 The option remains default OFF. Private bundles were not inspected on Mac;
 no complete physical qualification is claimed.
 
@@ -868,12 +869,72 @@ by the normal closeout; no historical evidence was deleted. All 78 managed runs
 pass the artifact check. The snapshot is local/ignored; the pinned Git object
 remains the source for recovering its exact bytes.
 
+## Corrected segment counts and review-004 closeout
+
+The user returned the corrected disjoint BASE table and six-frame review. The
+CSV accounting agrees row-by-row in the transferred summary; private CSV and
+review files remain on Windows and were not inspected on Mac.
+
+| Bucket | Source time (s) | Rows | v1 Oil | v2 Oil | New | Lost | Net |
+|---|---|---|---|---|---|---|---|
+| FULL_PREFIX | 480 ≤ t < 550 | 139 | 0 | 3 | 3 | 0 | +3 |
+| DRAIN | 550 ≤ t < 652 | 205 | 125 | 170 | 45 | 0 | +45 |
+| REFILL | 652 ≤ t < 674 | 43 | 24 | 39 | 16 | 1 | +15 |
+| FULL_TRANSITION | 674 ≤ t < 675 | 2 | 0 | 0 | 0 | 0 | 0 |
+| FULL_SUFFIX | 675 ≤ t ≤ 780 | 211 | 36 | 91 | 55 | 0 | +55 |
+| OUTSIDE | outside the above intervals | 1 | 0 | 0 | 0 | 0 | 0 |
+| Total | | 601 | 185 | 303 | 119 | 1 | +118 |
+
+The transition rows are f16160@674.007 s and f16172@674.507 s; both variants
+abstain. Do not infer the exact FULL transition or two definite misses from
+those timestamps. OUTSIDE remains f11508@479.980 s. The only lost row remains
+f15776@657.991 s, v1 Y437→v2 empty: the returned parenthetical **DRAIN is a
+label typo; this row belongs to REFILL**. The table already places it there.
+The f15896 empty IFO evaluations/qualifying set are reused, not re-investigated.
+
+Review artifacts are reported at
+`C:\0.Coding\2.Reference\Oil level tracker\0.windows_diagnostic\data\reviews\review-004\`:
+`packet.json` (16.3 MB), `labels.json` (`s11-o2-labels-v2`, six cases), seven
+history revisions and reply-001 through reply-007, including the f15884 correction.
+Plain and idx-guide crops cover Y350–480 at 2×. Their files/history stay in place;
+the transferred summary is not a replacement packet or a locally verified import.
+
+**Scope qualification supplied directly by the user:** the actual boundary is
+ambiguous even to the human observer; detector and LVLM observations were within
+a degree of practical tolerance, and candidates were chosen because a choice
+was requested. Preserve the following recorded answers together with that
+qualification. Do not score the two alternative preferences as definite gross
+false detections, assert a lower-reflection identity from them, or compute an
+accuracy rate. No numerical error tolerance or exclusive physical owner is established.
+
+| BASE frame / nominal time | v2 selected Y | Reported human candidate preference / allowed alternatives | Qualified interpretation |
+|---|---|---|---|
+| f15872 / 662.0 s | 433.5 (idx3) | 404.5 (idx10) preferred | Different preference under visual ambiguity, not a certified exact-Y error |
+| f15884 / 662.5 s | 409 (idx4) | 409 (idx4) and 396 (idx7) both allowed | Selected candidate is among accepted alternatives; keep the correcting reply |
+| f15896 / 663.0 s | none | 417 (idx10), 419 (idx13), 407 (idx15) all allowed | Visible/acceptable alternatives exist but no numeric output |
+| f15908 / 663.5 s | 418 (idx15) | 418 (idx15) and 413.5 (idx10) both allowed | Selected candidate is among accepted alternatives |
+| f15920 / 664.0 s | 425 (idx10) | 413 (idx15) or 416 (idx20) preferred | Different preference under visual ambiguity, not a certified exact-Y error |
+| f15932 / 664.5 s | 411 (idx8) | 411 (idx8) and 411 (idx19) allowed | Two candidate identities at the same Y; not two distinct physical boundaries |
+
+The three acceptable f15896 Y values match the previously transferred
+`INCOMPATIBLE_BRANCH`, admitted=0 candidates. This supports a local harmful
+exclusion before IFO at that review scope; it does not choose one unique correct
+tracklet or explain every blank frame. The two differing-preference rows remain
+useful comparison cases with uncertainty. The full-suffix output increase and
+the separately reviewed 721 s non-Oil output remain adverse controls; ambiguity
+in these six refill frames does not relabel those distinct intervals.
+
+**Bounded intake CLOSED.** No repeat CSV/IFO/idx interrogation or mandatory finer
+Y annotation. Retain original answers/history and attach this clarification when
+reusing review-004; do not silently overwrite earlier replies. Proceed to the
+authorized individual cost-first trial preparation, followed by RGB and Local XY.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: v1's three observation-barrier losses reach final sequence/CSV under v2. The shared non-Oil candidate is confirmed through anchor_corridor and is newly published at 721 s versus v1, with selected/CSV equality now confirmed. The f15896 seven-candidate loss is before IFO at tracklet branch compatibility; which candidate is the actual refill interface remains unknown. Zero final FULL rows remain. Incorrect transferred segment labels are not physical truth, and no new selector defect is established at 720/771 s.
+- First harmful stage: v1's three observation-barrier losses reach final sequence/CSV under v2. The 721 s non-Oil selection remains an adverse control. At f15896, three human-allowed alternatives correspond to previously reported INCOMPATIBLE_BRANCH/admitted=0 candidates excluded before IFO; no unique exact physical owner is established. The user qualifies review-004's two differing preferences as visually ambiguous/practically tolerated, not definitive false-interface labels. Zero final FULL rows remain, and no new selector defect is established at 720/771 s.
 - Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
-- Execution scope: earlier v2 implementation/local verification remain recorded above. Current documentation-only work records the received disjoint total/IFO result and applies the user's explicit BASE timing correction to the canonical truth and Windows counting procedure. Historical bucket measurements stay intact; their obsolete phase/false-output interpretations are superseded. No private media or bundles are inspected locally, no detector source changes or new experiments run, and no physical interface is inferred from a selected tracklet or LVLM estimate. Existing ROI/Artifact coverage unknowns remain unchanged; exact correspondence still requires displayed-image human review.
+- Execution scope: earlier v2 implementation/local verification remain recorded above. This receipt closes corrected segment arithmetic and the six-frame human review at its explicitly qualified preference scope. Historical bucket measurements stay intact; obsolete phase/false-output interpretations are superseded. No private media, bundle or review packet is inspected locally, no runtime is exercised for this receipt, and no exact truth is inferred from a selected candidate or LVLM estimate. Existing ROI/Artifact coverage unknowns and integrated field acceptance remain separate.
 - Logic-map impact: NONE — this intake distinguishes the existing raw, phase, selector and final-publication responsibilities; v2 ownership and the map updated in `4c72ebb` remain unchanged.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.

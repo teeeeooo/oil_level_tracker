@@ -4,8 +4,9 @@
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
-is unknown; post-transition FULL counts start at 675 s. The current request is
-[Refill owner and false-output follow-up](#refill-owner-and-false-output-follow-up).
+is unknown; post-transition FULL counts start at 675 s. The bounded
+[Refill owner and false-output follow-up](#refill-owner-and-false-output-follow-up)
+is now CLOSED. No new Windows execution is requested until a candidate is prepared.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
@@ -280,6 +281,14 @@ FULL 구간을 포함하므로 전부 누락으로 세지 않는다. 검토된 �
 
 ### Refill owner and false-output follow-up
 
+**CLOSED — 결과 수신 완료.** [정정 집계와 review-004](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md#corrected-segment-counts-and-review-004-closeout)를
+재사용한다. 아래 추출·검토 단계와 이전 전달문은 수행 이력으로 남기며 다시
+요청하지 않는다. 사용자 설명에 따라 여섯 프레임의 후보 선택은 애매한 계면에서의
+허용 가능한 대안/선호 판정이다. 유일한 정밀 정답이나 두 건의 확정 오검출로
+확대하지 않는다. 여러 후보와 불확실성을 함께 보존하고, 선택을 강요하지 않는다.
+f15776@657.991초는 REFILL이며 반환문의 DRAIN 표기만 정정한다.
+다음 Windows 실행은 1순위 cost-first 옵션의 로컬 준비가 끝난 뒤 별도 전달한다.
+
 **수신 완료:** BASE 601개의 고유 키가 1:1 대응하고 timestamp 차이는 0건이다.
 전체 185→303, 새 출력 119−소실 1=118이 일치한다. OUTSIDE는
 f11508@479.9795초, 소실 1행은 f15776@657.9907초(v1 Y437→v2 빈 칸)다.
@@ -392,7 +401,7 @@ FULL 전환 구현 완료는 다음 세 후보 비교의 선행 조건이 아니
 이번 작업은 제한된 BASE 진단이다. Accum/Foam 최종 동일성과 전체 구간 승인은
 아직 별도 미확인으로 남긴다.
 
-전달용 짧은 프롬프트:
+완료된 요청의 이전 전달문 — 재전달하지 않음:
 
 ```text
 ③ v1: <v1 번들 경로>
