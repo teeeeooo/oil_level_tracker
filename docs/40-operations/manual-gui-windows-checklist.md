@@ -148,14 +148,18 @@ scaling and the result is recorded in the owning evidence/closeout.
   `WS1-ACCUM-POST-FOAM` and `WS1-ACCUM-DRAIN`. Omission of any segment makes
   the report incomplete.
 - Keep Oil material presence separate from visible-interface truth. BASE is
-  full/no-interface before about 550 s and after about 663.6 s; numeric Oil in
-  either interval is false.
+  full/no-interface before about 550 s and from 675 s after the corrected
+  transition window. The user corrected BASE to drain during 550--652 s, refill
+  during 652--674 s and reach FULL within 674--675 s. Count that transition
+  separately without forcing frame-exact truth; numeric Oil in the full prefix
+  or post-transition suffix is false.
 - Treat Accum Foam as present only around 672--680 s. After about 680 s, wall
   residue is not Foam. During the layered interval require `foam_y < oil_y` in
   source coordinates and do not permit the Foam top to own Oil.
 - Historical R7--R10 checklist references to BASE 540/674 Oil anchors or later
-  Accum Foam are superseded by this canonical review. Retain those sections as
-  version-specific procedures only, not current physical truth.
+  Accum Foam are superseded by this canonical review. The October 15 timing
+  correction does not by itself qualify the old 674 s/Y435 coordinate. Retain
+  those sections as version-specific procedures only, not current physical truth.
 - Use nested completed-window sequence fields for final publication. Graph
   bridges and top-level current-frame candidates do not count as numeric Oil or
   Foam observations.

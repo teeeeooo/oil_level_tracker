@@ -1,9 +1,10 @@
 # Initial-FULL observation comparison
 
-Status: version 1 causal intake and version 2 local checks are complete. The first
-Windows v1/v2 summary confirms the three observation-predicate corrections, but
-does not yet establish final output equality or physical restoration. Reconcile
-BASE final CSV/sequence outputs before interpreting unchanged candidate counts.
+Status: version 1 causal intake and version 2 local checks are complete. The
+returned final CSV comparison confirms 185→303 numeric BASE outputs across 601
+matched rows. The [latest return and user timing correction](#reconciled-return-and-user-timeline-correction--2026-10-15)
+close aggregate/IFO checks and supersede earlier physical timing interpretations
+below. New phase-specific counts and human candidate correspondence remain pending.
 The option remains default OFF. Private bundles were not inspected on Mac;
 no complete physical qualification is claimed.
 
@@ -781,12 +782,79 @@ procedure as one replacement handoff. Those items remain pending, not an already
 running Windows review. No additional detector experiment or expanded evidence
 request follows.
 
+## Reconciled return and user timeline correction — 2026-10-15
+
+The latest Windows reply reports 601 unique keys in each BASE CSV, equal key
+sets and zero timestamp differences. Its disjoint table, using the then-current
+550/662/663.6 s boundaries, is arithmetically consistent:
+
+| Old time bucket (not current phase truth) | Rows | v1 Oil | v2 Oil | New | Lost | Net |
+|---|---|---|---|---|---|---|
+| 480 ≤ t < 550 | 139 | 0 | 3 | 3 | 0 | +3 |
+| 550 ≤ t < 662 | 225 | 143 | 189 | 47 | 1 | +46 |
+| 662 ≤ t < 663.6 | 3 | 0 | 2 | 2 | 0 | +2 |
+| 663.6 ≤ t ≤ 780 | 233 | 42 | 109 | 67 | 0 | +67 |
+| OUTSIDE | 1 | 0 | 0 | 0 | 0 | 0 |
+| Total | 601 | 185 | 303 | 119 | 1 | +118 |
+
+OUTSIDE is f11508@479.9795 s. The sole lost row is
+f15776@657.9907 s, v1 Y437→v2 empty. These are received Windows measurements,
+not a local inspection of the private bundles. They close the earlier arithmetic
+discrepancy; the overlapping 603-row/+119 table remains rejected.
+
+At f15896@662.996 s, IFO `evaluations` is an existing empty array (zero rows),
+`blocked_by_current_state=False`, and `qualifying_tracklet_ids=[]`. This closes
+the pending cardinality question: there were no evaluated/passing IFO rows.
+The seven admitted=0 `INCOMPATIBLE_BRANCH` candidates were excluded before IFO;
+their actual physical identity remains unqualified. Do not request this summary again.
+
+The Windows agent also supplied an ffmpeg/LVLM image interpretation, explicitly
+not a human review. It reports visible interfaces in all six 662–664.5 s images,
+two selected-Y matches, visibility near the top at about 674 s and uncertainty
+at 675 s. These are retained as agent interpretations, not exact-Y truth or
+candidate labels. An empty output at f15896 has no selected line; whether it
+misses the actual interface still needs human correspondence review. Different
+tracklet IDs alone do not establish different
+physical interfaces. Clearly bind BASE/Accum views before recording human idx
+judgments. The claimed pixel error band and the later right-view observation do
+not qualify additional truth.
+
+After locating the original 2026-08-25 09:52 KST message behind the old truth,
+the user explicitly corrected their own BASE record to **550–652 s gradual
+descent, 652–674 s level recovery, FULL reached within 674–675 s**. This direct
+correction owns the updated [reviewed truth](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#base-timeline-correction--2026-10-15)
+and JSON. It is not an automatic adoption of the LVLM's candidate coordinates.
+
+Consequences for earlier interpretations in this record:
+
+- The 662–664.5 s six-frame set is mid-refill, not a top-exit window. The old
+  662/663.6 s boundaries and post-663.6 absence claims are superseded throughout.
+- f15776@657.9907 s is a lost output during refill, not drain. Its correctness
+  remains unreviewed; a missing numeric row is not automatically a true loss.
+- The old 663.6–780 s counts (42→109, 67 new) remain time-bucket measurements,
+  but cannot be presented as FULL-suffix false-output counts. Neither can the
+  old 670–780 s 36→97 counts. Repartition actual matched rows; do not derive
+  new phase counts or false-output proportions from the old aggregate table.
+- Totals 601 / 185→303 / 119 new−1 lost=118 and the f15896 IFO result remain
+  valid. The 721 s user-identified non-Oil output remains in the full suffix.
+- Count 674 ≤ t < 675 separately as FULL_TRANSITION; precise transition time
+  and source Y remain unknown. Use 675 s as a post-transition accounting cutoff,
+  never as a detector rule or invented exact annotation. The old 674 s/Y435
+  anchor does not become qualified solely because timing changed.
+
+The next Windows request is one corrected disjoint CSV table, followed by only
+needed image/idx review using the existing O2 persistence workflow. Completed
+total/IFO/lost-row checks and the user's corrected interval need no repeated
+question. Cost-first assignment → candidate-local RGB → Oil-only Local XY stays
+the approved individual trial order, followed by FULL closure and integrated
+validation. No source behavior or field disposition changes in this correction.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: v1's three observation-barrier losses reach final sequence/CSV under v2. The shared non-Oil candidate is confirmed through anchor_corridor and is newly published at 721 s versus v1, with selected/CSV equality now confirmed. The f15896 seven-candidate loss is before IFO at tracklet branch compatibility; which candidate is the actual refill interface remains unknown. Zero final FULL rows remain. Incorrect transferred segment labels are not physical truth, and no new selector defect is established at 720/771 s.
 - Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
-- Execution scope: earlier v2 implementation/local verification remain recorded above. Current work reconciles the transferred refill readout and rejects overlapping recount totals using fixed-cohort arithmetic and unchanged canonical truth. The original selected-candidate object is reconciled and candidate rejection before IFO remains source-backed. No private media are inspected locally, no source changes or new experiments run, and no physical interface is inferred from a selected tracklet. Existing ROI/Artifact coverage unknowns remain unchanged; physical correspondence still requires actual private-video inspection.
+- Execution scope: earlier v2 implementation/local verification remain recorded above. Current documentation-only work records the received disjoint total/IFO result and applies the user's explicit BASE timing correction to the canonical truth and Windows counting procedure. Historical bucket measurements stay intact; their obsolete phase/false-output interpretations are superseded. No private media or bundles are inspected locally, no detector source changes or new experiments run, and no physical interface is inferred from a selected tracklet or LVLM estimate. Existing ROI/Artifact coverage unknowns remain unchanged; exact correspondence still requires displayed-image human review.
 - Logic-map impact: NONE — this intake distinguishes the existing raw, phase, selector and final-publication responsibilities; v2 ownership and the map updated in `4c72ebb` remain unchanged.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.

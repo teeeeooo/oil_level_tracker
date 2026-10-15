@@ -2,6 +2,13 @@
 
 **Status:** `ACTIVE PROCEDURE` — candidate-current, revision-neutral.
 
+**October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
+refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
+is unknown; post-transition FULL counts start at 675 s. The current request is
+[Refill owner and false-output follow-up](#refill-owner-and-false-output-follow-up).
+Earlier completed inspection steps below are retained for reference and must not
+be repeated merely because the reviewed timing changed.
+
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
 
 ## 1. Preconditions and identity
@@ -79,7 +86,7 @@ CSV flag는 `OIL_DIRECTION_UNCONFIRMED`이고 보고서는 이를 방향 요약/
 판정에 사용하지 않는다고 설명한다. 후보가 없거나 다른 hard gate에 막힌 지점,
 이미 drain/refill 상태로 전환한 뒤의 손실은 이 옵션의 해결 범위가 아니다.
 
-먼저 BASE의 약 550–662초 하강과 662–663.6초 급속 재충전이 원본과 대조해
+먼저 BASE의 약 550–652초 하강과 652–674초 회복, 674–675초 FULL 전환이 원본과 대조해
 얼마나 드러나는지, 앞뒤 FULL 구간에 잘못된 선이 생기는지 확인한다. 보고서만
 읽은 판단과 원본 대조 결과를 구분한다. Accum과 Foam 변화도 함께 기록하되
 정확한 Y truth가 없는 곳은 위치 정확도를 단정하지 않는다. 아래 9개 구간을
@@ -88,7 +95,7 @@ CSV flag는 `OIL_DIRECTION_UNCONFIRMED`이고 보고서는 이를 방향 요약/
 Mac에 전달할 최소 결과는 **소스/ROI/설정 동일 여부, 구간별 OFF→ON 관측 변화,
 복원된 움직임, 오검출과 긴 공백, 보고서 해석 가능 여부, 실제 runtime**의 텍스트
 요약이다. 비공개 영상·이미지·bundle을 Mac으로 전송할 필요는 없다. 이 결과를
-받아 첫 수정의 효과와 남은 실패를 판단한 뒤 조건부 후보 순서를 적용한다.
+받아 첫 수정의 효과와 남은 실패를 판단한 뒤 승인된 세 후보 비교 순서를 적용한다.
 
 ### October 15 completed-bundle inspection
 
@@ -146,7 +153,7 @@ FULL+ON의 BASE 출력은 확인됐지만, 첫 하강 등장 누락과 중간 �
 ### October 15 audit reconciliation
 
 전달된 첫 점검문은 BASE의 774초 숫자 관측을 실제 상단 이탈로 해석했지만,
-기존 정답에서는 BASE가 약 663.6초에 FULL이 된 뒤 780초까지 계면이 없다.
+정정된 정답에서는 BASE가 674–675초 사이 FULL에 도달한 뒤 780초까지 계면이 없다.
 또 source Y는 아래로 증가하므로 `dir=+1`을 상승으로 해석할 수 없다.
 [수신 기록의 정정 사항](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md#windows-three-bundle-audit-intake--reconciliation-required)을
 읽고 기존 세 bundle에서 다음 내용만 다시 추출한다. 새 분석·해시 비교·환경
@@ -155,12 +162,12 @@ FULL+ON의 BASE 출력은 확인됐지만, 첫 하강 등장 누락과 중간 �
 1. **548.5–550초:** ②의 Y363 출력과 ③의 Y367 출력 사이에 ③이 처음 허용되는
    시점과 앞선 누락 조건을 확인한다. 550초 한 점이 있다는 사실만으로 첫 등장
    누락 전체가 해결됐다고 판정하지 않는다.
-2. **약 550–662초 하강 구간:** ②에 숫자 Oil이 있고 ③에는 없는 첫 지점과
+2. **약 550–652초 하강 구간:** ②에 숫자 Oil이 있고 ③에는 없는 첫 지점과
    바로 앞뒤 표본을 찾는다. 실제 후보와 실패 조건을 기록하고, ②의 출력이라는
    이유만으로 물리적으로 옳은 유면이라고 확정하지 않는다.
-3. **662–664초와 바로 앞뒤 표본:** 실제 재충전/상단 이탈에 해당하는 CSV와
-   저장 trace를 비교한다. 774초 같은 분석창의 마지막 숫자 출력으로 대체하지
-   않는다. 후보 Y·상태·허용 ID·선택·초기 FULL 관측 조건을 함께 읽는다.
+3. **662–664초의 기존 표본:** 재충전 도중의 CSV와 저장 trace를 비교한 기록이다.
+   상단 이탈은 674–675초이며, 기존 표본이나 774초의 마지막 숫자 출력으로
+   대체하지 않는다. 후보 Y·상태·허용 ID·선택·초기 FULL 관측 조건을 함께 읽는다.
 
 원본 JSONL 한 행을 `record`라고 할 때 필드 위치는 다음과 같다.
 
@@ -185,7 +192,8 @@ release 계열은 `initial_full_observation`의 **상위 객체**에 있다. 원
 motion runtime은 계속 초기 `filled_barrier`일 수 있다.
 
 결과는 세 구간의 작은 표와 최초 확인 가능한 차단 조건으로 요약한다. 기존 정답과
-반대인 663.6초 이후 숫자 출력은 실제 상승 복원으로 집계하지 않는다. 첫 점검의
+반대인 675초 이후 숫자 출력은 실제 상승 복원으로 집계하지 않는다.
+674–675초 전환 표본은 별도 판정하며, 663.6초를 FULL 경계로 사용하지 않는다. 첫 점검의
 전체 observed 0/0.514/0.308과 회고적 ACCEPTED 홀드는 물리적 정답률이 아니다.
 
 ### Remaining three-record extraction
@@ -211,9 +219,10 @@ boundary/ambiguous이므로 FULL likelihood 0은 기본값이다. 상세 근거�
 2. 기존과 같은 영상·Recipe·ROI·480–780초·2 fps를 사용하고, BASE 초기 FULL과
    Accum 초기 EMPTY를 유지한다. GUI에서 직접 분석을 시작하고 새 bundle에 저장한다.
    BASIC trace면 이번 수치 비교에 충분하다. 원본 영상으로 위치/움직임을 대조한다.
-3. 기존 ③과 새 ④의 첫 등장, 553.5/662.5/663.5초 출력, 실제 662–663.6초 재충전
+3. 기존 ③과 새 ④의 첫 등장, 553.5/662.5/663.5초 출력, 실제 652–674초 재충전
    궤적을 비교한다. 숫자가 늘어난 것과 실제 유면이 복원된 것을 구분한다.
-   663.6–780초의 숫자 후보는 정답상 FULL 구간의 오검출로 별도 집계한다.
+   675–780초의 최종 숫자 출력은 FULL 구간의 오검출로 별도 집계한다.
+   674–675초는 FULL 전환 창이며 정확한 전환 프레임은 미확인이다.
    774초를 상단 이탈로 해석하지 않으며 source Y 감소가 상승이다.
 4. 결과는 짧은 표로 전달한다: 구간별 유효한 복원/오검출/남은 공백,
    실제 상단에 닿는 마지막 계면의 시각과 위치, Accum/Foam 변화.
@@ -239,7 +248,7 @@ v2는 이미 승인된 현재 관측에 매번 새 앵커를 요구하던 조건
 재충전 owner의 연속성을 review로 확인한다. 이후 합의한
 [세 후보 개별 비교](#three-candidate-windows-comparisons)를 먼저 수행하고,
 그 결과에 근거해 FULL 전이를 별도로 구현한다. 중간 소실을 FULL로 바꾸거나
-663.6초를 코드에 넣어서는 안 된다. 정식 FIELD PASS는 여전히
+정답 시각을 코드에 넣어서는 안 된다. 정식 FIELD PASS는 여전히
 아래의 전체 9개 구간과 현재 acceptance owner가 판단한다.
 
 ### V2 final output reconciliation
@@ -271,77 +280,65 @@ FULL 구간을 포함하므로 전부 누락으로 세지 않는다. 검토된 �
 
 ### Refill owner and false-output follow-up
 
-**수신 상태:** 새 숫자 출력 119행−소실 1행=순증가 118, 여섯 표본의 최종
-선택/CSV 값, 663초의 `INCOMPATIBLE_BRANCH` 후보 7개를 받았다.
-721초 selected_candidate 원문에는 Y694가 있으며 CSV와 일치한다. 이 객체와
-기존 여섯 행의 검출 메타데이터는 확인 완료이므로 다시 추출하지 않는다.
+**수신 완료:** BASE 601개의 고유 키가 1:1 대응하고 timestamp 차이는 0건이다.
+전체 185→303, 새 출력 119−소실 1=118이 일치한다. OUTSIDE는
+f11508@479.9795초, 소실 1행은 f15776@657.9907초(v1 Y437→v2 빈 칸)다.
+f15896의 IFO는 `evaluations=[]`(0행), `blocked_by_current_state=False`,
+`qualifying_tracklet_ids=[]`이며 “전부 통과”가 아니다. 기존 여섯 행과 721초
+선택 객체/CSV도 확인 완료다. 이 값들을 다시 추출하거나 질문하지 않는다.
 
-반환된 480–663.5 / 663.5–665 / 665–670 / 670–780초는 원본 재검토가 아닌
-임의 근사 경계였음이 확인됐다. [정답 소유 문서](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)와
-그 JSON을 그대로 사용한다. 후속 재집계도 경계 표본을 양쪽에 넣어
-603행/187→306/+119가 됐으므로 채택하지 않는다. 전체는 기존 601행,
-185→303, 새 출력 119−소실 1=+118이다. 이번 합의는 기존 후속 질문을 아래
-**CSV 정합성 마무리 → 이미지/idx review**로 정리한다. 현재 Windows 요청은
-이 범위이며, 세 후보 실행은 각각의 로컬 준비·검증과 별도 전달 후 수행한다.
+**사용자 정답 정정:** BASE는 550–652초 하강, 652–674초 회복,
+674–675초 사이 FULL 도달이다. [정답 소유 문서](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#base-timeline-correction--2026-10-15)와
+JSON을 갱신했다. 이전 경계의 중복 없는 표는 산술상 맞지만 물리 구간별
+평가에는 더 이상 사용하지 않는다. 663.6초 이후 출력을 모두 오검출로 보는
+해석도 철회한다. 이번 요청은 **저장 CSV의 구간 재배정 → 필요한 이미지/idx
+review**까지만이며, 세 후보 실행은 로컬 준비·검증 후 별도 전달한다.
 
-1. **구간 집계만 바로잡는다.** BASE 최종 CSV의 실제 시각으로 다음 구간을
-   사용하고, 검출 결과의 시작/끝이나 임의 경계로 바꾸지 않는다.
+1. **새 정답 경계로 한 번만 재집계한다.** 기존에 검증한 BASE 행 매칭을
+   재사용하고 CSV의 실제 시각으로 다음 구간을 배정한다.
 
    | 정답 구간 | 집계용 경계 |
    |---|---|
    | WS1-BASE-FULL-PREFIX | 480 ≤ t < 550 |
-   | WS1-BASE-DRAIN | 550 ≤ t < 662 |
-   | WS1-BASE-RAPID-REFILL | 662 ≤ t < 663.6 |
-   | WS1-BASE-FULL-SUFFIX | 663.6 ≤ t ≤ 780 |
+   | WS1-BASE-DRAIN | 550 ≤ t < 652 |
+   | WS1-BASE-RAPID-REFILL / REFILL | 652 ≤ t < 674 |
+   | WS1-BASE-RAPID-REFILL / FULL_TRANSITION | 674 ≤ t < 675 |
+   | WS1-BASE-FULL-SUFFIX | 675 ≤ t ≤ 780 |
    | OUTSIDE | 위 구간 밖 표본 |
 
-   두 BASE CSV의 `(glass_id, frame_index)`가 각각 유일하고 키 집합이 같은지
-   확인한 뒤 한 번만 1:1 매칭한다. 입력 중복이나 누락이 있으면 조용히 버리지
-   말고 해당 키를 보고한다. 그 매칭 행마다 아래 함수로 **구간 하나만** 배정한다.
-   `between` 등으로 양끝을 포함하는 네 집계를 따로 만든 뒤 더하지 않는다.
-   시간은 CSV의 `float(row["timestamp_sec"])`이며 매칭된 두 행에서 같아야 한다.
-   550.01/661.99/663.50으로 경계를 옮기지 않는다.
+   `WS1-BASE-RAPID-REFILL`은 기존 ID만 유지한다. REFILL과 FULL_TRANSITION은
+   그 안의 서로 겹치지 않는 하위 구간이며, 상위 합계와 함께 중복 가산하지 않는다.
+   674–675초의 정확한 FULL 도달 프레임은 미확인이다. 이 구간의 숫자를
+   시각만으로 정답/오검출로 판정하지 않는다. 675초는 전환 후 집계 경계다.
+   `(glass_id, frame_index)`의 기존 1:1 매칭 행마다 **구간 하나만** 배정한다.
+   시간은 `float(row["timestamp_sec"])`이고, 가장 가까운 표본으로 경계를
+   옮기거나 양끝 포함 집계를 따로 더하지 않는다.
 
    ```python
    def base_segment(t):
        if 480 <= t < 550:
            return "FULL_PREFIX"
-       elif 550 <= t < 662:
+       elif 550 <= t < 652:
            return "DRAIN"
-       elif 662 <= t < 663.6:
-           return "RAPID_REFILL"
-       elif 663.6 <= t <= 780:
+       elif 652 <= t < 674:
+           return "REFILL"
+       elif 674 <= t < 675:
+           return "FULL_TRANSITION"
+       elif 675 <= t <= 780:
            return "FULL_SUFFIX"
        return "OUTSIDE"
    ```
 
-   지정 집계에서 f13187@550.01과 f15872@661.995는 DRAIN,
-   f15908@663.496는 RAPID REFILL에만 속한다. 물리 정답의 근사성과 중복 집계는
-   다르다. 모든 행이 한 구간에만 들어가야 하며, 경계 처리로 전체 순증가가
-   +119가 되는 것을 허용하지 않는다.
-
-   OUTSIDE 포함 구간 합계가 각각 **601행 / v1 185 / v2 303 / 새 출력 119 /
-   소실 1 / 순증가 118**인지 확인한다. 실패하면 숫자를 맞춰 고치지 말고
-   중복·미배정·미매칭 여부를 보고한다. 숫자 0도 관측이므로 빈 칸과 구분한다.
-   검사를 통과한 구간별 표만 전달한다. OUTSIDE는
-   이전 전체 601행과 이번 집계 600행의 차이를 설명하도록 frame/time도 적는다.
-   소실 1행의 frame/time와 v1 Y를 한 줄로 덧붙인다. 새 출력−소실은 118과
-   맞아야 한다. ~550/~663.6초는 실제로는 근사 정답 경계이므로, 이 수치 구간
-   집계와 경계 표본의 영상 판정을 구분한다. DRAIN 안의 숫자가 모두 정답인
-   것은 아니다. 앞서 670–780초로 보고한 36→97행은 기존 정답상 FULL 부분구간의
-   오출력 증가로 보존하며 전체 FULL suffix 집계로 대신 쓰지 않는다.
-   이번 중복 표의 FULL suffix 새 출력 68행은 아직 확정값이 아니다.
-   추가 출력 중 오검출 비중과 v2 전체 숫자 출력 중 오검출 비중도 구분한다.
-2. **663초 f15896의 작은 IFO 요약만 보충한다.**
-   `record.sequence.state.sequence_material_phase_diagnostics.initial_full_observation`
-   에서 `evaluations`의 행 수, `blocked_by_current_state`,
-   `qualifying_tracklet_ids`를 적는다. 실제 evaluations가 `[]`일 때만 0행으로
-   표기하고, 필드 부재/null과 구분한다. 행이 있다면 각 행의 tracklet ID,
-   `passed`, false predicate 키만 적는다. 빈 배열에서 false 키가 없다는 것을
-   “전부 통과”로 쓰지 않는다. 일곱 INCOMPATIBLE_BRANCH 후보는 admitted=0이라
-   IFO 입력 전 phase-layer 구성에서 제외되므로 IFO 통과 후보로 세지 않는다.
-   해당 필드가 없으면 그 한계를 기록한다. 이 요약을 위해 전체 trace를 반복
-   전달하거나 detector를 다시 돌리지 않는다.
+   구간별 표본/v1 Oil/v2 Oil/새 출력/소실/순증가만 전달한다. OUTSIDE를 포함한
+   합계는 계속 **601 / 185 / 303 / 119 / 1 / +118**이어야 한다. 다른 값이면
+   맞춰 고치지 말고 불일치를 보고한다. 숫자 0은 빈 칸과 구분한다.
+   f15776@657.9907초의 소실 1행과 기존 662–664.5초 여섯 표본은 이제 모두
+   REFILL에 속한다. 소실 행이 실제 유면 손실인지는 아직 미평가다.
+   이전 663.6–780초의 42→109행 및 새 출력 67행은 옛 시각 구간의 측정으로만
+   보존한다. 새 FULL_SUFFIX 오검출 수로 재사용하거나 총 출력에서 추정하지 않는다.
+2. **f15896 IFO 확인은 완료다.** 빈 evaluations와 빈 qualifying 집합을
+   재질문하지 않는다. 기존 일곱 `INCOMPATIBLE_BRANCH` 후보는 admitted=0으로
+   IFO 입력 전에 제외된 기록이며 실제 유면 후보인지 여부는 별도 영상 판정이다.
 3. **기존 review 방식으로 실제 유면을 확인한다.** 기존 명목 662/662.5/663/
    663.5/664/664.5초 여섯 표본부터 진행한다. 원본 열람 가능 여부를 먼저 적고,
    [O2의 packet 준비·회신 저장 절차](s11-o2-local-shadow-evaluation.md#1-먼저-한-프레임의-검토-packet-만들기)를
@@ -356,8 +353,9 @@ FULL 구간을 포함하므로 전부 누락으로 세지 않는다. 검토된 �
      프레임은 나란히 보여준다. 새 이미지 도구보다 기존 가이드 도구를 우선한다.
    - 원본상 계면 `보임/안 보임/판별 불가`, 선택 선과의 `일치/불일치/판별 불가`,
      서로 다른 후보가 같은 실제 계면을 따라가는지 확인한다. 식별 가능한
-     source Y/범위와 마지막 실제 계면 가시 시각·위치, Glass 내부 상단을 적되
-     정밀 좌표를 강제로 요구하거나 ROI 상단을 실제 Glass 상단으로 대신하지 않는다.
+   source Y/범위와 Glass 내부 상단을 적되 정밀 좌표를 강제로 요구하거나
+   ROI 상단을 실제 Glass 상단으로 대신하지 않는다. 마지막 실제 계면의
+   정확한 시각·위치는 후속 FULL closure에 필요할 때 별도로 확인한다.
    - 사용자의 실제 답을 `record`로 labels/replies/history에 남기고 `status`로
      재개한다. 에이전트의 이미지 해석과 사용자 직접 판정을 구분한다. 기존
      첫 등장·중간 하강 판정은 정확한 대응이 확인된 것만 재사용하며, 새 출력이나
@@ -368,9 +366,10 @@ FULL 구간을 포함하므로 전부 누락으로 세지 않는다. 검토된 �
      원본 열람/표시가 불가하면 그 한계를 기록하고 사람 판정 완료로 쓰지 않는다.
      숫자 표로 실제 영상 판정을 대신하거나 미확인 값을 정답으로 채우지 않는다.
 
-**현재 분석의 종료 조건:** 1–2의 결과는 구간별 표 하나, 소실 표본 및 작은 IFO
-요약으로 끝낸다. 중복·불일치는 명시적으로 해결하거나 미확인으로 남기며 숫자를
-맞춰 쓰지 않는다. 298개 빈 프레임의 원인 전수 조사나 전체 후보/predicate
+**현재 분석의 종료 조건:** 1의 새 경계 표 하나로 CSV 작업을 끝내고,
+이미 완료한 2와 소실/OUTSIDE 식별은 재사용한다. 중복·불일치는 명시적으로
+해결하거나 미확인으로 남기며 숫자를 맞춰 쓰지 않는다. 298개 빈 프레임의
+원인 전수 조사나 전체 후보/predicate
 추출로 확대하지 않는다. 3은 필요한 대응 판정과 남은 불확실성/접근 한계를
 저장하면 종료한다. 판별 불가는 유효한 기록이며, 해당 정확도 주장은 미평가로
 유지한 채 후보 비교 준비로 진행한다. 모든 누락의 해결이 종료 조건은 아니다.
@@ -378,6 +377,12 @@ FULL 구간을 포함하므로 전부 누락으로 세지 않는다. 검토된 �
 Y433.5→409는 감소이고 409→418은 증가(아래쪽 이동)다. 서로 다른 선택
 tracklet을 곧바로 하나의 실제 상승 계면이나 승인된 handoff로 해석하지 않는다.
 664.497초는 요청한 여섯 행의 마지막일 뿐 마지막 실제 계면 시각이 아니다.
+사용자가 674–675초 FULL 도달을 직접 정정했으므로 같은 구간 질문을 반복하지 않는다.
+Windows 에이전트의 LVLM 판독은 후보별 사용자 판정이 아니다. 기존 여섯 프레임은
+재충전 도중의 위치/대응 검토로 재사용한다. BASE/Accum을 명확히 표시하고,
+서로 다른 tracklet ID만으로 실제 계면이 다르다고 단정하지 않는다. f15896의
+빈 출력은 위치가 잘못된 선과 구분한다. 전환 구간의 정확한 프레임/Y 확인은
+후속 FULL closure 판단에 필요할 때만 수행한다.
 
 FULL 전환 구현 완료는 다음 세 후보 비교의 선행 조건이 아니다. 개별 비교 후
 유효한 결과를 바탕으로 기존 lifecycle의 refill closure/handoff 책임을 재사용한다.
@@ -393,15 +398,17 @@ FULL 전환 구현 완료는 다음 세 후보 비교의 선행 조건이 아니
 ③ v1: <v1 번들 경로>
 ④ v2: <v2 번들 경로>
 원본 영상: <영상 경로>
-새 review 폴더: <review 폴더 경로>
+review 폴더: <review 폴더 경로>
+docs/30-validation/windows-sample1-heating-coldstart-reviewed-truth.md와
 docs/40-operations/s11-current-windows-field-qualification.md의
-“Refill owner and false-output follow-up” 절에 따라 진행해줘.
-CSV는 중복 없는 구간 표, 소실 1행, f15896의 작은 IFO 요약까지만 마무리해줘.
-OUTSIDE 포함 601행, 185→303, 새 출력119−소실1=118을 확인하고 불일치는 보고해줘.
-이후 기존 O2 review 절차로 662–664.5초 여섯 프레임의 원본·idx 가이드를
-보여주고 실제 유면 대응을 질문해줘. 답은 review 폴더에 기록하고,
-열람 불가·판별 불가는 그대로 남겨줘. 기존 완료 판정은 다시 묻지 마.
-이번에는 detector 재실행·세 후보 실행·추가 해시 비교는 필요 없어.
+“Refill owner and false-output follow-up” 절을 읽고 진행해줘.
+사용자 정정은 BASE 550–652초 하강, 652–674초 회복, 674–675초 사이 FULL이야.
+기존 CSV를 새 경계로 한 번만 재집계하고 674–675초는 전환 구간으로 따로 보여줘.
+총 601행 / 185→303 / 새 출력119−소실1=118은 유지돼야 해.
+완료된 f15896 IFO·소실 행·OUTSIDE 확인은 반복하지 마.
+이후 필요한 미검토 장면만 기존 O2 방식으로 BASE/Accum이 명확한 원본·idx
+가이드를 보여주고 내 답을 review에 저장해줘. 기존 여섯 프레임은 재충전 도중이야.
+에이전트 판독을 내 판정으로 쓰지 말고, detector 재실행·해시 비교는 하지 마.
 ```
 
 ### Three-candidate Windows comparisons

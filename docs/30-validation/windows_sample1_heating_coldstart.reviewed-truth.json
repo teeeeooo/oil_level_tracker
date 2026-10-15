@@ -1,12 +1,18 @@
 {
   "schema_version": 1,
+  "truth_revision": "2026-10-15-base-timing-correction",
   "sample_id": "windows_sample1_heating_coldstart",
   "sample_alias_only": true,
   "actual_source_filename_recorded": false,
   "private_source_stored_in_repository": false,
   "review_authority": {
     "kind": "user_direct_source_video_review",
-    "last_reconciled_date": "2026-08-25",
+    "last_reconciled_date": "2026-10-15",
+    "base_timeline_correction": {
+      "supersedes_review_date": "2026-08-25",
+      "user_statement": "550--652 유면 서서히 감소 / 652--674 유면 회복 / 674--675 사이에 Full 도달",
+      "scope": "BASE interval timing; no exact Y or candidate identity annotation; Accum unchanged"
+    },
     "same_physical_video_for_windows_versions": [
       "R14",
       "R15",
@@ -35,7 +41,13 @@
   },
   "transition_contract": {
     "precision": "reviewed_approximate_unless_explicitly_frame_annotated",
-    "automatic_transition_tolerance_sec": null
+    "automatic_transition_tolerance_sec": null,
+    "base_full_transition_window_sec": {
+      "start": 674.0,
+      "end": 675.0,
+      "exact_transition_sec": null
+    },
+    "base_full_transition_scoring": "report separately; frame-level presence/absence needs direct review"
   },
   "segments": [
     {
@@ -60,7 +72,8 @@
       "glass": "BASE",
       "start_sec": 550.0,
       "start_is_approximate": true,
-      "end_sec": 662.0,
+      "end_sec": 652.0,
+      "end_is_approximate": true,
       "expected": {
         "oil_material": "present_partial",
         "oil_boundary": "visible_oil_air",
@@ -76,11 +89,14 @@
     {
       "id": "WS1-BASE-RAPID-REFILL",
       "glass": "BASE",
-      "start_sec": 662.0,
-      "end_sec": 663.6,
+      "id_note": "legacy ID retained; rapid motion throughout the interval is not established",
+      "start_sec": 652.0,
+      "start_is_approximate": true,
+      "end_sec": 675.0,
       "end_is_approximate": true,
+      "terminal_window": "transition_contract.base_full_transition_window_sec",
       "expected": {
-        "oil_material": "rapidly_filling",
+        "oil_material": "filling_until_full_transition",
         "oil_boundary": "visible_until_top_disappearance",
         "foam": "absent",
         "oil_boundary_motion": "upward_source_y_decreases"
@@ -93,8 +109,9 @@
     {
       "id": "WS1-BASE-FULL-SUFFIX",
       "glass": "BASE",
-      "start_sec": 663.6,
+      "start_sec": 675.0,
       "start_is_approximate": true,
+      "start_semantics": "counting cutoff after reviewed 674-675 s FULL transition; not exact transition time",
       "end_sec": 780.0,
       "expected": {
         "oil_material": "present_full",
@@ -206,7 +223,11 @@
     },
     {
       "claim": "BASE 674 s Y435 is a real Oil boundary",
-      "replacement": "WS1-BASE-FULL-SUFFIX has no visible interface"
+      "replacement": "674 s is within the FULL transition window; Y435 remains an unqualified historical point estimate"
+    },
+    {
+      "claim": "BASE drains until 662 s, rapidly refills at 662-663.6 s and is FULL thereafter",
+      "replacement": "User correction on 2026-10-15: drain 550-652 s; refill 652-674 s; FULL reached within 674-675 s; full suffix counted from 675 s"
     },
     {
       "claim": "Accum 758-774.5 s is real Foam",
