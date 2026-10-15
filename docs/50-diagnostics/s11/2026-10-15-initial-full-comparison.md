@@ -464,12 +464,42 @@ writer then completed and cleaned that output. The final artifact check passes
 for all 77 managed runs. This does not establish peak-budget compliance; a later
 FULL replay needs a larger explicit allowance or a smaller trace window.
 
+## Operator-reported non-Oil tracking from 721.01 s
+
+During the v2 Windows comparison, the operator added a previously omitted
+observation: from source-video time **721.01 s**, the detector tracks something
+other than actual Oil; it looks like heat shimmer, and the same false tracking
+also occurred with OFF. Treat the non-Oil identification and prior OFF occurrence
+as operator-reported evidence. Heat shimmer is a suspected visual explanation,
+not a verified optical cause or a locally inspected image.
+
+The specific OFF bundle/initial state, affected Glass, output surface, final
+selected candidate and interval end are not yet bound. The earlier ① FULL+OFF
+BASE CSV count was zero, so do not silently assign this observation to ① final
+BASE output. The current Windows review can identify the relevant saved OFF run
+and compare its preview/overlay/final output with v1/v2 at actual sampled times
+around 721.01 s; no new run or whole-JSON transfer is requested for this addendum.
+
+If this is BASE, it lies in the canonical ~663.6–780 s FULL suffix and supplies an
+additional reported false-observation checkpoint, not a new physical truth period.
+If another Glass is affected, use its own reviewed interval. Compare whether the
+same non-Oil target persists, grows or diminishes across modes and inspect the
+admission/selection evidence of a representative false positive. A wrongly
+accepted candidate may pass every current predicate; false-key extraction alone
+cannot establish its cause. The earliest harmful stage and the heat-shimmer
+mechanism remain unknown until that evidence is returned.
+
+This supplements the ongoing comparison without changing the v2 source, the
+fixed optional-mechanism order or field disposition. A pre-existing false
+positive is still a candidate-discrimination problem; pre-existence alone does
+not prove v2 preserves its extent or that a particular later mechanism will fix it.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: transferred ON predicates identify repeated anchor/direct-identity/current-confirmation checks at 553.5/662.5/663.5 s despite existing tracklet admission. The raw outcomes also establish default FULL zero, not a measured no-interface likelihood. Physical identity, top-reaching continuity and full-state publication remain separate unresolved questions.
+- First harmful stage: transferred ON predicates identify repeated anchor/direct-identity/current-confirmation checks at 553.5/662.5/663.5 s despite existing tracklet admission. The raw outcomes also establish default FULL zero, not a measured no-interface likelihood. For the added 721.01 s non-Oil observation, output binding and the earliest harmful stage are unknown; heat shimmer remains a hypothesis. Physical identity, top-reaching continuity and full-state publication remain separate unresolved questions.
 - Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
-- Execution scope: transferred Windows tables and corrected predicate keys are reconciled against source, not locally inspected private media. V2 changes the existing observation branch; focused lifecycle/resolver checks run through actual detector construction. The existing frozen local analysis/export runner verifies default/OFF preservation, same-frame candidate/CSV provenance, independent Foam and debug equivalence; all changed physical positions remain unreviewed. GUI construction is unchanged and its earlier propagation evidence is reused.
-- Logic-map impact: UPDATED — v2 observation admission reuses the builder's bounded confirmation and continuation eligibility; the map distinguishes that from v1's repeated anchor requirement. No state-transition or owner graph is added.
+- Execution scope: the earlier v2 implementation and local runner verification remain recorded above. This addendum records the operator's 721.01 s observation and narrows the ongoing Windows source/bundle comparison. No private media are inspected locally, no source changes or new experiments run, and no new physical/optical cause is inferred from text alone.
+- Logic-map impact: NONE — this addendum adds a reported opposition checkpoint to the existing comparison; v2 ownership and the map updated in `4c72ebb` remain unchanged.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.
