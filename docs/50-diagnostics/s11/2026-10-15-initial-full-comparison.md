@@ -655,8 +655,9 @@ The transferred follow-up reports 119 newly numeric frames and one lost frame,
 giving the already established net increase of 118. Its physical segment labels
 are **not accepted**: they use 480–663.5 / 663.5–665 / 665–670 / 670–780 s,
 which differ from the canonical reviewed 480–~550 / ~550–662 / 662–~663.6 /
-~663.6–780 s. No new direct source-video review is supplied to replace that truth.
-An operator clarification is pending; until then the canonical owner is unchanged.
+~663.6–780 s. The subsequent reply explicitly confirms those boundaries were
+arbitrary approximations, not a new source-video review. Canonical truth remains
+unchanged; that clarification is closed.
 
 Retain the numbers as reported time buckets, not as corrected physical segments:
 
@@ -733,12 +734,59 @@ If the Windows agent cannot view the original, record that access limit and leav
 the physical match to the operator; another candidate table cannot substitute for
 it. No new run, source revision, hash check or complete JSON transfer is needed.
 
+### Boundary recount — overlapping totals not accepted
+
+The next reply retains the canonical physical timeline but snaps aggregation
+boundaries to f13187 / 550.01 s, f15872 / 661.99 s and f15908 / 663.50 s, counting
+boundary samples on both sides. It returns:
+
+| Returned bucket | Rows | v1 numeric | v2 numeric | New / lost | Net |
+|---|---|---|---|---|---|
+| 480–550.01 s | 140 | 1 | 4 | 3 / 0 | +3 |
+| 550.01–661.99 s | 225 | 143 | 189 | 47 / 1 | +46 |
+| 661.99–663.50 s | 4 | 1 | 3 | 2 / 0 | +2 |
+| 663.50–780 s | 234 | 42 | 110 | 68 / 0 | +68 |
+| Overlapping sum | 603 | 187 | 306 | 120 / 1 | +119 |
+
+These are not a valid partition of the previously reported 601 unique BASE rows.
+Changing segment membership cannot change the fixed-cohort totals 185→303 or
+119 new−1 lost=118. The returned totals add two v1 numeric occurrences and three
+v2 numeric occurrences; their extra net one is a counting discrepancy, not a
+detector change or an allowed boundary tolerance. Do not replace the accepted
+aggregate with +119 or treat the row-count discrepancy as harmless.
+
+The procedure's numeric aggregation cutoffs remain 550 / 662 / 663.6 s, applied
+to actual CSV time, without snapping to the nearest sample. Under that accounting,
+f13187 at 550.01 s and f15872 at 661.995 s belong only to DRAIN, while f15908 at
+663.496 s belongs only to RAPID REFILL. Approximate physical transition truth is
+separate from this deterministic bookkeeping. OUTSIDE preserves samples such as
+the reported first 479.98 s row; every matched row belongs to exactly one bucket.
+Do not reconstruct a final segment table by subtracting guessed duplicate values;
+the actual unique frame pairs must be grouped once.
+
+The reply locates the one lost output in DRAIN, but still supplies no frame/time.
+The claimed 68 new FULL-suffix outputs and other bucket totals remain provisional
+until deduplication and fixed-boundary aggregation pass. The earlier reported
+670–780 s subinterval remains separate evidence; it is not replaced by this
+overlapping table. Also distinguish **new outputs** from **all v2 outputs**:
+even 110/303 would be about 36%, so this table does not establish that most of
+v2's total numeric observations are FULL-suffix false positives. It does support
+continuing the review of false outputs among additions, without certifying the
+DRAIN candidates as actual interfaces.
+
+This reply answers the timeline-clarification question, not the outstanding
+f15896 IFO cardinality or original-video correspondence checks. The operator
+clarifies that the df00806 questions have not yet been forwarded; send the updated
+procedure as one replacement handoff. Those items remain pending, not an already
+running Windows review. No additional detector experiment or expanded evidence
+request follows.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: v1's three observation-barrier losses reach final sequence/CSV under v2. The shared non-Oil candidate is confirmed through anchor_corridor and is newly published at 721 s versus v1, with selected/CSV equality now confirmed. The f15896 seven-candidate loss is before IFO at tracklet branch compatibility; which candidate is the actual refill interface remains unknown. Zero final FULL rows remain. Incorrect transferred segment labels are not physical truth, and no new selector defect is established at 720/771 s.
 - Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
-- Execution scope: earlier v2 implementation/local verification remain recorded above. Current work reconciles the transferred refill readout, incorrect time-bucket labels, seven incompatible candidates and original selected-candidate object against source and canonical truth. No private media are inspected locally, no source changes or new experiments run, and no physical interface is inferred from a selected tracklet. Existing ROI/Artifact coverage unknowns remain unchanged; physical correspondence still requires actual private-video inspection.
+- Execution scope: earlier v2 implementation/local verification remain recorded above. Current work reconciles the transferred refill readout and rejects overlapping recount totals using fixed-cohort arithmetic and unchanged canonical truth. The original selected-candidate object is reconciled and candidate rejection before IFO remains source-backed. No private media are inspected locally, no source changes or new experiments run, and no physical interface is inferred from a selected tracklet. Existing ROI/Artifact coverage unknowns remain unchanged; physical correspondence still requires actual private-video inspection.
 - Logic-map impact: NONE — this intake distinguishes the existing raw, phase, selector and final-publication responsibilities; v2 ownership and the map updated in `4c72ebb` remain unchanged.
 - Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.
