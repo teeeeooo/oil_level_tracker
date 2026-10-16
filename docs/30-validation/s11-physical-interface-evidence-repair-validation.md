@@ -48,6 +48,35 @@ physical recall. GUI wiring is unchanged; its passing propagation checks are
 reusable, while actual detector/resolver construction and output provenance run
 on the changed source.
 
+## October 16 top-exit FULL comparison checks
+
+- Explicit OFF preserves the v2 reference and all numeric candidate/CSV values.
+  ON must also preserve every numeric Oil node, independent Foam coordinates and
+  candidate admission; only supported coordinate-free state rows may change.
+- Positive: one mature selected owner rises over the bounded confirmation window
+  to the configured top, then disappears on a usable unopposed frame. Check FULL
+  at disappearance and continued absence, empty raw/smoothed Oil coordinates,
+  exact source-frame witness and distinct temporal-state flags/validity/CSV.
+- Negative/reset: mid-height loss, stationary top, downward/reversed trajectory,
+  owner switch, provisional/unconfirmed or material-opposed owner, competing or
+  unselected admitted current Oil, censored spike, current EMPTY, black/glare/
+  unavailable raster, missing quality fields and stale/nonpositive sample time.
+  New interface after FULL remains numeric and ends the old state episode;
+  subsequent blank must not resume stale FULL. No initial-FULL prior-only output.
+- Exercise detector/resolver and every GUI factory/launch flag, final sample and
+  CSV/trace publication, debug equality, permutation and bounded suffix influence.
+  Compare configured geometry top with the effective mask's reachable limit;
+  masked/uncertain physical exit is not a passing FULL transition.
+- Windows compares ④ with ⑧ v2+top-exit-full, all three rejected mechanisms OFF.
+  First check endpoint reachability and physical-top correspondence using existing
+  ④ inputs. If margin excludes the endpoint band, return that small preflight and
+  do not run a whole video that cannot satisfy the condition. Local evidence is
+  retained in [the October 16 record](../60-evidence/s11/2026-10-16-top-exit-full.md).
+  Reuse existing reviews and canonical buckets; inspect the 674–675 s transition
+  and its preceding selected-owner evidence. Do not infer a missing exact exit
+  frame from the timeline. Keep 721 s wrong output as the next separate task,
+  reporting changes rather than censoring it under the FULL assumption.
+
 ## Cost-first comparison checks
 
 The option repeats the frozen first-sort intervention; it does not claim physical

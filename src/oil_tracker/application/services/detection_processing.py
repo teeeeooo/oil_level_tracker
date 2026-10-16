@@ -83,17 +83,18 @@ def tracking_sample_from_detection(
     }
     flags = {str(flag).strip().upper() for flag in detection.flags}
     sequence_state = "SEQUENCE_RESOLVED_STATE" in flags
-    image_supported_state = explicit_state and (
+    supported_state = explicit_state and (
         not sequence_state
         or "R6_IMAGE_SUPPORTED_STATE" in flags
         or "R7_IMAGE_SUPPORTED_STATE" in flags
+        or "OIL_TOP_EXIT_FULL" in flags
     )
     visible_valid = detection.fill_state is not FillState.UNKNOWN_REVIEW and (
         oil_px is not None or detection.fill_state is FillState.FULL_WITH_FOAM
     )
     oil_valid = (
         detection.overall_confidence >= glass.detector_settings.minimum_final_confidence
-        and (image_supported_state or visible_valid)
+        and (supported_state or visible_valid)
     )
     foam_observed = detection.raw_foam_front_y is not None or foam_px is not None
     foam_topology_conflict = bool(

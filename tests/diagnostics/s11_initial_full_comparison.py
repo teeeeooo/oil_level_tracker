@@ -82,6 +82,7 @@ def compare(
     output: Path, roi_inputs: Path, sample: str, *, debug_full: bool = False,
     cost_first_comparison: bool = False,
     candidate_rgb_comparison: bool = False,
+    top_exit_comparison: bool = False,
 ) -> None:
     from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
     from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
@@ -96,7 +97,7 @@ def compare(
     from tests.diagnostics.s11_replay_provenance import capture_runtime_provenance
     import csv
 
-    if cost_first_comparison and candidate_rgb_comparison:
+    if sum((cost_first_comparison, candidate_rgb_comparison, top_exit_comparison)) > 1:
         raise ValueError("Compare one mechanism at a time.")
     output.mkdir(parents=True, exist_ok=False)
     video = ROOT / "sample" / f"{sample}.mp4"
@@ -108,7 +109,8 @@ def compare(
     variants = {}
     raw_inputs = []
     for enabled in (False, True):
-        mode = (("candidate_rgb" if enabled else "observation") if candidate_rgb_comparison
+        mode = (("top_exit" if enabled else "observation") if top_exit_comparison
+                else ("candidate_rgb" if enabled else "observation") if candidate_rgb_comparison
                 else ("cost_first" if enabled else "observation") if cost_first_comparison
                 else ("observation" if enabled else "baseline"))
         with TemporaryDirectory(prefix=f"{sample}-{mode}-", dir=output) as scratch:
@@ -124,9 +126,10 @@ def compare(
                     InitialObservationState.FULL_NO_INTERFACE, str(video), session.analysis_start_sec,
                 )
             detector = Recorder(
-                initial_full_observation=cost_first_comparison or candidate_rgb_comparison or enabled,
+                initial_full_observation=cost_first_comparison or candidate_rgb_comparison or top_exit_comparison or enabled,
                 cost_first_assignment=cost_first_comparison and enabled,
                 candidate_rgb=candidate_rgb_comparison and enabled,
+                top_exit_full=top_exit_comparison and enabled,
             )
             started = time.monotonic()
             result = AnalysisPipeline(
@@ -144,6 +147,7 @@ def compare(
             for sample_row, detection, csv_row in zip(rows, detector.completed, csv_rows, strict=True):
                 assert ("+cost-first-assignment-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (cost_first_comparison and enabled)
                 assert ("+candidate-rgb-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (candidate_rgb_comparison and enabled)
+                assert ("+top-exit-full-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (top_exit_comparison and enabled)
                 y = sample_row["raw_oil_air_level_y"]
                 assert y == detection["raw_oil_air_level_y"]
                 assert (None if not csv_row["raw_oil_air_level_y"] else float(csv_row["raw_oil_air_level_y"])) == y
@@ -163,7 +167,8 @@ def compare(
                 "rows": rows,
                 "phase": [{"frame_index": d["frame_index"], "phase": d["debug_metrics"]["sequence_material_phase"],
                            "reason": d["debug_metrics"]["sequence_material_phase_reason"],
-                           "observation": d["debug_metrics"]["sequence_material_phase_diagnostics"].get("initial_full_observation")}
+                           "observation": d["debug_metrics"]["sequence_material_phase_diagnostics"].get("initial_full_observation"),
+                           **({"top_exit": d["debug_metrics"]["sequence_material_phase_diagnostics"].get("top_exit_full")} if top_exit_comparison else {})}
                           for d in detector.completed],
                 "events": stable([asdict(e) for g in result.glass_results for e in g.events]),
                 "report": asdict(report),
@@ -185,7 +190,8 @@ def compare(
                 candidate["features"] = {k: v for k, v in candidate["features"].items()
                                          if not k.startswith("oil_candidate_rgb_")}
     assert raw_inputs[0] == compared_raw, "Comparison changed unannotated current-frame detector inputs"
-    result = {"sample": sample, "comparison": ("candidate_rgb" if candidate_rgb_comparison
+    result = {"sample": sample, "comparison": ("top_exit" if top_exit_comparison
+                                               else "candidate_rgb" if candidate_rgb_comparison
                                                else "cost_first" if cost_first_comparison else "initial_full"),
               "initial_state": "FULL mechanism stress condition; not physical truth",
               "debug_trace_level": "FULL" if debug_full else "NONE",
@@ -264,6 +270,8 @@ if __name__ == "__main__":
                         help="Compare FULL+observation v2 with/without cost-first assignment")
     candidates.add_argument("--candidate-rgb-comparison", action="store_true",
                             help="Compare FULL+observation v2 with/without frozen candidate RGB eligibility")
+    candidates.add_argument("--top-exit-comparison", action="store_true",
+                            help="Compare FULL+observation v2 with/without top-exit FULL closure")
     args = parser.parse_args()
     if args.prepare_roi:
         prepare(args.prepare_roi)
@@ -274,4 +282,5 @@ if __name__ == "__main__":
             parser.error("--compare requires --roi-inputs and --sample")
         compare(args.compare, args.roi_inputs, args.sample, debug_full=args.debug_full,
                 cost_first_comparison=args.cost_first_comparison,
-                candidate_rgb_comparison=args.candidate_rgb_comparison)
+                candidate_rgb_comparison=args.candidate_rgb_comparison,
+                top_exit_comparison=args.top_exit_comparison)

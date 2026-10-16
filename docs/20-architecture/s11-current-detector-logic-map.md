@@ -36,6 +36,7 @@ owns the record, not a second feature inventory in each experiment.
 | Run window, cadence and initial state | [`AnalysisSession`](../../src/oil_tracker/domain/session.py) → [`AnalysisPipeline.run`](../../src/oil_tracker/application/services/analysis_pipeline.py) schedules frames and forwards matching session confirmations to completed resolution | Actual sampling and confirmed state versus Recipe intent or standalone frame identity; neither static preparation nor initial-state confirmation may be assumed from a helper test. |
 | Experimental Local XY | Explicit [`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py) constructor input → selected Oil measurement lanes | Default OFF; it is not the Recipe exclusion mask. State scope/digest if used; historical rejection does not authorize enabling or tuning it. |
 | Initial-FULL observation comparison | GUI `--initial-full-observation` → `build_main_window` detector factory → `OpenCvPhaseDetector` / resolver policy | Default OFF; bounded tracklet-admitted current observations may reach selection without a drain release (v2 includes continuation rows and already-confirmed provisional witnesses). Trial version/title and direction-uncertainty flags distinguish it from baseline. It does not enable Local XY or change Recipe initial state. |
+| Top-exit FULL comparison | GUI `--oil-top-exit-full` → the same detector factory/resolver → `OilPathLifecycleOwner._close_top_exit_full` | Default OFF. After numeric selection, a bounded same-owner rise to the configured top plus usable unopposed disappearance may emit coordinate-free FULL. Raw image likelihood is unchanged; `OIL_TOP_EXIT_FULL` identifies temporal state evidence. Every numeric node is preserved; cost-first/RGB/Local XY are separate. |
 | Cost-first assignment comparison | GUI `--oil-cost-first-assignment` → same detector factory → `OpenCvPhaseDetector` / `ObservationSequenceResolver` → Oil config and `DirectedTrackletPolicy` | Default OFF, independent of initial-FULL. Only the first assignment sort removes established-status precedence; existing reciprocal reservation ordering and all eligibility/ambiguity/confirmation rules remain. ON adds `+cost-first-assignment-v1`; intended Windows pair uses FULL+observation v2 in both runs. |
 | Candidate RGB comparison | GUI `--oil-candidate-rgb` → same detector factory → frame projector's frozen RGB annotations → `candidate_is_eligible` | Default OFF; additional completed-Oil eligibility only, using packaged fixed weights and native visible/glare-free side patches. Compatibility cannot promote authority or rescue rejection; UNKNOWN/UNAVAILABLE fail this condition. Raw proposals and direct Foam policy remain. ON adds `+candidate-rgb-v1`; cost-first remains OFF. |
 | Completed analysis and report | [`DetectionRunCoordinator`](../../src/oil_tracker/application/services/detection_run.py) → sequence composition → sample/event/judgment/export owners below | Raw helper, current-frame output, completed Oil/Foam, and report are different execution scopes. Recipe judgment/scale and report rendering do not establish physical accuracy. |
@@ -95,7 +96,8 @@ flowchart LR
   P0 --> PF[OIL-PHASE-FILL]
   PF --> PD[OIL-PHASE-DRAIN]
   PD --> S[OIL-SELECTOR\nbounded fixed-lag path]
-  S --> OP[OIL-PROJECTION\nselected same-frame candidate]
+  S --> X[OIL-PHASE-FILL\noptional selected-owner top-exit closure]
+  X --> OP[OIL-PROJECTION\nselected same-frame candidate or typed state]
   OP --> C[SEQUENCE-COMPOSITION\nOil/state then Foam]
   FC --> FE[FOAM-EPISODE\ntracks + formation witness]
   FI --> A
@@ -117,7 +119,8 @@ OpenCvPhaseDetector.resolve_sequence
             -> OilPathLifecycleOwner.resolve
                  -> OilMaterialPhaseLifecycleOwner.resolve
                  -> BoundedOilInterfaceSelector.resolve
-                 -> OilResolutionProjectionOwner.project
+                 -> optional _close_top_exit_full (selected-owner state evidence)
+            -> OilResolutionProjectionOwner.project
        -> FoamEpisodeResolver.resolve (on Oil-projected detections)
   -> DetectionRunCoordinator.resolve_completed_window
   -> tracking_sample_from_detection
@@ -316,7 +319,7 @@ discrimination or implementation of the full raster-witness proposal.
 `OilResolutionProjectionOwner._project_detection` turns one node into one final `PhaseDetection`:
 
 - `oil`: selected candidate Y is copied to raw/smoothed/public Oil fields for that source frame; state is derived from the selected Oil path; sequence and tracklet provenance are added to metrics.
-- `full`/`empty`: image-supported state is emitted with no Oil coordinate.
+- `full`/`empty`: image-supported state is emitted with no Oil coordinate. The optional top-exit route emits a separately typed temporal FULL state; it does not raise raw image likelihood.
 - `unknown`: no Oil coordinate; barrier/initial-state/tracklet reasons are retained in flags/metrics.
 
 The projection uses the selected nested candidate, not a path-interpolated Y. The current code’s compatibility flags still use several `R17_*` names while the resolver/version is `r21-truth-preserving-detector-repair-v1`; those labels are storage/readability details, not an alternate R17 owner.
@@ -327,6 +330,19 @@ For optional `OBSERVED_INTERFACE` rows, projection uses `PARTIAL_VISIBLE` plus
 presentation retains their coordinates and extrema but excludes them from direction
 summaries and explicitly states their uncertainty/false-positive risk. Other rows
 retain the ordinary event/report semantics; Foam still resolves independently.
+
+The optional top-exit route runs after selection/spike censorship inside
+`OilPathLifecycleOwner`, where the actual observed owner is available. It preserves
+all numeric nodes and uses only a bounded consecutive same-owner rising witness,
+a direct/ordered-lower anchor, strict material/identity clearance and the configured
+ellipse top within row-localization tolerance. The next frame must have usable
+raster evidence, no phase-admitted Oil, no EMPTY or ambiguity/contradiction. FULL
+continues only through unopposed absence; new interface, unavailable frame or stale
+time gap resets it. No earlier blank is filled. Diagnostics retain the underlying
+motion phase/reason and exact source witness; `state_only` describes coordinate-free
+state admission, not an Oil allowed-set bypass. Sample validity recognizes
+`OIL_TOP_EXIT_FULL` separately from current-image evidence. Windows must verify
+that the configured top actually represents the physical visible exit.
 
 ## 5. Independent Foam path and composition
 

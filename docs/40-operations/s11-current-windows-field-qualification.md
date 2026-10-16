@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE` — current comparisons and accounting CLOSED; no active Windows task.
+**Status:** `ACTIVE PROCEDURE` — top-exit geometry preflight is the next handoff; execute the comparison only if its input condition is reachable. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -14,13 +14,101 @@ also closes the tested configuration without adoption: partial BASE suppression
 coexists with a reviewed replacement artifact and an allowed Accum observation
 loss. All three candidate runs and the
 [saved-output accounting closeout](#priority-3-local-xy-saved-output-closeout)
-are complete. No additional CSV extraction, image question or detector run is
-requested. The Work Plan returns the next-direction decision to the user.
+are complete. The user subsequently authorized the [top-exit FULL comparison](#top-exit-full-comparison), followed by a separate investigation of the 721 s non-interface output. Do not repeat the old accounting requests.
 Review-006 remains unreviewed/pending. Cost-first/RGB/Local XY remain OFF outside retained trial data.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
+
+## Top-exit FULL comparison
+
+**현재 순서: ④ v2 기반 FULL 전환 검증 → 그다음 721초 부근 비유면 조사.**
+새 후보 ⑧은 `initial_full_observation=True, top_exit_full=True`이며
+cost-first/RGB/Local XY는 OFF다. 디텍터·resolver에
+`+initial-full-observation-v2+top-exit-full-v1`이 붙는다. 같은 조건의 기존
+④ bundle을 재사용한다. 이 비교는 아직 채택된 기본 동작이 아니다.
+
+**전체 실행 전, 기존 자료로 상단 조건부터 확인한다.** 로컬 두 Recipe에서는
+margin이 설정 ellipse 상단을 제외해 새 조건의 끝점에 도달할 수 없었다.
+Windows에서도 같다고 단정하지 않고, 기존 ④ Recipe와 674–675초 직전 자료로
+BASE의 아래 값만 확인한다. 디텍터 재실행이나 새 전체 CSV 분석은 필요 없다.
+
+- `geometry_top_y = ellipse.center_y - ellipse.radius_y`와
+  `endpoint_tolerance_px = max(1, 2 * ellipse.radius_y * 0.012)`.
+- 기존 `build_mask_bundle`의 effective mask에서 가장 작은 **source Y**.
+  crop 원점을 더하고, mask 밖의 후보를 도달 가능한 실제 관측으로 세지 않는다.
+- 상단 소실 직전의 마지막 허용 계면 관측 시각/Y/owner와 원본의 가시 상단.
+  기존 리뷰가 없으면 LVLM 관찰과 사용자 판정을 구분하고 위치 불확실성을 남긴다.
+
+effective mask의 상단이 `geometry_top_y + endpoint_tolerance_px`보다 아래이거나,
+설정 상단과 실제 가시 상단의 대응을 확인할 수 없으면 **여기서 멈추고 위 값과
+사유만 반환한다. ⑧ 전체 실행은 하지 않는다.** 이를 해결하려고 margin/ROI/임계값을
+변경하거나 mask 끝을 물리적 FULL 경계로 간주하지 않는다. 이 경우 다음 수정은
+상단 입력의 의미를 먼저 정한 뒤 진행한다. 조건이 도달 가능하고 물리적 대응이
+확인되면 아래의 동일 조건 비교를 한 번 수행한다.
+
+1. Work Plan이 지정한 게시 소스에서 기존 headless 실행기/AnalysisPipeline을
+   재사용한다. 디텍터는 아래와 같이 생성한다. GUI를 사용하면 같은 ZIP 루트에서
+   `python -m oil_tracker --initial-full-observation --oil-top-exit-full`로 실행한다.
+   창 제목에는 `상단 이탈 FULL 비교`가 표시된다. GUI를 여는 것만으로 분석이
+   시작되지는 않는다. 실제 수행한 경로를 기록한다.
+
+   ```python
+   detector = OpenCvPhaseDetector(initial_full_observation=True, top_exit_full=True)
+   ```
+
+2. 기존 영상·Recipe·ROI/margin/exclusion/Artifact·영점·스케일을 유지한다.
+   480–780초, 2fps, FULL debug, compressor_start=485초,
+   BASE FULL / Accum EMPTY 초기 확인값을 그대로 사용한다. 새 출력은
+   `sample/output/`의 관리되는 실행 폴더에 둔다. ④ 조건이 맞으면 다시 돌리지 않는다.
+3. BASE/Accum 각 601개의 `(glass_id, frame_index)`를 일대일 대응하고,
+   기존 정규 구간표로 Oil 숫자/Y·FULL/UNKNOWN·Foam 좌표/validity/episode 변화를
+   정리한다. 이 구현은 **기존 숫자 Oil을 모두 보존**해야 한다. 숫자 값/선택이
+   바뀌면 먼저 계약 위반으로 보고하고 임의 튜닝하지 않는다. 최초 FULL과 연속
+   유지 범위, FULL 종료 사유를 보고한다. 시간 정답으로 CSV 상태를 덮어쓰지 않는다.
+4. 674–675초 전환과 직전 마지막 관측을 중심으로 다음을 짧게 확인한다.
+   - `sequence.state.sequence_material_phase_diagnostics.top_exit_full`의
+     `reason`, `predicates`, `witness`, `geometry_top_y`, `endpoint_tolerance_px`.
+     source frame과 resolver offset을 구분한다. FULL이 없으면 마지막 상단 접근
+     후보의 실제 실패 조건만 보고한다. 전체 빈 프레임/JSON을 다시 분석하지 않는다.
+   - 원본에서 같은 실제 상승 계면이 상단으로 사라졌는지, **설정 ellipse 상단이
+     물리적 Glass의 가시 상단과 맞는지** 확인한다. margin/effective-mask 끝이나
+     crop 밖 소실만으로 FULL 성공을 인정하지 않는다. top 불일치/가림이 있으면
+     그 사실을 보고하고 ROI 또는 임계값을 바꾸지 않는다.
+   - FULL 행은 Oil 좌표가 비어 있고 `OIL_TOP_EXIT_FULL`이 있으며, raw
+     `record.state.oil_no_interface_full_likelihood`는 원래 값 그대로다.
+     `sequence_state_image_evidence=0`을 새 이미지 FULL 판정으로 설명하지 않는다.
+     witness의 마지막 선택 Y·frame/owner가 실제 직전 관측과 맞는지 확인한다.
+5. review-004/005의 복수 허용·대략적 일치와 review-007/008은 재사용한다.
+   review-006은 pending으로 보존한다. 이번 top-exit 장면에서만 새로운 사용자
+   판단이 필요하면 기존 review 폴더의 packet/plain/guide 방식으로 최소한만 질문한다.
+   LVLM 관찰을 사용자 확정으로 저장하지 않는다. 정확한 전환 프레임이 불확실하면
+   674–675초 범위를 유지한다.
+6. 721초 비유면과 723/771초 보호 지점은 **최종 출력 변화 유무만** 함께 남긴다.
+   원인 조사·억제 수정은 이번 FULL 결과를 받은 뒤 별도 단계다. 현재 숫자를
+   FULL로 덮거나 새 후보를 추가해 오검출이 해결됐다고 처리하지 않는다.
+   FULL 성공/미해결, 기존 관측 보존, 실제 top 대응, 최종 Foam 영향을 반환하고
+   멈춘다. O2 OPEN / FIELD FAIL과 기본 OFF를 유지한다.
+
+전달용 짧은 프롬프트:
+
+```text
+④ FULL+ON v2 bundle: <기준 번들 경로>
+최신 소스 ZIP: <소스 경로>
+기존 영상·Recipe·review 폴더: <경로>
+
+docs/40-operations/s11-current-windows-field-qualification.md의
+“Top-exit FULL comparison”의 실행 전 상단 조건을 기존 ④ 자료로 먼저 확인해줘.
+설정 상단·effective mask 상단·마지막 실제 관측이 맞지 않으면 전체 재실행 없이
+문서에 적힌 값과 사유만 알려줘. ROI/margin/임계값은 바꾸지 마.
+조건이 맞을 때만 ⑧을 실행·비교해줘.
+initial-full-observation과 top-exit-full만 ON, cost-first/RGB/Local XY는 OFF야.
+같은 조건의 ④는 재사용하고, 기존 headless 실행기 또는 문서의 GUI 실행을 사용해줘.
+기존 숫자 Oil이 유지되는지와 674–675초 상단 소실→FULL 전환·유지 여부를 확인해줘.
+721초 부근은 변화 유무만 기록해줘. 원인 조사는 다음 단계야.
+기존 사용자 판정은 재사용하고, 튜닝·추가 재실행 없이 결과를 알려줘.
+```
 
 ## 1. Preconditions and identity
 

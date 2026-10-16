@@ -134,6 +134,55 @@ than positive no-interface evidence. This correction creates neither a FULL node
 from that zero nor a FULL hold from an ordinary missing observation. Verify the
 recovered topward owner against the actual refill before designing that transition.
 
+## October 16 top-exit FULL closure
+
+After all three individual Windows mechanisms were closed without adoption, the
+user authorized this order: **④ v2 top-exit FULL closure, then investigation of
+the non-interface output around 721 s**. The latter is not an identity fix to
+bundle into this change. The optional `top_exit_full` constructor/GUI mode adds
+`+top-exit-full-v1`; it defaults OFF and compares separately against unchanged
+initial-FULL v2 with cost-first, RGB and Local XY OFF.
+
+Reuse `OilPathLifecycleOwner`, after bounded selection and spike censorship but
+before projection. This seam has the actual selected owner; the earlier material
+phase loop sees several admitted hypotheses and cannot certify which one was
+observed. This is a causal coordinate-free lifecycle decision, not a CSV/report
+rewrite, a numeric interpolation, or a bypass of candidate admission. Preserve
+every selected numeric Oil node, including wrong identities still needing the
+subsequent 721 s investigation.
+
+Use a bounded window of consecutive same-owner selected observations. Reuse
+existing confirmation count/window, jump, progress, material and direction
+limits. Require mature admitted observations, a direct/ordered-lower anchor in
+the window, strict current/history material clearance and actual upward source-Y
+progress. The last measurement must reach the configured ellipse top within the
+existing row-localization tolerance, not merely the broad entrance band. The
+upper endpoint is a geometry assumption to check against the physical visible
+Glass top on Windows; a crop/margin edge is not automatically that physical top.
+Local mask inspection found the endpoint band outside the effective mask for both
+retained Recipes. This candidate therefore has no demonstrated real-video positive
+closure. Check Windows endpoint reachability from existing ④ inputs before a full
+run; if it fails, resolve the geometry contract first instead of tuning the band.
+No reviewed time, source Y or Glass identity enters the rule.
+
+Only the immediately following usable frame with no phase-admitted Oil, no
+current EMPTY evidence and no ambiguity/contradiction can confirm disappearance.
+Ordinary mid-height loss, owner switches, static top structures, missing raster
+quality, black/glare/unavailable frames and censored current Oil cannot close.
+After confirmation, coordinate-free FULL may continue only through usable,
+unopposed absence frames. Any new current interface, state contradiction or
+unavailability ends that evidence episode; no stale resumption or owner transfer.
+Missing observations before closure never receive a coordinate or retroactive FULL.
+
+Record source frame/time/owner/Y for the bounded witness, actual predicates,
+geometry boundary, reset reason and inferred-state origin. Keep raw current-image
+FULL likelihood unchanged, including zero. `OIL_TOP_EXIT_FULL` distinguishes
+this temporal evidence from `R17_IMAGE_SUPPORTED_STATE`; sample validity must
+recognize the typed coordinate-free result without inventing an Oil measurement.
+Foam still resolves independently afterward, so compare final composition as
+well as its raw coordinates. This option can expose a mechanical transition but
+does not establish physical identity or field acceptance.
+
 ## Cost-first assignment comparison
 
 The first of the three authorized Windows candidates reuses the exact intervention
@@ -470,8 +519,8 @@ as the serialized array index. Diagnostic detail must not change output.
 - Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples; the cost-first Windows regression, qualified review-004/005 and frozen RGB model's rim failure/input contract.
 - Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
-- Existing feature coverage: normal Recipe ellipse/margin/exclusions, static preparation and initial-state confirmation remain active. RGB comparison reuses the frozen initial-FULL interior ROI Recipes with empty templates/exclusions, cost-first and Local XY OFF. Only the packaged fixed-model eligibility condition differs between explicit FULL+v2 runs. Native RGB/effective/glare support is measured without the retired overlay guard. Private Windows setup remains operator evidence.
-- Execution scope: RGB preparation verifies frozen inference and actual GUI/AnalysisPipeline → completed resolution → CSV/report on the existing two local clips, with debug equivalence and retained-v2 equality. Earlier initial-FULL/cost-first results retain their scope. No private media, fit, new label, model download or physical acceptance is part of local verification.
-- Difference from prior failures: the RGB model and its known rim false accepts are unchanged; the new bounded consumer requires its compatibility in addition to existing Oil eligibility. It cannot raise authority or repair hard exclusions. Initial-FULL/cost-first retain their distinct scopes; full raster-witness acceptance, confirmation, scores and motion release remain unchanged. No threshold or source-specific rescue is added.
-- Logic-map impact: UPDATED — the new RGB setup route, current-frame annotations and additional completed eligibility condition are mapped; default behavior, existing phase/selection authority and the separate cost-first route remain unchanged.
-- Failure-registry impact: NONE — F05/F08 already own permanent barriers and unsafe release; this trial deliberately measures remaining identity errors without declaring those failures repaired.
+- Existing feature coverage: top-exit comparison reuses normal Recipe geometry/margin/exclusions/Artifact, static preparation and session initial-state forwarding. Constructor top_exit_full defaults OFF; compare initial-FULL v2 with/without it, cost-first/RGB/Local XY OFF. Unit fixtures isolate selected-owner and completed publication semantics; source-derived replay uses the existing frozen local Recipes. No geometry change or reference auto-consumer is introduced. Private Windows physical-top alignment remains an explicit qualification limit.
+- Execution scope: October 16 top-exit preparation exercised bounded selected-owner closure, negative/reset controls, real detector/resolver/GUI construction and completed sample/trace/CSV publication. Both frozen local videos retain the prior v2 rows/events/report across NONE/FULL debug; neither supplies positive closure, and their effective masks exclude the endpoint band. Local checks do not access private Windows media or qualify the configured top as the physical exit. Earlier RGB/initial-FULL/cost-first results retain their scope. No fit, new label, model download or physical acceptance is part of local verification.
+- Difference from prior failures: top-exit closure requires an actually selected mature owner reaching the configured top, followed immediately by usable unopposed absence. It cannot repeat the initial prior, promote an unselected candidate, copy a coordinate, relax a drain gate or turn ordinary mid-height loss into FULL. Numeric selection and the rejected three mechanisms are unchanged; the later 721 s identity investigation remains separate.
+- Logic-map impact: UPDATED — map the default-OFF top-exit launch route, post-selection lifecycle seam, typed temporal state evidence and coordinate-free sample validity. Default numeric selection, initial-FULL v2 and independent Foam owners remain.
+- Failure-registry impact: UPDATED — F05 distinguishes bounded selected-owner top-exit state evidence from the prohibited prior-only or disappearance-only FULL fallback. F08/F09/F10 guards remain applicable; no field success is claimed.

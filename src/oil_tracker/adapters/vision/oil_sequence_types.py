@@ -83,6 +83,8 @@ class OilSequenceNode:
     identity: str
     candidate_ref: OilCandidateRef | None = None
     state_evidence: float = 0.0
+    state_evidence_source: str = "current_image"
+    temporal_state_evidence: float = 0.0
 
     @property
     def y(self) -> float | None:

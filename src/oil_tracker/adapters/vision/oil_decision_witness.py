@@ -174,5 +174,7 @@ def build_oil_decision_witness(
         "selection": {
             "resolved_kind": node.kind,
             "selected_candidate": selected,
+            **({"state_evidence_source": "top_exit"}
+               if node.state_evidence_source == "top_exit" else {}),
         },
     }

@@ -48,9 +48,12 @@ class OpenCvPhaseDetector:
         initial_full_observation: bool = False,
         cost_first_assignment: bool = False,
         candidate_rgb: bool = False,
+        top_exit_full: bool = False,
     ) -> None:
         if cost_first_assignment and candidate_rgb:
             raise ValueError("Compare cost-first and candidate RGB separately.")
+        if top_exit_full and (cost_first_assignment or candidate_rgb or oil_measurement_scopes):
+            raise ValueError("Compare top-exit FULL separately from cost-first, RGB and Local XY.")
         scopes = tuple(oil_measurement_scopes)
         if len(scopes) > MAX_SCOPES or any(not isinstance(s, OilMeasurementScope) for s in scopes):
             raise ValueError("Invalid or excessive Oil measurement scopes.")
@@ -66,6 +69,8 @@ class OpenCvPhaseDetector:
             self.version += "+cost-first-assignment-v1"
         if candidate_rgb:
             self.version += "+" + RGB_VERSION
+        if top_exit_full:
+            self.version += "+top-exit-full-v1"
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
         self._static_foam_maps: dict[str, np.ndarray] = {}
@@ -77,6 +82,7 @@ class OpenCvPhaseDetector:
             initial_full_observation=initial_full_observation,
             cost_first_assignment=cost_first_assignment,
             candidate_rgb=candidate_rgb,
+            top_exit_full=top_exit_full,
         )
         self._frame_evidence_owner = CurrentFrameEvidenceOwner(
             evaluate_oil=self._evaluate_oil_pipeline,

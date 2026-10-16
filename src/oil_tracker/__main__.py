@@ -24,6 +24,10 @@ def main() -> int:
         "--oil-candidate-rgb", action="store_true",
         help="고정 RGB 모델로 Oil 후보를 거르는 비교 모드 (기본 OFF)",
     )
+    comparisons.add_argument(
+        "--oil-top-exit-full", action="store_true",
+        help="상승 계면의 상단 이탈 후 FULL 상태를 연결하는 비교 모드 (기본 OFF)",
+    )
     options, qt_args = parser.parse_known_args(sys.argv[1:])
     app = QApplication.instance() or QApplication([sys.argv[0], *qt_args])
     app.setApplicationName("Rotary Oil Level Tracker")
@@ -36,6 +40,8 @@ def main() -> int:
         comparison_options["cost_first_assignment"] = True
     if options.oil_candidate_rgb:
         comparison_options["candidate_rgb"] = True
+    if options.oil_top_exit_full:
+        comparison_options["top_exit_full"] = True
     window = build_main_window(**comparison_options)
     window.show()
     return app.exec()
