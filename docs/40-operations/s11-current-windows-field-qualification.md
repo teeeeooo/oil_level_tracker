@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE` — top-exit geometry preflight is the next handoff; execute the comparison only if its input condition is reachable. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE` — bounded 721 s saved-evidence investigation is the next handoff. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -14,16 +14,81 @@ also closes the tested configuration without adoption: partial BASE suppression
 coexists with a reviewed replacement artifact and an allowed Accum observation
 loss. All three candidate runs and the
 [saved-output accounting closeout](#priority-3-local-xy-saved-output-closeout)
-are complete. The user subsequently authorized the [top-exit FULL comparison](#top-exit-full-comparison), followed by a separate investigation of the 721 s non-interface output. Do not repeat the old accounting requests.
+are complete. The user subsequently authorized the [top-exit FULL comparison](#top-exit-full-comparison), followed by a separate investigation of the 721 s non-interface output. Its received geometry preflight failed before execution; FULL remains unresolved. Proceed with the already-requested [721 s investigation](#721-second-identity-investigation). Do not repeat the old accounting requests.
 Review-006 remains unreviewed/pending. Cost-first/RGB/Local XY remain OFF outside retained trial data.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
 
+## 721-second identity investigation
+
+**현재 요청은 ④의 저장된 증거 확인뿐이다.** FULL 상단 preflight는 조건 불일치로
+종료했고 ⑧은 실행하지 않았다. FULL 수정은 미해결로 남긴 채, 사용자가 요청한
+다음 단계인 721초 비유면의 앵커 승인 근거를 확인한다. 디텍터 실행·설정 변경·
+신규 알고리즘 비교·새 사용자 이미지 판정은 이번 범위에 없다.
+
+이미 확인된 값은 재사용한다: BASE `oil-tracklet:000474:0424`, ④의
+f17287@721.012s 선택 `material_path`, row `oil-row:000482:002`, Y694;
+확정 profile `anchor_corridor`, 창 offset 480–485(약 720–722.5초).
+723초의 material veto와 771초의 identity 보호, 기존 8행 번들 비교 및
+전체 트랙릿 궤적은 다시 추출하지 않는다. 아지랑이라는 원인은 미확인이다.
+
+1. **확정 창만, 표본당 한 행으로 정리한다.** ④ BASE의 분석 표본 offset
+   480–485를 실제 source frame/time과 대응하고 해당 tracklet의 row만 읽는다.
+   각 행에는 frame/time, row ID, 앵커로 표시된 member의
+   `source/Y/authority_reason`, `initial_authority/post_track_authority/authority`,
+   최종 선택 여부를 적는다. 같은 row의 여러 source를 독립 anchor 프레임으로
+   중복 계산하지 않는다. 저장 전후 단계가 다르면 차이를 그대로 남기고,
+   최종 authority를 과거 confirmation 입력이라고 단정하지 않는다.
+2. **721초 실제 선택 member만 작은 `키 / 경로 / 값` 표로 보충한다.**
+   `record.sequence.oil_candidates[]`에서 source/Y/row/tracklet을 모두 맞춘다.
+   다음 저장 항목을 확인한다: `authority_reason`, `phase_identity`,
+   `cross_representation_support`, `semantic_corridor_support`,
+   `track_opposition`, `effective_track_opposition`, `tracklet_material_conflict`,
+   `identity_contradiction`. 이어 `oil_candidate_authority.py`의 해당 reason
+   분기에서 쓰는 원시 features/penalties 중 핵심 항목만 최대 10개 덧붙인다.
+   원시 후보 대응이 유일하지 않으면 UNAVAILABLE로 남긴다. 저장되지 않은
+   점수를 새로 만들거나 다른 Y/유사 후보로 대신 채우지 않는다.
+3. `anchor_corridor`는 충분한 compatible 관측과 앵커 수로 확정되는 경로다.
+   motion 0.36/coverage 0.44가 0.50보다 작다는 이유만으로 구현 오류로
+   판정하지 않는다. 확인할 것은 **이미 비유면으로 판정된 경계가 어떤
+   authority reason과 입력 때문에 앵커가 되었는지**다. 단조성, source 이름,
+   국소 움직임만으로 아지랑이나 실제 계면을 분류하지 않는다.
+4. `calibrated_artifact_match`가 없다는 것은 공간 Artifact 기능 OFF의 증거가
+   아니다. `sequence.oil_candidates`는 점수 정렬되어 있으므로 witness의
+   `candidate_offset`을 그 배열 인덱스로 사용하지 않는다. null/빈 배열/미저장을
+   구분하고 없는 필드는 추정하지 않는다. 723초 차이는 기존 회신의 material
+   veto로 설명 가능한 범위까지만 비교한다.
+5. **두 작은 표와 결론 한 문단을 반환하고 멈춘다.** 앵커 승인 분기와 아직
+   확인되지 않은 인과를 분리한다. 전체 JSON/601행 CSV/116개 후보/네 bundle
+   비교를 다시 반환하지 않는다. 재실행·튜닝·추가 자동 조사로 확장하지 않는다.
+   review-004/005의 복수 허용·대략적 일치와 review-006 pending은 유지한다.
+
+전달용 짧은 프롬프트:
+
+```text
+④ FULL+ON v2 bundle: <기준 번들 경로>
+소스·기존 review 폴더: <경로>
+
+docs/40-operations/s11-current-windows-field-qualification.md의
+“721-second identity investigation”을 따라줘.
+⑧은 실행하지 말고, ④ 저장 trace에서 000474:0424의 확정 창과
+721초 선택 후보가 앵커로 승인된 이유만 문서의 두 작은 표로 정리해줘.
+기존 비유면 판정과 723/771초 보호 결과는 재사용해줘.
+재실행·튜닝·전체 CSV 재집계·새 사용자 판정은 필요 없어.
+```
+
 ## Top-exit FULL comparison
 
-**현재 순서: ④ v2 기반 FULL 전환 검증 → 그다음 721초 부근 비유면 조사.**
+**preflight 수신 완료: CONDITION FAILED / ⑧ NOT RUN.** BASE의 허용 끝점
+Y220.870보다 effective mask 상단 Y243이 아래에 있어 조건에 도달할 수 없다.
+마지막 선택 Y352는 mask 상단보다도 109px 아래다. 이는 사용자 정답 Y나 실제
+마지막 계면 가시 시각을 뜻하지 않는다. [수신 기록](../60-evidence/s11/2026-10-16-top-exit-full.md#windows-geometry-preflight-received--condition-failed)을 따른다.
+아래는 이전 조건부 절차이며 **현재 ⑧ 실행을 요청하지 않는다**. FULL은 물리적
+상태의 의미를 유지하며, mask 경계로 바꾸거나 margin을 줄이지 않는다.
+
+**이전 조건부 순서: ④ v2 기반 FULL 전환 검증 → 그다음 721초 부근 비유면 조사.**
 새 후보 ⑧은 `initial_full_observation=True, top_exit_full=True`이며
 cost-first/RGB/Local XY는 OFF다. 디텍터·resolver에
 `+initial-full-observation-v2+top-exit-full-v1`이 붙는다. 같은 조건의 기존
@@ -91,7 +156,7 @@ effective mask의 상단이 `geometry_top_y + endpoint_tolerance_px`보다 아�
    FULL 성공/미해결, 기존 관측 보존, 실제 top 대응, 최종 Foam 영향을 반환하고
    멈춘다. O2 OPEN / FIELD FAIL과 기본 OFF를 유지한다.
 
-전달용 짧은 프롬프트:
+이전 조건부 프롬프트 — 현재 실행하지 않음:
 
 ```text
 ④ FULL+ON v2 bundle: <기준 번들 경로>

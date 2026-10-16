@@ -1,7 +1,9 @@
 # Optional top-exit FULL closure — local preparation
 
-**Status:** local implementation/contract checks complete; actual physical closure
-NOT QUALIFIED. Windows geometry preflight is required before a whole-video run.
+**Status:** Windows geometry preflight COMPLETE / CONDITION FAILED; ⑧ NOT RUN.
+Local contract checks remain valid at their original scope; actual physical
+closure is NOT QUALIFIED. The next bounded task is the requested 721 s identity
+investigation, while FULL remains unresolved.
 Current authority remains the [Work Plan](../../00-project/work-plan.md), with
 O2 OPEN / FIELD FAIL and the accepted default unchanged.
 
@@ -70,19 +72,73 @@ Direct inspection with the real mask builder and frozen local Recipes shows:
 
 This is an unresolved input/geometry limitation, not successful real-video FULL
 recovery. The synthetic resolver fixture bypasses pixel masking and cannot
-establish endpoint reachability. The Windows Recipe and actual final visible
-interface must be checked before requesting a long run. If its endpoint is also
-excluded or its physical meaning cannot be established, return the few geometry
-and last-observation values and stop; do not tune margin or widen the gate.
+establish endpoint reachability. The Windows preflight below now confirms the
+same endpoint exclusion. Do not tune margin, widen the gate or request the
+conditional whole-video run.
 
 The [Windows procedure](../../40-operations/s11-current-windows-field-qualification.md#top-exit-full-comparison)
-contains that preflight and a conditional ④/⑧ comparison, with a short forwarding
-prompt. Canonical [reviewed truth](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
+contains that preflight and a conditional ④/⑧ comparison; its execution condition
+failed in the received preflight below. Canonical [reviewed truth](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
 keeps BASE 674–675 s uncertain transition and ≥675 s FULL. It is an evaluation
 oracle, never a production time rule. Reuse review-004/005 practical multiple
 allowances; review-006 remains pending. The later 721 s investigation is separate:
 this code preserves existing numeric observations, including known false output,
 and does not claim to identify shimmer or fix that selection.
+
+## Windows geometry preflight received — condition failed
+
+The operator relayed the Windows agent's readout from ④
+`oil_level_analysis_22-3_initial_ON_v2_20261015_171421`: Recipe snapshot,
+existing debug masks and the existing last selected CSV row. This is transferred
+evidence; the private files were not inspected on the Mac. No ⑧ execution, new
+CSV aggregation, ROI/margin/threshold change or new human label occurred.
+
+| BASE quantity | Reported value, source coordinates |
+|---|---:|
+| Ellipse center / vertical radius | 597.710 / 386.107 |
+| Configured top | 211.603 |
+| Endpoint tolerance | 9.267 |
+| Maximum source Y allowed by top-exit endpoint band | 220.870 |
+| Margin ratio | 0.08 |
+| Crop origin Y / first effective-mask row | 211 / 32 |
+| Effective-mask top | 243 |
+| Gap from allowed endpoint to effective mask | 22.130 |
+| Last reported pre-transition selected Oil, f16124 / 672.500 s | Y352.0 |
+
+The mask is reported unchanged in nine frames f16100–f16196 / 671.5–675.5 s.
+The continuous ellipse calculation gives inner top 242.492 before rasterization,
+consistent with the reported row 243. Thus the configured endpoint band is
+outside the effective mask. This is a confirmed preflight failure for this
+Recipe, not a measured ④/⑧ output regression: **⑧ was not run**.
+
+There is also a separate observation gap. The last pre-transition selected Y352
+is 109 px below the mask top; following approach/transition rows are reported
+UNKNOWN from approximately 673.01 s. This is not a claim that the entire later
+675–780 s interval has no numeric output; its known false rows remain recorded.
+Moving the endpoint to the mask top alone would not establish a selected rise
+to that boundary. This row is a detector observation, not a newly reviewed
+physical interface or the exact last visible interface. The supplied
+`R17_RESOLVED_OIL` / `R17_TRACKLET_CONTINUING` values are flags, not tracklet IDs;
+the actual owner identity remains unreported and is not needed to close this
+failed preflight.
+
+The LVLM describes the ellipse top as roughly aligned with the visible Glass
+top, with ±15–25 px uncertainty. That is not a human-approved coordinate and is
+wider than the 9.267 px endpoint tolerance. It cannot establish that margin is
+the sole physical cause or that the configured boundary is precisely correct.
+
+Keep FULL's existing physical meaning. The effective-mask edge describes where
+measurement is available; it does not prove the Glass is full. Do not select
+between these meanings as an arbitrary threshold preference, exempt top-exit
+from the mask, or impose the reviewed 674–675 s timing in the detector. A future
+closure repair needs evidence linking the final true rising interface to the
+physical visible exit, including the unobserved interval. This remains open;
+no additional geometry question or full replay is requested by this receipt.
+
+This finishes the FULL preflight checkpoint and allows the already-requested
+[721 s investigation](../../40-operations/s11-current-windows-field-qualification.md#721-second-identity-investigation)
+to proceed independently from saved ④ evidence. It does not mark FULL repaired,
+enable any rejected mechanism, or change O2 OPEN / FIELD FAIL.
 
 ## Reproducibility and retention
 
@@ -104,10 +160,10 @@ No model fit, detector threshold/ROI change or sample3 run occurred.
 
 ## Detector Governance
 
-- Logic-map nodes: `OIL-PHASE-FILL`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-EPISODE`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`
 - Failure-registry entries: `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`
-- First harmful stage: existing v2 cannot convert the selected top-exit observation into a coordinate-free temporal FULL state; the new seam addresses that representation gap. Physical success is unknown, and the local mask check proves an endpoint reachability limitation that must be resolved for a real positive case. No new cause for the separate 721 s artifact is inferred.
-- Existing feature coverage: local original base Recipe and retained interior sample4 Recipe use ellipse/margin masks (0.08), empty exclusions and no Artifact templates, normal static preparation and explicit initial FULL. Source Recipe initial AUTO is overridden only by the stress-test session confirmation. Initial-FULL v2 is ON in both modes; top-exit is the only comparison variable; cost-first/RGB/Local XY are OFF. Private Windows templates/ROI and physical-top correspondence were not exercised. Default behavior and prior candidate findings are retained.
-- Execution scope: synthetic completed resolver/sample/CSV and independent Foam checks plus real GUI construction/CLI forwarding; two local full pipelines with raw detector, completed sequence and final CSV/report, NONE/FULL debug. Mask inspection uses the actual builder on the unchanged local Recipes. No private Windows execution, human top-exit judgment or milestone acceptance is claimed.
-- Logic-map impact: UPDATED — add the opt-in launch route and post-selection closure before projection; mark temporal versus image state evidence and downstream coordinate-free validity, without changing numeric selection or Foam ownership.
-- Failure-registry impact: UPDATED — F05 permits bounded selected-owner top-exit state evidence while preserving the rejection of prior-only and disappearance-only FULL. F08/F09/F10 negative/reset obligations remain; their historical failures are not promoted to success.
+- First harmful stage: the configured endpoint prerequisite is unreachable inside the reported Windows effective mask, so ⑧ execution stopped before comparison. The reported final selected Y also ends well below the mask top; its upstream loss cause and actual physical endpoint remain unknown. The local synthetic seam does not establish a true selected top-exit owner in Windows.
+- Existing feature coverage: prior local coverage remains as recorded above. The Windows receipt uses ④'s stored Recipe ellipse/margin (0.08), existing effective masks and last selected CSV row, with initial-FULL v2. Top-exit/cost-first/RGB/Local XY are OFF in ④; ⑧ was not run. Existing spatial Artifact configuration was not changed. The mask calculation is checked locally from transferred numbers; LVLM physical-top correspondence remains unqualified.
+- Execution scope: this receipt is documentation and bounded source review only. No detector, private video, fresh output bundle or new human review was run locally. Prior synthetic/GUI/local-video checks retain their original limits; this preflight establishes an input-condition failure, not ④/⑧ performance or field acceptance.
+- Logic-map impact: NONE — the map already describes the configured-top prerequisite and post-selection seam. No setup, mask, authority, selection or publication code changes in this receipt.
+- Failure-registry impact: NONE — F05/F08/F09/F10 already distinguish physical ownership, observed state, coordinate meaning and unsafe threshold escape. The failed preflight supplies evidence within those constraints, not a new repaired mechanism.

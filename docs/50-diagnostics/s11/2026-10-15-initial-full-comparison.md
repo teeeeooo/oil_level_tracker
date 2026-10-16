@@ -1109,12 +1109,64 @@ next candidate. O2 OPEN / FIELD FAIL, accepted baseline and the original sequenc
 remain: cost-first closed → candidate-local RGB → Oil-only Local XY. The user's
 shorthand `RGB+Local XY` is not used to stack them into one comparison.
 
+## 721 s identity follow-up — source review, 2026-10-16
+
+The top-exit preflight has returned CONDITION FAILED / ⑧ NOT RUN. The user had
+already requested the 721 s investigation next. Reuse the earlier eight-row
+comparison, six-frame confirmation-window identity, selected-candidate object
+and user-reported non-Oil judgment above. Do not reopen aggregate CSV accounting,
+the three rejected trials or the exact optical cause. The canonical corrected
+FULL suffix starts at 675 s; the earlier 663.6 s interpretation above is historical.
+
+Bounded source review at `6248e08` establishes the executing route:
+
+1. `evaluate_candidate_authority` assigns ANCHOR_ELIGIBLE through named material/
+   phase routes. The reported material_path member at 721 s is anchor-grade, but
+   the transferred evidence has not supplied its `authority_reason`. Its source
+   family alone does not identify which branch passed.
+2. `DirectedInterfaceTrackletBuilder._row_hypotheses` sets one `anchor_signal`
+   per row if any member is anchor-grade. `_confirmation_evidence` first requires
+   enough compatible observations, then selects ANCHOR_CORRIDOR when the policy's
+   anchor count passes. That branch does not require the motion branch's 0.50
+   support/coverage or directional-progress conditions. The minimum anchor count
+   comes from `_tracklet_policy`, including its terminal-fallback context; do not
+   assume a fixed count from the profile name. Multiple representations in one
+   row are not multiple independent anchor frames.
+3. `_finalize_track` admits the bounded confirmation-window members, including
+   earlier members. The reported 480–485 sequence offsets therefore refer to
+   six sampled positions / about 2.5 s, not a 0.5 s source-video window.
+4. Initial-FULL v2 reuses these admitted current owners with material/identity
+   clearance, then selection publishes the actual candidate. At f17287, the
+   received witness and CSV agree on Y694. At f17335, the received material veto
+   blocks output. Neither the serializer nor a missing FULL label creates Y694.
+
+This locates the investigation at the **false boundary's anchor evidence and
+confirmation**, upstream of final selection. It does not prove that the anchor
+algorithm violated its own predicates or that weak motion alone caused the
+error. The first known wrong physical role is the reported anchor-grade non-Oil
+member; the earliest erroneous evidence field/authority branch remains unknown.
+
+The next intake is limited to saved ④ records: the six confirmation positions
+and the 721/723 s member contrast. Ask for stored anchor reasons and the few
+material/artifact/representation values needed to distinguish those branches.
+No new detector execution, calibration, forced visual labeling, whole-track
+table or bulk JSON is requested. Source candidate offsets must not be used as
+indices into score-sorted `sequence.oil_candidates`. Missing fields stay
+UNAVAILABLE; an absent calibrated-artifact annotation does not prove that
+spatial templates were disabled. The existing 723/771 s protection and
+review-004/005 practical positive allowances remain controls for a later repair.
+
+The [active Windows procedure](../../40-operations/s11-current-windows-field-qualification.md#721-second-identity-investigation)
+defines this finite extraction and its short forwarding prompt. Stop after
+returning the identified anchor route and named unknowns; do not start another
+threshold, mask, RGB or cost-first trial from this source review.
+
 ## Detector Governance
 
-- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
-- Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: v1's observation-barrier losses reach final sequence/CSV under v2; ④ f15896 has previously reported INCOMPATIBLE_BRANCH/admitted=0 alternatives excluded before IFO. In ⑤, the reported whole-refill numeric loss is established at publication scope, but the earliest causal stage is unknown without candidate-specific trace evidence. Empty CSV does not prove raw candidate absence. Review-004 preferences remain qualified, and unchanged UNKNOWN at 723/771 s does not establish identical protection predicates.
-- Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF. The new Windows receipt reports FULL+observation v2 with/without cost-first, expected suffixes and matching FULL-debug/record counts. Actual Windows ROI/Artifact/static preparation values are not supplied by this table; no fresh configuration or hash audit is requested for this bounded receipt. Prior run coverage remains recorded above.
-- Execution scope: October 16 receipts are documentation-only, using user-reported Windows tables and direct review-005 replies. No detector or private media is run or inspected locally for this receipt. Earlier engineering tests retain their scope; saved CSV accounting and two Accum human scenes close the supplement without a rerun. Physical labels remain scoped practical allowances, not whole-run acceptance.
-- Logic-map impact: NONE — the existing cost-first setup route and first-sort intervention still describe the unchanged source; this receipt changes candidate disposition and review scope only.
-- Failure-registry impact: NONE — existing identity, lifecycle and provenance risks cover the result; no new causal mechanism or repaired physical failure is established.
+- Logic-map nodes: `FRAME-EVIDENCE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
+- Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
+- First harmful stage: prior v2 recovery and cost-first regression retain their recorded scope. At 721 s the user-reported non-Oil member has anchor authority, ANCHOR_CORRIDOR track admission and final Y694 publication. The specific authority branch and earliest misleading input remain unknown; current source review explains the route without inferring a motion-threshold bypass. Review-004 preferences remain qualified, and unchanged UNKNOWN at 723/771 s does not establish identical protection predicates.
+- Existing feature coverage: prior local and Windows comparisons keep their recorded input scope. The 721 s follow-up reuses ④ initial-FULL v2 with spatial Artifact templates active, all three optional trial mechanisms and top-exit OFF. Source review covers authority, row grouping, anchor confirmation and IFO v2 consumers. It does not recalculate private raster evidence, disable templates or infer their per-candidate result from reference-comparison status.
+- Execution scope: October 16 source review and transferred receipts only; no detector/private-video execution or new labels. The next Windows task reads six saved confirmation positions and the 721/723 s contrast; no complete-track or aggregate replay. The exact false-anchor reason remains missing, so no behavioral repair or field acceptance is claimed.
+- Logic-map impact: NONE — the existing authority, tracklet, IFO and publication routes match the inspected source. This follow-up changes evidence scope and next investigation only.
+- Failure-registry impact: NONE — F03/F04 already reject motion/continuity as physical identity proof; F05/F08/F09/F10 protect phase, coordinates and non-case-specific repair. No new mechanism or repaired physical failure is established.
