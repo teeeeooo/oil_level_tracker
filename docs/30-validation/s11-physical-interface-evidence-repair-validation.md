@@ -147,6 +147,16 @@ evidence; no follow-up threshold tuning or default promotion is automatic.
 
 ## Required two-sided controls
 
+Retain the [October 16 peer screen](../50-diagnostics/s11/2026-10-16-corroboration-peer-screen.md#same-frame-positive-and-rim-counterexample)
+as an E3/E4 counter-control: the accepted f1140 material candidate and the
+separately reviewed same-frame rim must not be separated merely by raising the
+legacy scalar support floor or requiring zero-support legacy seed authority.
+Preserve actual raw BoundaryKind when reusing the frozen model-preparation
+inventory; seven historical unreviewed Foam entries were declared Oil there.
+The complete 187-unit roster and original labels remain unchanged. This
+candidate-level negative result adds neither a completed-output loss claim nor
+Windows efficacy or a new universal numeric acceptance threshold.
+
 | ID | Positive case | Negative / invariant | Required observation |
 |---|---|---|---|
 | E1 | Textured Oil/Foam interface, both proposal peers high in broad texture | Internal stripe/residue with similar scalar texture and boundary scores | Only the interface receives positive local partition evidence |

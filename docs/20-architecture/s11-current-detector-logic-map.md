@@ -251,6 +251,13 @@ provisional. This preserves all existing authority/phase/selection checks and
 adds no positive identity route. The [comparison design](s11-physical-interface-evidence-repair-design.md#candidate-local-rgb-windows-comparison)
 owns the frozen consumer and its limits.
 
+The [October 16 same-frame peer screen](../50-diagnostics/s11/2026-10-16-corroboration-peer-screen.md#same-frame-positive-and-rim-counterexample)
+records reciprocal different-family support between reviewed rim candidates.
+The proposed zero-support legacy seed-anchor prerequisite also removes accepted
+material support and is rejected. Cross-representation support remains a
+maximum scalar, not a physical-independence certificate. This diagnostic
+finding does not change the runtime owner or establish the private 721 s peer.
+
 ### 4.2 Physical identity (`OIL-TRACKLET`)
 
 `DirectedInterfaceTrackletBuilder.resolve` groups same-frame eligible refs into row hypotheses (`oil-row:<frame>:<ordinal>`), then matches them to only bounded active tracklets (`oil-tracklet:<frame>:<ordinal>`). Match cost uses bounded frame gap, jump/prediction error, representation overlap/bridge, reversal and quality. Established-parent/child ambiguity is symmetric; ambiguous branch identities terminate and involved frame hypotheses are incompatible. Confirmed evidence is found in a bounded six-frame window using `ANCHOR_CORRIDOR`, `ANCHOR_TRAJECTORY`, or `MOTION_TRAJECTORY`; later observations are `CONTINUING` only while bounded anchor/motion evidence remains. Loss is bounded, and a tracklet never silently merges across a phase handoff.

@@ -1,0 +1,10 @@
+{
+  "reason": "An evolving decision document was incorrectly reused by the already-closed input-failure run. Recover the exact originally pinned prereadout bytes at an immutable path; preserve its hash/size and every result rather than rehash a changed document.",
+  "old_path": "docs/50-diagnostics/s11/2026-10-16-corroboration-peer-screen.md",
+  "new_path": "docs/50-diagnostics/s11/2026-10-16-corroboration-peer-screen/preflight.md",
+  "evidence_sha256_unchanged": "406c3aee5f018e04e5c5a96ba57d5172901d4833b8dae52461561f2146673435",
+  "evidence_bytes_unchanged": 7252,
+  "original_manifest_sha256": "deb788d98e07fdae149aa78d4c00a5b5e9d8023c2991bc89180987c1f1101e69",
+  "state_unchanged": "closed",
+  "corrected_manifest_sha256": "0aa762f635f405162be3483c210e7966494d92fea9903d3961a811b15db3699d"
+}

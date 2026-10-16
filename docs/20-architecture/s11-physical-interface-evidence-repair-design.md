@@ -312,6 +312,16 @@ their current requirements during implementation comparison.
 
 ### Independent corroboration
 
+The [October 16 peer screen](../50-diagnostics/s11/2026-10-16-corroboration-peer-screen.md#nonrecursive-seed-condition-rejected-without-retuning)
+falsifies a shortcut: requiring an ordinary peer to pass legacy anchor authority
+with zero representation support removes an already accepted material candidate's
+support. Different-family raw rim candidates can also support each other more
+strongly than the accepted interface. Neither a larger support floor nor a
+pre-existing-anchor requirement replaces the physical witness below. Preserve
+noncircular measurement dependencies without demanding legacy anchor status of
+a weak raw peer. This is a rejected local necessary-condition screen, not a new
+runtime rule or a replay of the private 721 s frame.
+
 Construct evidence before authority in a directed order: raw witness → eligible
 peer relation → independent support → phase identity → authority. A candidate
 cannot use its new anchor status to validate the peer that granted that status.

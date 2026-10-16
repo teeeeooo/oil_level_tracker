@@ -1639,3 +1639,14 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 최초 Git 추가일 (KST) | 문서 | 범위 |
 |---|---|---|
 | 2026-10-16 | [60-evidence/s11/2026-10-16-windows-comparison-checkpoint.md](60-evidence/s11/2026-10-16-windows-comparison-checkpoint.md) | 세 후보·FULL preflight·721초 조사 완료 상태와 기존 판정·자료 위치, 다음 수정안 설계 재개용 인계 |
+
+### 2026-10-16 corroboration peer 검증 추가 — 최초 Git 등록일 미확정
+
+| 작성일 / Git 상태 | 문서 | 범위 |
+|---|---|---|
+| 2026-10-16 / 미등록 | [50-diagnostics/s11/2026-10-16-corroboration-peer-screen.md](50-diagnostics/s11/2026-10-16-corroboration-peer-screen.md) | frozen P1/P2 실행, rim 상호 지지와 실제 계면 지지 손실, 미채택 판정 |
+| 2026-10-16 / 미등록 | [50-diagnostics/s11/2026-10-16-corroboration-peer-screen/readout.json.gz](50-diagnostics/s11/2026-10-16-corroboration-peer-screen/readout.json.gz) | 187개 전체 분모, 175 Oil 후보 기여 peer·정답 범위·원시 타입 대조 |
+| 2026-10-16 / 미등록 | [50-diagnostics/s11/2026-10-16-corroboration-peer-screen/verification.json](50-diagnostics/s11/2026-10-16-corroboration-peer-screen/verification.json) | source pin, 175 순서 대조, 342개 테스트와 정확한 반례 |
+| 2026-10-16 / 미등록 | [60-evidence/s11/2026-10-16-corroboration-handoff.md](60-evidence/s11/2026-10-16-corroboration-handoff.md) | 결과·자료·재현·미채택/미완료 및 다음 세션 인수인계 |
+| 2026-10-16 / 미등록 | [50-diagnostics/s11/2026-10-16-corroboration-peer-screen/preflight.md](50-diagnostics/s11/2026-10-16-corroboration-peer-screen/preflight.md) | 첫 입력 실패 실행이 고정했던 원문을 동일 SHA-256으로 보존한 읽기 전 명세 |
+| 2026-10-16 / 미등록 | [50-diagnostics/s11/2026-10-16-corroboration-peer-screen/storage-reference-relocation.json](50-diagnostics/s11/2026-10-16-corroboration-peer-screen/storage-reference-relocation.json) | 가변 문서를 참조한 저장 실수의 경로 정정 기록; 원래 증거 해시·내용 불변 |

@@ -245,6 +245,14 @@ whole group as lost, infer exact survivor IDs or use the reply as a runtime
 whitelist. Current region perimeters may supply local boundary proposals, but
 retained appearance includes structure; a nearby face does not establish role.
 
+**Additional bounded evidence — 2026-10-16:** the
+[corroboration peer screen](2026-10-16-corroboration-peer-screen.md#same-frame-positive-and-rim-counterexample)
+finds a reviewed same-frame rim mutual-support pair. Requiring a supporting
+ordinary candidate to independently pass zero-support legacy anchor authority
+also removes accepted material support; the frozen shortcut is rejected without
+retuning. This strengthens the existing identity/alias warning, not a new
+failure class, adopted rule or explanation of the private 721 s optical cause.
+
 ### S11-F05 — Initial-state and material-phase hard-lock asymmetry
 
 **Affected detector logic node(s):** `OIL-HYPOTHESIS` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.
