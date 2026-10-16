@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE` — bounded 721 s saved-evidence investigation is the next handoff. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / NO CURRENT EXECUTION REQUEST` — bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -14,7 +14,7 @@ also closes the tested configuration without adoption: partial BASE suppression
 coexists with a reviewed replacement artifact and an allowed Accum observation
 loss. All three candidate runs and the
 [saved-output accounting closeout](#priority-3-local-xy-saved-output-closeout)
-are complete. The user subsequently authorized the [top-exit FULL comparison](#top-exit-full-comparison), followed by a separate investigation of the 721 s non-interface output. Its received geometry preflight failed before execution; FULL remains unresolved. Proceed with the already-requested [721 s investigation](#721-second-identity-investigation). Do not repeat the old accounting requests.
+are complete. The user subsequently authorized the [top-exit FULL comparison](#top-exit-full-comparison), followed by a separate investigation of the 721 s non-interface output. Its received geometry preflight failed before execution; FULL remains unresolved. The [721 s investigation](#721-second-identity-investigation) has now returned its bounded evidence and is complete. No additional Windows extraction or run is requested; the Work Plan owns the next local repair-design boundary.
 Review-006 remains unreviewed/pending. Cost-first/RGB/Local XY remain OFF outside retained trial data.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
@@ -23,10 +23,19 @@ This document is the executable target-Windows field procedure for whichever S11
 
 ## 721-second identity investigation
 
-**현재 요청은 ④의 저장된 증거 확인뿐이다.** FULL 상단 preflight는 조건 불일치로
-종료했고 ⑧은 실행하지 않았다. FULL 수정은 미해결로 남긴 채, 사용자가 요청한
-다음 단계인 721초 비유면의 앵커 승인 근거를 확인한다. 디텍터 실행·설정 변경·
-신규 알고리즘 비교·새 사용자 이미지 판정은 이번 범위에 없다.
+**수신 완료 / 추가 Windows 작업 없음.** ④ 저장 trace의 여섯 표본 위치에서
+실제 관측 5개와 앵커 표시 행 3개가 확인됐고, 721초 선택 member의 승인 이유는
+`corroborated_material_path`였다. 이후 `anchor_corridor` 확정과 IFO v2 허용을
+통해 Y694가 출력됐다. 이번 확인은 이 경로를 특정했으며 오검출을 수정한 것은
+아니다. [수신·소스 대조 기록](../50-diagnostics/s11/2026-10-15-initial-full-comparison.md#saved-trace-receipt--bounded-identity-intake-complete)을 따른다.
+
+`semantic_sequence_available=False`는 미저장 키의 부재만으로 확정하지 않는다.
+코드는 전체 시퀀스의 semantic anchor 집합으로 계산한다. 성공한 분기와 제공된
+corridor/motion 값으로부터의 조건부 추론으로 기록하며 추가 추출은 요청하지
+않는다. 비유면 판정은 유지하고, 아지랑이라는 광학적 원인만 미확인으로 남긴다.
+FULL preflight CONDITION FAILED / ⑧ NOT RUN, O2 OPEN / FIELD FAIL을 유지한다.
+
+**아래는 완료된 추출 절차의 참조 기록이며 다시 실행하지 않는다.**
 
 이미 확인된 값은 재사용한다: BASE `oil-tracklet:000474:0424`, ④의
 f17287@721.012s 선택 `material_path`, row `oil-row:000482:002`, Y694;
@@ -42,7 +51,7 @@ f17287@721.012s 선택 `material_path`, row `oil-row:000482:002`, Y694;
    중복 계산하지 않는다. 저장 전후 단계가 다르면 차이를 그대로 남기고,
    최종 authority를 과거 confirmation 입력이라고 단정하지 않는다.
 2. **721초 실제 선택 member만 작은 `키 / 경로 / 값` 표로 보충한다.**
-   `record.sequence.oil_candidates[]`에서 source/Y/row/tracklet을 모두 맞춘다.
+   `record.sequence.candidates[]`에서 source/Y/row/tracklet을 모두 맞춘다.
    다음 저장 항목을 확인한다: `authority_reason`, `phase_identity`,
    `cross_representation_support`, `semantic_corridor_support`,
    `track_opposition`, `effective_track_opposition`, `tracklet_material_conflict`,
@@ -56,7 +65,7 @@ f17287@721.012s 선택 `material_path`, row `oil-row:000482:002`, Y694;
    authority reason과 입력 때문에 앵커가 되었는지**다. 단조성, source 이름,
    국소 움직임만으로 아지랑이나 실제 계면을 분류하지 않는다.
 4. `calibrated_artifact_match`가 없다는 것은 공간 Artifact 기능 OFF의 증거가
-   아니다. `sequence.oil_candidates`는 점수 정렬되어 있으므로 witness의
+   아니다. `sequence.candidates`는 점수 정렬되어 있으므로 witness의
    `candidate_offset`을 그 배열 인덱스로 사용하지 않는다. null/빈 배열/미저장을
    구분하고 없는 필드는 추정하지 않는다. 723초 차이는 기존 회신의 material
    veto로 설명 가능한 범위까지만 비교한다.
@@ -65,18 +74,15 @@ f17287@721.012s 선택 `material_path`, row `oil-row:000482:002`, Y694;
    비교를 다시 반환하지 않는다. 재실행·튜닝·추가 자동 조사로 확장하지 않는다.
    review-004/005의 복수 허용·대략적 일치와 review-006 pending은 유지한다.
 
-전달용 짧은 프롬프트:
+전달용 짧은 프롬프트 — 완료 상태 공유, 새 작업 요청 아님:
 
 ```text
-④ FULL+ON v2 bundle: <기준 번들 경로>
-소스·기존 review 폴더: <경로>
-
 docs/40-operations/s11-current-windows-field-qualification.md의
-“721-second identity investigation”을 따라줘.
-⑧은 실행하지 말고, ④ 저장 trace에서 000474:0424의 확정 창과
-721초 선택 후보가 앵커로 승인된 이유만 문서의 두 작은 표로 정리해줘.
-기존 비유면 판정과 723/771초 보호 결과는 재사용해줘.
-재실행·튜닝·전체 CSV 재집계·새 사용자 판정은 필요 없어.
+“721-second identity investigation”은 회신 수신으로 완료됐어.
+corroborated_material_path → anchor_corridor → Y694 출력 경로를 기록했어.
+semantic_sequence_available=False는 직접 저장값이 아니라 코드상 조건부 추론이야.
+④ bundle과 기존 review 자료를 보존해줘. 추가 추출·재실행·튜닝·새 판정은 없어.
+⑧도 실행하지 않아. 다음 수정안과 검증 범위를 정리한 뒤 필요한 작업을 전달할게.
 ```
 
 ## Top-exit FULL comparison

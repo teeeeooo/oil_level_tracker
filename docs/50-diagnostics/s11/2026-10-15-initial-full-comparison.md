@@ -1118,12 +1118,14 @@ and user-reported non-Oil judgment above. Do not reopen aggregate CSV accounting
 the three rejected trials or the exact optical cause. The canonical corrected
 FULL suffix starts at 675 s; the earlier 663.6 s interpretation above is historical.
 
-Bounded source review at `6248e08` establishes the executing route:
+The initial bounded source review at `6248e08` established the route below.
+The subsequent saved-trace receipt closes its missing authority reason; see the
+received evidence immediately below.
 
 1. `evaluate_candidate_authority` assigns ANCHOR_ELIGIBLE through named material/
-   phase routes. The reported material_path member at 721 s is anchor-grade, but
-   the transferred evidence has not supplied its `authority_reason`. Its source
-   family alone does not identify which branch passed.
+   phase routes. The reported material_path member at 721 s was anchor-grade,
+   but the evidence available at that checkpoint had not supplied its
+   `authority_reason`. Its source family alone did not identify which branch passed.
 2. `DirectedInterfaceTrackletBuilder._row_hypotheses` sets one `anchor_signal`
    per row if any member is anchor-grade. `_confirmation_evidence` first requires
    enough compatible observations, then selects ANCHOR_CORRIDOR when the policy's
@@ -1143,30 +1145,117 @@ Bounded source review at `6248e08` establishes the executing route:
 This locates the investigation at the **false boundary's anchor evidence and
 confirmation**, upstream of final selection. It does not prove that the anchor
 algorithm violated its own predicates or that weak motion alone caused the
-error. The first known wrong physical role is the reported anchor-grade non-Oil
-member; the earliest erroneous evidence field/authority branch remains unknown.
+error. At that checkpoint, the first known wrong physical role was the reported
+anchor-grade non-Oil member; its exact authority branch was still unknown.
 
-The next intake is limited to saved ④ records: the six confirmation positions
-and the 721/723 s member contrast. Ask for stored anchor reasons and the few
-material/artifact/representation values needed to distinguish those branches.
-No new detector execution, calibration, forced visual labeling, whole-track
-table or bulk JSON is requested. Source candidate offsets must not be used as
-indices into score-sorted `sequence.oil_candidates`. Missing fields stay
-UNAVAILABLE; an absent calibrated-artifact annotation does not prove that
-spatial templates were disabled. The existing 723/771 s protection and
-review-004/005 practical positive allowances remain controls for a later repair.
+### Saved-trace receipt — bounded identity intake complete
 
-The [active Windows procedure](../../40-operations/s11-current-windows-field-qualification.md#721-second-identity-investigation)
-defines this finite extraction and its short forwarding prompt. Stop after
-returning the identified anchor route and named unknowns; do not start another
-threshold, mask, RGB or cost-first trial from this source review.
+The user returned six BASE records from the existing ④ trace. This is transferred
+Windows evidence, not a local re-extraction or new physical judgment. No detector
+run, tuning, aggregate CSV analysis or new label occurred. The requested anchor
+reason is now known: **`corroborated_material_path`**.
+
+| Sequence offset / source frame / time | Target row | Material-path member and stored authority | Final selection |
+|---|---|---|---|
+| 480 / f17263 / 720.011 s | `oil-row:000480:003` | Y684, CONTINUATION_ELIGIBLE | unknown |
+| 481 / f17275 / 720.511 s | No target-tracklet row | Missing observation | unknown |
+| 482 / f17287 / 721.012 s | `oil-row:000482:002` | Y694, ANCHOR_ELIGIBLE / `corroborated_material_path` | Oil Y694 |
+| 483 / f17299 / 721.512 s | `oil-row:000483:004` | Y694, same anchor reason | Oil Y694 |
+| 484 / f17311 / 722.013 s | `oil-row:000484:004` | Y695, CONTINUATION_ELIGIBLE | Oil Y695 |
+| 485 / f17323 / 722.513 s | `oil-row:000485:001` | Y696, same anchor reason; lifecycle confirmed | Oil Y696 |
+
+All rows concern `oil-tracklet:000474:0424`. Initial, post-track and final stored
+authority are reported equal for each member. There are **five observations and
+three separate anchor-bearing rows** across six positions / about 2.5 s; other
+source members within a row are continuations, not additional anchor frames.
+Reported confirmation support is 0.7770, not a calibrated physical-identity
+probability. The stored snapshot is not a replay of the historical confirmation
+call; bounded retrospective admission explains selection before offset 485.
+
+At f17287 the source/Y/row/tracklet match uniquely identifies the selected
+material-path member in **`record.sequence.candidates[]`**. This corrects the
+earlier procedure's `sequence.oil_candidates` path. The raw candidate was matched
+separately by `candidate_input_index=9`; witness `candidate_offset` must not be
+used as an index into the score-sorted sequence array.
+
+| Evidence group | Reported values at the selected Y694 member |
+|---|---|
+| Typed identity / authority | `direct_interface`; `corroborated_material_path`; no reported failed authority gates; identity contradiction `none` |
+| Corroboration | cross-representation 0.4571; semantic corridor 0.0 |
+| Opposition | track 0.1323; effective track 0.0331; tracklet material conflict 0.3559 |
+| Raw boundary / material-path features | boundary 0.6149; material_path 1.0; sector fraction 1.0; texture availability flag 1.0; texture conflict 0.4231 |
+| Raw ambiguity / optical features | ambiguity 0.0595; optics/glare 0.0/0.0; artifact 0.12; static prior 0.0701 |
+| Raw registered motion | support 0.3271; coverage 0.40 |
+| Selection | selected true; final score 0.6149; witness and CSV Y694 |
+
+#### Source reconciliation and claim limits
+
+- `evaluate_candidate_authority` has a route matching the reported reason:
+  direct-interface material-path evidence, available texture evidence,
+  representation support at least 0.24, boundary at least 0.50, sector fraction
+  at least 0.80, and bounded ambiguity/material/artifact/optics conflicts. The
+  reported observations are consistent with this route. Normalized
+  `material_support`, `artifact_signature` and `static_contradiction` are not
+  supplied; do not fabricate their values or treat a feature alone as the
+  normalized feature/penalty aggregate. Texture availability in code is based
+  on the conflict measurement's presence, not only its availability flag.
+- **Semantic availability is a source-backed inference, not a saved Boolean.**
+  The receipt inferred `semantic_sequence_available=False` from a missing key.
+  The actual caller computes `bool(semantic_anchor_keys)` using qualified
+  ordinary candidates across the whole sequence. An absent per-candidate key
+  does not establish that global value. Under the inspected producing-route
+  semantics and reported inputs, the successful named branch, corridor 0.0
+  and motion coverage 0.40 below the default 0.60 are consistent only with its
+  `not semantic_sequence_available` alternative. Retain that conditional
+  inference without claiming the global key set was directly extracted.
+- `_cross_representation_support` returns the **maximum** eligible nearby
+  different-family peer score. It neither counts independent votes nor requires
+  that peer already be an anchor. Family difference, Y proximity and scalar
+  material/coverage checks are implemented; physical independence of the
+  measurements is not proved by the number 0.4571. The winning peer and shared
+  derivation for this frame were not supplied, so correlated support remains
+  a possible explanation, not an established cause.
+- `anchor_corridor` uses compatible observations and anchor count. It does not
+  require the separate motion-confirmation profile's support/coverage minimum.
+  Thus this is a **physical false anchor through an existing permitted route**,
+  not evidence of an accidental motion-threshold bypass. The per-member
+  authority reason plus three anchor-bearing rows explains the reported route;
+  it does not locate the first misleading raw raster measurement.
+
+The existing non-Oil judgment is retained. Only the optical explanation
+(shimmer, reflection or another boundary) is unknown. The 723 s material veto
+and 771 s identity protection are reused from prior receipts, not freshly
+verified here. Missing `calibrated_artifact_match` does not imply spatial
+Artifact templates were disabled. The typed guards, initial-FULL v2 recovery,
+review-004/005 practical positive allowances and independent Foam remain
+required controls.
+
+#### Closeout and next repair boundary
+
+The [bounded Windows procedure](../../40-operations/s11-current-windows-field-qualification.md#721-second-identity-investigation)
+is **COMPLETE**. No further extraction, duplicate image judgment or detector
+execution is requested. Top-exit remains CONDITION FAILED / ⑧ NOT RUN; FULL
+closure and O2 OPEN / FIELD FAIL are unchanged.
+
+The local source review narrows the next repair-design target to **physical
+corroboration before material-path anchor authority**, reusing the existing
+[independent-corroboration contract](../../20-architecture/s11-physical-interface-evidence-repair-design.md#independent-corroboration)
+and its witness/provenance owners. The present scalar scores identify a failing
+route but do not supply a validated true/false discriminator. A concrete
+successor must distinguish the known negative from allowed faint/multiple
+interfaces, identify the supporting peer and its measurement independence,
+and preserve the 723/771 s protections and final Foam. It must not simply require
+motion everywhere, treat missing semantic evidence as an artifact label,
+disable all material-path anchors, or repeat rejected RGB/Local XY trials.
+No new runtime policy, threshold, full-witness implementation or fourth trial
+is selected by this receipt; the broader witness design remains unaccepted.
 
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: prior v2 recovery and cost-first regression retain their recorded scope. At 721 s the user-reported non-Oil member has anchor authority, ANCHOR_CORRIDOR track admission and final Y694 publication. The specific authority branch and earliest misleading input remain unknown; current source review explains the route without inferring a motion-threshold bypass. Review-004 preferences remain qualified, and unchanged UNKNOWN at 723/771 s does not establish identical protection predicates.
-- Existing feature coverage: prior local and Windows comparisons keep their recorded input scope. The 721 s follow-up reuses ④ initial-FULL v2 with spatial Artifact templates active, all three optional trial mechanisms and top-exit OFF. Source review covers authority, row grouping, anchor confirmation and IFO v2 consumers. It does not recalculate private raster evidence, disable templates or infer their per-candidate result from reference-comparison status.
-- Execution scope: October 16 source review and transferred receipts only; no detector/private-video execution or new labels. The next Windows task reads six saved confirmation positions and the 721/723 s contrast; no complete-track or aggregate replay. The exact false-anchor reason remains missing, so no behavioral repair or field acceptance is claimed.
-- Logic-map impact: NONE — the existing authority, tracklet, IFO and publication routes match the inspected source. This follow-up changes evidence scope and next investigation only.
+- First harmful stage: prior v2 recovery and cost-first regression retain their recorded scope. The received 721 s non-Oil member is promoted by corroborated_material_path to anchor authority, followed by ANCHOR_CORRIDOR admission and final Y694 publication. The exact raw measurement or supporting peer that first misrepresents physical identity remains unknown. This is not a demonstrated motion-threshold bypass. Review-004 preferences remain qualified; prior 723/771 s protection evidence is reused without claiming a fresh verification.
+- Existing feature coverage: prior local and Windows comparisons keep their recorded input scope. The 721 s follow-up reuses ④ initial-FULL v2 with spatial Artifact templates active, all three optional trial mechanisms and top-exit OFF. Source review covers normalized evidence, cross-representation maximum-peer support, sequence-wide semantic availability, authority, row grouping, anchor confirmation and IFO v2 consumers. It neither recalculates private raster evidence nor infers template inactivity from absent annotations. Existing witness/independence design is a repair constraint, not an activated policy.
+- Execution scope: October 16 source review and the completed six-position Windows saved-trace receipt only; no detector/private-video execution, aggregate replay or new labels. Selected reason/inputs and five observations/three anchor rows are reported evidence; semantic availability is conditionally inferred from current route semantics. Intake is closed, no further Windows request is pending, and no behavioral repair or field acceptance is claimed.
+- Logic-map impact: NONE — the existing authority, tracklet, IFO and publication routes match the inspected source. This follow-up closes evidence intake and narrows the repair-design boundary without changing control flow.
 - Failure-registry impact: NONE — F03/F04 already reject motion/continuity as physical identity proof; F05/F08/F09/F10 protect phase, coordinates and non-case-specific repair. No new mechanism or repaired physical failure is established.
