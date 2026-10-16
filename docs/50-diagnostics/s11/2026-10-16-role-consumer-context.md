@@ -83,8 +83,63 @@ FULL endpoint, independent Foam and actual report-only acceptance remain open.
 
 ## Execution result
 
-The source, tests and this hypothesis record are frozen before the real run.
-Results and the exact frozen commit will be added after execution.
+Frozen code and hypotheses: `15b735e10dfb1dd64c133d538673492f0d5722b7`.
+The five complete 113-row runs executed. Baseline complete-detection equality
+passed, and independent verification covered 565 CSV rows, 513 numeric source
+joins, 12,745 authority calls and 10 report extrema with no mismatches.
+These numbers validate provenance/injection scope, not physical accuracy.
+
+| Arm | Numeric Oil | Current physical controls selected | Known opposed selected | Changed selections | Numeric / valid Foam |
+|---|---:|---:|---:|---:|---:|
+| baseline | 101 | 3 | 3 | 0 | 26 / 26 |
+| negative anchor demotion | 101 | 3 | 1 | 2 | 26 / 26 |
+| negative member veto | 104 | 2 | 0 | 14 | 26 / 25 |
+| positive authority only | 101 | 4 | 0 | 16 | 25 / 25 |
+| combined | 106 | 5 | 0 | 11 | 25 / 25 |
+
+Denominators are six currently physical correspondences and six exact opposed
+candidates; the one practical-only candidate remains unselected in all arms.
+These are exposed sparse controls, not an accuracy rate or an all-candidates goal.
+Three originally useful physical selections are 38/42.5/52 s; stale 49.5 s
+physical acceptance is excluded. Both combined recoveries (40/44 s) match the
+already-reviewed exact candidates, and the three useful originals survive.
+
+Anchor demotion leaves the wrong 44 s maximum intact; its new 40 s minimum is
+an unreviewed same-frame alternative. Member exclusion removes the three wrong
+selections but changes downstream ownership and replaces the correct 52 s
+selection. Positive authority alone recovers 40/44 s but displaces the correct
+42.5 s candidate. Combining the interventions restores that candidate as well.
+At 42 s the combined positive is retained as ANCHOR but its tracklet is unadmitted;
+there is no numeric Oil. Do not relax confirmation just for this single gap.
+
+The combined report maximum changes to 51 s/Y820 and the minimum to 2 s/Y858;
+these selected targets remain unassessed. Removing old wrong extrema is therefore
+not proof that new extrema describe the physical movement. All five arms retain
+one report-level Foam episode. In positive/combined arms, the newly selected
+39.5 s Oil Y838 triggers the existing final-Oil alias rejection of Foam Y841,
+shifting the sampled first Foam observation from 39.5 to 40 s. This half-second
+change alone is not a context failure. Negative-only veto instead preserves
+40 s Foam Y840 but selects Oil Y831, causing topology flags and false per-series
+validity. Raw Foam count alone would miss that adverse composition effect.
+
+**Disposition: partial consumer feasibility, no automatic detector candidate.**
+The combined intervention demonstrates useful selected-point recovery without
+requiring the missing sixth correspondence; it does not implement the needed
+pixel-derived role discriminator or certify unknown owners/extrema. The required
+repair must supply both qualified positive and negative member evidence and
+carry it through physical history/ownership and independent Foam composition.
+No defaults, thresholds, production sources or formal truth were changed.
+
+### Post-run source-context inspection plan
+
+Inspect all 113 original sampled source frames, not just the changed extreme.
+`tests/diagnostics/s11_role_source_context.py` verifies the existing sample4 video
+hash, exact decoded frame/time joins, original Recipe crop and lossless 2x-nearest
+atlas round trips. Captions identify changes but add no line or physical label.
+This is post-run agent inspection, not a held-out classifier evaluation or a new
+human response. Keep unknown alternative roles unknown after inspection.
+The source helper is frozen separately before execution; it does not rerun or
+alter the five role arms. Its evidence will be linked in the handoff.
 
 ## Detector Governance
 
