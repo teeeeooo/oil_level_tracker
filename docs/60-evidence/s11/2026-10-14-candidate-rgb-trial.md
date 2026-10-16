@@ -6,6 +6,9 @@
 후보 허용을 native 경로·주변 픽셀의 물리 라벨로 확장하지 않는다.
 기존 모델의 rim 실패는 유지한다. 후속 [Windows 비교용 로컬 준비](#windows-comparison-local-preparation--2026-10-16)는
 같은 가중치를 실제 Oil 후보 자격 조건에 연결한 별도 opt-in 범위다.
+[Windows 비교 결과](#windows-rgb-result--2026-10-16)는 BASE 관측 전량 소실로
+**REGRESSION / NOT_ADOPTED**로 종료했다. review-006은 미검토로 보존하며,
+그 답변을 후보 종료나 다음 Local XY 준비의 전제조건으로 삼지 않는다.
 
 ## 실행 전 입력 고정
 
@@ -331,17 +334,116 @@ initial-FULL, facade/cutover, Foam 통합, packaging 검사 140개 중 중복 6�
 | `none/sample4/comparison.json` | `14095b41e264606e885069870f08f40c8ed5eb4a453959e5d6ade782003e9955` |
 | `implementation.patch` | `4c950378c1c6617545ae0965e77d66b85a7630b7a6e58354fc51c496fca8e0f0` |
 
-Windows 비교는 아직 미실행이며 [실행 절차와 짧은 프롬프트](../../40-operations/s11-current-windows-field-qualification.md#priority-2-candidate-rgb-comparison)를 제공한다.
+로컬 전달 당시 Windows 비교는 미실행이었으며 [실행 절차와 짧은 프롬프트](../../40-operations/s11-current-windows-field-qualification.md#priority-2-candidate-rgb-comparison)를 제공했다.
 review-004/005의 복수 허용·실용적 근사를 재사용하고 기존 O2/FIELD 상태를 유지한다.
+
+## Windows RGB result — 2026-10-16
+
+**REGRESSION / NOT_ADOPTED.** 사용자가 전달한 Windows 실행·CSV 요약을
+수신했다. 원본 영상, CSV/JSONL과 review packet은 Windows에 있으며 Mac에서
+직접 검사하지 않았다. 기준 ④의 최종 BASE 303행이 ⑥에서 모두 사라졌고,
+이미 사용자에게 허용된 계면도 출력되지 않는다. 이는 실제 계면이 없다는 새
+불확실성이 아니라 기존 판정에 대한 관측 손실이다. 전체 303개가 모두 정확한
+계면이었다는 뜻도 아니다. 임계값 완화, 재학습, 재실행은 하지 않는다.
+
+### Reported execution and final output
+
+- 기준: `oil_level_analysis_22-3_initial_ON_v2_20261015_171421`, Windows의
+  `0.windows_diagnostic/bundle/`에 보존된 ④를 재사용.
+- 후보: `oil_level_analysis_22-3_initial_ON_v2_candidate_rgb_20261016_122107`,
+  `sample/output/`에 보존된 ⑥. 전달 구현은 `d7e19ba`, 문서 전달 HEAD는 `1f0a00e`다.
+  이번 회신은 실행 소스 SHA 원문을 포함하지 않으며, 보고된 resolver 접미사는
+  `+initial-full-observation-v2+candidate-rgb-v1`이고 cost-first는 없다.
+- 동일 영상/Recipe bytes와 세션 7개 필드의 일치가 보고됐다. 480–780초,
+  2fps, FULL debug, BASE FULL/Accum EMPTY다. 실제 Recipe의 개별 Artifact/ROI
+  값은 이 회신에 없으며 일치 확인을 다시 요구하지 않는다.
+- `OpenCvPhaseDetector(initial_full_observation=True, candidate_rgb=True)`를
+  사용하는 `AnalysisPipeline` / `AnalyzeVideoUseCase`의 **headless 실행**으로
+  보고됐다. 약 24.8분은 단일 실행 시간이다. 실제 GUI 조작·패키지 검증으로
+  바꾸어 기록하거나 GUI만을 위해 다시 실행하지 않는다.
+
+다음은 전달된 최종 숫자 출력 집계다. BASE/Accum 각각 601행이며,
+[검토 정답](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)의
+구간을 앞 포함·뒤 제외(마지막 780초 포함)로 분리했다.
+
+| Glass / 구간 | 표본 | ④ Oil | ⑥ Oil | ④ Foam | ⑥ Foam |
+|---|---:|---:|---:|---:|---:|
+| BASE FULL_PREFIX 480–550 | 139 | 3 | 0 | 0 | 0 |
+| BASE DRAIN 550–652 | 205 | 170 | 0 | 0 | 0 |
+| BASE REFILL 652–674 | 43 | 39 | 0 | 0 | 0 |
+| BASE FULL_TRANSITION 674–675 | 2 | 0 | 0 | 0 | 0 |
+| BASE FULL_SUFFIX 675–780 | 211 | 91 | 0 | 0 | 0 |
+| BASE OUTSIDE | 1 | 0 | 0 | 0 | 0 |
+| **BASE 합계** | **601** | **303** | **0** | **0** | **0** |
+| Accum EMPTY 480–653 | 346 | 0 | 0 | 0 | 0 |
+| Accum ENTRY_SPLASH 653–672 | 37 | 4 | 0 | 7 | 7 |
+| Accum FOAM_LAYERED 672–680 | 16 | 10 | 3 | 11 | 11 |
+| Accum POST_FOAM 680–700 | 41 | 0 | 0 | 0 | 0 |
+| Accum DRAIN 700–780 | 160 | 22 | 0 | 22 | 22 |
+| Accum OUTSIDE | 1 | 0 | 0 | 0 | 0 |
+| **Accum 합계** | **601** | **36** | **3** | **40** | **40** |
+
+BASE 후반 FULL의 91개 비유면 숫자가 없어졌지만 하강/회복의 209개 출력도
+전부 사라졌다. 후자를 정확도 209건 손실로 세지는 않아도, 이미 허용된 관측의
+소실과 전체 움직임 부재만으로 미채택 결론은 충분하다. Foam 불변과 episode/
+confirmed count 동일은 사용자 보고이며 표는 숫자 수를 확인한다. 최종 모든
+필드의 로컬 비교는 아니다. 이전부터 존재하던 ENTRY_SPLASH 7행 / DRAIN 22행의
+Foam 출력이 정답이 됐다는 의미도 아니다.
+
+### Reused judgments and unresolved summary details
+
+1. review-004는 여섯 프레임의 **실용적 허용과 불확실성**으로 재사용한다.
+   f15884의 409/396, f15908의 418/413.5, f15932의 411은 허용된 대안이다.
+   f15872의 404.5 선호와 f15920의 413/416 선호를 기존 433.5/425의 확정
+   `non_interface` 라벨로 바꾸지 않는다. f15896은 양쪽 모두 빈 값이며 이미
+   허용한 417/419/407 관측이 계속 누락된다. 후보별 RGB 최초 거부 stage와
+   OPPOSED/UNAVAILABLE의 정확한 분해는 이 요약만으로 확정하지 않는다.
+2. 721/723초의 `Y311/309/312/317` 및 `Y329/353/356`은 Glass·좌표계·최종 행
+   연결이 불명확하다. 기존 ④ BASE f17287@721.012의 CSV는 **Y694**, f17335@
+   723.014는 **빈 값**이었다. 따라서 721초 제거는 BASE 전체 빈 출력과 양립하지만,
+   **723초 BASE의 새 개선**은 성립하지 않는다. 771초 양쪽 UNKNOWN 보고는 유지한다.
+   이 충돌은 기존 기록을 덮어쓰거나 RGB 종료를 위한 전체 trace 재분석 사유가 아니다.
+3. `BASE COMPATIBLE=0`과 `eligible 8235→1`은 같은 수라고 확정할 수 없다.
+   Accum의 `7790→1046`도 원시 필드 정의·분모가 없는 요약이다. 후보 판정 수와
+   다른 단계 eligibility를 혼합하지 않고 **UNRECONCILED**로 남긴다. 최종 CSV
+   BASE 0 / Accum 3과 별개이며 모든 BASE raw 후보가 사라졌다고 해석하지 않는다.
+4. review-005의 f16076@670.5에서 허용한 482/479.5 소실은 추가 손실 근거다.
+   f17431@727은 ④/⑥ 모두 빈 값이라는 보고를 유지하며 ⑤의 신규 관측과 섞지 않는다.
+
+### Review-006 retained, no required follow-up
+
+Windows `0.windows_diagnostic/data/reviews/review-006/`에 packet-v2, pending/
+unreviewed labels, plain/guide 6장과 replies 폴더가 준비됐다고 보고됐다.
+새 사용자 회신은 아직 없다. 아래 세 선택 위치와 LVLM 관찰을 분리해 보존한다.
+
+| Accum frame / 시각 | ④ Oil Y | ⑥ Oil Y | 최종 출력 차이 |
+|---|---:|---:|---|
+| f16184 / 675.0 s | 317 | 498 | 양쪽 숫자, Y 변경 |
+| f16208 / 676.0 s | 빈 값 | 485 | 신규 출력 |
+| f16232 / 677.0 s | 269 | 444 | 양쪽 숫자, Y 변경 |
+
+이 세 행이 ⑥의 전부라는 집계를 따르면 Accum은 **새 출력 1 / 소실 34 /
+공통 숫자 Y 변경 2**, 순증가 −33이다. 이는 전달 수치에서 계산한 분해이며
+별도 로컬 CSV 검사 결과가 아니다.
+
+LVLM의 “Foam 하단/바닥 아티팩트”는 미확정 관찰이다. 이 구간의 정답은 상단
+Foam과 하단 **Oil/Foam 계면**을 각각 추적하는 것이다. Oil-air가 아니라거나
+Foam 아래라는 이유만으로 Oil 오검출이 되지 않는다. 실제 Oil/Foam 경계와 고정
+바닥/반사 여부는 다르다. 세 후보에 정답/오검출 라벨을 자동 부여하지 않는다.
+RGB 미채택은 이미 성립하므로 추가 강제 선택을 요청하지 않고 packet을 보존한다.
+이후 사용자가 직접 답하면 기존 record/history 절차로 해당 범위에만 반영한다.
+
+Cost-first → RGB 두 비교는 종료, 다음은 [Local XY 입력 준비](../../40-operations/s11-current-windows-field-qualification.md#priority-3-local-xy-input-preparation)다.
+O2 OPEN / FIELD FAIL, 기본 detector, FULL 전환 미해결은 그대로다.
 
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION`.
 - Failure-registry entries: `S11-F02`, `S11-F09`, `S11-F10`.
-- First harmful stage: a regional role preference loses practically accepted candidates before any selector can preserve them; RGB compatibility must retain both accepted alternatives and opposed controls. The later B input audit locates missing complete upper patches at unchanged `FRAME-EVIDENCE` visibility, before model inference; the physical correctness of removal remains unqualified.
+- First harmful stage: the Windows receipt establishes whole-BASE final observation loss, including previously allowed interfaces. RGB eligibility is the changed consumer, but exact per-candidate OPPOSED/UNAVAILABLE/other rejection counts and earliest loss are not established by the contradictory summary. Historical B input loss and reviewed rim false acceptance retain their narrower evidence above.
 - Prior mechanisms reviewed: old CR1 category collision and all-four public sign failure; B practical acceptance; original native-head N3 loss; source-qualified candidate bindings and exact floor/ceil support.
 - Difference from prior failures: one fixed native RGB candidate-compatibility trial changes input information and supervision, with sample4-only fit and exposed public transfer. It does not retry native external-surface labels, tune the failed role threshold or choose a new production winner.
-- Existing feature coverage: historical candidate/sample3 inputs remain frozen above. New local comparison uses native RGB and unchanged effective/glare masks, static preparation, explicit FULL plus observation v2 and the previously frozen interior Recipes, with exclusions/templates empty and cost-first/Local XY OFF. Original model weights and all source/variant inputs are checked; no retired mask repair is enabled.
-- Execution scope: the earlier offline fit/input audit retain their historical scope. The new step is inference-only arithmetic parity plus real GUI construction and AnalysisPipeline → final CSV/report on two local clips, including FULL/NONE equivalence. No training, new physical labels, private Windows execution, human report reading or field acceptance occurs locally.
-- Logic-map impact: UPDATED — default-OFF RGB setup, frame annotations and the additional completed-Oil eligibility condition are mapped; all existing authority/phase/selection and direct Foam owners remain.
+- Existing feature coverage: historical and local preparation inputs remain frozen above. The received Windows pair reports matching video/Recipe/session, FULL debug, initial BASE FULL/Accum EMPTY, observation v2 with RGB only in ⑥; individual ROI/template/static-input values are not supplied. The existing scope-aware constructor and current GUI/sequence owners are unchanged. No mask repair, retraining or new setup is applied.
+- Execution scope: this receipt is documentation-only. Windows reports headless detector/pipeline/use-case execution and completed CSV, not GUI operation; private artifacts were not inspected locally. Earlier 169 tests and local comparisons retain their original scope. No new detector execution, physical labels or field acceptance accompanies this receipt.
+- Logic-map impact: NONE — the mapped RGB annotation/eligibility route still matches source; only its returned field disposition and next Windows input task change.
 - Failure-registry impact: NONE — no new failure family or accepted detector repair; this checks candidate-level input capability under existing evidence boundaries.

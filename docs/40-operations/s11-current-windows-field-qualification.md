@@ -6,10 +6,13 @@
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
 is unknown; post-transition FULL counts start at 675 s. The bounded
 [Refill owner and false-output follow-up](#refill-owner-and-false-output-follow-up)
-is now CLOSED. Cost-first and its review-005 supplement are also CLOSED as
-**REGRESSION / NOT_ADOPTED**. The next Windows comparison is
-[priority 2 candidate RGB](#priority-2-candidate-rgb-comparison), separately
-against ④ FULL+ON v2. Cost-first and Local XY stay OFF.
+is now CLOSED. Cost-first/review-005 and the
+[returned RGB comparison](../60-evidence/s11/2026-10-14-candidate-rgb-trial.md#windows-rgb-result--2026-10-16)
+are CLOSED as **REGRESSION / NOT_ADOPTED**. The next Windows task is
+[priority 3 Local XY input preparation](#priority-3-local-xy-input-preparation)
+for a separate comparison against ④ FULL+ON v2. No Local XY replay is ready
+until its Windows structure/sampling scope is supplied. Review-006 remains
+unreviewed/pending and does not block this preparation. Cost-first/RGB remain OFF.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
@@ -43,7 +46,7 @@ candidate identity, not the retired comparison's commit or branch.
 ### October 15 first initial-FULL comparison
 
 **Completed historical procedure.** Cost-first and its bounded supplement also
-returned; use the priority 2 RGB handoff for the next run.
+returned; RGB has since returned too. Use the priority 3 input handoff next.
 
 This is the first exploratory OFF/ON comparison named by the Work Plan, before
 cost-first assignment, candidate RGB or Local XY. False positives are permitted
@@ -608,10 +611,15 @@ BASE 누락 구간, Accum의 정답 구간별 집계, review-004 여섯 행(f158
 
 ### Priority 2 candidate RGB comparison
 
+**완료된 실행 절차.** [Windows 회신](../60-evidence/s11/2026-10-14-candidate-rgb-trial.md#windows-rgb-result--2026-10-16)에서
+BASE 303→0, Accum 36→3이며 ⑥은 **악화·미채택**이다. 회신은 headless
+pipeline/use-case 실행으로 기록하고 GUI 재실행을 요구하지 않는다. review-006은
+미검토로 보존하며 RGB 종료를 위해 추가 질문하지 않는다. 아래 명령은 실행 이력이다.
+
 구현 소스는 `d7e19baf32df012ad113ed2318dd278a7258de80`이다. 이 커밋 또는
 이후 문서만 갱신한 전달용 ZIP을 사용하며, 실제 받은 ZIP의 revision을 실행 기록에 남긴다.
 
-현재 비교는 **④ FULL+ON v2 ↔ ⑥ FULL+ON v2 + candidate RGB**다.
+실행한 비교는 **④ FULL+ON v2 ↔ ⑥ FULL+ON v2 + candidate RGB**다.
 ⑤ cost-first 결과 위에 RGB를 추가하지 않는다. 고정 가중치/입력은 이전 RGB
 실험과 같고, 새 부분은 그 판정을 최종 Oil 후보 자격 조건에 연결한 것이다.
 기존 rim 오수용 3건은 남는다. RGB 허용은 물리적 정답이나 확률이 아니며,
@@ -663,7 +671,7 @@ BASE 누락 구간, Accum의 정답 구간별 집계, review-004 여섯 행(f158
    FULL 전환은 이번 RGB 변경 범위 밖이며 accepted baseline과 O2/FIELD 상태는
    유지한다. 다음 Local XY는 별도 준비 후 v2와 비교한다.
 
-전달용 짧은 프롬프트:
+이전 실행용 프롬프트 (완료 이력; 다시 보내지 않음):
 
 ```text
 ④ FULL+ON v2 bundle: <기준 번들 경로>
@@ -678,6 +686,63 @@ GUI 분석을 완료해줘. cost-first와 Local XY는 끄고, 조건이 같으�
 review-004/005의 사용자 판정과 복수 허용·대략적 일치를 재사용하고,
 새 판단만 기존 review 폴더의 새 packet으로 질문·기록해줘.
 재학습·임계값/ROI 조정 없이 결과를 반환해줘.
+```
+
+### Priority 3 Local XY input preparation
+
+**현재 작업: Windows 입력 준비. 디텍터 실행 단계가 아니다.** 기존
+[`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py)는
+지정된 source X/Y 영역의 Oil 측정만 제외하는 구현이며 자동 구조물 검출기가 아니다.
+현재 GUI에는 이를 켜는 flag가 없고, 기존 진단 runner의 rectangle은 Mac sample4용이다.
+새 `--oil-local-xy` 옵션이 있다고 가정하거나 Mac 좌표를 Windows에 복사하지 않는다.
+[구현 재사용과 입력 경계](../60-evidence/s11/2026-10-09-local-xy-implementation.md#windows-input-preparation--2026-10-16)를 읽는다.
+
+1. 기존 ④ bundle, 같은 Recipe, 원본 영상과 review 폴더를 사용한다. Recipe의
+   Artifact template, support reference, exclusion 설정과 기존 회신에서 이미
+   확인한 **고정 구조물 영역**이 있는지 확인한다. 이미 충분히 확인한 영역은
+   재질문하지 않는다. 후보 idx/한 점의 비유면 판정은 사각형 전체의 제외 허용이 아니다.
+2. 적용할 Glass별로 **한 번 고정할 scope 집합**을 준비한다. 각 영역의 원본
+   frame/time, 이미지 크기, source 좌표 `[x0,x1) × [y0,y1)`, 보이는 구조물과
+   기존 판정 근거를 표에 적는다. ROI-local 좌표면 crop origin을 명시해 source로
+   변환한다. 범위는 고정 구조물 근거로 정하며, 검출률을 보고 넓히거나 이동하지 않는다.
+   717–750.5초의 흔들리는 비유면 tracklet 전체를 고정 제외 띠로 바꾸지 않는다.
+   구조물 확인과 별개로 실제 계면이 그 영역을 통과할 가능성도 그대로 기록한다.
+3. 기존 자료에 충분한 영역 판정이 없으면 **구체적인 구조물 장면 하나**의 plain/
+   guide를 준비한 뒤 사용자에게 해당 표시 범위의 역할과 실용적인 제외 범위를
+   확인한다. 막연한 좌표 요청이나 기존 계면 재질문은 하지 않는다. 적절한 영역을
+   찾지 못하거나 혼합/불명확하면 `NOT_PREPARED`로 반환한다. 임의 mask로 대체하지 않는다.
+   새 질문·원본·reply는 `0.windows_diagnostic/data/reviews/`의 새 폴더에 두며,
+   회신 전은 pending/unreviewed, LVLM 관찰은 참고다. 기존 record/history 방식을
+   사용하되, 후보 판정만으로 sampling rectangle이 확정됐다고 저장하지 않는다.
+4. 확인된 입력은 기존 `OilMeasurementScope.bind`에 필요한 Glass/geometry/settings,
+   frame size와 원본 reference를 연결해 보존한다. 같은 reference가 기존 Artifact
+   전체 후보 veto에도 쓰이면 충돌로 보고하고 template을 끄거나 삭제하지 않는다.
+   공유 Recipe exclusion과 Oil-only scope를 혼동하지 않고 Recipe/ROI는 그대로 둔다.
+5. **영역 표·판정 상태·적용 가능한 Glass·충돌/없는 입력만 반환**한다. private
+   이미지/영상/packet은 Windows에 남긴다. RGB의 721/723초 요약과 eligible 수 충돌은
+   이전 근거와 구분해 보존하되 전체 CSV/trace 분석이나 추가 RGB 질문을 재개하지 않는다.
+   review-006은 아직 미검토이며, Foam 하단이 실제 Oil/Foam 계면이면 정상 Oil 대상이다.
+6. 이 입력으로 실행 경로를 준비한 뒤 **④ v2 ↔ ⑦ v2+Oil-only Local XY**를 한 번
+   비교한다. 양쪽 initial-FULL v2, cost-first/RGB OFF, 같은 480–780초/2fps/초기값/
+   debug 조건이다. 적용 scope는 detector의 `+oil-local-xy-v1:<digest>`와 manifest로
+   구분하며 resolver 접미사가 바뀐다고 가정하지 않는다. 실제 실행은 다음 handoff이며,
+   raw Foam뿐 아니라 최종 Foam 좌표/validity/episode까지 비교한다. 실행 출력은
+   `sample/output/`에 둔다. FULL 전환과 최종 채택은 세 비교 이후의 별도 단계다.
+
+전달용 짧은 프롬프트:
+
+```text
+④ FULL+ON v2 bundle: <기준 번들 경로>
+Recipe·원본 영상: <경로>
+기존 review 폴더: <경로>
+
+docs/40-operations/s11-current-windows-field-qualification.md의
+“Priority 3 Local XY input preparation”을 읽고 적용 영역만 준비해줘.
+기존 Recipe/review에서 확인된 고정 구조물 영역을 우선 재사용하고,
+Glass·근거 프레임·원본 X/Y 범위·판정 상태를 표로 반환해줘.
+새 판단이 꼭 필요하면 구체적인 한 장면의 plain/guide를 준비해서 질문해줘.
+Mac sample4 좌표를 복사하거나 ROI를 바꾸지 말고 디텍터는 아직 실행하지 마.
+RGB는 악화·미채택으로 종료하고 review-006은 미검토 상태로 보존해줘.
 ```
 
 ## 2. Private source identity

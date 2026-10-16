@@ -6,6 +6,9 @@ WITHOUT PROMOTION** as a detector repair. Default runtime remains R22 behavior;
 O2 remains OPEN / FIELD FAIL. Base `aea2087651ada473fe78d6d60e9b3b21e52eea2b`.
 [Machine receipt](2026-10-09-local-xy-implementation.json) pins executing source,
 inputs, runtime, complete results, reports and the new human reply.
+The subsequently authorized third Windows comparison is a separate input context;
+see [Windows input preparation](#windows-input-preparation--2026-10-16).
+It does not reopen or promote the original Mac result.
 
 ## Frozen mechanism and implementation
 
@@ -151,10 +154,50 @@ before proposing another measurement. Foam endpoint episode loss remains its
 separate D5 item. O2 does not silently authorize O3/O4 changes. No further human
 judgment or Windows work is currently necessary for this closeout.
 
+## Windows input preparation — 2026-10-16
+
+After the [returned RGB regression](2026-10-14-candidate-rgb-trial.md#windows-rgb-result--2026-10-16),
+the authorized third comparison reuses this implementation separately against
+④ FULL+ON v2. It is **INPUT PENDING**, not a new algorithm or a ready ON switch.
+The current source at `1f0a00e` was inspected without running the detector:
+
+- `OpenCvPhaseDetector(oil_measurement_scopes=...)` and `OilMeasurementScope.bind`
+  already own the immutable Glass/geometry/settings/frame-size/reference binding.
+  Empty scopes take the legacy path; a nonempty scope adds `+oil-local-xy-v1:<digest>`
+  to the detector version. It need not change the completed resolver version.
+- The measurement policy remains affected-only common-X sample withdrawal in
+  material/raster-material/phase-transition lanes. It is not an automatic
+  structure detector, a whole-candidate veto, or the shared Recipe exclusion mask.
+- The current GUI bootstrap has no Local XY scope input. The retained diagnostic
+  runner has explicit sample4 coordinates and local replay assumptions; it is
+  not a Windows-private-video execution command. No new CLI flag is claimed.
+- The retained X[563,598)/Y[816,828) rectangle belongs to Mac sample4. No Windows
+  scope set was supplied with the current receipts. Windows must first identify
+  the structure/reference and source-coordinate sampling area using its existing
+  Recipe/reviews and original images. No private pixels need leave that machine.
+
+The [bounded handoff](../../40-operations/s11-current-windows-field-qualification.md#priority-3-local-xy-input-preparation)
+first reuses any already confirmed fixed-structure area. A point/idx judgment or
+moving non-interface track is not a reviewed rectangle; preserve that distinction.
+If a concrete area needs judgment, prepare its plain/guide context before asking
+once. Do not turn the whole 717–750.5 s oscillating path into an exclusion band.
+Bind one explicit set before the comparison, retaining actual matching-context
+checks and the prohibition on using the same reference for both withdrawal and
+an existing Artifact veto. Return a conflict instead of disabling a template.
+
+Once the Windows input is supplied, prepare the existing constructor-to-pipeline
+entry and its appropriate checks. Use initial-FULL v2 in both arms with cost-first
+and RGB OFF. Keep all shared masks, Recipe and session settings fixed. Full final
+Oil/Foam comparison remains necessary because prior scope changes altered public
+Foam validity even when raw Foam stayed equal. No detector run, new experiment
+artifact, threshold/rectangle search or acceptance occurs in this preparation.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F06`, `S11-F09`, `S11-F10`.
 - First harmful stage: fixed scoped outputs regress in completed selection/admission; 52 s has an admitted unselected boundary-region proposal and 54–56 s have present but unadmitted proposals. The first physical association error is unproven. Foam episode endpoint loss exists in both runs.
-- Logic-map impact: UPDATED — documents the optional scope through frame/candidate owners and actual measurement lineage; default and downstream owners remain unchanged.
-- Failure-registry impact: UPDATED — records this fixed local-withdrawal recurrence and the no-repeat boundary, without claiming that all local exclusion mechanisms are invalid.
+- Existing feature coverage: source inspection confirms explicit OilMeasurementScope binding and separate measurement exclusion, while shared masks/templates and downstream owners remain unchanged. The historical Mac rectangle is fixed evidence. Windows Recipe/reference/rectangle bindings are not yet supplied; their absence is an input preparation boundary, not evidence that the feature or private artifacts do not exist.
+- Execution scope: the October 16 step is read-only source/contract inspection and a Windows input handoff. No private or local detector replay, GUI wiring, new artifact or physical label is generated. Historical implementation measurements retain the scope above.
+- Logic-map impact: NONE — the existing constructor-bound Local XY feature row and frame/candidate details still describe source; no new route or automatic reference consumer is added.
+- Failure-registry impact: NONE — prior local-withdrawal recurrence and its no-promotion result remain; the authorized new Windows context has no measured outcome yet.
