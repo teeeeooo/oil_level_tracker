@@ -126,3 +126,32 @@ def test_empty_runs():
 
 def test_unknown_variant_rejected():
     with pytest.raises(ValueError): prepare_input([],[],'tuned_after_run')
+
+
+def test_full_event_join_accepts_same_frame_values():
+    from tests.diagnostics.s11_role_consumer_verify import verify_event_sample
+    event = {'representative_frame_index': '12', 'start_time_sec': '2',
+             'oil_level_px': '8', 'foam_front_px': '12'}
+    sample = {'timestamp_sec': '2', 'smoothed_oil_air_level_px_from_zero': '8',
+              'smoothed_foam_front_px_from_zero': '12'}
+    verify_event_sample(event, {'12': sample})
+
+
+@pytest.mark.parametrize('field,value', [('representative_frame_index','13'),('start_time_sec','3'),
+                                        ('oil_level_px','9'),('foam_front_px','13')])
+def test_full_event_join_rejects_mismatched_output(field, value):
+    from tests.diagnostics.s11_role_consumer_verify import verify_event_sample
+    event = {'representative_frame_index': '12', 'start_time_sec': '2',
+             'oil_level_px': '8', 'foam_front_px': '12', field: value}
+    sample = {'timestamp_sec': '2', 'smoothed_oil_air_level_px_from_zero': '8',
+              'smoothed_foam_front_px_from_zero': '12'}
+    with pytest.raises(ValueError): verify_event_sample(event, {'12': sample})
+
+
+def test_foam_event_does_not_require_an_oil_coordinate():
+    from tests.diagnostics.s11_role_consumer_verify import verify_event_sample
+    event = {'representative_frame_index': '12', 'start_time_sec': '2',
+             'oil_level_px': '', 'foam_front_px': '12'}
+    sample = {'timestamp_sec': '2', 'smoothed_oil_air_level_px_from_zero': '',
+              'smoothed_foam_front_px_from_zero': '12'}
+    verify_event_sample(event, {'12': sample})

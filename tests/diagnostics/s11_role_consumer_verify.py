@@ -15,6 +15,19 @@ def check(condition, message):
         raise ValueError(message)
 
 
+def verify_event_sample(event: dict, samples_by_frame: dict) -> None:
+    """Verify all motion/Foam/quality events, not only displayed extrema."""
+    frame = event['representative_frame_index']
+    check(frame in samples_by_frame, 'event representative frame absent')
+    sample = samples_by_frame[frame]
+    check(float(event['start_time_sec']) == float(sample['timestamp_sec']), 'event time join')
+    for event_key, sample_key in [('oil_level_px', 'smoothed_oil_air_level_px_from_zero'),
+                                  ('foam_front_px', 'smoothed_foam_front_px_from_zero')]:
+        if event[event_key] != '':
+            check(sample[sample_key] != '' and float(event[event_key]) == float(sample[sample_key]),
+                  'event representative level join')
+
+
 def verify(root: Path, directory: Path) -> dict:
     summary = json.loads((directory/'comparison.json').read_text())
     trace = json.loads(gzip.decompress((directory/'readout.json.gz').read_bytes()))
@@ -107,6 +120,7 @@ def verify(root: Path, directory: Path) -> dict:
             events=list(csv.DictReader(f))
         extreme_count=0
         for e in events:
+            verify_event_sample(e, {r['frame_index']: r for r in csv_rows})
             if e['event_type'] not in ('MAXIMUM_OIL_LEVEL','MINIMUM_OIL_LEVEL'): continue
             matches=[x for x in saved['extrema'] if x['event']==e['event_type']]
             check(len(matches)==1,'missing/duplicate extrema summary')
@@ -117,8 +131,8 @@ def verify(root: Path, directory: Path) -> dict:
         check(extreme_count==len(saved['extrema']), 'extrema count')
         report[name]={'rows':len(rows),'same_frame_numeric_joins':joined,'CSV_rows':len(csv_rows),
                       'authority_calls':len(calls),'authority_injections':injection_count,
-                      'extrema_verified':extreme_count,'foam_changed_frames':foam_changed}
-    return {'schema':'s11-role-consumer-independent-verification-v1','status':'PASS',
+                      'extrema_verified':extreme_count,'domain_events_verified':len(events),'foam_changed_frames':foam_changed}
+    return {'schema':'s11-role-consumer-independent-verification-v2','status':'PASS',
             'variants':report,'review_bindings':len(controls),'mismatches':0,
             'claim':'Arithmetic, provenance and injection scope only; no physical classifier or comprehension acceptance.'}
 

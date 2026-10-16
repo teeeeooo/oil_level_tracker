@@ -122,6 +122,13 @@ change alone is not a context failure. Negative-only veto instead preserves
 40 s Foam Y840 but selects Oil Y831, causing topology flags and false per-series
 validity. Raw Foam count alone would miss that adverse composition effect.
 
+The post-run all-event audit joins all 143 retained domain events to their CSV
+representative frame, timestamp and reported Oil/Foam levels. In addition to
+extrema changes, positive-authority-only creates OIL_DROP_START at 41.5 s while
+the combined arm does not. This new motion event is not independently qualified;
+its appearance is not called either a proven recovery or a proven false event.
+Verifier v2 adds this full-event check; the original v1 receipt stays immutable.
+
 **Disposition: partial consumer feasibility, no automatic detector candidate.**
 The combined intervention demonstrates useful selected-point recovery without
 requiring the missing sixth correspondence; it does not implement the needed

@@ -1,0 +1,1331 @@
+{
+  "schema": "s11-role-consumer-durable-summary-v1",
+  "starting_head": "b7576c72e2176256bc5323e52a80beaccfadb284",
+  "frozen_role_head": "15b735e10dfb1dd64c133d538673492f0d5722b7",
+  "source_inspection_head": "dc38ba3f51ac62a5cad16e040b25768b325eb23b",
+  "disposition": "PARTIAL_CONSUMER_FEASIBILITY_NO_AUTOMATIC_CANDIDATE",
+  "production_changed": false,
+  "field_disposition": "FIELD_FAIL_UNCHANGED",
+  "O2": "OPEN",
+  "human_report_only_acceptance": "PENDING_NOT_SUBSTITUTED_BY_AGENT_INSPECTION",
+  "scope": "Five full saved-candidate Mac sample4 runs. Current Windows evidence reviewed but no Windows execution; public CRW units not replayed and sample3 remains quarantined.",
+  "variants": [
+    {
+      "variant": "baseline",
+      "rows": 113,
+      "numeric_oil": 101,
+      "numeric_foam": 26,
+      "review_status_counts": {
+        "NO_NUMERIC_OIL": 12,
+        "UNASSESSED_SELECTION": 95,
+        "PHYSICAL_CORRESPONDENCE": 3,
+        "REVIEWED_OPPOSED": 3
+      },
+      "extrema": [
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 1260,
+          "time_sec": 42.0,
+          "y": 868.0,
+          "review_status": "REVIEWED_OPPOSED",
+          "selected": {
+            "candidate_offset": 15,
+            "source": "calibrated_high_recall",
+            "y": 868.0,
+            "tracklet_id": "oil-tracklet:000079:0014",
+            "row_hypothesis_id": "oil-row:000084:003"
+          }
+        },
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1320,
+          "time_sec": 44.0,
+          "y": 822.0,
+          "review_status": "REVIEWED_OPPOSED",
+          "selected": {
+            "candidate_offset": 21,
+            "source": "phase_transition_scan",
+            "y": 822.0,
+            "tracklet_id": "oil-tracklet:000084:0017",
+            "row_hypothesis_id": "oil-row:000088:001"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0
+        },
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 39.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 41.5,
+          "last_sample_sec": 41.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 43.0,
+          "last_sample_sec": 43.5,
+          "sample_count": 2,
+          "sampled_span_sec": 0.5
+        },
+        {
+          "start_sec": 50.0,
+          "last_sample_sec": 51.5,
+          "sample_count": 4,
+          "sampled_span_sec": 1.5
+        },
+        {
+          "start_sec": 54.0,
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        }
+      ],
+      "numeric_foam_runs": [
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 41.0,
+          "sample_count": 4,
+          "sampled_span_sec": 1.5
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 45.0,
+          "sample_count": 7,
+          "sampled_span_sec": 3.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 53.0,
+          "sample_count": 15,
+          "sampled_span_sec": 7.0
+        }
+      ],
+      "foam_changed_frames": [],
+      "authority_calls": 2549,
+      "changed_selection_count": 0,
+      "phase_witness_changed_frames": [],
+      "protected_original_selected": 3,
+      "new_physical_control_selections": [],
+      "original_physical_control_losses": [],
+      "event_delta": {
+        "count": 29,
+        "added": [],
+        "removed": [],
+        "representative_frame_time_level_joins": 29,
+        "physical_semantics": "NOT_INDEPENDENTLY_QUALIFIED"
+      }
+    },
+    {
+      "variant": "negative_anchor_demotion",
+      "rows": 113,
+      "numeric_oil": 101,
+      "numeric_foam": 26,
+      "review_status_counts": {
+        "NO_NUMERIC_OIL": 12,
+        "UNASSESSED_SELECTION": 97,
+        "PHYSICAL_CORRESPONDENCE": 3,
+        "REVIEWED_OPPOSED": 1
+      },
+      "extrema": [
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 1200,
+          "time_sec": 40.0,
+          "y": 867.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 20,
+            "source": "phase_transition_scan",
+            "y": 867.0,
+            "tracklet_id": "oil-tracklet:000079:0014",
+            "row_hypothesis_id": "oil-row:000080:002"
+          }
+        },
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1320,
+          "time_sec": 44.0,
+          "y": 822.0,
+          "review_status": "REVIEWED_OPPOSED",
+          "selected": {
+            "candidate_offset": 21,
+            "source": "phase_transition_scan",
+            "y": 822.0,
+            "tracklet_id": "oil-tracklet:000084:0017",
+            "row_hypothesis_id": "oil-row:000088:001"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0
+        },
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 39.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 41.5,
+          "last_sample_sec": 41.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 43.0,
+          "last_sample_sec": 43.5,
+          "sample_count": 2,
+          "sampled_span_sec": 0.5
+        },
+        {
+          "start_sec": 50.0,
+          "last_sample_sec": 51.5,
+          "sample_count": 4,
+          "sampled_span_sec": 1.5
+        },
+        {
+          "start_sec": 54.0,
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        }
+      ],
+      "numeric_foam_runs": [
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 41.0,
+          "sample_count": 4,
+          "sampled_span_sec": 1.5
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 45.0,
+          "sample_count": 7,
+          "sampled_span_sec": 3.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 53.0,
+          "sample_count": 15,
+          "sampled_span_sec": 7.0
+        }
+      ],
+      "foam_changed_frames": [],
+      "authority_calls": 2549,
+      "changed_selection_count": 2,
+      "phase_witness_changed_frames": [],
+      "protected_original_selected": 3,
+      "new_physical_control_selections": [],
+      "original_physical_control_losses": [],
+      "event_delta": {
+        "count": 29,
+        "added": [
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "start_time_sec": "40.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1200",
+            "oil_level_px": "-17.0",
+            "foam_front_px": "10.0"
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "42.0",
+            "end_time_sec": "45.0",
+            "representative_frame_index": "1260",
+            "oil_level_px": "-14.0",
+            "foam_front_px": "31.0"
+          }
+        ],
+        "removed": [
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "42.0",
+            "end_time_sec": "45.0",
+            "representative_frame_index": "1260",
+            "oil_level_px": "-18.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "start_time_sec": "42.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1260",
+            "oil_level_px": "-18.0",
+            "foam_front_px": "31.0"
+          }
+        ],
+        "representative_frame_time_level_joins": 29,
+        "physical_semantics": "NOT_INDEPENDENTLY_QUALIFIED"
+      }
+    },
+    {
+      "variant": "negative_member_veto",
+      "rows": 113,
+      "numeric_oil": 104,
+      "numeric_foam": 26,
+      "review_status_counts": {
+        "NO_NUMERIC_OIL": 9,
+        "UNASSESSED_SELECTION": 102,
+        "PHYSICAL_CORRESPONDENCE": 2
+      },
+      "extrema": [
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 1545,
+          "time_sec": 51.5,
+          "y": 862.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 10,
+            "source": "material_path",
+            "y": 862.0,
+            "tracklet_id": "oil-tracklet:000100:0023",
+            "row_hypothesis_id": "oil-row:000103:002"
+          }
+        },
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1590,
+          "time_sec": 53.0,
+          "y": 829.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 8,
+            "source": "material_path",
+            "y": 829.0,
+            "tracklet_id": "oil-tracklet:000100:0022",
+            "row_hypothesis_id": "oil-row:000106:000"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 42.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 49.0,
+          "last_sample_sec": 49.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 50.0,
+          "last_sample_sec": 50.5,
+          "sample_count": 2,
+          "sampled_span_sec": 0.5
+        },
+        {
+          "start_sec": 52.5,
+          "last_sample_sec": 52.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 54.0,
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        }
+      ],
+      "numeric_foam_runs": [
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 41.0,
+          "sample_count": 4,
+          "sampled_span_sec": 1.5
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 45.0,
+          "sample_count": 7,
+          "sampled_span_sec": 3.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 53.0,
+          "sample_count": 15,
+          "sampled_span_sec": 7.0
+        }
+      ],
+      "foam_changed_frames": [
+        1200
+      ],
+      "authority_calls": 2549,
+      "changed_selection_count": 14,
+      "phase_witness_changed_frames": [
+        1185,
+        1200,
+        1215,
+        1230,
+        1245,
+        1260,
+        1275,
+        1290,
+        1305,
+        1320,
+        1335,
+        1350,
+        1365,
+        1380,
+        1395,
+        1410,
+        1425,
+        1440,
+        1455,
+        1470,
+        1485,
+        1500,
+        1515,
+        1530,
+        1545
+      ],
+      "protected_original_selected": 2,
+      "new_physical_control_selections": [],
+      "original_physical_control_losses": [
+        "s4-f1560-idx20"
+      ],
+      "event_delta": {
+        "count": 28,
+        "added": [
+          {
+            "event_type": "ZERO_STABLE_RECOVERY",
+            "start_time_sec": "23.0",
+            "end_time_sec": "39.5",
+            "representative_frame_index": "690",
+            "oil_level_px": "0.0",
+            "foam_front_px": ""
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "39.5",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1185",
+            "oil_level_px": "12.0",
+            "foam_front_px": "9.0"
+          },
+          {
+            "event_type": "FOAM_FRONT_RISING",
+            "start_time_sec": "40.5",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1215",
+            "oil_level_px": "14.0",
+            "foam_front_px": "28.0"
+          },
+          {
+            "event_type": "FOAM_END",
+            "start_time_sec": "41.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1230",
+            "oil_level_px": "15.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "42.0",
+            "end_time_sec": "45.0",
+            "representative_frame_index": "1260",
+            "oil_level_px": "",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "REVIEW_REQUIRED",
+            "start_time_sec": "50.0",
+            "end_time_sec": "50.5",
+            "representative_frame_index": "1500",
+            "oil_level_px": "",
+            "foam_front_px": "36.0"
+          },
+          {
+            "event_type": "FOAM_REACH_TOP",
+            "start_time_sec": "51.5",
+            "end_time_sec": "51.5",
+            "representative_frame_index": "1545",
+            "oil_level_px": "-12.0",
+            "foam_front_px": "41.0"
+          },
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "start_time_sec": "51.5",
+            "end_time_sec": "",
+            "representative_frame_index": "1545",
+            "oil_level_px": "-12.0",
+            "foam_front_px": "41.0"
+          },
+          {
+            "event_type": "FOAM_FRONT_RISING",
+            "start_time_sec": "52.5",
+            "end_time_sec": "53.0",
+            "representative_frame_index": "1575",
+            "oil_level_px": "",
+            "foam_front_px": "39.0"
+          },
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "start_time_sec": "53.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1590",
+            "oil_level_px": "21.0",
+            "foam_front_px": "42.0"
+          }
+        ],
+        "removed": [
+          {
+            "event_type": "ZERO_STABLE_RECOVERY",
+            "start_time_sec": "23.0",
+            "end_time_sec": "39.0",
+            "representative_frame_index": "690",
+            "oil_level_px": "0.0",
+            "foam_front_px": ""
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "39.5",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1185",
+            "oil_level_px": "",
+            "foam_front_px": "9.0"
+          },
+          {
+            "event_type": "FOAM_FRONT_RISING",
+            "start_time_sec": "40.5",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1215",
+            "oil_level_px": "-14.0",
+            "foam_front_px": "28.0"
+          },
+          {
+            "event_type": "FOAM_END",
+            "start_time_sec": "41.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1230",
+            "oil_level_px": "-14.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "42.0",
+            "end_time_sec": "45.0",
+            "representative_frame_index": "1260",
+            "oil_level_px": "-18.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "start_time_sec": "42.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1260",
+            "oil_level_px": "-18.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "REVIEW_REQUIRED",
+            "start_time_sec": "43.0",
+            "end_time_sec": "43.5",
+            "representative_frame_index": "1290",
+            "oil_level_px": "",
+            "foam_front_px": "38.0"
+          },
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "start_time_sec": "44.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1320",
+            "oil_level_px": "28.0",
+            "foam_front_px": "38.0"
+          },
+          {
+            "event_type": "REVIEW_REQUIRED",
+            "start_time_sec": "50.0",
+            "end_time_sec": "51.5",
+            "representative_frame_index": "1500",
+            "oil_level_px": "",
+            "foam_front_px": "36.0"
+          },
+          {
+            "event_type": "FOAM_REACH_TOP",
+            "start_time_sec": "51.5",
+            "end_time_sec": "51.5",
+            "representative_frame_index": "1545",
+            "oil_level_px": "",
+            "foam_front_px": "41.0"
+          },
+          {
+            "event_type": "FOAM_FRONT_RISING",
+            "start_time_sec": "52.5",
+            "end_time_sec": "53.0",
+            "representative_frame_index": "1575",
+            "oil_level_px": "21.0",
+            "foam_front_px": "39.0"
+          }
+        ],
+        "representative_frame_time_level_joins": 28,
+        "physical_semantics": "NOT_INDEPENDENTLY_QUALIFIED"
+      }
+    },
+    {
+      "variant": "positive_authority_only",
+      "rows": 113,
+      "numeric_oil": 101,
+      "numeric_foam": 25,
+      "review_status_counts": {
+        "NO_NUMERIC_OIL": 12,
+        "UNASSESSED_SELECTION": 97,
+        "PHYSICAL_CORRESPONDENCE": 4
+      },
+      "extrema": [
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 1530,
+          "time_sec": 51.0,
+          "y": 861.5,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 11,
+            "source": "material_path",
+            "y": 861.5,
+            "tracklet_id": "oil-tracklet:000100:0024",
+            "row_hypothesis_id": "oil-row:000102:002"
+          }
+        },
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1575,
+          "time_sec": 52.5,
+          "y": 829.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 12,
+            "source": "calibrated_high_recall",
+            "y": 829.0,
+            "tracklet_id": "oil-tracklet:000100:0023",
+            "row_hypothesis_id": "oil-row:000105:001"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 46.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 47.5,
+          "last_sample_sec": 49.0,
+          "sample_count": 4,
+          "sampled_span_sec": 1.5
+        },
+        {
+          "start_sec": 50.0,
+          "last_sample_sec": 50.5,
+          "sample_count": 2,
+          "sampled_span_sec": 0.5
+        },
+        {
+          "start_sec": 51.5,
+          "last_sample_sec": 51.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 54.0,
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        }
+      ],
+      "numeric_foam_runs": [
+        {
+          "start_sec": 40.0,
+          "last_sample_sec": 41.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 45.0,
+          "sample_count": 7,
+          "sampled_span_sec": 3.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 53.0,
+          "sample_count": 15,
+          "sampled_span_sec": 7.0
+        }
+      ],
+      "foam_changed_frames": [
+        1185
+      ],
+      "authority_calls": 2549,
+      "changed_selection_count": 16,
+      "phase_witness_changed_frames": [
+        1125,
+        1140,
+        1185,
+        1200,
+        1215,
+        1230,
+        1245,
+        1260,
+        1275,
+        1290,
+        1305,
+        1320,
+        1335,
+        1350,
+        1365,
+        1380,
+        1395,
+        1410,
+        1425,
+        1440,
+        1455,
+        1470,
+        1485,
+        1500,
+        1515,
+        1530,
+        1545
+      ],
+      "protected_original_selected": 2,
+      "new_physical_control_selections": [
+        "s4-f1200-idx4",
+        "s4-f1320-idx9"
+      ],
+      "original_physical_control_losses": [
+        "s4-f1275-idx12"
+      ],
+      "event_delta": {
+        "count": 30,
+        "added": [
+          {
+            "event_type": "ZERO_STABLE_RECOVERY",
+            "start_time_sec": "23.0",
+            "end_time_sec": "45.5",
+            "representative_frame_index": "690",
+            "oil_level_px": "0.0",
+            "foam_front_px": ""
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "40.0",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1200",
+            "oil_level_px": "9.0",
+            "foam_front_px": "10.0"
+          },
+          {
+            "event_type": "FOAM_FRONT_RISING",
+            "start_time_sec": "40.5",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1215",
+            "oil_level_px": "14.0",
+            "foam_front_px": "28.0"
+          },
+          {
+            "event_type": "FOAM_END",
+            "start_time_sec": "41.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1230",
+            "oil_level_px": "15.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "OIL_DROP_START",
+            "start_time_sec": "41.5",
+            "end_time_sec": "44.0",
+            "representative_frame_index": "1245",
+            "oil_level_px": "17.0",
+            "foam_front_px": ""
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "42.0",
+            "end_time_sec": "45.0",
+            "representative_frame_index": "1260",
+            "oil_level_px": "15.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "46.0",
+            "end_time_sec": "53.0",
+            "representative_frame_index": "1380",
+            "oil_level_px": "",
+            "foam_front_px": "38.0"
+          },
+          {
+            "event_type": "REVIEW_REQUIRED",
+            "start_time_sec": "47.5",
+            "end_time_sec": "49.0",
+            "representative_frame_index": "1425",
+            "oil_level_px": "",
+            "foam_front_px": "36.0"
+          },
+          {
+            "event_type": "REVIEW_REQUIRED",
+            "start_time_sec": "50.0",
+            "end_time_sec": "50.5",
+            "representative_frame_index": "1500",
+            "oil_level_px": "",
+            "foam_front_px": "36.0"
+          },
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "start_time_sec": "51.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1530",
+            "oil_level_px": "-11.5",
+            "foam_front_px": "36.0"
+          },
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "start_time_sec": "52.5",
+            "end_time_sec": "",
+            "representative_frame_index": "1575",
+            "oil_level_px": "21.0",
+            "foam_front_px": "39.0"
+          }
+        ],
+        "removed": [
+          {
+            "event_type": "ZERO_STABLE_RECOVERY",
+            "start_time_sec": "23.0",
+            "end_time_sec": "39.0",
+            "representative_frame_index": "690",
+            "oil_level_px": "0.0",
+            "foam_front_px": ""
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "39.5",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1185",
+            "oil_level_px": "",
+            "foam_front_px": "9.0"
+          },
+          {
+            "event_type": "FOAM_FRONT_RISING",
+            "start_time_sec": "40.5",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1215",
+            "oil_level_px": "-14.0",
+            "foam_front_px": "28.0"
+          },
+          {
+            "event_type": "FOAM_END",
+            "start_time_sec": "41.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1230",
+            "oil_level_px": "-14.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "42.0",
+            "end_time_sec": "45.0",
+            "representative_frame_index": "1260",
+            "oil_level_px": "-18.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "start_time_sec": "42.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1260",
+            "oil_level_px": "-18.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "REVIEW_REQUIRED",
+            "start_time_sec": "43.0",
+            "end_time_sec": "43.5",
+            "representative_frame_index": "1290",
+            "oil_level_px": "",
+            "foam_front_px": "38.0"
+          },
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "start_time_sec": "44.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1320",
+            "oil_level_px": "28.0",
+            "foam_front_px": "38.0"
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "46.0",
+            "end_time_sec": "53.0",
+            "representative_frame_index": "1380",
+            "oil_level_px": "15.0",
+            "foam_front_px": "38.0"
+          },
+          {
+            "event_type": "REVIEW_REQUIRED",
+            "start_time_sec": "50.0",
+            "end_time_sec": "51.5",
+            "representative_frame_index": "1500",
+            "oil_level_px": "",
+            "foam_front_px": "36.0"
+          }
+        ],
+        "representative_frame_time_level_joins": 30,
+        "physical_semantics": "NOT_INDEPENDENTLY_QUALIFIED"
+      }
+    },
+    {
+      "variant": "negative_veto_positive_authority",
+      "rows": 113,
+      "numeric_oil": 106,
+      "numeric_foam": 25,
+      "review_status_counts": {
+        "NO_NUMERIC_OIL": 7,
+        "UNASSESSED_SELECTION": 101,
+        "PHYSICAL_CORRESPONDENCE": 5
+      },
+      "extrema": [
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 60,
+          "time_sec": 2.0,
+          "y": 858.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 10,
+            "source": "material_path",
+            "y": 858.0,
+            "tracklet_id": "oil-tracklet:000001:0000",
+            "row_hypothesis_id": "oil-row:000004:000"
+          }
+        },
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1530,
+          "time_sec": 51.0,
+          "y": 820.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 18,
+            "source": "phase_transition_scan",
+            "y": 820.0,
+            "tracklet_id": "oil-tracklet:000088:0018",
+            "row_hypothesis_id": "oil-row:000102:000"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 42.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 50.0,
+          "last_sample_sec": 50.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 51.5,
+          "last_sample_sec": 51.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 54.0,
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        }
+      ],
+      "numeric_foam_runs": [
+        {
+          "start_sec": 40.0,
+          "last_sample_sec": 41.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 45.0,
+          "sample_count": 7,
+          "sampled_span_sec": 3.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 53.0,
+          "sample_count": 15,
+          "sampled_span_sec": 7.0
+        }
+      ],
+      "foam_changed_frames": [
+        1185
+      ],
+      "authority_calls": 2549,
+      "changed_selection_count": 11,
+      "phase_witness_changed_frames": [
+        1125,
+        1140,
+        1185,
+        1200,
+        1215,
+        1230,
+        1245,
+        1260,
+        1275,
+        1290,
+        1305,
+        1320,
+        1335,
+        1350,
+        1365,
+        1380,
+        1395,
+        1410,
+        1425,
+        1440,
+        1455,
+        1470,
+        1485,
+        1500,
+        1515,
+        1530,
+        1545
+      ],
+      "protected_original_selected": 3,
+      "new_physical_control_selections": [
+        "s4-f1200-idx4",
+        "s4-f1320-idx9"
+      ],
+      "original_physical_control_losses": [],
+      "event_delta": {
+        "count": 27,
+        "added": [
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "start_time_sec": "2.0",
+            "end_time_sec": "",
+            "representative_frame_index": "60",
+            "oil_level_px": "-8.0",
+            "foam_front_px": ""
+          },
+          {
+            "event_type": "ZERO_STABLE_RECOVERY",
+            "start_time_sec": "23.0",
+            "end_time_sec": "41.5",
+            "representative_frame_index": "690",
+            "oil_level_px": "0.0",
+            "foam_front_px": ""
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "40.0",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1200",
+            "oil_level_px": "9.0",
+            "foam_front_px": "10.0"
+          },
+          {
+            "event_type": "FOAM_FRONT_RISING",
+            "start_time_sec": "40.5",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1215",
+            "oil_level_px": "14.0",
+            "foam_front_px": "28.0"
+          },
+          {
+            "event_type": "FOAM_END",
+            "start_time_sec": "41.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1230",
+            "oil_level_px": "15.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "42.0",
+            "end_time_sec": "45.0",
+            "representative_frame_index": "1260",
+            "oil_level_px": "",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "start_time_sec": "51.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1530",
+            "oil_level_px": "30.0",
+            "foam_front_px": "36.0"
+          }
+        ],
+        "removed": [
+          {
+            "event_type": "ZERO_STABLE_RECOVERY",
+            "start_time_sec": "23.0",
+            "end_time_sec": "39.0",
+            "representative_frame_index": "690",
+            "oil_level_px": "0.0",
+            "foam_front_px": ""
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "39.5",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1185",
+            "oil_level_px": "",
+            "foam_front_px": "9.0"
+          },
+          {
+            "event_type": "FOAM_FRONT_RISING",
+            "start_time_sec": "40.5",
+            "end_time_sec": "41.0",
+            "representative_frame_index": "1215",
+            "oil_level_px": "-14.0",
+            "foam_front_px": "28.0"
+          },
+          {
+            "event_type": "FOAM_END",
+            "start_time_sec": "41.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1230",
+            "oil_level_px": "-14.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "FOAM_START",
+            "start_time_sec": "42.0",
+            "end_time_sec": "45.0",
+            "representative_frame_index": "1260",
+            "oil_level_px": "-18.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "start_time_sec": "42.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1260",
+            "oil_level_px": "-18.0",
+            "foam_front_px": "31.0"
+          },
+          {
+            "event_type": "REVIEW_REQUIRED",
+            "start_time_sec": "43.0",
+            "end_time_sec": "43.5",
+            "representative_frame_index": "1290",
+            "oil_level_px": "",
+            "foam_front_px": "38.0"
+          },
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "start_time_sec": "44.0",
+            "end_time_sec": "",
+            "representative_frame_index": "1320",
+            "oil_level_px": "28.0",
+            "foam_front_px": "38.0"
+          },
+          {
+            "event_type": "REVIEW_REQUIRED",
+            "start_time_sec": "50.0",
+            "end_time_sec": "51.5",
+            "representative_frame_index": "1500",
+            "oil_level_px": "",
+            "foam_front_px": "36.0"
+          }
+        ],
+        "representative_frame_time_level_joins": 27,
+        "physical_semantics": "NOT_INDEPENDENTLY_QUALIFIED"
+      }
+    }
+  ],
+  "independent_verification": {
+    "schema": "s11-role-consumer-independent-verification-v1",
+    "status": "PASS",
+    "variants": {
+      "baseline": {
+        "rows": 113,
+        "same_frame_numeric_joins": 101,
+        "CSV_rows": 113,
+        "authority_calls": 2549,
+        "authority_injections": 0,
+        "extrema_verified": 2,
+        "foam_changed_frames": []
+      },
+      "negative_anchor_demotion": {
+        "rows": 113,
+        "same_frame_numeric_joins": 101,
+        "CSV_rows": 113,
+        "authority_calls": 2549,
+        "authority_injections": 3,
+        "extrema_verified": 2,
+        "foam_changed_frames": []
+      },
+      "negative_member_veto": {
+        "rows": 113,
+        "same_frame_numeric_joins": 104,
+        "CSV_rows": 113,
+        "authority_calls": 2549,
+        "authority_injections": 0,
+        "extrema_verified": 2,
+        "foam_changed_frames": [
+          1200
+        ]
+      },
+      "positive_authority_only": {
+        "rows": 113,
+        "same_frame_numeric_joins": 101,
+        "CSV_rows": 113,
+        "authority_calls": 2549,
+        "authority_injections": 5,
+        "extrema_verified": 2,
+        "foam_changed_frames": [
+          1185
+        ]
+      },
+      "negative_veto_positive_authority": {
+        "rows": 113,
+        "same_frame_numeric_joins": 106,
+        "CSV_rows": 113,
+        "authority_calls": 2549,
+        "authority_injections": 5,
+        "extrema_verified": 2,
+        "foam_changed_frames": [
+          1185
+        ]
+      }
+    },
+    "review_bindings": 13,
+    "mismatches": 0,
+    "claim": "Arithmetic, provenance and injection scope only; no physical classifier or comprehension acceptance."
+  },
+  "source_verification": {
+    "schema": "s11-source-atlas-independent-verification-v1",
+    "status": "PASS",
+    "source_frame_joins": 113,
+    "saved_png_pixel_roundtrips": 113,
+    "pages": 4,
+    "mismatches": 0,
+    "method": "Reopen saved PNGs; NumPy [y:y+h:2,x:x+w:2,:] crop, original RGB byte SHA256 and raw frame/time joins. No source decoder reuse in this verifier.",
+    "physical_labels_created": false,
+    "comparison_relocation_sha256": "feb368e6d629a4dd8c2fb12b1bbb15fc65ce06d1fa28aac5d8e5cfe4dcee69a1"
+  },
+  "focused_tests": {
+    "passed": 210,
+    "failed": 0,
+    "elapsed_sec": 2.65,
+    "scope": "8 focused unit modules, including 55 RCI/verification tests (49 original intervention tests plus 6 full-event join tests), corroboration/raster, authority, Foam, events and report presentation."
+  },
+  "retention": {
+    "role_files": 19,
+    "role_bytes": 1589066,
+    "source_files": 7,
+    "source_bytes": 2042577,
+    "managed_runs_at_closeout": 87,
+    "artifact_check_errors": 0
+  },
+  "runtime_observed_at_closeout": {
+    "python": "3.14.4 (v3.14.4:23116f998f6, Apr  7 2026, 09:45:22) [Clang 17.0.0 (clang-1700.6.4.2)]",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "opencv": "4.14.0",
+    "pytest": "9.1.1"
+  },
+  "artifacts": {
+    "sample/output/s11-role-consumer-20261016-001/evidence/comparison.json": {
+      "sha256": "feb368e6d629a4dd8c2fb12b1bbb15fc65ce06d1fa28aac5d8e5cfe4dcee69a1",
+      "bytes": 265189
+    },
+    "sample/output/s11-role-consumer-20261016-001/evidence/readout.json.gz": {
+      "sha256": "e150ed0747ca98aab39bd114e9b1d144b8fa81285d26fcab8133f309e087f734",
+      "bytes": 480387
+    },
+    "sample/output/s11-role-consumer-20261016-001/evidence/verification.json": {
+      "sha256": "1eee0feedfe8ff69460347a37ebf6f9ee0e08581956ab75d7ad2b02562ba38c9",
+      "bytes": 1545
+    },
+    "sample/output/s11-role-consumer-20261016-001/evidence/review.html": {
+      "sha256": "a4509abe11c965bdcb723b4bbb89ae50ae7aa82837d2470b5bf97f05941d1d6d",
+      "bytes": 6720
+    },
+    "sample/output/s11-role-source-context-20261016-001/evidence/source-context.json": {
+      "sha256": "3d433a5872cd1ca38c0df81d049edc34d78bd61986a57d4f21d9c358c1e87321",
+      "bytes": 31924
+    },
+    "sample/output/s11-role-source-context-20261016-001/evidence/verification.json": {
+      "sha256": "0df45d068dde6428ca75c7613cbf942e8a9465ce7b48b3bdc26d4c9c85097dc3",
+      "bytes": 479
+    },
+    "sample/output/s11-role-source-context-20261016-001/evidence/input-relocation.json": {
+      "sha256": "a584e2ac44e0a9ddd68ae6fa41bc833824c4cea0c9d15ac49d945a989f6303ef",
+      "bytes": 454
+    },
+    "sample/output/s11-role-consumer-20261016-001/evidence/baseline/events.csv": {
+      "sha256": "2e7f8b352560ac78fa9ab5a6d8e2e02958093197d5e0d03d106b537e6398e6de",
+      "bytes": 3317
+    },
+    "sample/output/s11-role-consumer-20261016-001/evidence/negative_anchor_demotion/events.csv": {
+      "sha256": "228039fafabebb2d662d912e96e68ead04033f4fe67b986db58ce8580c9f801a",
+      "bytes": 3304
+    },
+    "sample/output/s11-role-consumer-20261016-001/evidence/negative_member_veto/events.csv": {
+      "sha256": "8bd54c474a40273c6a688edac0f5076aee08af7bd57d3f8e369da3c65726f046",
+      "bytes": 3207
+    },
+    "sample/output/s11-role-consumer-20261016-001/evidence/positive_authority_only/events.csv": {
+      "sha256": "24855451ffc1abf8c0118757f3a2e09fa79cd1ac5d880c0305b21a4032834870",
+      "bytes": 3433
+    },
+    "sample/output/s11-role-consumer-20261016-001/evidence/negative_veto_positive_authority/events.csv": {
+      "sha256": "f4cdc7e18cbde83319ce18997135f5845a83c6bf8038ab952ba5929ffc3b5525",
+      "bytes": 3105
+    }
+  },
+  "limits": [
+    "Reviewed-role injection is not pixel-derived physical discrimination.",
+    "No candidate accuracy or 100%-candidate criterion.",
+    "Unknown alternatives and current practical-only labels remain unchanged.",
+    "No automatic judgment or independent human reading was rerun.",
+    "Source inspection is post-run and sampled at 2 Hz, not every native 30 Hz frame."
+  ],
+  "post_run_event_audit": {
+    "scope": "All retained domain events, not only extrema; parsed from immutable CSVs after graph inspection. No replay or output changes.",
+    "representative_frame_time_level_joins": 143,
+    "mismatches": 0,
+    "finding": "positive_authority_only adds OIL_DROP_START at 41.5 s; the combined arm does not. This is an unqualified new motion event, not a proven false event."
+  }
+}
