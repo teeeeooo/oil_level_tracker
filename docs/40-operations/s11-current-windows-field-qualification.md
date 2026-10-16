@@ -608,6 +608,9 @@ BASE 누락 구간, Accum의 정답 구간별 집계, review-004 여섯 행(f158
 
 ### Priority 2 candidate RGB comparison
 
+구현 소스는 `d7e19baf32df012ad113ed2318dd278a7258de80`이다. 이 커밋 또는
+이후 문서만 갱신한 전달용 ZIP을 사용하며, 실제 받은 ZIP의 revision을 실행 기록에 남긴다.
+
 현재 비교는 **④ FULL+ON v2 ↔ ⑥ FULL+ON v2 + candidate RGB**다.
 ⑤ cost-first 결과 위에 RGB를 추가하지 않는다. 고정 가중치/입력은 이전 RGB
 실험과 같고, 새 부분은 그 판정을 최종 Oil 후보 자격 조건에 연결한 것이다.
