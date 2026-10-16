@@ -7,7 +7,8 @@ O2 remains OPEN / FIELD FAIL. Base `aea2087651ada473fe78d6d60e9b3b21e52eea2b`.
 [Machine receipt](2026-10-09-local-xy-implementation.json) pins executing source,
 inputs, runtime, complete results, reports and the new human reply.
 The subsequently authorized third Windows comparison is a separate input context;
-see [Windows scope receipt and comparison handoff](#windows-scope-receipt-and-comparison-handoff--2026-10-16).
+see the [Windows result](#windows-local-xy-result--2026-10-16): the approved
+two-Glass configuration is also **REGRESSION / NOT_ADOPTED**.
 It does not reopen or promote the original Mac result.
 
 ## Frozen mechanism and implementation
@@ -195,7 +196,7 @@ artifact, threshold/rectangle search or acceptance occurs in this preparation.
 
 ## Windows scope receipt and comparison handoff — 2026-10-16
 
-**Input COMPLETE; Windows comparison PENDING.** The user relayed review-007's
+**Input COMPLETE; comparison was PENDING at this checkpoint and has now returned below.** The user relayed review-007's
 direct approvals: Accum R11 in `reply-001.json`, then BASE R11/R12 in
 `reply-002.json`. The packet, labels and plain/guide images stay under the existing
 Windows `0.windows_diagnostic/data/reviews/review-007/` directory. Their contents
@@ -261,12 +262,106 @@ temporary files; no private Windows footage or original Mac experiment is rerun.
 Local entry verification cannot promote the candidate or establish field
 effectiveness; O2 remains OPEN / FIELD FAIL.
 
+## Windows Local XY result — 2026-10-16
+
+**Disposition: REGRESSION / NOT_ADOPTED for the tested configuration.** All three
+authorized individual Windows comparisons have now returned. Local XY reduces
+some BASE false output, but selects another confirmed non-interface and loses a
+previously allowed Accum interface observation. These failures suffice to reject
+promotion without resolving every count or upstream cause. The three-rectangle
+configuration stays OFF; default R22 and opt-in ④ v2 are not changed. O2 remains
+OPEN / FIELD FAIL. No BASE-only run, region expansion or fourth trial follows.
+
+### Reported execution and final output
+
+The user reports matching video/Recipe, 480–780 s, 2 fps, FULL debug,
+compressor start 485 s, BASE FULL and Accum EMPTY. ⑦ adds
+`+oil-local-xy-v1:fd692dd...` with the review-007 BASE R11/R12 and Accum R11 scopes;
+shared ROI/Artifact settings are unchanged. Its saved bundle is
+`sample/output/oil_level_analysis_22-3_initial_ON_v2_local_xy_20261016_150030/`.
+The preceding handoff was `0f29ab6`; this receipt does not supply an exact
+producing commit or full scope digest. Private files were not inspected locally,
+so the results below remain user-relayed Windows evidence, not a local rerun or
+a complete exact-source field qualification.
+
+| Final numeric rows | ④ v2 | ⑦ Local XY | Net change |
+|---|---:|---:|---:|
+| BASE Oil | 303 | 254 | −49 |
+| Accum Oil | 36 | 14 | −22 |
+| BASE Foam | 0 | 0 | 0 |
+| Accum Foam | 40 | 40 | 0 |
+
+The return reports identical final Foam coordinates, validity and episodes in
+this pair. This is compared-field invariance, not evidence that every Foam row
+is physically correct or that Local XY can never change final Foam. The retained
+Mac trial demonstrates that Oil changes can affect final composition validity.
+
+### Reviewed meaning and limits
+
+- BASE outputs before 717 s are reported unchanged. Review-004 supplies six
+  662–664.5 s frame judgments, not truth for all of 480–670 s. Preserve its
+  practical alternatives and uncertainty; unchanged output does not certify
+  every observation in the larger interval.
+- BASE 717–751 s contains fewer numeric outputs, but not complete suppression:
+  725–733 s retains seven changed numeric selections around Y860–913. The new
+  **review-008 / reply-001** directly identifies **f17383 near 725 s, selected
+  Y913, as a non-interface bottom-wall artifact**. Its packet, labels and
+  plain/guide images remain in the established Windows review folder. Do not
+  extend this one artifact-identity judgment to every changed row.
+- Independently, [canonical reviewed truth](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
+  says BASE has no visible interface after the 674–675 s transition. Consequently
+  retained or new numeric outputs at 751–780 s are still false-presence outputs,
+  not restored real Oil. Their exact artifact identities need not be guessed.
+  If the reported pre-717 s equality and aggregate totals both hold, the prior
+  91 FULL_SUFFIX rows would become 42; this is a **derived inference pending
+  the disjoint saved-CSV table**, not a new measured count.
+- Accum reportedly loses 14 outputs at 669.5–678.5 s. At least one is a directly
+  supported regression: review-005 Scene 2 **f16076 near 670.5 s**, where Y482
+  was a practical match and Y479.5 was also allowed, is now blank. The receipt
+  does not individually qualify all 14 prior selected rows. Lower Foam–Oil
+  contact is a valid Oil target. Review-006 remains unreviewed and is not a new
+  prerequisite. Accum's new 683.5 s/Y205 output is unreviewed, not a confirmed
+  recovery or false positive.
+- Y482 lies outside Accum R11's Y[321,430) rectangle. Its final loss does not
+  prove direct removal of that point: changed measurements, competing candidates
+  and temporal ownership can affect completed selection. The first harmful
+  stage is **not established by this CSV summary**. Likewise, absence of a
+  final number does not prove that its raw candidate/tracklet was deleted.
+
+### Bounded accounting correction still needed
+
+The BASE interval counts sum to 303→254, but the narrative mixes gross losses
+with net change. Under its stated new/lost decomposition, the implied totals are
+**54 lost, 5 new, net −49**. In 717–751 s, the three listed buckets imply
+7+7+35 = **49 losses**, not 42; seven changed selections remain in 725–733 s.
+The reported 42/49 = 86% is not an accepted false-output removal rate: its
+denominator is net change, and the numerator omits the middle bucket's losses.
+
+Accum's listed reference counts sum to **14+13+10 = 37**, conflicting with the
+overall 36. The listed 24 losses and one new row imply −23, conflicting with
+−22. Boundary duplication, an omitted change or a transcription error has not
+been established; do not silently choose an explanation or publish 10/24 = 42%
+as effectiveness. A single saved-CSV reconciliation should correct these
+counts, using the existing canonical buckets and unique Glass/frame keys.
+The return also omits final `FULL_NO_INTERFACE` counts and executed measurement
+lineage details; neither FULL closure nor the exact sample-removal mechanism is
+claimed from this receipt. Only the simple final FULL counts join the bounded
+accounting request; no new trace/causal audit is opened to reject the candidate.
+
+The [saved-output closeout](../../40-operations/s11-current-windows-field-qualification.md#priority-3-local-xy-saved-output-closeout)
+requests two disjoint tables, the Accum discrepancy explanation and final FULL
+counts. It reuses existing files/reviews, with no detector run, tuning or new
+image question. After this accounting correction, the Work Plan returns the
+next-direction decision to the user because no tested overall configuration was
+adoptable. The proposed follow-up is evidence-backed FULL closure from ④ v2;
+no implementation begins automatically and disappearance alone cannot assert FULL.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F06`, `S11-F09`, `S11-F10`.
-- First harmful stage: fixed scoped outputs regress in completed selection/admission; 52 s has an admitted unselected boundary-region proposal and 54–56 s have present but unadmitted proposals. The first physical association error is unproven. Foam episode endpoint loss exists in both runs.
+- First harmful stage: in the returned Windows comparison, final selection/publication of BASE f17383/Y913 is a directly reviewed non-interface and Accum f16076 loses an allowed interface observation. The first upstream harmful stage is unknown from the summary; candidate deletion or direct masking is not established. Historical Mac selection/admission findings above retain their original scope.
 - Existing feature coverage: review-007 supplies two approved BASE rectangles and one Accum rectangle. The same Recipe reportedly has 12/14 geometry-only Artifact templates with active spatial veto and no support references. The matching-reference guard remains, but coordinate overlap is not a conflict. Focused tests exercise separate scope bindings, existing Artifact rejection, initial-FULL v2 and completed CSV/trace publication; shared masks/settings stay fixed. Historical Mac evidence remains separate.
-- Execution scope: the October 16 follow-up records the user-relayed Windows approvals, adds synthetic integration coverage and prepares one fixed ④ vs ⑦ Windows run through the existing headless production use case. No private detector replay, GUI wiring, algorithm change, new local research artifact or inferred physical label is generated. Full Windows outcome and final Foam effects remain pending; historical measurements retain their original scope above.
+- Execution scope: the October 16 follow-up records the user-relayed ④ vs ⑦ final-output comparison and direct review-008 reply, checks its arithmetic and prepares a saved-CSV-only correction. No detector replay, code change, new research artifact or inferred pixel label is generated locally. Final Foam equality is reported for this pair; exact source identity, canonical count reconciliation and first-stage causality have the limits above. Historical tests/measurements retain their original scope.
 - Logic-map impact: NONE — the existing constructor-bound Local XY feature row and frame/candidate details still describe source; no new route or automatic reference consumer is added.
-- Failure-registry impact: NONE — prior local-withdrawal recurrence and its no-promotion result remain; the authorized new Windows context has no measured outcome yet.
+- Failure-registry impact: NONE — the Windows non-interface replacement and allowed-observation loss are consistent with existing F04/F09/F10 guards. This receipt supports non-adoption, not a new proven upstream mechanism; no no-repeat rule is weakened.

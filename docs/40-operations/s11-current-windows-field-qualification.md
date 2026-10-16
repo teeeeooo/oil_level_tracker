@@ -8,12 +8,14 @@ is unknown; post-transition FULL counts start at 675 s. The bounded
 [Refill owner and false-output follow-up](#refill-owner-and-false-output-follow-up)
 is now CLOSED. Cost-first/review-005 and the
 [returned RGB comparison](../60-evidence/s11/2026-10-14-candidate-rgb-trial.md#windows-rgb-result--2026-10-16)
-are CLOSED as **REGRESSION / NOT_ADOPTED**. The next Windows task is
-[priority 3 Local XY comparison](#priority-3-local-xy-comparison), separately
-against ④ FULL+ON v2. Review-007 has supplied direct approval for BASE R11/R12
-and Accum R11. Reuse the existing headless production runner with these fixed
-inputs; no repeated region approval is needed. Review-006 remains
-unreviewed/pending and does not block execution. Cost-first/RGB remain OFF.
+are CLOSED as **REGRESSION / NOT_ADOPTED**. The
+[returned Local XY comparison](../60-evidence/s11/2026-10-09-local-xy-implementation.md#windows-local-xy-result--2026-10-16)
+also closes the tested configuration without adoption: partial BASE suppression
+coexists with a reviewed replacement artifact and an allowed Accum observation
+loss. All three candidate runs are complete. The sole current Windows task is
+[saved-output accounting closeout](#priority-3-local-xy-saved-output-closeout);
+reuse existing CSV/reviews without another detector run. Review-006 remains
+unreviewed/pending. Cost-first/RGB/Local XY remain OFF outside retained trial data.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
@@ -692,7 +694,8 @@ review-004/005의 사용자 판정과 복수 허용·대략적 일치를 재사�
 ### Priority 3 Local XY input preparation
 
 **완료 이력: review-007로 입력 준비 완료. 아래 준비 절차를 반복하지 않는다.**
-현재 실행은 다음 [Local XY comparison](#priority-3-local-xy-comparison)을 따른다. 기존
+당시 실행은 다음 [Local XY comparison](#priority-3-local-xy-comparison)에 기록되어 있다.
+현재 작업은 [saved-output closeout](#priority-3-local-xy-saved-output-closeout)이다. 기존
 [`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py)는
 지정된 source X/Y 영역의 Oil 측정만 제외하는 구현이며 자동 구조물 검출기가 아니다.
 현재 GUI에는 이를 켜는 flag가 없고, 기존 진단 runner의 rectangle은 Mac sample4용이다.
@@ -749,7 +752,9 @@ RGB는 악화·미채택으로 종료하고 review-006은 미검토 상태로 �
 
 ### Priority 3 Local XY comparison
 
-**현재 작업: ④ FULL+ON v2 ↔ ⑦ FULL+ON v2 + Oil-only Local XY.**
+**완료 이력: ④ FULL+ON v2 ↔ ⑦ FULL+ON v2 + Oil-only Local XY 실행 완료·미채택.**
+아래 실행 절차를 반복하지 않는다. 현재 작업은 다음
+[saved-output closeout](#priority-3-local-xy-saved-output-closeout)이다.
 Review-007의 Accum 승인(reply-001)과 BASE 승인(reply-002)을 재사용한다.
 [입력 수신·Artifact 설명 정정·실행 경계](../60-evidence/s11/2026-10-09-local-xy-implementation.md#windows-scope-receipt-and-comparison-handoff--2026-10-16)를 읽는다.
 알고리즘은 기존 `oil-local-xy-v1` 그대로이며, 이번에 고정한 Windows 입력으로
@@ -841,7 +846,7 @@ Review-007의 Accum 승인(reply-001)과 BASE 승인(reply-002)을 재사용한�
    분석·scope/임계값 튜닝·추가 재실행은 하지 않는다. FULL 전환 구현과 최종 채택은
    세 비교 이후 판단하며 accepted baseline과 O2 OPEN / FIELD FAIL은 유지한다.
 
-전달용 짧은 프롬프트:
+이전 비교 실행용 프롬프트 (완료 이력; 다시 보내지 않음):
 
 ```text
 ④ FULL+ON v2 bundle: <기준 번들 경로>
@@ -856,6 +861,62 @@ docs/40-operations/s11-current-windows-field-qualification.md의
 두 Glass의 최종 CSV 증감, 실제 계면 유지/손실, 비유면 출력과 최종 Foam 영향을
 정리해줘. 기존 사용자 판정은 재사용하고 새 판단이 필요한 변경 장면만 질문해줘.
 출력은 sample/output/에 두고, 튜닝이나 추가 재실행 없이 결과를 알려줘.
+```
+
+### Priority 3 Local XY saved-output closeout
+
+**현재 작업은 기존 ④·⑦ CSV 집계 정정뿐이다.** 디텍터 실행과 review-008의
+직접 판정은 완료됐다. BASE f17383/Y913의 비유면 선택과 Accum f16076의 허용
+계면 관측 소실로 ⑦은 **REGRESSION / NOT_ADOPTED**다. 세 후보의 비교 실행을
+종료하고, 아래 보완을 위해 후보 튜닝·재실행·새 이미지 질문을 하지 않는다.
+
+1. 두 `tracking_data.csv`를 `(glass_id, frame_index)`로 일대일 대응한다. 중복,
+   키 차이, timestamp 불일치 여부와 Glass별 행 수를 한 줄로 보고한다. 기대값은
+   각 Glass 601행이며, 어긋나면 숫자를 맞추지 말고 차이를 적는다. Oil 숫자 행은
+   최종 CSV의 `raw_oil_air_level_y`가 비어 있지 않은 행으로 일관되게 정의한다.
+2. 기존 구간 함수로 각 행을 **한 구간에만** 배정해 BASE/Accum 표를 하나씩
+   반환한다. BASE는 FULL_PREFIX/DRAIN/REFILL/FULL_TRANSITION/FULL_SUFFIX/
+   OUTSIDE, Accum은 EMPTY/ENTRY_SPLASH/FOAM_LAYERED/POST_FOAM/DRAIN/OUTSIDE다.
+   기존 canonical 경계 규칙을 재사용하고 경계 행을 양쪽에 넣지 않는다.
+   각 행에는 `표본 수, ④ Oil, ⑦ Oil, 신규, 소실, 양쪽 숫자 Y 변경, 순증감`을
+   적고 합계를 포함한다. Y 변경은 신규·소실에 중복 집계하지 않는다.
+   별도로 Glass별 ④/⑦ `FULL_NO_INTERFACE` 행 수도 반환한다. 이를 시간 정답으로
+   덮어쓰거나 기존 v2 결과만 보고 ⑦도 0이라고 추정하지 않는다.
+3. **확인할 산술 차이는 두 가지다.** BASE는 전체 303→254이나 세부 신규/소실을
+   합하면 신규 5·소실 54·순감소 49다. 717–751초 세부 소실은 7+7+35=49이며
+   725–733초에는 7개의 대체 숫자 출력이 남는다. 기존 42행 설명이 무엇을 세었는지
+   짧게 정정한다. Accum은 세부 기준 14+13+10=37이 전체 36과 다르고,
+   소실 24·신규 1도 순감소 22와 맞지 않는다. 원인이 된 중복/누락/오기 등을
+   실제 CSV에서 확인해 **해당 행의 frame/time과 정정 이유만** 덧붙인다.
+   기존 86%/42%는 순증감·소실·물리 판정을 섞은 비율이므로 효과 지표로 사용하지 않는다.
+4. 물리 판정은 기존 범위 그대로 둔다. Review-004는 662–664.5초 여섯 프레임의
+   실용적 허용 판정이고, review-005 f16076은 확인된 소실 사례다. 이것만으로
+   Accum 소실 14행 모두의 과거 Y가 정확했다고 확장하지 않는다. Review-008은
+   f17383/Y913 바닥벽 판정이다. BASE는 canonical truth상 675초 이후 계면이
+   없으므로 그 뒤 새 숫자나 Y 이동을 실제 계면 복원으로 세지 않는다.
+   Accum 신규 683.5초/Y205는 기존 판단이 없으면 미평가로 유지한다.
+5. Foam 좌표·validity·episode 동일성은 **이번 비교에서 보고된 불변**으로
+   보존하고 재검토하지 않는다. 이 불변을 일반적인 무영향/정확성 보장으로
+   바꾸지 않는다. Scope 측정량·후보·tracklet·최초 차단 단계의 새 원인 분석은
+   이번 요청에 포함하지 않는다. 요약에 없는 사항은 미확인으로 남긴다.
+6. **두 구간표 + FULL 행 수 + 산술 정정 설명**만 반환하면 이 보완은 끝난다.
+   기존 packet/reply와 pending review-006을 보존한다. 세 후보의 미채택 판단과
+   O2 OPEN / FIELD FAIL은 유지한다. 다음 구현 방향은 Work Plan의 사용자 판단
+   지점으로 돌리며, ④ 기반 FULL 전환 복구는 제안 단계다.
+
+전달용 짧은 프롬프트:
+
+```text
+④ bundle: <기준 번들 경로>
+⑦ Local XY bundle: <비교 번들 경로>
+
+docs/40-operations/s11-current-windows-field-qualification.md의
+“Priority 3 Local XY saved-output closeout”을 읽고 기존 CSV 집계만 정정해줘.
+BASE/Accum의 중복 없는 정규 구간표(신규·소실·Y 변경 포함)와
+각 bundle의 FULL_NO_INTERFACE 행 수를 반환해줘.
+BASE 순감소 49와 실제 소실 수, Accum 세부 합계 37과 전체 36의 차이를
+확인해서 원인이 된 행과 정정 이유만 알려줘. 86%/42% 효과 비율은 철회해줘.
+기존 사용자 판정과 Foam 비교 결과를 재사용하고, 디텍터 재실행·튜닝·새 질문은 하지 마.
 ```
 
 ## 2. Private source identity
