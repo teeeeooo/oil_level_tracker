@@ -1660,3 +1660,9 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-16 | [50-diagnostics/s11/2026-10-16-raster-partition-screen.md](50-diagnostics/s11/2026-10-16-raster-partition-screen.md) | CRW-1 고정 가설·동일 위치 픽셀 대응·계면/비유면 양면 대조 |
 | 2026-10-16 | [50-diagnostics/s11/2026-10-16-raster-partition-screen/summary.json](50-diagnostics/s11/2026-10-16-raster-partition-screen/summary.json) | 전체 분모·18개 검토 대조·별도 직접 픽셀 검산·source hash |
 | 2026-10-16 | [60-evidence/s11/2026-10-16-raster-partition-handoff.md](60-evidence/s11/2026-10-16-raster-partition-handoff.md) | 입력의 부분적 유용성·단독 판별 한계·움직임 맥락 기준·재현과 재개 |
+
+### RCI-1 후속 등록
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| Git 미등록 (2026-10-16 작성) | [2026-10-16-role-consumer-context.md](50-diagnostics/s11/2026-10-16-role-consumer-context.md) | 검토 역할의 consumer 반사실 실험; 자동 판별기 아님 |
