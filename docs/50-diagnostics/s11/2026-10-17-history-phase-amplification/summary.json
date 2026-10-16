@@ -1,0 +1,479 @@
+{
+  "schema": "s11-hpa-handoff-summary-v1",
+  "base_head": "bdcad30f1d343ceb9adaaa04a8e0e8b2272ed4d1",
+  "prior_closeout_commit": "b795e40",
+  "status": "CLOSED_WITHOUT_PRODUCTION_PROMOTION",
+  "production_unchanged": true,
+  "design": "docs/50-diagnostics/s11/2026-10-17-history-phase-amplification.md",
+  "runs": [
+    "sample/output/s11-history-phase-20261017-001/evidence",
+    "sample/output/s11-history-phase-factorial-20261017-001/evidence",
+    "sample/output/s11-terminal-veto-20261017-001/evidence"
+  ],
+  "h1": [
+    {
+      "id": "baseline_weights__selected_oil-f001275",
+      "compared_to": "selected_oil-f001275",
+      "public_equal": true,
+      "scalar_edits": 18,
+      "oil_numeric": 84,
+      "foam_numeric": 26,
+      "changed_oil_elsewhere": 28
+    },
+    {
+      "id": "loss_weights__selected_oil-f001275",
+      "compared_to": "baseline",
+      "public_equal": true,
+      "scalar_edits": 18,
+      "oil_numeric": 101,
+      "foam_numeric": 26,
+      "changed_oil_elsewhere": 0
+    },
+    {
+      "id": "baseline_weights__all_oil-f001320",
+      "compared_to": "all_oil-f001320",
+      "public_equal": false,
+      "scalar_edits": 584,
+      "oil_numeric": 105,
+      "foam_numeric": 26,
+      "changed_oil_elsewhere": 24
+    },
+    {
+      "id": "loss_weights__all_oil-f001320",
+      "compared_to": "baseline",
+      "public_equal": false,
+      "scalar_edits": 584,
+      "oil_numeric": 101,
+      "foam_numeric": 26,
+      "changed_oil_elsewhere": 0
+    },
+    {
+      "id": "baseline_weights__all_foam-f001200",
+      "compared_to": "all_foam-f001200",
+      "public_equal": true,
+      "scalar_edits": 0,
+      "oil_numeric": 100,
+      "foam_numeric": 22,
+      "changed_oil_elsewhere": 21
+    },
+    {
+      "id": "loss_weights__all_foam-f001200",
+      "compared_to": "baseline",
+      "public_equal": true,
+      "scalar_edits": 0,
+      "oil_numeric": 101,
+      "foam_numeric": 26,
+      "changed_oil_elsewhere": 0
+    }
+  ],
+  "h2": [
+    {
+      "mask": 0,
+      "oil_numeric": 84,
+      "foam_numeric": 26,
+      "oil_changed_elsewhere": 28,
+      "qualified_fill_count": 1
+    },
+    {
+      "mask": 1,
+      "oil_numeric": 100,
+      "foam_numeric": 26,
+      "oil_changed_elsewhere": 0,
+      "qualified_fill_count": 0
+    },
+    {
+      "mask": 2,
+      "oil_numeric": 84,
+      "foam_numeric": 26,
+      "oil_changed_elsewhere": 28,
+      "qualified_fill_count": 1
+    },
+    {
+      "mask": 3,
+      "oil_numeric": 100,
+      "foam_numeric": 26,
+      "oil_changed_elsewhere": 0,
+      "qualified_fill_count": 0
+    },
+    {
+      "mask": 4,
+      "oil_numeric": 84,
+      "foam_numeric": 26,
+      "oil_changed_elsewhere": 28,
+      "qualified_fill_count": 1
+    },
+    {
+      "mask": 5,
+      "oil_numeric": 100,
+      "foam_numeric": 26,
+      "oil_changed_elsewhere": 0,
+      "qualified_fill_count": 0
+    },
+    {
+      "mask": 6,
+      "oil_numeric": 84,
+      "foam_numeric": 26,
+      "oil_changed_elsewhere": 28,
+      "qualified_fill_count": 1
+    },
+    {
+      "mask": 7,
+      "oil_numeric": 100,
+      "foam_numeric": 26,
+      "oil_changed_elsewhere": 0,
+      "qualified_fill_count": 0
+    }
+  ],
+  "h3": {
+    "population_conditions": 246,
+    "quarantined_frames": 7,
+    "cohorts": [
+      {
+        "mode": "selected_oil",
+        "conditions": 101,
+        "public_changed": 2,
+        "oil_coordinate_changed": 1,
+        "foam_coordinate_changed": 0,
+        "point_local_oil": 84
+      },
+      {
+        "mode": "all_oil",
+        "conditions": 113,
+        "public_changed": 2,
+        "oil_coordinate_changed": 2,
+        "foam_coordinate_changed": 0,
+        "point_local_oil": 69
+      },
+      {
+        "mode": "all_foam",
+        "conditions": 31,
+        "public_changed": 0,
+        "oil_coordinate_changed": 0,
+        "foam_coordinate_changed": 0,
+        "point_local_oil": 21
+      }
+    ],
+    "triggered_conditions": [
+      {
+        "id": "selected_oil-f001275",
+        "quarantined_sample_times_sec": [
+          44.0
+        ],
+        "default": {
+          "oil_numeric": 84,
+          "foam_numeric": 26,
+          "suffix44_56_numeric": 0,
+          "oil_at52": null,
+          "control_at52": "NO_NUMERIC_OIL",
+          "extrema": [
+            {
+              "event_type": "MINIMUM_OIL_LEVEL",
+              "representative_frame_index": 60,
+              "start_time_sec": 2.0,
+              "oil_level_px": -8.0
+            },
+            {
+              "event_type": "MAXIMUM_OIL_LEVEL",
+              "representative_frame_index": 1200,
+              "start_time_sec": 40.0,
+              "oil_level_px": 19.0
+            }
+          ],
+          "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 43.5초 +15.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 40.0초 +19.0 px, 관측 최저는 2.0초 -8.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+        },
+        "trial": {
+          "oil_numeric": 103,
+          "foam_numeric": 26,
+          "suffix44_56_numeric": 19,
+          "oil_at52": 862.0,
+          "control_at52": "UNASSESSED_SELECTION",
+          "extrema": [
+            {
+              "event_type": "MINIMUM_OIL_LEVEL",
+              "representative_frame_index": 1545,
+              "start_time_sec": 51.5,
+              "oil_level_px": -12.0
+            },
+            {
+              "event_type": "MAXIMUM_OIL_LEVEL",
+              "representative_frame_index": 1590,
+              "start_time_sec": 53.0,
+              "oil_level_px": 21.0
+            }
+          ],
+          "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 53.0초 +21.0 px, 관측 최저는 51.5초 -12.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+        },
+        "other_time_oil_changes": 14
+      },
+      {
+        "id": "selected_oil-f001590",
+        "quarantined_sample_times_sec": [
+          55.5,
+          56.0
+        ],
+        "default": {
+          "oil_numeric": 93,
+          "foam_numeric": 26,
+          "suffix44_56_numeric": 12,
+          "oil_at52": null,
+          "control_at52": "NO_NUMERIC_OIL",
+          "extrema": [
+            {
+              "event_type": "MINIMUM_OIL_LEVEL",
+              "representative_frame_index": 1260,
+              "start_time_sec": 42.0,
+              "oil_level_px": -18.0
+            },
+            {
+              "event_type": "MAXIMUM_OIL_LEVEL",
+              "representative_frame_index": 1320,
+              "start_time_sec": 44.0,
+              "oil_level_px": 28.0
+            }
+          ],
+          "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 49.5초 +14.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+        },
+        "trial": {
+          "oil_numeric": 93,
+          "foam_numeric": 26,
+          "suffix44_56_numeric": 12,
+          "oil_at52": null,
+          "control_at52": "NO_NUMERIC_OIL",
+          "extrema": [
+            {
+              "event_type": "MINIMUM_OIL_LEVEL",
+              "representative_frame_index": 1260,
+              "start_time_sec": 42.0,
+              "oil_level_px": -18.0
+            },
+            {
+              "event_type": "MAXIMUM_OIL_LEVEL",
+              "representative_frame_index": 1320,
+              "start_time_sec": 44.0,
+              "oil_level_px": 28.0
+            }
+          ],
+          "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 49.5초 +14.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+        },
+        "other_time_oil_changes": 7
+      },
+      {
+        "id": "all_oil-f001560",
+        "quarantined_sample_times_sec": [
+          54.0,
+          55.5
+        ],
+        "default": {
+          "oil_numeric": 96,
+          "foam_numeric": 26,
+          "suffix44_56_numeric": 15,
+          "oil_at52": null,
+          "control_at52": "NO_NUMERIC_OIL",
+          "extrema": [
+            {
+              "event_type": "MINIMUM_OIL_LEVEL",
+              "representative_frame_index": 1260,
+              "start_time_sec": 42.0,
+              "oil_level_px": -18.0
+            },
+            {
+              "event_type": "MAXIMUM_OIL_LEVEL",
+              "representative_frame_index": 1320,
+              "start_time_sec": 44.0,
+              "oil_level_px": 28.0
+            }
+          ],
+          "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 52.5초 +21.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+        },
+        "trial": {
+          "oil_numeric": 99,
+          "foam_numeric": 26,
+          "suffix44_56_numeric": 18,
+          "oil_at52": null,
+          "control_at52": "NO_NUMERIC_OIL",
+          "extrema": [
+            {
+              "event_type": "MINIMUM_OIL_LEVEL",
+              "representative_frame_index": 1260,
+              "start_time_sec": 42.0,
+              "oil_level_px": -18.0
+            },
+            {
+              "event_type": "MAXIMUM_OIL_LEVEL",
+              "representative_frame_index": 1635,
+              "start_time_sec": 54.5,
+              "oil_level_px": 45.0
+            }
+          ],
+          "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 +39.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 54.5초 +45.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+        },
+        "other_time_oil_changes": 8
+      },
+      {
+        "id": "all_oil-f001575",
+        "quarantined_sample_times_sec": [
+          54.0,
+          55.5
+        ],
+        "default": {
+          "oil_numeric": 96,
+          "foam_numeric": 26,
+          "suffix44_56_numeric": 15,
+          "oil_at52": 833.0,
+          "control_at52": "PHYSICAL_CORRESPONDENCE",
+          "extrema": [
+            {
+              "event_type": "MINIMUM_OIL_LEVEL",
+              "representative_frame_index": 1260,
+              "start_time_sec": 42.0,
+              "oil_level_px": -18.0
+            },
+            {
+              "event_type": "MAXIMUM_OIL_LEVEL",
+              "representative_frame_index": 1320,
+              "start_time_sec": 44.0,
+              "oil_level_px": 28.0
+            }
+          ],
+          "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 52.0초 +17.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+        },
+        "trial": {
+          "oil_numeric": 99,
+          "foam_numeric": 26,
+          "suffix44_56_numeric": 18,
+          "oil_at52": 833.0,
+          "control_at52": "PHYSICAL_CORRESPONDENCE",
+          "extrema": [
+            {
+              "event_type": "MINIMUM_OIL_LEVEL",
+              "representative_frame_index": 1260,
+              "start_time_sec": 42.0,
+              "oil_level_px": -18.0
+            },
+            {
+              "event_type": "MAXIMUM_OIL_LEVEL",
+              "representative_frame_index": 1635,
+              "start_time_sec": 54.5,
+              "oil_level_px": 45.0
+            }
+          ],
+          "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 +39.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 54.5초 +45.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+        },
+        "other_time_oil_changes": 8
+      }
+    ],
+    "baseline": {
+      "oil_numeric": 101,
+      "foam_numeric": 26,
+      "suffix44_56_numeric": 20,
+      "oil_at52": 833.0,
+      "control_at52": "PHYSICAL_CORRESPONDENCE",
+      "extrema": [
+        {
+          "event_type": "MINIMUM_OIL_LEVEL",
+          "representative_frame_index": 1260,
+          "start_time_sec": 42.0,
+          "oil_level_px": -18.0
+        },
+        {
+          "event_type": "MAXIMUM_OIL_LEVEL",
+          "representative_frame_index": 1320,
+          "start_time_sec": 44.0,
+          "oil_level_px": 28.0
+        }
+      ],
+      "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+    }
+  },
+  "verification": {
+    "schema": "s11-history-phase-verification-v2",
+    "rows": 29832,
+    "oil_joins": 26414,
+    "foam_joins": 6803,
+    "events": 7657,
+    "windows": 264,
+    "scalar_edits": 1204,
+    "csv_rows": 2486,
+    "quarantines": 7,
+    "source_video_inventories": 9,
+    "paired_publication_windows": 8,
+    "unique_pins": 253,
+    "mismatches": 0,
+    "verifier_sha256": "44a0945a28ffc624435a5dc7a571c397d37f440366004a2d9813d979463b60ee",
+    "physical_accuracy": "NOT_EVALUATED",
+    "report_comprehension": "NOT_HUMAN_EVALUATED"
+  },
+  "tests": {
+    "full_unit_suite": 2300,
+    "unit_seconds": 275.56,
+    "new_focused_tests": 33,
+    "legacy_phase_suite_under_trial": 89,
+    "legacy_trial_activations": 0
+  },
+  "source_scope": {
+    "path": "sample/output/s11-terminal-veto-20261017-001/evidence/source-scope.json",
+    "sha256": "d448e6111c8ed63b65c8621ea47ea23e6e8187ad20f9cf601b88f7844f1b66ee",
+    "video_byte_inventories": 9,
+    "new_completed_detector_input": "saved sample4 raw, 0–56 s, 2Hz, 113 rows; no current-frame re-extraction",
+    "windows": "retained evidence only; no new private-pixel replay"
+  },
+  "nonclaims": [
+    "No observed physical FULL",
+    "No new physical labels or accuracy rate",
+    "No independent human report acceptance",
+    "No Windows FIELD PASS"
+  ],
+  "decision": "Do not deploy donor geometry or quarantine alone. Assignment ownership remains unresolved; recovering points does not recover qualified report context.",
+  "artifact_closeout": {
+    "runs": [
+      {
+        "run": "sample/output/s11-history-phase-20261017-001",
+        "state": "closed",
+        "kept_files": 4,
+        "kept_bytes": 3331802,
+        "reused_files": 0,
+        "manifest_sha256": "abda612b84baf45971a59fd379b03928cfe8f13c7439dceaeca1577e08c5b0d1"
+      },
+      {
+        "run": "sample/output/s11-history-phase-factorial-20261017-001",
+        "state": "closed",
+        "kept_files": 11,
+        "kept_bytes": 3256591,
+        "reused_files": 10,
+        "manifest_sha256": "24b2fd6bc64bfa80afcac666e8911f625dd3813d2cc1cf107d94ee4f26a079c8"
+      },
+      {
+        "run": "sample/output/s11-terminal-veto-20261017-001",
+        "state": "closed",
+        "kept_files": 41,
+        "kept_bytes": 5424290,
+        "reused_files": 19,
+        "manifest_sha256": "7e8d3975f0b9852dbdebf23a960aa9a8597fc3f5e58600993698273a57b80be7"
+      }
+    ],
+    "managed_runs_checked": 94,
+    "errors": [],
+    "kept_files": 56,
+    "kept_bytes": 12012683,
+    "html": "sample/output/s11-terminal-veto-20261017-001/evidence/context-review.html",
+    "html_image_references_verified": 11
+  },
+  "post_close_verification": {
+    "schema": "s11-history-phase-verification-v2",
+    "rows": 29832,
+    "oil_joins": 26414,
+    "foam_joins": 6803,
+    "events": 7657,
+    "windows": 264,
+    "scalar_edits": 1204,
+    "csv_rows": 2486,
+    "quarantines": 7,
+    "source_video_inventories": 9,
+    "paired_publication_windows": 8,
+    "unique_pins": 253,
+    "mismatches": 0,
+    "verifier_sha256": "44a0945a28ffc624435a5dc7a571c397d37f440366004a2d9813d979463b60ee",
+    "physical_accuracy": "NOT_EVALUATED",
+    "report_comprehension": "NOT_HUMAN_EVALUATED"
+  }
+}

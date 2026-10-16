@@ -22,7 +22,7 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 
 ## 폴더별 목록
 
-현재 색인 수록 271개 파일. 이후 추가된 모든 repo 문서의 전수 목록을 보증하는 수치는 아닙니다.
+기존 폴더별 색인 스냅샷은 271개 파일이며, 이후 추가 등록은 하단에 별도로 기록합니다. 모든 repo 문서의 전수 목록을 보증하는 수치는 아닙니다.
 `검토 후 유지`는 승계가 확인되지 않아 현 위치를 보존한다는 뜻이며,
 그 문서의 과거 실행 지시 전체가 현행이라는 의미가 아닙니다.
 
@@ -1677,3 +1677,13 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-16 | [2026-10-16-profile-witness-consumer.md](50-diagnostics/s11/2026-10-16-profile-witness-consumer.md) | 행 분리 검증으로 비교하는 두 픽셀 모델과 전체 sequence/report 개입; 물리 역할 미검증 |
 | 2026-10-16 | [2026-10-16-profile-witness-consumer/summary.json](50-diagnostics/s11/2026-10-16-profile-witness-consumer/summary.json) | 7조건 전체 분모·실제 report 맥락·독립 검산 및 보존 해시 |
 | 2026-10-16 | [2026-10-16-profile-witness-handoff.md](60-evidence/s11/2026-10-16-profile-witness-handoff.md) | 픽셀 가설 반복 검증·비채택 사유·재현·재개 경계 |
+
+## 2026-10-17 추가 등록 — SOI-1 보존 / HPA-1 인수인계
+
+| 최초 Git 등록일 (KST) | 문서 | 역할 |
+|---|---|---|
+| 2026-10-17 (`b795e40`) | [SOI-1 handoff](60-evidence/s11/2026-10-16-single-observation-handoff.md) | 기존 미커밋 인수인계 보존; 문서 날짜는 10월 16일 |
+| 2026-10-17 (`b795e40`) | [SOI-1 summary](50-diagnostics/s11/2026-10-16-single-observation-influence/summary.json) | 기존 검증 결과의 소형 저장본 |
+| 2026-10-17 | [HPA-1 study](50-diagnostics/s11/2026-10-17-history-phase-amplification.md) | 세 번의 가설·검증, 기각/미채택 근거 |
+| 2026-10-17 | [HPA-1 summary](50-diagnostics/s11/2026-10-17-history-phase-amplification/summary.json) | 조건별 결과·검증·보존 manifest 연결 |
+| 2026-10-17 | [HPA-1 handoff](60-evidence/s11/2026-10-17-history-phase-handoff.md) | 재현·로컬 증거·후속 설계 경계 |

@@ -255,6 +255,8 @@ failure class, adopted rule or explanation of the private 721 s optical cause.
 
 ### S11-F05 — Initial-state and material-phase hard-lock asymmetry
 
+HPA-1 local follow-up: the [complete row-feature factorial](2026-10-17-history-phase-amplification.md) identifies internal matching Y and assignment as the primary loss branch; restoring scalar opposition does not repair that episode. Donor median/history is diagnostic only, and the existing reciprocal physical-swap safeguards remain in force.
+
 **SOI-1 local evidence (October 16):** [Single-observation influence](2026-10-16-single-observation-influence.md#causal-boundary-not-a-blanket-repair) reproduces a 44–56 s numeric Oil gap after withdrawing one reviewed 42.5 s member. Rebuilt history reaches internal `FILL_SPAN_MATERIAL_VETO` / `FILLED_CAP_VETO`; frozen-history withdrawal stays local but is not deployable. Removing newly admitted Y818 still gives identical numeric loss, so that backfill is not necessary. The recurrence/association/confirmation substage and safe policy remain unknown. This is Mac counterfactual evidence, not verified physical FULL or a new Windows field result; all existing guards and contracts below remain.
 
 **Affected detector logic node(s):** `OIL-HYPOTHESIS` → `OIL-PHASE-INITIAL`/`OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` → `OIL-SELECTOR`.
@@ -280,6 +282,8 @@ failure class, adopted rule or explanation of the private 721 s optical cause.
 **Confidence:** Confirmed R5/R17 asymmetry and R18 source contract; completed causal rerun confirms the compared behavior and named release boundaries; named unknowns remain for the actual Base interface first loss, Accum snapshot/candidate cause and exact reviewed Y anchors.
 
 ### S11-F06 — Foam/Oil/material evidence cross-coupling
+
+HPA-1 local follow-up: [terminal-veto quarantine on all 246 conditions](2026-10-17-history-phase-amplification.md) restores some suffix numerics but leaves the accepted 52 s owner unresolved and exposes new late unassessed extrema. Internal FILLED_BARRIER is not observed FULL; no barrier-only suppression or default change was adopted. All four activated conditions and controls remain available in the handoff.
 
 **Affected detector logic node(s):** `FRAME-EVIDENCE`/`OIL-HYPOTHESIS`/`OIL-CANDIDATE` → `OIL-AUTHORITY`/`OIL-SELECTOR`, and `FOAM-CANDIDATE`/`FOAM-IDENTITY`/`FOAM-EPISODE` → `SEQUENCE-COMPOSITION`.
 
