@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import csv
+from dataclasses import asdict
 import json
 from pathlib import Path
 
@@ -157,3 +159,113 @@ def test_bundle_failure_removes_temporary_bundle_and_debug_staging(tmp_path):
     assert not Path(completion.staging_directory).exists()
     assert not list(tmp_path.glob(".*.tmp-*"))
     assert result.debug_trace_completion is None
+
+
+def test_two_local_xy_scopes_with_initial_full_reach_completed_csv_and_trace(tmp_path):
+    from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
+    from oil_tracker.adapters.vision.artifact_calibration import region_template_from_source_rect
+    from oil_tracker.adapters.vision.oil_measurement_scope import OilMeasurementScope
+    from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+    from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
+    from oil_tracker.application.services.recipe_validation_service import RecipeValidationService
+    from oil_tracker.application.use_cases.analyze_video import AnalyzeVideoUseCase
+    from oil_tracker.domain.enums import InitialObservationState
+    from oil_tracker.domain.geometry import Rect
+    from oil_tracker.domain.session import InitialStateConfirmation
+    from tests.test_oil_detector_integration import glass
+    from tests.test_s11_behavioral_repairs_integration import _base_step_frame
+
+    recipe = InspectionRecipe.empty(320, 240, "two-scopes")
+    recipe.glasses = [
+        glass(InitialObservationState.FULL_NO_INTERFACE, "base"),
+        glass(InitialObservationState.EMPTY_NO_INTERFACE, "accum"),
+    ]
+    rects = ((Rect(146, 126, 8, 8), Rect(180, 140, 6, 8)), (Rect(120, 124, 6, 16),))
+    scopes = []
+    for index, (config, rectangles) in enumerate(zip(recipe.glasses, rects, strict=True)):
+        config.geometry.artifact_templates = [
+            region_template_from_source_rect(rect, config, name="fixed structure")
+            for rect in rectangles
+        ]
+        scopes.append(OilMeasurementScope.bind(
+            config, frame_size=(320, 240), reference_sha256=("a", "b")[index] * 64,
+            rectangles=rectangles,
+        ))
+    recipe_before = recipe.to_dict()
+    metadata = VideoMetadata(str(tmp_path / "synthetic.mp4"), 320, 240, 30.0, 4.0, 120, "synthetic")
+
+    class Reader:
+        def __init__(self):
+            self.metadata = metadata
+            self.closed = False
+
+        def read_at(self, timestamp):
+            return _base_step_frame(112 + round(timestamp * 10)), round(timestamp * 30), timestamp
+
+        def close(self):
+            self.closed = True
+
+    outputs = []
+    for active_scopes in ((), tuple(scopes)):
+        session = AnalysisSession(
+            input_video_path=metadata.path, video_metadata=metadata,
+            analysis_start_sec=0.0, analysis_end_sec=4.0, compressor_start_sec=0.0,
+            sampling_fps=2.0, debug_trace_level=DebugTraceLevel.FULL,
+            resolution_confirmed=True, output_directory=str(tmp_path),
+        )
+        for config in recipe.glasses:
+            session.initial_state_confirmations[config.id] = InitialStateConfirmation(
+                config.initial_state, session.input_video_path, session.analysis_start_sec,
+            )
+        reader = Reader()
+        detector = OpenCvPhaseDetector(
+            initial_full_observation=True, oil_measurement_scopes=active_scopes,
+        )
+        pipeline = AnalysisPipeline(
+            lambda _path: reader, detector, RecipeValidationService(),
+            JsonlDebugTraceWriterFactory(tmp_path),
+        )
+        # Existing bundle fixture replaces image/report rendering only. Detector,
+        # sequence, tracking, CSV serialization and JSONL writer remain real.
+        output = AnalyzeVideoUseCase(pipeline, _store()).execute(recipe, session, output_root=tmp_path)
+        assert not output.result.errors
+        assert reader.closed and recipe.to_dict() == recipe_before
+        assert ("+oil-local-xy-v1:" in detector.version) == bool(active_scopes)
+        assert len(detector.measurement_scope_manifest) == len(active_scopes)
+
+        with (output.output_path / "tracking_data.csv").open(encoding="utf-8-sig", newline="") as stream:
+            csv_rows = {(row["glass_id"], int(row["frame_index"])): row for row in csv.DictReader(stream)}
+        trace = [json.loads(line) for line in (output.output_path / "debug/debug_trace.jsonl").read_text(encoding="utf-8").splitlines()]
+        records = {(row["glass_id"], row["frame_index"]): row for row in trace}
+        samples = {(group.glass_id, sample.frame_index): sample
+                   for group in output.result.glass_results for sample in group.samples}
+        assert len(csv_rows) == len(records) == len(samples) == 18
+        assert csv_rows.keys() == records.keys() == samples.keys()
+        assert any(sample.raw_oil_air_level_y is not None for sample in samples.values())
+        scopes_by_id = {s.glass_id: s for s in active_scopes}
+        for key, sample in samples.items():
+            row, record = csv_rows[key], records[key]
+            sequence = record["sequence"]
+            version = sequence["state"]["sequence_resolver_version"]
+            assert version.endswith("+initial-full-observation-v2")
+            for field, position in (("raw_oil_air_level_y", "raw_oil_y"), ("raw_foam_front_y", "raw_foam_y")):
+                value = None if row[field] == "" else float(row[field])
+                assert value == getattr(sample, field) == sequence["positions"][position]
+            if sample.raw_oil_air_level_y is not None:
+                selected = [c for c in sequence["candidates"] if c["kind"] == "oil_air" and c["selected"]]
+                assert len(selected) == 1 and selected[0]["canonical_y"] == sample.raw_oil_air_level_y
+            lineage = record["state"]["oil_measurement_lineage"]["candidates"]
+            bound = [item["sampling_scope"] for item in lineage if "sampling_scope" in item]
+            if active_scopes:
+                assert bound
+                assert all(item["sha256"] == scopes_by_id[key[0]].sha256 for item in bound)
+            else:
+                assert not bound
+        outputs.append((records, samples))
+
+    baseline, scoped = outputs
+    for key, record in baseline[0].items():
+        assert record["state"]["foam_component_diagnostics"] == scoped[0][key]["state"]["foam_component_diagnostics"]
+        # Equality is scoped to this synthetic scene, not a field guarantee.
+        foam = lambda sample: {k: v for k, v in asdict(sample).items() if "foam" in k}
+        assert foam(baseline[1][key]) == foam(scoped[1][key])

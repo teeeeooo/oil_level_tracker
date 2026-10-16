@@ -165,6 +165,38 @@ def test_same_reference_cannot_also_veto_and_unrelated_templates_remain_allowed(
     s.validate(g,oil_frame())
 
 
+def test_geometry_only_artifact_at_same_rect_still_vetoes_with_local_scope():
+    from oil_tracker.adapters.vision.artifact_calibration import (
+        apply_artifact_templates, region_template_from_source_rect,
+    )
+    from oil_tracker.domain.detection import BoundaryCandidate
+    from oil_tracker.domain.enums import BoundaryKind
+
+    g = glass()
+    s = scope(g)
+    template = region_template_from_source_rect(s.rectangles[0], g, name="fixed structure")
+    g.geometry.artifact_templates = [template]
+    before = asdict(g)
+    assert template.support_reference is None
+    s.validate(g, oil_frame())  # Coordinate overlap is not a reference conflict.
+    candidate = BoundaryCandidate(
+        source="material_path", kind=BoundaryKind.OIL_AIR, y=130,
+        features={
+            "artifact_center_x_norm": template.center_x,
+            "artifact_center_y_norm": template.center_y,
+            "artifact_width_norm": template.width,
+            "artifact_height_norm": template.height,
+        },
+    )
+
+    rejected, count = apply_artifact_templates([candidate], g)
+
+    assert count == 1 and rejected[0].rejected
+    assert rejected[0].reject_reason == f"calibrated_artifact:{template.id}"
+    assert asdict(g) == before
+    assert not candidate.rejected
+
+
 def test_phase_trace_reproduces_actual_scoped_profile_and_unavailable_support():
     image=np.full((100,100),90,np.float32);image[51:]=150
     visible=np.ones_like(image,bool);ex=np.zeros_like(visible)

@@ -7,7 +7,7 @@ O2 remains OPEN / FIELD FAIL. Base `aea2087651ada473fe78d6d60e9b3b21e52eea2b`.
 [Machine receipt](2026-10-09-local-xy-implementation.json) pins executing source,
 inputs, runtime, complete results, reports and the new human reply.
 The subsequently authorized third Windows comparison is a separate input context;
-see [Windows input preparation](#windows-input-preparation--2026-10-16).
+see [Windows scope receipt and comparison handoff](#windows-scope-receipt-and-comparison-handoff--2026-10-16).
 It does not reopen or promote the original Mac result.
 
 ## Frozen mechanism and implementation
@@ -158,7 +158,8 @@ judgment or Windows work is currently necessary for this closeout.
 
 After the [returned RGB regression](2026-10-14-candidate-rgb-trial.md#windows-rgb-result--2026-10-16),
 the authorized third comparison reuses this implementation separately against
-④ FULL+ON v2. It is **INPUT PENDING**, not a new algorithm or a ready ON switch.
+④ FULL+ON v2. At this preparation checkpoint it was **INPUT PENDING**;
+the later review-007 receipt below completes that input, without a new algorithm.
 The current source at `1f0a00e` was inspected without running the detector:
 
 - `OpenCvPhaseDetector(oil_measurement_scopes=...)` and `OilMeasurementScope.bind`
@@ -192,12 +193,80 @@ Oil/Foam comparison remains necessary because prior scope changes altered public
 Foam validity even when raw Foam stayed equal. No detector run, new experiment
 artifact, threshold/rectangle search or acceptance occurs in this preparation.
 
+## Windows scope receipt and comparison handoff — 2026-10-16
+
+**Input COMPLETE; Windows comparison PENDING.** The user relayed review-007's
+direct approvals: Accum R11 in `reply-001.json`, then BASE R11/R12 in
+`reply-002.json`. The packet, labels and plain/guide images stay under the existing
+Windows `0.windows_diagnostic/data/reviews/review-007/` directory. Their contents
+are user-reported evidence, not locally inspected private files. Review-006's
+18 unreviewed RGB candidates remain pending and do not block this comparison.
+
+| Glass ID prefix | Region | Frozen source rectangle `[x0,x1) × [y0,y1)` | `Rect(x,y,width,height)` | Nominal pixels | Approved reference |
+|---|---|---|---|---:|---|
+| BASE `8f94fb85` | R11 | `[100,163) × [468,710)` | `Rect(100,468,63,242)` | 15,246 | f17287 / 721 s |
+| BASE `8f94fb85` | R12 | `[106,114) × [713,757)` | `Rect(106,713,8,44)` | 352 | Same BASE reference |
+| Accum `8fb6ebc7` | R11 | `[1612,1622) × [321,430)` | `Rect(1612,321,10,109)` | 1,090 | f17335 / 723 s |
+
+These are two Glass scopes containing three rectangles, with frame size
+`(1920,1080)`. Resolve full Glass IDs and existing source-reference bindings from
+the same Windows Recipe/packet; the prefixes above are identifiers for this
+receipt, not production IDs. BASE's nominal union is 15,598 pixels and the total
+is 16,688; these are not measured support losses. The reported 46/16 BASE and
+four Accum tracklet-Y overlaps also do not establish full XY support overlap.
+Actual interface observations can pass through these regions. Approval permits
+this fixed sampling experiment; it is not dense negative truth, an instruction
+to remove a whole tracklet, or a change to the practical review-004/005 allowances.
+
+### Artifact correction
+
+The earlier Windows `CONFLICT` interpretation was incorrect. Source inspection
+confirms that `OilMeasurementScope.validate()` rejects an Artifact template only
+when its `support_reference.snapshot_sha256` equals the scope's reference digest.
+Coordinate overlap by itself is not that conflict. Windows reports that none of
+the Recipe's 12 BASE / 14 Accum templates has a support reference, so those saved
+settings do not trigger this guard. Preserve the guard; do not disable templates
+or change a reference solely to bypass it if actual execution inputs differ.
+
+`diagnostic_only` / `NOT_EVALUATED` / `geometry_only` describe reference-comparison
+diagnostics. Independently, `apply_artifact_templates()` uses spatial templates
+to reject candidates without requiring any support reference. Windows reports
+2,058 rejected BASE candidates across 587 frames and 4,393 Accum candidates across
+586 frames in ④. Those counts are reported, not locally reproduced. Thus ④ vs ⑦
+measures **Local XY added to the existing active Artifact configuration**. Shared
+ROI, exclusions, templates and detector settings remain identical in both arms.
+
+### Execution boundary
+
+Reuse the headless Windows RGB runner's real `OpenCvPhaseDetector` →
+`AnalysisPipeline` → `AnalyzeVideoUseCase` → `OutputBundleStore` path. Replace only
+its comparison configuration with initial-FULL v2 plus the two bound scopes,
+cost-first/RGB OFF. No new GUI option, Recipe schema or production algorithm is
+needed; the existing constructor already owns this input. The
+[active Windows handoff](../../40-operations/s11-current-windows-field-qualification.md#priority-3-local-xy-comparison)
+specifies binding, runtime identity, final Oil/Foam comparison and the short prompt.
+
+Focused local verification passes: **28 tests** across
+`tests/unit/test_oil_measurement_scope.py` and
+`tests/integration/test_debug_trace_bundle_output.py`, including two new checks.
+The geometry-only overlap check retains actual Artifact rejection. The real
+detector/resolver, pipeline, use case and CSV/trace store complete two synthetic
+runs of 18 rows each, with BASE FULL / Accum EMPTY and initial-FULL v2. Glass scope
+digests remain separate, Recipe data remains unchanged, and selected same-frame
+Oil, completed positions and CSV agree. Raw Foam diagnostics and completed Foam
+fields match in this synthetic scene; field Foam validity is still untested.
+The integration fixture substitutes the reader and image/report rendering, so it
+does not qualify Windows decoding, the GUI or report appearance. Tests use
+temporary files; no private Windows footage or original Mac experiment is rerun.
+Local entry verification cannot promote the candidate or establish field
+effectiveness; O2 remains OPEN / FIELD FAIL.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-SELECTOR`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F06`, `S11-F09`, `S11-F10`.
 - First harmful stage: fixed scoped outputs regress in completed selection/admission; 52 s has an admitted unselected boundary-region proposal and 54–56 s have present but unadmitted proposals. The first physical association error is unproven. Foam episode endpoint loss exists in both runs.
-- Existing feature coverage: source inspection confirms explicit OilMeasurementScope binding and separate measurement exclusion, while shared masks/templates and downstream owners remain unchanged. The historical Mac rectangle is fixed evidence. Windows Recipe/reference/rectangle bindings are not yet supplied; their absence is an input preparation boundary, not evidence that the feature or private artifacts do not exist.
-- Execution scope: the October 16 step is read-only source/contract inspection and a Windows input handoff. No private or local detector replay, GUI wiring, new artifact or physical label is generated. Historical implementation measurements retain the scope above.
+- Existing feature coverage: review-007 supplies two approved BASE rectangles and one Accum rectangle. The same Recipe reportedly has 12/14 geometry-only Artifact templates with active spatial veto and no support references. The matching-reference guard remains, but coordinate overlap is not a conflict. Focused tests exercise separate scope bindings, existing Artifact rejection, initial-FULL v2 and completed CSV/trace publication; shared masks/settings stay fixed. Historical Mac evidence remains separate.
+- Execution scope: the October 16 follow-up records the user-relayed Windows approvals, adds synthetic integration coverage and prepares one fixed ④ vs ⑦ Windows run through the existing headless production use case. No private detector replay, GUI wiring, algorithm change, new local research artifact or inferred physical label is generated. Full Windows outcome and final Foam effects remain pending; historical measurements retain their original scope above.
 - Logic-map impact: NONE — the existing constructor-bound Local XY feature row and frame/candidate details still describe source; no new route or automatic reference consumer is added.
 - Failure-registry impact: NONE — prior local-withdrawal recurrence and its no-promotion result remain; the authorized new Windows context has no measured outcome yet.

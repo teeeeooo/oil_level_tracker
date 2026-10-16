@@ -9,10 +9,11 @@ is unknown; post-transition FULL counts start at 675 s. The bounded
 is now CLOSED. Cost-first/review-005 and the
 [returned RGB comparison](../60-evidence/s11/2026-10-14-candidate-rgb-trial.md#windows-rgb-result--2026-10-16)
 are CLOSED as **REGRESSION / NOT_ADOPTED**. The next Windows task is
-[priority 3 Local XY input preparation](#priority-3-local-xy-input-preparation)
-for a separate comparison against ④ FULL+ON v2. No Local XY replay is ready
-until its Windows structure/sampling scope is supplied. Review-006 remains
-unreviewed/pending and does not block this preparation. Cost-first/RGB remain OFF.
+[priority 3 Local XY comparison](#priority-3-local-xy-comparison), separately
+against ④ FULL+ON v2. Review-007 has supplied direct approval for BASE R11/R12
+and Accum R11. Reuse the existing headless production runner with these fixed
+inputs; no repeated region approval is needed. Review-006 remains
+unreviewed/pending and does not block execution. Cost-first/RGB remain OFF.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
@@ -690,7 +691,8 @@ review-004/005의 사용자 판정과 복수 허용·대략적 일치를 재사�
 
 ### Priority 3 Local XY input preparation
 
-**현재 작업: Windows 입력 준비. 디텍터 실행 단계가 아니다.** 기존
+**완료 이력: review-007로 입력 준비 완료. 아래 준비 절차를 반복하지 않는다.**
+현재 실행은 다음 [Local XY comparison](#priority-3-local-xy-comparison)을 따른다. 기존
 [`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py)는
 지정된 source X/Y 영역의 Oil 측정만 제외하는 구현이며 자동 구조물 검출기가 아니다.
 현재 GUI에는 이를 켜는 flag가 없고, 기존 진단 runner의 rectangle은 Mac sample4용이다.
@@ -729,7 +731,7 @@ review-004/005의 사용자 판정과 복수 허용·대략적 일치를 재사�
    raw Foam뿐 아니라 최종 Foam 좌표/validity/episode까지 비교한다. 실행 출력은
    `sample/output/`에 둔다. FULL 전환과 최종 채택은 세 비교 이후의 별도 단계다.
 
-전달용 짧은 프롬프트:
+이전 입력 준비용 프롬프트 (완료 이력; 다시 보내지 않음):
 
 ```text
 ④ FULL+ON v2 bundle: <기준 번들 경로>
@@ -743,6 +745,117 @@ Glass·근거 프레임·원본 X/Y 범위·판정 상태를 표로 반환해줘
 새 판단이 꼭 필요하면 구체적인 한 장면의 plain/guide를 준비해서 질문해줘.
 Mac sample4 좌표를 복사하거나 ROI를 바꾸지 말고 디텍터는 아직 실행하지 마.
 RGB는 악화·미채택으로 종료하고 review-006은 미검토 상태로 보존해줘.
+```
+
+### Priority 3 Local XY comparison
+
+**현재 작업: ④ FULL+ON v2 ↔ ⑦ FULL+ON v2 + Oil-only Local XY.**
+Review-007의 Accum 승인(reply-001)과 BASE 승인(reply-002)을 재사용한다.
+[입력 수신·Artifact 설명 정정·실행 경계](../60-evidence/s11/2026-10-09-local-xy-implementation.md#windows-scope-receipt-and-comparison-handoff--2026-10-16)를 읽는다.
+알고리즘은 기존 `oil-local-xy-v1` 그대로이며, 이번에 고정한 Windows 입력으로
+한 번 비교한다. cost-first/RGB는 OFF다.
+
+1. **적용 범위는 두 Glass, 사각형 세 개다.** 같은 Recipe에서 아래 prefix에
+   유일하게 대응하는 활성 Glass의 **전체 ID**를 사용한다. 배열 순서로 Glass를
+   추정하지 않는다. 원본 크기는 `(1920,1080)`이며 좌표는 source 기준 half-open이다.
+
+   | Glass | 영역 | source X/Y | 생성할 Rect | 원본 reference |
+   |---|---|---|---|---|
+   | BASE `8f94fb85` | R11 | `[100,163) × [468,710)` | `Rect(100,468,63,242)` | f17287 / 721 s |
+   | BASE `8f94fb85` | R12 | `[106,114) × [713,757)` | `Rect(106,713,8,44)` | 같은 BASE reference |
+   | Accum `8fb6ebc7` | R11 | `[1612,1622) × [321,430)` | `Rect(1612,321,10,109)` | f17335 / 723 s |
+
+   Review-007의 원본 reference/판정 연결을 재사용해 각 scope의 reference digest를
+   얻는다. guide·확대 crop의 digest를 원본 대신 쓰거나 임의 값을 넣지 않는다.
+   기존 packet에서 확인 가능한 입력을 사용자에게 다시 옮겨 달라고 요청하지 않는다.
+   영역을 움직이거나 넓히지 않고, 717–750.5초 전체 Y 궤적을 제외 띠로 만들지 않는다.
+2. **Artifact 설정은 그대로 유지한다.** 현재 Recipe는 BASE 12 / Accum 14개의
+   template에 support reference가 없다고 확인됐다. 동일 좌표 template은 Local XY와
+   공존할 수 있고 기존 공간 후보 veto도 계속 작동한다. `diagnostic_only`는 참조
+   비교 상태이지 후보 제거 OFF가 아니다. 실제 입력에 같은 reference digest를 쓰는
+   `support_reference`가 발견되어 `validate()`가 실패하면 해당 차이만 보고한다.
+   이를 피하려고 template을 끄거나 reference를 바꾸지 않는다.
+3. **RGB 비교 때 사용한 headless 실행기를 재사용한다.** Recipe/세션 로딩,
+   `AnalysisPipeline`, `AnalyzeVideoUseCase`, `OutputBundleStore`는 유지하고 아래
+   detector 설정만 전달한다. `base_glass`/`accum_glass`와 reference digest는 위에서
+   확인한 실제 Windows 입력이다. 새 GUI flag나 Mac 진단 runner를 가정하지 않는다.
+
+   ```python
+   from oil_tracker.adapters.vision.oil_measurement_scope import OilMeasurementScope
+   from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
+   from oil_tracker.domain.geometry import Rect
+
+   scopes = (
+       OilMeasurementScope.bind(
+           base_glass, frame_size=(1920, 1080),
+           reference_sha256=base_reference_sha256,
+           rectangles=(Rect(100, 468, 63, 242), Rect(106, 713, 8, 44)),
+       ),
+       OilMeasurementScope.bind(
+           accum_glass, frame_size=(1920, 1080),
+           reference_sha256=accum_reference_sha256,
+           rectangles=(Rect(1612, 321, 10, 109),),
+       ),
+   )
+   detector = OpenCvPhaseDetector(
+       initial_full_observation=True,
+       cost_first_assignment=False, candidate_rgb=False,
+       oil_measurement_scopes=scopes,
+   )
+   ```
+
+   실행 전 scope ID 집합이 BASE/Accum의 전체 ID 집합과 같고, 사각형 수가 각각
+   2/1인지 확인한다. 두 scope의 `validate(glass, original_frame)`로 설정/geometry/
+   크기/reference 충돌 검사를 수행한다. 이후 pipeline 내부의 프레임별 검사도 유지한다.
+   `detector.version`과 `measurement_scope_manifest`를 실행 기록에 저장한다.
+   detector의 `+oil-local-xy-v1:<digest>`로 적용을 구분하며, resolver는
+   `+initial-full-observation-v2`를 유지한다. resolver만 보고 Local XY OFF로 오판하지 않는다.
+4. 같은 영상·Recipe·공유 ROI/exclusion·Artifact·480–780초·2fps·FULL debug,
+   BASE FULL / Accum EMPTY 초기 확정값으로 실행한다. 조건이 맞는 ④는 재사용하고
+   ⑦만 생성한다. 새로운 대용량 출력은 `sample/output/`의 관리되는 실행 폴더에
+   둔다. 기존 [산출물 관리 절차](experiment-artifact-lifecycle.md)를 재사용한다.
+   Recipe/설정을 바꾸거나 RGB 모델을 재학습하지 않는다. 이번 실행은 headless
+   production 경로 비교이며 GUI 조작 검증으로 기록하지 않는다.
+5. **적용 확인과 최종 출력 비교를 함께 한다.** Glass별 scope와 측정 lineage에서
+   실제 eligible 영역과의 교집합, `original/excluded/remaining/used_counts`,
+   common-X/지원 부족 여부를 대표 영향 프레임에서 확인한다. 명목 사각형 면적이나
+   Y 겹침만으로 측정 제외가 작동했다고 결론내리지 않는다. 범위 밖 동작과 기존
+   Artifact 거부가 유지되는지도 확인한다. 측정이 바뀌므로 raw Oil 후보 동일성을
+   요구하지 않고, 최종 선택 후보 → completed trace → CSV 좌표 일치를 확인한다.
+6. 기존 구간 함수를 재사용해 BASE/Accum **각 601행**을 중복 없이 한 구간씩 집계한다.
+   BASE는 480–550 / 550–652 / 652–674 / 674–675 / 675–780초와 OUTSIDE다.
+   Accum은 480–653 / 653–672 / 672–680 / 680–700 / 700–780초와 OUTSIDE이며
+   기존 canonical 함수의 경계 포함 규칙을 유지한다. 기준 Oil은 BASE 303,
+   Accum 36이다. Oil 신규/소실/양쪽 숫자 Y 변경, fill/flags 변화를 구분한다.
+   Foam은 raw 좌표뿐 아니라 completed/CSV 좌표, validity, confidence,
+   confirmed frame/episode 및 Oil/Foam 순서 충돌까지 대조한다. raw Foam 불변을
+   최종 Foam 무영향으로 줄여 쓰지 않는다.
+7. Review-004 여섯 프레임과 review-005 두 장면, BASE 721초와 723/771초를 재사용한다.
+   복수 허용·대략적 일치·판단 불가를 유지하고 새 판단이 필요한 **중요한 변경 장면**만
+   기존 `0.windows_diagnostic/data/reviews/`의 새 packet/plain/guide로 질문·record한다.
+   Review-006은 pending으로 보존하며, Foam–Oil 하단 경계도 정상 Oil 대상일 수 있다.
+   BASE 721초 기존 최종 CSV Y694와 723초 빈 출력을 다른 Glass/후보 Y와 섞지 않는다.
+   새로 출력이 줄었다는 이유만으로 오검출 개선이나 실제 계면 손실을 단정하지 않는다.
+8. 영역 적용 확인, 구간별 증감, 실제 허용 계면의 유지/손실, 비유면 출력과 최종 Foam
+   영향, 효과 있음/없음·악화/판단 근거 부족을 간략히 반환한다. 전체 빈 프레임 원인
+   분석·scope/임계값 튜닝·추가 재실행은 하지 않는다. FULL 전환 구현과 최종 채택은
+   세 비교 이후 판단하며 accepted baseline과 O2 OPEN / FIELD FAIL은 유지한다.
+
+전달용 짧은 프롬프트:
+
+```text
+④ FULL+ON v2 bundle: <기준 번들 경로>
+최신 소스와 기존 RGB 실행기: <경로>
+review-007 및 기존 review 폴더: <경로>
+
+docs/40-operations/s11-current-windows-field-qualification.md의
+“Priority 3 Local XY comparison”을 읽고 ⑦을 실행·비교해줘.
+승인된 BASE R11·R12와 Accum R11을 모두 적용하고, 기존 RGB headless 실행기를
+재사용해줘. initial-FULL v2 ON, cost-first/RGB OFF이며 조건이 같은 ④는 재사용해줘.
+기존 Artifact/ROI 설정과 승인 영역은 그대로 유지해줘.
+두 Glass의 최종 CSV 증감, 실제 계면 유지/손실, 비유면 출력과 최종 Foam 영향을
+정리해줘. 기존 사용자 판정은 재사용하고 새 판단이 필요한 변경 장면만 질문해줘.
+출력은 sample/output/에 두고, 튜닝이나 추가 재실행 없이 결과를 알려줘.
 ```
 
 ## 2. Private source identity
