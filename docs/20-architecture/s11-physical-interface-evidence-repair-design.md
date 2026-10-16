@@ -322,6 +322,25 @@ noncircular measurement dependencies without demanding legacy anchor status of
 a weak raw peer. This is a rejected local necessary-condition screen, not a new
 runtime rule or a replay of the private 721 s frame.
 
+The subsequent [native-geometry screen](../50-diagnostics/s11/2026-10-16-corroboration-geometry-screen.md#executed-results)
+finds captured native paths for 35/175 Oil candidates, but none of the 85 directed
+positive support pairs has both paths. The required common-native comparison
+is therefore not assessable on these saved pairs. Basic raster-band arithmetic
+reproduces; neither fact validates a physical discriminator. Do not install a
+both-native hard gate over the existing packets and call their lost support a
+successful false-anchor repair.
+
+Keep three input types distinct: an actual generator path; a separately
+re-observed current-raster contour hypothesis with its own extraction lineage;
+and a scalar-center sampling window. Only the first two can supply proposed
+contour geometry, and either still needs physical-role/localization qualification.
+A re-observed hypothesis is new measured evidence, not retroactively a native
+path of the original candidate. It must retain alternatives, unavailable sectors
+and explicit pixel-to-candidate correspondence. Candidate Y, nearest peaks and
+peak hulls cannot silently become a contour or calibrated uncertainty. A concrete
+localizer/partition design and its two-sided controls must precede any consumer;
+this clarification selects no new extraction algorithm or operating point.
+
 Construct evidence before authority in a directed order: raw witness → eligible
 peer relation → independent support → phase identity → authority. A candidate
 cannot use its new anchor status to validate the peer that granted that status.
@@ -491,11 +510,14 @@ negative raster controls before enabling the corresponding new route. Reuse
 existing spatial, temporal and resource bounds where applicable; do not choose
 thresholds to include a private Y jump or make a private conflict value pass.
 
-The current scalar evidence lacks per-sector two-sided context and provenance
-lineage needed to claim these witnesses already exist. Implementation must
-add those bounded measurements and serialize the actual decisions. If the
-controls cannot distinguish a stationary interface from an internal structure,
-section 4 remains unenabled; do not weaken its evidence requirements.
+Current authority consumes scalar support, not a qualified physical witness.
+O1 already retains basic two-sided measurements and some native paths/lineage;
+reuse those rather than assuming extraction is wholly absent. The geometry
+screen shows the missing cross-family contour input, while physical role and
+measurement independence remain unqualified. Any necessary new bounded
+measurements and their actual decisions must be explicit. If the controls
+cannot distinguish a stationary interface from an internal structure, section 4
+remains unenabled; do not weaken its evidence requirements.
 
 Implementation sequence is witness extraction and controls, independent support,
 association and confirmation, committed fill handoff, then the new phase and
@@ -529,8 +551,8 @@ as the serialized array index. Diagnostic detail must not change output.
 - Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples; the cost-first Windows regression, qualified review-004/005 and frozen RGB model's rim failure/input contract.
 - Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
-- Existing feature coverage: top-exit comparison reuses normal Recipe geometry/margin/exclusions/Artifact, static preparation and session initial-state forwarding. Constructor top_exit_full defaults OFF; compare initial-FULL v2 with/without it, cost-first/RGB/Local XY OFF. Unit fixtures isolate selected-owner and completed publication semantics; source-derived replay uses the existing frozen local Recipes. No geometry change or reference auto-consumer is introduced. Private Windows physical-top alignment remains an explicit qualification limit.
-- Execution scope: October 16 top-exit preparation exercised bounded selected-owner closure, negative/reset controls, real detector/resolver/GUI construction and completed sample/trace/CSV publication. Both frozen local videos retain the prior v2 rows/events/report across NONE/FULL debug; neither supplies positive closure, and their effective masks exclude the endpoint band. Local checks do not access private Windows media or qualify the configured top as the physical exit. Earlier RGB/initial-FULL/cost-first results retain their scope. No fit, new label, model download or physical acceptance is part of local verification.
-- Difference from prior failures: top-exit closure requires an actually selected mature owner reaching the configured top, followed immediately by usable unopposed absence. It cannot repeat the initial prior, promote an unselected candidate, copy a coordinate, relax a drain gate or turn ordinary mid-height loss into FULL. Numeric selection and the rejected three mechanisms are unchanged; the later 721 s identity investigation remains separate.
-- Logic-map impact: UPDATED — map the default-OFF top-exit launch route, post-selection lifecycle seam, typed temporal state evidence and coordinate-free sample validity. Default numeric selection, initial-FULL v2 and independent Foam owners remain.
-- Failure-registry impact: UPDATED — F05 distinguishes bounded selected-owner top-exit state evidence from the prohibited prior-only or disappearance-only FULL fallback. F08/F09/F10 guards remain applicable; no field success is claimed.
+- Existing feature coverage: this clarification reuses the frozen A1/public original raster, visibility masks, O1 path/center bands and exact candidate provenance. Source review follows retained diagnostic paths through phase_candidate_assembler and phase_frame_detection to oil_interface_diagnostics, then contrasts the scalar authority consumer. Existing Recipe, Artifact/static/motion and all comparison options are unchanged; earlier top-exit/RGB/IFO scopes remain in their result owners.
+- Execution scope: the linked frozen 7ee6d90 diagnostic joins 187 units and 85 directed contributions and independently checks 4,136 band references; 92 focused tests pass. No pair has both captured native paths, so common-native physical comparison is not assessable. This design update selects no algorithm, fits no model and changes no production, sequence, report or private Windows execution.
+- Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited.
+- Logic-map impact: NONE — source review confirms the existing diagnostic path and scalar authority routes; no setup, runtime owner, consumer or control-flow edge changes in this clarification.
+- Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair.
