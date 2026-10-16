@@ -1674,4 +1674,6 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 
 | 최초 Git 추가일 | 문서 | 구분 |
 |---|---|---|
-| 2026-10-16 / 미등록 | [2026-10-16-profile-witness-consumer.md](50-diagnostics/s11/2026-10-16-profile-witness-consumer.md) | 행 분리 검증으로 비교하는 두 픽셀 모델과 전체 sequence/report 개입; 물리 역할 미검증 |
+| 2026-10-16 | [2026-10-16-profile-witness-consumer.md](50-diagnostics/s11/2026-10-16-profile-witness-consumer.md) | 행 분리 검증으로 비교하는 두 픽셀 모델과 전체 sequence/report 개입; 물리 역할 미검증 |
+| 2026-10-16 | [2026-10-16-profile-witness-consumer/summary.json](50-diagnostics/s11/2026-10-16-profile-witness-consumer/summary.json) | 7조건 전체 분모·실제 report 맥락·독립 검산 및 보존 해시 |
+| 2026-10-16 | [2026-10-16-profile-witness-handoff.md](60-evidence/s11/2026-10-16-profile-witness-handoff.md) | 픽셀 가설 반복 검증·비채택 사유·재현·재개 경계 |

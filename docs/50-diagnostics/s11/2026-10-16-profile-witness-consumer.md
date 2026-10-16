@@ -153,7 +153,7 @@ A successor must add a different, qualified boundary/side-role observation and
 explain coherent consumer ownership, rather than increasing slope freedom,
 changing the window/cutoff or granting anchor authority to a profile preference.
 Keep RCI-1's positive/negative oracle feasibility as a diagnostic upper bound, not
-an deployable fallback. FULL, independent Foam-front qualification and actual
+a deployable fallback. FULL, independent Foam-front qualification and actual
 report-only acceptance remain separate; no fourth Windows comparison is queued.
 
 Reproduction, compact machine summary, retention and final tests are recorded in

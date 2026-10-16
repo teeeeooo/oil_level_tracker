@@ -1,0 +1,1015 @@
+{
+  "schema": "s11-profile-witness-closeout-v1",
+  "frozen_head": "9c77abae2b1f2165a7dc70ba067e85ceb75949bc",
+  "verdict": "CLOSED_WITHOUT_PROMOTION",
+  "production_changed": false,
+  "windows": "NOT_RUN",
+  "report_comprehension": "NOT_HUMAN_EVALUATED",
+  "sample4_frames": 113,
+  "sample4_oil_candidates": 2549,
+  "screened_oil_candidates": 175,
+  "screen_source_counts": {
+    "sample4": 153,
+    "public": 22
+  },
+  "screen_summary": {
+    "H1": {
+      "ACCEPTED": {
+        "JUMP_PREFERRED": 8,
+        "UNKNOWN": 1,
+        "CORNER_PREFERRED": 2
+      },
+      "OPPOSED": {
+        "JUMP_PREFERRED": 2,
+        "CORNER_PREFERRED": 4,
+        "UNKNOWN": 1
+      },
+      "UNASSESSED": {
+        "UNKNOWN": 41,
+        "CORNER_PREFERRED": 69,
+        "JUMP_PREFERRED": 47
+      }
+    },
+    "H2": {
+      "ACCEPTED": {
+        "JUMP_PREFERRED": 11
+      },
+      "OPPOSED": {
+        "JUMP_PREFERRED": 7
+      },
+      "UNASSESSED": {
+        "UNKNOWN": 24,
+        "JUMP_PREFERRED": 133
+      }
+    }
+  },
+  "verification": {
+    "schema": "s11-profile-witness-verification-v2",
+    "status": "PASS",
+    "mismatches": 0,
+    "storage_aliases_verified": 5,
+    "verifier_code_sha256": "80fa254775dc0404bbd14f3a5b421db8cc9ee1b64eafd9e9476754f7f4bb15cb",
+    "sampled_source_frames": 113,
+    "sample4_candidates": 2549,
+    "screened_candidates": 175,
+    "pixel_arithmetic": {
+      "profile_count": 6234,
+      "pixel_references": 2164608
+    },
+    "variants": {
+      "baseline": {
+        "rows": 113,
+        "numeric_source_joins": 101,
+        "authority_calls": 2549,
+        "promotions": 0,
+        "member_vetoes": 0,
+        "events": 29,
+        "extrema": 2
+      },
+      "H1_negative_member_veto": {
+        "rows": 113,
+        "numeric_source_joins": 71,
+        "authority_calls": 2549,
+        "promotions": 0,
+        "member_vetoes": 950,
+        "events": 31,
+        "extrema": 2
+      },
+      "H1_positive_authority_only": {
+        "rows": 113,
+        "numeric_source_joins": 85,
+        "authority_calls": 2549,
+        "promotions": 941,
+        "member_vetoes": 0,
+        "events": 27,
+        "extrema": 2
+      },
+      "H1_negative_veto_positive_authority": {
+        "rows": 113,
+        "numeric_source_joins": 103,
+        "authority_calls": 2549,
+        "promotions": 949,
+        "member_vetoes": 950,
+        "events": 32,
+        "extrema": 2
+      },
+      "H2_negative_member_veto": {
+        "rows": 113,
+        "numeric_source_joins": 101,
+        "authority_calls": 2549,
+        "promotions": 0,
+        "member_vetoes": 10,
+        "events": 29,
+        "extrema": 2
+      },
+      "H2_positive_authority_only": {
+        "rows": 113,
+        "numeric_source_joins": 86,
+        "authority_calls": 2549,
+        "promotions": 2014,
+        "member_vetoes": 0,
+        "events": 26,
+        "extrema": 2
+      },
+      "H2_negative_veto_positive_authority": {
+        "rows": 113,
+        "numeric_source_joins": 86,
+        "authority_calls": 2549,
+        "promotions": 2014,
+        "member_vetoes": 10,
+        "events": 26,
+        "extrema": 2
+      }
+    },
+    "claim": "Original-pixel arithmetic, row-held-out fit, intervention scope and publication provenance; not physical accuracy or human comprehension."
+  },
+  "focused_tests": {
+    "passed": 213,
+    "failed": 0,
+    "source": "tests-retention.log"
+  },
+  "baseline_full_equal": true,
+  "variants": [
+    {
+      "variant": "baseline",
+      "numeric_oil": 101,
+      "valid_oil": 101,
+      "numeric_foam": 26,
+      "valid_foam": 26,
+      "review_status_counts": {
+        "NO_NUMERIC_OIL": 12,
+        "UNASSESSED_SELECTION": 95,
+        "PHYSICAL_CORRESPONDENCE": 3,
+        "REVIEWED_OPPOSED": 3
+      },
+      "extrema": [
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 1260,
+          "time_sec": 42.0,
+          "y": 868.0,
+          "review_status": "REVIEWED_OPPOSED",
+          "selected": {
+            "candidate_offset": 15,
+            "source": "calibrated_high_recall",
+            "y": 868.0,
+            "tracklet_id": "oil-tracklet:000079:0014",
+            "row_hypothesis_id": "oil-row:000084:003"
+          }
+        },
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1320,
+          "time_sec": 44.0,
+          "y": 822.0,
+          "review_status": "REVIEWED_OPPOSED",
+          "selected": {
+            "candidate_offset": 21,
+            "source": "phase_transition_scan",
+            "y": 822.0,
+            "tracklet_id": "oil-tracklet:000084:0017",
+            "row_hypothesis_id": "oil-row:000088:001"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0
+        },
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 39.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 41.5,
+          "last_sample_sec": 41.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 43.0,
+          "last_sample_sec": 43.5,
+          "sample_count": 2,
+          "sampled_span_sec": 0.5
+        },
+        {
+          "start_sec": 50.0,
+          "last_sample_sec": 51.5,
+          "sample_count": 4,
+          "sampled_span_sec": 1.5
+        },
+        {
+          "start_sec": 54.0,
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        }
+      ],
+      "foam_changed_frames": [],
+      "original_physical_controls_preserved": [
+        38.0,
+        42.5,
+        52.0
+      ],
+      "physical_controls_recovered": [],
+      "changed_selection_count": 0,
+      "report_movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+    },
+    {
+      "variant": "H1_negative_member_veto",
+      "numeric_oil": 71,
+      "valid_oil": 71,
+      "numeric_foam": 26,
+      "valid_foam": 26,
+      "review_status_counts": {
+        "UNASSESSED_SELECTION": 71,
+        "NO_NUMERIC_OIL": 42
+      },
+      "extrema": [
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 825,
+          "time_sec": 27.5,
+          "y": 867.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 21,
+            "source": "phase_transition_scan",
+            "y": 867.0,
+            "tracklet_id": "oil-tracklet:000000:0002",
+            "row_hypothesis_id": "oil-row:000055:002"
+          }
+        },
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1065,
+          "time_sec": 35.5,
+          "y": 822.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 19,
+            "source": "phase_transition_scan",
+            "y": 822.0,
+            "tracklet_id": "oil-tracklet:000000:0002",
+            "row_hypothesis_id": "oil-row:000071:001"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 2.5,
+          "last_sample_sec": 2.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 36.0,
+          "last_sample_sec": 56.0,
+          "sample_count": 41,
+          "sampled_span_sec": 20.0
+        }
+      ],
+      "foam_changed_frames": [],
+      "original_physical_controls_preserved": [],
+      "physical_controls_recovered": [],
+      "changed_selection_count": 50,
+      "report_movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 0.0초 -9.0 px, 마지막 관측은 35.5초 +28.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 35.5초 +28.0 px, 관측 최저는 27.5초 -17.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+    },
+    {
+      "variant": "H1_positive_authority_only",
+      "numeric_oil": 85,
+      "valid_oil": 85,
+      "numeric_foam": 25,
+      "valid_foam": 25,
+      "review_status_counts": {
+        "UNASSESSED_SELECTION": 84,
+        "NO_NUMERIC_OIL": 28,
+        "PHYSICAL_CORRESPONDENCE": 1
+      },
+      "extrema": [
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1245,
+          "time_sec": 41.5,
+          "y": 833.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 18,
+            "source": "phase_transition_scan",
+            "y": 833.0,
+            "tracklet_id": "oil-tracklet:000072:0014",
+            "row_hypothesis_id": "oil-row:000083:000"
+          }
+        },
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 1275,
+          "time_sec": 42.5,
+          "y": 864.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 10,
+            "source": "material_path",
+            "y": 864.0,
+            "tracklet_id": "oil-tracklet:000079:0020",
+            "row_hypothesis_id": "oil-row:000085:003"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 4.5,
+          "last_sample_sec": 4.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 39.0,
+          "last_sample_sec": 39.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 42.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 44.0,
+          "last_sample_sec": 56.0,
+          "sample_count": 25,
+          "sampled_span_sec": 12.0
+        }
+      ],
+      "foam_changed_frames": [
+        1185
+      ],
+      "original_physical_controls_preserved": [
+        38.0
+      ],
+      "physical_controls_recovered": [],
+      "changed_selection_count": 48,
+      "report_movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 0.0초 -9.0 px, 마지막 관측은 43.5초 +15.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 41.5초 +17.0 px, 관측 최저는 42.5초 -14.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+    },
+    {
+      "variant": "H1_negative_veto_positive_authority",
+      "numeric_oil": 103,
+      "valid_oil": 102,
+      "numeric_foam": 26,
+      "valid_foam": 25,
+      "review_status_counts": {
+        "UNASSESSED_SELECTION": 100,
+        "NO_NUMERIC_OIL": 10,
+        "PHYSICAL_CORRESPONDENCE": 3
+      },
+      "extrema": [
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1170,
+          "time_sec": 39.0,
+          "y": 821.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 14,
+            "source": "calibrated_high_recall",
+            "y": 821.0,
+            "tracklet_id": "oil-tracklet:000000:0002",
+            "row_hypothesis_id": "oil-row:000078:001"
+          }
+        },
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 1425,
+          "time_sec": 47.5,
+          "y": 881.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 9,
+            "source": "material_path",
+            "y": 881.0,
+            "tracklet_id": "oil-tracklet:000095:0040",
+            "row_hypothesis_id": "oil-row:000095:004"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 2.5,
+          "last_sample_sec": 3.0,
+          "sample_count": 2,
+          "sampled_span_sec": 0.5
+        },
+        {
+          "start_sec": 35.5,
+          "last_sample_sec": 35.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 37.5,
+          "last_sample_sec": 37.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 40.0,
+          "last_sample_sec": 40.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 42.5,
+          "last_sample_sec": 43.0,
+          "sample_count": 2,
+          "sampled_span_sec": 0.5
+        },
+        {
+          "start_sec": 47.0,
+          "last_sample_sec": 47.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 50.5,
+          "last_sample_sec": 50.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 51.5,
+          "last_sample_sec": 51.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        }
+      ],
+      "foam_changed_frames": [
+        1185
+      ],
+      "original_physical_controls_preserved": [
+        38.0,
+        52.0
+      ],
+      "physical_controls_recovered": [
+        44.0
+      ],
+      "changed_selection_count": 54,
+      "report_movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 0.0초 -9.0 px, 마지막 관측은 56.0초 -14.0 px입니다. 양 끝 관측 높이를 비교하면 낮아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 39.0초 +29.0 px, 관측 최저는 47.5초 -31.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+    },
+    {
+      "variant": "H2_negative_member_veto",
+      "numeric_oil": 101,
+      "valid_oil": 101,
+      "numeric_foam": 26,
+      "valid_foam": 26,
+      "review_status_counts": {
+        "NO_NUMERIC_OIL": 12,
+        "UNASSESSED_SELECTION": 95,
+        "PHYSICAL_CORRESPONDENCE": 3,
+        "REVIEWED_OPPOSED": 3
+      },
+      "extrema": [
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 1260,
+          "time_sec": 42.0,
+          "y": 868.0,
+          "review_status": "REVIEWED_OPPOSED",
+          "selected": {
+            "candidate_offset": 15,
+            "source": "calibrated_high_recall",
+            "y": 868.0,
+            "tracklet_id": "oil-tracklet:000079:0014",
+            "row_hypothesis_id": "oil-row:000084:003"
+          }
+        },
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1320,
+          "time_sec": 44.0,
+          "y": 822.0,
+          "review_status": "REVIEWED_OPPOSED",
+          "selected": {
+            "candidate_offset": 21,
+            "source": "phase_transition_scan",
+            "y": 822.0,
+            "tracklet_id": "oil-tracklet:000084:0017",
+            "row_hypothesis_id": "oil-row:000088:001"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0
+        },
+        {
+          "start_sec": 39.5,
+          "last_sample_sec": 39.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 41.5,
+          "last_sample_sec": 41.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 43.0,
+          "last_sample_sec": 43.5,
+          "sample_count": 2,
+          "sampled_span_sec": 0.5
+        },
+        {
+          "start_sec": 50.0,
+          "last_sample_sec": 51.5,
+          "sample_count": 4,
+          "sampled_span_sec": 1.5
+        },
+        {
+          "start_sec": 54.0,
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        }
+      ],
+      "foam_changed_frames": [],
+      "original_physical_controls_preserved": [
+        38.0,
+        42.5,
+        52.0
+      ],
+      "physical_controls_recovered": [],
+      "changed_selection_count": 0,
+      "report_movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다."
+    },
+    {
+      "variant": "H2_positive_authority_only",
+      "numeric_oil": 86,
+      "valid_oil": 84,
+      "numeric_foam": 23,
+      "valid_foam": 21,
+      "review_status_counts": {
+        "NO_NUMERIC_OIL": 27,
+        "UNASSESSED_SELECTION": 84,
+        "PHYSICAL_CORRESPONDENCE": 2
+      },
+      "extrema": [
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 15,
+          "time_sec": 0.5,
+          "y": 858.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 10,
+            "source": "material_path",
+            "y": 858.0,
+            "tracklet_id": "oil-tracklet:000001:0000",
+            "row_hypothesis_id": "oil-row:000001:000"
+          }
+        },
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1185,
+          "time_sec": 39.5,
+          "y": 830.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 19,
+            "source": "phase_transition_scan",
+            "y": 830.0,
+            "tracklet_id": "oil-tracklet:000013:0006",
+            "row_hypothesis_id": "oil-row:000079:001"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 0.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 6.5,
+          "last_sample_sec": 6.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 7.5,
+          "last_sample_sec": 7.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 18.0,
+          "last_sample_sec": 18.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 42.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 44.5,
+          "last_sample_sec": 44.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 56.0,
+          "sample_count": 21,
+          "sampled_span_sec": 10.0
+        }
+      ],
+      "foam_changed_frames": [
+        1185,
+        1200,
+        1335,
+        1350,
+        1380
+      ],
+      "original_physical_controls_preserved": [
+        38.0
+      ],
+      "physical_controls_recovered": [
+        44.0
+      ],
+      "changed_selection_count": 43,
+      "report_movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 0.5초 -8.0 px, 마지막 관측은 45.5초 +7.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 39.5초 +20.0 px, 관측 최저는 0.5초 -8.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 2회입니다."
+    },
+    {
+      "variant": "H2_negative_veto_positive_authority",
+      "numeric_oil": 86,
+      "valid_oil": 84,
+      "numeric_foam": 23,
+      "valid_foam": 21,
+      "review_status_counts": {
+        "NO_NUMERIC_OIL": 27,
+        "UNASSESSED_SELECTION": 84,
+        "PHYSICAL_CORRESPONDENCE": 2
+      },
+      "extrema": [
+        {
+          "event": "MINIMUM_OIL_LEVEL",
+          "frame_index": 15,
+          "time_sec": 0.5,
+          "y": 858.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 10,
+            "source": "material_path",
+            "y": 858.0,
+            "tracklet_id": "oil-tracklet:000001:0000",
+            "row_hypothesis_id": "oil-row:000001:000"
+          }
+        },
+        {
+          "event": "MAXIMUM_OIL_LEVEL",
+          "frame_index": 1185,
+          "time_sec": 39.5,
+          "y": 830.0,
+          "review_status": "UNASSESSED_SELECTION",
+          "selected": {
+            "candidate_offset": 19,
+            "source": "phase_transition_scan",
+            "y": 830.0,
+            "tracklet_id": "oil-tracklet:000013:0006",
+            "row_hypothesis_id": "oil-row:000079:001"
+          }
+        }
+      ],
+      "missing_oil_runs": [
+        {
+          "start_sec": 0.0,
+          "last_sample_sec": 0.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 6.5,
+          "last_sample_sec": 6.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 7.5,
+          "last_sample_sec": 7.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 18.0,
+          "last_sample_sec": 18.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 42.0,
+          "last_sample_sec": 42.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 44.5,
+          "last_sample_sec": 44.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0
+        },
+        {
+          "start_sec": 46.0,
+          "last_sample_sec": 56.0,
+          "sample_count": 21,
+          "sampled_span_sec": 10.0
+        }
+      ],
+      "foam_changed_frames": [
+        1185,
+        1200,
+        1335,
+        1350,
+        1380
+      ],
+      "original_physical_controls_preserved": [
+        38.0
+      ],
+      "physical_controls_recovered": [
+        44.0
+      ],
+      "changed_selection_count": 43,
+      "report_movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 0.5초 -8.0 px, 마지막 관측은 45.5초 +7.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 39.5초 +20.0 px, 관측 최저는 0.5초 -8.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 2회입니다."
+    }
+  ],
+  "reviewed_inputs": [
+    {
+      "id": "s4-f1140-idx7",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "UNASSESSED",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "JUMP_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1140-idx9",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "JUMP_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1140-idx10",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "UNASSESSED",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "CORNER_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1140-idx22",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "UNASSESSED",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "CORNER_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1200-idx4",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "JUMP_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1200-idx10",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "OPPOSED_OIL_TARGET",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "JUMP_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1260-idx4",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "JUMP_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1260-idx15",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "OPPOSED_OIL_TARGET",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "CORNER_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1275-idx12",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "JUMP_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1320-idx9",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "JUMP_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1320-idx21",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "OPPOSED_OIL_TARGET",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "UNKNOWN",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1485-idx8",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "NOT_QUALIFIED",
+        "practical": "ACCEPTED_APPROXIMATION"
+      },
+      "preferences": {
+        "H1": "UNKNOWN",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "s4-f1560-idx20",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "preferences": {
+        "H1": "JUMP_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "public-f1499-idx3",
+      "review_label": "OPPOSED",
+      "label_basis": "WRONG_CURRENT_PUBLISHED_SCALAR",
+      "preferences": {
+        "H1": "CORNER_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "public-f1499-idx5",
+      "review_label": "ACCEPTED",
+      "label_basis": "PRACTICAL_ACCEPTANCE",
+      "preferences": {
+        "H1": "CORNER_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "public-f1499-idx9",
+      "review_label": "ACCEPTED",
+      "label_basis": "PRACTICAL_ACCEPTANCE",
+      "preferences": {
+        "H1": "JUMP_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "public-f1499-idx13",
+      "review_label": "ACCEPTED",
+      "label_basis": "PRACTICAL_ACCEPTANCE",
+      "preferences": {
+        "H1": "JUMP_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    },
+    {
+      "id": "public-f1499-idx20",
+      "review_label": "ACCEPTED",
+      "label_basis": "PRACTICAL_ACCEPTANCE",
+      "preferences": {
+        "H1": "CORNER_PREFERRED",
+        "H2": "JUMP_PREFERRED"
+      }
+    }
+  ],
+  "native_artifacts": {
+    "comparison.json": {
+      "path": "sample/output/s11-profile-witness-20261016-001/evidence/comparison.json",
+      "sha256": "a0515c9aaa7e572f7dc0c2d0d48f884d34e27820b05359044e9ed9429f23af24",
+      "bytes": 5138025
+    },
+    "measurements.json.gz": {
+      "path": "sample/output/s11-profile-witness-20261016-001/evidence/measurements.json.gz",
+      "sha256": "a97cd30fa32b77e4542adf7162dfb32a06e8b58c30c929426017b4485a8414ec",
+      "bytes": 2161792
+    },
+    "readout.json.gz": {
+      "path": "sample/output/s11-profile-witness-20261016-001/evidence/readout.json.gz",
+      "sha256": "bd3ac4ca8b147318f4ec6e8eb1d30507ca0f20fd91d00212a737a00fb5ec041f",
+      "bytes": 685167
+    },
+    "verification.json": {
+      "path": "sample/output/s11-profile-witness-20261016-001/evidence/verification.json",
+      "sha256": "cc13a274f663c4aaf84d7a71102838a088e9a9daf1334764ee3c1d069942058f",
+      "bytes": 1963
+    },
+    "verification-storage.json": {
+      "path": "sample/output/s11-profile-witness-20261016-001/evidence/verification-storage.json",
+      "sha256": "b2ee7b5ffd014df77204f1e7f23ae76a2d3628b3765de935abc7a0523fdd824e",
+      "bytes": 2090
+    },
+    "artifact-aliases.json": {
+      "path": "sample/output/s11-profile-witness-20261016-001/evidence/artifact-aliases.json",
+      "sha256": "ec62167e96d98637ad9acd90b07f386792152611babdbd8fa684fae05b8acaec",
+      "bytes": 1548
+    },
+    "tests-retention.log": {
+      "path": "sample/output/s11-profile-witness-20261016-001/evidence/tests-retention.log",
+      "sha256": "e9967a36f7c7793b98dd20f6d30a1f07a2f8a3a5bfc2d5bfb5e3ca7673ed0e02",
+      "bytes": 260
+    }
+  },
+  "interpretation": {
+    "H1_input": "All six physical sample4 correspondences prefer jump, but two reviewed non-targets also do.",
+    "H1_combined": "Recovers44s and preserves38/52s; loses42.5s and introduces unassessed 39s maximum/47.5s minimum and lower plateau. No integrated gain.",
+    "H2": "All11 accepted and all7 opposed prefer discontinuity. Positive consumer loses46-56s Oil and splits reported Foam into two episodes.",
+    "not_an_edge_case_rejection": true,
+    "next_boundary": "No profile-window/degree/cutoff retry or generic anchor promotion. A distinct qualified boundary/side-role observation must support coherent member/history/owner consumption."
+  },
+  "storage_verifier_head": "7917c1ea62d4e64932d2c56501a35fb1c5130534",
+  "post_closeout_checks": {
+    "v2_receipt_equal": true,
+    "managed_runs": 88,
+    "managed_errors": 0,
+    "kept_files": 24,
+    "retained_payload_bytes": 8727329,
+    "discarded_files": 15,
+    "source_frame_foam_candidate_membership_rows": 175,
+    "report_image_links": 7
+  }
+}
