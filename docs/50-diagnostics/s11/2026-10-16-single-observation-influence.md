@@ -121,3 +121,89 @@ before claiming even local benefit. No production or Windows qualification.
 - Execution scope: tests/diagnostics performs exhaustive single-frame eligibility interventions through the current completed resolver, samples/events and report presentation; selected representatives additionally execute real CSV and graph rendering. Original pixel atlases are inspected. No private Windows replay, raw pixel model, whole-recording physical truth, Recipe judgment, GUI/full report-source generation or independent user reading.
 - Logic-map impact: NONE — diagnostic-only counterfactuals at existing admission fields; no production responsibility, default or call route changes.
 - Failure-registry impact: NONE — current identity/lifecycle/coupling/provenance classes cover the measured sensitivity; no blanket rejection or new physical-role mechanism.
+
+## Results and decisions
+
+**SOI-1 is COMPLETE / CLOSED WITHOUT PRODUCTION PROMOTION.** Three predeclared
+rounds test six hypotheses. The primary denominator is 245 single-time eligibility
+withdrawals, not 245 videos or independent physical experiments. Including baseline,
+causal replays and H6 controls, 287 completed-window records contain 32,431 sampled
+rows. This is sensitivity and causal attribution, not detector accuracy or a human
+report-comprehension pass. Production `src/`, defaults, Recipe and truth are unchanged.
+
+| Primary condition | Cases | No Oil-coordinate change outside intervention time | Largest other-time Oil change | Cases changing Foam coordinates |
+|---|---:|---:|---:|---:|
+| Selected Oil member removed | 101 | 84 | 28 samples | 0 |
+| All Oil members at one time removed | 113 | 69 | 21 samples | 4 |
+| Raw Foam eligibility at one time removed | 31 | 21 | 21 samples | 26 |
+
+These counts are not a pass/fail accuracy score. An unchanged baseline can already
+be physically wrong; a small changed value or short gap can still communicate the
+movement adequately. The priority is large propagated context loss, not making all
+101/113/31 cases point-local.
+
+Baseline has 101 numeric Oil and 26 numeric Foam samples. At 42.5 s, withdrawing the
+reviewed Oil member f1275/idx12/Y835 changes 28 other Oil samples and removes every
+numeric Oil output from 44 through 56 s: 25 sampled points across a 12-second span.
+Oil count becomes 84; the last reported Oil observation moves to 43.5 s. Foam stays
+unchanged. The existing 52 s positive is collateral loss, not the injected miss.
+
+All-Oil loss at 44 s increases numeric coverage to 104 while changing report extrema
+from baseline +28/-18 px to +45/-32 px. More output is not evidence of better context;
+the new extrema are unassessed selections, not newly established physical peaks.
+Raw-Foam loss at 40 s changes Oil to 100 numeric samples and Foam to 22. In addition
+to the injected 40 s point, Foam loses 44.5, 45 and 46 s; the displayed episode count
+changes from one to two. These outputs were inspected as actual rendered graphs,
+not inferred from counts alone. All four existing original sample4 source atlases
+were visually revisited, without generating new physical labels.
+
+| Follow-up hypothesis | Execution | Result and interpretation |
+|---|---|---|
+| H4: final Foam episode input versus raw material context | All 31 losses repeated after unchanged Oil resolution | Oil unchanged in 31/31; Foam point-local in 25/31. Six still split report episodes. At 40 s specifically, only the injected Foam point is lost and the original single episode remains. The early cross-series effect is not a final renderer defect. |
+| H5: final consumption versus rebuilt tracking history | Two selected representatives removed after original tracklet construction | Both lose only the intervened Oil point, with 100 Oil/26 Foam samples and zero other-time coordinate changes. Original history is counterfactually retained, so this is NOT a valid production remedy. |
+| H6: newly admitted Y818 backfill is necessary for the long gap | Four complete windows; remove the newly admitted member, rebuild all later stages | The 44–56 s gap remains. Both Oil and Foam coordinates equal the original selected-loss run; CSV/events and both graphs are byte-identical. Whole-Oil negative control also exactly reproduces its original result. A Y818/source-specific exclusion is not supported. |
+
+## Causal boundary, not a blanket repair
+
+The selected-member loss removes admitted idx12/Y835 and admits idx17/Y818 at the
+same frame. H6 rules out that extra member as necessary for the observed long loss.
+Recurrence rerating and directed-track confirmation fields then differ; subsequent
+phase decisions enter `FILL_SPAN_MATERIAL_VETO` at 44 s and `FILLED_CAP_VETO` thereafter.
+That internal `filled_barrier` is NOT verified physical FULL. H5 places the measured
+amplification before/through rebuilt track history and phase consumption, but does
+not uniquely separate recurrence from association/confirmation or establish a safe
+replacement policy. Track ID renumbering alone is explicitly excluded from movement
+change claims. For raw Foam, changed same-frame alias/material-identity admission
+feeds altered Oil history before final Foam alias/episode consumption.
+
+## Verification and scope
+
+Primary independent verification covers 27,798 rows, 24,672 exact Oil source/index/Y
+joins, 6,343 same-frame Foam memberships, 7,135 event joins and 452 complete CSV
+rows. Stage verification covers 4,181 rows, 1,103 events, 38,607 stage-member joins
+and 339 complete CSV rows. H6 checks 452 rows, 118 events, 7,346 admitted-ref joins
+and 113 CSV identity/coordinate rows. All report zero mismatches. Same-Y Foam
+membership is not a unique-candidate identity proof, nor are any joins physical truth.
+
+Post-close verification successfully reads retained hash aliases. The historical
+stage and H6 receipts keep their original verifier hashes; the current alias-aware
+verifier has a later hash. Only that hash differs from their recomputed receipts:
+all measurements/counts/stage differences agree. Preserve both in the tracked
+[compact summary](2026-10-16-single-observation-influence/summary.json), rather than
+rewriting closed evidence. Earlier attempts to refresh the open receipts were
+rejected by the exclusive-create JSON writer; no old receipt was overwritten.
+The first event-contract failure and typed v2 correction are separately retained.
+
+No fresh private Windows video was replayed. Existing [Windows comparisons and
+721 s intake](../../60-evidence/s11/2026-10-16-windows-comparison-checkpoint.md) and
+[nine reviewed segments](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
+remain external constraints, not new SOI physical test results. Preserve 004/005
+practical allowances, unreviewed 006 and Sample3 quarantine. FULL preflight remains
+failed / ⑧ not run; O2 remains OPEN / FIELD FAIL. No new field comparison is queued.
+
+The next bounded design must distinguish loss of an observation from affirmative
+material/state contradiction while preserving the existing physical-evidence and
+ambiguity guards. Do not deploy H5's frozen history, H6's oracle baseline membership,
+new Y/source vetoes, carry/interpolation, gate bypasses or report-only repairs.
+The [handoff](../../60-evidence/s11/2026-10-16-single-observation-handoff.md) owns the
+reproduction map and closeout evidence; Work Plan remains the current action owner.

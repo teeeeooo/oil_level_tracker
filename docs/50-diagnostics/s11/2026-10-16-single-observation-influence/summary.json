@@ -1,0 +1,896 @@
+{
+  "FULL": "INCOMPLETE_CONDITION_FAILED_NOT_RUN",
+  "O2": "OPEN",
+  "artifacts": {
+    "sample/output/s11-single-observation-20261016-001/evidence": {
+      "artifacts": {
+        "artifact-aliases.json": "15b6207268a56aeb5e4fb5428c94a075f2bf48f7248d71d361090e0a5984a4df",
+        "comparison.json": "f0e11d65700f711a5a46b240fd0d7f9400a3bb88cd766f39d8509a53a356bf67",
+        "population.jsonl.gz": "c46d87fb08fbf19307b5d7a4edc06779a267354e9422b5f45f4d5a33ac153925",
+        "preflight.json": "fb64ad5592e359f3a6c1a0c966bfafc9d654938f7030f1e678650e4cbe65f61e",
+        "review.html": "5b58288658be16738893ef318aaaea252c408a8dcac6bc0e3f4cf69196d369d6",
+        "verification-v1-failure.json": "8c33968e7b2e9e60713ba7ef1dc1d2f71c17f6990fe935879586362b524317cc",
+        "verification-v2.json": "6238b71ce45ae19abd06382d563cdc53e9b6c07ae7f3b938ce04f474ad4faa94"
+      },
+      "closed": true,
+      "kept_bytes": 5202127,
+      "kept_files": 26,
+      "manifest_sha256": "e4a40a094d86144cb1aa4c45d2cbc94227ee1ffa0d8a04e64186ba7826d21cfc"
+    },
+    "sample/output/s11-single-observation-backfill-20261016-001/evidence": {
+      "artifacts": {
+        "artifact-aliases.json": "9c16580b869384a605f085b1106c30a937aaa8e21b1bc0574e7c557ee85cd1eb",
+        "comparison.json": "f0f06d74c8853804d0b63d88ed7604f15742444d0e561ef1872b168120074e2b",
+        "preflight.json": "dcd22897910b9b1c2202be4e43eb0d2d9c8efa622dd8747f10f034e80fd74d28",
+        "readout.json.gz": "b0dff8561d5b69ea120262836a86c551b0587a0baa6beb69b3fe3aea46d11b4e",
+        "verification.json": "0f0d9d073eec9024572f69ea1f96555be8484861bc3df087131294da81efebb7"
+      },
+      "closed": true,
+      "kept_bytes": 663974,
+      "kept_files": 5,
+      "manifest_sha256": "00ec5ab30f98913c47100dfea101b94863d2475ccde436b0218327be8872af5a"
+    },
+    "sample/output/s11-single-observation-causality-20261016-001/evidence": {
+      "artifacts": {
+        "comparison.json": "b8777526f25c51122534653c623a25aee6b8de471d686332350627916d3e3402",
+        "preflight.json": "c7c962b4b93668ad04616e7a4b016fa82337f01750bf1c509cfcb0faf22ff109",
+        "readout.json.gz": "18ad16c64f3a0dc2eeaeb843243d36bbb4a41b9e29d373debc5b80984a720ea3",
+        "verification.json": "00efeb0bbf589570210214d0f3533fff0ee44ac6bdcd0dc7a3c2a9bb0c396b2e"
+      },
+      "closed": true,
+      "kept_bytes": 3082946,
+      "kept_files": 16,
+      "manifest_sha256": "3de997cc93b43ec055889fec1363fbc355583a2b93f90d556a01a98593c79f25"
+    }
+  },
+  "base_head": "74c05b8eaca2802f29dc84f2eb2705d7c63fc260",
+  "completed_window_records": 287,
+  "field_disposition": "FIELD_FAIL",
+  "followup": {
+    "backfill_cases": [
+      {
+        "case": null,
+        "extrema": [
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "oil_level_px": -18.0,
+            "start_time_sec": 42.0
+          },
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "oil_level_px": 28.0,
+            "start_time_sec": 44.0
+          }
+        ],
+        "foam_changed_elsewhere": 0,
+        "foam_landmarks": [
+          {
+            "end_time_sec": 53.0,
+            "event_type": "FOAM_START",
+            "timestamp_sec": 39.5
+          },
+          {
+            "end_time_sec": null,
+            "event_type": "FOAM_END",
+            "timestamp_sec": 53.5
+          }
+        ],
+        "foam_numeric": 26,
+        "id": "baseline",
+        "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다.",
+        "oil_changed_elsewhere": 0,
+        "oil_missing_runs": [
+          {
+            "last_sample_sec": 1.0,
+            "sample_count": 3,
+            "sampled_span_sec": 1.0,
+            "start_sec": 0.0
+          },
+          {
+            "last_sample_sec": 39.5,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 39.5
+          },
+          {
+            "last_sample_sec": 41.5,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 41.5
+          },
+          {
+            "last_sample_sec": 43.5,
+            "sample_count": 2,
+            "sampled_span_sec": 0.5,
+            "start_sec": 43.0
+          },
+          {
+            "last_sample_sec": 51.5,
+            "sample_count": 4,
+            "sampled_span_sec": 1.5,
+            "start_sec": 50.0
+          },
+          {
+            "last_sample_sec": 54.0,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 54.0
+          }
+        ],
+        "oil_numeric": 101
+      },
+      {
+        "case": {
+          "frame": 1275,
+          "index": 12,
+          "mode": "selected_oil"
+        },
+        "extrema": [
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "oil_level_px": -8.0,
+            "start_time_sec": 2.0
+          },
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "oil_level_px": 19.0,
+            "start_time_sec": 40.0
+          }
+        ],
+        "foam_changed_elsewhere": 0,
+        "foam_landmarks": [
+          {
+            "end_time_sec": 53.0,
+            "event_type": "FOAM_START",
+            "timestamp_sec": 39.5
+          },
+          {
+            "end_time_sec": null,
+            "event_type": "FOAM_END",
+            "timestamp_sec": 53.5
+          }
+        ],
+        "foam_numeric": 26,
+        "id": "original_selected_loss",
+        "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 43.5초 +15.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 40.0초 +19.0 px, 관측 최저는 2.0초 -8.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다.",
+        "oil_changed_elsewhere": 28,
+        "oil_missing_runs": [
+          {
+            "last_sample_sec": 1.0,
+            "sample_count": 3,
+            "sampled_span_sec": 1.0,
+            "start_sec": 0.0
+          },
+          {
+            "last_sample_sec": 42.0,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 42.0
+          },
+          {
+            "last_sample_sec": 56.0,
+            "sample_count": 25,
+            "sampled_span_sec": 12.0,
+            "start_sec": 44.0
+          }
+        ],
+        "oil_numeric": 84
+      },
+      {
+        "case": {
+          "frame": 1275,
+          "index": 12,
+          "mode": "selected_oil"
+        },
+        "extrema": [
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "oil_level_px": -8.0,
+            "start_time_sec": 2.0
+          },
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "oil_level_px": 19.0,
+            "start_time_sec": 40.0
+          }
+        ],
+        "foam_changed_elsewhere": 0,
+        "foam_landmarks": [
+          {
+            "end_time_sec": 53.0,
+            "event_type": "FOAM_START",
+            "timestamp_sec": 39.5
+          },
+          {
+            "end_time_sec": null,
+            "event_type": "FOAM_END",
+            "timestamp_sec": 53.5
+          }
+        ],
+        "foam_numeric": 26,
+        "id": "no_backfill_selected_loss",
+        "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 43.5초 +15.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 40.0초 +19.0 px, 관측 최저는 2.0초 -8.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다.",
+        "oil_changed_elsewhere": 28,
+        "oil_missing_runs": [
+          {
+            "last_sample_sec": 1.0,
+            "sample_count": 3,
+            "sampled_span_sec": 1.0,
+            "start_sec": 0.0
+          },
+          {
+            "last_sample_sec": 42.0,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 42.0
+          },
+          {
+            "last_sample_sec": 56.0,
+            "sample_count": 25,
+            "sampled_span_sec": 12.0,
+            "start_sec": 44.0
+          }
+        ],
+        "oil_numeric": 84
+      },
+      {
+        "case": {
+          "frame": 1320,
+          "index": null,
+          "mode": "all_oil"
+        },
+        "extrema": [
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "oil_level_px": 45.0,
+            "start_time_sec": 42.5
+          },
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "oil_level_px": -32.0,
+            "start_time_sec": 44.5
+          }
+        ],
+        "foam_changed_elsewhere": 0,
+        "foam_landmarks": [
+          {
+            "end_time_sec": 53.0,
+            "event_type": "FOAM_START",
+            "timestamp_sec": 39.5
+          },
+          {
+            "end_time_sec": null,
+            "event_type": "FOAM_END",
+            "timestamp_sec": 53.5
+          }
+        ],
+        "foam_numeric": 26,
+        "id": "no_backfill_whole_oil_control",
+        "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 42.5초 +45.0 px, 관측 최저는 44.5초 -32.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다.",
+        "oil_changed_elsewhere": 21,
+        "oil_missing_runs": [
+          {
+            "last_sample_sec": 1.0,
+            "sample_count": 3,
+            "sampled_span_sec": 1.0,
+            "start_sec": 0.0
+          },
+          {
+            "last_sample_sec": 42.0,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 42.0
+          },
+          {
+            "last_sample_sec": 44.0,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 44.0
+          },
+          {
+            "last_sample_sec": 45.5,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 45.5
+          },
+          {
+            "last_sample_sec": 47.0,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 47.0
+          },
+          {
+            "last_sample_sec": 50.5,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 50.5
+          },
+          {
+            "last_sample_sec": 54.0,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 54.0
+          }
+        ],
+        "oil_numeric": 104
+      }
+    ],
+    "backfill_removed_Y818_needed_for_gap": false,
+    "backfill_target_oil_and_foam_coordinates_equal_original_loss": true,
+    "late_foam_cases": 31,
+    "late_foam_no_other_foam_change": 25,
+    "late_foam_oil_unchanged": 31,
+    "late_foam_one_episode": 25,
+    "late_foam_two_episodes": 6,
+    "late_track_cases": [
+      {
+        "case": {
+          "frame": 1275,
+          "index": 12,
+          "mode": "selected_oil"
+        },
+        "extrema": [
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "oil_level_px": -18.0,
+            "start_time_sec": 42.0
+          },
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "oil_level_px": 28.0,
+            "start_time_sec": 44.0
+          }
+        ],
+        "foam_changed_elsewhere": 0,
+        "foam_landmarks": [
+          {
+            "end_time_sec": 53.0,
+            "event_type": "FOAM_START",
+            "timestamp_sec": 39.5
+          },
+          {
+            "end_time_sec": null,
+            "event_type": "FOAM_END",
+            "timestamp_sec": 53.5
+          }
+        ],
+        "foam_numeric": 26,
+        "id": "late_track__selected_oil-f001275",
+        "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다.",
+        "oil_changed_elsewhere": 0,
+        "oil_missing_runs": [
+          {
+            "last_sample_sec": 1.0,
+            "sample_count": 3,
+            "sampled_span_sec": 1.0,
+            "start_sec": 0.0
+          },
+          {
+            "last_sample_sec": 39.5,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 39.5
+          },
+          {
+            "last_sample_sec": 41.5,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 41.5
+          },
+          {
+            "last_sample_sec": 43.5,
+            "sample_count": 3,
+            "sampled_span_sec": 1.0,
+            "start_sec": 42.5
+          },
+          {
+            "last_sample_sec": 51.5,
+            "sample_count": 4,
+            "sampled_span_sec": 1.5,
+            "start_sec": 50.0
+          },
+          {
+            "last_sample_sec": 54.0,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 54.0
+          }
+        ],
+        "oil_numeric": 100
+      },
+      {
+        "case": {
+          "frame": 1320,
+          "index": null,
+          "mode": "all_oil"
+        },
+        "extrema": [
+          {
+            "event_type": "MINIMUM_OIL_LEVEL",
+            "oil_level_px": -18.0,
+            "start_time_sec": 42.0
+          },
+          {
+            "event_type": "MAXIMUM_OIL_LEVEL",
+            "oil_level_px": 21.0,
+            "start_time_sec": 52.5
+          }
+        ],
+        "foam_changed_elsewhere": 0,
+        "foam_landmarks": [
+          {
+            "end_time_sec": 53.0,
+            "event_type": "FOAM_START",
+            "timestamp_sec": 39.5
+          },
+          {
+            "end_time_sec": null,
+            "event_type": "FOAM_END",
+            "timestamp_sec": 53.5
+          }
+        ],
+        "foam_numeric": 26,
+        "id": "late_track__all_oil-f001320",
+        "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 52.5초 +21.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다.",
+        "oil_changed_elsewhere": 0,
+        "oil_missing_runs": [
+          {
+            "last_sample_sec": 1.0,
+            "sample_count": 3,
+            "sampled_span_sec": 1.0,
+            "start_sec": 0.0
+          },
+          {
+            "last_sample_sec": 39.5,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 39.5
+          },
+          {
+            "last_sample_sec": 41.5,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 41.5
+          },
+          {
+            "last_sample_sec": 44.0,
+            "sample_count": 3,
+            "sampled_span_sec": 1.0,
+            "start_sec": 43.0
+          },
+          {
+            "last_sample_sec": 51.5,
+            "sample_count": 4,
+            "sampled_span_sec": 1.5,
+            "start_sec": 50.0
+          },
+          {
+            "last_sample_sec": 54.0,
+            "sample_count": 1,
+            "sampled_span_sec": 0.0,
+            "start_sec": 54.0
+          }
+        ],
+        "oil_numeric": 100
+      }
+    ]
+  },
+  "frozen_heads": [
+    "e00dffb1a912320ac4fe8e6affd81514d48f95b6",
+    "30b1feaf99fa5b39d42cc147f2b831f507cd6e1d",
+    "bdcad30f1d343ceb9adaaa04a8e0e8b2272ed4d1"
+  ],
+  "hypotheses": 6,
+  "independent_report_comprehension": "NOT_EVALUATED",
+  "input_pins": {
+    "sample/output/s11-p5-default-linkage-20261011-001/none/completed.json": "f5b403ce9a061fca3bd4933a44bfdbcf83df0c95811222981a7105aa259870ca",
+    "sample/output/s11-p5-default-linkage-20261011-001/none/oil_level_analysis_Local_XY_fixed_comparison_sample4_20261011_224401/recipe_snapshot.oilrecipe": "655cfd926003589e93acc940bf0f5a8e34f15d12b834f509f9aab2d078e55d45",
+    "sample/output/s11-p5-default-linkage-20261011-001/none/oil_level_analysis_Local_XY_fixed_comparison_sample4_20261011_224401/session.json": "eb58a6f97e4d44ec2c6c9554ae28e7ba481f6e03e1c0b3d30ab8426cc70c0813",
+    "sample/output/s11-p5-default-linkage-20261011-001/none/raw.json": "399ca8a5d19c2fa26f01c4f24fd72870acd84f22747201d8006616265cc5936f",
+    "sample/output/s11-raster-partition-20261016-001/evidence/readout.json.gz": "5458e62d198a821056996fabe736b9510d4b699571cd5497f88006c67a4723fc"
+  },
+  "managed_runs_check": {
+    "errors": [],
+    "runs": 91
+  },
+  "physical_accuracy": "NOT_EVALUATED",
+  "post_close_verification": [
+    {
+      "differences": [],
+      "original_verifier_sha256": "4d5da2104b43aedf777f77765eef5840136347a11667da5c1a1362f32df5e4be",
+      "post_close": {
+        "csv_rows": 452,
+        "events": 7135,
+        "foam_memberships": 6343,
+        "input_and_source_hashes": 227,
+        "mismatches": 0,
+        "oil_joins": 24672,
+        "physical_accuracy": "NOT_EVALUATED",
+        "report_comprehension": "NOT_HUMAN_EVALUATED",
+        "rows": 27798,
+        "runs": 246,
+        "schema": "s11-single-observation-verification-v2",
+        "verifier_sha256": "4d5da2104b43aedf777f77765eef5840136347a11667da5c1a1362f32df5e4be"
+      },
+      "receipt": "sample/output/s11-single-observation-20261016-001/evidence/verification-v2.json"
+    },
+    {
+      "differences": [
+        "verifier_sha256"
+      ],
+      "original_verifier_sha256": "97c59276b28a4a26a88e7c7b09207dbcdeb2a92065013f199dff800fc627cc8f",
+      "post_close": {
+        "csv_rows": 339,
+        "early": 4,
+        "events": 1103,
+        "late_foam": 31,
+        "late_track": 2,
+        "mismatches": 0,
+        "rows": 4181,
+        "schema": "s11-single-observation-causal-verification-v1",
+        "scope": "Computational attribution and provenance, NOT physical accuracy or production-safe policy",
+        "stage_member_joins": 38607,
+        "verifier_sha256": "892869e27c8b1c887a3a571a2e02ab61d36f105e18d39afbd913371de6c31866"
+      },
+      "receipt": "sample/output/s11-single-observation-causality-20261016-001/evidence/verification.json"
+    },
+    {
+      "differences": [
+        "verifier_sha256"
+      ],
+      "original_verifier_sha256": "9b256b253c1e80a6e688acf9581a03849114323f3a05d492ca8f7c16ea0db778",
+      "post_close": {
+        "csv_rows": 113,
+        "events": 118,
+        "mismatches": 0,
+        "ref_joins": 7346,
+        "rows": 452,
+        "schema": "s11-single-observation-backfill-verification-v1",
+        "scope": "H6 intervention scope and saved outputs only",
+        "verifier_sha256": "892869e27c8b1c887a3a571a2e02ab61d36f105e18d39afbd913371de6c31866"
+      },
+      "receipt": "sample/output/s11-single-observation-backfill-20261016-001/evidence/verification.json"
+    }
+  ],
+  "primary_mode_summary": {
+    "all_foam": {
+      "cases": 31,
+      "foam_changed_cases": 26,
+      "maximum_other_foam_changes": 3,
+      "maximum_other_oil_changes": 21,
+      "no_nonlocal_oil_change": 21
+    },
+    "all_oil": {
+      "cases": 113,
+      "foam_changed_cases": 4,
+      "maximum_other_foam_changes": 3,
+      "maximum_other_oil_changes": 21,
+      "no_nonlocal_oil_change": 69
+    },
+    "selected_oil": {
+      "cases": 101,
+      "foam_changed_cases": 0,
+      "maximum_other_foam_changes": 0,
+      "maximum_other_oil_changes": 28,
+      "no_nonlocal_oil_change": 84
+    }
+  },
+  "primary_representatives": [
+    {
+      "case": null,
+      "extrema": [
+        {
+          "event_type": "MINIMUM_OIL_LEVEL",
+          "oil_level_px": -18.0,
+          "start_time_sec": 42.0
+        },
+        {
+          "event_type": "MAXIMUM_OIL_LEVEL",
+          "oil_level_px": 28.0,
+          "start_time_sec": 44.0
+        }
+      ],
+      "foam_changed_elsewhere": 0,
+      "foam_landmarks": [
+        {
+          "end_time_sec": 53.0,
+          "event_type": "FOAM_START",
+          "timestamp_sec": 39.5
+        },
+        {
+          "end_time_sec": null,
+          "event_type": "FOAM_END",
+          "timestamp_sec": 53.5
+        }
+      ],
+      "foam_numeric": 26,
+      "id": "baseline",
+      "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 44.0초 +28.0 px, 관측 최저는 42.0초 -18.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다.",
+      "oil_changed_elsewhere": 0,
+      "oil_missing_runs": [
+        {
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0,
+          "start_sec": 0.0
+        },
+        {
+          "last_sample_sec": 39.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 39.5
+        },
+        {
+          "last_sample_sec": 41.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 41.5
+        },
+        {
+          "last_sample_sec": 43.5,
+          "sample_count": 2,
+          "sampled_span_sec": 0.5,
+          "start_sec": 43.0
+        },
+        {
+          "last_sample_sec": 51.5,
+          "sample_count": 4,
+          "sampled_span_sec": 1.5,
+          "start_sec": 50.0
+        },
+        {
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 54.0
+        }
+      ],
+      "oil_numeric": 101
+    },
+    {
+      "case": {
+        "frame": 1275,
+        "index": 12,
+        "mode": "selected_oil"
+      },
+      "extrema": [
+        {
+          "event_type": "MINIMUM_OIL_LEVEL",
+          "oil_level_px": -8.0,
+          "start_time_sec": 2.0
+        },
+        {
+          "event_type": "MAXIMUM_OIL_LEVEL",
+          "oil_level_px": 19.0,
+          "start_time_sec": 40.0
+        }
+      ],
+      "foam_changed_elsewhere": 0,
+      "foam_landmarks": [
+        {
+          "end_time_sec": 53.0,
+          "event_type": "FOAM_START",
+          "timestamp_sec": 39.5
+        },
+        {
+          "end_time_sec": null,
+          "event_type": "FOAM_END",
+          "timestamp_sec": 53.5
+        }
+      ],
+      "foam_numeric": 26,
+      "id": "selected_oil-f001275",
+      "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 43.5초 +15.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 40.0초 +19.0 px, 관측 최저는 2.0초 -8.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다.",
+      "oil_changed_elsewhere": 28,
+      "oil_missing_runs": [
+        {
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0,
+          "start_sec": 0.0
+        },
+        {
+          "last_sample_sec": 42.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 42.0
+        },
+        {
+          "last_sample_sec": 56.0,
+          "sample_count": 25,
+          "sampled_span_sec": 12.0,
+          "start_sec": 44.0
+        }
+      ],
+      "oil_numeric": 84
+    },
+    {
+      "case": {
+        "frame": 1320,
+        "index": null,
+        "mode": "all_oil"
+      },
+      "extrema": [
+        {
+          "event_type": "MAXIMUM_OIL_LEVEL",
+          "oil_level_px": 45.0,
+          "start_time_sec": 42.5
+        },
+        {
+          "event_type": "MINIMUM_OIL_LEVEL",
+          "oil_level_px": -32.0,
+          "start_time_sec": 44.5
+        }
+      ],
+      "foam_changed_elsewhere": 0,
+      "foam_landmarks": [
+        {
+          "end_time_sec": 53.0,
+          "event_type": "FOAM_START",
+          "timestamp_sec": 39.5
+        },
+        {
+          "end_time_sec": null,
+          "event_type": "FOAM_END",
+          "timestamp_sec": 53.5
+        }
+      ],
+      "foam_numeric": 26,
+      "id": "all_oil-f001320",
+      "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 42.5초 +45.0 px, 관측 최저는 44.5초 -32.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 1회입니다.",
+      "oil_changed_elsewhere": 21,
+      "oil_missing_runs": [
+        {
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0,
+          "start_sec": 0.0
+        },
+        {
+          "last_sample_sec": 42.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 42.0
+        },
+        {
+          "last_sample_sec": 44.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 44.0
+        },
+        {
+          "last_sample_sec": 45.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 45.5
+        },
+        {
+          "last_sample_sec": 47.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 47.0
+        },
+        {
+          "last_sample_sec": 50.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 50.5
+        },
+        {
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 54.0
+        }
+      ],
+      "oil_numeric": 104
+    },
+    {
+      "case": {
+        "frame": 1200,
+        "index": null,
+        "mode": "all_foam"
+      },
+      "extrema": [
+        {
+          "event_type": "MINIMUM_OIL_LEVEL",
+          "oil_level_px": -16.0,
+          "start_time_sec": 50.5
+        },
+        {
+          "event_type": "MAXIMUM_OIL_LEVEL",
+          "oil_level_px": 21.0,
+          "start_time_sec": 53.0
+        }
+      ],
+      "foam_changed_elsewhere": 3,
+      "foam_landmarks": [
+        {
+          "end_time_sec": 44.0,
+          "event_type": "FOAM_START",
+          "timestamp_sec": 39.5
+        },
+        {
+          "end_time_sec": null,
+          "event_type": "FOAM_END",
+          "timestamp_sec": 44.5
+        },
+        {
+          "end_time_sec": 53.0,
+          "event_type": "FOAM_START",
+          "timestamp_sec": 46.5
+        },
+        {
+          "end_time_sec": null,
+          "event_type": "FOAM_END",
+          "timestamp_sec": 53.5
+        }
+      ],
+      "foam_numeric": 22,
+      "id": "all_foam-f001200",
+      "movement_summary": "관측 가능한 지점을 기준으로 첫 관측은 1.5초 -7.0 px, 마지막 관측은 56.0초 -1.0 px입니다. 양 끝 관측 높이를 비교하면 높아졌습니다. 분석 구간 중 상승과 하강이 모두 관측되었습니다. 관측 최고는 53.0초 +21.0 px, 관측 최저는 50.5초 -16.0 px입니다. 보고서에 표시한 주요 거품 관측 구간은 2회입니다.",
+      "oil_changed_elsewhere": 21,
+      "oil_missing_runs": [
+        {
+          "last_sample_sec": 1.0,
+          "sample_count": 3,
+          "sampled_span_sec": 1.0,
+          "start_sec": 0.0
+        },
+        {
+          "last_sample_sec": 44.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 44.5
+        },
+        {
+          "last_sample_sec": 49.0,
+          "sample_count": 6,
+          "sampled_span_sec": 2.5,
+          "start_sec": 46.5
+        },
+        {
+          "last_sample_sec": 50.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 50.0
+        },
+        {
+          "last_sample_sec": 52.5,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 52.5
+        },
+        {
+          "last_sample_sec": 54.0,
+          "sample_count": 1,
+          "sampled_span_sec": 0.0,
+          "start_sec": 54.0
+        }
+      ],
+      "oil_numeric": 100
+    }
+  ],
+  "production_changed": false,
+  "production_source_count": 222,
+  "production_source_map_sha256": "c0ecc67c743c0b30047b436fc956dc6e0c3602893dd09cd74b2e6669e9611cfb",
+  "recipe_changed": false,
+  "retained_bytes": 8949047,
+  "retained_files": 47,
+  "retired_own_work_files": 6,
+  "rounds": 3,
+  "sampled_rows_including_replays": 32431,
+  "schema": "s11-single-observation-closeout-v1",
+  "storage_alias_files_reused": 5,
+  "study": "SOI-1",
+  "tests": {
+    "command": "QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest -q tests/unit/test_s11_single_observation_influence.py tests/unit/test_s11_single_observation_causality.py tests/unit/test_s11_role_consumer_intervention.py tests/unit/test_oil_interface_tracklets.py tests/unit/test_foam_episode_resolver.py tests/unit/test_oil_observation_resolver.py tests/unit/test_report_presentation.py",
+    "duration_sec": 4.72,
+    "failed": 0,
+    "passed": 226,
+    "scope": "focused seven files, not complete test suite"
+  },
+  "truth_changed": false,
+  "verdict": "COMPLETE_CLOSED_WITHOUT_PRODUCTION_PROMOTION",
+  "windows_new_execution": false
+}
