@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE` — candidate-current, revision-neutral.
+**Status:** `ACTIVE PROCEDURE` — current comparisons and accounting CLOSED; no active Windows task.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -12,10 +12,11 @@ are CLOSED as **REGRESSION / NOT_ADOPTED**. The
 [returned Local XY comparison](../60-evidence/s11/2026-10-09-local-xy-implementation.md#windows-local-xy-result--2026-10-16)
 also closes the tested configuration without adoption: partial BASE suppression
 coexists with a reviewed replacement artifact and an allowed Accum observation
-loss. All three candidate runs are complete. The sole current Windows task is
-[saved-output accounting closeout](#priority-3-local-xy-saved-output-closeout);
-reuse existing CSV/reviews without another detector run. Review-006 remains
-unreviewed/pending. Cost-first/RGB/Local XY remain OFF outside retained trial data.
+loss. All three candidate runs and the
+[saved-output accounting closeout](#priority-3-local-xy-saved-output-closeout)
+are complete. No additional CSV extraction, image question or detector run is
+requested. The Work Plan returns the next-direction decision to the user.
+Review-006 remains unreviewed/pending. Cost-first/RGB/Local XY remain OFF outside retained trial data.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
@@ -48,8 +49,8 @@ candidate identity, not the retired comparison's commit or branch.
 
 ### October 15 first initial-FULL comparison
 
-**Completed historical procedure.** Cost-first and its bounded supplement also
-returned; RGB has since returned too. Use the priority 3 input handoff next.
+**Completed historical procedure.** All three subsequent candidate comparisons
+and their bounded accounting are also complete. Do not replay this handoff.
 
 This is the first exploratory OFF/ON comparison named by the Work Plan, before
 cost-first assignment, candidate RGB or Local XY. False positives are permitted
@@ -695,7 +696,7 @@ review-004/005의 사용자 판정과 복수 허용·대략적 일치를 재사�
 
 **완료 이력: review-007로 입력 준비 완료. 아래 준비 절차를 반복하지 않는다.**
 당시 실행은 다음 [Local XY comparison](#priority-3-local-xy-comparison)에 기록되어 있다.
-현재 작업은 [saved-output closeout](#priority-3-local-xy-saved-output-closeout)이다. 기존
+[saved-output closeout](#priority-3-local-xy-saved-output-closeout)까지 완료됐다. 기존
 [`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py)는
 지정된 source X/Y 영역의 Oil 측정만 제외하는 구현이며 자동 구조물 검출기가 아니다.
 현재 GUI에는 이를 켜는 flag가 없고, 기존 진단 runner의 rectangle은 Mac sample4용이다.
@@ -753,8 +754,8 @@ RGB는 악화·미채택으로 종료하고 review-006은 미검토 상태로 �
 ### Priority 3 Local XY comparison
 
 **완료 이력: ④ FULL+ON v2 ↔ ⑦ FULL+ON v2 + Oil-only Local XY 실행 완료·미채택.**
-아래 실행 절차를 반복하지 않는다. 현재 작업은 다음
-[saved-output closeout](#priority-3-local-xy-saved-output-closeout)이다.
+아래 실행 절차를 반복하지 않는다. 후속
+[saved-output closeout](#priority-3-local-xy-saved-output-closeout)까지 완료됐다.
 Review-007의 Accum 승인(reply-001)과 BASE 승인(reply-002)을 재사용한다.
 [입력 수신·Artifact 설명 정정·실행 경계](../60-evidence/s11/2026-10-09-local-xy-implementation.md#windows-scope-receipt-and-comparison-handoff--2026-10-16)를 읽는다.
 알고리즘은 기존 `oil-local-xy-v1` 그대로이며, 이번에 고정한 Windows 입력으로
@@ -865,10 +866,21 @@ docs/40-operations/s11-current-windows-field-qualification.md의
 
 ### Priority 3 Local XY saved-output closeout
 
-**현재 작업은 기존 ④·⑦ CSV 집계 정정뿐이다.** 디텍터 실행과 review-008의
-직접 판정은 완료됐다. BASE f17383/Y913의 비유면 선택과 Accum f16076의 허용
-계면 관측 소실로 ⑦은 **REGRESSION / NOT_ADOPTED**다. 세 후보의 비교 실행을
-종료하고, 아래 보완을 위해 후보 튜닝·재실행·새 이미지 질문을 하지 않는다.
+**완료 이력 — 정정 회신 수신, 다시 요청하지 않음.**
+[정정된 두 구간표와 최종 FULL 행 수](../60-evidence/s11/2026-10-09-local-xy-implementation.md#saved-output-accounting-closeout--complete)를
+수신했다. Glass별 601개 키가 일대일 대응하고 timestamp 불일치·중복·누락은 0건이다.
+BASE 303→254(신규 5, 소실 54, 순감소 49), Accum 36→14(신규 1, 소실 23,
+순감소 22)로 일치한다.
+BASE Y 변경은 23행이며, 그중 DRAIN/REFILL의 두 행은 각각 −0.5px다.
+Accum f17239@719.0s는 양쪽 Y385.0인 유지 행으로, 이전 소실 과계상을 정정했다.
+④·⑦ 모두 두 Glass의 최종 `FULL_NO_INTERFACE` 행은 0건이다.
+86%/42% 효과 비율은 철회한다. BASE f17383/Y913 비유면과 Accum f16076 허용
+계면 소실에 따라 ⑦ **REGRESSION / NOT_ADOPTED**, O2 OPEN / FIELD FAIL을 유지한다.
+
+세 후보 비교와 CSV 보완은 여기서 마감한다. 아래 번호 절차와 이전 프롬프트는
+완료 이력이며 재실행하지 않는다. 추가 집계·후보 튜닝·이미지 질문 없이 기존
+산출물과 pending review-006을 보존한다. 다음 구현 방향은 Work Plan의 사용자
+판단 지점이며, ④ 기반의 증거 있는 상단 이탈→FULL 전환 복구가 제안 상태다.
 
 1. 두 `tracking_data.csv`를 `(glass_id, frame_index)`로 일대일 대응한다. 중복,
    키 차이, timestamp 불일치 여부와 Glass별 행 수를 한 줄로 보고한다. 기대값은
@@ -904,7 +916,7 @@ docs/40-operations/s11-current-windows-field-qualification.md의
    O2 OPEN / FIELD FAIL은 유지한다. 다음 구현 방향은 Work Plan의 사용자 판단
    지점으로 돌리며, ④ 기반 FULL 전환 복구는 제안 단계다.
 
-전달용 짧은 프롬프트:
+이전 집계 정정용 프롬프트 (완료 이력; 다시 보내지 않음):
 
 ```text
 ④ bundle: <기준 번들 경로>
@@ -917,6 +929,15 @@ BASE/Accum의 중복 없는 정규 구간표(신규·소실·Y 변경 포함)와
 BASE 순감소 49와 실제 소실 수, Accum 세부 합계 37과 전체 36의 차이를
 확인해서 원인이 된 행과 정정 이유만 알려줘. 86%/42% 효과 비율은 철회해줘.
 기존 사용자 판정과 Foam 비교 결과를 재사용하고, 디텍터 재실행·튜닝·새 질문은 하지 마.
+```
+
+완료 상태 공유용 짧은 프롬프트 (추가 점검 요청 없음):
+
+```text
+④↔⑦ Local XY 비교와 CSV 정정은 완료로 마감해줘.
+⑦ REGRESSION/NOT_ADOPTED, O2 OPEN/FIELD FAIL을 유지하고 기존 bundle과
+review-004~008을 보존해줘. review-006은 미검토 상태 그대로야.
+추가 집계·질문·재실행 없이 다음 작업 지시를 기다려줘.
 ```
 
 ## 2. Private source identity

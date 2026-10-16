@@ -298,10 +298,11 @@ Mac trial demonstrates that Oil changes can affect final composition validity.
 
 ### Reviewed meaning and limits
 
-- BASE outputs before 717 s are reported unchanged. Review-004 supplies six
-  662–664.5 s frame judgments, not truth for all of 480–670 s. Preserve its
-  practical alternatives and uncertainty; unchanged output does not certify
-  every observation in the larger interval.
+- BASE numeric presence before 717 s is reported unchanged, with two −0.5 px
+  coordinate changes at f15632/f15644 in the corrected table below. Review-004's
+  six 662–664.5 s frames are unchanged; those judgments are not truth for all of
+  480–670 s. Preserve practical alternatives and uncertainty; unchanged output
+  does not certify every observation in the larger interval.
 - BASE 717–751 s contains fewer numeric outputs, but not complete suppression:
   725–733 s retains seven changed numeric selections around Y860–913. The new
   **review-008 / reply-001** directly identifies **f17383 near 725 s, selected
@@ -312,9 +313,9 @@ Mac trial demonstrates that Oil changes can affect final composition validity.
   says BASE has no visible interface after the 674–675 s transition. Consequently
   retained or new numeric outputs at 751–780 s are still false-presence outputs,
   not restored real Oil. Their exact artifact identities need not be guessed.
-  If the reported pre-717 s equality and aggregate totals both hold, the prior
-  91 FULL_SUFFIX rows would become 42; this is a **derived inference pending
-  the disjoint saved-CSV table**, not a new measured count.
+  The corrected disjoint CSV table now reports **91→42 FULL_SUFFIX numeric
+  rows**, including five new rows. This is a returned count, replacing the
+  earlier derived inference pending reconciliation.
 - Accum reportedly loses 14 outputs at 669.5–678.5 s. At least one is a directly
   supported regression: review-005 Scene 2 **f16076 near 670.5 s**, where Y482
   was a practical match and Y479.5 was also allowed, is now blank. The receipt
@@ -328,33 +329,85 @@ Mac trial demonstrates that Oil changes can affect final composition validity.
   stage is **not established by this CSV summary**. Likewise, absence of a
   final number does not prove that its raw candidate/tracklet was deleted.
 
-### Bounded accounting correction still needed
+### Saved-output accounting closeout — complete
 
-The BASE interval counts sum to 303→254, but the narrative mixes gross losses
-with net change. Under its stated new/lost decomposition, the implied totals are
-**54 lost, 5 new, net −49**. In 717–751 s, the three listed buckets imply
-7+7+35 = **49 losses**, not 42; seven changed selections remain in 725–733 s.
-The reported 42/49 = 86% is not an accepted false-output removal rate: its
-denominator is net change, and the numerator omits the middle bucket's losses.
+The subsequent October 16 receipt closes the bounded
+[saved-output request](../../40-operations/s11-current-windows-field-qualification.md#priority-3-local-xy-saved-output-closeout).
+Windows reports a one-to-one `(glass_id, frame_index)` join: **601 rows per Glass
+in each bundle, zero timestamp mismatches, duplicates or missing keys**. Each
+row belongs to one canonical bucket, including OUTSIDE. Numeric Oil means a
+nonempty final CSV `raw_oil_air_level_y`; Y changes count only rows numeric in
+both bundles and are separate from new/lost observations.
 
-Accum's listed reference counts sum to **14+13+10 = 37**, conflicting with the
-overall 36. The listed 24 losses and one new row imply −23, conflicting with
-−22. Boundary duplication, an omitted change or a transcription error has not
-been established; do not silently choose an explanation or publish 10/24 = 42%
-as effectiveness. A single saved-CSV reconciliation should correct these
-counts, using the existing canonical buckets and unique Glass/frame keys.
-The return also omits final `FULL_NO_INTERFACE` counts and executed measurement
-lineage details; neither FULL closure nor the exact sample-removal mechanism is
-claimed from this receipt. Only the simple final FULL counts join the bounded
-accounting request; no new trace/causal audit is opened to reject the candidate.
+Final CSV `fill_state=FULL_NO_INTERFACE` was explicitly counted in both bundles:
 
-The [saved-output closeout](../../40-operations/s11-current-windows-field-qualification.md#priority-3-local-xy-saved-output-closeout)
-requests two disjoint tables, the Accum discrepancy explanation and final FULL
-counts. It reuses existing files/reviews, with no detector run, tuning or new
-image question. After this accounting correction, the Work Plan returns the
-next-direction decision to the user because no tested overall configuration was
-adoptable. The proposed follow-up is evidence-backed FULL closure from ④ v2;
-no implementation begins automatically and disappearance alone cannot assert FULL.
+| Glass | ④ v2 FULL rows | ⑦ Local XY FULL rows |
+|---|---:|---:|
+| BASE | 0 | 0 |
+| Accum | 0 | 0 |
+
+The session's BASE FULL / Accum EMPTY initial confirmations are unchanged. They
+are configuration context, not final CSV FULL rows; zero FULL output does not
+establish that the initial state was ignored by the resolver. Neither bundle
+demonstrates the required top-exit FULL closure.
+
+**BASE — corrected disjoint final-output counts**
+
+| Segment | Time interval (s) | Samples | ④ Oil | ⑦ Oil | New | Lost | Y changed | Net |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| FULL_PREFIX | 480 ≤ t < 550 | 139 | 3 | 3 | 0 | 0 | 0 | 0 |
+| DRAIN | 550 ≤ t < 652 | 205 | 170 | 170 | 0 | 0 | 1 | 0 |
+| REFILL | 652 ≤ t < 674 | 43 | 39 | 39 | 0 | 0 | 1 | 0 |
+| FULL_TRANSITION | 674 ≤ t < 675 | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+| FULL_SUFFIX | 675 ≤ t ≤ 780 | 211 | 91 | 42 | 5 | 54 | 21 | −49 |
+| OUTSIDE | Outside the intervals above | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **Total** | — | **601** | **303** | **254** | **5** | **54** | **23** | **−49** |
+
+Two small coordinate changes correct the earlier pre-717 s equality claim:
+f15632 near 652.0 s and f15644 near 652.5 s both change **458.0→457.5**. The
+returned actual-CSV-time partition places f15632 in DRAIN and f15644 in REFILL;
+rounded display times do not redefine the boundary. Review-004's six frames
+remain unchanged.
+
+Gross BASE losses are **7 + 7 + 35 + 5 = 54** across the reported 717–725,
+725–733, 733–751 and 755–780 s bands. The last five are f18102, f18114, f18126,
+f18438 and f18593. The earlier 42 counted only 7+35, omitting the middle seven;
+the whole-window total also includes the later five. Seven Y changes in
+725–733 s are retained numeric outputs, not losses. Thus **5 new − 54 lost =
+−49**, independently of the 23 Y changes. The prior 86%/42% effectiveness
+ratios are explicitly withdrawn; net counts, gross losses and physical
+judgments must not be combined into such a rate.
+
+**Accum — corrected disjoint final-output counts**
+
+| Segment | Time interval (s) | Samples | ④ Oil | ⑦ Oil | New | Lost | Y changed | Net |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| EMPTY | 480 ≤ t < 653 | 346 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ENTRY_SPLASH | 653 ≤ t < 672 | 37 | 4 | 0 | 0 | 4 | 0 | −4 |
+| FOAM_LAYERED | 672 ≤ t < 680 | 16 | 10 | 0 | 0 | 10 | 0 | −10 |
+| POST_FOAM | 680 ≤ t < 700 | 41 | 0 | 1 | 1 | 0 | 0 | +1 |
+| DRAIN | 700 ≤ t ≤ 780 | 160 | 22 | 13 | 0 | 9 | 0 | −9 |
+| OUTSIDE | Outside the intervals above | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **Total** | — | **601** | **36** | **14** | **1** | **23** | **0** | **−22** |
+
+The discrepancy is the previously overcounted loss **f17239 near 719.0 s**:
+both bundles output **Y385.0**, so it is unchanged. The later DRAIN losses are
+**nine**, not ten. Correct accounting is **36 = 14 early losses + 13 retained +
+9 later losses**, **23 lost = 14+9**, and **14 candidate rows = 13 retained +
+1 new**. The 13 unchanged rows belong in the reference total, never in the loss
+total; the earlier 24-loss claim was 14+10 and did not include those 13. The
+single new row **f16388 near 683.5 s / Y205.0** remains unreviewed.
+
+Final Foam equality and review-004/005/007/008 remain as reported above;
+review-006 stays pending. All three candidate comparisons and the requested CSV
+accounting are now complete, without new detector runs, tuning or image review.
+Exact measurement lineage and the first upstream cause remain unknown; they
+are not new closeout prerequisites. No tested overall configuration is adopted,
+and O2 OPEN / FIELD FAIL remains. The Work Plan now returns the next-direction
+decision to the user. Proposed follow-up: evidence-backed top-exit FULL closure
+from ④ v2 as a development comparison reference. No implementation begins
+automatically; neither the reviewed timestamp nor disappearance alone may
+assert FULL.
 
 ## Detector Governance
 
@@ -362,6 +415,6 @@ no implementation begins automatically and disappearance alone cannot assert FUL
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F06`, `S11-F09`, `S11-F10`.
 - First harmful stage: in the returned Windows comparison, final selection/publication of BASE f17383/Y913 is a directly reviewed non-interface and Accum f16076 loses an allowed interface observation. The first upstream harmful stage is unknown from the summary; candidate deletion or direct masking is not established. Historical Mac selection/admission findings above retain their original scope.
 - Existing feature coverage: review-007 supplies two approved BASE rectangles and one Accum rectangle. The same Recipe reportedly has 12/14 geometry-only Artifact templates with active spatial veto and no support references. The matching-reference guard remains, but coordinate overlap is not a conflict. Focused tests exercise separate scope bindings, existing Artifact rejection, initial-FULL v2 and completed CSV/trace publication; shared masks/settings stay fixed. Historical Mac evidence remains separate.
-- Execution scope: the October 16 follow-up records the user-relayed ④ vs ⑦ final-output comparison and direct review-008 reply, checks its arithmetic and prepares a saved-CSV-only correction. No detector replay, code change, new research artifact or inferred pixel label is generated locally. Final Foam equality is reported for this pair; exact source identity, canonical count reconciliation and first-stage causality have the limits above. Historical tests/measurements retain their original scope.
+- Execution scope: the October 16 follow-up records the user-relayed ④ vs ⑦ final-output comparison, direct review-008 reply and completed saved-CSV correction, including both disjoint tables and explicit FULL row counts. Local checks verify the reported arithmetic and document consistency; private CSV/video/reviews are not replayed locally. No detector code, new research artifact or inferred pixel label is generated. Final Foam equality is reported for this pair; exact source identity, measurement lineage and first-stage causality retain the limits above. Historical tests/measurements retain their original scope.
 - Logic-map impact: NONE — the existing constructor-bound Local XY feature row and frame/candidate details still describe source; no new route or automatic reference consumer is added.
 - Failure-registry impact: NONE — the Windows non-interface replacement and allowed-observation loss are consistent with existing F04/F09/F10 guards. This receipt supports non-adoption, not a new proven upstream mechanism; no no-repeat rule is weakened.
