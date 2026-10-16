@@ -124,3 +124,26 @@ def test_independent_verifier_rejects_corruptions(corruption):
     else: row['sectors'][0]['columns'] = []
     with pytest.raises((ValueError, StopIteration)):
         verify_measurement(row, gray, mask)
+
+
+@pytest.mark.parametrize('case', ['valid', 'hash', 'missing', 'outside', 'traversal'])
+def test_retained_alias_resolution(tmp_path, case):
+    import json
+    import hashlib
+    from tests.diagnostics.s11_profile_role_verify import artifact_file
+    repo=tmp_path/'repo'; directory=repo/'evidence'; directory.mkdir(parents=True)
+    shared=repo/'shared.csv'; shared.write_text('original bytes')
+    sha=hashlib.sha256(shared.read_bytes()).hexdigest()
+    target='shared.csv'
+    if case=='hash': sha='0'*64
+    if case=='missing': target='missing.csv'
+    if case=='outside':
+        target='../outside.csv'
+        (tmp_path/'outside.csv').write_text('original bytes')
+    aliases={'aliases':{'arm/tracking.csv':{'path':target,'sha256':sha}}}
+    (directory/'artifact-aliases.json').write_text(json.dumps(aliases))
+    relative='../shared.csv' if case=='traversal' else 'arm/tracking.csv'
+    if case=='valid':
+        assert artifact_file(repo,directory,relative)==shared
+    else:
+        with pytest.raises(ValueError): artifact_file(repo,directory,relative)

@@ -19,6 +19,24 @@ from tests.diagnostics.s11_role_consumer_verify import check, verify_event_sampl
 MODEL_NAMES = ('affine', 'corner', 'jump', 'separate_slopes')
 
 
+def artifact_file(root, directory, relative):
+    """Resolve byte-identical retained aliases without restoring duplicate files."""
+    check(not Path(relative).is_absolute() and '..' not in Path(relative).parts, 'invalid artifact path')
+    local = directory/relative
+    if local.is_file():
+        return local
+    aliases_path = directory/'artifact-aliases.json'
+    check(aliases_path.is_file(), 'missing artifact: '+relative)
+    aliases = json.loads(aliases_path.read_text())['aliases']
+    check(relative in aliases, 'unmapped artifact: '+relative)
+    entry = aliases[relative]
+    target = (root/entry['path']).resolve()
+    check(target.is_relative_to(root.resolve()), 'alias outside repository')
+    check(target.is_file() and hashlib.sha256(target.read_bytes()).hexdigest()==entry['sha256'],
+          'alias bytes changed: '+relative)
+    return target
+
+
 def load_gzip(path):
     return json.loads(gzip.decompress(path.read_bytes()))
 
@@ -82,6 +100,11 @@ def verify_measurement(row, gray, visible):
 
 
 def verify(root, directory):
+    aliases_path = directory/'artifact-aliases.json'
+    aliases = json.loads(aliases_path.read_text())['aliases'] if aliases_path.is_file() else {}
+    for relative, entry in aliases.items():
+        path = artifact_file(root, directory, relative)
+        check(hashlib.sha256(path.read_bytes()).hexdigest()==entry['sha256'], 'aliased source bytes')
     comparison = json.loads((directory/'comparison.json').read_text())
     measurements = load_gzip(directory/'measurements.json.gz')
     trace = load_gzip(directory/'readout.json.gz'); pre = comparison['preflight']
@@ -150,7 +173,7 @@ def verify(root, directory):
     for run, summary in zip(trace['variants'],comparison['variants'],strict=True):
         name = run['variant']; rows=run['rows']; check(name==summary['variant'], 'condition binding')
         arm, mode = (None, 'baseline') if name=='baseline' else name.split('_',1)
-        with (directory/name/'tracking.csv').open(encoding='utf-8-sig',newline='') as f:
+        with artifact_file(root, directory, name+'/tracking.csv').open(encoding='utf-8-sig',newline='') as f:
             csv_rows=list(csv.DictReader(f))
         check(len(rows)==len(csv_rows)==len(raw)==113, 'full-window denominator')
         counts=Counter(); joined=0; foam_changed=[]
@@ -195,7 +218,7 @@ def verify(root, directory):
             c=original[edit['frame']]['candidates'][edit['index']]
             check(edit['before']==c['features'].get('sequence_eligible') and edit['after']==0.0, 'veto mutation')
         check(promotions==len(summary['authority_changes']), 'promotion count')
-        with (directory/name/'events.csv').open(encoding='utf-8-sig',newline='') as f:
+        with artifact_file(root, directory, name+'/events.csv').open(encoding='utf-8-sig',newline='') as f:
             events=list(csv.DictReader(f))
         extrema=0
         for event in events:
@@ -209,7 +232,9 @@ def verify(root, directory):
         report[name]={'rows':len(rows),'numeric_source_joins':joined,'authority_calls':len(expected_keys),
                       'promotions':promotions,'member_vetoes':len(expected_vetoes),
                       'events':len(events),'extrema':extrema}
-    return {'schema':'s11-profile-witness-verification-v1','status':'PASS','mismatches':0,
+    return {'schema':'s11-profile-witness-verification-v2','status':'PASS','mismatches':0,
+            'storage_aliases_verified':len(aliases),
+            'verifier_code_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'sampled_source_frames':len(frames),'sample4_candidates':len(table),
             'screened_candidates':len(original_units),'pixel_arithmetic':dict(totals),'variants':report,
             'claim':'Original-pixel arithmetic, row-held-out fit, intervention scope and publication provenance; not physical accuracy or human comprehension.'}
