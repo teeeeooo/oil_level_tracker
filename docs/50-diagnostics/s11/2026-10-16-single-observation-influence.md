@@ -56,6 +56,40 @@ all event-to-sample joins, CSV and original input/source hashes. Retain compact 
 population and representative witnesses; reuse original source atlases rather than
 copying media. No independent human report comprehension is claimed.
 
+## Second-stage hypotheses — frozen before causal replay
+
+The completed first sweep has 245 loss cases plus baseline. Selected-member loss
+has no nonlocal Oil coordinate effect in 84/101 cases, but f1275 produces a
+44–56 s numeric gap. Raw Foam eligibility loss at f1200 changes Oil and splits the
+reported Foam episode. These are sensitivity results, not physical acceptance.
+Source inspection shows `sequence_foam_eligible` is also read during Oil admission
+(material identity and alias context), so H3 is not a pure final-Foam switch.
+
+H4: repeat all 31 Foam losses ONLY at the input to the final Foam resolver, after
+unchanged Oil resolution. Compare to the original early loss. This isolates raw
+material-context effects from final episode confirmation/alias effects. Unchanged
+Oil coordinates in this late intervention are an execution control, not a new
+independence theorem or repair of real missing evidence.
+
+H5: for the two preselected Oil representatives only, withdraw the same members
+AFTER original tracklet construction, before lifecycle/selection. Keep the original
+history explicitly frozen. This diagnostic counterfactual tests how much change
+comes from rebuilding identity/history versus downstream consumption. The removed
+observation still contributed to the frozen history: this is NOT a valid deployable
+missing-observation policy, positive evidence, or permission to preserve stale IDs.
+
+Additionally instrument admission, recurrence opposition and tracklet outputs for
+baseline and all three original representatives; require compact replay equality.
+Record all common-ref changes and all retained/disappeared members by exact offset.
+Do not classify track-ID renumbering alone as changed motion or physical error.
+No new thresholds, sorting, truth roles, source pixels or Windows execution.
+
+The first independent verifier stopped on an incorrect verifier assumption:
+ANALYSIS_END intentionally omits levels, but v1 required equality even when its
+Oil level was None. Preserve that failure receipt; require coordinate-free
+ANALYSIS_START/END and exact smoothed-sample equality (including missingness) for
+other events. Add omitted-level and corrupt-level controls. The 245 numerical experiments and their original outputs do not change.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `CSV-PUBLICATION`, `RESULT-PRESENTATION`.

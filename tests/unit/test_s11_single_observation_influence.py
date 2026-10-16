@@ -80,3 +80,17 @@ def test_irregular_sample_spans_are_not_continuous_durations():
     rows=[dict(time_sec=t,oil_y=y) for t,y in [(0,None),(.5,10),(2,10),(3,None)]]
     assert runs(rows,'oil_y',True)==[dict(start_sec=.5,last_sample_sec=2,sample_count=2,sampled_span_sec=1.5)]
     assert runs(rows,'oil_y',False)[-1]['sampled_span_sec']==0
+
+
+from tests.diagnostics.s11_single_observation_verify import check_event_levels
+
+
+def test_coordinate_free_lifecycle_event_is_not_fabricated_sample():
+    sample=dict(smoothed_oil_air_level_px_from_zero=-1,smoothed_foam_front_px_from_zero=4)
+    check_event_levels(dict(event_type='ANALYSIS_END',oil_level_px=None,foam_front_px=None),sample)
+    check_event_levels(dict(event_type='MAXIMUM_OIL_LEVEL',oil_level_px=-1,foam_front_px=4),sample)
+    for event in [dict(event_type='MAXIMUM_OIL_LEVEL',oil_level_px=2,foam_front_px=4),
+        dict(event_type='MAXIMUM_OIL_LEVEL',oil_level_px=-1,foam_front_px=5),
+        dict(event_type='MAXIMUM_OIL_LEVEL',oil_level_px=None,foam_front_px=4),
+        dict(event_type='ANALYSIS_END',oil_level_px=-1,foam_front_px=None)]:
+        with pytest.raises(ValueError): check_event_levels(event,sample)

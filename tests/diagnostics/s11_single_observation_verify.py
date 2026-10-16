@@ -62,6 +62,16 @@ def check_edits(record, originals):
             before=c['features'].get(field),before_present=field in c['features']), 'intervention provenance mismatch')
 
 
+def check_event_levels(event, sample):
+    """Lifecycle events intentionally omit coordinates; numeric events bind smoothed samples."""
+    for event_key, sample_key in [('oil_level_px','smoothed_oil_air_level_px_from_zero'),
+                                  ('foam_front_px','smoothed_foam_front_px_from_zero')]:
+        if event['event_type'] in ('ANALYSIS_START', 'ANALYSIS_END'):
+            require(event[event_key] is None, 'lifecycle event fabricated a coordinate')
+        else:
+            require(sample[sample_key] == event[event_key], 'event representative level join')
+
+
 def verify(root, output):
     comparison = json.loads((output/'comparison.json').read_text())
     pre = comparison['preflight']
@@ -108,8 +118,7 @@ def verify(root, output):
             for event in record['events']:
                 row = byframe[event['representative_frame_index']]
                 require(row['time_sec']==event['start_time_sec'], 'event time join')
-                require(row['sample']['raw_oil_air_level_px_from_zero']==event['oil_level_px'], 'event Oil join')
-                require(row['sample']['raw_foam_front_px_from_zero']==event['foam_front_px'], 'event Foam join')
+                check_event_levels(event, row['sample'])
                 counts['events'] += 1
             if name in comparison['representatives']: records[name]=record
     require(seen==set(summaries), 'missing population cases')
@@ -138,7 +147,7 @@ def verify(root, output):
                 elif key=='flags': require(value.split(';')==expected if value else expected==[], 'CSV flags')
                 else: require(value==expected,'CSV text')
             counts['csv_rows'] += 1
-    return dict(schema='s11-single-observation-verification-v1', **counts,
+    return dict(schema='s11-single-observation-verification-v2', **counts,
         input_and_source_hashes=len(pre['inputs'])+len(pre['source_hashes']),
         verifier_sha256=digest(Path(__file__)), mismatches=0,
         physical_accuracy='NOT_EVALUATED',report_comprehension='NOT_HUMAN_EVALUATED')
