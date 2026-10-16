@@ -4,24 +4,25 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** Default R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The initial-FULL comparison has quantified Windows output recovery and a newly exposed false-output checkpoint, remains opt-in and is not a promoted baseline. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior.
-**Next transition:** The [native-geometry screen](../50-diagnostics/s11/2026-10-16-corroboration-geometry-screen.md) is COMPLETE / NO PROMOTION: none of 85 positive contribution pairs has both captured native paths, so common-native physical comparison is NOT ASSESSABLE. Do not install a both-native hard gate over existing packets. The prior legacy seed-anchor screen remains REJECTED. The next repair-design target is a concrete current-raster contour/region witness with explicit measurement lineage before anchor authority, preserving weak/multiple review-004/005 allowances; no validated discriminator or behavior change is selected. The **721 s intake is COMPLETE**, with corroborated_material_path → anchor_corridor → Y694 as the false-anchor route, actual peer/optical cause unknown. No further Windows extraction, detector execution, bulk CSV analysis or fourth trial is requested now. **FULL transition validation is INCOMPLETE**: preflight CONDITION FAILED / ⑧ NOT RUN. Resolve the observed-top/physical-state contract before the still-required Windows transition/hold comparison; do not move FULL to the mask edge or reduce margin.
+**Next transition:** The [CRW-1 paired-raster screen](../50-diagnostics/s11/2026-10-16-raster-partition-screen.md) is COMPLETE / INPUT USEFUL / NO PRODUCTION PROMOTION. It supplies explicit current-raster sector hypotheses, not qualified continuous contours or a physical-role discriminator. Reuse its partial positive preservation and opposed controls; do not tune band/window/sector-count cutoffs or turn shared extraction aliases into independent support. The next bounded repair design must name physical-role evidence and its exact consumer, then test selected episode/extrema impact rather than run another input-only audit. Preserve weak/multiple review-004/005 allowances; no successor behavior is selected. Legacy seed-anchor and both-native hard-gate shortcuts remain excluded. The **721 s intake is COMPLETE**; false-anchor route known, actual peer/optical cause unknown. No further Windows extraction, detector execution, bulk CSV analysis or fourth trial is requested now. **FULL transition validation is INCOMPLETE**: preflight CONDITION FAILED / ⑧ NOT RUN. Resolve the observed-top/physical-state contract before the still-required Windows transition/hold comparison; do not move FULL to the mask edge or reduce margin.
 **Windows comparison source:** The completed investigation used existing **④ FULL+ON v2** only. No new comparison is queued. The optional ⑧ implementation is published at `6248e08` with `+initial-full-observation-v2+top-exit-full-v1`, but its preflight failed and it is not being run or promoted. Top-exit/cost-first/RGB/Local XY stay OFF outside retained trials. The earlier ⑦ identity limit remains in its retained record; no hash-driven rerun.
-**Latest checkpoint:** The [native-geometry handoff](../60-evidence/s11/2026-10-16-corroboration-geometry-handoff.md) reuses all 187 units (175 Oil / 8 Foam / 4 contexts) and the original judgments. Captured native paths exist for 35 Oil candidates, but no positive-support pair has both; this is missing input, not a physical classification failure or absent visible interface. Independent original-raster checks reproduce 4,136 grayscale band references / 2,867 distinct windows with zero mismatches; 92 focused tests pass. No detector, model, Recipe, truth, final Oil/Foam or report changes occurred. The prior [peer-screen handoff](../60-evidence/s11/2026-10-16-corroboration-handoff.md), received 721 s evidence and rejected Windows comparisons retain their scopes. The [top-exit preflight](../60-evidence/s11/2026-10-16-top-exit-full.md#windows-geometry-preflight-received--condition-failed) still has endpoint Y220.870 versus mask top Y243 and last pre-transition selection Y352. All nine field segments and actual report-only acceptance remain open; O2 OPEN / FIELD FAIL is unchanged.
+**Latest checkpoint:** The [CRW-1 handoff](../60-evidence/s11/2026-10-16-raster-partition-handoff.md) records one frozen run over the same 187 units (175 Oil / 8 Foam / 4 contexts). The descriptive partition condition retains 8/11 accepted candidates across 7/8 reviewed frames and is absent in 6/7 opposed candidates; these are input flags, not detector accuracy. f1200's opposed count exceeds its accepted count, while f1320 ties, so count-only authority is unsupported. All unknown/practical labels remain. Direct-loop checks reproduce 6,133 gradients and 1,244 partitions with zero mismatches; 123 focused tests pass. No production detector, model, Recipe, truth, final Oil/Foam or report changes occurred. The prior native-geometry input limit, received 721 s evidence and rejected Windows comparisons retain their scopes. The [top-exit preflight](../60-evidence/s11/2026-10-16-top-exit-full.md#windows-geometry-preflight-received--condition-failed) still has endpoint Y220.870 versus mask top Y243 and last pre-transition selection Y352. All nine field segments and actual report-only acceptance remain open; O2 OPEN / FIELD FAIL is unchanged.
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
-**Resume checkpoint — 2026-10-16:** the latest authorized local hypothesis,
-verification and handoff work is complete. Begin with the
-[native-geometry handoff](../60-evidence/s11/2026-10-16-corroboration-geometry-handoff.md),
+**Resume checkpoint — 2026-10-16:** the latest local hypothesis, verification
+and handoff work is complete. Begin with the
+[CRW-1 handoff](../60-evidence/s11/2026-10-16-raster-partition-handoff.md),
 then reuse the [Windows checkpoint](../60-evidence/s11/2026-10-16-windows-comparison-checkpoint.md).
-Basic band arithmetic is verified, while common-native G2 comparison had no
-eligible two-path inputs. Preserve the difference between captured generator
-paths, separately re-observed contour hypotheses and scalar-center windows.
-Do not repeat a higher support cutoff, legacy seed-anchor requirement, or
-vacuous both-native gate. The next design still needs current-raster physical
-compatibility with positive preservation; no classifier, new Windows request,
-FULL transition/hold result or report-only acceptance is implied.
-Review-006 stays unreviewed and Sample3 remains quarantined.
+Current-raster sector hypotheses now exist, but are neither native contour truth
+nor a physical-role classifier. Reuse the frozen readout instead of repeating
+input-only checks; no sector-count/band/window rescue, legacy seed-anchor or
+both-native gate. A successor must specify the physical-role evidence, exact
+consumer and selected-episode/report impact checks before behavior comparison.
+Isolated misses or residual opposition are assessed by movement impact, not a
+100%-candidate target; all-UNKNOWN or erased refill/Foam episodes cannot pass.
+No new Windows request, FULL transition/hold result or independent report
+acceptance is implied. Review-006 stays unreviewed and Sample3 quarantined.
 
 **Windows execution constraint:** the user's Windows host is isolated and uses
 downloaded GitHub source ZIPs in separate folders, without Git clone. Reuse the

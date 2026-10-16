@@ -69,8 +69,53 @@ No full-video replay, new fit or private Windows pixel access is part of CRW-1.
 
 ## Execution result
 
-Not executed at draft freeze. The result will be recorded here after the
-single managed run; source and hypothesis must be committed before real input.
+Executed once at clean frozen `7845f890c52e2c6fab2b4b1a84f2e2139f9ded3e`.
+The hypothesis, extractor, direct-loop verifier and 31 new tests were committed
+before the real raster run. No outcome-led band/window/count changes followed.
+The [machine summary](2026-10-16-raster-partition-screen/summary.json) preserves
+all 18 reviewed controls, original label scopes and the complete denominators.
+
+| Question | Fixed observation | Disposition |
+|---|---|---|
+| H1 localization | 10/11 accepted candidates have at least three uncensored localized sectors; 6/7 opposed candidates also do | Measurable sector hypotheses, not physical-role or continuous-contour qualification |
+| H2 partition | 8/11 accepted and 1/7 opposed candidates have at least three partition sectors | Useful partial input; not a standalone discriminator or chosen detector operating point |
+| Reviewed-frame preservation | An accepted candidate has this partition flag in 7/8 reviewed frames | Sparse context-preservation screen, not continuous-motion/report acceptance |
+| H3 shared extraction | 33/85 directed peer relations share any positive partition rows; 7/85 share at least three sectors | Exact extraction aliases; no new independent support votes |
+| Arithmetic | 6,133 gradient references and 1,244 four-band references, zero direct-loop mismatches | Measurement implementation reproduced, not detector accuracy |
+| Tests | 123 passed / 0 failed in 7.17 s: 31 new and 92 related cases | Synthetic contracts and diagnostic regression only |
+
+The public frame keeps two of its four practically accepted alternatives. This
+is one represented frame, not a requirement to recover all four approximations.
+The f1140 accepted material candidate retains three partition sectors while all
+three reviewed rims have fewer. These are useful bounded observations; residual
+errors do not make all of this information worthless.
+
+However, f1200's opposed idx10/Y865.5 has four partition sectors versus three
+for accepted idx4/Y841. A monotone count threshold that retains the accepted
+candidate also admits this opposition; picking the largest count is wrong there.
+At f1320, accepted idx9/Y844 and opposed idx21/Y822 both have two. Changing the
+count cutoff cannot separate that tie. These controls disqualify count-only
+physical authority, not every possible use of the measured input. No actual
+selected-output change, false-extremum repair or report benefit was measured.
+All 157 unassessed Oil candidates, eight Foam candidates and four contexts remain
+unassessed at their original roles. Six historical physical correspondences and
+five practical acceptances remain distinct within the eleven accepted Oil units.
+
+The actual raster extraction took 1.329 s; this is not end-to-end detector
+performance. Inputs were hash-checked before and after the run. Direct visual
+inspection covered the saved f1140/f1275/f1485 source crops; numerical extraction
+covered all eight frozen rasters. Windows evidence was reused from the
+[received checkpoint](../../60-evidence/s11/2026-10-16-windows-comparison-checkpoint.md),
+not newly executed or independently re-extracted from private video.
+
+Full output remains local at
+`sample/output/s11-raster-partition-20261016-001/evidence/readout.json.gz`
+(371,355 bytes; SHA-256
+`5458e62d198a821056996fabe736b9510d4b699571cd5497f88006c67a4723fc`).
+The compact Git summary carries the direct-loop result and source hashes;
+full profiles and all censored/alternative rows remain in that managed readout.
+The [handoff](../../60-evidence/s11/2026-10-16-raster-partition-handoff.md)
+owns reproduction and the bounded continuation checkpoint.
 
 ## Detector Governance
 

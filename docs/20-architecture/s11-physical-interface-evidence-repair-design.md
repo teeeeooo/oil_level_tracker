@@ -339,7 +339,20 @@ path of the original candidate. It must retain alternatives, unavailable sectors
 and explicit pixel-to-candidate correspondence. Candidate Y, nearest peaks and
 peak hulls cannot silently become a contour or calibrated uncertainty. A concrete
 localizer/partition design and its two-sided controls must precede any consumer;
-this clarification selects no new extraction algorithm or operating point.
+this clarification selects no production extraction algorithm or operating point.
+
+The fixed [CRW-1 raster-partition screen](../50-diagnostics/s11/2026-10-16-raster-partition-screen.md#execution-result)
+now implements a diagnostic-only input: matched-column edge measurements and
+matched-position four-band context, with every tied peak and censored sector
+retained. Generator-native and scalar-center seeds remain explicitly different;
+the resulting sector peak sets are neither continuous contours nor inherited
+native truth. This is useful partial input, not a qualified material-role witness.
+A larger count of supported sectors can favor a reviewed non-target over an
+accepted interface, and another positive/negative pair ties. Do not convert
+that count to authority or tune its cutoff to those cases. Shared exact rows
+from this same extractor are measurement aliases, not independent peer votes.
+The physical-role/localization and consumer validation below remain required;
+CRW-1 supplies no new production field, peer support or selection policy.
 
 Construct evidence before authority in a directed order: raw witness → eligible
 peer relation → independent support → phase identity → authority. A candidate
@@ -552,7 +565,7 @@ as the serialized array index. Diagnostic detail must not change output.
 - Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
 - Existing feature coverage: this clarification reuses the frozen A1/public original raster, visibility masks, O1 path/center bands and exact candidate provenance. Source review follows retained diagnostic paths through phase_candidate_assembler and phase_frame_detection to oil_interface_diagnostics, then contrasts the scalar authority consumer. Existing Recipe, Artifact/static/motion and all comparison options are unchanged; earlier top-exit/RGB/IFO scopes remain in their result owners.
-- Execution scope: the linked frozen 7ee6d90 diagnostic joins 187 units and 85 directed contributions and independently checks 4,136 band references; 92 focused tests pass. No pair has both captured native paths, so common-native physical comparison is not assessable. This design update selects no algorithm, fits no model and changes no production, sequence, report or private Windows execution.
+- Execution scope: the linked frozen 7ee6d90 diagnostic had no two-native comparison inputs; CRW-1 at 7845f89 adds diagnostic-only matched current-raster sector observations over the same 187 units and 85 relations. Its direct-loop arithmetic and 123 focused tests verify measurement contracts, not continuous contours or physical roles. This update selects no production extractor/consumer, fits no model and changes no sequence, report or private Windows execution.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited.
 - Logic-map impact: NONE — source review confirms the existing diagnostic path and scalar authority routes; no setup, runtime owner, consumer or control-flow edge changes in this clarification.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair.

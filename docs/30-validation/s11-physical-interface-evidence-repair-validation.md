@@ -169,6 +169,21 @@ entire support population cannot satisfy positive preservation. The 4,136 basic
 grayscale band checks (2,867 distinct windows) validate arithmetic only, not
 material-role discrimination, detector output or report comprehension.
 
+The fixed [CRW-1 paired-raster screen](../50-diagnostics/s11/2026-10-16-raster-partition-screen.md#execution-result)
+adds measurable sector hypotheses without qualifying a continuous native contour.
+Its matched-column/position masks, tied alternatives, censoring and exact raster
+lineage are required input controls for reuse. Retain f1200's accepted/other
+partition counts of 3/4 and f1320's 2/2 tie as counterexamples to count-only
+physical authority; do not raise/lower that cutoff or shift the extraction window
+to fit them. A shared re-observed row is the same extraction, not independent
+support. The direct-loop arithmetic result cannot establish semantic independence.
+Evaluate useful preservation at reviewed-frame/episode scope: keeping two of four
+practical alternatives can still represent the public frame. A single remaining
+opposition or missing candidate is not automatically a whole-report failure;
+its actual selected duration, extrema and movement impact must be measured.
+Conversely, 7/8 sparse frame groups with descriptive support is not evidence that
+continuous movement, Windows identity or report comprehension has improved.
+
 | ID | Positive case | Negative / invariant | Required observation |
 |---|---|---|---|
 | E1 | Textured Oil/Foam interface, both proposal peers high in broad texture | Internal stripe/residue with similar scalar texture and boundary scores | Only the interface receives positive local partition evidence |
@@ -273,6 +288,6 @@ focused tests before the broader candidate suite.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: BASE association across a reviewed location mismatch and Accum boundary-owner exclusion are distinct targets; private physical-identity continuity remains unresolved. The local polarity-only association prototype failed protected truth and photometric positive controls.
 - Existing feature coverage: the new E3/E4 control reuses fixed current-frame candidate kinds, original raster/visibility and O1 native/center evidence without changing Recipe, masks, Artifact/static setup or experimental modes. The 187-unit population retains all accepted, opposed and unassessed records and the seven historical declared-kind mismatches.
-- Execution scope: linked local geometry availability and direct grayscale checks only, with 92 focused tests; no two-native pair, completed sequence, private Windows replay or actual reader response is supplied by this change. Earlier RGB/initial-FULL/top-exit checks remain at their recorded scopes. No new physical acceptance or classifier is claimed.
+- Execution scope: linked native geometry availability and CRW-1 paired-raster input checks only; the latter has 123 focused tests and separate direct-loop arithmetic. No continuous contour qualification, completed sequence, private Windows replay or actual reader response is supplied by this change. Earlier RGB/initial-FULL/top-exit checks retain their scopes. Partial descriptive support does not establish a physical classifier or report acceptance.
 - Logic-map impact: NONE — this adds a validation precondition for a proposed witness, not a production route or a new consumer.
 - Failure-registry impact: NONE — existing identity/provenance/no-threshold-shortcut guards cover missing contour input; prior rejected comparisons and full physical-witness acceptance are unchanged.

@@ -1,0 +1,490 @@
+{
+  "schema": "s11-crw1-execution-summary-v1",
+  "base_head": "20d5d4d555e1296959a75f3c2c0eb96b12de6e71",
+  "execution_head": "7845f890c52e2c6fab2b4b1a84f2e2139f9ded3e",
+  "verdict": "INPUT_MEASUREMENT_USEFUL; STANDALONE_ROLE_NOT_QUALIFIED; NO_PRODUCTION_PROMOTION",
+  "readout": {
+    "path": "sample/output/s11-raster-partition-20261016-001/evidence/readout.json.gz",
+    "sha256": "5458e62d198a821056996fabe736b9510d4b699571cd5497f88006c67a4723fc",
+    "bytes": 371355
+  },
+  "summary": {
+    "total_units": 187,
+    "frames": 8,
+    "source_kind_counts": {
+      "oil_air": 175,
+      "foam_front": 8,
+      "NON_CANDIDATE_CONTEXT": 4
+    },
+    "positive_contribution_pairs": 85,
+    "pairs_with_any_shared_partition": 33,
+    "pairs_with_three_shared_partition_sectors": 7,
+    "physical_discriminator_adopted": false,
+    "by_review": {
+      "ACCEPTED": {
+        "units": 11,
+        "three_localized_sectors": [
+          "s4-f1140-idx9",
+          "s4-f1200-idx4",
+          "s4-f1260-idx4",
+          "s4-f1275-idx12",
+          "s4-f1320-idx9",
+          "s4-f1485-idx8",
+          "s4-f1560-idx20",
+          "public-f1499-idx5",
+          "public-f1499-idx9",
+          "public-f1499-idx13"
+        ],
+        "three_partition_sectors": [
+          "s4-f1140-idx9",
+          "s4-f1200-idx4",
+          "s4-f1260-idx4",
+          "s4-f1275-idx12",
+          "s4-f1485-idx8",
+          "s4-f1560-idx20",
+          "public-f1499-idx9",
+          "public-f1499-idx13"
+        ],
+        "frame_partition_presence": {
+          "public-f1499": true,
+          "sample4-f1140": true,
+          "sample4-f1200": true,
+          "sample4-f1260": true,
+          "sample4-f1275": true,
+          "sample4-f1320": false,
+          "sample4-f1485": true,
+          "sample4-f1560": true
+        }
+      },
+      "OPPOSED": {
+        "units": 7,
+        "three_localized_sectors": [
+          "s4-f1140-idx7",
+          "s4-f1140-idx10",
+          "s4-f1140-idx22",
+          "s4-f1200-idx10",
+          "s4-f1260-idx15",
+          "public-f1499-idx3"
+        ],
+        "three_partition_sectors": [
+          "s4-f1200-idx10"
+        ],
+        "frame_partition_presence": {
+          "public-f1499": false,
+          "sample4-f1140": false,
+          "sample4-f1200": true,
+          "sample4-f1260": false,
+          "sample4-f1320": false
+        }
+      },
+      "UNASSESSED": {
+        "units": 157,
+        "three_localized_sectors": [
+          "s4-f1140-idx1",
+          "s4-f1140-idx2",
+          "s4-f1140-idx3",
+          "s4-f1140-idx4",
+          "s4-f1140-idx5",
+          "s4-f1140-idx11",
+          "s4-f1140-idx12",
+          "s4-f1140-idx13",
+          "s4-f1140-idx14",
+          "s4-f1140-idx16",
+          "s4-f1140-idx17",
+          "s4-f1140-idx18",
+          "s4-f1140-idx20",
+          "s4-f1140-idx21",
+          "s4-f1200-idx2",
+          "s4-f1200-idx3",
+          "s4-f1200-idx5",
+          "s4-f1200-idx6",
+          "s4-f1200-idx8",
+          "s4-f1200-idx9",
+          "s4-f1200-idx11",
+          "s4-f1200-idx12",
+          "s4-f1200-idx14",
+          "s4-f1200-idx15",
+          "s4-f1200-idx16",
+          "s4-f1200-idx17",
+          "s4-f1200-idx18",
+          "s4-f1200-idx19",
+          "s4-f1200-idx20",
+          "s4-f1260-idx1",
+          "s4-f1260-idx2",
+          "s4-f1260-idx3",
+          "s4-f1260-idx5",
+          "s4-f1260-idx6",
+          "s4-f1260-idx9",
+          "s4-f1260-idx10",
+          "s4-f1260-idx12",
+          "s4-f1260-idx13",
+          "s4-f1260-idx17",
+          "s4-f1260-idx19",
+          "s4-f1275-idx1",
+          "s4-f1275-idx2",
+          "s4-f1275-idx4",
+          "s4-f1275-idx5",
+          "s4-f1275-idx7",
+          "s4-f1275-idx8",
+          "s4-f1275-idx9",
+          "s4-f1275-idx10",
+          "s4-f1275-idx13",
+          "s4-f1275-idx14",
+          "s4-f1275-idx15",
+          "s4-f1275-idx16",
+          "s4-f1275-idx17",
+          "s4-f1320-idx1",
+          "s4-f1320-idx4",
+          "s4-f1320-idx5",
+          "s4-f1320-idx6",
+          "s4-f1320-idx8",
+          "s4-f1320-idx10",
+          "s4-f1320-idx11",
+          "s4-f1320-idx12",
+          "s4-f1320-idx13",
+          "s4-f1320-idx14",
+          "s4-f1320-idx15",
+          "s4-f1320-idx17",
+          "s4-f1320-idx19",
+          "s4-f1320-idx20",
+          "s4-f1320-idx22",
+          "s4-f1320-idx23",
+          "s4-f1485-idx1",
+          "s4-f1485-idx2",
+          "s4-f1485-idx3",
+          "s4-f1485-idx4",
+          "s4-f1485-idx5",
+          "s4-f1485-idx9",
+          "s4-f1485-idx10",
+          "s4-f1485-idx11",
+          "s4-f1485-idx12",
+          "s4-f1485-idx13",
+          "s4-f1485-idx14",
+          "s4-f1485-idx15",
+          "s4-f1485-idx16",
+          "s4-f1485-idx18",
+          "s4-f1485-idx19",
+          "s4-f1560-idx2",
+          "s4-f1560-idx3",
+          "s4-f1560-idx4",
+          "s4-f1560-idx5",
+          "s4-f1560-idx7",
+          "s4-f1560-idx9",
+          "s4-f1560-idx10",
+          "s4-f1560-idx11",
+          "s4-f1560-idx12",
+          "s4-f1560-idx13",
+          "s4-f1560-idx15",
+          "s4-f1560-idx16",
+          "s4-f1560-idx17",
+          "s4-f1560-idx18",
+          "s4-f1560-idx19",
+          "public-f1499-idx1",
+          "public-f1499-idx2",
+          "public-f1499-idx4",
+          "public-f1499-idx6",
+          "public-f1499-idx8",
+          "public-f1499-idx10",
+          "public-f1499-idx11",
+          "public-f1499-idx12",
+          "public-f1499-idx14",
+          "public-f1499-idx16",
+          "public-f1499-idx17",
+          "public-f1499-idx18",
+          "public-f1499-idx19",
+          "public-f1499-idx21"
+        ],
+        "three_partition_sectors": [
+          "s4-f1140-idx4",
+          "s4-f1140-idx12",
+          "s4-f1140-idx14",
+          "s4-f1200-idx8",
+          "s4-f1200-idx9",
+          "s4-f1200-idx19",
+          "s4-f1200-idx20",
+          "s4-f1260-idx9",
+          "s4-f1260-idx13",
+          "s4-f1275-idx4",
+          "s4-f1275-idx7",
+          "s4-f1320-idx12",
+          "s4-f1485-idx4",
+          "s4-f1485-idx14",
+          "s4-f1485-idx19",
+          "s4-f1560-idx2",
+          "s4-f1560-idx3",
+          "s4-f1560-idx9",
+          "s4-f1560-idx11",
+          "s4-f1560-idx13",
+          "s4-f1560-idx19",
+          "public-f1499-idx8",
+          "public-f1499-idx12",
+          "public-f1499-idx17"
+        ],
+        "frame_partition_presence": {
+          "public-f1499": true,
+          "sample4-f1140": true,
+          "sample4-f1200": true,
+          "sample4-f1260": true,
+          "sample4-f1275": true,
+          "sample4-f1320": true,
+          "sample4-f1485": true,
+          "sample4-f1560": true
+        }
+      }
+    }
+  },
+  "controls": [
+    {
+      "id": "s4-f1140-idx7",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "UNASSESSED",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 887.0,
+      "localized_sectors": 3,
+      "partition_sectors": 1,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1140-idx9",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 844.0,
+      "localized_sectors": 4,
+      "partition_sectors": 3,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1140-idx10",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "UNASSESSED",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 880.0,
+      "localized_sectors": 3,
+      "partition_sectors": 2,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1140-idx22",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "UNASSESSED",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 882.0,
+      "localized_sectors": 3,
+      "partition_sectors": 2,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1200-idx4",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 841.0,
+      "localized_sectors": 5,
+      "partition_sectors": 3,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1200-idx10",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "OPPOSED_OIL_TARGET",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 865.5,
+      "localized_sectors": 5,
+      "partition_sectors": 4,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1260-idx4",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 839.0,
+      "localized_sectors": 5,
+      "partition_sectors": 3,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1260-idx15",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "OPPOSED_OIL_TARGET",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 868.0,
+      "localized_sectors": 4,
+      "partition_sectors": 1,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1275-idx12",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 835.0,
+      "localized_sectors": 3,
+      "partition_sectors": 3,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1320-idx9",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 844.0,
+      "localized_sectors": 5,
+      "partition_sectors": 2,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1320-idx21",
+      "review_label": "OPPOSED",
+      "label_basis": {
+        "physical": "OPPOSED_OIL_TARGET",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 822.0,
+      "localized_sectors": 2,
+      "partition_sectors": 2,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1485-idx8",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "NOT_QUALIFIED",
+        "practical": "ACCEPTED_APPROXIMATION"
+      },
+      "source_y": 841.0,
+      "localized_sectors": 5,
+      "partition_sectors": 4,
+      "legacy_eligible": true
+    },
+    {
+      "id": "s4-f1560-idx20",
+      "review_label": "ACCEPTED",
+      "label_basis": {
+        "physical": "TARGET_CORRESPONDENCE",
+        "practical": "NOT_REVIEWED"
+      },
+      "source_y": 833.0,
+      "localized_sectors": 3,
+      "partition_sectors": 3,
+      "legacy_eligible": true
+    },
+    {
+      "id": "public-f1499-idx3",
+      "review_label": "OPPOSED",
+      "label_basis": "WRONG_CURRENT_PUBLISHED_SCALAR",
+      "source_y": 321.0,
+      "localized_sectors": 5,
+      "partition_sectors": 2,
+      "legacy_eligible": true
+    },
+    {
+      "id": "public-f1499-idx5",
+      "review_label": "ACCEPTED",
+      "label_basis": "PRACTICAL_ACCEPTANCE",
+      "source_y": 430.0,
+      "localized_sectors": 3,
+      "partition_sectors": 2,
+      "legacy_eligible": true
+    },
+    {
+      "id": "public-f1499-idx9",
+      "review_label": "ACCEPTED",
+      "label_basis": "PRACTICAL_ACCEPTANCE",
+      "source_y": 425.0,
+      "localized_sectors": 3,
+      "partition_sectors": 3,
+      "legacy_eligible": true
+    },
+    {
+      "id": "public-f1499-idx13",
+      "review_label": "ACCEPTED",
+      "label_basis": "PRACTICAL_ACCEPTANCE",
+      "source_y": 427.0,
+      "localized_sectors": 3,
+      "partition_sectors": 3,
+      "legacy_eligible": true
+    },
+    {
+      "id": "public-f1499-idx20",
+      "review_label": "ACCEPTED",
+      "label_basis": "PRACTICAL_ACCEPTANCE",
+      "source_y": 424.0,
+      "localized_sectors": 1,
+      "partition_sectors": 1,
+      "legacy_eligible": true
+    }
+  ],
+  "direct_loop_verification": {
+    "schema": "s11-raster-partition-direct-loop-verification-v1",
+    "readout_sha256": "5458e62d198a821056996fabe736b9510d4b699571cd5497f88006c67a4723fc",
+    "gradient_references": 6133,
+    "partition_references": 1244,
+    "error_count": 0,
+    "errors": [],
+    "arithmetic_atol": 1e-12,
+    "physical_or_report_acceptance": false
+  },
+  "tests": {
+    "passed": 123,
+    "failed": 0,
+    "new_cases": 31,
+    "prior_related_cases": 92,
+    "pytest_seconds": 7.17
+  },
+  "runtime_seconds": 1.329143707989715,
+  "source_sha256": {
+    "tests/diagnostics/s11_raster_partition_screen.py": "7d58d7b919dd26284fb014311d8c445b77c2037be8994cc1c8a98cfc8d3e5331",
+    "tests/diagnostics/s11_raster_partition_verify.py": "93b4a75513d344e5587534e3d0c16385fea1b4792273edee74eb8bad49b4bd1a",
+    "tests/unit/test_s11_raster_partition_screen.py": "6edb403f5d905843a5b516d7f6864589e65c0a951d91afe8c79f1a4495c80003"
+  },
+  "production_changed": false,
+  "windows_replay": "NOT_RUN",
+  "independent_report_reading": "NOT_RUN",
+  "local_images_directly_inspected": [
+    "sample4-f1140",
+    "sample4-f1275",
+    "sample4-f1485"
+  ],
+  "source_inputs_unchanged": true,
+  "closeout": {
+    "focused_recheck": {
+      "passed": 123,
+      "failed": 0,
+      "seconds": 7.61
+    },
+    "relative_link_references_checked": 22,
+    "link_errors": [],
+    "governance": "PASS",
+    "git_diff_check": "PASS",
+    "frozen_source_hashes_unchanged": true,
+    "production_src_and_recipe_diff": [],
+    "artifact_check": {
+      "managed_runs": 85,
+      "errors": []
+    },
+    "managed_run_status": "CLOSED",
+    "kept_files": 2
+  }
+}
