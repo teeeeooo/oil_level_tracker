@@ -48,3 +48,28 @@ def test_late_track_drops_members_not_original_history(index,remaining):
 
 def test_late_track_empty_withdrawal_fails():
     with pytest.raises(ValueError): filtered_tracklets(TrackResult(((),)),0,None)
+
+
+from tests.diagnostics.s11_single_observation_causal_verify import members, stage_difference
+from tests.diagnostics.s11_single_observation_backfill import without_backfill
+
+
+def test_stage_identity_change_is_separate_from_coordinate_change():
+    a=[[dict(frame_offset=0,candidate_offset=1,tracklet_id='a',y=10)]]
+    b=[[dict(frame_offset=0,candidate_offset=1,tracklet_id='b',y=10)]]
+    delta=stage_difference(a,b,[dict(frame_index=15,time_sec=.5)])
+    assert delta['field_counts']=={'tracklet_id':1}
+    assert not delta['added'] and not delta['removed']
+
+
+def test_stage_member_key_mismatch_and_duplicates_fail():
+    with pytest.raises(ValueError): members([[dict(frame_offset=1,candidate_offset=0)]])
+    with pytest.raises(ValueError): members([[dict(frame_offset=0,candidate_offset=0)]*2])
+
+
+def test_no_backfill_never_restores_missing_member_or_filters_other_frames():
+    def ref(i): return SimpleNamespace(candidate_offset=i,candidate=SimpleNamespace(source='x',y=10+i))
+    raw=((ref(1),ref(2)),(ref(2),)); before=deepcopy(raw)
+    changed,removed=without_backfill(raw,[{0,1},{0}],0)
+    assert raw==before and [r.candidate_offset for r in changed[0]]==[1]
+    assert changed[1]==raw[1] and [r['candidate_offset'] for r in removed]==[2]

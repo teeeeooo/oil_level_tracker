@@ -90,10 +90,32 @@ Oil level was None. Preserve that failure receipt; require coordinate-free
 ANALYSIS_START/END and exact smoothed-sample equality (including missingness) for
 other events. Add omitted-level and corrupt-level controls. The 245 numerical experiments and their original outputs do not change.
 
+## Third-stage hypothesis — H6, frozen before execution
+
+Stage capture shows selected Oil f1275/candidate12 (835 px, reviewed correspondence)
+leaves admission and candidate17 (818 px, unassessed) enters its place. The original
+loss later enters internal `FILL_SPAN_MATERIAL_VETO` at 44 s and `FILLED_CAP_VETO`;
+this internal filled barrier is NOT itself a verified physical FULL observation.
+Late-track H5 held original history and therefore cannot identify whether admission
+backfill, recurrence rerating or history construction caused the long numeric loss.
+
+H6: rerun the exact original selected-member loss, then suppress ONLY newly admitted
+members at its intervention frame relative to baseline admission membership. Rebuild
+recurrence, tracking, phase and selection normally. Do not hold any original history,
+change surviving refs, restore the withdrawn observation or assign physical labels.
+Run unchanged baseline, exact unfiltered selected-member replay, filtered selected
+loss, and the original all-Oil f1320 loss with the same no-backfill operation. That
+last arm had no added admitted member and must exactly equal its original result.
+This is an oracle comparative ablation, NOT a deployable no-backfill policy: a real
+miss does not provide the baseline proposal membership. If the 44–56 s gap remains,
+new candidate17 is not necessary for this failure; do not retune/exclude that Y.
+If it disappears, inspect both retained positive controls and new report extremes
+before claiming even local benefit. No production or Windows qualification.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-IDENTITY`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `CSV-PUBLICATION`, `RESULT-PRESENTATION`.
-- Failure-registry entries: `S11-F04`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
+- Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: existing RCI/PWC and Local XY results show candidate interventions can change later ownership and report extremes; this study isolates one-frame admission loss without asserting a new optical or physical first cause.
 - Existing feature coverage: reuse P5 NONE raw candidates and original Recipe/session, UNKNOWN initial state, configured ellipse/margin 0.08, zero user exclusions/templates, preserved preprocessing/static/Artifact outcomes. No new extraction or learning. IFO, top-exit, cost-first, RGB and Local XY remain OFF. Only existing sequence eligibility on copied candidates is withdrawn. Shared frame/state evidence remains, so these are not camera-outage tests.
 - Execution scope: tests/diagnostics performs exhaustive single-frame eligibility interventions through the current completed resolver, samples/events and report presentation; selected representatives additionally execute real CSV and graph rendering. Original pixel atlases are inspected. No private Windows replay, raw pixel model, whole-recording physical truth, Recipe judgment, GUI/full report-source generation or independent user reading.
