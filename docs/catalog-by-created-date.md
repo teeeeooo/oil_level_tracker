@@ -1633,3 +1633,9 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 최초 등록 기준 | 문서 | 범위 |
 |---|---|---|
 | 2026-10-15 / 미등록 | [50-diagnostics/s11/2026-10-15-initial-full-comparison.md](50-diagnostics/s11/2026-10-15-initial-full-comparison.md) | 내부 ROI 고정과 초기 FULL 관측 경로 비교; 실제 Windows 판정은 별도 |
+
+### 2026-10-16 Windows 비교 체크포인트
+
+| 최초 Git 추가일 (KST) | 문서 | 범위 |
+|---|---|---|
+| 2026-10-16 | [60-evidence/s11/2026-10-16-windows-comparison-checkpoint.md](60-evidence/s11/2026-10-16-windows-comparison-checkpoint.md) | 세 후보·FULL preflight·721초 조사 완료 상태와 기존 판정·자료 위치, 다음 수정안 설계 재개용 인계 |

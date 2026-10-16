@@ -82,10 +82,16 @@ docs/40-operations/s11-current-windows-field-qualification.md의
 corroborated_material_path → anchor_corridor → Y694 출력 경로를 기록했어.
 semantic_sequence_available=False는 직접 저장값이 아니라 코드상 조건부 추론이야.
 ④ bundle과 기존 review 자료를 보존해줘. 추가 추출·재실행·튜닝·새 판정은 없어.
-⑧도 실행하지 않아. 다음 수정안과 검증 범위를 정리한 뒤 필요한 작업을 전달할게.
+FULL은 사전 조건 확인만 완료됐고 ⑧ 본검증은 미실행이야. 지금은 실행하지 않아.
+상단 관측·판정 조건을 정리한 뒤 FULL 전환·유지 Windows 검증이 필요해.
+다음 수정안과 검증 범위를 정리한 뒤 필요한 작업을 전달할게.
 ```
 
 ## Top-exit FULL comparison
+
+**FULL 전환 검증 자체는 미완료다.** 아래의 완료 상태는 사전 조건 확인에만
+해당한다. 상단 관측·판정 조건을 정리한 뒤 실제 FULL 전환·유지와 기존 관측
+보존의 Windows 비교가 남는다. 현재 추가 실행 요청은 없다.
 
 **preflight 수신 완료: CONDITION FAILED / ⑧ NOT RUN.** BASE의 허용 끝점
 Y220.870보다 effective mask 상단 Y243이 아래에 있어 조건에 도달할 수 없다.
