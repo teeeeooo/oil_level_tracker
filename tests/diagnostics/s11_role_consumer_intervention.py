@@ -117,16 +117,17 @@ def bind_controls(raw, units):
     return controls
 
 
-def intervene_authority(decision, *, variant, opposed, physical_positive):
+def intervene_authority(decision, *, variant, opposed, physical_positive,
+                        marker='DIAGNOSTIC_ORACLE'):
     """Change just the returned tier; existing phase/material evidence is untouched."""
     require(variant in VARIANTS, 'unknown diagnostic variant')
     if variant == 'negative_anchor_demotion' and opposed and decision.tier is Tier.ANCHOR_ELIGIBLE:
         return replace(decision, tier=Tier.CONTINUATION_ELIGIBLE,
-                       failed_gates=(*decision.failed_gates, 'DIAGNOSTIC_ORACLE_ANCHOR_DEMOTION'))
+                       failed_gates=(*decision.failed_gates, f'{marker}_ANCHOR_DEMOTION'))
     if (variant in {'positive_authority_only', 'negative_veto_positive_authority'}
             and physical_positive and Tier.HARD_INVALID < decision.tier < Tier.ANCHOR_ELIGIBLE):
         return replace(decision, tier=Tier.ANCHOR_ELIGIBLE,
-                       failed_gates=(*decision.failed_gates, 'DIAGNOSTIC_ORACLE_AUTHORITY_PROMOTION'))
+                       failed_gates=(*decision.failed_gates, f'{marker}_AUTHORITY_PROMOTION'))
     return decision
 
 
@@ -177,7 +178,8 @@ def control_status(row, controls):
     return 'PRACTICALLY_ACCEPTED' if match['practical_only'] else 'PHYSICAL_CORRESPONDENCE'
 
 
-def replay(raw, controls, glass, variant):
+def replay(raw, controls, glass, variant, *, analysis_id='DIAGNOSTIC_ROLE_ORACLE',
+           marker='DIAGNOSTIC_ORACLE'):
     prepared, edits = prepare_input(raw, controls, variant)
     detections = tuple(decode(d) for d in prepared)
     ordered = [(d.frame_index, i, c) for d in detections for i, c in enumerate(d.candidates)
@@ -197,7 +199,7 @@ def replay(raw, controls, glass, variant):
         control = by_key.get((frame, index), {})
         after = intervene_authority(before, variant=variant,
             opposed=control.get('review_label') == 'OPPOSED',
-            physical_positive=control.get('physical_positive', False))
+            physical_positive=control.get('physical_positive', False), marker=marker)
         calls.append({'frame': frame, 'index': index, 'source': candidate.source, 'y': candidate.y,
                       'before': normalize(asdict(before)), 'after': normalize(asdict(after)),
                       'phase_identity': context.phase_identity.identity.value,
@@ -230,14 +232,14 @@ def replay(raw, controls, glass, variant):
                'foam_fields': {k: out[k] for k in FOAM_FIELDS}}
         row['review_status'] = control_status(row, controls)
         rows.append(row)
-    samples = [tracking_sample_from_detection('DIAGNOSTIC_ROLE_ORACLE', glass, d) for d in result.detections]
+    samples = [tracking_sample_from_detection(analysis_id, glass, d) for d in result.detections]
     for row, sample in zip(rows, samples, strict=True):
         row['oil_is_valid'], row['foam_is_valid'] = sample.oil_is_valid, sample.foam_is_valid
     # REVIEW_REQUIRED is a diagnostic wrapper status, not a rerun of Recipe judgment.
     glass_result = GlassAnalysisResult(glass.id, glass.name, ResultState.REVIEW_REQUIRED, samples,
-        detect_events_for_glass('DIAGNOSTIC_ROLE_ORACLE', glass.id, samples),
+        detect_events_for_glass(analysis_id, glass.id, samples),
         judgment_note='Diagnostic intervention; no detector or physical acceptance.')
-    public_result = AnalysisResult('DIAGNOSTIC_ROLE_ORACLE', ResultState.REVIEW_REQUIRED,
+    public_result = AnalysisResult(analysis_id, ResultState.REVIEW_REQUIRED,
         [glass_result], 'DIAGNOSTIC', 'DIAGNOSTIC')
     return {'variant': variant, 'rows': rows, 'authority_calls': calls,
             'input_edits': edits, 'runtime_sec': time.perf_counter()-started,

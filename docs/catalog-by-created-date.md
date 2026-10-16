@@ -1668,3 +1668,10 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-16 | [2026-10-16-role-consumer-context.md](50-diagnostics/s11/2026-10-16-role-consumer-context.md) | 검토 역할의 consumer 반사실 실험; 자동 판별기 아님 |
 | 2026-10-16 | [2026-10-16-role-consumer-context/summary.json](50-diagnostics/s11/2026-10-16-role-consumer-context/summary.json) | 반복 개입 결과·검증·보존 해시 요약 |
 | 2026-10-16 | [2026-10-16-role-consumer-handoff.md](60-evidence/s11/2026-10-16-role-consumer-handoff.md) | 전체 구간 consumer 검증·원본 대조·후속 실행 기준 |
+
+
+### PWC-1 픽셀 모델·완료 consumer 검증
+
+| 최초 Git 추가일 | 문서 | 구분 |
+|---|---|---|
+| 2026-10-16 / 미등록 | [2026-10-16-profile-witness-consumer.md](50-diagnostics/s11/2026-10-16-profile-witness-consumer.md) | 행 분리 검증으로 비교하는 두 픽셀 모델과 전체 sequence/report 개입; 물리 역할 미검증 |
