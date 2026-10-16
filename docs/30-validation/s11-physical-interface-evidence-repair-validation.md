@@ -76,6 +76,30 @@ Top-exit FULL is after the three comparisons, not an entry requirement. Windows
 results can close this candidate as effect, no effect/regression, or insufficient
 evidence; no follow-up threshold tuning or default promotion is automatic.
 
+## Candidate-local RGB comparison checks
+
+- The packaged weights must equal the frozen candidate-model artifact. Reproduce
+  all available retained variant logits within the prior `1e-4` tolerance and
+  every retained decision, including the known rim false accepts. Shared-strip
+  convolution must agree with independently evaluated patches.
+- Preserve exact floor/ceil support, effective/glare masking, source/crop mapping
+  and the excluded central gap. Missing patches and variant disagreement remain
+  in the population as UNAVAILABLE/UNKNOWN, never fabricated zeros or negatives.
+- RGB compatibility is only an additional completed-Oil eligibility condition:
+  it cannot override hard-invalid/artifact/phase/ownership rejection. Disabled
+  execution must neither load weights nor annotate/change raw inputs.
+- Verify the real GUI factory's four detector entry paths and independent
+  initial-FULL flag, reject cost-first stacking, and identify ON in detector and
+  completed resolver versions. Test missing/corrupt weights and missing enabled
+  annotations without a silent fallback.
+- Reuse the existing local comparison runner on frozen base/sample4 inputs.
+  Compare OFF with retained v2, compare unmodified raw proposal/Foam content
+  after removing only added RGB annotations, and check exact same-frame
+  selection/CSV equality. Compare final Foam and FULL/NONE debug results.
+- Windows compares ④ v2 with ⑥ v2+RGB, reusing review-004/005 uncertainty and
+  the canonical BASE/Accum timeline. Neither positive model scores, local
+  arithmetic equality nor fewer false outputs establishes field acceptance.
+
 ## Validation layers
 
 1. Exercise raster-derived witnesses before authority. Tests which directly
@@ -197,7 +221,7 @@ focused tests before the broader candidate suite.
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: BASE association across a reviewed location mismatch and Accum boundary-owner exclusion are distinct targets; private physical-identity continuity remains unresolved. The local polarity-only association prototype failed protected truth and photometric positive controls.
-- Existing feature coverage: independent default-OFF initial-FULL and cost-first options reuse existing Recipe/ROI, static preparation, tracklet confirmation and final publication. Frozen local comparison inputs retain empty exclusions/templates and Local XY OFF; Windows input details remain attributed operator evidence.
-- Execution scope: focused admission/association/resolver/GUI tests and the existing bounded real analysis runner cover v2 vs v2+cost-first, with retained-v2 equality, exact candidate/CSV provenance and debug equivalence; private Windows physical review remains separate.
-- Logic-map impact: UPDATED — the current map distinguishes v2 admission and the separate cost-first first-sort option, including its unchanged reciprocal-reservation ordering.
+- Existing feature coverage: default-OFF RGB uses the same current native RGB/effective/glare support and frozen packaged model. Local comparisons use the frozen interior Recipes, static preparation and initial FULL, with cost-first/Local XY and templates/exclusions OFF/empty. Windows settings remain attributed operator evidence.
+- Execution scope: frozen-logit parity, eligibility controls, real GUI entry paths and the existing bounded pipeline runner check v2 vs v2+RGB, retained-v2 equality, exact candidate/CSV provenance and debug equivalence. No fitting or private Windows replay is part of local verification.
+- Logic-map impact: UPDATED — the current map adds RGB setup and annotation/eligibility ownership without changing the existing phase, selector or independent Foam routes.
 - Failure-registry impact: NONE — existing F03/F04/F05/F08/F09/F10 controls cover the widened exploratory mode; earlier polarity-only failures and full physical-witness acceptance remain unchanged.

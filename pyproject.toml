@@ -34,7 +34,7 @@ include-package-data = true
 where = ["src"]
 
 [tool.setuptools.package-data]
-oil_tracker = ["adapters/reporting/templates/*.j2", "resources/styles/*.qss", "resources/icons/*"]
+oil_tracker = ["adapters/reporting/templates/*.j2", "resources/styles/*.qss", "resources/icons/*", "resources/models/*.npz"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"

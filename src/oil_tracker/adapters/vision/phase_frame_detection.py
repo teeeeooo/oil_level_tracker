@@ -45,6 +45,7 @@ from .oil_shadow_types import (
     SmoothingAction,
 )
 from .phase_candidate_assembler import assemble_phase_candidates
+from .oil_candidate_rgb import OilCandidateRgb
 from .oil_interface_diagnostics import measure_oil_interfaces
 from .oil_pipeline_diagnostics import project_measurement_lineage
 from .preprocessing import PreprocessResult, preprocess
@@ -253,6 +254,9 @@ class CurrentFrameEvidenceOwner:
 
 class CurrentFrameResultProjector:
     """Project one evidence bundle through compatibility state and output fields."""
+
+    def __init__(self, *, candidate_rgb: OilCandidateRgb | None = None) -> None:
+        self._candidate_rgb = candidate_rgb
 
     def project(
         self,
@@ -509,6 +513,14 @@ class CurrentFrameResultProjector:
         if calibrated_artifact_rejected_count:
             flags.append("R8_CALIBRATED_ARTIFACT_REJECTED")
 
+        rgb_summary = None
+        if self._candidate_rgb is not None:
+            candidates, rgb_summary = self._candidate_rgb.annotate(
+                candidates, crop_bgr=bundle.crop, effective_mask=bundle.effective_mask,
+                glare_mask=pre.glare_mask, crop_origin=bundle.crop_origin,
+                source_center_x=glass.geometry.ellipse.center_x,
+            )
+
         debug_metrics = {
             "glare_ratio": float(np.count_nonzero(pre.glare_mask))
             / max(1, np.count_nonzero(bundle.effective_mask)),
@@ -629,6 +641,8 @@ class CurrentFrameResultProjector:
             effective_photometric_metrics(pre, bundle.effective_mask)
         )
         debug_metrics.update(oil_runtime_metrics(oil_result))
+        if rgb_summary is not None:
+            debug_metrics["oil_candidate_rgb"] = rgb_summary
         if evidence.candidate_assembly.measurement_scope is not None:
             debug_metrics["oil_measurement_scope"] = evidence.candidate_assembly.measurement_scope
         oil_detail = oil_debug_detail(oil_result) if debug else None

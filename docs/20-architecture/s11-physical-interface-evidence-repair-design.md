@@ -1,7 +1,7 @@
 # S11 Physical Interface Evidence Repair Design
 
 **Design status:** full physical-witness proposal remains unaccepted; the separately
-bounded October 15 initial-FULL and cost-first comparisons below are authorized
+bounded initial-FULL, cost-first and candidate RGB comparisons below are authorized
 for exploratory implementation.
 Revision naming and runtime promotion are not assigned
 by this document. The [work plan](../00-project/work-plan.md) owns execution state.
@@ -170,6 +170,56 @@ controls, resolver/publication integration, and a paired real-video replay using
 the already frozen initial-FULL interior ROI inputs. Reuse the existing replay
 runner and managed artifact entry; do not reconstruct the retired October 10 raw
 inputs or refit a model. Windows effectiveness remains pending.
+
+## Candidate-local RGB Windows comparison
+
+Priority 2 reuses the [frozen candidate model](../60-evidence/s11/2026-10-14-candidate-rgb-trial.md)
+without fitting, cutoff changes or a new mask. The historical rim failure remains
+FALSIFIED_BY_REVIEWED_RIM. The new work is the opt-in connection to completed
+Oil eligibility; the old trial scored isolated candidates and had no production
+consumer. Compare FULL+observation v2 with v2+RGB, with cost-first and Local XY OFF.
+
+`--oil-candidate-rgb` is default OFF and independent of initial-FULL. Package the
+unchanged 6,594-byte weights with SHA-256
+`8daffcdff5a59f6c8b2212c3e41aa911d676ac391d152a23857bd65d185636db` as a runtime
+resource; retain the historical evidence copy. No Torch/model download is needed.
+NumPy inference implements the same three valid convolutions, two ReLUs, ordered
+side means and classifier. Shared convolution over a 25-pixel-wide native strip
+reuses overlapping 7×7 computations; it must equal independent per-patch inference.
+
+For every finite Oil candidate, use the Recipe ellipse's rounded source center X
+and the candidate's source Y, converted by the actual crop origin. Preserve the
+existing ±12 native side footprint, all complete visible/glare-free 7×7 patches,
+RGB /255 and required floor/ceil Y variants. No resize, padding, replacement mask,
+pure-side labels or private Glass/time/Y rules. Every required variant must choose
+the same class; ties/disagreement are UNKNOWN, missing support is UNAVAILABLE.
+
+Apply the model as an **additional completed-Oil eligibility condition**:
+only OIL_CANDIDATE_COMPATIBLE passes this condition. OPPOSED, UNKNOWN and
+UNAVAILABLE do not. Compatibility never raises authority, changes a score,
+rescues an existing rejection or supplies an interface coordinate. Preserve all
+raw proposals with their RGB result and input provenance; do not delete denied
+candidates. The existing `candidate_is_eligible` owner consumes the added
+condition before tracklet/phase/selection. Current-frame legacy positions remain
+provisional; the comparison claims concern completed sequence/CSV output.
+No-interface evidence, association, ownership, selector and direct Foam policy
+are unchanged. Final Foam effects must still be compared after composition.
+
+The normal frame projector computes RGB annotations independent of debug level.
+The shared GUI factory carries the flag to preview, analysis, preflight and
+redetection; detector/resolver identities append `+candidate-rgb-v1`. Missing or
+corrupt packaged weights abort enabled construction; a resolver configured for
+RGB must not silently accept Oil inputs without the RGB annotation. Cost-first
+and RGB cannot be enabled together in this single-mechanism comparison.
+
+Before any local replay, freeze this consumer and input rule. Verify all retained
+available candidate logits/decisions against the old readout, including the three
+known rim false accepts. Verify missing support, fractional variants, crop origin,
+hard-invalid preservation, raw Foam/proposal preservation, OFF equality, actual
+GUI routing and exact selected/CSV provenance. Reuse the two frozen local clips
+and interior Recipes; their FULL initial state is a mechanism stress condition,
+not physical truth. Retain losses and unknowns without tuning. Windows physical
+comparison and the third Local XY candidate remain separate.
 
 ## 1. Interface evidence and independence
 
@@ -417,11 +467,11 @@ as the serialized array index. Diagnostic detail must not change output.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples; the October 10 cost-order-only probe and qualified October 15 review-004 return.
+- Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples; the cost-first Windows regression, qualified review-004/005 and frozen RGB model's rim failure/input contract.
 - Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
-- Existing feature coverage: normal Recipe ellipse/margin/exclusions, static preparation and session initial-state confirmation remain active. Cost-first reuses the frozen initial-FULL interior ROI Recipes; templates/exclusions retain their recorded empty state, Local XY stays OFF and no RGB head is enabled. Both paired runs use explicit FULL plus observation v2; only the default-OFF cost-first option differs. Private Windows ROI/Artifact/static settings remain operator evidence, checked for matching conditions there.
-- Execution scope: initial-FULL implementation/replays retain their recorded scope. Cost-first verification covers the existing GUI factory through detector/resolver/tracklet policy, bounded association controls and real AnalysisPipeline → completed resolution → CSV/report comparison on two local videos, with sample4 repeated under FULL debug. It reuses frozen inputs and the managed artifact entry; no private Windows media or physical acceptance is inferred from local checks.
-- Difference from prior failures: the full raster-witness proposal still requires independent identity evidence. Initial-FULL v2 isolates current-candidate publication from motion certification without changing association. The separate cost-first option repeats only the earlier first-sort intervention on this v2 reference; it is not a new physical witness or a repair of the earlier upper-texture failure. Confirmation windows, candidate scores, motion release and formal acceptance remain unchanged; no threshold or source-specific rescue is added.
-- Logic-map impact: UPDATED — default-OFF cost-first setup propagation and the precisely bounded first-assignment sort are added to the existing feature and OIL-TRACKLET entries; initial-FULL ownership and default behavior are preserved.
+- Existing feature coverage: normal Recipe ellipse/margin/exclusions, static preparation and initial-state confirmation remain active. RGB comparison reuses the frozen initial-FULL interior ROI Recipes with empty templates/exclusions, cost-first and Local XY OFF. Only the packaged fixed-model eligibility condition differs between explicit FULL+v2 runs. Native RGB/effective/glare support is measured without the retired overlay guard. Private Windows setup remains operator evidence.
+- Execution scope: RGB preparation verifies frozen inference and actual GUI/AnalysisPipeline → completed resolution → CSV/report on the existing two local clips, with debug equivalence and retained-v2 equality. Earlier initial-FULL/cost-first results retain their scope. No private media, fit, new label, model download or physical acceptance is part of local verification.
+- Difference from prior failures: the RGB model and its known rim false accepts are unchanged; the new bounded consumer requires its compatibility in addition to existing Oil eligibility. It cannot raise authority or repair hard exclusions. Initial-FULL/cost-first retain their distinct scopes; full raster-witness acceptance, confirmation, scores and motion release remain unchanged. No threshold or source-specific rescue is added.
+- Logic-map impact: UPDATED — the new RGB setup route, current-frame annotations and additional completed eligibility condition are mapped; default behavior, existing phase/selection authority and the separate cost-first route remain unchanged.
 - Failure-registry impact: NONE — F05/F08 already own permanent barriers and unsafe release; this trial deliberately measures remaining identity errors without declaring those failures repaired.

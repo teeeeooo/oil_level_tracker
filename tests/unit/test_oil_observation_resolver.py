@@ -713,8 +713,8 @@ def test_confirmed_full_is_context_only_until_image_state_or_oil_evidence() -> N
     assert any(member["selected"] for member in selected_row["members"])
 
 
-@pytest.mark.parametrize("cost_first", [False, True])
-def test_initial_full_comparison_publishes_exact_current_y_with_uncertain_direction(cost_first):
+@pytest.mark.parametrize("cost_first,rgb", [(False, False), (True, False), (False, True)])
+def test_initial_full_comparison_publishes_exact_current_y_with_uncertain_direction(cost_first, rgb):
     from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
     glass = glass_config()
     ys = (150., 147., 144., 141., 138., 135., 132., 129.)
@@ -722,9 +722,13 @@ def test_initial_full_comparison_publishes_exact_current_y_with_uncertain_direct
         _detection(i, _candidate(y, boundary=.85, broad=.85, selected=True), ambiguity=.1)
         for i, y in enumerate(ys)
     )
+    if rgb:
+        for d in detections:
+            for c in d.candidates:
+                c.features["oil_candidate_rgb_eligible"] = 1.
     baseline = OpenCvPhaseDetector().resolve_sequence(detections, glass, InitialObservationState.FULL_NO_INTERFACE)
     trial_detector = OpenCvPhaseDetector(
-        initial_full_observation=True, cost_first_assignment=cost_first,
+        initial_full_observation=True, cost_first_assignment=cost_first, candidate_rgb=rgb,
     )
     trial = trial_detector.resolve_sequence(detections, glass, InitialObservationState.FULL_NO_INTERFACE)
     assert all(d.raw_oil_air_level_y is None for d in baseline.detections)
@@ -732,6 +736,7 @@ def test_initial_full_comparison_publishes_exact_current_y_with_uncertain_direct
     assert "initial-full-observation-v2" in trial_detector.version
     for detection, expected in zip(trial.detections, ys, strict=True):
         assert ("+cost-first-assignment-v1" in detection.debug_metrics["sequence_resolver_version"]) is cost_first
+        assert ("+candidate-rgb-v1" in detection.debug_metrics["sequence_resolver_version"]) is rgb
         assert detection.fill_state is FillState.PARTIAL_VISIBLE
         assert "OIL_DIRECTION_UNCONFIRMED" in detection.flags
         selected = [c for c in detection.candidates if c.kind is BoundaryKind.OIL_AIR and c.selected]
@@ -741,16 +746,21 @@ def test_initial_full_comparison_publishes_exact_current_y_with_uncertain_direct
     assert [d.raw_foam_front_y for d in trial.detections] == [d.raw_foam_front_y for d in baseline.detections]
 
 
-@pytest.mark.parametrize("cost_first", [False, True])
-def test_initial_full_comparison_cannot_publish_a_hard_unavailable_frame(cost_first):
+@pytest.mark.parametrize("cost_first,rgb", [(False, False), (True, False), (False, True)])
+def test_initial_full_comparison_cannot_publish_a_hard_unavailable_frame(cost_first, rgb):
     glass = glass_config()
     detections = tuple(
         _detection(i, _candidate(130., boundary=.85, broad=.85), ambiguity=.1,
                    flags=("FRAME_UNAVAILABLE",) if i == 4 else ())
         for i in range(8)
     )
+    if rgb:
+        for d in detections:
+            for c in d.candidates:
+                c.features["oil_candidate_rgb_eligible"] = 1.
     trial = OilObservationResolver(OilObservationResolverConfig(
         initial_full_observation_enabled=True, cost_first_assignment_enabled=cost_first,
+        candidate_rgb_enabled=rgb,
     )).resolve(
         detections, glass, InitialObservationState.FULL_NO_INTERFACE,
     )

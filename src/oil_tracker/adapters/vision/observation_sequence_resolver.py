@@ -67,15 +67,19 @@ class ObservationSequenceResolver:
     def __init__(
         self, *, initial_full_observation: bool = False,
         cost_first_assignment: bool = False,
+        candidate_rgb: bool = False,
     ) -> None:
         self._oil = OilObservationResolver(OilObservationResolverConfig(
             initial_full_observation_enabled=initial_full_observation,
             cost_first_assignment_enabled=cost_first_assignment,
+            candidate_rgb_enabled=candidate_rgb,
         ))
         if initial_full_observation:
             self.version += "+initial-full-observation-v2"
         if cost_first_assignment:
             self.version += "+cost-first-assignment-v1"
+        if candidate_rgb:
+            self.version += "+candidate-rgb-v1"
         self._foam = FoamEpisodeResolver()
 
     def resolve(

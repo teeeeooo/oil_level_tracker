@@ -161,6 +161,7 @@ class OilObservationResolverConfig:
     tracklet_ambiguity_margin: float = 0.08
     initial_full_observation_enabled: bool = False
     cost_first_assignment_enabled: bool = False
+    candidate_rgb_enabled: bool = False
 
     @property
     def end_to_end_commit_lag_frames(self) -> int:
@@ -1462,6 +1463,8 @@ class OilObservationResolver:
             self.version += "+initial-full-observation-v2"
         if self.config.cost_first_assignment_enabled:
             self.version += "+cost-first-assignment-v1"
+        if self.config.candidate_rgb_enabled:
+            self.version += "+candidate-rgb-v1"
         self.admission_evidence = OilAdmissionEvidenceOwner(self.config)
         self.tracklet_opposition = OilTrackletOppositionOwner(
             self.config
@@ -1476,6 +1479,12 @@ class OilObservationResolver:
         confirmed_initial_state: InitialObservationState | None = None,
     ) -> OilObservationResolution:
         source = tuple(detections)
+        if self.config.candidate_rgb_enabled and any(
+            "oil_candidate_rgb_eligible" not in candidate.features
+            for detection in source for candidate in detection.candidates
+            if candidate.kind is BoundaryKind.OIL_AIR
+        ):
+            raise ValueError("Candidate RGB comparison requires annotated Oil inputs.")
         if not source:
             return OilObservationResolution(
                 (),

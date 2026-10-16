@@ -37,6 +37,7 @@ owns the record, not a second feature inventory in each experiment.
 | Experimental Local XY | Explicit [`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py) constructor input → selected Oil measurement lanes | Default OFF; it is not the Recipe exclusion mask. State scope/digest if used; historical rejection does not authorize enabling or tuning it. |
 | Initial-FULL observation comparison | GUI `--initial-full-observation` → `build_main_window` detector factory → `OpenCvPhaseDetector` / resolver policy | Default OFF; bounded tracklet-admitted current observations may reach selection without a drain release (v2 includes continuation rows and already-confirmed provisional witnesses). Trial version/title and direction-uncertainty flags distinguish it from baseline. It does not enable Local XY or change Recipe initial state. |
 | Cost-first assignment comparison | GUI `--oil-cost-first-assignment` → same detector factory → `OpenCvPhaseDetector` / `ObservationSequenceResolver` → Oil config and `DirectedTrackletPolicy` | Default OFF, independent of initial-FULL. Only the first assignment sort removes established-status precedence; existing reciprocal reservation ordering and all eligibility/ambiguity/confirmation rules remain. ON adds `+cost-first-assignment-v1`; intended Windows pair uses FULL+observation v2 in both runs. |
+| Candidate RGB comparison | GUI `--oil-candidate-rgb` → same detector factory → frame projector's frozen RGB annotations → `candidate_is_eligible` | Default OFF; additional completed-Oil eligibility only, using packaged fixed weights and native visible/glare-free side patches. Compatibility cannot promote authority or rescue rejection; UNKNOWN/UNAVAILABLE fail this condition. Raw proposals and direct Foam policy remain. ON adds `+candidate-rgb-v1`; cost-first remains OFF. |
 | Completed analysis and report | [`DetectionRunCoordinator`](../../src/oil_tracker/application/services/detection_run.py) → sequence composition → sample/event/judgment/export owners below | Raw helper, current-frame output, completed Oil/Foam, and report are different execution scopes. Recipe judgment/scale and report rendering do not establish physical accuracy. |
 
 For structure/exclusion hypotheses, the [recall index](../00-project/recall-index.md)
@@ -230,12 +231,22 @@ records the correction and bounded behavior-equality check.
 
 The authority tiers have these meanings in the current code:
 
-- `HARD_INVALID`: fails `candidate_is_eligible` (explicit sequence eligibility, visibility/evidence availability, Artifact match, optics/exclusion/border conflict); the ref is discarded.
+- `HARD_INVALID`: fails `candidate_is_eligible` (explicit sequence eligibility, visibility/evidence availability, Artifact match, optics/exclusion/border conflict, or the opt-in RGB eligibility condition); the ref is discarded.
 - `ANCHOR_ELIGIBLE`: independently identified direct/ordered-lower/phase/material candidate satisfying one of the explicit authority routes.
 - `CONTINUATION_ELIGIBLE`: eligible material/boundary continuation that is not independently anchor-grade.
 - `CANDIDATE_ONLY`: retained only when later bookkeeping needs it; it cannot be phase-admitted.
 
 Per frame, ordinary refs are sorted by authority/quality/Y/source and limited by configured `candidate_top_k`; a non-calibrated supplemental row, bounded calibrated-high-recall reserve, and one ordered-lower reserve can be retained. This reserve affects evaluation capacity, not identity authority. Material identity opposition is bounded (missing/seed-age/drift limits) and is not the same as a final Foam episode.
+
+The optional RGB comparison annotates candidates in `CurrentFrameResultProjector`
+after normal candidate assembly and Artifact checks. `OilCandidateRgb` uses the
+unchanged packaged candidate model and current native crop/effective/glare mask;
+no score, Y, source family or temporal state enters its model. Only compatible
+floor/ceil variants pass the additional eligibility condition. Original proposals
+remain in trace with RGB status/support/logits; current legacy positions remain
+provisional. This preserves all existing authority/phase/selection checks and
+adds no positive identity route. The [comparison design](s11-physical-interface-evidence-repair-design.md#candidate-local-rgb-windows-comparison)
+owns the frozen consumer and its limits.
 
 ### 4.2 Physical identity (`OIL-TRACKLET`)
 
@@ -436,6 +447,8 @@ bounded expiry and one-attempt semantics.
   absolute recovery expiry, R20 delayed reacquisition, and R21 recent
   trajectory evidence; R22-1 raster diagnostics and the existing native material
   and spatial-fallback paths were reviewed for the R22-2 diagnostic extension.
+  The opt-in RGB route reuses the frozen candidate model and its recorded rim
+  counterexamples; cost-first Windows regression remains unpromoted.
 - Prior mechanisms rejected: unbounded renewal, cross-ID identity reuse,
   diagnostic-text authority, coordinate carry, threshold/case tuning, duplicate
   path finding and diagnostic-peak recentering.
@@ -448,7 +461,8 @@ bounded expiry and one-attempt semantics.
   ROI is frozen separately from original Recipes, static preparation remains active,
   and private Windows ROI remains operator-verified there.
 - Execution scope: current source/caller review and focused lifecycle/resolver/GUI/event/report
-  tests for initial-FULL and cost-first routes; bounded local analysis replay is recorded
+  tests for initial-FULL, cost-first and RGB routes; frozen RGB inference parity
+  and bounded local analysis replay are recorded
   in its comparison record. No Windows execution or physical acceptance is implied.
 - Difference from prior failures: typed competing-identity contradiction is
   propagated before member selection, and only one independently reaffirmed
@@ -460,9 +474,12 @@ bounded expiry and one-attempt semantics.
   requiring a new anchor every frame; motion state and phase release stay unchanged.
   The cost-first option repeats only the October 10 first-sort intervention under
   an explicit GUI/resolver option; its known false-identity risk is not resolved.
+  RGB adds only a compatibility requirement before Oil authority and preserves
+  all raw proposals; it does not turn its scores into positive physical authority.
 - Logic-map impact: UPDATED — this section records the R22 current owners and
   transition/evidence boundaries plus the R22-2 debug-only capture/measurement route
-  and complete branch-specific phase failure reasons, cost-first setup/first-sort scope, plus A1 pure spatial
+  and complete branch-specific phase failure reasons, cost-first setup/first-sort scope,
+  RGB current-frame annotations and completed eligibility, plus A1 pure spatial
   diagnostic reproduction with exact candidate binding, and D2 scoped reference/measurement-footprint comparison in the existing debug projector. The quick index and graph now expose existing setup and auxiliary inputs before detector experimentation.
 - Failure-registry impact: NONE — historical mechanisms remain unchanged.
 

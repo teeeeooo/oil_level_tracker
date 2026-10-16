@@ -4,6 +4,8 @@
 이 기록은 [고정 후보 계약](../../20-architecture/s11-contextual-role-observation-design.md#candidate-local-rgb-compatibility-successor)의
 실제 입력 준비와 단일 실행을 다룬다. 기존 native-surface 학습 결과를 바꾸거나
 후보 허용을 native 경로·주변 픽셀의 물리 라벨로 확장하지 않는다.
+기존 모델의 rim 실패는 유지한다. 후속 [Windows 비교용 로컬 준비](#windows-comparison-local-preparation--2026-10-16)는
+같은 가중치를 실제 Oil 후보 자격 조건에 연결한 별도 opt-in 범위다.
 
 ## 실행 전 입력 고정
 
@@ -269,6 +271,69 @@ saturation과 겹치는 픽셀은 0개다. 이는 표시선 억제 분기의 기
 canonical 위치에 보존하고 작업 사본 둘을 제거했다. 관리 실행 35개 오류 0.
 새 모델 호출·학습·대체 마스크·생산 변경·Windows 실행은 모두 0이다.
 
+## Windows comparison local preparation — 2026-10-16
+
+Cost-first의 Windows regression과 review-005 종료 후, 승인된 두 번째 비교를
+준비했다. `--initial-full-observation --oil-candidate-rgb`로 ⑥을 실행하고
+④ FULL+ON v2와 비교한다. Cost-first/Local XY는 OFF이며 기본 실행은 그대로다.
+후보 판정·범위와 새로운 consumer는 [비교 설계](../../20-architecture/s11-physical-interface-evidence-repair-design.md#candidate-local-rgb-windows-comparison)에 고정했다.
+
+기존 실험은 후보별 오프라인 판정만 했으므로, 런타임의 `OilCandidateRgb`는
+고정 추론과 annotation만 담당한다. 실험 실행기의 학습·과거 자료 의존성을
+제품에 가져오지 않는다. 6,594-byte 고정 가중치의 runtime copy는 package resource로
+포함되며 SHA-256은 `8daffcdff5a59f6c8b2212c3e41aa911d676ac391d152a23857bd65d185636db`다.
+역사 evidence copy는 보존한다. Torch·추가 다운로드·학습·cutoff 변경은 없다.
+
+현재 프레임 projector는 기존 raw Oil 후보를 지우거나 점수를 바꾸지 않고 RGB
+판정·floor/ceil 입력 hash/patch 수/logits를 붙인다. 기존 `candidate_is_eligible`이
+완료 Oil 처리에서 추가 조건을 소비한다. COMPATIBLE만 이 조건을 통과하며
+UNKNOWN/UNAVAILABLE/OPPOSED는 통과하지 않는다. 모델 허용이 기존 hard veto,
+phase/owner/selection 조건을 무효화하거나 새 좌표를 만들지는 않는다. 동일 GUI
+factory의 preview/analysis/preflight/redetection 경로와 detector/resolver 버전에
+옵션을 전달했다. 현재 프레임 legacy 좌표와 최종 sequence/CSV는 구분한다.
+
+기존 입력 182개 Oil 후보를 재사용한 계산 검증에서 **165 available 판정 전부 일치,
+17 unavailable 유지**, 입력 patch hash/개수와 floor/ceil variant도 일치했다.
+logit 최대 절대 오차는 `6.430396814138817e-6`으로 기존 `1e-4` 범위 안이다.
+공유 strip convolution은 독립 patch 계산과도 일치한다. **f1140 idx7/10/22의
+rim 오수용 3건도 그대로 재현**되며 이를 성공이나 보정된 확률로 바꾸지 않는다.
+
+| 고정 로컬 입력 / 요청 창 | 행 | v2 Oil | RGB Oil | 새 출력 | 소실 | 양쪽 숫자 Y 변경 | 숫자 Foam |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| base_sample_1 / 0–14.4 s | 30 | 12 | 7 | 2 | 7 | 3 | 0→0 |
+| sample4 내부 ROI / 0–56 s | 113 | 16 | 12 | 9 | 13 | 3 | 76→76 |
+
+기존 initial-FULL 비교의 ROI/2fps/static preparation 및 전체 AnalysisPipeline →
+bundle/CSV/report 경로를 재사용했다. 이 로컬 FULL 초기값은 기계적 비교 조건이며
+물리 정답이 아니다. 143개 기준 행·phase·events·raw hash와 report(생성 run_id만
+제외)는 보존된 v2와 일치했다. RGB annotation만 제외하면 양쪽 raw 후보·현재
+좌표·Foam 입력도 정확히 같다. 최종 숫자 Oil은 항상 같은 프레임의 COMPATIBLE
+선택 후보 Y 및 CSV와 일치한다. 최종 Foam 7개 필드는 143행 전부 같으며,
+sample4의 FULL/NONE debug 비교도 두 모드의 rows/phase/events/report/raw 및 RGB
+annotation이 일치한다. 변경된 전체 행은 base 29/sample4 25이며 물리 정확도는
+모두 NOT_EVALUATED로 남긴다. 숫자 감소 자체는 유효성 판정이 아니다.
+
+**169개 서로 다른 테스트 통과**: RGB/GUI/관측 비교 35개와 넓힌 resolver,
+initial-FULL, facade/cutover, Foam 통합, packaging 검사 140개 중 중복 6개를
+제외한 수다. 가중치 누락/변조, non-repo cwd, 입력 부족/변형 불일치, 기본 OFF,
+기존 veto 보존, 정확한 선택 좌표와 GUI 네 경로를 확인했다. 실제 GUI entry의
+`--help`에도 새 옵션과 cost-first 동시 사용 금지가 표시된다.
+
+관리 실행 `sample/output/s11-candidate-rgb-windows-prep-20261016-001`은 CLOSED이며
+`evidence/`에 5개 파일, 1,118,712 bytes를 보존했다. FULL 중복은 동등성 확인 뒤
+제거했고 임시 bundle/cache/작업용 plan도 정리했다. 관리 실행 80개 오류 0이다.
+
+| 보존 경로 | SHA-256 |
+|---|---|
+| `frozen-model-verification.json` | `557ae984e206bd8b4de42ee9fa88bac71924be6d4eed4667350c6b362f22c273` |
+| `verification.json` | `0994d2a4a2c0c5acc59d321fac68c95532d14d6cf0ba8d526130d1e7ae6f3fc7` |
+| `none/base_sample_1/comparison.json` | `ad0c0b5781cf9080f166716fae342532a6a69151fb9f69b483780190411f3f61` |
+| `none/sample4/comparison.json` | `14095b41e264606e885069870f08f40c8ed5eb4a453959e5d6ade782003e9955` |
+| `implementation.patch` | `4c950378c1c6617545ae0965e77d66b85a7630b7a6e58354fc51c496fca8e0f0` |
+
+Windows 비교는 아직 미실행이며 [실행 절차와 짧은 프롬프트](../../40-operations/s11-current-windows-field-qualification.md#priority-2-candidate-rgb-comparison)를 제공한다.
+review-004/005의 복수 허용·실용적 근사를 재사용하고 기존 O2/FIELD 상태를 유지한다.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION`.
@@ -276,7 +341,7 @@ canonical 위치에 보존하고 작업 사본 둘을 제거했다. 관리 실�
 - First harmful stage: a regional role preference loses practically accepted candidates before any selector can preserve them; RGB compatibility must retain both accepted alternatives and opposed controls. The later B input audit locates missing complete upper patches at unchanged `FRAME-EVIDENCE` visibility, before model inference; the physical correctness of removal remains unqualified.
 - Prior mechanisms reviewed: old CR1 category collision and all-four public sign failure; B practical acceptance; original native-head N3 loss; source-qualified candidate bindings and exact floor/ceil support.
 - Difference from prior failures: one fixed native RGB candidate-compatibility trial changes input information and supervision, with sample4-only fit and exposed public transfer. It does not retry native external-surface labels, tune the failed role threshold or choose a new production winner.
-- Existing feature coverage: existing saved candidate population, original RGB, effective/glare masks and source pins; sample3 uses the original Recipe geometry/settings and unchanged `build_mask_bundle` / `preprocess`, checked against saved diagnostic bands. Exclusions/templates remain empty, Local XY OFF. Static/initial-state/sequence owners are not executed; no D2 efficacy claim.
-- Execution scope: completed input preparation and one predeclared offline 1,118-parameter / 1,000-step fit, full-population final inference, mean-color ablation and independent arithmetic verification. The reuse CLI executed the rim-reply check and the 38-candidate sample3 qualification/input audit. The upper-mask review renders the sole missing accepted upper strip and measures unchanged mask-predicate overlap; no alternative mask is applied. No new inference, training, automatic labels for other candidates, production replay, report reading, O2 acceptance or Windows execution.
-- Logic-map impact: NONE — offline diagnostic only; production owners and schemas unchanged.
+- Existing feature coverage: historical candidate/sample3 inputs remain frozen above. New local comparison uses native RGB and unchanged effective/glare masks, static preparation, explicit FULL plus observation v2 and the previously frozen interior Recipes, with exclusions/templates empty and cost-first/Local XY OFF. Original model weights and all source/variant inputs are checked; no retired mask repair is enabled.
+- Execution scope: the earlier offline fit/input audit retain their historical scope. The new step is inference-only arithmetic parity plus real GUI construction and AnalysisPipeline → final CSV/report on two local clips, including FULL/NONE equivalence. No training, new physical labels, private Windows execution, human report reading or field acceptance occurs locally.
+- Logic-map impact: UPDATED — default-OFF RGB setup, frame annotations and the additional completed-Oil eligibility condition are mapped; all existing authority/phase/selection and direct Foam owners remain.
 - Failure-registry impact: NONE — no new failure family or accepted detector repair; this checks candidate-level input capability under existing evidence boundaries.

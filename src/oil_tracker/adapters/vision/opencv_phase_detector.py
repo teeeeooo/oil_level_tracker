@@ -31,6 +31,7 @@ from .phase_frame_detection import (
 )
 from .preprocessing import PreprocessResult, preprocess
 from .oil_measurement_scope import OilMeasurementScope, MAX_SCOPES
+from .oil_candidate_rgb import OilCandidateRgb, RGB_VERSION
 from oil_tracker.domain.artifact_reference import fingerprint
 from .temporal_raster_evidence import (
     RegisteredFoamMotionTracker,
@@ -46,7 +47,10 @@ class OpenCvPhaseDetector:
         self, *, oil_measurement_scopes: Sequence[OilMeasurementScope] = (),
         initial_full_observation: bool = False,
         cost_first_assignment: bool = False,
+        candidate_rgb: bool = False,
     ) -> None:
+        if cost_first_assignment and candidate_rgb:
+            raise ValueError("Compare cost-first and candidate RGB separately.")
         scopes = tuple(oil_measurement_scopes)
         if len(scopes) > MAX_SCOPES or any(not isinstance(s, OilMeasurementScope) for s in scopes):
             raise ValueError("Invalid or excessive Oil measurement scopes.")
@@ -60,6 +64,8 @@ class OpenCvPhaseDetector:
             self.version += "+initial-full-observation-v2"
         if cost_first_assignment:
             self.version += "+cost-first-assignment-v1"
+        if candidate_rgb:
+            self.version += "+" + RGB_VERSION
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
         self._static_foam_maps: dict[str, np.ndarray] = {}
@@ -70,6 +76,7 @@ class OpenCvPhaseDetector:
         self._observation_sequence_resolver = ObservationSequenceResolver(
             initial_full_observation=initial_full_observation,
             cost_first_assignment=cost_first_assignment,
+            candidate_rgb=candidate_rgb,
         )
         self._frame_evidence_owner = CurrentFrameEvidenceOwner(
             evaluate_oil=self._evaluate_oil_pipeline,
@@ -79,7 +86,9 @@ class OpenCvPhaseDetector:
             static_maps=self._static_maps,
             static_foam_maps=self._static_foam_maps,
         )
-        self._frame_result_projector = CurrentFrameResultProjector()
+        self._frame_result_projector = CurrentFrameResultProjector(
+            candidate_rgb=OilCandidateRgb() if candidate_rgb else None,
+        )
         self._debug_projector = PhaseDebugProjector(self._static_foam_maps)
 
     @property

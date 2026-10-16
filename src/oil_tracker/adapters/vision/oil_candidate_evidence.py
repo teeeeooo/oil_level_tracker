@@ -252,6 +252,9 @@ def candidate_is_eligible(
     candidate: BoundaryCandidate,
     evidence: OilCandidateEvidence | None = None,
 ) -> bool:
+    rgb_eligible = candidate.features.get("oil_candidate_rgb_eligible")
+    if rgb_eligible is not None and unit(rgb_eligible) < 0.5:
+        return False
     if unit(candidate.features.get("calibrated_artifact_match", 0.0)) >= 0.72:
         return False
     explicit = candidate.features.get("sequence_eligible")

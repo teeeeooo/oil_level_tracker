@@ -6,9 +6,10 @@
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
 is unknown; post-transition FULL counts start at 675 s. The bounded
 [Refill owner and false-output follow-up](#refill-owner-and-false-output-follow-up)
-is now CLOSED. The October 16 cost-first Windows result is **REGRESSION /
-NOT_ADOPTED**. Use only the [saved-output/Accum supplement](#cost-first-result-closeout)
-below; the cost-first run has already returned and is not requested again.
+is now CLOSED. Cost-first and its review-005 supplement are also CLOSED as
+**REGRESSION / NOT_ADOPTED**. The next Windows comparison is
+[priority 2 candidate RGB](#priority-2-candidate-rgb-comparison), separately
+against ④ FULL+ON v2. Cost-first and Local XY stay OFF.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
@@ -41,8 +42,8 @@ candidate identity, not the retired comparison's commit or branch.
 
 ### October 15 first initial-FULL comparison
 
-**Completed historical procedure.** The subsequent cost-first comparison also
-returned; use its bounded closeout below, without another detector run.
+**Completed historical procedure.** Cost-first and its bounded supplement also
+returned; use the priority 2 RGB handoff for the next run.
 
 This is the first exploratory OFF/ON comparison named by the Work Plan, before
 cost-first assignment, candidate RGB or Local XY. False positives are permitted
@@ -466,7 +467,7 @@ review, 실제 유면 회복·소실과 비유면 출력 변화, Accum/Oil·Foam
 
 **실행 결과 수신 / 악화·미채택 — 2026-10-16.** BASE 재충전 Oil 39→0으로
 채택하지 않는다. 아래 실행 절차는 완료 이력이며 재실행 요청이 아니다.
-현재 요청은 [Cost-first result closeout](#cost-first-result-closeout)뿐이다.
+후속 [Cost-first result closeout](#cost-first-result-closeout)도 완료됐다.
 구현 `2083277`과 게시 handoff 소스의 옵션은 그대로 보존한다.
 
 이번 비교는 **④ FULL+ON v2 ↔ ⑤ FULL+ON v2 + cost-first**다. 여기서 OFF/ON은
@@ -540,7 +541,12 @@ O2 review로 질문·회신을 저장해줘. 임계값 조정이나 다음 후�
 
 ### Cost-first result closeout
 
-**현재 요청 — 저장된 결과 보완만 수행.** ⑤는 BASE 전체 재충전 관측 소실로
+**완료 이력 — review-005 회신 수신. 다시 요청하지 않음.** 601행 집계,
+Accum new 17/lost 31, review-004 여섯 행과 Accum 두 장면의 사용자 회신을
+받았다. 사용자가 확정한 Windows 보관 위치는 기존
+`0.windows_diagnostic/data/reviews/review-005/`다. 아래 최초 요청의 저장 경로는
+이 후속 결정으로 대체됐으며 review-005를 다시 이동하지 않는다.
+⑤는 BASE 전체 재충전 관측 소실로
 **악화·미채택**이다. 721초와 FULL suffix의 비유면 숫자 제거는 함께 기록한다.
 Accepted baseline, O2 OPEN / FIELD FAIL, cost-first → RGB → Local XY 순서는
 그대로다. 다음 보완은 Accum 부작용 기록을 마치는 작업이며 미채택을 재심사하거나
@@ -582,7 +588,7 @@ Accepted baseline, O2 OPEN / FIELD FAIL, cost-first → RGB → Local XY 순서�
    받은 뒤 로컬에서 **우선순위 2번 candidate-local RGB**를 준비하며, cost-first를
    누적하지 않는다. Windows 담당자는 새 후보를 임의로 실행하지 않는다.
 
-전달용 짧은 프롬프트:
+이전 보완용 프롬프트 (완료 이력; 다시 보내지 않음):
 
 ```text
 ④ FULL+ON v2 bundle: <기준 번들 경로>
@@ -598,6 +604,77 @@ BASE 누락 구간, Accum의 정답 구간별 집계, review-004 여섯 행(f158
 새 파일은 sample/output/reviews/ 아래 별도 폴더에 저장해줘.
 ⑤는 악화·미채택이며 기존 O2/FIELD 상태와 1→2→3 순서는 유지해줘.
 디텍터 재실행이나 추가 튜닝 없이 보완표와 두 장면 결과만 반환해줘.
+```
+
+### Priority 2 candidate RGB comparison
+
+현재 비교는 **④ FULL+ON v2 ↔ ⑥ FULL+ON v2 + candidate RGB**다.
+⑤ cost-first 결과 위에 RGB를 추가하지 않는다. 고정 가중치/입력은 이전 RGB
+실험과 같고, 새 부분은 그 판정을 최종 Oil 후보 자격 조건에 연결한 것이다.
+기존 rim 오수용 3건은 남는다. RGB 허용은 물리적 정답이나 확률이 아니며,
+입력 부족/판정 불일치는 별도로 기록한다. 모델 재학습이나 cutoff 조정은 없다.
+
+1. 새 소스 ZIP을 별도 폴더에 풀고 기존 Windows Python 환경을 사용한다.
+   작은 고정 가중치는 소스의 `src/oil_tracker/resources/models/`에 포함되어
+   있으므로 별도 다운로드/Torch 설치는 필요 없다. 영상·Recipe/ROI·480–780초·
+   2fps·BASE FULL/Accum EMPTY·debug 수준을 ④와 동일하게 유지한다. 기존 ④는
+   조건이 같으면 재사용하며, 이번 기준이 FULL debug이면 후보도 FULL로 실행한다.
+   설정을 변경했다면 같은 조건의 v2 기준을 새로 만들고 옛 수치와 섞지 않는다.
+2. 새 소스 폴더에서 아래 명령으로 GUI를 연 뒤 직접 분석을 시작한다.
+
+   ```powershell
+   $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+   python -m oil_tracker --initial-full-observation --oil-candidate-rgb
+   ```
+
+   기준 재실행이 필요한 경우에는 `python -m oil_tracker --initial-full-observation`을
+   사용한다. 초기 FULL/EMPTY 설정은 옵션이 바꾸지 않으므로 GUI에서 유지한다.
+   후보 창에는 `초기 FULL 관측 비교`와 `Oil RGB 비교`, trace의 completed
+   `sequence_resolver_version`에는 `+initial-full-observation-v2+candidate-rgb-v1`이
+   있어야 한다. cost-first 접미사는 없어야 한다. 소스가 잘못 선택되거나 가중치
+   오류로 실행이 중단되면 그 결과만 알리고 옵션을 끄거나 모델을 교체하지 않는다.
+3. 완료 bundle의 최종 CSV를 Glass/frame으로 대응시킨다. BASE는
+   480–550 / 550–652 / 652–674 / 674–675 / 675–780초 + OUTSIDE,
+   Accum은 480–653 / 653–672 / 672–680 / 680–700 / 700–780초 + OUTSIDE로
+   중복 없이 집계한다. 마지막 780초만 포함하고 나머지 구간 끝은 제외한다.
+   각 구간의 표본·숫자 Oil/Foam·새 출력·소실·양쪽 숫자이나 Y 변경을 반환한다.
+   최종 Oil/Foam 유효성/상태/flags도 비교하며, 모델 허용/후보 수를 CSV로 대신하지
+   않는다. 동일 조건의 기준은 BASE 601/303 Oil, Accum 601/36 Oil이다.
+4. RGB는 모든 Glass의 Oil 후보에 적용된다. raw `record.state.oil_candidate_rgb`의
+   판정 수와 후보 `oil_candidate_rgb_decision`/`oil_candidate_rgb_variants`를 통해
+   허용·거부·UNKNOWN·UNAVAILABLE을 구분한다. 거부/미측정 후보도 trace에 남는다.
+   숫자 감소가 실제 계면 제거인지 비유면 제거인지 분리하고, 기본값 OFF와
+   비교해 최종 Foam이 같은지 확인한다. raw 후보 없음과 최종 선택 없음은 다르다.
+5. review-004의 여섯 BASE 프레임, review-005의 Accum f17431/f16076,
+   721초 비유면 출력과 723/771초 최종 거부를 기존 판정 범위에서 대조한다.
+   idx는 packet마다 달라질 수 있으므로 정확한 frame/source Y/후보를 연결한다.
+   복수 허용·대략적 일치·판단 불가를 유지하고 이미 답한 장면은 다시 질문하지 않는다.
+   새로 달라진 중요한 장면에만 기존 O2 절차로 plain/guide와 질문을 준비한다.
+   사용자 회신 전에는 unreviewed/pending이며 LVLM 관찰은 참고로 구분한다.
+6. 새 분석 bundle/대용량 실행 출력은 `sample/output/` 아래에 둔다. Windows의
+   사용자 검토 packet·labels·replies는 사용자가 지정한 기존
+   `0.windows_diagnostic/data/reviews/`의 **새 review 폴더**에 저장하고 이전
+   review-004/005를 보존한다. 사용자 회신은 기존 `record` 명령으로 기록한다.
+7. 구간별 집계·주요 변경 장면·Accum/Foam 영향과 **효과 있음 / 효과 없음·악화 /
+   판단 근거 부족**을 반환한다. 전체 빈 프레임 원인 분석이나 추가 튜닝은 하지 않는다.
+   FULL 전환은 이번 RGB 변경 범위 밖이며 accepted baseline과 O2/FIELD 상태는
+   유지한다. 다음 Local XY는 별도 준비 후 v2와 비교한다.
+
+전달용 짧은 프롬프트:
+
+```text
+④ FULL+ON v2 bundle: <기준 번들 경로>
+새 RGB 소스: <새 소스 폴더>
+기존 review-004/005: <기존 review 폴더>
+
+docs/40-operations/s11-current-windows-field-qualification.md의
+“Priority 2 candidate RGB comparison”을 읽고 진행해줘.
+기준과 같은 조건으로 --initial-full-observation --oil-candidate-rgb를 켜서
+GUI 분석을 완료해줘. cost-first와 Local XY는 끄고, 조건이 같으면 ④를 재사용해줘.
+최종 CSV 구간별 증감과 주요 변경 장면, Accum/Foam 영향을 정리해줘.
+review-004/005의 사용자 판정과 복수 허용·대략적 일치를 재사용하고,
+새 판단만 기존 review 폴더의 새 packet으로 질문·기록해줘.
+재학습·임계값/ROI 조정 없이 결과를 반환해줘.
 ```
 
 ## 2. Private source identity

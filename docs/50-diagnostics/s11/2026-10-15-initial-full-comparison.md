@@ -11,8 +11,9 @@ no complete physical qualification is claimed.
 The subsequent [cost-first local preparation](#cost-first-option-local-verification)
 is complete. The [October 16 Windows result](#cost-first-windows-result--2026-10-16)
 is **REGRESSION / NOT_ADOPTED**: the whole BASE refill loses numeric output.
-Only a bounded accounting/Accum review supplement remains; this does not reopen
-cost-first tuning or the completed initial-FULL intake.
+The [review-005 supplement](#cost-first-supplement-closed--review-005) now closes
+its bounded accounting/Accum review. No cost-first tuning or initial-FULL intake
+is reopened; the next candidate is RGB, then Local XY separately.
 
 The [fixed Work Plan order](../../00-project/work-plan.md#fixed-execution-order--2026-10-15)
 and [bounded design](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-15-initial-full-observation-comparison)
@@ -1058,7 +1059,7 @@ raw candidates. Likewise, UNKNOWN at 723/771 s establishes retained final
 abstention, not unchanged material/identity predicates. The earliest harmful
 stage in ⑤ remains unknown; do not transfer ④'s INCOMPATIBLE_BRANCH cause to it.
 
-**Bounded remainder:** complete the missing accounting and review at most two
+**At this receipt, bounded remainder:** complete the missing accounting and review at most two
 changed Accum scenes: one new Oil output in 727–779 s and one lost output near
 670–674 s. Reuse the O2 packet/reply workflow, preserve multiple acceptable
 candidates/uncertainty, and keep review-004 unchanged. These scene judgments
@@ -1069,12 +1070,51 @@ own this finite supplement. The next implementation remains candidate-local RGB,
 then Oil-only Local XY, each against ④. Accepted baseline and O2 OPEN / FIELD FAIL
 remain unchanged; a failed candidate does not reorder the agreed comparisons.
 
+## Cost-first supplement closed — review-005
+
+The user returned completion of the saved-output supplement and two direct human
+replies. This closes the finite cost-first review as **REGRESSION / NOT_ADOPTED**.
+The return's `③303 / ③36` denotes the established **④ FULL+ON v2** reference;
+③ v1 had 185 BASE outputs. No new comparison or reference substitution is inferred.
+
+- BASE FULL_TRANSITION two rows and OUTSIDE one row are now accounted for:
+  601 total, ④ Oil 303→⑤ 93. All six review-004 rows, including f15884, were
+  matched and their existing judgments reused; BASE/721 s were not re-asked.
+- Accum was repartitioned using the canonical segments: Oil 36→22, new 17 /
+  lost 31 (`36 + 17 - 31 = 22`); reported Foam count 40→40. The summary reports
+  completed segment accounting; its individual table rows remain in the private
+  `supplement-summary.md` and are not reproduced or independently checked here.
+- Review-005 is reported at
+  `C:\0.Coding\2.Reference\Oil level tracker\0.windows_diagnostic\data\reviews\review-005\`.
+  The user corrected the initial output location to the established Windows
+  review structure. Preserve that folder; do not move it back. Its packet,
+  labels-v2, two replies and plain/guide images remain private Windows artifacts.
+  Labels started unreviewed/pending; only the user's direct replies were recorded
+  as human review. Prior LVLM-only provisional judgments are superseded.
+
+| Exact scene | Direct reply retained | Recorded outcome |
+|---|---|---|
+| New ⑤ Oil, f17431@727 s | Y298/idx24 and Y300/idx17 are closer to the interface; both allowed | APPROXIMATE_MATCH_MULTIPLE_ALLOWED |
+| Lost ⑤ Oil, f16076@670.5 s | Y482/idx6 and Y479.5/idx16 are the interface; approximate match allowed | APPROXIMATE_MATCH |
+
+These are candidate-level practical allowances, not unique Y truth or labels for
+all 17 new/31 lost rows. The summary does not give the selected Y for scene 1;
+do not turn the allowed alternatives into an unqualified claim that its selected
+output, or every late Accum output, was correct. At 670.5 s the canonical context
+is ENTRY_SPLASH, before the approximately 672 s Foam onset.
+
+No detector rerun or tuning occurred in this supplement. The earliest internal
+cause of the cost-first losses remains unknown and is not a prerequisite to the
+next candidate. O2 OPEN / FIELD FAIL, accepted baseline and the original sequence
+remain: cost-first closed → candidate-local RGB → Oil-only Local XY. The user's
+shorthand `RGB+Local XY` is not used to stack them into one comparison.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: v1's observation-barrier losses reach final sequence/CSV under v2; ④ f15896 has previously reported INCOMPATIBLE_BRANCH/admitted=0 alternatives excluded before IFO. In ⑤, the reported whole-refill numeric loss is established at publication scope, but the earliest causal stage is unknown without candidate-specific trace evidence. Empty CSV does not prove raw candidate absence. Review-004 preferences remain qualified, and unchanged UNKNOWN at 723/771 s does not establish identical protection predicates.
 - Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF. The new Windows receipt reports FULL+observation v2 with/without cost-first, expected suffixes and matching FULL-debug/record counts. Actual Windows ROI/Artifact/static preparation values are not supplied by this table; no fresh configuration or hash audit is requested for this bounded receipt. Prior run coverage remains recorded above.
-- Execution scope: October 16 receipt is documentation-only, using the user's Windows tables and existing canonical/human review. No detector or private media is run or inspected locally. Earlier real GUI/pipeline tests remain engineering evidence; the reported Windows output regression is not field acceptance. The pending supplement uses saved CSV and at most two Accum image scenes, without a new detector experiment.
+- Execution scope: October 16 receipts are documentation-only, using user-reported Windows tables and direct review-005 replies. No detector or private media is run or inspected locally for this receipt. Earlier engineering tests retain their scope; saved CSV accounting and two Accum human scenes close the supplement without a rerun. Physical labels remain scoped practical allowances, not whole-run acceptance.
 - Logic-map impact: NONE — the existing cost-first setup route and first-sort intervention still describe the unchanged source; this receipt changes candidate disposition and review scope only.
 - Failure-registry impact: NONE — existing identity, lifecycle and provenance risks cover the result; no new causal mechanism or repaired physical failure is established.
