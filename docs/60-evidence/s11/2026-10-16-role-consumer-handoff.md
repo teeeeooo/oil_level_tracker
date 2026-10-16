@@ -108,7 +108,10 @@ H3/H4의 새 39.5초 Oil Y838 때문에 기존 Foam Y841에 최종 Oil alias 거
 H3에서는 41.5초 OIL_DROP_START가 새로 발생하지만 H4에서는 발생하지 않는다.
 이 새 하강 사건의 물리적 의미는 아직 확정하지 않았으므로 실제 회복으로 계산하지 않는다.
 단순 검출 개수뿐 아니라 운동 사건의 생성·소멸까지 확인해야 하는 구체적 근거다.
-원본의 verifier v1 receipt는 그대로 보존하고, 후속 v2는 이 전체 이벤트 연결도 검사한다.
+원본의 verifier v1 receipt는 그대로 보존했다. 후속 v2를
+`18f6fe3e24653581e07057287c31d03e4af0e202`에 고정한 후 보존된 evidence에
+다시 실행했고, 전체 143개 이벤트 연결을 포함하여 불일치 0으로 통과했다.
+최종 receipt 전체와 SHA256은 검증 요약 JSON의 final_verification에 있다.
 
 현재 비교용 result container의 상태는 명시적으로 REVIEW_REQUIRED이다.
 자동 Recipe 합격 판정, 전체 HTML/source-context 생성 경로, GUI와 실제 독립 사용자의

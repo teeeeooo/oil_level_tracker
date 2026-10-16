@@ -1327,5 +1327,87 @@
     "representative_frame_time_level_joins": 143,
     "mismatches": 0,
     "finding": "positive_authority_only adds OIL_DROP_START at 41.5 s; the combined arm does not. This is an unqualified new motion event, not a proven false event."
+  },
+  "final_verification": {
+    "frozen_verifier_head": "18f6fe3e24653581e07057287c31d03e4af0e202",
+    "receipt_sha256": "d014d862fcd1d36627fe5896ef9082863e645a403241568567cf21d09590a394",
+    "receipt": {
+      "schema": "s11-role-consumer-independent-verification-v2",
+      "status": "PASS",
+      "variants": {
+        "baseline": {
+          "rows": 113,
+          "same_frame_numeric_joins": 101,
+          "CSV_rows": 113,
+          "authority_calls": 2549,
+          "authority_injections": 0,
+          "extrema_verified": 2,
+          "domain_events_verified": 29,
+          "foam_changed_frames": []
+        },
+        "negative_anchor_demotion": {
+          "rows": 113,
+          "same_frame_numeric_joins": 101,
+          "CSV_rows": 113,
+          "authority_calls": 2549,
+          "authority_injections": 3,
+          "extrema_verified": 2,
+          "domain_events_verified": 29,
+          "foam_changed_frames": []
+        },
+        "negative_member_veto": {
+          "rows": 113,
+          "same_frame_numeric_joins": 104,
+          "CSV_rows": 113,
+          "authority_calls": 2549,
+          "authority_injections": 0,
+          "extrema_verified": 2,
+          "domain_events_verified": 28,
+          "foam_changed_frames": [
+            1200
+          ]
+        },
+        "positive_authority_only": {
+          "rows": 113,
+          "same_frame_numeric_joins": 101,
+          "CSV_rows": 113,
+          "authority_calls": 2549,
+          "authority_injections": 5,
+          "extrema_verified": 2,
+          "domain_events_verified": 30,
+          "foam_changed_frames": [
+            1185
+          ]
+        },
+        "negative_veto_positive_authority": {
+          "rows": 113,
+          "same_frame_numeric_joins": 106,
+          "CSV_rows": 113,
+          "authority_calls": 2549,
+          "authority_injections": 5,
+          "extrema_verified": 2,
+          "domain_events_verified": 27,
+          "foam_changed_frames": [
+            1185
+          ]
+        }
+      },
+      "review_bindings": 13,
+      "mismatches": 0,
+      "claim": "Arithmetic, provenance and injection scope only; no physical classifier or comprehension acceptance."
+    },
+    "scope": "Verifier v2 rerun against immutable retained evidence; all 143 event joins included. No role replay, source extraction or production changes. Original v1 receipt remains unchanged."
+  },
+  "final_quality_checks": {
+    "focused_unit_tests_passed": 210,
+    "relative_markdown_file_targets_checked": 1149,
+    "missing_relative_file_targets": 0,
+    "anchor_validation": "NOT_CLAIMED",
+    "detector_governance": "PASS",
+    "artifact_lifecycle": {
+      "managed_runs": 87,
+      "errors": 0
+    },
+    "production_source_recipe_truth_diff": "NONE"
   }
 }
