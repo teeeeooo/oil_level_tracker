@@ -6,8 +6,9 @@
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
 is unknown; post-transition FULL counts start at 675 s. The bounded
 [Refill owner and false-output follow-up](#refill-owner-and-false-output-follow-up)
-is now CLOSED. Local priority 1 preparation is complete; use the published handoff
-source and [cost-first comparison](#priority-1-cost-first-comparison) below.
+is now CLOSED. The October 16 cost-first Windows result is **REGRESSION /
+NOT_ADOPTED**. Use only the [saved-output/Accum supplement](#cost-first-result-closeout)
+below; the cost-first run has already returned and is not requested again.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
@@ -40,8 +41,8 @@ candidate identity, not the retired comparison's commit or branch.
 
 ### October 15 first initial-FULL comparison
 
-**Completed historical procedure.** Use the cost-first handoff below for the current
-comparison; its OFF/ON refers to a different option and keeps observation v2 ON.
+**Completed historical procedure.** The subsequent cost-first comparison also
+returned; use its bounded closeout below, without another detector run.
 
 This is the first exploratory OFF/ON comparison named by the Work Plan, before
 cost-first assignment, candidate RGB or Local XY. False positives are permitted
@@ -463,9 +464,10 @@ review, 실제 유면 회복·소실과 비유면 출력 변화, Accum/Oil·Foam
 
 ### Priority 1 cost-first comparison
 
-**준비 완료 / Windows 결과 대기.** 구현은 `2083277`이며, 이 checkpoint와 같은
-검출기 소스를 담은 게시 ZIP을 사용한다. 후속 문서 커밋이 포함돼도 검출 옵션은
-동일하다. 현재 절차는 이 절이며 이전 initial-FULL/CSV 요청은 완료된 이력이다.
+**실행 결과 수신 / 악화·미채택 — 2026-10-16.** BASE 재충전 Oil 39→0으로
+채택하지 않는다. 아래 실행 절차는 완료 이력이며 재실행 요청이 아니다.
+현재 요청은 [Cost-first result closeout](#cost-first-result-closeout)뿐이다.
+구현 `2083277`과 게시 handoff 소스의 옵션은 그대로 보존한다.
 
 이번 비교는 **④ FULL+ON v2 ↔ ⑤ FULL+ON v2 + cost-first**다. 여기서 OFF/ON은
 cost-first만 뜻하며, 두 조건 모두 초기 FULL 관측 옵션 v2를 켠다. 초기 FULL+OFF나
@@ -519,7 +521,7 @@ UNKNOWN+OFF, v1과 비교하는 작업이 아니다. 후보 2·3은 아직 준�
    판단 근거 부족**을 반환한다. 상단 소실→FULL은 이번 변경의 구현 범위가 아니다.
    결과를 보며 임계값·ROI·모델을 조정하거나 다음 후보를 누적하지 않는다.
 
-전달용 짧은 프롬프트:
+기존 실행용 프롬프트 (완료 이력; 다시 보내지 않음):
 
 ```text
 기준 ④ FULL+ON v2 bundle: <기준 번들 경로>
@@ -534,6 +536,68 @@ docs/40-operations/s11-current-windows-field-qualification.md의
 최종 CSV 구간별 변화와 달라진 장면, Accum/Foam 영향을 간단히 정리해줘.
 review-004의 복수 허용 후보와 불확실성을 유지하고, 추가 판단이 필요할 때만
 O2 review로 질문·회신을 저장해줘. 임계값 조정이나 다음 후보 실행은 하지 말아줘.
+```
+
+### Cost-first result closeout
+
+**현재 요청 — 저장된 결과 보완만 수행.** ⑤는 BASE 전체 재충전 관측 소실로
+**악화·미채택**이다. 721초와 FULL suffix의 비유면 숫자 제거는 함께 기록한다.
+Accepted baseline, O2 OPEN / FIELD FAIL, cost-first → RGB → Local XY 순서는
+그대로다. 다음 보완은 Accum 부작용 기록을 마치는 작업이며 미채택을 재심사하거나
+새 알고리즘 진입조건을 만드는 작업이 아니다.
+
+1. 기존 ④/⑤ CSV만 사용해 각 Glass 601행의 누락 없는 집계를 마무리한다.
+   BASE 표에 빠진 **674–675초 FULL_TRANSITION 2행 / OUTSIDE 1행**을 추가한다.
+   Accum은 BASE 구간을 쓰지 말고 **480–653 / 653–672 / 672–680 / 680–700 /
+   700–780초 + OUTSIDE**로 다시 배정한다. 구간은 앞 포함·뒤 제외, 마지막은
+   780초 포함으로 한 행을 한 곳에만 넣는다. 각 구간의 Oil/Foam 최종 숫자 수,
+   새 출력/소실, 전체 합계를 반환한다. 현재 Accum 표의 기준 Oil 합계는 34이며
+   전체 36과 2행 차이가 있다. 실제 CSV로 배정하고 임의로 채우지 않는다.
+2. review-004의 **f15872 / f15884 / f15896 / f15908 / f15920 / f15932**를
+   6행으로 대응해 두 조건의 최종 Oil Y/valid/fill_state를 적는다. 이전 요약에서
+   빠진 f15884도 포함한다. 기존 사용자 판정·복수 허용·대략적 일치·불확실성을
+   재사용하며 BASE 6장면과 721초는 다시 질문하지 않는다. 빈 CSV는 원시 후보
+   부재라는 뜻이 아니다. 723/771초 UNKNOWN 유지만 확인됐으면 그렇게 적고,
+   실제 predicate가 같다는 결론으로 확대하지 않는다. 이 확인을 위한 전체 trace
+   추적이나 원인 규명을 추가 작업으로 만들지 않는다.
+3. 새 O2 review는 **Accum 두 장면까지만** 준비한다.
+
+   - **신규 Oil:** 727–779초 중 ④ 빈 값 → ⑤ 숫자 출력인 장면 1개.
+   - **Oil 소실:** 670–674초 중 ④ 숫자 출력 → ⑤ 빈 값인 장면 1개.
+
+   각 범위에서 조건을 만족하는 첫 표본을 택하고, 움직임/정체가 애매할 때만
+   인접 3–5프레임을 같은 장면의 문맥으로 보여준다. 해당 변경이 없으면
+   `NOT_FOUND`로 남기고 범위를 넓히지 않는다. 670–674초 전체를 Foam으로
+   부르지 말고 실제 시각에 맞는 canonical 구간을 적는다.
+4. [O2 질문·회신·기록 절차](s11-o2-local-shadow-evaluation.md#3-에이전트-질문--사용자-회신--기록재개)를
+   재사용한다. 신규 출력은 ⑤ 선택 선, 소실은 ④ 선택 선을 해당 bundle/frame에
+   연결하고 주석 없는 원본과 가이드를 함께 준비한다. 새 packet·이미지·reply는
+   `sample/output/reviews/<새 review 폴더>/`에 저장하고 review-004는 보존한다.
+   질문은 실제 Oil 계면인지, Foam 상단/반사/잔류물 등 다른 대상인지, 판단 불가인지로
+   제한한다. 선택된 선이 완벽하다고 가정하지 않고 복수 허용/대략적 일치를 받는다.
+   LVLM은 참고 관찰로 분리하고 사용자 회신은 기존 `record` 명령으로 저장한다.
+   판독이 어려우면 uncertainty를 남기고 이 장면을 종료한다.
+5. 보완 집계와 두 장면의 판정/불확실성만 반환한다. 판단 불가도 유효한 종료다.
+   ⑤ 재실행·임계값/ROI 조정·전체 빈 프레임 분석은 하지 않는다. 이 보완을
+   받은 뒤 로컬에서 **우선순위 2번 candidate-local RGB**를 준비하며, cost-first를
+   누적하지 않는다. Windows 담당자는 새 후보를 임의로 실행하지 않는다.
+
+전달용 짧은 프롬프트:
+
+```text
+④ FULL+ON v2 bundle: <기준 번들 경로>
+⑤ cost-first bundle: <후보 번들 경로>
+기존 review-004: <review-004 폴더>
+
+docs/40-operations/s11-current-windows-field-qualification.md의
+“Cost-first result closeout”을 읽고 저장된 결과만 보완해줘.
+BASE 누락 구간, Accum의 정답 구간별 집계, review-004 여섯 행(f15884 포함)을
+마무리해줘. BASE와 721초는 기존 판정을 재사용해줘.
+새 O2 review는 Accum 신규 Oil(727–779초) 1장면과 소실(670–674초) 1장면만
+준비하고 사용자 회신을 기록해줘. 복수 허용·대략적 일치·판단 불가를 유지해줘.
+새 파일은 sample/output/reviews/ 아래 별도 폴더에 저장해줘.
+⑤는 악화·미채택이며 기존 O2/FIELD 상태와 1→2→3 순서는 유지해줘.
+디텍터 재실행이나 추가 튜닝 없이 보완표와 두 장면 결과만 반환해줘.
 ```
 
 ## 2. Private source identity

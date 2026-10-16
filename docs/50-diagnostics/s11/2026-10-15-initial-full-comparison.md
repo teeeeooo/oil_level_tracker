@@ -9,7 +9,10 @@ truth or a binary accuracy score. Earlier timing/interpretations below are histo
 The option remains default OFF. Private bundles were not inspected on Mac;
 no complete physical qualification is claimed.
 The subsequent [cost-first local preparation](#cost-first-option-local-verification)
-is complete; its separate Windows comparison remains pending.
+is complete. The [October 16 Windows result](#cost-first-windows-result--2026-10-16)
+is **REGRESSION / NOT_ADOPTED**: the whole BASE refill loses numeric output.
+Only a bounded accounting/Accum review supplement remains; this does not reopen
+cost-first tuning or the completed initial-FULL intake.
 
 The [fixed Work Plan order](../../00-project/work-plan.md#fixed-execution-order--2026-10-15)
 and [bounded design](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-15-initial-full-observation-comparison)
@@ -994,18 +997,84 @@ discarded only after its equality checks. SHA-256 under the run's `evidence/`:
 | `none/base_sample_1/comparison.json` | `a99f6d712327786422c85d463b026342218c9d2afa7d563f221468f4152e1541` |
 | `none/sample4/comparison.json` | `b5d325d3a8d930cbe91015e5d0006e70c0843e5d2291088a8badf279e49c204c` |
 
-**Local engineering COMPLETE; Windows comparison PENDING; no promotion.** Use
+**At local handoff: engineering COMPLETE; Windows comparison PENDING; no promotion.** Use
 [Priority 1 cost-first comparison](../../40-operations/s11-current-windows-field-qualification.md#priority-1-cost-first-comparison)
 and the accompanying short prompt. Preserve practical candidate tolerance, f15896,
 721 s, FULL suffix and 723/771 s controls. Top-exit FULL and candidates 2/3 remain
 separate; no additional tuning or automatic fourth experiment is authorized.
 
+## Cost-first Windows result — 2026-10-16
+
+**Receipt scope:** the user supplied the Windows agent's comparison of
+④ FULL+ON v2 and ⑤ v2+cost-first. Private CSV/trace/media were not inspected on
+Mac. The return reports 1,202 rows and FULL-debug records in both bundles, with
+the expected resolver suffix change from `+initial-full-observation-v2` to
+`+initial-full-observation-v2+cost-first-assignment-v1`. This supports the reported
+option identity, not independent verification of every Recipe/ROI/session value.
+The [reviewed timeline](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
+and qualified review-004 remain the physical authorities.
+
+| Reported BASE bucket | Rows | ④ numeric Oil | ⑤ numeric Oil |
+|---|---:|---:|---:|
+| FULL_PREFIX / 480–550 s | 139 | 3 | 3 |
+| DRAIN / 550–652 s | 205 | 170 | 90 |
+| REFILL / 652–674 s | 43 | 39 | 0 |
+| FULL_SUFFIX / 675–780 s | 211 | 91 | 0 |
+| Whole BASE | 601 | 303 | 93 |
+
+The listed buckets contain 598 rows; FULL_TRANSITION (two rows) and OUTSIDE
+(one) are omitted from the return, not absent from the run. Reported whole-window
+Oil loss is 211 rows with one new output at f14470@603.5 s, giving −210 overall.
+The four numeric subtotals already match the reported totals; the omitted rows'
+full field changes still need the saved-output supplement. Do not turn the 93
+remaining outputs or the new FILLING label into physical accuracy.
+
+Accum Oil is reported as 36→22. Its returned BASE-shaped bins contain only
+598 rows and 34→22 numeric Oil, leaving two baseline numeric rows unallocated
+in that table. Repartition once using the five canonical Accum segments plus
+OUTSIDE; do not infer the missing row identities. In the reported 675–780 s bin,
+28−19 lost+12 new=21. New outputs around 727–779 s are not yet physical recoveries.
+The reported 670–674 s FOAMING_VISIBLE→UNKNOWN changes straddle the reviewed
+~672 s Foam onset; a fill-state label cannot redefine that onset.
+
+Reported Foam episodes/confirmed frames are BASE 0/0→0/0 and Accum 8/40→8/40,
+with matching Foam Y. This is useful compared-field invariance; unreported
+confidence/validity/events and universal independence are not verified by it.
+
+**Assessment: REGRESSION / NOT_ADOPTED.** Removing the 91 full-suffix numeric
+false outputs, including f17287@721 s/Y694, is useful negative evidence. It does
+not compensate for losing all numeric output throughout the reviewed refill
+interval, which includes human-allowed interface observations. All-UNKNOWN does
+not recover the movement or establish a FULL transition. Earlier candidate
+ambiguity remains valid: ④'s 39 refill outputs are not 39 exact-Y truths, and the
+two review-004 preferences are not newly certified false interfaces.
+
+The five-frame review-004 impact list omits f15884. It reports losses at f15872,
+f15908, f15920 and f15932, and unchanged empty output at f15896. The whole-refill
+zero count also implies loss of f15884's prior Y409 if its row is included as
+reported; confirm all six saved rows in one small table, without re-asking the
+user to choose candidates. Empty final CSV does **not** establish absence of
+raw candidates. Likewise, UNKNOWN at 723/771 s establishes retained final
+abstention, not unchanged material/identity predicates. The earliest harmful
+stage in ⑤ remains unknown; do not transfer ④'s INCOMPATIBLE_BRANCH cause to it.
+
+**Bounded remainder:** complete the missing accounting and review at most two
+changed Accum scenes: one new Oil output in 727–779 s and one lost output near
+670–674 s. Reuse the O2 packet/reply workflow, preserve multiple acceptable
+candidates/uncertainty, and keep review-004 unchanged. These scene judgments
+document side effects; they do not reopen candidate promotion or require every
+unknown to be resolved. No rerun, all-blank trace audit or threshold repair follows.
+The [closeout instructions and short prompt](../../40-operations/s11-current-windows-field-qualification.md#cost-first-result-closeout)
+own this finite supplement. The next implementation remains candidate-local RGB,
+then Oil-only Local XY, each against ④. Accepted baseline and O2 OPEN / FIELD FAIL
+remain unchanged; a failed candidate does not reorder the agreed comparisons.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: v1's three observation-barrier losses reach final sequence/CSV under v2. The 721 s non-Oil selection remains an adverse control. At f15896, three human-allowed alternatives correspond to previously reported INCOMPATIBLE_BRANCH/admitted=0 candidates excluded before IFO; no unique exact physical owner is established. The user qualifies review-004's two differing preferences as visually ambiguous/practically tolerated, not definitive false-interface labels. Zero final FULL rows remain, and no new selector defect is established at 720/771 s.
-- Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF; new local ROI remains separate from regression inputs. Windows intake reports initial FULL/OFF, UNKNOWN/OFF and FULL/ON with the same window/cadence/Glass IDs, and FULL/FULL/BASIC trace. Actual Windows ROI/Artifact/static preparation values are not supplied by the returned table; bundle names do not establish configuration. User excludes hash/environment checks for this read-only intake.
-- Execution scope: the bounded CSV/review receipt is documentation-only at its qualified preference scope. The subsequent cost-first preparation exercises real GUI construction, unit/integration controls and complete local AnalysisPipeline → CSV/report on two frozen clips, with sample4 debug equivalence. Private media/bundles/review-004 are not inspected locally and physical acceptance remains pending. Retained-v2 comparison excludes only generated report run IDs; all changed outputs and claim limits are recorded above.
-- Logic-map impact: UPDATED — the separate cost-first constructor/GUI route and first-sort intervention are mapped at OIL-TRACKLET; existing lifecycle/selector/publication ownership is preserved.
-- Failure-registry impact: NONE — existing barrier, identity and provenance entries cover this trial; no physical failure is declared solved by preflight.
+- First harmful stage: v1's observation-barrier losses reach final sequence/CSV under v2; ④ f15896 has previously reported INCOMPATIBLE_BRANCH/admitted=0 alternatives excluded before IFO. In ⑤, the reported whole-refill numeric loss is established at publication scope, but the earliest causal stage is unknown without candidate-specific trace evidence. Empty CSV does not prove raw candidate absence. Review-004 preferences remain qualified, and unchanged UNKNOWN at 723/771 s does not establish identical protection predicates.
+- Existing feature coverage: local comparisons use ellipse/margin masks and shared preprocessing with exclusions/templates empty and Local XY OFF. The new Windows receipt reports FULL+observation v2 with/without cost-first, expected suffixes and matching FULL-debug/record counts. Actual Windows ROI/Artifact/static preparation values are not supplied by this table; no fresh configuration or hash audit is requested for this bounded receipt. Prior run coverage remains recorded above.
+- Execution scope: October 16 receipt is documentation-only, using the user's Windows tables and existing canonical/human review. No detector or private media is run or inspected locally. Earlier real GUI/pipeline tests remain engineering evidence; the reported Windows output regression is not field acceptance. The pending supplement uses saved CSV and at most two Accum image scenes, without a new detector experiment.
+- Logic-map impact: NONE — the existing cost-first setup route and first-sort intervention still describe the unchanged source; this receipt changes candidate disposition and review scope only.
+- Failure-registry impact: NONE — existing identity, lifecycle and provenance risks cover the result; no new causal mechanism or repaired physical failure is established.
