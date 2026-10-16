@@ -1652,3 +1652,9 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-16 | [50-diagnostics/s11/2026-10-16-corroboration-peer-screen/storage-reference-relocation.json](50-diagnostics/s11/2026-10-16-corroboration-peer-screen/storage-reference-relocation.json) | 가변 문서를 참조한 저장 실수의 경로 정정 기록; 원래 증거 해시·내용 불변 |
 
 최초 Git 추가일은 `e8d205cca160a7f7a0a5fe4cdb0e4e316a7045cf`의 author 시각을 KST로 변환하여 확정했다.
+
+### 2026-10-16 current-raster partition 검증
+
+| 최초 Git 등록일 (KST) | 문서 | 범위 |
+|---|---|---|
+| 미등록 (작성 2026-10-16) | [50-diagnostics/s11/2026-10-16-raster-partition-screen.md](50-diagnostics/s11/2026-10-16-raster-partition-screen.md) | CRW-1 고정 가설·동일 위치 픽셀 대응·계면/비유면 양면 대조 |
