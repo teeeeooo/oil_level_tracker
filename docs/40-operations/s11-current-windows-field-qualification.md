@@ -70,10 +70,20 @@ after Foam. 679.0 s is source frame 16280, whose human-reviewed Y213 is in the
 [R22 findings](../50-diagnostics/s11/s11-r22-reviewed-interface-causal-findings.md#accum-authority-and-independent-support).
 Table C counts all captured Accum frames in 671–681 s.
 
+**Boundary Y is a human review, not an agent estimate.** It uses the existing
+[O2 review procedure](s11-o2-local-shadow-evaluation.md#3-에이전트-질문--사용자-회신--기록재개)
+on the same ④ bundle as a new **review-009** (review-001–008 are taken). Use
+`prepare` → `link-bundle` → plain/idx-guide images → one question per frame →
+`record`. Table B prints `candidate_input_index` as `idx`, the same key the
+packet uses, so answers join without matching on Y. Review-006 (Accum 675/676/677
+s, RGB packet) overlaps this interval but stays pending and untouched; review-009
+does not answer or overwrite it. Several acceptable candidates and `uncertain`
+are valid answers, as in review-004.
+
 ### Request text for the Windows agent
 
-[Source ZIP](https://github.com/teeeeooo/oil_level_tracker/archive/1ceccbbb2bc9ed687e3d88447558eb5b1db638b8.zip)
-(commit `1ceccbb`).
+[Source ZIP](https://github.com/teeeeooo/oil_level_tracker/archive/1c21444addad7758fa3db1d426485c1c65d5cb0f.zip)
+(commit `1c21444`).
 
 ```text
 S11 Accum 텍스처 gate 확인 — 저장된 ④ trace 읽기 전용 추출이야. 재실행·튜닝·비교 실행은 하지 마.
@@ -100,11 +110,17 @@ ORDERED_LOWER 실패 → anchor 미승인"으로 막히는지 확인한다.
    원인 조사는 하지 않는다. NOT_CAPTURED / NO_SEQUENCE도 그대로 둔다.
    인접 프레임이나 다른 후보로 채우지 않는다.
 
-4. 선택 사항: 사용자가 원본 영상에서 직접 본 아래쪽 Oil/Foam 경계의 대략 Y를
-   목표 시각별로 한 줄씩 덧붙인다(불확실하면 "불명"). 에이전트가 추정한
-   좌표는 넣지 않는다. 679.0초(f16280)는 기존 검토값 Y213이 있다.
+4. 표 A에서 캡처된 목표 프레임만 새 review-009로 사람 검토를 한다.
+   s11-o2-local-shadow-evaluation.md의 "3. 에이전트 질문 → 사용자 회신 → 기록·재개"
+   절차를 그대로 쓴다: 같은 ④ bundle로 prepare(Accum glass_id, 표 A의 frame) →
+   link-bundle → 질문 전 plain/idx-guide 이미지를 열어 경로를 알려줌 → 한 프레임씩 질문 →
+   사용자 답을 record로 저장. selection의 recording_group/partition은 review-004와 같게 둔다.
+   질문은 프레임당 하나: "아래쪽 Oil/Foam 경계가 보이나요? 보이면 그 경계에 있는 후보 idx는?"
+   여러 idx 허용, 판단 보류(uncertain) 허용. 에이전트가 고르거나 좌표를 추정하지 않는다.
+   review-006은 열거나 답하지 않는다. 679.0초(f16280)는 기존 검토값 Y213을 참고로 보여줘도 된다.
+   반환은 프레임별 한 줄: frame | visibility | interface idx | non_interface idx(답한 경우) | 비고.
 
-5. 영상·이미지·JSON·CSV 원본은 보내지 않는다. 표와 결론 한 줄만 반환하고 멈춘다.
+5. 영상·이미지·JSON·CSV·packet 원본은 보내지 않는다. 표, 검토 줄, 결론 한 줄만 반환하고 멈춘다.
    결론 한 줄에는 "표 C에서 TEX0가 몇 프레임" 같은 관찰만 쓰고, 원인 판정이나
    수정 제안은 하지 않는다. FIELD FAIL / O2 OPEN, review-006 pending,
    ⑧ NOT RUN 상태는 바뀌지 않는다.
