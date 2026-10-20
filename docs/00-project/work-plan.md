@@ -49,9 +49,19 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
   FAILED: 673–677 s transfer (boundary first; 0/24 negatives, incl. anchor Y235),
   but at 678.5 s the Foam texture has faded and the boundary is invisible to the
   witness (O5). CLOSED WITHOUT PROMOTION; no consumer built.
-- **Next (agreed):** review other approaches. The layered-Foam part has held-out
-  support; the Foam-collapse onset (678.5 s) needs evidence other than material
-  texture. No detector change or Windows run is queued.
+- **ARV-1 approach review (2026-10-20):** [review](../50-diagnostics/s11/2026-10-20-approach-review.md#recommendation)
+  is complete; the choice is the user's.
+  - Split the work by Foam state. Layered Foam (673–677 s) has held-out witness
+    support. Collapse onset has a one-level fallback target: the air–liquid top.
+  - Open truth question: are the 678.5 s published/anchor rows Y238/Y229 the
+    air–liquid top? If so, the fallback is already met.
+  - Recommended order:
+    1. review-010 on the saved ④ bundle;
+    2. one A+C experiment: the unchanged LBW-3 unit qualifies ordered-lower
+       demotion in layered Foam;
+    3. collapse evidence (gray/colour or a phase) only after the review.
+  - A standalone gray/colour discriminator would repeat CRW-1/PWC-1/RGB. No
+    detector change or Windows run is queued.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
