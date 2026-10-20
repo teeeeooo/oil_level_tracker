@@ -125,3 +125,16 @@ def test_lbw2_short_gap_inside_the_layer_stays_interior():
 def test_lbw2_lower_structure_below_clean_oil_is_not_supported():
     material, effective, glare = _rasters((20, 100), (130, 170))
     assert lbw.witness(material, effective, glare, 130, tolerance=12)["decision"] != "INTERFACE_SUPPORTED"
+
+
+def _row(y, decision="INTERFACE_SUPPORTED"):
+    return {"y": y, "decision": decision}
+
+
+def test_lbw3_accepts_only_the_first_supported_bottom():
+    rows = [_row(805, "INTERNAL_OR_ARTIFACT"), _row(835), _row(844), _row(868), _row(850, "UNRESOLVED")]
+    lbw.accept(rows, "lbw3", 12.0)
+    assert [row["y"] for row in rows if row["accepted"]] == [835, 844]
+    lbw.accept(rows, "lbw2", 12.0)
+    assert [row["y"] for row in rows if row["accepted"]] == [835, 844, 868]
+    assert lbw.accept([_row(830, "UNRESOLVED")], "lbw3", 12.0)[0]["accepted"] is False

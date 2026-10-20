@@ -194,11 +194,26 @@ def rasters_from_bundle(root, record):
     return load('foam_combined_evidence').astype(np.float64) / 255.0, load('effective_mask'), load('glare_mask')
 
 
+def accept(rows, definition, tolerance):
+    """Mark the unit each definition is judged on.
+
+    lbw1/lbw2: the standalone row witness (`INTERFACE_SUPPORTED`).
+    lbw3: the frame's first supported bottom -- supported rows within the
+    same-boundary tolerance of the topmost supported row. No Foam input.
+    """
+    supported = [row for row in rows if row['decision'] == 'INTERFACE_SUPPORTED']
+    top = min((row['y'] for row in supported), default=None)
+    for row in rows:
+        row['accepted'] = row in supported and (definition != 'lbw3' or row['y'] <= top + tolerance)
+    return rows
+
+
 def _line(frame, row, role=''):
     counts = row['counts']
     check = {None: '-', True: 'ok', False: 'MISMATCH'}[row['check']]
     return (f"f{frame} | {row['y']:.1f} | {row['idx']} | {row['source'][:20]} | {role} | {row['decision']} | "
-            f"T{counts['TERMINAL']} I{counts['INTERIOR']} O{counts['OTHER']} U{counts['UNAVAILABLE']} | {check}")
+            f"T{counts['TERMINAL']} I{counts['INTERIOR']} O{counts['OTHER']} U{counts['UNAVAILABLE']} | {check}"
+            f"{' | first' if row.get('accepted') and row['decision'] == 'INTERFACE_SUPPORTED' else ''}")
 
 
 def _check_valid(rows):
@@ -213,7 +228,7 @@ def run_bundle(bundle_path, glass_key, positives, negatives, definition='lbw1'):
     bundle, repository, glass = _load(bundle_path, glass_key)
     by_frame = {item.frame_index: item for item in repository.summaries(str(glass.id))}
     frames = sorted(set(positives) | set(negatives))
-    tolerance = same_boundary_tolerance(glass) if definition == 'lbw2' else None
+    tolerance = same_boundary_tolerance(glass) if definition in ('lbw2', 'lbw3') else None
     print(f'run_id={bundle.run_id} trace={bundle.debug_trace_level} glass={glass.name} definition={definition} '
           f'tol={tolerance}')
     print('[W] frame | Y | idx | source | role | decision | sectors | self-check')
@@ -225,7 +240,8 @@ def run_bundle(bundle_path, glass_key, positives, negatives, definition='lbw1'):
             continue
         record = next(_records(bundle, [summary]))
         origin, _ = origin_from_record(record)
-        rows = evaluate(rasters_from_bundle(bundle.root, record), record.get('candidates') or [], origin, tolerance)
+        rows = accept(evaluate(rasters_from_bundle(bundle.root, record), record.get('candidates') or [], origin,
+                               tolerance), definition, tolerance)
         all_rows += rows
         by_idx = {row['idx']: row for row in rows}
         wanted_pos, wanted_neg = positives.get(frame, set()), negatives.get(frame, set())
@@ -234,7 +250,7 @@ def run_bundle(bundle_path, glass_key, positives, negatives, definition='lbw1'):
                 print(f'f{frame} | - | {idx} | NOT_FOUND')
                 continue
             print(_line(frame, by_idx[idx], 'pos' if idx in wanted_pos else 'neg'))
-        supported = lambda idx: by_idx.get(idx, {}).get('decision') == 'INTERFACE_SUPPORTED'
+        supported = lambda idx: by_idx.get(idx, {}).get('accepted', False)
         frame_pos = sorted(idx for idx in wanted_pos if supported(idx))
         frame_neg = sorted(idx for idx in wanted_neg if supported(idx))
         frame_lines.append(f'f{frame} | pos supported {frame_pos or "-"} | neg supported {frame_neg or "-"}')
@@ -300,7 +316,8 @@ def run_sample4(work, definition='lbw1'):
                                       JsonlDebugTraceWriterFactory(Path(scratch))).run(recipe, session)
     assert not result.errors, result.errors
     fingerprint = _tracking_fingerprint(result)
-    tolerance = same_boundary_tolerance(next(g for g in recipe.glasses if g.enabled)) if definition == 'lbw2' else None
+    tolerance = (same_boundary_tolerance(next(g for g in recipe.glasses if g.enabled))
+                 if definition in ('lbw2', 'lbw3') else None)
     print(f'sample4 fingerprint={fingerprint} p5_equal={fingerprint == P5_FINGERPRINT} frames={len(captured)} '
           f'definition={definition} tol={tolerance}')
     if fingerprint != P5_FINGERPRINT:
@@ -310,7 +327,7 @@ def run_sample4(work, definition='lbw1'):
     report, all_rows = [], []
     for frame in sorted(captured):
         item = captured[frame]
-        rows = evaluate(item['rasters'], item['candidates'], item['origin_y'], tolerance)
+        rows = accept(evaluate(item['rasters'], item['candidates'], item['origin_y'], tolerance), definition, tolerance)
         all_rows += rows
         for time, target, role in SAMPLE4_CONTROLS:
             if int(round(time * 30)) != frame:
@@ -320,15 +337,15 @@ def run_sample4(work, definition='lbw1'):
                 if abs(row['y'] - target) <= match:
                     print(_line(frame, row, f'{role}{target:g}'))
                     report.append(dict(time=time, target=target, role=role, **{k: row[k] for k in (
-                        'idx', 'y', 'source', 'decision', 'counts', 'states', 'check')}))
+                        'idx', 'y', 'source', 'decision', 'accepted', 'counts', 'states', 'check')}))
     pos_times = sorted({time for time, _, role in SAMPLE4_CONTROLS if role == 'pos'})
     supported = [time for time in pos_times if any(r['time'] == time and r['role'] == 'pos'
-                                                   and r['decision'] == 'INTERFACE_SUPPORTED' for r in report)]
+                                                   and r['accepted'] for r in report)]
     negatives = [f"{r['time']}s:Y{r['y']:g}" for r in report
-                 if r['role'] == 'neg' and r['decision'] == 'INTERFACE_SUPPORTED']
+                 if r['role'] == 'neg' and r['accepted']]
     time, pos_ys, neg_ys = SAMPLE4_DECISIVE
-    decisive = (any(r['time'] == time and r['y'] in pos_ys and r['decision'] == 'INTERFACE_SUPPORTED' for r in report)
-                and not any(r['time'] == time and r['y'] in neg_ys and r['decision'] == 'INTERFACE_SUPPORTED'
+    decisive = (any(r['time'] == time and r['y'] in pos_ys and r['accepted'] for r in report)
+                and not any(r['time'] == time and r['y'] in neg_ys and r['accepted']
                             for r in report))
     valid, failed, checked = _check_valid(all_rows)
     summary = dict(definition=definition, fingerprint_equal=True, positive_frames_supported=f'{len(supported)}/{len(pos_times)}',
@@ -350,13 +367,13 @@ def main():
     sub = parser.add_subparsers(dest='mode', required=True)
     local = sub.add_parser('sample4')
     local.add_argument('--work', type=Path, required=True)
-    local.add_argument('--definition', choices=('lbw1', 'lbw2'), required=True)
+    local.add_argument('--definition', choices=('lbw1', 'lbw2', 'lbw3'), required=True)
     saved = sub.add_parser('bundle')
     saved.add_argument('--bundle', type=Path, required=True)
     saved.add_argument('--glass', default='Accum')
     saved.add_argument('--pos', required=True, help="frame:idx list, e.g. '16184:10,22'")
     saved.add_argument('--neg', required=True)
-    saved.add_argument('--definition', choices=('lbw1', 'lbw2'), required=True)
+    saved.add_argument('--definition', choices=('lbw1', 'lbw2', 'lbw3'), required=True)
     args = parser.parse_args()
     if args.mode == 'sample4':
         run_sample4(args.work, args.definition)

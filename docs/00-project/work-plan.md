@@ -42,9 +42,10 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
   the Foam front") separates the Foam layer from structure. The ④ trace stays
   unread and held out. One earlier run was invalid (tool variable shadowing,
   fixed in `43b7d76`).
-- **Next:** the user decides whether to freeze a successor that evaluates the
-  ordered unit (first supported bottom below the Foam front), not the
-  standalone row witness. No detector change or Windows run is queued.
+- **LBW-3 (user-approved 2026-10-20, last in this line):** [first supported bottom](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md)
+  is frozen. It keeps LBW-2's row witness and judges the frame's topmost
+  supported bottom within the same-boundary tolerance. Afterwards, whatever the
+  result, the user reviews other approaches.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
