@@ -105,8 +105,12 @@ def pattern(seq, counts, counterfactual):
     return 'OTHER_EXCL'
 
 
-def analyze(record, glass):
-    """Return frame summary and per-candidate rows for one saved record (pure)."""
+def analyze(record, glass, requested=()):
+    """Return frame summary and per-candidate rows for one saved record (pure).
+
+    Rows cover the top-K refs plus any requested ``candidate_input_index`` values,
+    including candidates without stored gate fields (``NOT_TOPK``).
+    """
     sequence = record.get('sequence')
     frame = dict(frame=record['frame_index'], time=float(record['timestamp_sec']),
                  reasons=list(record.get('capture_reasons') or []), sequence=sequence is not None, rows=[],
@@ -128,17 +132,19 @@ def analyze(record, glass):
                            if item.get('kind') == 'foam_front' and (_f(item.get('sequence_foam_eligible')) or 0) >= 0.5
                            and _f(item.get('canonical_y')) is not None)
     frame['version'] = (sequence.get('state') or {}).get('sequence_resolver_version')
-    top_k = [item for item in sequence.get('candidates') or []
-             if item.get('kind') == 'oil_air' and item.get('phase_identity') is not None]
-    frame['top_k'] = len(top_k)
-    for seq in top_k:
+    sequence_oil = [item for item in sequence.get('candidates') or [] if item.get('kind') == 'oil_air']
+    frame['top_k'] = sum(item.get('phase_identity') is not None for item in sequence_oil)
+    for seq in sequence_oil:
         matches = by_key.get((str(seq['source']), float(seq['canonical_y'])), [])
+        top = seq.get('phase_identity') is not None
+        if not top and not any(input_index[id(item)] in requested for item in matches):
+            continue
         row = dict(y=float(seq['canonical_y']), source=str(seq['source']), authority=seq.get('authority'),
                    reason=seq.get('authority_reason'), identity=seq.get('phase_identity'),
                    identity_gates=seq.get('phase_identity_failed_gates') or '',
                    ordered_lower=_f(seq.get('ordered_lower')), support=_f(seq.get('cross_representation_support')),
                    admitted=_f(seq.get('tracklet_admitted')), stage=seq.get('reject_stage'),
-                   selected=bool(seq.get('selected')))
+                   selected=bool(seq.get('selected')), top_k=top)
         if seq.get('selected'):
             frame['selected'] = f"Y{row['y']:.0f} {row['reason']}"
         if row['authority'] == 'ANCHOR_ELIGIBLE':
@@ -151,8 +157,11 @@ def analyze(record, glass):
         candidate = matches[0]
         evidence = index.evidence(candidate)
         recomputed = resolver._cross_representation_support(candidate, oil, glass, evidence_index=index)
-        frame['check_total'] += 1
-        frame['check_ok'] += int(row['support'] is not None and abs(recomputed - row['support']) <= 1e-6)
+        if top:
+            frame['check_total'] += 1
+            frame['check_ok'] += int(row['support'] is not None and abs(recomputed - row['support']) <= 1e-6)
+        else:
+            row['support'] = recomputed  # what the resolver would compute; no stored value exists
         counts, texture_only = peer_reasons(candidate, oil, glass, index)
         counterfactual = support_without_texture(candidate, oil, glass, index, texture_only)
         features = candidate.features
@@ -160,14 +169,15 @@ def analyze(record, glass):
                    terminal=_f(features.get('material_terminal_partition_support')),
                    row_support=_f(features.get('raw_material_row_support')),
                    counts=dict(counts), counterfactual=counterfactual,
-                   pattern=pattern(seq, counts, counterfactual))
+                   final_score=candidate.final_score,
+                   pattern=pattern(seq, counts, counterfactual) if top else 'NOT_TOPK')
         frame['rows'].append(row)
     return frame
 
 
 def _pick(rows):
-    keep = [row for row in rows if row['selected'] or row['authority'] == 'ANCHOR_ELIGIBLE'
-            or row.get('ordered_lower') == 1.0]
+    keep = [row for row in rows if row['top_k'] and (row['selected'] or row['authority'] == 'ANCHOR_ELIGIBLE'
+                                                   or row.get('ordered_lower') == 1.0)]
     keep.sort(key=lambda row: (not row['selected'], row['authority'] != 'ANCHOR_ELIGIBLE', row['y']))
     return sorted(keep[:ROWS_PER_FRAME], key=lambda row: row['y'])
 
@@ -205,9 +215,53 @@ def _records(bundle, summaries):
             yield json.loads(handle.read(summary.byte_length).decode('utf-8'))
 
 
-def run(bundle_path, glass_key, times):
+def run(bundle_path, glass_key, times, requested=None):
     bundle, repository, glass = _load(bundle_path, glass_key)
-    report(bundle, repository.summaries(str(glass.id)), glass, times)
+    summaries = repository.summaries(str(glass.id))
+    if requested:
+        report_requested(bundle, summaries, glass, requested)
+    else:
+        report(bundle, summaries, glass, times)
+
+
+def parse_rows(text):
+    """'16184:10,22;16232:10' -> {16184: {10, 22}, 16232: {10}}."""
+    rows = {}
+    for part in filter(None, (item.strip() for item in text.split(';'))):
+        frame, indices = part.split(':')
+        rows[int(frame)] = {int(value) for value in indices.split(',') if value.strip()}
+    return rows
+
+
+def report_requested(bundle, summaries, glass, requested):
+    """Table D: exactly the requested candidates, whether or not they were top-K."""
+    by_frame = {item.frame_index: item for item in summaries}
+    print(f'run_id={bundle.run_id} trace={bundle.debug_trace_level} glass={glass.name}')
+    print('[D] frame | actual s | Y | idx | source | topK | authority/reason | identity [failed gates] | '
+          'ol | sup | sup* | conflict | terminal | row | peers | admitted/stage | final | pattern')
+    for frame_index in sorted(requested):
+        summary = by_frame.get(frame_index)
+        if summary is None:
+            print(f'f{frame_index} | NOT_CAPTURED')
+            continue
+        record = next(_records(bundle, [summary]))
+        frame = analyze(record, glass, requested[frame_index])
+        if not frame['sequence']:
+            print(f'f{frame_index} | NO_SEQUENCE')
+            continue
+        rows = {row.get('idx'): row for row in frame['rows'] if row.get('idx') in requested[frame_index]}
+        for idx in sorted(requested[frame_index], key=lambda value: (rows[value]['y'] if value in rows else 1e9, value)):
+            row = rows.get(idx)
+            if row is None:
+                print(f"f{frame_index} | {frame['time']:.3f} | - | {idx} | NOT_FOUND_OR_AMBIG")
+                continue
+            print(f"f{frame_index} | {frame['time']:.3f} | {row['y']:.0f}{'*' if row['selected'] else ''} | {idx} | "
+                  f"{row['source'][:20]} | {'Y' if row['top_k'] else 'N'} | "
+                  f"{(row['authority'] or '-')[:4]}/{row['reason'] or '-'} | "
+                  f"{_short(row['identity'])} [{_short(row['identity_gates'])}] | {_num(row['ordered_lower'], 0)} | "
+                  f"{_num(row['support'])} | {_num(row.get('counterfactual'))} | {_num(row.get('conflict'))} | "
+                  f"{_num(row.get('terminal'))} | {_num(row.get('row_support'))} | {_peers(row.get('counts'))} | "
+                  f"{_num(row['admitted'], 0)}/{row['stage']} | {_num(row.get('final_score'))} | {row['pattern']}")
 
 
 def report(bundle, summaries, glass, times):
@@ -270,8 +324,10 @@ def main():
     parser.add_argument('--bundle', type=Path, required=True)
     parser.add_argument('--glass', default='Accum')
     parser.add_argument('--times', default=','.join(str(value) for value in TIMES))
+    parser.add_argument('--rows', help="exact frame:idx list, e.g. '16184:10,22;16232:10' (prints table D only)")
     args = parser.parse_args()
-    run(args.bundle.expanduser().resolve(), args.glass, tuple(float(value) for value in args.times.split(',')))
+    run(args.bundle.expanduser().resolve(), args.glass, tuple(float(value) for value in args.times.split(',')),
+        parse_rows(args.rows) if args.rows else None)
 
 
 if __name__ == '__main__':

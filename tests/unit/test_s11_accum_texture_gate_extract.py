@@ -126,3 +126,27 @@ def test_report_prints_short_tables_and_marks_uncaptured_targets(tmp_path, capsy
     assert "NOT_CAPTURED" in out
     assert "recompute_mismatch=0" in out
     assert len(out.splitlines()) < 40
+
+
+def test_requested_rows_include_top_k_pruned_candidates(tmp_path, capsys, monkeypatch):
+    original = _with_artifact_calibration
+
+    def narrow_glass():
+        glass = original()
+        glass.detector_settings.candidate_top_k = 1
+        return glass
+
+    monkeypatch.setitem(globals(), "_with_artifact_calibration", narrow_glass)
+    glass, staging = _real_trace(tmp_path)
+    index = json.loads((staging / "debug_index.json").read_text(encoding="utf-8"))
+    summaries = [SimpleNamespace(**{key: item[key] for key in
+                                    ("record_id", "timestamp_sec", "byte_offset", "byte_length", "frame_index")})
+                 for item in index["records"]]
+    bundle = SimpleNamespace(root=staging, debug_trace_path="debug_trace.jsonl", run_id="run-1",
+                             debug_trace_level="basic")
+    assert extract.parse_rows("0:1,2,3; 99:1") == {0: {1, 2, 3}, 99: {1}}
+    extract.report_requested(bundle, summaries, glass, {0: {1, 2, 3}, 99: {1}})
+    lines = capsys.readouterr().out.splitlines()
+    assert any(" | 1 | " in line and "| N |" in line and line.endswith("NOT_TOPK") for line in lines)
+    assert any(" | 3 | " in line and "| Y |" in line for line in lines)
+    assert "f99 | NOT_CAPTURED" in lines
