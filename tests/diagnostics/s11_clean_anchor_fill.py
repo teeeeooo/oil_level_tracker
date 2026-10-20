@@ -87,7 +87,9 @@ def control_outcomes(record, controls):
     return out
 
 
-def run(root, output):
+def run(root, output, *, trial=None, protocol=PROTOCOL, schema='s11-clean-anchor-fill-v1',
+        scope='CAF-1 diagnostic wrapper; not production adoption', extra_sources=()):
+    trial = trial or execute
     rci.require(output.is_dir() and not any(output.iterdir()), 'empty managed work required')
     parent = root / SOI_PARENT
     prior = json.loads((parent / 'comparison.json').read_text(encoding='utf-8'))
@@ -100,16 +102,17 @@ def run(root, output):
             saved.append(json.loads(line))
     rci.require(len(saved) == 246, 'original denominator mismatch')
     source_paths = list((root / 'src').rglob('*.py')) + [
-        Path(__file__), Path(soi.__file__), Path(rci.__file__), Path(hpa.__file__), Path(verify.__file__)]
+        Path(__file__), Path(soi.__file__), Path(rci.__file__), Path(hpa.__file__), Path(verify.__file__),
+        *map(Path, extra_sources)]
     sources = {str(p.relative_to(root)): rci.digest(p) for p in source_paths}
     inputs = {**prior['preflight']['inputs'],
               str(SOI_PARENT / 'population.jsonl.gz'): rci.digest(parent / 'population.jsonl.gz'),
-              str(PROTOCOL): rci.digest(root / PROTOCOL)}
+              str(protocol): rci.digest(root / protocol)}
     rci.require(all(rci.digest(root / p) == v for p, v in inputs.items()), 'input drift')
     pre = dict(head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True,
                                             encoding='utf-8', stdin=subprocess.DEVNULL).strip(),
                sources=sources, inputs=inputs, cases=[r['case'] for r in saved], controls=controls,
-               scope='CAF-1 diagnostic wrapper; not production adoption')
+               scope=scope)
     rci.write_json(output / 'preflight.json', pre)
     summaries = []
     checks = event_checks = 0
@@ -120,10 +123,10 @@ def run(root, output):
             ordinary, _, _, _ = soi.execute(raw, recipe, original['case'])
             rci.require(ordinary['rows'] == original['rows'] and ordinary['events'] == original['events'],
                         'ordinary policy does not reproduce saved SOI rows/events')
-            trial, _, _, _, operations = execute(raw, recipe, original['case'])
+            trial_record, _, _, _, operations = trial(raw, recipe, original['case'])
             if ordinal == 0:
                 ordinary_baseline = ordinary
-            for record in (ordinary, trial):
+            for record in (ordinary, trial_record):
                 for row, source in zip(record['rows'], raw, strict=True):
                     verify.check_row(row, source)
                     checks += 1
@@ -131,20 +134,20 @@ def run(root, output):
                 for event in record['events']:
                     verify.check_event_levels(event, samples[event['representative_frame_index']])
                     event_checks += 1
-            summary = soi.summarize(trial, ordinary_baseline)
-            paired = soi.summarize(trial, ordinary)
+            summary = soi.summarize(trial_record, ordinary_baseline)
+            paired = soi.summarize(trial_record, ordinary)
             summary.update(
                 operations=len(operations),
                 paired_oil_changed_frames=paired['oil_changed_frames'],
                 paired_foam_changed_frames=paired['foam_changed_frames'],
-                paired_public_equal=hpa.public_signature(trial) == hpa.public_signature(ordinary),
+                paired_public_equal=hpa.public_signature(trial_record) == hpa.public_signature(ordinary),
                 ordinary_oil_numeric=sum(r['oil_y'] is not None for r in ordinary['rows']),
-                ordinary_report_extrema=extrema(ordinary), trial_report_extrema=extrema(trial),
+                ordinary_report_extrema=extrema(ordinary), trial_report_extrema=extrema(trial_record),
                 ordinary_foam_landmarks=soi.summarize(ordinary, ordinary)['foam_landmarks'],
                 ordinary_controls=control_outcomes(ordinary, controls),
-                trial_controls=control_outcomes(trial, controls))
+                trial_controls=control_outcomes(trial_record, controls))
             summaries.append(summary)
-            stream.write(json.dumps(dict(ordinary=ordinary, trial=trial, operations=operations),
+            stream.write(json.dumps(dict(ordinary=ordinary, trial=trial_record, operations=operations),
                                     ensure_ascii=False, allow_nan=False) + '\n')
             if ordinal % 20 == 0 or ordinal == 245:
                 print(ordinal, len(operations), summary['ordinary_oil_numeric'], summary['oil_numeric'],
@@ -162,7 +165,7 @@ def run(root, output):
             if policy == 'ordinary':
                 record, _, public, presentation = soi.execute(raw, recipe, expected['ordinary']['case'])
             else:
-                record, _, public, presentation, operations = execute(raw, recipe, expected['trial']['case'])
+                record, _, public, presentation, operations = trial(raw, recipe, expected['trial']['case'])
                 rci.require(operations == expected['operations'], 'activation replay drift')
             rci.require(record == expected[policy], 'publication replay drift')
             directory = output / 'paired' / name / policy
@@ -171,7 +174,7 @@ def run(root, output):
             GraphRenderer().render(public, directory / 'graphs', recipe, presentation=presentation)
     rci.require(all(rci.digest(root / p) == v for p, v in {**sources, **inputs}.items()),
                 'source/input mutation')
-    result = dict(schema='s11-clean-anchor-fill-v1', preflight=pre, cases=summaries, changed_cases=changed,
+    result = dict(schema=schema, preflight=pre, cases=summaries, changed_cases=changed,
                   population_cases=len(saved), population_rows=checks, events_verified=event_checks,
                   activated_cases=sum(bool(s['operations']) for s in summaries),
                   production_unchanged=True, physical_accuracy='NOT_EVALUATED',
