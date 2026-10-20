@@ -168,6 +168,8 @@ evidence and must tolerate missing edge support without inventing closure.
 
 ### S11-F04 — Component identity leakage and alias continuation
 
+CAF-1 local follow-up (October 20): [saved witnesses](2026-10-20-clean-anchor-fill.md#why-the-lower-structure-is-selected) show the sample4 lower structure near Y862–868 receiving `ANCHOR_ELIGIBLE` authority as `ordered_lower_interface`. Meanwhile the accepted interface rows near Y833–841 hold only continuation authority. The same pattern produces the reviewed 42 s Y868 wrong target, the 79:0014 fill chain behind HPA-1's barrier and the user-confirmed false 51–52 s Y862 run. Material-texture conflict does not separate these roles: accepted rows score 0.59–0.98 and the wrong anchors 0.59–0.83. Lowest-ordered geometry is therefore acting as an identity shortcut; it is not a qualified physical role.
+
 **Affected detector logic node(s):** `OIL-AUTHORITY` → `OIL-TRACKLET` → `OIL-PHASE-FILL`/`OIL-PHASE-DRAIN` and `FOAM-IDENTITY`.
 
 **Mechanism/trigger:** Y adjacency, source-family preference, a recurring track, local appearance, broad-mask ordering, or a prior alias decision transferred identity across a physical phase/component change. Graph/run bounds then treated all adjacent `kind == oil` nodes as one path. Conversely, an overly strict distance component prototype censored legitimate continuation without proving identity.
@@ -254,6 +256,8 @@ retuning. This strengthens the existing identity/alias warning, not a new
 failure class, adopted rule or explanation of the private 721 s optical cause.
 
 ### S11-F05 — Initial-state and material-phase hard-lock asymmetry
+
+CAF-1 local follow-up (October 20): [clean-anchor fill qualification](2026-10-20-clean-anchor-fill.md#results-and-decision) stopped crediting material-contradicted anchors toward fill completion. Of 246 sample4 conditions, 4 activate; the baseline is unchanged and Foam is unchanged. The lost 44–56 s trajectory returns close to the baseline, but in two cases a 50.5–52 s Y862–866 run appears that the user confirmed is a wrong target. It creates a false report minimum (A). The baseline's owner bound from the contradicted fill had been suppressing that lower anchor only incidentally. CLOSED WITHOUT PROMOTION; do not retry material-veto anchor filtering at fill or authority level.
 
 HPA-1 local follow-up: the [complete row-feature factorial](2026-10-17-history-phase-amplification.md) identifies internal matching Y and assignment as the primary loss branch; restoring scalar opposition does not repair that episode. Donor median/history is diagnostic only, and the existing reciprocal physical-swap safeguards remain in force.
 

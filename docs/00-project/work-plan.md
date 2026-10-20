@@ -10,6 +10,23 @@
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
+**CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
+is CLOSED WITHOUT PROMOTION.
+- **What it did:** 4 of 246 sample4 conditions activate; the baseline and Foam
+  are unchanged. The lost 44–56 s trajectory returns close to the baseline.
+- **Why it stopped:** two cases add a 50.5–52 s Y862–866 run that the user
+  confirmed is a wrong target (A).
+- **Root cause:** `OIL-AUTHORITY` gives `ordered_lower_interface` anchor
+  authority to the lower glass structure (also the reviewed 42 s Y868 and
+  HPA-1's 79:0014 fill chain), while accepted interface rows hold continuation
+  only. Material-texture conflict does not separate the two.
+- **Other recordings:** base_sample_1/sample2 qualification windows show zero
+  activations.
+- **Next:** a successor must qualify the lowest-ordered row's physical role
+  (interface versus vessel structure) before it holds anchor authority. No
+  material-veto filtering, fixed band, Y/time exception or recurrence veto. No
+  successor is selected yet, and no Windows run is queued.
+
 **Evaluation decision — 2026-10-20:** the user adopted numerical local-residual
 (C) bounds, a supported-extremum report rule and a net baseline/candidate
 comparison procedure. All three are owned by the
