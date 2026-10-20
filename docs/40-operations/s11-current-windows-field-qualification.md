@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / NO CURRENT EXECUTION REQUEST` — the [Accum texture-gate extraction](#accum-texture-gate-extraction), review-009 and the boundary-row follow-up are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: LBW-3 HELD-OUT WITNESS CHECK` — one [read-only saved-trace check](#lbw-3-held-out-witness-check); no run. The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -20,6 +20,37 @@ Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
+
+## LBW-3 held-out witness check
+
+**Current request — saved ④ trace only, no run.** [LBW-3](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md)
+asks whether a raster witness for the bottom of a textured layer, taken as the
+frame's first supported bottom, separates the reviewed Accum boundary from
+Foam-interior anchors and wrong selections. sample4 passed as development data.
+This trace has not been read by any witness definition and is the decisive
+held-out check. Positives and negatives are fixed by `candidate_input_index` from
+review-009 and the ATG-1 tables. The tool reads each record's saved
+`foam_combined_evidence`, `effective_mask` and `glare_mask` PNGs. It recomputes the
+stored whole-row texture features as a self-check, and writes nothing.
+
+```text
+S11 LBW-3 독립 확인. 기존 ④ bundle(trace=full)을 읽기만 해. 재실행, 튜닝, 새 bundle,
+새 질문은 하지 마. 이 결과로 정의를 바꾸지도 않아.
+
+1. 아래 ZIP을 새 폴더에 풀고 그 폴더에서 실행해.
+   https://github.com/teeeeooo/oil_level_tracker/archive/87817ad37328dffc041f0b3c5b023897f9b66ec9.zip
+
+   $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+   python -B -m tests.diagnostics.s11_layer_bottom_witness bundle --bundle "<④ bundle 폴더>" --glass Accum --definition lbw3 --pos "16136:10,26;16184:10,22,25;16232:10,23,25,26;16268:12,24" --neg "16136:25,12,2,20,3;16184:14,24,11,18,17;16232:11,16,24,18,1;16268:16,21"
+
+2. 다음 줄만 출력 그대로 돌려줘. 값은 고치지 마.
+   - 머리줄 1개(run_id … definition=lbw3 tol=…)
+   - [F]로 시작하는 줄 전부(4줄)와 [S] 줄
+   - [W] 줄 중 role이 pos인 줄 전부, role이 neg이면서 끝에 "| first"가 붙은 줄
+   NOT_CAPTURED, NOT_FOUND, 오류 메시지가 있으면 그 줄도 그대로 적어줘.
+
+3. 반환 후 멈춰. 원인 판정이나 수정 제안은 하지 마. 영상, 이미지, JSON, CSV 원본은 보내지 마.
+```
 
 ## Accum texture-gate extraction
 

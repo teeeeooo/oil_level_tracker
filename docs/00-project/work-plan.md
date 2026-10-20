@@ -44,8 +44,10 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
   fixed in `43b7d76`).
 - **LBW-3 (user-approved 2026-10-20, last in this line):** [first supported bottom](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md)
   is frozen. It keeps LBW-2's row witness and judges the frame's topmost
-  supported bottom within the same-boundary tolerance. Afterwards, whatever the
-  result, the user reviews other approaches.
+  supported bottom within the same-boundary tolerance. sample4 (development)
+  PASSED (6/6 positives, 0 negatives, decisive 42 s). The read-only held-out
+  [Windows check](../40-operations/s11-current-windows-field-qualification.md#lbw-3-held-out-witness-check)
+  is requested. Afterwards, whatever the result, the user reviews other approaches.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
