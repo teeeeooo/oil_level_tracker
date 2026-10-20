@@ -6,7 +6,8 @@ S11 ACTIVE / O2 OPEN / Windows FIELD FAIL. Default R22 + R22-3/O1 and every
 experiment flag are unchanged; this session made **no production change**.
 [Work Plan](../../00-project/work-plan.md) is the only current-state and
 authorization owner. Everything below is committed and pushed. All 104 managed
-runs check clean.
+runs check clean. At `477c135` the full unit suite (`tests`, excluding
+`tests/diagnostics`) reports 3,780 passed and 12 skipped.
 
 The user chose to **pause the layered-Foam line and start the FULL
 observable-top question (B)** next.
