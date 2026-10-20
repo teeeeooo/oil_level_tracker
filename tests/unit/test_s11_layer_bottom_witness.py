@@ -102,3 +102,26 @@ def test_saved_trace_pngs_round_trip_through_the_real_writer(tmp_path):
     assert lbw.origin_from_record(record) == (origin, "candidate_local_y")
     rows = lbw.evaluate(lbw.rasters_from_bundle(root, record), record["candidates"], origin)
     assert [(row["decision"], row["check"]) for row in rows] == [("INTERFACE_SUPPORTED", True)]
+
+
+def test_lbw2_supports_a_thin_oil_band_over_structure_that_lbw1_rejects():
+    material, effective, glare = _rasters((20, 100), (112, 150))
+    assert lbw.witness(material, effective, glare, 100)["decision"] == "INTERNAL_OR_ARTIFACT"
+    assert lbw.witness(material, effective, glare, 100, tolerance=12)["decision"] == "INTERFACE_SUPPORTED"
+
+
+def test_lbw2_localizes_within_the_same_boundary_tolerance_only():
+    material, effective, glare = _rasters((20, 100))
+    assert lbw.witness(material, effective, glare, 92, tolerance=12)["decision"] == "INTERFACE_SUPPORTED"
+    assert lbw.witness(material, effective, glare, 70, tolerance=12)["decision"] == "INTERNAL_OR_ARTIFACT"
+
+
+def test_lbw2_short_gap_inside_the_layer_stays_interior():
+    material, effective, glare = _rasters((20, 60), (63, 120))
+    assert lbw.witness(material, effective, glare, 60, tolerance=12)["decision"] == "INTERNAL_OR_ARTIFACT"
+    assert lbw.witness(material, effective, glare, 120, tolerance=12)["decision"] == "INTERFACE_SUPPORTED"
+
+
+def test_lbw2_lower_structure_below_clean_oil_is_not_supported():
+    material, effective, glare = _rasters((20, 100), (130, 170))
+    assert lbw.witness(material, effective, glare, 130, tolerance=12)["decision"] != "INTERFACE_SUPPORTED"

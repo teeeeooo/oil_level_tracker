@@ -35,9 +35,11 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
   including the decisive 42 s pair: the clean Oil band below it (~15 px) is
   thinner than the fixed depth (17 px) before lower-structure texture returns.
   No consumer was built; no Windows extraction is requested.
-- **Next:** the user decides whether to freeze a successor witness that does not
-  assume a minimum Oil-band thickness, using the unread ④ trace as a held-out
-  check. No detector change or Windows run is queued.
+- **LBW-2 (user-approved 2026-10-20):** [successor protocol](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-2.md)
+  is frozen. It has two changes only: a 5-row clean onset instead of a clean
+  depth, and test rows within the existing same-boundary tolerance. sample4 is
+  development data; the unread ④ trace is the held-out decisive check
+  (read-only Windows extraction). No detector change until both pass.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
