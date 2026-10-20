@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / NO CURRENT EXECUTION REQUEST` — the [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: review-010 human review` ([request](#review-010-upper-row-roles-at-foam-collapse-onset)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -20,6 +20,66 @@ Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
+
+## Review-010 upper-row roles at Foam-collapse onset
+
+**REQUESTED 2026-10-20 — human review only; no run or extraction.** Step 1 of the
+[ARV-1 recommendation](../50-diagnostics/s11/2026-10-20-approach-review.md#recommendation).
+It asks whether the published/anchor rows above the reviewed boundary are the
+air–liquid top (the collapse fallback target), Foam interior or something else.
+It uses the [O2 procedure](s11-o2-local-shadow-evaluation.md#3-에이전트-질문--사용자-회신--기록재개)
+on the same ④ bundle. The O2 tool and `src/` are unchanged since `1c21444`, so
+the LBW-3 source folder (`87817ad`) is reused. Review-001–009 are not opened or
+changed. Roles are kept in the reply note because the label schema has no role
+field.
+
+```text
+S11 review-010 — Foam 붕괴 시작 구간 위쪽 행의 역할 확인. 기존 ④ bundle로 사람 검토만 해.
+실행·재실행·추출·튜닝은 하지 마.
+
+목적: 677 / 678.5 / 679초에 현재 출력이나 anchor로 쓰이는 위쪽 행이
+air–액체(또는 air–Foam) 상면인지, Foam 내부인지 사용자가 직접 확인한다.
+
+0. 소스는 LBW-3 때 풀어둔 소스 폴더(87817ad)를 그대로 쓴다. O2 도구는 그 뒤 바뀌지 않았다.
+   bundle은 같은 ④ FULL+ON v2 bundle이다. 이동·수정하지 않는다.
+
+1. s11-o2-local-shadow-evaluation.md의 "3. 에이전트 질문 → 사용자 회신 → 기록·재개"
+   절차를 그대로 쓴다. 같은 ④ bundle로 새 review-010을 prepare한다
+   (Accum, f16232 / f16268 / f16280) → link-bundle.
+   selection의 recording_group/partition은 review-009와 같게 둔다.
+   review-001~009(특히 006, 009)는 열거나 고치지 않는다.
+
+2. 질문할 후보. packet 후보 목록에서 canonical_y를 반올림한 값이 일치하는 idx를
+   찾아 가이드에 표시한다. 같은 Y에 idx가 여럿이면 모두 표시한다.
+   못 찾으면 "없음"으로 보고하고 다른 후보로 바꾸지 않는다.
+   - f16232 / 677.0초: idx11 Y235 (anchor), idx16 Y269 (출력)
+   - f16268 / 678.5초: idx16 Y229 (anchor), idx21 Y238 (출력), Y392, Y403
+   - f16280 / 679.0초: Y391, Y392
+   참고로 보여줘도 되는 기존 답: 679초 상면 Y213(R22),
+   유체–유체 층 idx11/20/25 Y412–416(review-009).
+
+3. 질문 전에 plain / idx-guide 이미지를 열고 파일 경로를 알려준다.
+   프레임마다 두 가지만 묻는다.
+   Q1 "맨 위 상면이 보이나요? 보이면 종류(air–Foam / air–액체)와,
+       그 상면에 있는 후보 idx는? (없으면 '후보 없음')"
+   Q2 "표시한 각 후보는 무엇인가요? 상면 / Foam 내부 / 유체–유체 층 / 기타 / 판단 보류"
+   여러 idx와 판단 보류를 허용한다. 에이전트가 고르거나 좌표를 추정하지 않는다.
+
+4. 사용자 답을 record로 저장한다.
+   - visibility는 장면 판정 그대로 둔다.
+   - 후보 identity는 다음과 같이 둔다.
+     · air–액체 상면, 유체–유체 층 → interface
+     · air–Foam 상면, Foam 내부, 기타 → non_interface
+     · 판단 보류 → uncertain
+   - 역할은 reply note에 한 줄로 남긴다.
+     예: "role: idx16=foam_interior; idx21=air_liquid_top"
+     역할 값: air_foam_top / air_liquid_top / foam_interior / liquid_liquid / other / uncertain
+
+5. 프레임별로 한 줄만 반환한다.
+   frame | 상면 보임(종류) | 상면 idx | 후보별 역할(idx=역할 …) | 비고
+   영상·이미지·JSON 원본은 보내지 않는다. 원인 판정이나 수정 제안 없이 멈춘다.
+   FIELD FAIL / O2 OPEN, review-006 pending, ⑧ NOT RUN 상태는 바뀌지 않는다.
+```
 
 ## LBW-3 held-out witness check
 
