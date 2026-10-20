@@ -100,6 +100,18 @@ detector rules. The current product publishes one Oil level plus Foam, so the
 two-layer best case is a target and not an existing output role. The user did
 not rank publishing only the liquid–liquid layer; do not infer a ranking for it.
 
+**Review-010 roles (2026-10-20, same ④ bundle):**
+- 677.0 s (f16232), layered Foam: the top is **air–Foam** at about Y230–235
+  (idx24/18/11). Y269 (idx16) is Foam interior.
+- 678.5 s (f16268): the top is **air–liquid**, at Y229 (idx16) and idx10/20/25.
+  Y238 (idx21) is inside the liquid (`other`). idx17/18 are liquid–liquid.
+- 679.0 s (f16280): the air–liquid top is idx10/19/18/24 (about Y215, consistent
+  with R22 Y213). idx13/22 are liquid–liquid, beside review-009's Y412–416.
+
+The collapse fallback target is therefore visible from 678.5 s.
+[ARV-1](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)
+records the detector comparison.
+
 ## Reviewed timeline
 
 | Segment ID | Glass | Interval | Reviewed physical behavior | Required detector meaning |

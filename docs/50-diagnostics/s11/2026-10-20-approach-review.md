@@ -1,6 +1,6 @@
 # ARV-1 — approach review after the layer-bottom witness line
 
-**Status: REVIEW COMPLETE — recommendation awaits the user's choice.** Desk review
+**Status: REVIEW COMPLETE; step 1 (review-010) COMPLETE ([result](#review-010-result)) — next step awaits the user's choice.** Desk review
 only: no detector change, run, tuning or Windows request. Base HEAD: `8e97de2`.
 Current authority: [Work Plan](../../00-project/work-plan.md). The user asked for
 this review after [LBW-3](2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)
@@ -68,6 +68,50 @@ out. 679/684 s were read by ATG-1 but not by the witness. Options:
    `UNRESOLVED` leaves today's behaviour unchanged.
 3. **Collapse handling (B or D) waits for step 1.** If Y229/Y238 is the air–liquid
    top, the fallback is already met and B becomes optional best-case work.
+
+## Review-010 result
+
+Relayed from the Windows work PC on 2026-10-20. Human review on the same ④ bundle
+with the [O2 procedure](../../40-operations/s11-current-windows-field-qualification.md#review-010-upper-row-roles-at-foam-collapse-onset);
+no run. Three cases are all `visible`; final `labels_sha256` `2b12853f…1150c`;
+three history entries. Review-001–009 are untouched. Y values come from the
+ATG-1/LBW-2 tables where an idx is known there; idx are per frame.
+
+| Frame / s | Top surface | Top candidates | Other roles |
+|---|---|---|---|
+| f16232 / 677.0 | air–**Foam** | idx24 Y230, idx18 Y232, **idx11 Y235 (anchor)** | idx16 Y269 (published) = Foam interior |
+| f16268 / 678.5 | air–**liquid** | **idx16 Y229 (anchor)**, idx10, idx20, idx25 | idx21 Y238 (published) = other: inside the liquid, slight shade. idx17, idx18 = liquid–liquid |
+| f16280 / 679.0 | air–liquid | idx10, idx19, idx18, idx24 | idx13, idx22 = liquid–liquid |
+
+The user also sent a camera photo of the f16280 idx guide. It shows a bright
+horizontal line at about Y215 (idx19/idx10). idx13/idx22 lie at about Y392–400,
+next to the review-009 liquid–liquid candidates idx25/11/20 (Y412–416). These
+are read from a photo of a screen and are approximate. The Y of idx10/17/18/20/25
+at 678.5 s is not in any local record.
+
+**Answers to the open question:**
+- **678.5 s:** the anchor Y229 *is* the air–liquid top, i.e. the collapse
+  fallback target. The published Y238, 9 px lower, is *not* (the user marked it
+  `other`). The target is present and anchored, but the selector publishes a
+  different row.
+- **679 s:** top candidates exist (about Y215), but nothing is published.
+- **677 s (layered Foam):** the demoting anchor Y235 is the **air–Foam top**, not
+  Foam interior as ATG-1 had inferred. The published Y269 is Foam interior. The
+  reviewed requirement "the Foam top must not become Oil" is what fails here.
+  The detector's eligible Foam Y210 lies about 20–25 px above that top.
+
+**What changes in the review:**
+- The collapse gap is a **selection/publication gap, not an evidence gap.** The
+  fallback target already exists as a candidate (and as the anchor at 678.5 s).
+  Gray/colour evidence (B) and a collapse phase (D) are not needed for the
+  fallback. They remain optional best-case work for the liquid–liquid layer.
+- The layered-Foam gap is a **role error**: the Foam top holds the topmost
+  ordered-lower anchor and demotes the Oil/Foam bottom. For approach A+C, the
+  consumer must not depend on the upper anchor reading `INTERNAL`; LBW-3 left
+  the Foam top out of the unit but did not mark it interior.
+- LBW-3 stays closed. Its 678.5 s control treated idx16 as a negative; that is
+  right for a layer-bottom witness (idx16 is not a layer bottom), but idx16 is
+  the collapse fallback target and is not a wrong output.
 
 ## Detector Governance
 

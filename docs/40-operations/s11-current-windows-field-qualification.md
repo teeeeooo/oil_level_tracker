@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: review-010 human review` ([request](#review-010-upper-row-roles-at-foam-collapse-onset)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / NO CURRENT EXECUTION REQUEST` — review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -23,7 +23,7 @@ This document is the executable target-Windows field procedure for whichever S11
 
 ## Review-010 upper-row roles at Foam-collapse onset
 
-**REQUESTED 2026-10-20 — human review only; no run or extraction.** Step 1 of the
+**COMPLETE — reference record; do not re-ask.** [Result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result). Human review only; no run or extraction. Step 1 of the
 [ARV-1 recommendation](../50-diagnostics/s11/2026-10-20-approach-review.md#recommendation).
 It asks whether the published/anchor rows above the reviewed boundary are the
 air–liquid top (the collapse fallback target), Foam interior or something else.

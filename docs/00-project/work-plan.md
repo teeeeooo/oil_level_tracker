@@ -62,6 +62,15 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
     3. collapse evidence (gray/colour or a phase) only after the review.
   - A standalone gray/colour discriminator would repeat CRW-1/PWC-1/RGB. No
     detector change or Windows run is queued.
+- **Review-010 (2026-10-20):** [result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)
+  is COMPLETE.
+  - 678.5 s: the anchor Y229 is the air–liquid top (the fallback target). The
+    published Y238 is not. 679 s: top candidates exist; nothing is published.
+    The collapse gap is selection/publication, not evidence.
+  - 677 s: the demoting anchor Y235 is the air–Foam top. The published Y269 is
+    Foam interior.
+  - Next step: the user's choice between the layered-Foam A+C experiment and
+    the collapse selection gap.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
