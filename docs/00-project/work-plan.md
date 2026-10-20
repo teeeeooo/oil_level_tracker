@@ -10,7 +10,14 @@
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
-**Resume checkpoint — 2026-10-20:** start with the
+**Resume checkpoint — 2026-10-20 (latest):** start with the
+[FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).
+The layered-Foam line (ATG-1 → LBT-1) is **paused**. The user chose B next:
+define the observable top that FULL inference uses. It is too early on
+sample4 (LBT-1 outcome G) and unreachable on Windows BASE (top-exit preflight).
+Desk review first; no detector change or Windows run is queued.
+
+**Earlier resume checkpoint — 2026-10-20:** the
 [texture-authority handoff](../60-evidence/s11/2026-10-20-texture-authority-handoff.md).
 The user chose the next step: check on Windows, preferably from the saved ④
 trace, whether the texture-conflict support gate blocks the Accum layered-Foam
@@ -104,6 +111,13 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
   entrance band and confirms a fill, vetoing 54.5–56 s. Remaining questions are
   fill geometry, Foam–Oil composition coupling, and the 39.5–40 s
   Foam-below-unit frames. No Windows run is proposed.
+- **Direction (user, 2026-10-20):** pause the layered-Foam line and start **B,
+  the FULL observable top**. See the
+  [handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md#first-tasks-for-the-next-session-b-review-desk-work-first).
+  The user decided option (b) for the LBT-2 successor: a Foam change is judged
+  against truth or review, not an automatic stop. The Foam-visible fill guard
+  (option A) is not started, because B would make it unnecessary if top-exit
+  replaces the proximity rule.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
