@@ -29,10 +29,12 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
 - **Truth addition:** the user defined the Oil target during Foam collapse in the
   [reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#accum-foam-collapse-target--2026-10-20).
   Best case: air–liquid top and liquid–liquid layer; fallback: air–liquid top.
-- **Next:** the user selects whether to design a successor that covers both
-  layers (terminal-boundary support under textured Foam, and the role of an
-  upper owner below the Foam front). No successor, detector change or Windows
-  run is queued.
+- **Next (user-approved 2026-10-20):** [LBW-1 layer-bottom witness](../50-diagnostics/s11/2026-10-20-layer-bottom-witness.md)
+  covers both layers with one raster witness for the bottom of the textured
+  layer, used by support, nearest-anchor and layer-interior consumers. The
+  protocol is frozen; S0 (read-only witness screen on sample4 and the saved ④
+  trace) comes next. No detector change until S0 passes. S2 Windows comparison
+  needs a separate user go.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
