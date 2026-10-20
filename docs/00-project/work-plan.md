@@ -35,11 +35,16 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
   including the decisive 42 s pair: the clean Oil band below it (~15 px) is
   thinner than the fixed depth (17 px) before lower-structure texture returns.
   No consumer was built; no Windows extraction is requested.
-- **LBW-2 (user-approved 2026-10-20):** [successor protocol](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-2.md)
-  is frozen. It has two changes only: a 5-row clean onset instead of a clean
-  depth, and test rows within the existing same-boundary tolerance. sample4 is
-  development data; the unread ④ trace is the held-out decisive check
-  (read-only Windows extraction). No detector change until both pass.
+- **LBW-2 (user-approved 2026-10-20):** [successor witness](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-2.md#s0-result)
+  is CLOSED WITHOUT PROMOTION at the sample4 development check. Every positive
+  is supported (6/6), but the 42 s lower-structure Y868 is supported too. The
+  witness finds any textured band's bottom; only ordering ("first bottom below
+  the Foam front") separates the Foam layer from structure. The ④ trace stays
+  unread and held out. One earlier run was invalid (tool variable shadowing,
+  fixed in `43b7d76`).
+- **Next:** the user decides whether to freeze a successor that evaluates the
+  ordered unit (first supported bottom below the Foam front), not the
+  standalone row witness. No detector change or Windows run is queued.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
