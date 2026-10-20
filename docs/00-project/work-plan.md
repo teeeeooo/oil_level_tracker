@@ -83,6 +83,15 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
     context and also acted pre-Foam.
   - No Windows run is proposed. The next design must cover the selection and
     fill-phase owners together, not one more authority repair.
+- **SFR-1 review (2026-10-20):** [selection/fill review](../50-diagnostics/s11/2026-10-20-selection-fill-review.md#recommendation)
+  is complete; the choice is the user's.
+  - Both LBQ-1 failures come from one mixed-identity owner (F04). Tracklets
+    79:0013/90:0020 alternate between rows above the Foam row (Y805–813) and
+    the layer bottom. The same mixing exists in the ordinary run.
+  - The unit is a 12 px role band; its top lies 2–12 px above reviewed rows.
+  - Recommended: LBT-1, the layer-bottom topology rule E1 with consumers 1–2,
+    all limited to the ordered-lower context. Pre-registered risk: sample4's
+    entrance band (Y826) is 3–18 px above its level.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
