@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from bisect import bisect_left, bisect_right
 from dataclasses import dataclass
 import math
 from statistics import median
@@ -22,6 +23,10 @@ from .graph_series import REPORT_MAX_CONTEXT_GAP_SEC
 MAX_REPORT_LANDMARKS = 12
 MAX_REPORT_FOAM_EPISODES = 3
 MINIMUM_FOAM_EPISODE_SEC = 0.5
+# P0 C1 supported-extremum rule: a landmark needs another observation of the
+# same series within this window and band (fraction of Glass vertical diameter).
+EXTREMUM_SUPPORT_WINDOW_SEC = 1.0
+EXTREMUM_SUPPORT_BAND_FRACTION = 0.05
 
 
 @dataclass
@@ -154,7 +159,7 @@ def build_glass_report_presentation(
     numeric = tuple((sample, _oil_px(sample)) for sample in samples if _oil_px(sample) is not None)
     cadence = _sample_cadence(samples)
     unavailable = _unavailable_intervals(samples, cadence)
-    extrema = _extrema_landmarks(glass, numeric)
+    extrema = _extrema_landmarks(glass, numeric, config)
     foam_episodes = _foam_episodes(samples, cadence)
     foam_landmarks = _foam_landmarks(glass, foam_episodes)
     physical = _physical_event_landmarks(glass, samples, cadence)
@@ -279,8 +284,9 @@ def format_landmark_level(
 def _extrema_landmarks(
     glass: GlassAnalysisResult,
     numeric: tuple[tuple[TrackingSample, float | None], ...],
+    config: GlassInspectionConfig | None,
 ) -> tuple[ReportLandmark, ...]:
-    trusted = _extrema_samples(numeric)
+    trusted = _extrema_samples(numeric, config)
     if not trusted:
         return ()
     maximum = max(trusted, key=lambda item: (item[1], -item[0].timestamp_sec))[0]
@@ -307,11 +313,47 @@ def _extrema_landmarks(
 
 def _extrema_samples(
     numeric: tuple[tuple[TrackingSample, float | None], ...],
+    config: GlassInspectionConfig | None,
 ) -> tuple[tuple[TrackingSample, float], ...]:
     finite = tuple((sample, float(value)) for sample, value in numeric if value is not None)
     if _is_r7_stream(sample for sample, _value in finite):
-        return tuple(item for item in finite if _r7_anchor(item[0]))
-    return finite
+        finite = tuple(item for item in finite if _r7_anchor(item[0]))
+    band = _extremum_support_band(config)
+    if band is None:
+        return finite
+    return _supported_extremum_candidates(finite, band)
+
+
+def _extremum_support_band(config: GlassInspectionConfig | None) -> float | None:
+    if config is None:
+        return None
+    height = 2.0 * float(config.geometry.ellipse.radius_y)
+    if not math.isfinite(height) or height <= 0:
+        return None
+    return EXTREMUM_SUPPORT_BAND_FRACTION * height
+
+
+def _supported_extremum_candidates(
+    finite: tuple[tuple[TrackingSample, float], ...],
+    band: float,
+) -> tuple[tuple[TrackingSample, float], ...]:
+    """Keep observations corroborated by a nearby same-series observation.
+
+    Unsupported points stay in the stored series and graph; they only cannot
+    receive a maximum/minimum landmark.
+    """
+    ordered = sorted(finite, key=lambda item: item[0].timestamp_sec)
+    times = [sample.timestamp_sec for sample, _value in ordered]
+    supported: list[tuple[TrackingSample, float]] = []
+    for index, (sample, value) in enumerate(ordered):
+        start = bisect_left(times, sample.timestamp_sec - EXTREMUM_SUPPORT_WINDOW_SEC - 1e-9)
+        end = bisect_right(times, sample.timestamp_sec + EXTREMUM_SUPPORT_WINDOW_SEC + 1e-9)
+        if any(
+            other != index and abs(ordered[other][1] - value) <= band + 1e-9
+            for other in range(start, end)
+        ):
+            supported.append((sample, value))
+    return tuple(supported)
 
 
 def _foam_episodes(
@@ -555,7 +597,7 @@ def _movement_summary(
         change < 0 for change in meaningful_deltas
     ):
         summary += " 분석 구간 중 상승과 하강이 모두 관측되었습니다."
-    extrema_source = _extrema_samples(numeric)
+    extrema_source = _extrema_samples(numeric, config)
     if extrema_source:
         maximum_sample, _ = max(
             extrema_source,

@@ -17,10 +17,11 @@ comparison procedure. All three are owned by the
 The bounds are ±5% of Glass diameter, isolated single samples, 2 s/5 s gaps and
 ±2 s event timing. Unassessed points that change an extremum, direction or phase
 go to one targeted user question. They govern comparisons frozen from now on;
-closed results are not re-scored. The extremum rule still needs implementation
-in `report_presentation._extrema_landmarks` and verification; until then reports
-keep the existing rule. No detector behavior, stored value or field disposition
-changes.
+closed results are not re-scored. The extremum rule is implemented in the report
+eligible-set helper and unit-verified. It covers report landmarks and narrative
+only; domain events and Result Review keep raw extremes, and no full report
+bundle or Windows run has been replayed. No detector behavior, stored value or
+field disposition changes.
 
 **Resume checkpoint — 2026-10-17:** Start with the
 [HPA-1 handoff](../60-evidence/s11/2026-10-17-history-phase-handoff.md) and compact

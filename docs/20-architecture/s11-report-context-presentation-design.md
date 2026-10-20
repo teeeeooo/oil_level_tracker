@@ -46,6 +46,32 @@ owners. It does not claim the two-second value is calibrated, certify physical
 identity or make static/interactive presentation identical. Source/report interval
 review remains the next decision-bearing step; current field gates remain intact.
 
+## Supported extremum landmarks — 2026-10-20
+
+This implements the user-adopted
+[P0 extremum display rule](../30-validation/s11-interface-observability-witness-validation.md#local-residual-bounds-and-extremum-display--2026-10-20).
+The rule lives in the existing eligible-set helper, so landmarks and narrative
+still share extremum eligibility. After the R7 anchor-only filter, an observation
+stays eligible only when another eligible observation lies within 1 s of source
+time and within 5% of the Recipe Glass vertical diameter (`2 × radius_y`).
+
+Unsupported points remain in tracking samples, CSV and graph vertices; they only
+receive no maximum/minimum landmark or summary sentence. If nothing is supported,
+the report names no extremum. Without Glass geometry, no band can be derived and
+the previous unfiltered behavior applies. Domain `MAXIMUM/MINIMUM_OIL_LEVEL`
+events and the Result Review engineering surface are unchanged. Landmark
+selection, source-review windows and graph labels follow the filtered landmarks
+through their existing consumers.
+
+A read-only check rebuilt the presentation from the only stored result bundle,
+sample4 from 2026-10-11 (`s11-p5-default-linkage-20261011-001/none`), with the
+same 101 Oil values. Band: 5.2 px.
+- The former maximum at 44 s (+28 px) is one of the known wrong-target report
+  extrema. It has no support, and the maximum moves to 52.5 s (+21 px).
+- The 42 s minimum (−18 px), the other known wrong target, keeps a supporting
+  neighbor. It therefore remains a visible A-class failure check, not one the
+  rule hides.
+
 ## History Review
 
 - Logic-map nodes: `RESULT-PRESENTATION`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`.
@@ -53,6 +79,8 @@ review remains the next decision-bearing step; current field gates remain intact
 - Prior mechanisms reviewed: R1 observed-run/display-bridge distinction; R7 anchor-only extrema; current independent Oil/Foam validity; the three supplied 2026-10-07 audits and report-context prototype.
 - Prior mechanisms rejected: Foam flags granting Oil authority, unrestricted fallback from legacy anchor eligibility, numeric interpolation/carry, treating missing Foam as physical disappearance, and promoting local report checks into field success.
 - Preserved contracts: immutable stored observations, same-frame provenance, independent series, actual legacy anchor protection, bounded existing episode/landmark selection, unchanged event history and separate field qualification.
-- Difference from prior failures: repair report interpretation inside its existing owner without changing upstream identity, numeric publication, detector thresholds or candidate selection; summary and landmarks share extrema eligibility, long display connections are bounded and context-only captures cannot create measurements.
-- Logic-map impact: NONE — existing runtime owners and pipeline edges remain unchanged.
+- Difference from prior failures: repair report interpretation inside its existing owner without changing upstream identity, numeric publication, detector thresholds or candidate selection; summary and landmarks share extrema eligibility, long display connections are bounded and context-only captures cannot create measurements. The 2026-10-20 support rule selects only which stored value is labeled; it neither removes nor rewrites values.
+- Existing feature coverage: reuses the Recipe ellipse `radius_y` already used by the movement-summary tolerance, the R7 anchor eligibility and the existing landmark consumers (graph renderer, source-review window planner, capture store). No Recipe, session or detector setting is added.
+- Execution scope: unit tests through `build_glass_report_presentation` cover isolated spikes, window/band edges, no supported point, R7 anchors and missing geometry. No detector run, full report bundle replay or Windows run was exercised; field disposition is unchanged.
+- Logic-map impact: UPDATED — the `RESULT-PRESENTATION` row records the supported-extremum landmark rule; runtime owners and pipeline edges remain unchanged.
 - Failure-registry impact: NONE — existing F09/F10 guards apply; no failed detector mechanism is retired or promoted.

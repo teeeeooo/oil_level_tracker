@@ -1960,9 +1960,10 @@ maximum/minimum only when at least one other finite observation of the same
 series within 1 s of source time lies inside its C1 band. Unsupported points stay
 unchanged in CSV, TrackingSample and graph vertices and are only not annotated.
 This chooses which observed point receives a landmark; it creates, moves,
-interpolates or deletes no value and is not report repair. Implementation belongs
-to `report_presentation._extrema_landmarks`; until it is implemented and verified,
-current reports keep the existing rule.
+interpolates or deletes no value and is not report repair. It is implemented in
+the report's shared eligible-set helper (`report_presentation._extrema_samples`)
+and unit-verified; domain extremum events and Result Review keep raw extremes.
+See the [report design](../20-architecture/s11-report-context-presentation-design.md#supported-extremum-landmarks--2026-10-20).
 
 **Comparison procedure.** Score the baseline and each candidate on the same
 scene-level A/B/C/U table and compare them net. Neither A nor B is waived:

@@ -184,8 +184,10 @@ def test_r7_report_extrema_and_capture_samples_use_anchor_grade_oil() -> None:
     samples = [
         _sample(config.id, 0.0, oil=5.0, flags=anchor),
         _sample(config.id, 0.5, oil=100.0, flags=continuation),
-        _sample(config.id, 1.0, oil=-100.0, flags=continuation),
-        _sample(config.id, 1.5, oil=0.0, flags=anchor),
+        _sample(config.id, 1.0, oil=4.0, flags=anchor),
+        _sample(config.id, 1.5, oil=-100.0, flags=continuation),
+        _sample(config.id, 2.0, oil=0.5, flags=anchor),
+        _sample(config.id, 2.5, oil=0.0, flags=anchor),
     ]
     glass = GlassAnalysisResult(
         config.id,
@@ -207,7 +209,98 @@ def test_r7_report_extrema_and_capture_samples_use_anchor_grade_oil() -> None:
     )
 
     assert maximum.sample is samples[0]
-    assert minimum.sample is samples[3]
+    assert minimum.sample is samples[5]
+
+
+def _extremum_landmark(report, event_type):
+    return next(
+        (item for item in report.landmarks if item.event_type is event_type),
+        None,
+    )
+
+
+def test_isolated_spike_does_not_receive_extremum_landmark_but_stays_in_series():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    # Glass diameter 129.6 px, so the C1 support band is 6.48 px.
+    values = [10.0, 11.0, 60.0, 12.0, 11.0, -40.0, 9.0, 8.0]
+    samples = [
+        _sample(config.id, index * 0.5, oil=value)
+        for index, value in enumerate(values)
+    ]
+    glass = GlassAnalysisResult(
+        config.id, config.name, ResultState.REVIEW_REQUIRED, samples=samples
+    )
+
+    report = build_glass_report_presentation(glass, config)
+
+    maximum = _extremum_landmark(report, EventType.MAXIMUM_OIL_LEVEL)
+    minimum = _extremum_landmark(report, EventType.MINIMUM_OIL_LEVEL)
+    assert maximum.sample is samples[3]
+    assert minimum.sample is samples[7]
+    assert report.finite_oil_count == len(values)
+    assert samples[2].smoothed_oil_air_level_px_from_zero == 60.0
+    assert "관측 최고는 1.5초" in report.movement_summary
+    assert "관측 최저는 3.5초" in report.movement_summary
+
+
+def test_extremum_support_uses_one_second_window_and_five_percent_band():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    samples = [
+        _sample(config.id, 0.0, oil=0.0),
+        _sample(config.id, 0.5, oil=1.0),
+        # Supported only by a neighbor exactly 1.0 s away and 6.4 px apart.
+        _sample(config.id, 3.0, oil=30.0),
+        _sample(config.id, 4.0, oil=23.6),
+        # Within 1 s but 6.6 px away: outside the 6.48 px band.
+        _sample(config.id, 6.0, oil=50.0),
+        _sample(config.id, 6.5, oil=43.4),
+        # Inside the band but 1.5 s away: outside the window.
+        _sample(config.id, 9.0, oil=80.0),
+        _sample(config.id, 10.5, oil=79.0),
+    ]
+    glass = GlassAnalysisResult(
+        config.id, config.name, ResultState.REVIEW_REQUIRED, samples=samples
+    )
+
+    report = build_glass_report_presentation(glass, config)
+
+    assert _extremum_landmark(report, EventType.MAXIMUM_OIL_LEVEL).sample is samples[2]
+    assert _extremum_landmark(report, EventType.MINIMUM_OIL_LEVEL).sample is samples[0]
+
+
+def test_no_supported_observation_omits_extrema_without_dropping_values():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    samples = [
+        _sample(config.id, 0.0, oil=0.0),
+        _sample(config.id, 0.5, oil=30.0),
+        _sample(config.id, 1.0, oil=-30.0),
+    ]
+    glass = GlassAnalysisResult(
+        config.id, config.name, ResultState.REVIEW_REQUIRED, samples=samples
+    )
+
+    report = build_glass_report_presentation(glass, config)
+
+    assert _extremum_landmark(report, EventType.MAXIMUM_OIL_LEVEL) is None
+    assert _extremum_landmark(report, EventType.MINIMUM_OIL_LEVEL) is None
+    assert report.finite_oil_count == 3
+    assert "관측 최고" not in report.movement_summary
+
+
+def test_extremum_support_is_not_applied_without_glass_geometry():
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    samples = [
+        _sample(config.id, 0.0, oil=0.0),
+        _sample(config.id, 0.5, oil=30.0),
+    ]
+    glass = GlassAnalysisResult(
+        config.id, config.name, ResultState.REVIEW_REQUIRED, samples=samples
+    )
+
+    report = build_glass_report_presentation(glass, None)
+
+    assert _extremum_landmark(report, EventType.MAXIMUM_OIL_LEVEL).sample is samples[1]
+    assert _extremum_landmark(report, EventType.MINIMUM_OIL_LEVEL).sample is samples[0]
 
 
 def test_single_temporally_confirmed_foam_publication_remains_a_report_episode():

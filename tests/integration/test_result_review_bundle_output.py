@@ -149,6 +149,11 @@ def test_cancellation_during_gap_context_captures_closes_reader_and_discards_bun
     samples = result.glass_results[0].samples
     samples.append(replace(samples[0], frame_index=120, timestamp_sec=4.0,
                            smoothed_oil_air_level_px_from_zero=20.0))
+    # Supporting neighbours outside the 1.0-4.0 s gap keep both extrema landmarked.
+    samples.insert(0, replace(samples[0], frame_index=15, timestamp_sec=0.5,
+                              smoothed_oil_air_level_px_from_zero=11.0))
+    samples.append(replace(samples[0], frame_index=135, timestamp_sec=4.5,
+                           smoothed_oil_air_level_px_from_zero=19.0))
     reads = []
     closed = []
 
