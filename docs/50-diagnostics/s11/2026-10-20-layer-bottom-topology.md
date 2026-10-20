@@ -1,6 +1,6 @@
 # LBT-1 — layer-bottom topology in the ordered-lower context
 
-**Status: DRAFT — awaiting the user's freeze approval. Nothing has run.** Base HEAD:
+**Status: FROZEN — approved by the user 2026-10-20; tool `tests/diagnostics/s11_layer_bottom_topology.py` committed with this text before any run.** Base HEAD:
 `a7fa2e4`. Current authority: [Work Plan](../../00-project/work-plan.md). This
 protocol implements the [SFR-1 recommendation](2026-10-20-selection-fill-review.md#recommendation).
 
