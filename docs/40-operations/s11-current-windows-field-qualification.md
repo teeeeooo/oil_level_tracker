@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / NO CURRENT EXECUTION REQUEST` — bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: ACCUM TEXTURE-GATE EXTRACTION` — one [read-only saved-trace extraction](#accum-texture-gate-extraction) is requested; no run. Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -14,12 +14,105 @@ also closes the tested configuration without adoption: partial BASE suppression
 coexists with a reviewed replacement artifact and an allowed Accum observation
 loss. All three candidate runs and the
 [saved-output accounting closeout](#priority-3-local-xy-saved-output-closeout)
-are complete. The user subsequently authorized the [top-exit FULL comparison](#top-exit-full-comparison), followed by a separate investigation of the 721 s non-interface output. Its received geometry preflight failed before execution; FULL remains unresolved. The [721 s investigation](#721-second-identity-investigation) has now returned its bounded evidence and is complete. No additional Windows extraction or run is requested; the Work Plan owns the next local repair-design boundary.
+are complete. The user subsequently authorized the [top-exit FULL comparison](#top-exit-full-comparison), followed by a separate investigation of the 721 s non-interface output. Its received geometry preflight failed before execution; FULL remains unresolved. The [721 s investigation](#721-second-identity-investigation) has now returned its bounded evidence and is complete. Apart from the [Accum texture-gate extraction](#accum-texture-gate-extraction), no Windows extraction or run is requested; the Work Plan owns the next local repair-design boundary.
 Review-006 remains unreviewed/pending. Cost-first/RGB/Local XY remain OFF outside retained trial data.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
+
+## Accum texture-gate extraction
+
+**Current request — saved trace only, no run.** It asks whether the reviewed
+Accum layered-Foam boundary (`WS1-ACCUM-FOAM-LAYERED`, about 672–680 s) loses
+anchor authority by the sample4 mechanism of
+[AAT-1](../50-diagnostics/s11/2026-10-20-anchor-authority-trace.md#findings):
+an ordered-lower candidate needs cross-representation support of at least 0.12,
+and texture-conflicted peers (conflict ≥ 0.60) are excluded, so support stays 0.
+Context is in the [texture-authority handoff](../60-evidence/s11/2026-10-20-texture-authority-handoff.md#decided-next-step-user-2026-10-20).
+Same mechanism means the texture/authority direction is relevant in the field;
+a different one stops sample4-only work on it.
+
+### Source-based field coverage of the ④ trace
+
+④ FULL+ON v2 ran commit `4c72ebb`. Between that commit and the tool commit, the
+trace writer, phase identity, candidate authority and the cross-support function
+are unchanged. The only resolver/evidence differences are OFF-by-default flags
+and an RGB eligibility guard whose feature is absent in ④. Saved fields were
+determined from the writer, not from the bundle.
+
+| Needed value | In the ④ trace? | Path / limit |
+|---|---|---|
+| `material_texture_conflict`, `material_terminal_partition_support`, `raw_material_row_support` | Yes, for every Oil candidate in a captured record | top-level `candidates[].features` (raw frame input) |
+| Phase identity and failed gates, `ordered_lower`, cross-representation support, authority tier/reason/failed gates, tracklet admission/failure, selection, reject stage | Yes, but only for the per-frame top-K resolver refs | `sequence.candidates[]`; null for top-K-pruned or hard-invalid candidates such as the R22 Y217 peer |
+| Foam material row and seed age | **No** | Only eligible Foam-front rows are saved. Seed age ≤ 3 s is visible only through the absence of the `ordered_lower_recent_direct_foam` gate |
+| Why support is 0: which peer was excluded and by which condition | **No** | Needs derived evidence (artifact signature, optics opposition, eligibility, representation family) that the trace does not store |
+| Capture of every target frame | Not guaranteed | BASIC trace stores only marker frames (Foam, no selection, ambiguity and similar). The tool reports `NOT_CAPTURED` instead of substituting a neighbour |
+
+Saved values alone cannot separate "excluded by texture" from "no independent
+peer" or other exclusions. The read-only tool
+`tests/diagnostics/s11_accum_texture_gate_extract.py` therefore reads the saved
+records and applies the current source functions to the saved features. It does
+not run the detector, resolver or pipeline and writes nothing. It recomputes
+every stored support value with the resolver function itself (`recompute n/n`).
+On any mismatch the per-peer attribution for that frame is invalid.
+
+Pattern codes (mechanical, no physical judgement): `TEX0` = ordered-lower,
+continuation-only, failing only the cross-representation gate, with at least
+one peer excluded only by texture, and support ≥ 0.12 once those peers are kept
+(`sup*`), which is the AAT-1 mechanism. `TEX_WEAK` = texture exclusion present
+but `sup*` < 0.12. `NOPEER` = no other-family peer within tolerance.
+`OTHER_EXCL` = peers excluded by other conditions. `GATE_OTHER` = direct
+quality or Foam recency also fails.
+
+Targets are 673, 675, 677, 678.5 and 679.0 s in the layered interval, plus 684 s
+after Foam. 679.0 s is source frame 16280, whose human-reviewed Y213 is in the
+[R22 findings](../50-diagnostics/s11/s11-r22-reviewed-interface-causal-findings.md#accum-authority-and-independent-support).
+Table C counts all captured Accum frames in 671–681 s.
+
+### Request text for the Windows agent
+
+[Source ZIP](https://github.com/teeeeooo/oil_level_tracker/archive/1ceccbbb2bc9ed687e3d88447558eb5b1db638b8.zip)
+(commit `1ceccbb`).
+
+```text
+S11 Accum 텍스처 gate 확인 — 저장된 ④ trace 읽기 전용 추출이야. 재실행·튜닝·비교 실행은 하지 마.
+
+목적: ④ FULL+ON v2 bundle의 Accum 층상 Foam 구간(약 672–680초)에서
+실제 Oil/Foam 경계 후보가 "텍스처 충돌 peer 제외 → 표현 간 지지 0 →
+ORDERED_LOWER 실패 → anchor 미승인"으로 막히는지 확인한다.
+
+1. 위 ZIP을 새 폴더에 풀고, 그 폴더에서 기존 Windows Python으로 실행한다.
+   bundle은 이동·수정하지 않고 경로만 넘긴다. 이 명령은 읽기만 한다.
+
+   $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+   python -B -m tests.diagnostics.s11_accum_texture_gate_extract --bundle "<④ FULL+ON v2 bundle 폴더>" --glass Accum
+
+   Glass 이름이 다르면 오류 메시지에 나온 실제 이름으로 --glass만 바꾼다.
+   다른 시각·옵션·bundle로 넓히지 않는다.
+
+2. 출력된 머리줄 2개(run_id/trace/records/tol, resolver)와 표 A, B, C를
+   그대로 텍스트로 돌려준다. 값을 고치거나 반올림·재해석하지 않는다.
+   표 B가 25행을 넘으면 각 시각의 pattern이 TEX0/TEX_WEAK/NOPEER/OTHER_EXCL/
+   GATE_OTHER인 행과 * 표시(선택) 행만 남긴다.
+
+3. 표 A의 recompute가 n/n이 아니면 해당 시각을 "재계산 불일치"로 표시만 하고
+   원인 조사는 하지 않는다. NOT_CAPTURED / NO_SEQUENCE도 그대로 둔다.
+   인접 프레임이나 다른 후보로 채우지 않는다.
+
+4. 선택 사항: 사용자가 원본 영상에서 직접 본 아래쪽 Oil/Foam 경계의 대략 Y를
+   목표 시각별로 한 줄씩 덧붙인다(불확실하면 "불명"). 에이전트가 추정한
+   좌표는 넣지 않는다. 679.0초(f16280)는 기존 검토값 Y213이 있다.
+
+5. 영상·이미지·JSON·CSV 원본은 보내지 않는다. 표와 결론 한 줄만 반환하고 멈춘다.
+   결론 한 줄에는 "표 C에서 TEX0가 몇 프레임" 같은 관찰만 쓰고, 원인 판정이나
+   수정 제안은 하지 않는다. FIELD FAIL / O2 OPEN, review-006 pending,
+   ⑧ NOT RUN 상태는 바뀌지 않는다.
+```
+
+Receipt goes to a new `50-diagnostics/s11/` record compared with AAT-1. The
+returned tables are relayed Windows evidence, not local verification. The Work
+Plan changes only if the direction changes.
 
 ## 721-second identity investigation
 

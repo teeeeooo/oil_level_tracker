@@ -54,6 +54,12 @@ The answer decides the direction:
 
 ## First tasks for the next session
 
+**Status (2026-10-20):** task 1 is done. The source review found gate outcomes
+saved for top-K refs but not the per-peer exclusion reason. The read-only tool
+and Korean request are in the
+[Accum texture-gate extraction](../../40-operations/s11-current-windows-field-qualification.md#accum-texture-gate-extraction).
+Awaiting the Windows return (task 3).
+
 **Roles.** Bundles exist only on the user's isolated Windows work PC. Data can
 go in but cannot come out. The local session cannot read the ④ bundle. The flow:
 1. The local session decides from **source code** what the ④ trace holds, and
