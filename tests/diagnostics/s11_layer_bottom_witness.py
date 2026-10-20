@@ -315,9 +315,9 @@ def run_sample4(work, definition='lbw1'):
         for time, target, role in SAMPLE4_CONTROLS:
             if int(round(time * 30)) != frame:
                 continue
-            tolerance = SAMPLE4_C1 if role == 'pos' else 1.0
+            match = SAMPLE4_C1 if role == 'pos' else 1.0  # control matching, not the witness tolerance
             for row in rows:
-                if abs(row['y'] - target) <= tolerance:
+                if abs(row['y'] - target) <= match:
                     print(_line(frame, row, f'{role}{target:g}'))
                     report.append(dict(time=time, target=target, role=role, **{k: row[k] for k in (
                         'idx', 'y', 'source', 'decision', 'counts', 'states', 'check')}))
