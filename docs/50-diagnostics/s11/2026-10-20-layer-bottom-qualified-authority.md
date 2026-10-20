@@ -1,6 +1,6 @@
 # LBQ-1 — layer-bottom-qualified ordered-lower authority
 
-**Status: DRAFT — awaiting the user's freeze approval. Nothing has run.** Base HEAD:
+**Status: FROZEN — approved by the user 2026-10-20; tool `tests/diagnostics/s11_layer_bottom_qualified_authority.py` committed with this text before any run.** Base HEAD:
 `cc503bf`. Current authority: [Work Plan](../../00-project/work-plan.md). This is
 step 2 of the [ARV-1 recommendation](2026-10-20-approach-review.md#recommendation),
 updated by [review-010](2026-10-20-approach-review.md#review-010-result).
