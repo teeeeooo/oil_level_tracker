@@ -71,6 +71,18 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
     Foam interior.
   - Next step: the user's choice between the layered-Foam A+C experiment and
     the collapse selection gap.
+- **LBQ-1 (user-approved 2026-10-20):** [layer-bottom-qualified authority](../50-diagnostics/s11/2026-10-20-layer-bottom-qualified-authority.md#results-and-decision)
+  is CLOSED WITHOUT PROMOTION. Stop rules fired on sample4: 42.5 s Y805, lost
+  48.5–56 s Oil, changed extrema, and Foam episode merges in 3 conditions.
+  - The unit moves anchor authority to the layer bottom (40.5–56 s).
+  - Publication still fails at two later owners. Selection keeps the
+    continuation owner Y805 (42.5 s). The fill phase confirms the stronger
+    chain as `filled_barrier` and vetoes 48.5–56 s.
+  - Consumer 2 never activated on sample4.
+  - Disclosed scope gap: consumer 1 was not limited to the ordered-lower
+    context and also acted pre-Foam.
+  - No Windows run is proposed. The next design must cover the selection and
+    fill-phase owners together, not one more authority repair.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.

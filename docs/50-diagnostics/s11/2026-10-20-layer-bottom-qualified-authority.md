@@ -1,6 +1,6 @@
 # LBQ-1 — layer-bottom-qualified ordered-lower authority
 
-**Status: FROZEN — approved by the user 2026-10-20; tool `tests/diagnostics/s11_layer_bottom_qualified_authority.py` committed with this text before any run.** Base HEAD:
+**Status: CLOSED WITHOUT PROMOTION — stop rules fired on sample4 ([result](#results-and-decision)).** Frozen and approved by the user 2026-10-20; tool `tests/diagnostics/s11_layer_bottom_qualified_authority.py` (`f2ab748`) committed with this text before any run. Base HEAD:
 `cc503bf`. Current authority: [Work Plan](../../00-project/work-plan.md). This is
 step 2 of the [ARV-1 recommendation](2026-10-20-approach-review.md#recommendation),
 updated by [review-010](2026-10-20-approach-review.md#review-010-result).
@@ -148,12 +148,77 @@ Only after outcome P, and only with a separate user go:
 
 S11 ACTIVE / O2 OPEN / FIELD FAIL is unchanged by any local result.
 
+## Results and decision
+
+Tool `f2ab748`. Managed run `sample/output/s11-layer-bottom-qualified-authority-20261020-001`
+(closed; 10 files kept, the ordinary baseline render reused from SOI).
+`comparison.json` SHA-256 `1aaf70d8dd1cda237f84f56ac6f0dc1ff8358a2120b54fe33227106f7e2e0777`;
+`layers.json` SHA-256 `c3a4194063bc30a7da5590557bcf8368f0435349691521778effd511aa504f6b`.
+
+**Contracts: all PASS.**
+- Focused tests: 11 PASS.
+- Resolver, phase, authority and tracklet suites under the wrapper: 257 PASS,
+  zero activations, copy equality on every call.
+- sample4 capture equals the P5 fingerprint. Captured candidates equal `raw.json`
+  in all 113 frames. Witness self-check: 0/2,549 mismatches. The inert feature
+  alone leaves the ordinary result unchanged.
+- Ordinary rows/events reproduce all 246 saved SOI records. 55,596 rows and
+  14,960 event links verify.
+
+**Stop rules fired → CLOSED WITHOUT PROMOTION.**
+
+| Rule | Result |
+|---|---|
+| Named opposed newly selected | **FAIL:** 42.5 s publishes Y805 (TPA-1's opposed row; continuation-only, not in the unit) |
+| Reviewed positive replaced outside C1 with an extremum change | **FAIL:** 42.5 s Y835 → Y805. 49.5 s (Y836) and 52 s (Y833) are lost. Report extrema move from max 52.5 s Y829 / min 42 s Y868 to max 40 s Y831 / min 1.5 s Y857 |
+| Foam coordinate or episode changed | **FAIL:** 5 conditions. In 3 of them, the two Foam episodes merge into one 39.5–53 s episode, as in TPA-1 |
+
+**What each layer did (baseline, `layers.json`):**
+- **Consumer 1 moved anchor authority to the layer bottom.** From 40.5 s the
+  ordered-lower anchors are unit rows Y826–844 instead of the lower structure
+  (Y864–882). The opposed 40 s Y865.5, 42 s Y868 and 44 s Y822 are no longer
+  published. 40.5/41/43/43.5/45–48 s publish unit anchors, and 44 s recovers
+  Y842 (within C1 of Y844).
+- **Consumer 2 never activated** in any of the 246 conditions. sample4 has no
+  ordered-lower anchor above the unit, so the Windows 677 s case was not
+  exercised here.
+- **Selection layer (TPA-1) reappears.** At 42.5 s the published row is the
+  continuation-only owner Y805 while unit anchors Y833/835 exist. 42 s and
+  44.5 s publish nothing.
+- **New phase layer (`OIL-PHASE-FILL`).** From 48.5 s, the unit-anchored chain
+  confirms a fill span (`FILL_SPAN_CONFIRMED`). The phase becomes
+  `filled_barrier`, and `FILLED_CAP_VETO` suppresses every Oil output in
+  48.5–56 s, although unit anchors Y826–833 are present.
+
+**Scope gap in this protocol (disclosed, not repaired).** LBW-1 limited its
+consumers to the ordered-lower context. This text limited them only to a
+non-empty unit and did not restate that context for consumer 1. The unit is
+non-empty in all 113 sample4 frames, including the pre-Foam 0–38 s. Consumer 1
+therefore also acted there and shifted 0–35 s outputs by 2–7 px (no reviewed
+controls there). The run follows the frozen text. Whether the pre-Foam
+activations contribute to the 48.5 s fill confirmation is not known. Testing
+that would be a new protocol.
+
+**Descriptive:**
+- `base_sample_1` 0–14.4 s: no unit, no activation, output unchanged.
+- `sample2` 0–2 s: the unit is non-empty in 2 of 5 frames, with 2
+  activations. The 2.0 s Oil Y603 becomes no output (unreviewed).
+
+**Reading.** The unit qualifies the right rows: authority moves to the layer
+bottom wherever it is tested. But anchor repair alone does not give
+publication. Two downstream owners act next: selection keeps an older
+continuation owner (42.5 s), and fill-phase confirmation turns the stronger
+chain into a filled cap (48.5–56 s). This is outcome L plus a phase layer,
+reached through stop rules. TPA-1's successor boundary predicted it: stacking
+an authority repair moves the failure to the next owner. No consumer is
+promoted, and nothing is tuned. Windows S2 is not proposed.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`.
 - Failure-registry entries: `S11-F01`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F10`.
 - First harmful stage: `OIL-AUTHORITY` — texture-excluded support, then nearest-ordered-lower demotion under the air–Foam top (AAT-1, TPA-1, ATG-1, review-010).
 - Existing feature coverage: reuses the LBW-3 witness unchanged, LBW-1 consumers 1–2 (consumer 2 condition changed by review-010), the TPA-1 wrapper pattern, the CAF-1/SOI runner, P0 bounds and SOI controls. The material-layer, identity, admission, phase and Foam owners are unchanged.
-- Execution scope: planned — sample4 baseline plus 245 SOI conditions (development) and base_sample_1/sample2 descriptive, diagnostic wrapper only; Windows S2 needs a separate go.
+- Execution scope: sample4 baseline plus 245 SOI conditions (development) and base_sample_1/sample2 descriptive, diagnostic wrapper only; Windows S2 not run.
 - Logic-map impact: NONE — diagnostic wrapper; no source change.
-- Failure-registry impact: NONE — a draft diagnostic with no runtime mechanism; any stop result is recorded here.
+- Failure-registry impact: NONE — a closed diagnostic with no runtime mechanism; the selection and fill-phase counterexamples are recorded here.
