@@ -158,9 +158,9 @@ def test_default_generator_never_calls_offline_extension(monkeypatch):
 
 def test_trial_cannot_overwrite_completed_evidence(tmp_path):
     from scripts import s11_center_path_trial as trial
-    path=tmp_path/"readout.json"; path.write_text("preserve")
+    path=tmp_path/"readout.json"; path.write_text("preserve", encoding="utf-8")
     with pytest.raises(FileExistsError): trial.run(tmp_path,tmp_path)
-    assert path.read_text()=="preserve"
+    assert path.read_text(encoding="utf-8")=="preserve"
 
 
 def test_trial_rejects_repurposed_source_set_before_loading(tmp_path):

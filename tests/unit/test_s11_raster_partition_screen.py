@@ -157,7 +157,7 @@ def test_direct_loop_oracle_with_corruption_control(tmp_path,corrupt):
           'visibility':{'path':'mask.npz'},'mask_key':'visible','origin':origin}
     prepared=tmp_path/'docs/50-diagnostics/s11/2026-10-14-candidate-rgb-trial/prepared.json'
     prepared.parent.mkdir(parents=True)
-    prepared.write_text(json.dumps({'frames':{'synthetic-A':spec}}))
+    prepared.write_text(json.dumps({'frames':{'synthetic-A':spec}}), encoding="utf-8")
     witness=observed((gray,mask,origin,row))
     if corrupt:
         witness['sectors'][0]['peak_groups'][0]['partitions'][0]['integer_margin']+=1

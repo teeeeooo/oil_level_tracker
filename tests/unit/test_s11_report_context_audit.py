@@ -74,9 +74,9 @@ def report_fixture(tmp_path):
                        "page_path": "page.png", "tile_xy": [0, 0]}]}
     def write(sequences):
         for item in sequences:
-            (tmp_path / item["metadata_path"]).write_text(json.dumps(item))
+            (tmp_path / item["metadata_path"]).write_text(json.dumps(item), encoding="utf-8")
         (tmp_path / "report.html").write_text("".join(
-            '<script class="sequence-data" type="application/json">'+json.dumps(item)+'</script>' for item in sequences))
+            '<script class="sequence-data" type="application/json">'+json.dumps(item)+'</script>' for item in sequences), encoding="utf-8")
         return tmp_path / "report.html"
     return seq, write
 
@@ -107,5 +107,5 @@ def test_sequence_contract_failures(tmp_path, fault):
     if fault == "numeric": seq["numeric_measurement"] = True
     if fault == "resize": seq["geometry"]["resize_scale"] = 2
     path = write([seq])
-    if fault == "sidecar": (tmp_path / "seq.json").write_text('{}')
+    if fault == "sidecar": (tmp_path / "seq.json").write_text('{}', encoding="utf-8")
     with pytest.raises(ValueError): inspect_sequences(path)

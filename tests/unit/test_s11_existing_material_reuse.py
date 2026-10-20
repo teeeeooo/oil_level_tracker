@@ -114,7 +114,7 @@ def test_rehashed_support_cannot_point_at_another_candidate(tmp_path, field, val
     subject = {"source": "material_path", "canonical_y": 60.0, "candidate_input_index": 1}
     subject[field] = value
     path = tmp_path / "capture.json"
-    path.write_text(json.dumps({"subjects": [subject]}))
+    path.write_text(json.dumps({"subjects": [subject]}), encoding="utf-8")
     candidate["native_support"] = {"oil_interface_witness": {
         "path": "capture.json", "pointer": "/subjects/0",
         "sha256": reuse.o2.fingerprint_json(subject)}}
@@ -124,12 +124,12 @@ def test_rehashed_support_cannot_point_at_another_candidate(tmp_path, field, val
 
 def test_cli_refuses_overwrite_before_loading_inputs(tmp_path, monkeypatch):
     path = tmp_path / "old.json"
-    path.write_text("frozen")
+    path.write_text("frozen", encoding="utf-8")
     monkeypatch.setattr("sys.argv", ["reuse", "--manifest", str(tmp_path / "missing.json"),
                                      "--output", str(path)])
     with pytest.raises(ValueError, match="overwrite"):
         reuse.main()
-    assert path.read_text() == "frozen"
+    assert path.read_text(encoding="utf-8") == "frozen"
 
 
 def test_same_candidate_under_different_query_ids_is_rejected():

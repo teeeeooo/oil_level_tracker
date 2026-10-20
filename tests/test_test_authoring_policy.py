@@ -42,10 +42,31 @@ def test_repository_test_text_io_declares_encoding():
     assert violations == []
 
 
+def _local_dict_keywords(tree: ast.Module) -> dict[str, set[str]]:
+    """Keywords of `name = dict(...)` assignments, for `**name` call expansion."""
+    keywords: dict[str, set[str]] = {}
+    for node in ast.walk(tree):
+        if not (
+            isinstance(node, ast.Assign)
+            and len(node.targets) == 1
+            and isinstance(node.targets[0], ast.Name)
+            and isinstance(node.value, ast.Call)
+            and isinstance(node.value.func, ast.Name)
+            and node.value.func.id == "dict"
+        ):
+            continue
+        keywords.setdefault(node.targets[0].id, set()).update(
+            keyword.arg for keyword in node.value.keywords if keyword.arg
+        )
+    return keywords
+
+
 def test_noninteractive_subprocess_runs_define_stdin_and_text_encoding():
     violations: list[str] = []
     for path in _test_paths():
-        for node in ast.walk(_tree(path)):
+        tree = _tree(path)
+        dict_keywords = _local_dict_keywords(tree)
+        for node in ast.walk(tree):
             if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Attribute):
                 continue
             if not (
@@ -55,7 +76,11 @@ def test_noninteractive_subprocess_runs_define_stdin_and_text_encoding():
             ):
                 continue
             keywords = {keyword.arg for keyword in node.keywords if keyword.arg}
-            if "stdin" not in keywords:
+            for keyword in node.keywords:
+                if keyword.arg is None and isinstance(keyword.value, ast.Name):
+                    keywords |= dict_keywords.get(keyword.value.id, set())
+            # `input=` supplies stdin; passing both is rejected by subprocess.
+            if "stdin" not in keywords and "input" not in keywords:
                 violations.append(f"{_relative(path)}:{node.lineno}:stdin")
             if keywords.intersection({"text", "universal_newlines"}) and "encoding" not in keywords:
                 violations.append(f"{_relative(path)}:{node.lineno}:encoding")

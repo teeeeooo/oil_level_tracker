@@ -38,7 +38,7 @@ def synthetic_report(directory: Path, fault: str = "none") -> Path:
             '<button data-step="1">next</button><input type="range" min="0" max="180" value="0">'
             '<p class="sequence-time"></p></div><script class="sequence-data" '
             'type="application/json">' + data + '</script></article>')
-    script = (ROOT / "src/oil_tracker/adapters/reporting/templates/source_sequences.js.j2").read_text()
+    script = (ROOT / "src/oil_tracker/adapters/reporting/templates/source_sequences.js.j2").read_text(encoding="utf-8")
     draw = ('ctx.drawImage(image, frame.tile_xy[0], frame.tile_xy[1], data.tile_size, data.tile_size,\n'
             '                      0, 0, canvas.width, canvas.height);')
     assert script.count(draw) == 1
@@ -53,7 +53,7 @@ def synthetic_report(directory: Path, fault: str = "none") -> Path:
         card = card.replace('width:192px;height:192px', 'width:360px;height:360px')
         card = '<div style="padding-top:18.40625px">' + card + '</div>'
     report = directory / "report.html"
-    report.write_text('<!doctype html><meta charset="utf-8">' + card * 3 + script)
+    report.write_text('<!doctype html><meta charset="utf-8">' + card * 3 + script, encoding="utf-8")
     return report
 
 
@@ -64,13 +64,14 @@ def test_browser_checks_rendered_frame_not_only_label(tmp_path, fault):
     output = tmp_path / "output"
     output.mkdir()
     completed = subprocess.run([NODE, str(SCRIPT), str(report), str(output)],
-                               capture_output=True, text=True, timeout=90)
+                               capture_output=True, text=True, timeout=90,
+                               stdin=subprocess.DEVNULL, encoding="utf-8")
     message = completed.stdout + completed.stderr
     assert report.read_bytes() == original
     assert not list(output.glob("chrome-profile-*")), message
     if fault in {"none", "styled"}:
         assert completed.returncode == 0, message
-        result = json.loads((output / "browser.json").read_text())
+        result = json.loads((output / "browser.json").read_text(encoding="utf-8"))
         assert len(result["canvas_checks"]) == 8
         assert all(c["equal"] and c["pixels_restored"] and
                    c["observed_png_sha256"] == c["reference_png_sha256"] == c["restored_png_sha256"]

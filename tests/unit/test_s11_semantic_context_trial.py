@@ -89,6 +89,7 @@ def test_existing_output_refused_before_loading_model_or_manifest(tmp_path):
 
 def test_real_cli_help_outside_repository_needs_no_transformers(tmp_path):
     result = subprocess.run([sys.executable, str(Path(trial.__file__).resolve()), "--help"],
-                            cwd=tmp_path, capture_output=True, text=True, timeout=20)
+                            cwd=tmp_path, capture_output=True, text=True, timeout=20,
+                            stdin=subprocess.DEVNULL, encoding="utf-8")
     assert result.returncode == 0, result.stderr
     assert "prepare,run" in result.stdout
