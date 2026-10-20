@@ -58,9 +58,9 @@ The answer decides the direction:
 saved for top-K refs but not the per-peer exclusion reason. The read-only tool
 and Korean request are in the
 [Accum texture-gate extraction](../../40-operations/s11-current-windows-field-qualification.md#accum-texture-gate-extraction).
-The first return and review-009 are in
-[ATG-1](../../50-diagnostics/s11/2026-10-20-accum-texture-gate.md); the boundary-row
-follow-up is pending.
+Tasks 1–3 are complete:
+[ATG-1](../../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision) finds the
+same mechanism at 673–677 s and a nearest-anchor second blocker at 677–679 s.
 
 **Roles.** Bundles exist only on the user's isolated Windows work PC. Data can
 go in but cannot come out. The local session cannot read the ④ bundle. The flow:

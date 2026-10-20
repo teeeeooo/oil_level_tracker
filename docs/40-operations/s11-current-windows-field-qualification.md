@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: ACCUM BOUNDARY-ROW FOLLOW-UP` — the first [Accum texture-gate](#accum-texture-gate-extraction) return and review-009 are received; one read-only [boundary-row follow-up](#first-return-and-boundary-row-follow-up) is requested; no run. Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / NO CURRENT EXECUTION REQUEST` — the [Accum texture-gate extraction](#accum-texture-gate-extraction), review-009 and the boundary-row follow-up are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -14,7 +14,7 @@ also closes the tested configuration without adoption: partial BASE suppression
 coexists with a reviewed replacement artifact and an allowed Accum observation
 loss. All three candidate runs and the
 [saved-output accounting closeout](#priority-3-local-xy-saved-output-closeout)
-are complete. The user subsequently authorized the [top-exit FULL comparison](#top-exit-full-comparison), followed by a separate investigation of the 721 s non-interface output. Its received geometry preflight failed before execution; FULL remains unresolved. The [721 s investigation](#721-second-identity-investigation) has now returned its bounded evidence and is complete. Apart from the [Accum texture-gate extraction](#accum-texture-gate-extraction), no Windows extraction or run is requested; the Work Plan owns the next local repair-design boundary.
+are complete. The user subsequently authorized the [top-exit FULL comparison](#top-exit-full-comparison), followed by a separate investigation of the 721 s non-interface output. Its received geometry preflight failed before execution; FULL remains unresolved. The [721 s investigation](#721-second-identity-investigation) has now returned its bounded evidence and is complete. The [Accum texture-gate extraction](#accum-texture-gate-extraction) is also complete; no Windows extraction or run is requested; the Work Plan owns the next local repair-design boundary.
 Review-006 remains unreviewed/pending. Cost-first/RGB/Local XY remain OFF outside retained trial data.
 Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
@@ -23,7 +23,7 @@ This document is the executable target-Windows field procedure for whichever S11
 
 ## Accum texture-gate extraction
 
-**Current request — saved trace only, no run.** It asks whether the reviewed
+**COMPLETE — reference record; do not re-run.** Saved trace only, no run. It asked whether the reviewed
 Accum layered-Foam boundary (`WS1-ACCUM-FOAM-LAYERED`, about 672–680 s) loses
 anchor authority by the sample4 mechanism of
 [AAT-1](../50-diagnostics/s11/2026-10-20-anchor-authority-trace.md#findings):

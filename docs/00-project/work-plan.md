@@ -16,6 +16,24 @@ The user chose the next step: check on Windows, preferably from the saved ④
 trace, whether the texture-conflict support gate blocks the Accum layered-Foam
 boundary. No detector change or Windows comparison is implied.
 
+**ATG-1 result — 2026-10-20:** [Accum texture-gate extraction](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)
+is CLOSED (read-only ④ trace + review-009 human review; no run).
+- **Same mechanism at 673–677 s:** every reviewed top-K boundary candidate fails
+  only `ordered_lower_cross_representation` with support 0.00. Texture-only peer
+  exclusion causes it (conflict 0.60–0.77, terminal 0.91–1.00). Keeping those
+  peers would give 0.73–0.90. The texture/authority direction has field relevance.
+- **Second blocker at 677–679 s:** an upper ordered-lower anchor between the Foam
+  front and the boundary demotes the boundary (`nearest_ordered_lower_interface`).
+  Published Oil follows upper rows 177–184 px above the boundary, as in TPA-1.
+  A support-only repair is therefore insufficient.
+- **Truth addition:** the user defined the Oil target during Foam collapse in the
+  [reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#accum-foam-collapse-target--2026-10-20).
+  Best case: air–liquid top and liquid–liquid layer; fallback: air–liquid top.
+- **Next:** the user selects whether to design a successor that covers both
+  layers (terminal-boundary support under textured Foam, and the role of an
+  upper owner below the Foam front). No successor, detector change or Windows
+  run is queued.
+
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
 - **What it did:** 4 of 246 sample4 conditions activate; the baseline and Foam
