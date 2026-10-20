@@ -10,6 +10,12 @@
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
+**Resume checkpoint — 2026-10-20:** start with the
+[texture-authority handoff](../60-evidence/s11/2026-10-20-texture-authority-handoff.md).
+The user chose the next step: check on Windows, preferably from the saved ④
+trace, whether the texture-conflict support gate blocks the Accum layered-Foam
+boundary. No detector change or Windows comparison is implied.
+
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
 - **What it did:** 4 of 246 sample4 conditions activate; the baseline and Foam
