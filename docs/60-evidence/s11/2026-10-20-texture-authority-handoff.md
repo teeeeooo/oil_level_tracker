@@ -54,11 +54,22 @@ The answer decides the direction:
 
 ## First tasks for the next session
 
+**Roles.** Bundles exist only on the user's isolated Windows work PC. Data can
+go in but cannot come out. The local session cannot read the ④ bundle. The flow:
+1. The local session decides from **source code** what the ④ trace holds, and
+   writes a Korean text request for the Windows-side agent.
+2. The user runs it on Windows, with the repo downloaded as a ZIP, and the
+   Windows agent prints small text tables.
+3. The user transcribes them back to the local session, which analyzes them.
+
+Every request must yield short, transcribable text.
+
 1. **Prefer saved-trace extraction, not a rerun.** The
    [721 s investigation](../../40-operations/s11-current-windows-field-qualification.md#721-second-identity-investigation)
    read `phase_identity`, `cross_representation_support`, authority reasons and
-   raw features from the existing ④ FULL+ON v2 bundle trace. Confirm from
-   source/schema which of these the saved trace holds for each Accum candidate:
+   raw features from the existing ④ FULL+ON v2 bundle trace. Determine from the
+   trace writer source and the recorded ④ run settings (not the bundle, which
+   is not local) which of these the saved trace holds for each Accum candidate:
    - `material_texture_conflict`, `material_terminal_partition_support`,
      `raw_material_row_support`;
    - Foam material row and seed age, `phase_identity` / failed gates,
