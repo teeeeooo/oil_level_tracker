@@ -31,7 +31,14 @@ is CLOSED WITHOUT PROMOTION.
   candidates, which defeats R14's recent-Foam ordered-lower exception. Lower
   structure keeps support. The existing terminal-partition feature separates the
   decisive controls, but the 38 s lower rows show it is not a complete
-  discriminator. No successor is selected yet, and no Windows run is queued.
+  discriminator.
+- **TPA-1:** [terminal-pair support](../50-diagnostics/s11/2026-10-20-terminal-partition-support.md#results-and-decision)
+  is CLOSED WITHOUT PROMOTION. It restores authority to the 42 s boundary, but
+  a mature continuation owner above the Foam front (Y805) replaces the reviewed
+  42/42.5 s positives and becomes the report maximum (A). Three conditions also
+  merge Foam episodes. The remaining layers are tracklet admission, Oil above
+  the Foam front, and fill-chain ambiguity. No successor is selected, and no
+  Windows run is queued.
 
 **Evaluation decision — 2026-10-20:** the user adopted numerical local-residual
 (C) bounds, a supported-extremum report rule and a net baseline/candidate

@@ -109,12 +109,87 @@ Windows comparison, with the Accum layered-Foam segments as the field target.
 That needs the user's Windows run. S11 ACTIVE / O2 OPEN / FIELD FAIL is
 unchanged by local results.
 
+## Results and decision
+
+**TPA-1 CLOSED WITHOUT PROMOTION.** Two stop conditions were met in stage 1, so
+stage 2 was not run. The managed run
+`sample/output/s11-terminal-partition-support-20261020-001` is closed. It keeps
+the full population and summaries, plus paired outputs for five decisive cases.
+
+### Contract checks
+- Focused tests: 5 PASS.
+- Resolver and phase suites under the wrapper: 221 PASS with zero activations,
+  and copy equality held on every call.
+- Stage 1: ordinary rows and events reproduce the saved SOI records. 55,596 rows
+  and 13,797 event links verify with zero provenance errors.
+
+### Baseline under TPA-1
+
+| Control | Ordinary | TPA-1 | Reading |
+|---|---:|---:|---|
+| 38 s accepted Y844 / opposed Y880–887 | 844 | 844 | unchanged |
+| 40 s accepted Y841 / opposed Y865.5 | 865.5 | missing | wrong target removed; accepted not recovered |
+| 42 s accepted Y839 / opposed Y868 | 868 | **805** | **A:** replacement 34 px off, above the 819 Foam row |
+| 42.5 s accepted Y835 | 835 | **805** | **A:** reviewed positive lost |
+| 44 s accepted Y844 / opposed Y822 | 822 | 842 | recovered within C1 |
+| 49.5 s practical Y841 | 836 | 836 | unchanged |
+| 52 s accepted Y833 | 833 | 833 | unchanged |
+
+- The 42–42.5 s Y805 pair becomes the supported report maximum. The baseline
+  minimum moves to 0.5 s Y858.
+- 0–35 s values shift by 3–5 px, mostly within C1 (no reviewed controls there).
+- 38.5–41 s output is suppressed by `FILL_OWNER_AMBIGUOUS`.
+- 43–43.5 s and 50–51 s gain plausible Y829–837 values.
+
+### Population
+- All 246 conditions activate and change; 226 of them select Y805 at 42 s.
+- Five change Foam coordinates. In three of those (all-Oil 39 s and 46 s,
+  all-Foam 40 s), the two Foam episodes 39.5–44 s and 46.5–53 s merge into one
+  39.5–53 s episode. That erases a Foam episode boundary, which is a stop
+  condition independent of the Oil result.
+
+### Why Y805 is selected
+
+TPA-1 does what AAT-1 predicted at the decisive frame: at 42 s the
+accepted-interface row gains `ANCHOR_ELIGIBLE` (phase-scan Y835, high-recall
+Y837). That is still not enough.
+- **Admission:** the row's tracklet is a new provisional one and is not
+  phase-admitted.
+- **Selection:** the phase is unconstrained `OPEN` / `FILL_CHAIN_AMBIGUOUS`.
+  The selector takes tracklet 79:0012, a *continuing*, continuation-only owner
+  that has followed Foam-region texture (Y805–816) since 39.5 s and sits above
+  the current Foam front.
+- **Why it matured:** between 38.5 s and 41 s, two competing fill chains keep
+  the phase ambiguous and suppress output.
+- **Source of Y805:** the Y805 candidates themselves are non-terminal
+  (terminal 0.00, conflict 0.79–0.81). TPA-1 never supported them; they are
+  reached through the changed history.
+
+Restoring authority to the boundary under Foam is necessary but not sufficient.
+Track maturity and admission then let an older Oil-impossible owner above the
+Foam front win.
+
+### Successor boundary
+
+Do not retry the terminal-pair exemption alone, change the 0.55 level, or widen
+it. The remaining layers are:
+- a provisional, newly anchored boundary is not admitted against a mature
+  continuation owner;
+- an Oil owner above the current Foam front stays selectable while Oil and Foam
+  are layered;
+- fill-chain ambiguity suppresses output and lets that owner mature.
+
+Each is a separate owner (`OIL-TRACKLET` admission, `SEQUENCE-COMPOSITION`
+topology, `OIL-PHASE-FILL`). Stacking fixes without a qualified physical-role
+witness repeats the pattern seen since HPA-1: each local repair exposes the next
+layer.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F06`, `S11-F10`.
-- First harmful stage: AAT-1 places it at `OIL-AUTHORITY` cross-representation support: the texture-conflict peer exclusion zeroes support for the accepted boundary under Foam. Whether restoring support for terminal boundary pairs repairs context without new errors is the open question.
+- First harmful stage: `OIL-AUTHORITY` cross-representation support (AAT-1). Restoring it moves the failure to `OIL-TRACKLET` admission and selection, where a mature continuation owner above the Foam front wins while fill chains are ambiguous.
 - Existing feature coverage: saved sample4 P5 NONE raw candidates and stored Recipe/session; UNKNOWN_REVIEW, margin 0.08, zero exclusions/templates, all experimental options OFF; existing material-texture and terminal-partition features from the saved acquisition; existing `material_layer_terminal` level 0.55. Stage 2 uses the stored base_sample_1/sample2 Recipes through the ordinary analysis entry.
 - Execution scope: stage 1 runs the completed resolver, samples, events, report presentation and changed-case CSV/graphs on reused acquisition; stage 2 runs full extraction and completed analysis for two short windows. No GUI, private Windows replay, physical accuracy claim or independent report reading.
 - Logic-map impact: NONE — diagnostic wrapper only; production source, defaults and runtime ownership are unchanged.
-- Failure-registry impact: NONE — evidence is recorded here; any registry pointer follows the results.
+- Failure-registry impact: UPDATED — F06 records TPA-1's closure and the Foam-episode merge; no new failure class or adopted policy.
