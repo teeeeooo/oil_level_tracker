@@ -45,9 +45,13 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
 - **LBW-3 (user-approved 2026-10-20, last in this line):** [first supported bottom](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md)
   is frozen. It keeps LBW-2's row witness and judges the frame's topmost
   supported bottom within the same-boundary tolerance. sample4 (development)
-  PASSED (6/6 positives, 0 negatives, decisive 42 s). The read-only held-out
-  [Windows check](../40-operations/s11-current-windows-field-qualification.md#lbw-3-held-out-witness-check)
-  is requested. Afterwards, whatever the result, the user reviews other approaches.
+  passed. The [held-out Windows check](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)
+  FAILED: 673–677 s transfer (boundary first; 0/24 negatives, incl. anchor Y235),
+  but at 678.5 s the Foam texture has faded and the boundary is invisible to the
+  witness (O5). CLOSED WITHOUT PROMOTION; no consumer built.
+- **Next (agreed):** review other approaches. The layered-Foam part has held-out
+  support; the Foam-collapse onset (678.5 s) needs evidence other than material
+  texture. No detector change or Windows run is queued.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.

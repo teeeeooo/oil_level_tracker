@@ -1,6 +1,6 @@
 # LBW-3 — first supported layer bottom
 
-**Status: S0 SAMPLE4 PASSED — WINDOWS HELD-OUT CHECK REQUESTED** ([result](#s0-sample4-result), [request](../../40-operations/s11-current-windows-field-qualification.md#lbw-3-held-out-witness-check)). Protocol base HEAD: `a5b21e5`. Current authority:
+**Status: CLOSED WITHOUT PROMOTION — WINDOWS HELD-OUT CHECK FAILED** ([held-out result](#windows-held-out-result)); sample4 development check passed. Protocol base HEAD: `a5b21e5`. Current authority:
 [Work Plan](../../00-project/work-plan.md). The user approved LBW-3 as the last
 witness definition in this line. Whatever its result, the next step is to review
 other approaches. Everything not listed below is inherited from
@@ -70,12 +70,54 @@ candidate is at or above Y831). That positive frame still holds four reviewed
 candidates in the unit. This is a development-data pass on its third viewing.
 It does not show transfer.
 
+## Windows held-out result
+
+Relayed from the Windows work PC. The frozen tool `87817ad` ran read-only on ④
+(`a9ccece3-…`, `trace=full`, Accum, tol 12.0). No private file was inspected locally.
+
+| Frame / s | Reviewed positives (unit = `first`) | Negatives in unit |
+|---|---|---|
+| f16136 / 673.0 | idx10 Y493 **first** (T3); idx26 Y490 `INTERNAL` (T1 I4) | none |
+| f16184 / 675.0 | idx22 Y496, idx10 Y497, idx25 Y498 all **first** (T3 I2) | none |
+| f16232 / 677.0 | idx23 Y449, idx10 Y451, idx26 Y453 **first** (T3–4); idx25 Y444 `UNRESOLVED` (T2) | none (idx11 anchor Y235 out) |
+| f16268 / 678.5 | idx12, idx24 Y415 both `UNRESOLVED` (**T0 I0 O5**) | none (idx16 anchor Y229 out) |
+
+Self-check: 0/108 mismatches (valid).
+
+| Rule | Result |
+|---|---|
+| 1. No negative in the unit | PASS: 0 of 24 |
+| 2. Decisive 677 s | PASS |
+| 2. Decisive 678.5 s | **FAIL**: neither idx12 nor idx24 is in the unit |
+| 3. Positive frames ≥ 80 % | **FAIL**: 3/4 (75 %) |
+| 4. Self-check | PASS |
+
+**Decision.** Under the frozen rule, LBW-3 closes without promotion. No consumer
+is built, and no definition is drawn from this result. The user's agreed next
+step is a review of other approaches.
+
+**What the held-out data shows (for that review):**
+- **673–677 s, clear layered Foam: the witness transfers.** The reviewed boundary
+  is the first supported bottom in all three frames. All 24 interior rows, Foam
+  anchors and wrong selections stay out, including the 677 s anchor Y235 that
+  demotes the boundary today. This is the first held-out support for the
+  layer-bottom idea.
+- **678.5 s, Foam fading: the witness sees nothing.** Every sector at Y415 is
+  `OTHER` (O5): the texture above the boundary is no longer at the layer level.
+  This is the onset of the collapse the user described: Foam turns to liquid
+  (see the [Foam-collapse target](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#accum-foam-collapse-target--2026-10-20)).
+  Here the second blocker (upper anchor Y229 demoting Y415) acts with no texture
+  evidence available. A material-texture witness cannot address it by
+  construction.
+- The 75 % figure rests on four frames. The point is not the rate but which frame
+  fails, and why.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F06`, `S11-F10`.
 - First harmful stage: `OIL-AUTHORITY` — texture-excluded support, then nearest-ordered-lower demotion under an upper anchor inside the Foam layer (AAT-1, TPA-1, ATG-1); LBW-1/2 showed thickness and lower-structure limits of a standalone row witness.
 - Existing feature coverage: as LBW-2; the only new element is the frame-level ordering, mirroring the existing nearest-ordered-lower rule. sample4 is development data; the ④ FULL+ON v2 saved trace is held out.
-- Execution scope: S0 sample4 development check run (existing production analysis, witness on detector-artifact rasters, no consumer); Windows held-out check requested as a read-only saved-trace extraction.
+- Execution scope: S0 sample4 development check (existing production analysis, witness on detector-artifact rasters, no consumer) and the relayed read-only Windows held-out check on the saved ④ trace; S1/S2 not run.
 - Logic-map impact: NONE — no source change.
-- Failure-registry impact: NONE — no runtime mechanism; pending the held-out check.
+- Failure-registry impact: NONE — a closed diagnostic screen with no runtime mechanism; held-out counterexample (678.5 s) recorded here.
