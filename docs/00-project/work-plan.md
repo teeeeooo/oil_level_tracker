@@ -24,8 +24,14 @@ is CLOSED WITHOUT PROMOTION.
   activations.
 - **Next:** a successor must qualify the lowest-ordered row's physical role
   (interface versus vessel structure) before it holds anchor authority. No
-  material-veto filtering, fixed band, Y/time exception or recurrence veto. No
-  successor is selected yet, and no Windows run is queued.
+  material-veto filtering, fixed band, Y/time exception or recurrence veto.
+- **AAT-1 follow-up trace:** [anchor-authority trace](../50-diagnostics/s11/2026-10-20-anchor-authority-trace.md#findings)
+  locates the gate. The `material_texture_conflict >= 0.60` peer exclusion in
+  `_cross_representation_support` zeroes support for accepted Oil/Foam boundary
+  candidates, which defeats R14's recent-Foam ordered-lower exception. Lower
+  structure keeps support. The existing terminal-partition feature separates the
+  decisive controls, but the 38 s lower rows show it is not a complete
+  discriminator. No successor is selected yet, and no Windows run is queued.
 
 **Evaluation decision — 2026-10-20:** the user adopted numerical local-residual
 (C) bounds, a supported-extremum report rule and a net baseline/candidate

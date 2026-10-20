@@ -287,6 +287,8 @@ HPA-1 local follow-up: the [complete row-feature factorial](2026-10-17-history-p
 
 ### S11-F06 — Foam/Oil/material evidence cross-coupling
 
+AAT-1 local trace (October 20): [authority gates on saved sample4](2026-10-20-anchor-authority-trace.md#findings) show that the `material_texture_conflict >= 0.60` peer exclusion in `_cross_representation_support` zeroes support for accepted Oil/Foam boundary candidates (conflict 0.60–0.75 because the boundary sits under textured Foam). That defeats R14's recent-Foam ordered-lower exception, while lower-structure rows keep support and anchor authority. The existing terminal-partition feature is 1.00 on all 7 accepted controls and 0.00 on the 40/42/44 s opposed targets and the 51–52 s Y862 structure, but it is not a complete discriminator: the 38 s lower opposed rows also score 1.00. Evidence only; no policy adopted.
+
 HPA-1 local follow-up: [terminal-veto quarantine on all 246 conditions](2026-10-17-history-phase-amplification.md) restores some suffix numerics but leaves the accepted 52 s owner unresolved and exposes new late unassessed extrema. Internal FILLED_BARRIER is not observed FULL; no barrier-only suppression or default change was adopted. All four activated conditions and controls remain available in the handoff.
 
 **Affected detector logic node(s):** `FRAME-EVIDENCE`/`OIL-HYPOTHESIS`/`OIL-CANDIDATE` → `OIL-AUTHORITY`/`OIL-SELECTOR`, and `FOAM-CANDIDATE`/`FOAM-IDENTITY`/`FOAM-EPISODE` → `SEQUENCE-COMPOSITION`.
