@@ -147,7 +147,11 @@ Reuse `OilPathLifecycleOwner`, after bounded selection and spike censorship but
 before projection. This seam has the actual selected owner; the earlier material
 phase loop sees several admitted hypotheses and cannot certify which one was
 observed. This is a causal coordinate-free lifecycle decision, not a CSV/report
-rewrite, a numeric interpolation, or a bypass of candidate admission. Preserve
+rewrite, a numeric interpolation, or a bypass of candidate admission. The closure
+body lives in `oil_top_exit_full.close_top_exit_full`; the lifecycle owner calls
+it at this seam with the existing policy and per-frame hard-unavailability. It
+moved there on 2026-10-20 to restore the lifecycle/module size guards, and its
+behavior is unchanged. Preserve
 every selected numeric Oil node, including wrong identities still needing the
 subsequent 721 s investigation.
 
@@ -565,7 +569,7 @@ as the serialized array index. Diagnostic detail must not change output.
 - Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
 - Existing feature coverage: this clarification reuses the frozen A1/public original raster, visibility masks, O1 path/center bands and exact candidate provenance. Source review follows retained diagnostic paths through phase_candidate_assembler and phase_frame_detection to oil_interface_diagnostics, then contrasts the scalar authority consumer. Existing Recipe, Artifact/static/motion and all comparison options are unchanged; earlier top-exit/RGB/IFO scopes remain in their result owners.
-- Execution scope: the linked frozen 7ee6d90 diagnostic had no two-native comparison inputs; CRW-1 at 7845f89 adds diagnostic-only matched current-raster sector observations over the same 187 units and 85 relations. Its direct-loop arithmetic and 123 focused tests verify measurement contracts, not continuous contours or physical roles. This update selects no production extractor/consumer, fits no model and changes no sequence, report or private Windows execution.
+- Execution scope: the linked frozen 7ee6d90 diagnostic had no two-native comparison inputs; CRW-1 at 7845f89 adds diagnostic-only matched current-raster sector observations over the same 187 units and 85 relations. Its direct-loop arithmetic and 123 focused tests verify measurement contracts, not continuous contours or physical roles. This update selects no production extractor/consumer, fits no model and changes no sequence, report or private Windows execution. The 2026-10-20 top-exit move is behavior-preserving: the existing top-exit unit tests, resolver decomposition guards, production-surface test and R16 characterization goldens pass. No detector run or Windows execution was exercised.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited.
-- Logic-map impact: NONE — source review confirms the existing diagnostic path and scalar authority routes; no setup, runtime owner, consumer or control-flow edge changes in this clarification.
+- Logic-map impact: UPDATED — the top-exit row and call tree now name `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner`. Order, inputs and default-OFF behavior are unchanged; the earlier source review of the diagnostic path and scalar authority routes still stands.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair.
