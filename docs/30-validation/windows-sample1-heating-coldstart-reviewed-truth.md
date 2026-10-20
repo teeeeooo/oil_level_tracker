@@ -71,6 +71,35 @@ the start of the post-transition FULL counting bucket, not as an exact observed
 transition time. The correction does not establish candidate identities or Y
 coordinates and must not become a timestamp rule in detector code.
 
+## Accum Foam-collapse target — 2026-10-20
+
+The user's direct review of the Accum Foam collapse (end of
+`WS1-ACCUM-FOAM-LAYERED` into `WS1-ACCUM-POST-FOAM`) adds a layer case the table
+below does not spell out. As Foam disappears it turns into liquid. That liquid
+briefly lies on the Oil before mixing in. Two transparent boundaries can then
+coexist:
+
+- an **air–liquid top surface**;
+- a faint **liquid–liquid layer** between the collapsed-Foam liquid and the Oil,
+  separable only by a slight color difference.
+
+Reviewed examples: at f16280 / 679.0 s, the air–liquid top is near Y213 (R22
+review) and the liquid–liquid layer near Y412–416 (review-009). At f16400 / 684.0 s,
+the two layers are distinguishable only by close color inspection. The user
+recorded this as "not visible" because it is hard to detect, not because it is
+physically absent.
+
+**Oil target while Foam collapses (user decision):**
+
+1. **Best:** distinguish both the air–liquid top and the liquid–liquid layer.
+2. **Acceptable fallback:** the air–liquid top.
+
+The collapsed-Foam liquid is not Foam. Interval names and segment IDs are
+unchanged. These Y values are review evidence for this recording only, not
+detector rules. The current product publishes one Oil level plus Foam, so the
+two-layer best case is a target and not an existing output role. The user did
+not rank publishing only the liquid–liquid layer; do not infer a ranking for it.
+
 ## Reviewed timeline
 
 | Segment ID | Glass | Interval | Reviewed physical behavior | Required detector meaning |

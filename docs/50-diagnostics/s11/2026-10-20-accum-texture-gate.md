@@ -109,11 +109,11 @@ Consequences for ATG-1:
 - At 684 s the stored anchor Y205 (`material_path`, admitted, not selected) lies
   near the earlier air–liquid Y213 at 679 s. This is a neighbouring-frame
   coincidence; no air–liquid Y was reviewed at 684 s.
-- **Open truth-definition question, not decided here:** the
-  [reviewed truth](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
-  says `WS1-ACCUM-POST-FOAM` keeps "the visible Oil boundary" as Oil owner. It does
-  not say whether the Oil target during collapse is the air–liquid top or the
-  liquid–liquid layer. The canonical truth is not rewritten here.
+- **Oil target during collapse — decided by the user** and recorded in the
+  [reviewed truth](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#accum-foam-collapse-target--2026-10-20):
+  the best case separates the air–liquid top and the liquid–liquid layer; the
+  fallback is the air–liquid top. This does not change the 673–678.5 s
+  decision frames of ATG-1.
 - **Transcription gap.** The first table B row (673.0 s, Y367, idx25) has four
   numeric columns instead of five. That row is not a reviewed candidate and is not
   used above.
