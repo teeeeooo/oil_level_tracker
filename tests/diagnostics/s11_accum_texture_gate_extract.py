@@ -116,6 +116,7 @@ def analyze(record, glass):
     raw = [item for item in record.get('candidates') or []
            if item.get('kind') == 'oil_air' and _f(item.get('canonical_y')) is not None]
     oil = tuple(_candidate(item) for item in raw)
+    input_index = {id(item): source.get('candidate_input_index') for item, source in zip(oil, raw)}
     index = OilCandidateEvidenceIndex()
     for item in oil:
         index.register(item)
@@ -155,7 +156,7 @@ def analyze(record, glass):
         counts, texture_only = peer_reasons(candidate, oil, glass, index)
         counterfactual = support_without_texture(candidate, oil, glass, index, texture_only)
         features = candidate.features
-        row.update(conflict=evidence.material_texture_conflict,
+        row.update(idx=input_index[id(candidate)], conflict=evidence.material_texture_conflict,
                    terminal=_f(features.get('material_terminal_partition_support')),
                    row_support=_f(features.get('raw_material_row_support')),
                    counts=dict(counts), counterfactual=counterfactual,
@@ -235,7 +236,7 @@ def report(bundle, summaries, glass, times):
               f"{frame['anchors']} | {frame['top_k']}/{frame['raw_oil']} | {frame['check_ok']}/{frame['check_total']}")
     print('\ncodes: CONT/DIRECT/OLOWER identity; olX=ordered_lower_cross_representation, '
           'olFoam=ordered_lower_recent_direct_foam; sup*=support with texture-only peers kept; * selected')
-    print('[B] actual s | Y | source | authority/reason | identity [failed gates] | sup | sup* | conflict | '
+    print('[B] actual s | Y | idx | source | authority/reason | identity [failed gates] | sup | sup* | conflict | '
           'terminal | row | peers | admitted/stage | pattern')
     for _, summary in targets:
         frame = frames.get(summary.record_id) if summary else None
@@ -243,7 +244,7 @@ def report(bundle, summaries, glass, times):
             continue
         for row in _pick(frame['rows']):
             mark = '*' if row['selected'] else ''
-            print(f"{frame['time']:.1f} | {row['y']:.0f}{mark} | {row['source'][:20]} | "
+            print(f"{frame['time']:.1f} | {row['y']:.0f}{mark} | {row.get('idx', '-')} | {row['source'][:20]} | "
                   f"{(row['authority'] or '-')[:4]}/{row['reason']} | {_short(row['identity'])} [{_short(row['identity_gates'])}] | "
                   f"{_num(row['support'])} | {_num(row.get('counterfactual'))} | {_num(row.get('conflict'))} | "
                   f"{_num(row.get('terminal'))} | {_num(row.get('row_support'))} | {_peers(row.get('counts'))} | "

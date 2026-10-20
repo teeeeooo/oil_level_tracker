@@ -106,6 +106,7 @@ def test_saved_writer_records_recompute_stored_support_exactly(tmp_path):
     assert sum(frame["check_total"] for frame in frames) > 0
     assert all(frame["check_ok"] == frame["check_total"] for frame in frames)
     assert any(row.get("conflict") == 0.75 for frame in frames for row in frame["rows"])
+    assert all(isinstance(row.get("idx"), int) for frame in frames for row in frame["rows"])
 
 
 def test_report_prints_short_tables_and_marks_uncaptured_targets(tmp_path, capsys):
