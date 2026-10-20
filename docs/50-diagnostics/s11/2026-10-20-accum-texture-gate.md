@@ -82,14 +82,38 @@ images to remove overlapping labels; packet idx/Y were unchanged.
    front stays selectable" more than AAT-1's zero support. It is unconfirmed
    until the reviewed rows themselves are read.
 
-## Open conflicts — not resolved here
+## User clarification of the Foam-collapse frames (2026-10-20)
 
-- **f16280 reviewed Y.** The [R22 findings](s11-r22-reviewed-interface-causal-findings.md#confirmed-transferred-observations)
-  record a human-reviewed boundary "near Y=213" at the same source frame. Review-009
-  reports Y412–416. Both claim source-frame Y. Neither record is overwritten.
-  The user must say which one, or whether both are visible and different.
-- **f16400 visibility.** The reply is "안 보임", but the relayed label summary says
-  all six cases are `visible`. Confirm `reply-006`'s stored visibility.
+The two disagreements below came from the physical scene, not from recording
+errors. This is the user's direct explanation. It is recorded beside both earlier
+answers and replaces neither.
+
+- **f16280 / 679.0 s has two boundaries.** Foam is collapsing into liquid at this
+  moment. Near **Y213** there is an **air–liquid** boundary. Near **Y412–416** a
+  faint **liquid–liquid** layer is visible: the collapsed Foam liquid lies on the
+  Oil before it mixes in. Both layers are transparent, so the user found the
+  layer hard to call. The R22 answer (Y213) and the review-009 answer (Y412–416)
+  name these two different boundaries. Neither is a mislabel of the other.
+- **f16400 / 684.0 s.** Foam is gone, and two transparent liquid layers remain,
+  separated only by a slight color difference. The user answered "not visible"
+  because a detector would hardly separate them. Close inspection can
+  distinguish them by color. The answer is a practical detectability judgment,
+  not physical absence. The stored-value check in the follow-up only confirms
+  what was recorded.
+
+Consequences for ATG-1:
+
+- **Decision frames are 673–678.5 s**, where a Foam layer clearly sits over Oil.
+  679 and 684 s are **Foam-collapse transition** cases. They are reported but
+  do not decide "same / different mechanism" by themselves.
+- At 684 s the stored anchor Y205 (`material_path`, admitted, not selected) lies
+  near the earlier air–liquid Y213 at 679 s. This is a neighbouring-frame
+  coincidence; no air–liquid Y was reviewed at 684 s.
+- **Open truth-definition question, not decided here:** the
+  [reviewed truth](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md)
+  says `WS1-ACCUM-POST-FOAM` keeps "the visible Oil boundary" as Oil owner. It does
+  not say whether the Oil target during collapse is the air–liquid top or the
+  liquid–liquid layer. The canonical truth is not rewritten here.
 - **Transcription gap.** The first table B row (673.0 s, Y367, idx25) has four
   numeric columns instead of five. That row is not a reviewed candidate and is not
   used above.
@@ -98,7 +122,8 @@ images to remove overlapping labels; packet idx/Y were unchanged.
 
 The bounded `--rows` extraction for the reviewed candidates only. It prints table D
 with stored gates where top-K, and `NOT_TOPK` with recomputed support and raw
-texture features otherwise. The decision rule from the handoff applies on receipt:
+texture features otherwise. The decision rule from the handoff applies on receipt, judged on the 673–678.5 s
+decision frames:
 - reviewed candidates ordered-lower, continuation-only, failing only
   `ordered_lower_cross_representation` with texture-only exclusions → same
   mechanism as AAT-1;
