@@ -92,6 +92,18 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
   - Recommended: LBT-1, the layer-bottom topology rule E1 with consumers 1–2,
     all limited to the ordered-lower context. Pre-registered risk: sample4's
     entrance band (Y826) is 3–18 px above its level.
+- **LBT-1 (user-approved 2026-10-20):** [layer-bottom topology](../50-diagnostics/s11/2026-10-20-layer-bottom-topology.md#results-and-decision)
+  is CLOSED WITHOUT PROMOTION. Stop rules fired:
+  - 1/246 conditions newly select the opposed 40 s Y865.5 (outside the
+    context);
+  - Foam episodes change in 5 conditions (Foam publication follows Oil; F06).
+
+  The baseline is the best of the line: 42/42.5/44/52 s within C1, the wrong
+  42 s Y868 minimum gone, pre-Foam unchanged, and the SFR-1 mixing removed. The
+  pre-registered outcome G appeared: at 54.5 s the unit top Y820 enters the
+  entrance band and confirms a fill, vetoing 54.5–56 s. Remaining questions are
+  fill geometry, Foam–Oil composition coupling, and the 39.5–40 s
+  Foam-below-unit frames. No Windows run is proposed.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.
