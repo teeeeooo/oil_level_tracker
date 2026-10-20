@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: ACCUM TEXTURE-GATE EXTRACTION` — one [read-only saved-trace extraction](#accum-texture-gate-extraction) is requested; no run. Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: ACCUM BOUNDARY-ROW FOLLOW-UP` — the first [Accum texture-gate](#accum-texture-gate-extraction) return and review-009 are received; one read-only [boundary-row follow-up](#first-return-and-boundary-row-follow-up) is requested; no run. Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -129,6 +129,37 @@ ORDERED_LOWER 실패 → anchor 미승인"으로 막히는지 확인한다.
 Receipt goes to a new `50-diagnostics/s11/` record compared with AAT-1. The
 returned tables are relayed Windows evidence, not local verification. The Work
 Plan changes only if the direction changes.
+
+### First return and boundary-row follow-up
+
+**First return RECEIVED** and recorded in
+[ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md). The bundle is ④,
+and 102/102 stored support values were reproduced. Review-009 recorded the visible
+boundary candidates. Table B's five-row cap omitted every reviewed candidate, so
+the gate question is still open. The follow-up reads exactly those candidates
+with `--rows` ([source ZIP](https://github.com/teeeeooo/oil_level_tracker/archive/125af541a1647673cf79e2c66cc28ca840ba3a8d.zip),
+commit `125af54`). Review-009 is reused and not re-asked.
+
+```text
+S11 Accum 경계 후보 후속 추출. 기존 ④ bundle 읽기 전용이야.
+재실행, 새 bundle, 튜닝, 새 질문은 하지 마. review-009는 다시 묻지 않고 그대로 써.
+
+1. 아래 ZIP을 새 폴더에 풀고 그 폴더에서 실행해.
+   https://github.com/teeeeooo/oil_level_tracker/archive/125af541a1647673cf79e2c66cc28ca840ba3a8d.zip
+
+   $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+   python -B -m tests.diagnostics.s11_accum_texture_gate_extract --bundle "<④ bundle 폴더>" --glass Accum --rows "16136:10,26;16184:10,22,25;16232:10,23,25,26;16268:12,24;16280:11,20,25"
+
+2. 출력된 머리줄과 표 D를 그대로 돌려줘. 값은 고치지 마.
+   NOT_TOPK, NOT_FOUND_OR_AMBIG, NOT_CAPTURED도 그대로 둬.
+
+3. 기록 확인 두 가지만 답해줘. 파일은 보내지 마.
+   - review-009 labels.json에서 f16400(684초) case의 visibility 저장값
+   - 처음 표 B의 673.0초 Y367 idx25 행 원문
+     (전사된 숫자 열이 4개였어. 출력 원문의 해당 줄만 다시 적어줘.)
+
+4. 반환 후 멈춰. 원인 판정이나 수정 제안은 하지 마.
+```
 
 ## 721-second identity investigation
 
