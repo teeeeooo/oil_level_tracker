@@ -29,12 +29,15 @@ is CLOSED (read-only ④ trace + review-009 human review; no run).
 - **Truth addition:** the user defined the Oil target during Foam collapse in the
   [reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#accum-foam-collapse-target--2026-10-20).
   Best case: air–liquid top and liquid–liquid layer; fallback: air–liquid top.
-- **Next (user-approved 2026-10-20):** [LBW-1 layer-bottom witness](../50-diagnostics/s11/2026-10-20-layer-bottom-witness.md)
-  covers both layers with one raster witness for the bottom of the textured
-  layer, used by support, nearest-anchor and layer-interior consumers. The
-  protocol is frozen; S0 (read-only witness screen on sample4 and the saved ④
-  trace) comes next. No detector change until S0 passes. S2 Windows comparison
-  needs a separate user go.
+- **LBW-1 (user-approved 2026-10-20):** [layer-bottom witness](../50-diagnostics/s11/2026-10-20-layer-bottom-witness.md#s0-result)
+  is CLOSED WITHOUT PROMOTION at S0. No negative was supported, and Y805 read as
+  layer interior. But sample4's reviewed boundary failed in 4/6 frames,
+  including the decisive 42 s pair: the clean Oil band below it (~15 px) is
+  thinner than the fixed depth (17 px) before lower-structure texture returns.
+  No consumer was built; no Windows extraction is requested.
+- **Next:** the user decides whether to freeze a successor witness that does not
+  assume a minimum Oil-band thickness, using the unread ④ trace as a held-out
+  check. No detector change or Windows run is queued.
 
 **CAF-1 checkpoint — 2026-10-20:** [clean-anchor fill qualification](../50-diagnostics/s11/2026-10-20-clean-anchor-fill.md#results-and-decision)
 is CLOSED WITHOUT PROMOTION.

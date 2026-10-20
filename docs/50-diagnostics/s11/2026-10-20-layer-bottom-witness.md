@@ -1,6 +1,6 @@
 # LBW-1 — Foam layer-bottom witness
 
-**Status: PROTOCOL FROZEN — S0 NOT RUN.** Base HEAD: `9af5483`. Current authority:
+**Status: CLOSED WITHOUT PROMOTION — S0 FAILED ON SAMPLE4** ([result](#s0-result)). Protocol base HEAD: `9af5483`. Current authority:
 [Work Plan](../../00-project/work-plan.md). The user chose this direction after
 [ATG-1](2026-10-20-accum-texture-gate.md#decision). This document fixes the
 witness definition, its consumers, stages, controls and stop rules before any
@@ -169,12 +169,59 @@ definition would be a new, separately frozen protocol.
 
 S11 ACTIVE / O2 OPEN / FIELD FAIL is unchanged by any local result.
 
+## S0 result
+
+Executed once with tool `c2b9865`, committed before the run. Managed run
+`sample/output/s11-layer-bottom-witness-20261020-001` is closed. Evidence:
+`evidence/sample4-s0.json`, 18.6 kB, SHA-256
+`57a1b22a28c13acdef61cac5eb4d3841e964b0ba55e1e5457dfb758fdf7469fe`. The BASIC
+trace was discarded.
+
+**Input checks pass.** The sample4 tracking fingerprint equals the saved P5 baseline
+(`e447626b…`). The self-check recomputes the stored whole-row features from the
+same rasters with 0/196 mismatches.
+
+| Rule | Result |
+|---|---|
+| 1. No negative supported | **PASS:** 42 s Y805 is `INTERNAL`; 42 s Y867/868, 40 s Y865.5 and 51–52 s Y861.5–862 are `UNRESOLVED`; 44 s Y821/822 is `INTERNAL` |
+| 2. Decisive 42 s pair | **FAIL:** Y835/837 are `INTERNAL` (T0–1 / I4–5). Only the hypothesis rows Y839/Y844 are supported (T3 I2) |
+| 3. Positive frames ≥ 80 % | **FAIL:** 2/6 (42 s via Y839/844; 49.5 s via `material_path` Y841). 40, 42.5, 44 and 52 s have every in-band candidate `INTERNAL` |
+| 4. Self-check | PASS (valid) |
+
+Report-only: the pre-Foam 38 s Y880 and Y887 are `INTERFACE_SUPPORTED`. They lie
+outside the ordered-lower scope, but they confirm that this witness alone does not
+mark a Foam boundary.
+
+**Why it fails (post-hoc observation, no tuning).** The sample4 ROI is 104 px high,
+so `d = 17`. At 42 s the central sectors' texture falls from 0.77–0.81 at Y839 to
+0.02–0.14 at Y845–855. It rises again to 0.41–0.98 at Y860–870, the lower vessel
+structure (the 42 s Y868 target). The clean Oil band between the Foam bottom and
+that structure is about 15 px, thinner than `d`. "No textured row within `d`
+below" therefore fails on the real boundary. The two edge sectors stay textured
+at 0.54–0.89 through the whole band (wall texture), so at most three sectors can
+ever be `TERMINAL`. The relative whole-row scalar (upper mean minus lower mean)
+still reads 1.00 here, because it compares averages instead of requiring absence.
+
+**Decision.** S0 fails on sample4, so the frozen rule stops LBW-1 regardless of
+Windows. No consumer is implemented, and no Windows S0 extraction is requested.
+`d`, the limits and the sector count stay as frozen. Choosing a smaller depth now
+would be fit to this sample4 band.
+
+**What carries forward.**
+- Negatives were never supported. In particular, Y805 (TPA-1) was
+  `INTERNAL_OR_ARTIFACT` and lower structures were `UNRESOLVED`, so an
+  interior-versus-bottom distinction is measurable.
+- The failure mode is a thin Oil band between two textured regions. Any successor
+  definition must hold when the Oil band is thinner than any fixed depth.
+- The Windows ④ trace has not yet been read with any witness. It can serve as a
+  held-out check for a successor definition frozen before reading it.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `FOAM-EPISODE`, `SEQUENCE-COMPOSITION`.
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F06`, `S11-F10`.
 - First harmful stage: `OIL-AUTHORITY` — texture-excluded cross-representation support, then nearest-ordered-lower demotion under an upper anchor inside the Foam layer (AAT-1, TPA-1, ATG-1).
 - Existing feature coverage: reuses the existing material evidence map, row-support normalization (0.42), texture limit (0.60), terminal depth ratios, five-sector grid, ordered-lower context and typed identity-contradiction channel; the physical-interface design's witness contract. CRW-1's gray partition count is not reused as authority (f1200 counterexample). S0 inputs: a new sample4 FULL-trace run of the saved P5 configuration (options OFF), and the ④ FULL+ON v2 saved trace (spatial Artifact templates as recorded for ④; cost-first/RGB/Local XY/top-exit OFF).
-- Execution scope: protocol only; nothing run. S0 is a read-only raster screen with no detector consumer; S1 is a local default-OFF replay; S2 needs a separate user go.
-- Logic-map impact: NONE — no source change yet; S1 would update `OIL-AUTHORITY`/`OIL-PHASE-FILL` only if promoted.
-- Failure-registry impact: NONE — no result yet.
+- Execution scope: S0 sample4 only — the existing production analysis (P5 configuration, options OFF, BASIC trace in a temporary directory) with witness evaluation on detector-artifact rasters; no detector consumer. Windows S0, S1 and S2 were not run.
+- Logic-map impact: NONE — diagnostic screen only; production source and ownership unchanged.
+- Failure-registry impact: NONE — a closed diagnostic screen with no runtime mechanism; the counterexample is recorded here.
