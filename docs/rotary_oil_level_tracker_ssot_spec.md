@@ -68,6 +68,15 @@ Detector의 실용 목표는 개별 frame의 유면 Y를 pixel-perfect하게 맞
 
 사용자와 합의한 평가 방향(2026-10-12)에 따라, **자료는 영상명이나 물질군이 아니라 장면의 판독 가능성·정답의 정밀도·검증 목적에 따라 사용한다**. 원리 확인, 실패 대응, 업무 흐름의 유용성을 구분하며, 기존 sample 1–4 전체를 정밀한 물리 정답으로 간주하거나 sample 5–7을 일괄 보조 자료로 낮추지 않는다. 판독 가능한 장면에서도 중요한 흐름과 사건을 바꾸지 않는 일부 누락·위치 오차·고립된 오검출은 수용할 수 있다. 각 오류는 그대로 기록하고, 적용 구간과 허용 범위는 후보 비교 전에 정한다. 한 점이라도 거짓 극값·반전·회복·Foam 사건을 만들면 작은 잔여 오류로 처리하지 않는다. 이는 모든 지점의 정답을 요구하지 않는다는 합의이며, 수치 허용치나 현장 합격을 승인한 것은 아니다. [장면별 평가 계약](30-validation/s11-interface-observability-witness-validation.md#p0-scene-based-evaluation-contract)이 구체적인 분모·영향·수용 절차를 소유한다.
 
+사용자 결정(2026-10-20)에 따라 **수용 가능한 국소 오류(C)의 숫자 범위를 후보 비교 전에 고정한다**. 범위는 다음과 같다.
+
+- 위치 오차: Glass 세로 지름의 ±5% 이내. 사용자가 허용한 대안 후보를 고르면 오차 0으로 본다.
+- 고립 오검출: 연속 1 샘플만, 구간 샘플의 5% 이하, 서로 5초 이상 떨어진 경우.
+- 누락: 보이는 움직임 구간에서 2초 이하는 C. 2–5초는 그 사이에 검토된 사건이 없을 때만 C. 그 이상이거나 사건을 덮는 누락은 흐름 삭제(B).
+- 사건 시각: 검토된 시각과 ±2초 이내.
+
+보고서의 최고·최저 표시는 1초 이내에 같은 series의 다른 관측이 같은 위치 범위 안에서 지지할 때만 붙인다. 원시 값은 바꾸지 않는다. 기존 방식과 후보는 같은 장면별 기준으로 비교한다. 극값·방향·phase를 바꾸는 미검증 점은 자동 종료 대신 사용자 질문 한 번으로 판정한다. 상세 규칙은 [국소 오류 범위와 극값 표시](30-validation/s11-interface-observability-witness-validation.md#local-residual-bounds-and-extremum-display--2026-10-20)가 소유한다.
+
 사용자 선택(2026-10-10)에 따라, **별도로 가시성과 움직임을 확인한 구간에서 같은 물리적 Oil 유면의 사용 가능한 두 수치 관측 사이 간격은 1초 이내를 개발 목표로 한다**. 실제 원본 timestamp의 차이로 측정하며, 잘못된 대상·미확인 수치·누락 및 시작/끝의 미관측 구간을 별도로 보고한다. 경계가 보이지 않는 구간의 값을 보간하거나 이어 붙여 목표를 채우지 않는다. 이 목표는 Foam 시간 기준, 정지·가림 구간, pixel 허용 오차나 검출기 판정 임계값으로 자동 전환하지 않으며, 보고서의 2초 연결 표시와도 별개다. [승인 답변](50-diagnostics/s11/2026-10-10-temporal-usefulness-reply.json)과 [평가 계약](30-validation/s11-interface-observability-witness-validation.md#oil-observation-cadence--one-second-development-target)이 적용 범위를 소유한다.
 
 사용자용 결과 보고서의 목표는 detector 내부 상태를 정리하는 것이 아니라, 원본 sight-glass 영상에서 관측된 유면 흐름을 설명하는 것이다. 보고서는 관측된 최고·최저 유면, Foam 발생·소멸과 주요 변화 시점을 graph에 표시하고 해당 원본 영상 장면을 Glass 중심 캡처로 함께 보여준다. 후보 점수, rejection reason, Spatial sector와 같은 debug 정보는 CSV/Result Review/debug artifact에 분리하며 main report의 정보 구조를 지배해서는 안 된다.
@@ -1539,6 +1548,7 @@ Main report는 raw event/confidence/debug table이나 source metadata dictionary
 - UNKNOWN_REVIEW: review background band
 - zero line: 고정 기준선
 - 사용자에게 의미 있는 최고·최저/Foam/기준점 통과 등의 landmark: 한글 label marker
+- 최고·최저 landmark는 1초 이내 같은 series의 다른 finite observation이 Glass 세로 지름 ±5% 안에서 지지하는 관측에만 붙인다. 지지 없는 점도 CSV와 graph vertex로는 그대로 남고 landmark만 받지 않는다(2026-10-20 결정)
 - numeric 값이 없는 full/empty 상태에 임의의 가짜 높이를 CSV에 쓰지 않는다.
 - Oil series의 저장값은 관측 결과 그대로 유지한다. `null`/non-finite sample은 graph vertex로 만들지 않고, 저장된 finite Oil anchor들만 시간순으로 하나의 presentation trajectory로 연결한다. 직접 연속 observation은 실선, missing run을 건너는 연결은 점선으로 구분한다.
 - 점선 bridge는 앞뒤 두 finite anchor만 vertex로 사용하며 누락 timestamp의 CSV/TrackingSample/overlay numeric 값을 만들거나 detector observation을 보간·수정하지 않는다. `UNKNOWN_REVIEW`와 no-interface 상태 표시는 연결 뒤에도 보이되 Oil movement를 가릴 정도로 지배적으로 렌더링하지 않는다.

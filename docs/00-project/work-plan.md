@@ -10,6 +10,18 @@
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
+**Evaluation decision — 2026-10-20:** the user adopted numerical local-residual
+(C) bounds, a supported-extremum report rule and a net baseline/candidate
+comparison procedure. All three are owned by the
+[P0 contract](../30-validation/s11-interface-observability-witness-validation.md#local-residual-bounds-and-extremum-display--2026-10-20).
+The bounds are ±5% of Glass diameter, isolated single samples, 2 s/5 s gaps and
+±2 s event timing. Unassessed points that change an extremum, direction or phase
+go to one targeted user question. They govern comparisons frozen from now on;
+closed results are not re-scored. The extremum rule still needs implementation
+in `report_presentation._extrema_landmarks` and verification; until then reports
+keep the existing rule. No detector behavior, stored value or field disposition
+changes.
+
 **Resume checkpoint — 2026-10-17:** Start with the
 [HPA-1 handoff](../60-evidence/s11/2026-10-17-history-phase-handoff.md) and compact
 summary. Its three rounds and all activated-case reports are closed without
@@ -447,7 +459,7 @@ completed source questions remain closed.
 - One generic detector across Glasses; no private identity/time/Y, truth import or case-specific runtime branch.
 - Numeric Oil/Foam is an exact same-frame selected native candidate, with independent validity and ownership; candidate Y = sequence raw Y = CSV raw Y.
 - FULL/EMPTY never fabricate coordinates or copy physical IDs across rapid-refill handoff. Ambiguity, unavailable/lost/hard-invalid evidence fails closed within bounded ownership.
-- No interpolation, carry, report repair, silent golden regeneration, whole-detector rewrite or speculative Accum relaxation.
+- No interpolation, carry, report repair, silent golden regeneration, whole-detector rewrite or speculative Accum relaxation. The 2026-10-20 supported-extremum rule only selects which observed point gets a landmark and is not report repair.
 - Physical identity, target role, path localization and scalar eligibility retain separate truth/acceptance; missing support, model abstention and truth uncertainty differ.
 - New-run hashes do not prove old-run immutability; nested channels/gains or duplicate views are not independent successes.
 

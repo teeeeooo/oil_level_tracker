@@ -1228,6 +1228,9 @@ H0's support-face intersection loses available partition geometry, while CBR-1
 admits wrong-region appearance despite current geometry. Private first physical
 causes and field effectiveness remain unqualified. F07's Foam front/texture
 distinction is preserved alongside the guards below.
+The October 20 local-residual bounds and extremum display rule are evaluation
+and report-landmark policy only; they change no detector owner, observation or
+stored value, and closed results keep their dispositions.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`, `FOAM-CANDIDATE`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F08`, `S11-F09`, `S11-F10`.
@@ -1919,7 +1922,9 @@ For local sample4, retain the wrong-target 42 s/44 s report extrema, the reviewe
 Partial failure is permitted in principle, including on visible scenes; zero
 pointwise error is not the product goal. A C classification needs evidence of
 limited impact, not merely low error count or short duration. No existing example
-is newly accepted as C by this reorganization, and no percentage, pixel allowance
+is newly accepted as C by this reorganization. The
+[October 20 bounds](#local-residual-bounds-and-extremum-display--2026-10-20)
+supply the predeclared numerical C limits; no other percentage, pixel allowance
 or blanket time budget is invented. If the impact cannot be resolved, retain
 unassessed impact; a confirmed point miss still remains a miss.
 
@@ -1927,9 +1932,45 @@ The approved one-second Oil development target remains scoped to separately
 qualified visible moving Oil and actual source timestamps, with inter-point and
 leading/trailing gaps separate. It is not a universal Foam or Windows tolerance.
 Foam onset, last observed front and physical disappearance remain distinct;
-Foam timing and the canonical automatic transition tolerance remain unset.
-Freeze any needed numerical bounds in the relevant behavior/field plan before
-comparison. A principle experiment can proceed without inventing those bounds.
+their C timing bound is C4 below. Freeze any other needed numerical bounds in
+the relevant behavior/field plan before comparison. A principle experiment can
+proceed without inventing those bounds.
+
+#### Local-residual bounds and extremum display — 2026-10-20
+
+The user adopted these bounds and the extremum rule after reviewing the A/B/C/U
+contract: without numerical limits no result could qualify as C, and the report's
+raw-point extremum turned every out-of-range isolated point into an A. Position
+scale follows review-004, whose jointly allowed BASE alternatives differ by
+0.6–1.7% of the Glass diameter and whose differing preferences stay within 3.8%,
+plus a visual check of the ±5 px band on sample4. The bounds apply to comparisons
+frozen after this date. Closed experiments keep their recorded dispositions and
+are not re-scored automatically; this is not field acceptance.
+
+| Bound | Rule |
+|---|---|
+| C1 position | Within ±5% of the Recipe Glass vertical diameter (`2 × radius_y`) of the qualified reference: about ±39 px on Windows BASE, ±5 px on sample4. Selecting any user-allowed alternative counts as zero error. A wrong owner or a false extremum/reversal stays A even inside the band. |
+| C2 isolated wrong identity | One wrong-identity numeric sample with no wrong-identity neighbor, at most 5% of the segment's sampled rows, and at least 5 s from another isolated wrong point. Two or more consecutive wrong-identity samples are not C. This also applies inside no-interface segments. |
+| C3 missing observations | In qualified visible moving Oil, an inter-observation gap of at most 2 s is C. A gap of 2–5 s is C only when no reviewed extremum, reversal, phase transition or Foam event lies inside it. Longer gaps, and gaps covering such an event, are B. The one-second development target is unchanged. |
+| C4 event timing | Detected Foam onset/disappearance and FULL/EMPTY transitions within ±2 s of the reviewed, possibly approximate, time. |
+| C5 event fabrication | A false Foam episode or FULL/EMPTY state supported by two or more consecutive samples is A; a single sample follows C2. |
+
+**Report extremum display.** An observed value may be annotated as a report
+maximum/minimum only when at least one other finite observation of the same
+series within 1 s of source time lies inside its C1 band. Unsupported points stay
+unchanged in CSV, TrackingSample and graph vertices and are only not annotated.
+This chooses which observed point receives a landmark; it creates, moves,
+interpolates or deletes no value and is not report repair. Implementation belongs
+to `report_presentation._extrema_landmarks`; until it is implemented and verified,
+current reports keep the existing rule.
+
+**Comparison procedure.** Score the baseline and each candidate on the same
+scene-level A/B/C/U table and compare them net. Neither A nor B is waived:
+replacing a baseline B with a confirmed A is not progress for that claim. A
+changed unassessed point that alters a report extremum, direction or phase
+becomes one targeted user question rather than an automatic closure; other
+unassessed points stay U and do not block alone. Freeze bounds and windows before
+outputs; do not adjust them afterward.
 
 #### Progression and existing acceptance boundaries
 

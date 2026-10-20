@@ -2840,6 +2840,16 @@ or retuning is introduced. F02/F04/F07/F09/F10 and the completed block below app
 logic-map/failure-registry impact is NONE because executing owners and causal
 findings are unchanged.
 
+2026-10-20 local-residual bounds: after the HPA-1 closeout, the user adopted
+numerical C bounds, a supported-extremum report landmark rule and a net
+baseline/candidate comparison in the P0 contract. The position scale reuses
+review-004's allowed-alternative spread. Nothing here is a detector operation,
+threshold or runtime branch. The landmark rule chooses which observed value is
+labeled and leaves stored values unchanged, so the no-repair and fail-closed
+contracts hold. Closed failures F05/F06/F08/F10 keep their dispositions.
+Logic-map/failure-registry impact is NONE because executing detector owners and
+causal findings are unchanged.
+
 2026-10-12 direction intake: reviewed S2's exact cost differences and ablation
 range, P2-S1's dominated pair, current default linkage and the O2/V5/O3 boundary.
 The change requires positive reachability before expensive successor comparisons
@@ -3152,5 +3162,7 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated. The user-selected upper projected branch defines the measurement target without treating image Y order as material identity, relabeling legacy truth or installing a selector; separately reviewed source intervals retain their uncertainty and scope.
+- Existing feature coverage: the dated entries above record their own Recipe/mask/Local XY/template input states. The 2026-10-20 evaluation update reuses the existing report landmark owner (`report_presentation._extrema_landmarks`), review-004's allowed alternatives and the Recipe ellipse `radius_y` as the position scale. No Recipe, session or detector setting changes.
+- Execution scope: for the 2026-10-20 update, no detector, report or Windows runtime was exercised. It reviews the evaluation/acceptance responsibility only. The landmark rule's implementation and verification remain separate, and closed results are not re-scored.
 - Logic-map impact: NONE — the fixed-center contract and implemented CBR-1 offline measurement reuse existing owners without a production consumer; no executing detector route changes. Previously documented Local XY routing remains as mapped.
 - Failure-registry impact: NONE — existing F02/F04/F06/F07 representation, role and coupling limits plus F09/F10 provenance and tuning guards cover the reviewed H0/G1 and CBR-1 results; no new field cause or repair is claimed.
