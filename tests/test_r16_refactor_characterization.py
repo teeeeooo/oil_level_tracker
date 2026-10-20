@@ -293,7 +293,7 @@ def test_r0_current_frame_candidate_and_debug_projection_fingerprint() -> None:
                 key: value for key, value in artifacts.state.items()
                 if key not in {
                     "oil_interface_diagnostics", "oil_interface_witness", "oil_measurement_lineage",
-                    "foam_component_diagnostics",
+                    "foam_component_diagnostics", "artifact_reference_comparison",
                 }
             },
             "images": _image_signatures({

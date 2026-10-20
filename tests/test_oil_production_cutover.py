@@ -356,12 +356,14 @@ def test_production_constructor_surfaces_have_no_oil_injection_callbacks():
     # remain forbidden. This also guards against accepting arbitrary **kwargs.
     assert set(detector_parameters) == {
         "oil_measurement_scopes", "initial_full_observation", "cost_first_assignment", "candidate_rgb",
+        "top_exit_full",
     }
     assert all(p.kind is inspect.Parameter.KEYWORD_ONLY for p in detector_parameters.values())
     assert detector_parameters["oil_measurement_scopes"].default == ()
     assert detector_parameters["initial_full_observation"].default is False
     assert detector_parameters["cost_first_assignment"].default is False
     assert detector_parameters["candidate_rgb"].default is False
+    assert detector_parameters["top_exit_full"].default is False
     assert set(pipeline_parameters) == {"bounds"}
     for forbidden in (
         "oil_runner",
