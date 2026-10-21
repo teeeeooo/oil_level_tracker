@@ -83,6 +83,8 @@ def compare(
     cost_first_comparison: bool = False,
     candidate_rgb_comparison: bool = False,
     top_exit_comparison: bool = False,
+    original_recipe: bool = False,
+    initial_state: str = "full",
 ) -> None:
     from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
     from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
@@ -99,13 +101,17 @@ def compare(
 
     if sum((cost_first_comparison, candidate_rgb_comparison, top_exit_comparison)) > 1:
         raise ValueError("Compare one mechanism at a time.")
+    if initial_state not in {"full", "unknown"}:
+        raise ValueError("Initial state must be full or unknown.")
     output.mkdir(parents=True, exist_ok=False)
     video = ROOT / "sample" / f"{sample}.mp4"
-    recipe_path = (roi_inputs / "sample4.oilrecipe" if sample == "sample4"
-                   else ROOT / "sample/base_sample_1.oilrecipe")
+    original = ROOT / "sample" / f"{sample}.oilrecipe"
+    recipe_path = (roi_inputs / "sample4.oilrecipe" if sample == "sample4" and not original_recipe
+                   else original)
     frozen = json.loads((roi_inputs / "roi-inputs.json").read_text(encoding="utf-8"))
-    hash_key = "comparison_recipe_sha256" if sample == "sample4" else "original_recipe_sha256"
-    assert _sha(recipe_path) == frozen["recipes"][sample][hash_key]
+    if sample in frozen["recipes"]:
+        hash_key = "original_recipe_sha256" if recipe_path == original else "comparison_recipe_sha256"
+        assert _sha(recipe_path) == frozen["recipes"][sample][hash_key]
     variants = {}
     raw_inputs = []
     for enabled in (False, True):
@@ -120,10 +126,12 @@ def compare(
             if debug_full:
                 session.debug_trace_level = DebugTraceLevel.FULL
             recipe = JsonRecipeRepository().load(recipe_path)
+            initial = (InitialObservationState.FULL_NO_INTERFACE if initial_state == "full"
+                       else InitialObservationState.UNKNOWN_REVIEW)
             for glass in recipe.glasses:
-                glass.initial_state = InitialObservationState.FULL_NO_INTERFACE
+                glass.initial_state = initial
                 session.initial_state_confirmations[glass.id] = InitialStateConfirmation(
-                    InitialObservationState.FULL_NO_INTERFACE, str(video), session.analysis_start_sec,
+                    initial, str(video), session.analysis_start_sec,
                 )
             detector = Recorder(
                 initial_full_observation=cost_first_comparison or candidate_rgb_comparison or top_exit_comparison or enabled,
@@ -147,7 +155,7 @@ def compare(
             for sample_row, detection, csv_row in zip(rows, detector.completed, csv_rows, strict=True):
                 assert ("+cost-first-assignment-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (cost_first_comparison and enabled)
                 assert ("+candidate-rgb-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (candidate_rgb_comparison and enabled)
-                assert ("+top-exit-full-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (top_exit_comparison and enabled)
+                assert ("+top-exit-full-v2" in detection["debug_metrics"]["sequence_resolver_version"]) == (top_exit_comparison and enabled)
                 y = sample_row["raw_oil_air_level_y"]
                 assert y == detection["raw_oil_air_level_y"]
                 assert (None if not csv_row["raw_oil_air_level_y"] else float(csv_row["raw_oil_air_level_y"])) == y
@@ -193,7 +201,9 @@ def compare(
     result = {"sample": sample, "comparison": ("top_exit" if top_exit_comparison
                                                else "candidate_rgb" if candidate_rgb_comparison
                                                else "cost_first" if cost_first_comparison else "initial_full"),
-              "initial_state": "FULL mechanism stress condition; not physical truth",
+              "initial_state": ("FULL mechanism stress condition; not physical truth" if initial_state == "full"
+                                else "UNKNOWN qualification state"),
+              "recipe": str(recipe_path.relative_to(ROOT)) if recipe_path.is_relative_to(ROOT) else str(recipe_path),
               "debug_trace_level": "FULL" if debug_full else "NONE",
               "recipe_sha256": _sha(recipe_path), "runtime": capture_runtime_provenance(video),
               "raw_inputs_equal": raw_inputs[0] == raw_inputs[1],
@@ -263,7 +273,10 @@ if __name__ == "__main__":
     modes.add_argument("--compare", type=Path)
     modes.add_argument("--verify-rgb", type=Path)
     parser.add_argument("--roi-inputs", type=Path)
-    parser.add_argument("--sample", choices=("base_sample_1", "sample4"))
+    parser.add_argument("--sample", choices=("base_sample_1", "sample2", "sample4"))
+    parser.add_argument("--original-recipe", action="store_true",
+                        help="Use sample/<sample>.oilrecipe instead of the frozen sample4 interior Recipe")
+    parser.add_argument("--initial-state", choices=("full", "unknown"), default="full")
     parser.add_argument("--debug-full", action="store_true")
     candidates = parser.add_mutually_exclusive_group()
     candidates.add_argument("--cost-first-comparison", action="store_true",
@@ -283,4 +296,5 @@ if __name__ == "__main__":
         compare(args.compare, args.roi_inputs, args.sample, debug_full=args.debug_full,
                 cost_first_comparison=args.cost_first_comparison,
                 candidate_rgb_comparison=args.candidate_rgb_comparison,
-                top_exit_comparison=args.top_exit_comparison)
+                top_exit_comparison=args.top_exit_comparison,
+                original_recipe=args.original_recipe, initial_state=args.initial_state)

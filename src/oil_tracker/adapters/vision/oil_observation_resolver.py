@@ -1481,7 +1481,7 @@ class OilObservationResolver:
         if self.config.candidate_rgb_enabled:
             self.version += "+candidate-rgb-v1"
         if self.config.top_exit_full_enabled:
-            self.version += "+top-exit-full-v1"
+            self.version += "+top-exit-full-v2"
         self.admission_evidence = OilAdmissionEvidenceOwner(self.config)
         self.tracklet_opposition = OilTrackletOppositionOwner(
             self.config

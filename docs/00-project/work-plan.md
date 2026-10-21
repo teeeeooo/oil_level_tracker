@@ -61,10 +61,18 @@ is COMPLETE (desk only).
   holds an `anchor_corridor` tracklet profile.
 - **User decision:** item 6 = 6a. The anchor may be the owner's tracklet-level
   anchor profile plus a direct-interface window row.
-- **FROZEN and authorized:** the [top-exit v2 design](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2)
-  (items 1, 2, 3a, 4, 6a; tests; local controls; pre-registered Windows
-  outcomes). The user authorized implementation and the local controls. Any
-  Windows comparison needs a separate go.
+- **IMPLEMENTED (default OFF), [local controls PASS](../60-evidence/s11/2026-10-21-top-exit-v2-local.md):**
+  the frozen [top-exit v2 design](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2)
+  (items 1, 2, 3a, 4, 6a; `+top-exit-full-v2`).
+  - Unit tests: 37 top-exit tests; full suite 3,792 passed, 12 skipped
+    (sample3).
+  - Four controls (sample4 original/UNKNOWN and interior/FULL, base_sample_1,
+    sample2): zero top-exit FULL rows and identical output. None reached a
+    disappearance evaluation, so the new rules are exercised only
+    synthetically.
+- **Next (needs the user's go):** one Windows comparison on ④'s inputs against
+  the pre-registered outcome: BASE FULL from 672–675 s, held through 780 s;
+  no Accum FULL.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.

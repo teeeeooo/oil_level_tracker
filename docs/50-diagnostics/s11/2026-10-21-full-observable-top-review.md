@@ -749,6 +749,11 @@ is proposed.
 and implementation with the local controls is authorized. A Windows comparison
 needs a separate go.
 
+**Implemented (2026-10-21):** top-exit v2, default OFF. The four frozen local
+controls pass with zero top-exit FULL rows and unchanged output; none reached a
+disappearance evaluation
+([evidence](../../60-evidence/s11/2026-10-21-top-exit-v2-local.md)).
+
 ## Constraints preserved
 
 - **Unchanged:** default R22 + R22-3/O1 and every experiment flag; FULL CONDITION

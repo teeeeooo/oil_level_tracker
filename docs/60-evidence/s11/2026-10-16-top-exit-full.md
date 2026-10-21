@@ -1,5 +1,9 @@
 # Optional top-exit FULL closure — local preparation
 
+**Superseded in place by [top-exit v2](2026-10-21-top-exit-v2-local.md)
+(2026-10-21; band endpoint, lag continuity, unselected exit row, tracklet anchor,
+FULL until drain). This record keeps v1's evidence.**
+
 **Status:** Windows geometry preflight COMPLETE / CONDITION FAILED; ⑧ NOT RUN.
 Local contract checks remain valid at their original scope; actual physical
 closure is NOT QUALIFIED. The next bounded task is the requested 721 s identity
