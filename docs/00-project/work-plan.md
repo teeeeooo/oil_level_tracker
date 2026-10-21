@@ -19,8 +19,17 @@ is COMPLETE (desk only).
 - **D2 is DECIDED:** S. The 27 % cap stays; top-exit is the FULL publication
   route; FULL persists under the cap until a drain release. G is a separate
   follow-up.
-- **D3 is DECIDED:** the user forwards the read-only ④ trace request (OTR-1 §5).
-  Receipt is pending; the D1b/D2 design waits for it.
+- **D3 receipt RECORDED** ([OTR-1 §6](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#6-windows-trace-receipt--2026-10-21)):
+  - ④ BASE stays in `INITIAL_FULL_BARRIER` throughout, so the 27 % rules never
+    act.
+  - The last selected row is Y352 (672.5 s). At 673.0 s an admitted Y329 owner is
+    not selected.
+  - From 673.5 s no proposal exists in Y243–339.
+  - Image FULL evidence is `not_available`.
+
+  The decided top-exit design would not change ④ BASE.
+- **Proposed next step (user's choice):** one human visibility review (BASE
+  673.0–675.0 s, next free ID review-011) before any D1b/D2 implementation.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.

@@ -1,8 +1,14 @@
 # OTR-1 — FULL observable-top design review (B)
 
 **Status: REVIEW COMPLETE — D1, D1b, D2 and D3 DECIDED by the user ([decision record](#decision-record--2026-10-21)).**
-The §5 ④ trace request was handed to the user for the Windows agent; receipt is
-pending. Desk review
+The [§6 ④ trace receipt](#6-windows-trace-receipt--2026-10-21) is recorded.
+- **27 % rules:** not involved on Windows BASE.
+- **Selection:** the last selected row is Y352; at 673.0 s an admitted Y329 is
+  not selected.
+- **Evidence:** from 673.5 s no proposal exists in Y243–339.
+- **Decided top-exit design:** would not change ④ BASE.
+
+A human visibility check is proposed before implementing. Desk review
 only: source reading, closed records, the retained LBT-1 CSV and one geometry
 computation with the real mask builder on retained local Recipes. No detector run,
 flag, tuning or Windows request was sent. Base HEAD `b9ff06b`. Current authority:
@@ -35,8 +41,9 @@ flag, tuning or Windows request was sent. Base HEAD `b9ff06b`. Current authority
      appears only through IFO v2 `observed_interface`. If this also holds at
      672.5–675 s, BASE cannot reach the 27 % fill or refill closures. Top-exit is
      then the only FULL route, and it is blocked three times: it is OFF in ④, its
-     endpoint is unreachable, and no selected rise goes above Y352. This is an
-     inference from sampled records; table A of the request below checks it.
+     endpoint is unreachable, and no selected rise goes above Y352. The
+     [§6 receipt](#6-windows-trace-receipt--2026-10-21) confirms this for every
+     frame. It also finds no proposal in Y243–339 from 673.5 s.
 4. **sample4 Y808 is a different Recipe.** It is the October 15
    agent-selected *interior comparison Recipe* `(595, 842, 37, 34)`, not
    `sample/sample4.oilrecipe` (Y798). Neither is a human-confirmed physical top.
@@ -336,6 +343,118 @@ Y352가 실제 계면인지는 판단하지 않는다.
 The returned tables are transferred Windows evidence. Record them in a new
 section of this file.
 
+## 6. Windows trace receipt — 2026-10-21
+
+**RECEIVED.** The user relayed the Windows agent's read-only extraction made with
+the §5 request (`0ddcd28`). This is transferred evidence: no private file was
+inspected on the Mac, and no run, new bundle, tuning or human review occurred.
+
+- **Identity:** run `a9ccece3-49bf-47af-a570-b1ca6e9777a4`, `trace_level=full`,
+  BASE 601 records.
+- **Read:** `debug/debug_index.json` and `debug/debug_trace.jsonl` only, by byte
+  offset.
+
+### Table A (condensed)
+
+These columns were constant in all 17 rows:
+- `release_stage = initial_full_drain_release` and `recovery_stage = initial_full`;
+- IFO `evaluated = True`, with motion `filled_barrier / INITIAL_FULL_BARRIER`;
+- `R.oil_no_interface_full_likelihood = 0.0` and `R.oil_no_interface_reason = not_available`.
+
+Every stage kind and Y (best path, continuation bound, spike suppressed, completed
+fill) equals the resolved kind and Y.
+
+| Time (frame) | Final state / Y | Resolved | Phase / reason | Allowed = IFO qualifying | Selected | Flags |
+|---|---|---|---|---|---|---|
+| 670.0 (16064) | PARTIAL_VISIBLE / 384 | oil | observed_interface / INITIAL_FULL_INTERFACE_OBSERVED | [000366:0319] | 000366:0319 | OIL_DIRECTION_UNCONFIRMED, R17_RESOLVED_OIL, R17_TRACKLET_CONTINUING, SEQUENCE_RESOLVED_OIL, SEQUENCE_SAME_FRAME_CANDIDATE |
+| 670.5 (16076) | PARTIAL_VISIBLE / 377 | oil | same | same | same | same |
+| 671.0 (16088) | PARTIAL_VISIBLE / 369 | oil | same | same | same | same |
+| 671.5 (16100) | PARTIAL_VISIBLE / 362 | oil | same | same | same | same |
+| 672.0 (16112) | PARTIAL_VISIBLE / 350 | oil | same | same | same | same |
+| 672.5 (16124) | PARTIAL_VISIBLE / 352 | oil | same | same | same | same |
+| 673.0 (16136) | UNKNOWN_REVIEW / null | unknown | observed_interface / INITIAL_FULL_INTERFACE_OBSERVED | [000366:0319] | — | R17_INITIAL_STATE_CONTEXT_ONLY, R17_OBSERVATION_UNAVAILABLE, SEQUENCE_UNAVAILABLE |
+| 673.5 (16148) | UNKNOWN_REVIEW / null | unknown | filled_barrier / INITIAL_FULL_BARRIER | [] | — | same as 673.0 |
+| 674.0–678.0 (16160–16256, 9 rows) | UNKNOWN_REVIEW / null | unknown | filled_barrier / INITIAL_FULL_BARRIER | [] | — | as 673.0 plus R17_MATERIAL_PHASE_BARRIER |
+
+### Table B (`sequence.candidates[]`, kind `oil_air`, Y < 352)
+
+| Time | Raw count | Rows: source Y / authority / identity / tracklet, lifecycle, admitted / reject stage |
+|---|---:|---|
+| 672.5 | 4 | `material_path` 322 / — / — / — / TOP_K_PRUNED_OR_HARD_INVALID · `phase_transition_scan` 336 / ANCHOR_ELIGIBLE / direct_interface / 000384:0333 provisional 0, INSUFFICIENT_NET_PROGRESS, recent dir +1, 17 px / INSUFFICIENT_NET_PROGRESS · `material_path` 338 / CONTINUATION_ELIGIBLE / direct_interface / 000384:0333, same / INSUFFICIENT_NET_PROGRESS · `material_path` 287 / — / — / — / TOP_K_PRUNED_OR_HARD_INVALID |
+| 673.0 | 2 | `material_path` 343 / — / TOP_K_PRUNED_OR_HARD_INVALID · **`phase_transition_scan` 329 / CONTINUATION_ELIGIBLE / continuation_only / 000366:0319 continuing, admitted 1, incompatible 0, recent dir −1, 48 px / GLOBAL_PATH_OR_RUN_BOUND, not selected** |
+| 673.5 | 3 | `distributed_sobel_path` 340, `phase_transition_scan` 348, `material_path` 349 — all TOP_K_PRUNED_OR_HARD_INVALID |
+| 674.0 | 3 | `phase_transition_scan` 349, `material_path` 349 — TOP_K_PRUNED_OR_HARD_INVALID · `calibrated_high_recall` 351 / CONTINUATION_ELIGIBLE / continuation_only / 000384:0333 provisional 0, INSUFFICIENT_NET_PROGRESS, recent dir +1, 17 px / MATERIAL_OWNERSHIP_BARRIER |
+| 674.5 | 2 | `phase_transition_scan` 346, `material_path` 347 — TOP_K_PRUNED_OR_HARD_INVALID |
+| 675.0 | 2 | `phase_transition_scan` 346, `material_path` 346 — TOP_K_PRUNED_OR_HARD_INVALID |
+| 675.5 | 2 | `material_path` 348, `phase_transition_scan` 344 — TOP_K_PRUNED_OR_HARD_INVALID |
+
+The 672.5 s selected row was reported as Y352, CONTINUATION_ELIGIBLE /
+continuation, continuation_only, `000366:0319` continuing, selected.
+
+### Table C (675.0–720.5 s)
+
+| Item | Result |
+|---|---|
+| Records | 91; one grid point NOT_CAPTURED |
+| Resolved kind | unknown 91 |
+| Phase / reason | `filled_barrier / INITIAL_FULL_BARRIER` 90; `observed_interface / INITIAL_FULL_INTERFACE_OBSERVED` 1 |
+| IFO motion | `filled_barrier / INITIAL_FULL_BARRIER` 91 |
+| Image FULL | Full likelihood min, median and max 0.0; `not_available` 91 |
+
+### Transcription notes (values kept as reported)
+
+- **Y287 at 672.5 s was marked "mask 밖".** By the stated rule (Y < 243) it lies
+  inside the mask, so the annotation is disregarded.
+- **The 672.5 s selected row** has source `sequence_selected` and null lifecycle
+  fields. It appears to be built from `S.sequence_selected_*`, not from a
+  `sequence.candidates` entry.
+- **Table C threshold:** the agent counted ≥ 0.50 instead of the requested ≥ 0.58.
+  With a maximum of 0.0 this changes nothing.
+- **Selected-tracklet column:** absent in rows from 673.0 s onward, where nothing
+  is selected.
+- **The one NOT_CAPTURED grid point** in Table C was not investigated.
+
+### Findings
+
+| # | Finding | Evidence |
+|---|---|---|
+| R1 | **H3 excluded.** The 27 % rules (T1–T3) never acted on ④ BASE. The motion runtime stays `INITIAL_FULL_BARRIER` throughout, so no drain release, fill closure or refill closure occurs | 17/17 Table A rows and 91/91 Table C records |
+| R2 | **The selected rise is the IFO v2 owner `000366:0319`**, which reaches Y384 → Y350 (672.0 s) → Y352 (672.5 s). Its last selected row is 0.18H below the Glass top and 109 px below the observable limit | Table A |
+| R3 | **H4 holds for one frame.** At 673.0 s the same owner is still admitted, allowed and IFO-qualifying at **Y329**, with recent upward progress of 48 px. The best path is nevertheless unknown (`GLOBAL_PATH_OR_RUN_BOUND`). The trace does not say whether its confidence failed publishability or the path cost preferred unknown. Even if selected, Y329 is 86 px below the limit | Tables A and B |
+| R4 | **H2 holds from 673.5 s.** No Oil proposal exists with Y < 340 during 673.5–675.5 s. The remaining proposals cluster at Y340–351 and are top-K pruned or hard-invalid. One exception is the 674.0 s Y351 row on a provisional downward tracklet, `000384:0333`, rejected by the ownership barrier. During the reviewed FULL transition, nothing is proposed in the top 97 px of the observable region (Y243–339) | Table B |
+| R5 | **Image FULL evidence is absent, not merely weak.** No no-interface evidence object is produced, so an unconstrained allowed set would still not publish image FULL here | `not_available`, likelihood 0.0 in 17 + 91 records |
+| R6 | **Design note for D2 (not a tuning proposal):** T9's window resets on any downward step. The 672.0 → 672.5 s move is 2 px downward (350 → 352), so a top-exit window would restart at 672.5 s | Table A |
+
+### Consequence for the decided D1b/D2
+
+Implementing D1b and D2 as decided would not change ④ BASE.
+- The endpoint (Y243 ± 9.3) is never approached: the closest admitted row is
+  Y329 and the last selected row is Y352.
+- The binding gap is upstream of top-exit:
+  - one selection loss at 673.0 s (`OIL-SELECTOR`);
+  - no proposal in Y243–339 from 673.5 s (`OIL-PROPOSAL` / `OIL-RAW-EVIDENCE`,
+    F02).
+- Widening the endpoint tolerance to cover 86–109 px would be the escape hatch
+  F10 forbids.
+
+**Open physical question (only a human can answer it):** during 673.0–675.0 s, is
+the rising oil interface visible between the mask top (Y243) and Y340?
+- **Visible:** proposal recall at the top of the Glass fails (F02). D1 stands.
+  The next work is on the evidence side; top-exit as decided follows.
+- **Not visible** (the top region hides it): for BASE the practical observable
+  limit is near Y330–340, not the mask top. D1's mask-top limit would then not
+  hold for this Glass. FULL would have to be inferred from a disappearance about
+  0.12H below the limit, which is the proximity class that produced G. That would
+  reopen D1/D2.
+
+**Agent lean (not binding):** pause the D1b/D2 implementation. First answer the
+visibility question with one human review through the existing O2 workflow on
+the ④ bundle (BASE 673.0, 673.5, 674.0, 674.5, 675.0 s). The question must allow
+"visible above every candidate", because no candidate exists above Y340 after
+673.0 s. The next free case ID is review-011. The paused layered-Foam line had
+earmarked it for Accum 672–677.5 s; IDs are assigned in order, so that line
+would take the next one.
+
 ## Constraints preserved
 
 - **Unchanged:** default R22 + R22-3/O1 and every experiment flag; FULL CONDITION
@@ -349,15 +468,18 @@ section of this file.
 
 ## Detector Governance
 
-- Logic-map nodes: `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FRAME-EVIDENCE`.
+- Logic-map nodes: `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `FRAME-EVIDENCE`, `OIL-RAW-EVIDENCE`, `OIL-PROPOSAL`.
 - Failure-registry entries: `S11-F02`, `S11-F05`, `S11-F08`, `S11-F10`.
 - First harmful stage:
   - **sample4:** `OIL-PHASE-FILL` — T1 confirms a fill on a row 0.21H from the
     configured top, and the cap then turns the Oil into UNKNOWN (LBT-1 G,
     verified in the retained CSV).
-  - **Windows BASE:** unknown. The sampled records point to the
-    `OIL-PHASE-INITIAL` barrier with IFO v2 (H1). H2–H4 are not excluded; table A
-    and B decide.
+  - **Windows BASE (§6):** the run stays in the `OIL-PHASE-INITIAL` barrier
+    throughout, so no 27 % rule acts. The first loss is at `OIL-SELECTOR` at
+    673.0 s: the admitted Y329 owner is not selected, for an unstored reason
+    (publishability or path cost). From 673.5 s there is no proposal in Y243–339
+    (`OIL-PROPOSAL` / `OIL-RAW-EVIDENCE`). Whether the interface is physically
+    visible there is unknown.
 - Existing feature coverage:
   - Source reviewed for every top-geometry consumer (T1–T10), `_constrain_layer`,
     image FULL evidence, IFO v2 and top-exit.
@@ -365,9 +487,10 @@ section of this file.
     snapshot, the October 15 interior Recipe and base_sample_1.
   - Windows BASE geometry comes from the transferred ④ receipt.
   - Top-exit, cost-first, RGB and Local XY are OFF in ④; IFO v2 is ON in ④.
-- Execution scope: desk review only. A read-only geometry computation and a read of
-  the retained LBT-1 CSV; no detector, pipeline or replay run; no Windows request
-  sent; no human review.
+- Execution scope: desk review plus one transferred read-only Windows trace
+  extraction (§6) from the existing ④ bundle; no detector, pipeline or replay
+  run anywhere; no human review. The local work was a read-only geometry
+  computation and a read of the retained LBT-1 CSV.
 - Logic-map impact: NONE — review only. The map already states that FULL barrier
   frames are coordinate-free and that top-exit uses the configured top.
 - Failure-registry impact: NONE — no mechanism changed. The facts above sit
