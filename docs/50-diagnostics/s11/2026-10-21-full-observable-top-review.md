@@ -497,6 +497,71 @@ can say where the level was at about 672 s. This is asked as
 the existing 27 % band, given the 672 s acceptance. D2 (S + persistence) is
 unchanged.
 
+### Review-011 result — 2026-10-21
+
+**COMPLETE.** Human review only, on the same ④ bundle, through the O2 workflow:
+prepare → link-bundle → 10 plain/idx-guide images → one question per frame →
+5 records. The packets are stored on Windows only.
+
+**Provenance**
+- Labels SHA-256 `32775814dfc3616b97f6caa7627171059ea12d3a7f718e0367f49d27864598f8`;
+  5 revisions.
+- Owners are empty, as in review-010 (status reports `missing_owners`).
+- The `87817ad` folder no longer existed. The agent used the Windows source
+  folder `oil_level_tracker-main`, whose commit was not reported. The O2 tool has
+  not changed since `a1bf512` (2026-10-06), and every requested Y was found in the
+  packet.
+- At f16088 the guide labels of idx9/idx11 (both Y369) overlapped. Only the
+  label positions were redrawn and the question asked again; no judgement changed.
+
+**User note:**
+
+> 내가 유면이라고 확인해준 idx들 보다 실제 유면은 약간 더 위에 존재해. 다만
+> 디텍터로는 검출이 어려울 것 같아 일정부분 감안해서 idx를 유면이라고 판정했어.
+> 대체로 idx들이 유면 경계의 빛반사를 따라가는 것 같더라고.
+
+| Frame / time | Level visible | Level idx | Candidate judgements | Note |
+|---|---|---|---|---|
+| f16064 / 670.0 s | yes | idx13 | idx13 Y384 = interface | The first answer ("above Y384") was corrected by the user |
+| f16088 / 671.0 s | yes | idx9, idx11 | idx9 Y369 = interface, idx11 Y369 = interface | |
+| f16112 / 672.0 s | yes | idx10 | idx10 Y350 = interface | |
+| f16124 / 672.5 s | yes | above all candidates | idx17 Y352, idx20 Y336, idx10 Y338 = non_interface (reflection) | "모두 빛반사를 잡고있음" |
+| f16136 / 673.0 s | yes | idx18 | idx18 Y329 = interface; idx10 Y343 = non_interface | Y329 was not selected; Y343 was not output |
+
+**Findings**
+
+| # | Finding |
+|---|---|
+| V1 | **The identity question is answered: option (a).** The IFO v2 owner `000366:0319` follows the level in practice, on the reflection just below the real boundary. This holds at 670.0/671.0/672.0 s (Y384/369/350) and at 673.0 s (Y329, unselected). "Almost full near 672 s" is therefore a level about **0.18H below the configured top (Y350)**. At 673.0 s the level is at 0.15H (Y329) |
+| V2 | **Two wrong outputs at the end of the rise.** At 672.5 s the published Y352 is a reflection below the level, which is already above Y336. At 673.0 s the true level Y329 is rejected, so R3/H4 is a real miss |
+| V3 | **R4 is not a miss to recover.** After 673.0 s, the near-full rise (void gone at 674–675 s) produces no proposal, and FULL is accepted from about 672 s |
+| V4 | **The upper-band endpoint is physically supported here.** The last true observation lies 0.15H below the top: inside the existing 27 % band (Y420) and 86 px below the observable limit. An endpoint at the observable limit cannot fire; the upper-band endpoint is supported by this review for this Glass |
+| V5 | **Detector rows sit slightly below the real level** (boundary reflection). The user accepted them as the level in practice. This is a practical allowance like review-004, not exact-Y truth |
+
+**What a top-exit revision would need (freeze before any run; nothing is
+implemented):**
+1. **Endpoint:** the last owner row lies within the existing top band
+   (`entrance_band_ratio`, 0.27H). This is D1b′ and replaces the
+   observable-limit endpoint; it reuses an existing ratio with no new constant.
+2. **Window continuity:** a one-frame lag row like 672.5 s, within the existing
+   bounded reversal tolerance (`handoff_direction_reversal_tolerance_px`), must
+   not reset the window.
+3. **The 673.0 s miss:** either the window counts the admitted, allowed,
+   IFO-qualifying same-owner row even when it is not selected, or the selection
+   miss is fixed. Choosing needs the reason (publishability or path cost). The
+   trace does not store it directly; a read-only recompute of that row's
+   confidence from saved features could separate the two.
+4. **D2b persistence:** after closure, FULL holds through IFO v2 exposures (the
+   721 s class) until a qualified T5 drain release.
+5. **Controls:**
+   - **Local negatives:** sample4 G (no FULL at 54.5–56 s); base_sample_1 and
+     sample2 unchanged; synthetic positive and negative cases.
+   - **Positive:** exists only on Windows, so one Windows comparison on ④'s
+     inputs is needed. That run needs the user's go.
+
+**Waiting for the user:** whether to adopt D1b′ and items 2–5 as the design
+direction, and whether to separate the 673.0 s cause first (item 3).
+
 ## Constraints preserved
 
 - **Unchanged:** default R22 + R22-3/O1 and every experiment flag; FULL CONDITION

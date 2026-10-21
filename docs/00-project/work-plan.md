@@ -37,8 +37,16 @@ is COMPLETE (desk only).
 - **Reopened:** the D1b endpoint. The observable limit cannot meet this target on
   ④; the existing 27 % band could, at G risk. Open identity question: where was
   the real level at about 672 s relative to the selected Y350?
-  [Review-011](../40-operations/s11-current-windows-field-qualification.md#review-011-base-level-at-the-fast-rise-onset)
-  was requested on 2026-10-21 (human review only); its receipt is pending.
+  [Review-011](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)
+  is COMPLETE:
+  - The IFO v2 owner follows the level in practice (Y384/369/350, then Y329 at
+    673.0 s, unselected).
+  - At 672.5 s the published Y352 is a reflection.
+  - "Almost full" is about 0.18H below the top, which supports an upper-band
+    top-exit endpoint (D1b′).
+- **Waiting for the user:** adopt the top-exit revision direction (OTR-1 items
+  1–5), and decide whether to first separate the 673.0 s non-selection cause.
+  Nothing is implemented; any Windows comparison needs a separate go.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.

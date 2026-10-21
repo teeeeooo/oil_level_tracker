@@ -102,6 +102,24 @@ The user re-checked the source video and stated:
 ([OTR-1 §6](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#6-windows-trace-receipt--2026-10-21)).
 "Almost full" does not establish whether those rows are the real level.
 
+**Review-011 (2026-10-21, same ④ bundle) answers this.** The selected and
+admitted rows follow the level in practice, on the boundary reflection just below
+it. The user accepted them with an allowance and noted the real level is
+slightly higher.
+
+| Time | Level | Not the level |
+|---|---|---|
+| 670.0 s | Y384 (idx13) | |
+| 671.0 s | Y369 (idx9/11) | |
+| 672.0 s | Y350 (idx10) | |
+| 672.5 s | Above every candidate | Y352/Y336/Y338 (reflections) |
+| 673.0 s | Y329 (idx18) | Y343 |
+
+"Almost full near 672 s" is therefore a level about 0.18 of the ellipse height
+below its top. These Y values are review evidence for this recording, not
+detector rules
+([OTR-1 review-011 result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)).
+
 ## Accum Foam-collapse target — 2026-10-20
 
 The user's direct review of the Accum Foam collapse (end of
