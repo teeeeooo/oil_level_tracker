@@ -115,11 +115,22 @@ is COMPLETE (desk only).
       miss the ~7.7 px direction tolerance.
     - **Status:** BASE `REVIEW_REQUIRED` from coverage 69.2% < 70%; Accum
       coverage 6.0%.
-  - **NEXT (user decision):**
-    - report options A (visible FULL bands), B (prefix reconstruction: barrier
-      scope and direction rule; changes the BASE judgment) and C (show the
-      judgment note);
-    - then the passed opt-in v3 and the paused layered-Foam line.
+  - **B direction (user, 2026-10-21):** judge the observations that continue
+    from the first one, not only the first two.
+    - **Continuity:** each step within `temporal_max_jump_px`; no hard failure in
+      between. Sequence UNKNOWN gaps are allowed.
+    - **Decisive move:** at least 1 % of the Glass height from the first Y, seen
+      on two consecutive observations.
+    - **Acceptance:** the first decisive move must be toward the prior's
+      direction (down for FULL, up for EMPTY); later up/down movement is
+      allowed. A first move the other way, or no move before the run ends,
+      leaves it unresolved.
+    - **Unchanged:** only hard failures act as barriers; the entrance topology
+      stays.
+    - **Pending:** a read-only ⑩ extraction (BASE 548–620 s Y, geometry, jump
+      limit, Accum first rows). Then freeze the rule before code.
+  - **Also open:** report options A (visible FULL bands) and C (show the
+    judgment note); then the passed opt-in v3 and the paused layered-Foam line.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
