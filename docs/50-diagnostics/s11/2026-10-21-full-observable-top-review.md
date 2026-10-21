@@ -1,8 +1,8 @@
 # OTR-1 — FULL observable-top design review (B)
 
-**Status: REVIEW COMPLETE — D1 DECIDED by the user ([decision record](#decision-record--2026-10-21)).**
-The user broadly agreed with the agent leans for D1b, D2 and D3. Each still needs
-an explicit go before any implementation or Windows request. Desk review
+**Status: REVIEW COMPLETE — D1, D1b, D2 and D3 DECIDED by the user ([decision record](#decision-record--2026-10-21)).**
+The §5 ④ trace request was handed to the user for the Windows agent; receipt is
+pending. Desk review
 only: source reading, closed records, the retained LBT-1 CSV and one geometry
 computation with the real mask builder on retained local Recipes. No detector run,
 flag, tuning or Windows request was sent. Base HEAD `b9ff06b`. Current authority:
@@ -261,12 +261,19 @@ Caveats:
 - **The Windows Y352 gap is unaffected.** It is 109 px below the observable limit,
   so D3 remains the first evidence step.
 
-**Still open, with the user's broad agreement to the leans:**
-- **D1b:** move only the top-exit endpoint, to the observable limit.
-- **D2:** S plus D2b persistence; G handled as a separate follow-up.
-- **D3:** (a) direct read with the §5 request.
+**Also decided by the user (2026-10-21), as proposed:**
+- **D1b:** move only the top-exit endpoint, to the observable limit. All other
+  top-relative ratios stay on the ellipse.
+- **D2:** S — keep T1–T3 as the cap and add top-exit as the FULL publication
+  route. Under D2b, a top-exit FULL persists under the cap until a qualified T5
+  drain release. G is a separate follow-up.
+- **D3:** (a) — the user forwards the §5 request to the Windows agent.
 
-## 5. Windows agent request — not sent; send only after the user approves D3 (a)
+Nothing is implemented yet. The design and tests for D1b/D2 follow after the D3
+tables are received, because they show whether a selected rise reaches the
+observable limit at all.
+
+## 5. Windows agent request — approved 2026-10-21; the user forwards it
 
 This prompt is for the **Windows agent**. It reads the existing ④ bundle only.
 
@@ -278,18 +285,18 @@ S11 BASE 상단 관측 공백 확인 — 저장된 ④ trace 읽기 전용 추�
 mask 상단 Y243까지 출력이 없던 구간이 어느 단계에서 멈췄는지 저장값만 옮겨 적는다.
 Y352가 실제 계면인지는 판단하지 않는다.
 
-1. ④ bundle의 debug trace 폴더에서 debug_index.json과 debug_trace.jsonl만 읽는다.
+1. ④ bundle의 debug/debug_index.json과 debug/debug_trace.jsonl만 읽는다.
    index의 records[] 중 glass_name이 BASE인 항목을 timestamp_sec로 찾고,
    byte_offset/byte_length로 해당 줄만 읽는다. 짧은 Python 읽기 코드는 써도 되지만
    결과 파일은 만들지 않는다. Glass 이름이 다르면 실제 이름만 바꾼다.
-   경로 표기: S = sequence.state, D = sequence.state.sequence_material_phase_diagnostics,
-   R = record 최상위.
+   경로 표기: Q = sequence(최종 결과), S = sequence.state,
+   D = sequence.state.sequence_material_phase_diagnostics, R = record 최상위(현재 프레임 원시값).
 
 2. 머리줄: run_id | trace_level | BASE record 수.
 
 3. 표 A — 670.0~678.0초, 0.5초 간격 17개 시각. 각 시각에서 ±0.3초 안의 가장 가까운
    record를 쓰고, 없으면 NOT_CAPTURED. 인접 시각으로 채우지 않는다. 시각당 한 줄:
-   time | frame_index | R.fill_state | R.positions.raw_oil_y |
+   time | frame_index | Q.fill_state | Q.positions.raw_oil_y |
    S.sequence_resolved_kind |
    S.sequence_stage_best_path_kind/_y | S.sequence_stage_continuation_bound_kind/_y |
    S.sequence_stage_spike_suppressed_kind/_y | S.sequence_stage_completed_fill_kind/_y |
@@ -298,7 +305,7 @@ Y352가 실제 계면인지는 판단하지 않는다.
    D.initial_full_observation.evaluated / .motion_phase / .motion_reason / .qualifying_tracklet_ids |
    D.release_stage | D.recovery_stage | S.sequence_selected_tracklet_id |
    R.state.oil_no_interface_full_likelihood | R.state.oil_no_interface_reason |
-   R.flags 중 R17_* / SEQUENCE_* / OIL_* 만
+   Q.flags 중 R17_* / SEQUENCE_* / OIL_* 만
 
 4. 표 B — 672.5, 673.0, 673.5, 674.0, 674.5, 675.0, 675.5초(표 A와 같은 record).
    - 각 시각: R.candidates[] 중 kind=oil_air이고 canonical_y < 352인 후보 수.

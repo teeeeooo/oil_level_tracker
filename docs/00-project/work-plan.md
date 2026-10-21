@@ -15,10 +15,12 @@ is COMPLETE (desk only).
 - **D1 is DECIDED:** the analysis ellipse is the Glass region. Its top is the
   physical top; the effective-mask top is the observable limit; the margin band
   between them sets FULL precision.
-- **Still need an explicit go** (the user broadly agreed with the leans):
-  - D1b: move only the top-exit endpoint.
-  - D2: S plus FULL persistence until a drain release.
-  - D3: run the drafted read-only ④ trace request, not yet sent.
+- **D1b is DECIDED:** move only the top-exit endpoint, to the observable limit.
+- **D2 is DECIDED:** S. The 27 % cap stays; top-exit is the FULL publication
+  route; FULL persists under the cap until a drain release. G is a separate
+  follow-up.
+- **D3 is DECIDED:** the user forwards the read-only ④ trace request (OTR-1 §5).
+  Receipt is pending; the D1b/D2 design waits for it.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
