@@ -312,6 +312,126 @@ nothing is retuned.
 Failure is any of: FULL before 672 s or in Accum; a changed row before closure;
 or FULL ending inside 675–780 s.
 
+## October 21 top-exit revision (v3)
+
+**Status: FROZEN 2026-10-21 before implementation.** After the
+[⑨ FAIL](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)
+the user chose option B: v2 plus a disappearance confirmed by the next frame.
+The rules, tests, controls and pass criteria below do not change after results.
+A Windows ⑩ comparison follows only after the local controls pass.
+
+**What ⑨ showed:**
+- **Where it closed:** v2 closed on a single blank frame mid-refill (f15896,
+  663.0 s).
+- **What review-004 sees there:** a visible interface. The candidates were
+  excluded as admitted-0 `INCOMPATIBLE_BRANCH`.
+- **The next frame:** at 663.5 s, ④ selected Oil again (Y418, an accepted
+  alternative).
+- **Why:** v2 treats one frame without an admitted Oil row as an exit.
+
+**Unchanged from v2:**
+- **Items:** 1 (band endpoint), 2 (lag continuity), 3a (unselected exit row),
+  4 (D2b episode) and 6a (anchor), together with the seam, switch, output and
+  scope.
+- **Selection:** numeric selection before closure is unchanged.
+- **Suffix:** becomes `+top-exit-full-v3`; v2 is replaced in place.
+
+**7. Confirmed disappearance (new).**
+- **Disappearance frame d.** When every v2 predicate passes, the closure is only
+  *pending*:
+  - frame d keeps its resolved node, which is unknown, exactly as in v2's
+    baseline;
+  - its record shows `TOP_EXIT_FULL_PENDING` with the witness, predicates and
+    `anchor_source`.
+- **Confirming frame d + 1.** The closure is confirmed only if d + 1 passes all
+  of these checks:
+  - bounded gap from d (0 < dt ≤ the witness's maximum gap);
+  - usable raster;
+  - EMPTY clear;
+  - not opposed;
+  - no current interface (no phase-admitted Oil row);
+  - resolved node unknown;
+  - material phase not DRAINING.
+
+  These are the disappearance-frame conditions applied once more, plus the D2b
+  episode-end conditions.
+- **On confirmation:**
+  - FULL starts at d + 1 with `TOP_EXIT_FULL_CONFIRMED`; frame d stays UNKNOWN;
+  - nothing is back-filled;
+  - the episode then follows item 4 unchanged.
+- **On cancellation:**
+  - any failed check cancels the pending closure (`confirmation = CANCELLED`);
+  - frame d + 1 is then processed as an ordinary frame; the witness was already
+    cleared at d, so a selected Oil row at d + 1 starts a new witness.
+- **No pending at the last frame.** A pending closure on the last frame never
+  becomes FULL.
+- **No new quantity.** Item 7 adds no threshold, constant, time, Y or Glass
+  identity. "One frame" is the smallest confirmation: the next frame must say
+  the same thing.
+
+**Diagnostics:**
+- `version: v3` and `confirmation` (`PENDING`, `CONFIRMED` or `CANCELLED`).
+- `confirmation_predicates` on frame d + 1.
+- `disappearance_frame_index` and `confirmation_frame_index` in the closure
+  copied into every episode record.
+
+**Expected on ④ from existing receipts (not a pass criterion):**
+- **663.0 s:** pending. At 663.5 s ④ selects Oil, so the closure is cancelled.
+- **663.5–673.0 s:** no evaluation. ④ has Oil on every row through 672.5 s, and
+  673.0 s holds the unselected 0319 row (a current interface).
+- **673.5 s:** pending, if the v2 predicates pass as the predicate check
+  predicts.
+- **674.0 s:** confirmed. ⑨'s Table Q shows that 674.0 s is usable, unopposed,
+  not EMPTY and without a current interface. FULL then starts at 674.0 s.
+- **675–780 s:** the episode should match ⑨, with the same frame gaps and the
+  same end conditions.
+
+**Known limits:**
+- **Longer blanks still close.** A blank of two or more frames inside the band,
+  after a qualifying witness, still closes.
+- **673.5 s is unproven on a run.** The closure there rests on stored values and
+  two inferences.
+- **The upstream exclusion stays.** The `INCOMPATIBLE_BRANCH` exclusion at
+  663.0 s is not repaired (option C); f15896 stays UNKNOWN.
+
+**Tests (synthetic, unit).**
+
+| Kind | Case | Expected |
+|---|---|---|
+| Rewritten | Every v2 positive (selected rise, band endpoints, lag step, ④-shaped unselected exit row, drain release, lower interface) | FULL from the confirming frame; the disappearance frame stays UNKNOWN; the record there says `TOP_EXIT_FULL_PENDING` |
+| Rewritten | Unusable or EMPTY frame inside the episode | Moved one frame later, so it falls inside a confirmed episode; same expectations as v2 |
+| New negative | ⑨ shape: a witness into the band, one blank frame, then the selected interface again | No FULL; numeric output equal to OFF; `confirmation = CANCELLED` on the reappearing frame |
+| New negative | Bad confirming frame: unavailable or fogged, black raster, EMPTY, time gap, a current Oil row | No FULL |
+| New negative | Pending on the last frame | No FULL |
+| New positive | ④ shape: a cancelled pending, a continued rise, then a real exit | FULL only from the second exit's confirming frame; earlier rows equal to OFF |
+| Kept | All other v2 cases | Unchanged |
+
+**Local controls.** These are the same four controls, entry, settings and pass
+criteria as v2, in a new managed run: sample4 original/UNKNOWN, sample4
+interior/FULL, base_sample_1/FULL and sample2/FULL. Each must show zero top-exit
+FULL rows, and raw inputs and all rows must match ON and OFF. Item 7 can only
+remove closures, so v2's zero is expected. Any failing control stops the work.
+
+**Windows ⑩ (after local PASS; the user forwards the request).** One comparison
+on ④'s inputs: ④ v2 against ④ v2 + top-exit v3. The criteria are unchanged
+from ⑨:
+- **BASE:**
+  - FULL starts within 672–675 s; 674.0 s is expected;
+  - no FULL before 672 s;
+  - FULL holds through 675–780 s with no numeric Oil row.
+- **Accum:** zero top-exit FULL rows.
+- **Both Glasses:** rows before closure are identical.
+
+Failure is any of: FULL before 672 s or in Accum; a changed row before closure;
+or FULL ending inside 675–780 s.
+
+The request also asks for these diagnostics:
+- the records at 663.0 and 663.5 s (pending, then cancelled);
+- 673.5 s: pending, with its witness and false predicates;
+- 674.0 s: confirmed.
+
+They explain a failure; they are not extra pass criteria.
+
 ## Cost-first assignment comparison
 
 The first of the three authorized Windows candidates reuses the exact intervention
@@ -695,8 +815,9 @@ as the serialized array index. Diagnostic detail must not change output.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
 - Existing feature coverage: this clarification reuses the frozen A1/public original raster, visibility masks, O1 path/center bands and exact candidate provenance. Source review follows retained diagnostic paths through phase_candidate_assembler and phase_frame_detection to oil_interface_diagnostics, then contrasts the scalar authority consumer. Existing Recipe, Artifact/static/motion and all comparison options are unchanged; earlier top-exit/RGB/IFO scopes remain in their result owners.
 - Execution scope: the linked frozen 7ee6d90 diagnostic had no two-native comparison inputs; CRW-1 at 7845f89 adds diagnostic-only matched current-raster sector observations over the same 187 units and 85 relations. Its direct-loop arithmetic and 123 focused tests verify measurement contracts, not continuous contours or physical roles. This update selects no production extractor/consumer, fits no model and changes no sequence, report or private Windows execution. The 2026-10-20 top-exit move is behavior-preserving: the existing top-exit unit tests, resolver decomposition guards, production-surface test and R16 characterization goldens pass. No detector run or Windows execution was exercised. The 2026-10-21 top-exit v2
-  section is a desk draft from OTR-1 and the transferred ④ receipts; nothing is
-  implemented or run.
+  section was implemented at `1f68c46` and failed its one Windows run (⑨); its
+  record is in the v2 evidence. The v3 section is frozen from that receipt and
+  review-004 before any code change; nothing in it is implemented or run yet.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited.
-- Logic-map impact: NONE — the 2026-10-21 top-exit v2 section is an unimplemented draft; the map's top-exit row changes when v2 is implemented. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands.
+- Logic-map impact: NONE — the 2026-10-21 top-exit v3 section is frozen but unimplemented; the map's top-exit row (now describing v2) changes when v3 is implemented. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair.

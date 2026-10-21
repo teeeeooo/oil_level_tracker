@@ -83,15 +83,14 @@ is COMPLETE (desk only).
       lag steps).
     - D2b then held FULL over 19 refill Oil rows (663.5–672.5 s).
   - **Not tested:** the intended 673.5 s closure was never evaluated.
-- **DECISION PENDING (user):** the
-  [options](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#options-the-user-decides)
-  are:
-  - **A.** Stop top-exit here.
-  - **B.** v3 = v2 + a disappearance confirmed by the next frame
-    (recommended); freeze, then local controls and one ⑩ run.
-  - **C.** Repair the 663.0 s exclusion first.
-
-  Nothing is retuned or rerun until the user decides.
+- **User decision (2026-10-21):** option B of the
+  [options](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#options-the-user-decides),
+  v3 = v2 + a disappearance confirmed by the next frame.
+  - **FROZEN** [top-exit v3](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v3)
+    before implementation.
+  - **Next:** implementation (default OFF, `+top-exit-full-v3`), then the same
+    four local controls, then one ⑩ Windows request against ⑨'s criteria (674.0 s
+    expected).
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
