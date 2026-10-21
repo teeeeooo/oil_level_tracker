@@ -8,8 +8,9 @@ The [§6 ④ trace receipt](#6-windows-trace-receipt--2026-10-21) is recorded.
   ([receipt](#673-s-selection-cause-receipt--2026-10-21)).
 - **Evidence:** from 673.5 s no proposal exists in Y243–339.
 - **Decided top-exit design:** would not change ④ BASE. The adopted revision
-  (items 1–5) waits for the user's item 3 choice and a proposed anchor-predicate
-  check.
+  (items 1–5, item 3 = 3a) is in a
+  [design draft](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2--draft);
+  it waits for the anchor-predicate check (item 6).
 
 Desk review plus transferred Windows evidence: source reading, closed records,
 the retained LBT-1 CSV, one geometry computation with the real mask builder on
@@ -668,6 +669,13 @@ user decides a new item 6:
 - accept the owner's tracklet-level anchor profile as the anchor proof; or
 - keep the per-row rule, and accept that top-exit cannot meet the 672 s target
   on ④.
+
+**User decision (2026-10-21):** item 3 = **3a**. The user sends the
+[predicate check](../../40-operations/s11-current-windows-field-qualification.md#top-exit-predicate-check)
+to the Windows agent; its receipt is pending. The
+[v2 design draft](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2--draft)
+collects items 1, 2, 3a, 4 and 5. It is frozen after the receipt settles
+item 6. Nothing is implemented.
 
 ## Constraints preserved
 

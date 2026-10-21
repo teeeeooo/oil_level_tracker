@@ -51,15 +51,15 @@ is COMPLETE (desk only).
     unknown (path cost, not publishability);
   - the last row before a top exit competes alone against the unknown node,
     and the fast 23 px step raised the bar (structural, S5).
-- **Open for the user:**
-  - item 3: 3a, the top-exit window counts the unselected publishable row
-    (agent lean); 3b, change the selector; or 3c, treat 673.0 s as the
-    disappearance;
-  - a proposed read-only [top-exit predicate check](../40-operations/s11-current-windows-field-qualification.md#top-exit-predicate-check).
-    Every reported window row is `CONTINUATION_ELIGIBLE`, so T9's
-    `independent_anchor` may still fail on ④ (S6).
-
-  Nothing is implemented; any Windows comparison needs a separate go.
+- **User decision:** item 3 = 3a. The top-exit window may close on the owner's
+  unselected, publishable, allowed exit row; numeric output is unchanged.
+- **Requested:** a read-only [top-exit predicate check](../40-operations/s11-current-windows-field-qualification.md#top-exit-predicate-check)
+  (receipt pending). Every reported window row is `CONTINUATION_ELIGIBLE`, so
+  T9's `independent_anchor` may still fail on ④ (S6, item 6).
+- **Drafted:** the [top-exit v2 design](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2--draft)
+  (items 1, 2, 3a, 4, 5; tests; local controls; pre-registered Windows
+  outcomes). It is frozen after the receipt. Nothing is implemented; any Windows
+  comparison needs a separate go.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.

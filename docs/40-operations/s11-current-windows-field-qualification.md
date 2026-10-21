@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / PROPOSED (not sent): top-exit predicate check (read-only)` — see [below](#top-exit-predicate-check). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: top-exit predicate check (read-only)` — see [below](#top-exit-predicate-check). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -23,7 +23,7 @@ This document is the executable target-Windows field procedure for whichever S11
 
 ## Top-exit predicate check
 
-**PROPOSED 2026-10-21 — not sent; the user decides.** Saved ④ trace only; no run.
+**REQUESTED 2026-10-21 — the user forwards it.** Saved ④ trace only; no run.
 The [673 s receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)
 (S6) found that the adopted revision items 1–5 do not cover every top-exit
 predicate. The likely blocker is `independent_anchor`: a window row must be

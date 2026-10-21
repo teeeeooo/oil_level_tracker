@@ -187,6 +187,116 @@ Foam still resolves independently afterward, so compare final composition as
 well as its raw coordinates. This option can expose a mechanical transition but
 does not establish physical identity or field acceptance.
 
+## October 21 top-exit revision (v2) — draft
+
+**Status: DRAFT — not frozen, not implemented.** Freeze it once the
+[top-exit predicate check](../40-operations/s11-current-windows-field-qualification.md#top-exit-predicate-check)
+receipt settles item 6. The user's decisions are recorded in
+[OTR-1](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#decision-record--2026-10-21):
+- D1: the ellipse is the Glass;
+- D2: S with D2b persistence;
+- D1b′ and revision items 1–5;
+- item 3 = 3a.
+
+v2 replaces v1's configured-top endpoint and its episode-ending rules. v1 keeps
+its local evidence above; it was never run on Windows.
+
+**Unchanged from v1:**
+- **Seam:** `close_top_exit_full`, called from `OilPathLifecycleOwner` after
+  bounded selection and spike censoring, before projection.
+- **Switch:** the same `top_exit_full` / `--oil-top-exit-full` option, default
+  OFF. The suffix becomes `+top-exit-full-v2`; v1 is replaced in place.
+- **Output:** coordinate-free FULL with `OIL_TOP_EXIT_FULL`. The raw image FULL
+  likelihood is untouched. Selection before closure is unchanged.
+- **Scope:** Foam stays independent. The option cannot be combined with
+  cost-first, RGB or Local XY. No new Recipe field, constant, time, Y or Glass
+  identity enters the rule. T1–T8 and T10 are unchanged (D1b′ moves the endpoint
+  only).
+
+| Item | v1 | v2 draft | Reused quantity |
+|---|---|---|---|
+| 1. Endpoint (D1b′) | Last row within max(1, 0.012H) of the configured top | Last window row inside the top band: (y_last − top) / H ≤ 0.27 | `entrance_band_ratio` (T1, T7) |
+| 2. Continuity | Any downward step resets the window | A downward step up to the reversal tolerance keeps it. Upward steps stay bounded by the maximum jump. Progress is still first to last row | `handoff_direction_reversal_tolerance_px` = max(1, 0.012H) |
+| 3a. Unselected exit row | Any phase-admitted Oil at an unknown frame resets | The owner's publishable row may close the window (below) | Selector publishability, allowed set |
+| 4. Ending (D2b) | Any admitted Oil, EMPTY, ambiguity or unusable frame ends the episode | Only DRAINING (a qualified T5 release) or EMPTY evidence ends it (below) | Material phase from the lifecycle |
+| 6. Anchor | One window row `ANCHOR_ELIGIBLE` with direct or ordered-lower identity | **Pending** the predicate check | — |
+
+**3a — the unselected exit row.**
+- **Applies only** at a frame where the bounded path resolved unknown, the window
+  is not empty, and the frame is usable, not EMPTY and not opposed.
+- **The row:** the owner is the window's last tracklet. The frame's publishable
+  layer must hold exactly one row of that owner, and the owner must be in the
+  frame's allowed set. The row passes the same per-row checks as a selected row
+  and the continuity rule. The phase layer holds no other tracklet.
+- **Bounds:**
+  - it only extends a window of selected rows; it never seeds one;
+  - at most one unselected row per window, as its last row, so the next frame
+    must be the disappearance.
+
+  This follows OTR-1 S5: the miss sits in the exit frame itself.
+- **Output:** the witness marks the row `selected: false`, with source, Y and row
+  ID. Its value is never published; that frame stays UNKNOWN.
+
+**4 — the FULL episode after confirmation (D2b).**
+- **FULL holds.** Each later frame publishes coordinate-free FULL while the
+  material phase is not DRAINING and EMPTY evidence is clear. This includes
+  frames where the selector chose Oil, such as IFO v2 exposures of the 721 s
+  class; those rows are not published.
+- **Fail closed per frame (agent's reading of D2b; the user confirms it at the
+  freeze).** An unusable or opposed frame publishes UNKNOWN without ending the
+  episode.
+- **End.** DRAINING (`DRAIN_RELEASE_CONFIRMED` or a recovery release) or EMPTY
+  evidence ends the episode. It cannot resume, and normal selection continues.
+- **Risk.** A real drain that the lifecycle does not release would stay FULL.
+  On ④ the lifecycle stayed in `INITIAL_FULL_BARRIER` in every sampled window.
+  The reviewed interval ends at 780 s, so it does not score this.
+
+**Tests (synthetic, unit).**
+
+| Kind | Case | Expected |
+|---|---|---|
+| Positive | ④ shape: rising owner rows with one anchor row, a lag step within tolerance, a last unselected publishable row at an unknown frame, then disappearance | FULL from the disappearance frame; the witness names the unselected row |
+| Positive | Last row inside the band, not at the top | FULL. v1's "broad entrance is not top exit" case flips |
+| Positive | After closure, an IFO exposure is selected as Oil; later DRAINING | FULL through the exposure; Oil after DRAINING; no resumption |
+| Positive | Unusable frame inside the episode | That frame UNKNOWN; FULL on the next frames |
+| Negative | Last row below the band | No FULL |
+| Negative | Downward step above the tolerance | Window resets |
+| Negative | Unselected row of another tracklet; two publishable rows of the owner; another admitted tracklet in the frame | Reset |
+| Negative | Unselected row as the window seed; two unselected rows; an unselected row followed by an owner row | No FULL |
+| Negative | EMPTY evidence inside the episode | Episode ends; no resumption |
+| Kept | v1 negatives: mid-Glass loss, stationary, downward, switch, provisional, opposed, competitor, bad disappearance frame, prior-only, ordering invariance, stacking ban, Foam composition | Unchanged |
+
+Rewritten v1 cases:
+- "reversal before loss" uses a reversal above the tolerance;
+- "unavailable frame ends the episode" becomes a per-frame UNKNOWN;
+- "new numeric interface ends FULL" becomes FULL until DRAINING, plus a release
+  case.
+
+**Local controls.** Production path, top-exit v2 ON against OFF, through the
+existing comparison entry. Its sample list gains sample2.
+
+| Input | Truth | Pass |
+|---|---|---|
+| sample4, original Recipe, default initial state | Never FULL | Zero top-exit FULL rows, in particular none at 54.5–56 s (G) |
+| sample4, October 15 interior Recipe (initial FULL stress) | Never FULL | Zero top-exit FULL rows |
+| base_sample_1, original Recipe | No FULL | Zero top-exit FULL rows |
+| sample2, original Recipe | Full-like, no interface, no rise | Zero top-exit FULL rows (prior-only FULL is forbidden) |
+
+In every control, rows before any closure must match ON and OFF exactly. Any
+failing control stops the work; nothing is retuned.
+
+**Windows (needs a separate go).** One comparison on ④'s inputs: ④ v2 against
+④ v2 + top-exit v2. Pre-registered:
+- **BASE:**
+  - FULL starts within 672–675 s; 673.5 s is expected if item 6 passes;
+  - no FULL before 672 s;
+  - FULL holds through 675–780 s with no numeric Oil row.
+- **Accum:** zero top-exit FULL rows; the truth has no FULL.
+- **Both Glasses:** rows before closure are identical.
+
+Failure is any of: FULL before 672 s or in Accum; a changed row before closure;
+or FULL ending inside 675–780 s.
+
 ## Cost-first assignment comparison
 
 The first of the three authorized Windows candidates reuses the exact intervention
@@ -569,7 +679,9 @@ as the serialized array index. Diagnostic detail must not change output.
 - Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto.
 - Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
 - Existing feature coverage: this clarification reuses the frozen A1/public original raster, visibility masks, O1 path/center bands and exact candidate provenance. Source review follows retained diagnostic paths through phase_candidate_assembler and phase_frame_detection to oil_interface_diagnostics, then contrasts the scalar authority consumer. Existing Recipe, Artifact/static/motion and all comparison options are unchanged; earlier top-exit/RGB/IFO scopes remain in their result owners.
-- Execution scope: the linked frozen 7ee6d90 diagnostic had no two-native comparison inputs; CRW-1 at 7845f89 adds diagnostic-only matched current-raster sector observations over the same 187 units and 85 relations. Its direct-loop arithmetic and 123 focused tests verify measurement contracts, not continuous contours or physical roles. This update selects no production extractor/consumer, fits no model and changes no sequence, report or private Windows execution. The 2026-10-20 top-exit move is behavior-preserving: the existing top-exit unit tests, resolver decomposition guards, production-surface test and R16 characterization goldens pass. No detector run or Windows execution was exercised.
+- Execution scope: the linked frozen 7ee6d90 diagnostic had no two-native comparison inputs; CRW-1 at 7845f89 adds diagnostic-only matched current-raster sector observations over the same 187 units and 85 relations. Its direct-loop arithmetic and 123 focused tests verify measurement contracts, not continuous contours or physical roles. This update selects no production extractor/consumer, fits no model and changes no sequence, report or private Windows execution. The 2026-10-20 top-exit move is behavior-preserving: the existing top-exit unit tests, resolver decomposition guards, production-surface test and R16 characterization goldens pass. No detector run or Windows execution was exercised. The 2026-10-21 top-exit v2
+  section is a desk draft from OTR-1 and the transferred ④ receipts; nothing is
+  implemented or run.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited.
-- Logic-map impact: UPDATED — the top-exit row and call tree now name `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner`. Order, inputs and default-OFF behavior are unchanged; the earlier source review of the diagnostic path and scalar authority routes still stands.
+- Logic-map impact: NONE — the 2026-10-21 top-exit v2 section is an unimplemented draft; the map's top-exit row changes when v2 is implemented. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair.
