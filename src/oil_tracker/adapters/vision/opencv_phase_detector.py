@@ -70,7 +70,7 @@ class OpenCvPhaseDetector:
         if candidate_rgb:
             self.version += "+" + RGB_VERSION
         if top_exit_full:
-            self.version += "+top-exit-full-v2"
+            self.version += "+top-exit-full-v3"
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
         self._static_foam_maps: dict[str, np.ndarray] = {}

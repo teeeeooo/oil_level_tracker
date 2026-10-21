@@ -155,7 +155,7 @@ def compare(
             for sample_row, detection, csv_row in zip(rows, detector.completed, csv_rows, strict=True):
                 assert ("+cost-first-assignment-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (cost_first_comparison and enabled)
                 assert ("+candidate-rgb-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (candidate_rgb_comparison and enabled)
-                assert ("+top-exit-full-v2" in detection["debug_metrics"]["sequence_resolver_version"]) == (top_exit_comparison and enabled)
+                assert ("+top-exit-full-v3" in detection["debug_metrics"]["sequence_resolver_version"]) == (top_exit_comparison and enabled)
                 y = sample_row["raw_oil_air_level_y"]
                 assert y == detection["raw_oil_air_level_y"]
                 assert (None if not csv_row["raw_oil_air_level_y"] else float(csv_row["raw_oil_air_level_y"])) == y

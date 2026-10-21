@@ -314,7 +314,9 @@ or FULL ending inside 675–780 s.
 
 ## October 21 top-exit revision (v3)
 
-**Status: FROZEN 2026-10-21 before implementation.** After the
+**Status: FROZEN 2026-10-21 before implementation (`e88d387`); IMPLEMENTED
+(default OFF); [local controls PASS](../60-evidence/s11/2026-10-21-top-exit-v3-local.md);
+Windows ⑩ requested.** After the
 [⑨ FAIL](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)
 the user chose option B: v2 plus a disappearance confirmed by the next frame.
 The rules, tests, controls and pass criteria below do not change after results.
@@ -816,8 +818,9 @@ as the serialized array index. Diagnostic detail must not change output.
 - Existing feature coverage: this clarification reuses the frozen A1/public original raster, visibility masks, O1 path/center bands and exact candidate provenance. Source review follows retained diagnostic paths through phase_candidate_assembler and phase_frame_detection to oil_interface_diagnostics, then contrasts the scalar authority consumer. Existing Recipe, Artifact/static/motion and all comparison options are unchanged; earlier top-exit/RGB/IFO scopes remain in their result owners.
 - Execution scope: the linked frozen 7ee6d90 diagnostic had no two-native comparison inputs; CRW-1 at 7845f89 adds diagnostic-only matched current-raster sector observations over the same 187 units and 85 relations. Its direct-loop arithmetic and 123 focused tests verify measurement contracts, not continuous contours or physical roles. This update selects no production extractor/consumer, fits no model and changes no sequence, report or private Windows execution. The 2026-10-20 top-exit move is behavior-preserving: the existing top-exit unit tests, resolver decomposition guards, production-surface test and R16 characterization goldens pass. No detector run or Windows execution was exercised. The 2026-10-21 top-exit v2
   section was implemented at `1f68c46` and failed its one Windows run (⑨); its
-  record is in the v2 evidence. The v3 section is frozen from that receipt and
-  review-004 before any code change; nothing in it is implemented or run yet.
+  record is in the v2 evidence. The v3 section was frozen from that receipt and
+  review-004 before any code change, then implemented with its local controls;
+  its record is in the v3 evidence.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited.
-- Logic-map impact: NONE — the 2026-10-21 top-exit v3 section is frozen but unimplemented; the map's top-exit row (now describing v2) changes when v3 is implemented. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands.
+- Logic-map impact: NONE — this design update changes no detector owner; the v3 implementation evidence records the logic-map update for the top-exit row and paragraph. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair.

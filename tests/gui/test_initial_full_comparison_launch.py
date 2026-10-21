@@ -35,7 +35,7 @@ def test_gui_comparison_mode_reaches_every_detector_entry(qtbot, monkeypatch, tm
         for version in (detector.version, resolver.version, resolver._oil.version):
             assert ("+cost-first-assignment-v1" in version) is cost_first
             assert ("+candidate-rgb-v1" in version) is rgb
-            assert ("+top-exit-full-v2" in version) is top_exit
+            assert ("+top-exit-full-v3" in version) is top_exit
 
 
 @pytest.mark.parametrize("args,expected", [

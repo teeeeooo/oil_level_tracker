@@ -40,9 +40,12 @@ def test_selected_rise_to_top_closes_as_coordinate_free_full_and_exports(tmp_pat
         d.raw_oil_air_level_y for d in baseline.detections
     ]
     assert all(d.fill_state is FillState.UNKNOWN_REVIEW for d in baseline.detections[8:])
-    assert all(d.fill_state is FillState.FULL_NO_INTERFACE for d in result.detections[8:])
-    assert result.diagnostics.full_frame_count == 4
-    for d in result.detections[8:]:
+    assert result.detections[8].fill_state is FillState.UNKNOWN_REVIEW
+    pending = result.detections[8].debug_metrics["sequence_material_phase_diagnostics"]["top_exit_full"]
+    assert pending["reason"] == "TOP_EXIT_FULL_PENDING" and pending["confirmation"] == "PENDING"
+    assert all(d.fill_state is FillState.FULL_NO_INTERFACE for d in result.detections[9:])
+    assert result.diagnostics.full_frame_count == 3
+    for d in result.detections[9:]:
         assert d.raw_oil_air_level_y is d.smoothed_oil_air_level_y is None
         assert "OIL_TOP_EXIT_FULL" in d.flags
         assert "R17_IMAGE_SUPPORTED_STATE" not in d.flags
@@ -53,18 +56,18 @@ def test_selected_rise_to_top_closes_as_coordinate_free_full_and_exports(tmp_pat
             "resolved_kind": "full", "selected_candidate": None, "state_evidence_source": "top_exit",
         }
         proof = d.debug_metrics["sequence_material_phase_diagnostics"]["top_exit_full"]
-        assert proof["confirmation_frame_index"] == 8
+        assert proof["disappearance_frame_index"] == 8 and proof["confirmation_frame_index"] == 9
         assert proof["witness"][-1]["frame_index"] == 7
         assert proof["witness"][-1]["y"] == 20.
     samples = [tracking_sample_from_detection("test", glass, d) for d in result.detections]
-    assert all(s.oil_is_valid for s in samples[8:])
-    assert all(not s.foam_is_valid for s in samples[8:])
+    assert all(s.oil_is_valid for s in samples[9:])
+    assert all(not s.foam_is_valid for s in samples[9:])
     CsvExporter().export(SimpleNamespace(glass_results=[SimpleNamespace(samples=samples, events=[])]),
                          tmp_path / "tracking.csv", tmp_path / "events.csv")
     with (tmp_path / "tracking.csv").open(encoding="utf-8-sig", newline="") as stream:
         rows = list(csv.DictReader(stream))
     assert all(row["fill_state"] == "FULL_NO_INTERFACE" and row["raw_oil_air_level_y"] == ""
-               and row["oil_is_valid"] == "True" for row in rows[8:])
+               and row["oil_is_valid"] == "True" for row in rows[9:])
 
 
 @pytest.mark.parametrize("ys", [
@@ -89,8 +92,9 @@ def test_missing_interface_without_qualified_top_exit_stays_unknown(ys):
 def test_rise_into_the_top_band_then_disappearance_closes(ys):
     glass, detections = _inputs(ys)
     result = _resolve(glass, detections)
-    assert all(d.fill_state is FillState.FULL_NO_INTERFACE for d in result.detections[8:])
+    assert all(d.fill_state is FillState.FULL_NO_INTERFACE for d in result.detections[9:])
     proof = result.detections[8].debug_metrics["sequence_material_phase_diagnostics"]["top_exit_full"]
+    assert proof["reason"] == "TOP_EXIT_FULL_PENDING"
     assert proof["predicates"]["top_band_reached"] and proof["witness"][-1]["y"] == ys[-1]
 
 
@@ -117,25 +121,86 @@ def test_bad_disappearance_frame_cannot_close_or_resume_stale_full(failure):
 def test_unavailable_frame_inside_full_episode_fails_closed_without_ending_it():
     glass, detections = _inputs()
     rows = list(detections)
-    rows[9] = replace(rows[9], flags=["FRAME_UNAVAILABLE"])
+    rows[10] = replace(rows[10], flags=["FRAME_UNAVAILABLE"])
     result = _resolve(glass, rows)
     assert [d.fill_state for d in result.detections[8:]] == [
-        FillState.FULL_NO_INTERFACE, FillState.UNKNOWN_REVIEW,
-        FillState.FULL_NO_INTERFACE, FillState.FULL_NO_INTERFACE,
+        FillState.UNKNOWN_REVIEW, FillState.FULL_NO_INTERFACE,
+        FillState.UNKNOWN_REVIEW, FillState.FULL_NO_INTERFACE,
     ]
-    reason = result.detections[9].debug_metrics["sequence_material_phase_diagnostics"]["top_exit_full"]["reason"]
+    reason = result.detections[10].debug_metrics["sequence_material_phase_diagnostics"]["top_exit_full"]["reason"]
     assert reason == "TOP_EXIT_FULL_FRAME_UNAVAILABLE"
 
 
 def test_empty_evidence_ends_full_episode_without_resuming():
     glass, detections = _inputs()
     rows = list(detections)
-    rows[9] = replace(rows[9], debug_metrics={**rows[9].debug_metrics, "oil_no_interface_empty_likelihood": .9})
+    rows[10] = replace(rows[10], debug_metrics={**rows[10].debug_metrics, "oil_no_interface_empty_likelihood": .9})
     result = _resolve(glass, rows)
-    assert result.detections[8].fill_state is FillState.FULL_NO_INTERFACE
-    assert all(d.fill_state is not FillState.FULL_NO_INTERFACE for d in result.detections[9:])
-    proof = result.detections[9].debug_metrics["sequence_material_phase_diagnostics"]["top_exit_full"]
+    assert result.detections[9].fill_state is FillState.FULL_NO_INTERFACE
+    assert all(d.fill_state is not FillState.FULL_NO_INTERFACE for d in result.detections[10:])
+    proof = result.detections[10].debug_metrics["sequence_material_phase_diagnostics"]["top_exit_full"]
     assert proof["episode_end"] == "EMPTY_EVIDENCE"
+
+
+def _proof(result, index):
+    return result.detections[index].debug_metrics["sequence_material_phase_diagnostics"]["top_exit_full"]
+
+
+def test_one_blank_frame_mid_rise_is_cancelled_by_the_reappearing_interface():
+    glass, detections = _inputs((52., 47., 42., 37., 32., 27., 24., 22., None, 22., 22., 21.))
+    baseline, result = (_resolve(glass, detections, enabled) for enabled in (False, True))
+    assert baseline.detections[9].raw_oil_air_level_y is not None
+    assert all(d.fill_state is not FillState.FULL_NO_INTERFACE for d in result.detections)
+    assert [d.raw_oil_air_level_y for d in result.detections] == [
+        d.raw_oil_air_level_y for d in baseline.detections]
+    assert _proof(result, 8)["reason"] == "TOP_EXIT_FULL_PENDING"
+    cancelled = _proof(result, 9)
+    assert cancelled["confirmation"] == "CANCELLED"
+    assert not cancelled["confirmation_predicates"]["no_current_interface"]
+
+
+@pytest.mark.parametrize("failure", ["FRAME_UNAVAILABLE", "FOGGED_OR_GLARE", "black", "empty", "time_gap", "interface"])
+def test_bad_confirming_frame_cancels_the_pending_closure(failure):
+    glass, detections = _inputs()
+    rows = list(detections)
+    if failure in {"FRAME_UNAVAILABLE", "FOGGED_OR_GLARE"}:
+        rows[9] = replace(rows[9], flags=[failure])
+    elif failure == "black":
+        rows[9] = replace(rows[9], debug_metrics={**rows[9].debug_metrics,
+            "effective_gray_mean": 0., "effective_gray_std": 0., "effective_gray_dynamic_range": 0.})
+    elif failure == "empty":
+        rows[9] = replace(rows[9], debug_metrics={**rows[9].debug_metrics, "oil_no_interface_empty_likelihood": .9})
+    elif failure == "time_gap":
+        rows[9:] = [replace(row, time_sec=row.time_sec + 100.) for row in rows[9:]]
+    else:
+        rows[9] = replace(_detection(9, _candidate(20., boundary=.85, broad=.85), ambiguity=.1,
+                                     photometric=(120., 20., 90.)), glass_id=glass.id)
+    result = _resolve(glass, tuple(rows))
+    assert _proof(result, 8)["reason"] == "TOP_EXIT_FULL_PENDING"
+    assert _proof(result, 9)["confirmation"] == "CANCELLED"
+    assert all(d.fill_state is not FillState.FULL_NO_INTERFACE for d in result.detections)
+
+
+def test_pending_on_the_last_frame_never_becomes_full():
+    glass, detections = _inputs(blanks=1)
+    result = _resolve(glass, detections)
+    assert _proof(result, 8)["reason"] == "TOP_EXIT_FULL_PENDING"
+    assert all(d.fill_state is not FillState.FULL_NO_INTERFACE for d in result.detections)
+
+
+def test_cancelled_blank_then_a_real_exit_closes_from_its_own_confirming_frame():
+    ys = (102., 97., 92., 87., 82., 77., 72., 67., None, 62., 57., 52., 47., 42., 37.)
+    glass, detections = _inputs(ys)
+    baseline, result = (_resolve(glass, detections, enabled) for enabled in (False, True))
+    assert _proof(result, 8)["reason"] == "TOP_EXIT_FULL_PENDING"
+    assert _proof(result, 9)["confirmation"] == "CANCELLED"
+    assert [d.raw_oil_air_level_y for d in result.detections[:16]] == [
+        d.raw_oil_air_level_y for d in baseline.detections[:16]]
+    assert all(d.fill_state is not FillState.FULL_NO_INTERFACE for d in result.detections[:16])
+    assert _proof(result, 15)["reason"] == "TOP_EXIT_FULL_PENDING"
+    proof = _proof(result, 16)
+    assert proof["reason"] == "TOP_EXIT_FULL_CONFIRMED" and proof["disappearance_frame_index"] == 15
+    assert all(d.fill_state is FillState.FULL_NO_INTERFACE for d in result.detections[16:])
 
 
 def test_full_prior_without_visible_owner_cannot_create_top_exit_state():
@@ -166,8 +231,9 @@ def test_new_numeric_interface_stays_full_until_a_drain_release(monkeypatch):
     glass, rows = _with_lower_interface()
     baseline, result = (_resolve(glass, rows, enabled) for enabled in (False, True))
     assert any(d.raw_oil_air_level_y is not None for d in baseline.detections[10:18])
+    assert result.detections[8].fill_state is not FillState.FULL_NO_INTERFACE
     assert all(d.fill_state is FillState.FULL_NO_INTERFACE and d.raw_oil_air_level_y is None
-               for d in result.detections[8:])
+               for d in result.detections[9:])
     assert [d.raw_oil_air_level_y for d in baseline.detections[:8]] == [
         d.raw_oil_air_level_y for d in result.detections[:8]]
 
@@ -176,7 +242,7 @@ def test_new_numeric_interface_stays_full_until_a_drain_release(monkeypatch):
         OilMaterialPhase.DRAINING if index == 12 else phase
         for index, phase in enumerate(r.material_phases))))
     released = _resolve(glass, rows)
-    assert all(d.fill_state is FillState.FULL_NO_INTERFACE for d in released.detections[8:12])
+    assert all(d.fill_state is FillState.FULL_NO_INTERFACE for d in released.detections[9:12])
     assert all(d.fill_state is not FillState.FULL_NO_INTERFACE for d in released.detections[12:])
     assert [d.raw_oil_air_level_y for d in released.detections[12:]] == [
         d.raw_oil_air_level_y for d in baseline.detections[12:]]
@@ -197,14 +263,14 @@ def test_top_exit_composes_with_independently_confirmed_foam():
 
     glass, detections = _inputs()
     rows = list(detections)
-    for index, y in ((8, 180.), (9, 174.)):
+    for index, y in ((9, 180.), (10, 174.)):
         rows[index] = replace(rows[index], candidates=[_foam_candidate(y, dynamic=.2)])
     baseline, result = (_resolve(glass, rows, enabled) for enabled in (False, True))
     assert result.diagnostics.foam_confirmed_frame_count == baseline.diagnostics.foam_confirmed_frame_count == 2
     assert [d.raw_foam_front_y for d in result.detections] == [d.raw_foam_front_y for d in baseline.detections]
-    assert all(d.fill_state is FillState.FULL_WITH_FOAM for d in result.detections[8:10])
+    assert all(d.fill_state is FillState.FULL_WITH_FOAM for d in result.detections[9:11])
     assert all(tracking_sample_from_detection("test", glass, d).foam_is_valid
-               for d in result.detections[8:10])
+               for d in result.detections[9:11])
 
 
 @pytest.mark.parametrize("change", ["switch", "provisional", "opposed", "competitor", "unselected"])
@@ -291,10 +357,11 @@ def _top_exit(result, index):
 def test_unselected_publishable_exit_row_closes_with_the_tracklet_anchor():
     baseline, result = _exit_case()
     assert baseline.path[7].kind == "unknown" and "row-7-rising" in baseline.publishable_row_hypothesis_ids[7]
-    assert [node.kind for node in result.path] == ["oil"] * 7 + ["unknown"] + ["full"] * 4
-    assert result.path[:8] == baseline.path[:8]
+    assert [node.kind for node in result.path] == ["oil"] * 7 + ["unknown"] * 2 + ["full"] * 3
+    assert result.path[:9] == baseline.path[:9]
     assert _top_exit(result, 7)["reason"] == "UNSELECTED_EXIT_ROW"
-    proof = _top_exit(result, 8)
+    assert _top_exit(result, 8)["reason"] == "TOP_EXIT_FULL_PENDING"
+    proof = _top_exit(result, 9)
     assert proof["reason"] == "TOP_EXIT_FULL_CONFIRMED" and proof["anchor_source"] == "tracklet_profile"
     assert proof["witness"][-1] == {**proof["witness"][-1], "frame_offset": 7, "y": 20., "selected": False}
     assert all(entry["selected"] for entry in proof["witness"][:-1])

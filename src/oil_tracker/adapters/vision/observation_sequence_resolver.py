@@ -83,7 +83,7 @@ class ObservationSequenceResolver:
         if candidate_rgb:
             self.version += "+candidate-rgb-v1"
         if top_exit_full:
-            self.version += "+top-exit-full-v2"
+            self.version += "+top-exit-full-v3"
         self._foam = FoamEpisodeResolver()
 
     def resolve(

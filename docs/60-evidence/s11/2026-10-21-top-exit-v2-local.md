@@ -1,5 +1,9 @@
 # Top-exit FULL v2 — local implementation and controls
 
+> **Superseded in place by [top-exit v3](2026-10-21-top-exit-v3-local.md).** The
+> v2 code was replaced under the same switch after the ⑨ FAIL recorded below.
+> This record is kept unchanged as the v2 evidence.
+
 **Status:** IMPLEMENTED (default OFF) / LOCAL CONTROLS PASS /
 [**Windows ⑨ FAIL against the pre-registered outcome — NOT ADOPTED**](#windows-top-exit-v2-comparison--2026-10-21).
 BASE FULL started at 663.0 s, on a mid-refill frame where the human review sees

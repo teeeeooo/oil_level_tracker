@@ -56,14 +56,16 @@ def close_top_exit_full(
     policy: OilMaterialPhasePolicy,
     hard_unavailable: tuple[bool, ...],
 ) -> OilPathLifecycleResult:
-    """Close a rising owner that leaves through the top band (v2).
+    """Close a rising owner that leaves through the top band (v3).
 
     Numeric selection before closure is unchanged. A bounded consecutive
     same-owner witness must rise into the existing entrance band and then
     vanish. Only the exit row may be the owner's publishable but unselected
     row, because the selector compares it alone against unknown once the owner
-    disappears. After confirmation, FULL holds until a drain release or EMPTY
-    evidence; an unusable or opposed frame inside it fails closed as UNKNOWN.
+    disappears. The disappearance stays pending until the next frame repeats
+    it; a single blank frame mid-rise therefore cannot close. After
+    confirmation, FULL holds until a drain release or EMPTY evidence; an
+    unusable or opposed frame inside it fails closed as UNKNOWN.
     """
     top = policy.geometry_top_y
     height = max(1.0, policy.geometry_height)
@@ -74,6 +76,7 @@ def close_top_exit_full(
     window_limit = max(1, config.tracklet_confirmation_window_frames)
     window: list[_WitnessRow] = []
     closure: dict[str, object] | None = None
+    pending: dict[str, object] | None = None
     path = list(result.path)
     phases = list(result.material_phases)
     reasons = list(result.material_phase_reasons)
@@ -137,7 +140,7 @@ def close_top_exit_full(
         )
         current_interface = any(item.kind == "oil" for item in phase_layers[index])
         record: dict[str, object] = {
-            "enabled": True, "version": "v2", "reason": "NO_TOP_EXIT_WITNESS",
+            "enabled": True, "version": "v3", "reason": "NO_TOP_EXIT_WITNESS",
             "geometry_top_y": top, "endpoint_band_ratio": policy.entrance_band_ratio,
             "reversal_tolerance_px": tolerance, "minimum_progress_px": minimum_progress,
             "predicates": {"current_raster_available": usable, "empty_clear": not empty,
@@ -149,9 +152,24 @@ def close_top_exit_full(
         if closure is not None and (empty or result.material_phases[index] is OilMaterialPhase.DRAINING):
             record["episode_end"] = "EMPTY_EVIDENCE" if empty else "DRAIN_RELEASE"
             window, closure = [], None
+        if pending is not None:
+            confirmation = {
+                "bounded_time_gap": 0.0 < dt <= pending["maximum_gap_sec"] + 1e-6,
+                "current_raster_available": usable, "empty_clear": not empty,
+                "ambiguity_clear": not opposed, "no_current_interface": not current_interface,
+                "unknown_node": node.kind == "unknown",
+                "not_draining": result.material_phases[index] is not OilMaterialPhase.DRAINING,
+            }
+            record["confirmation_predicates"] = confirmation
+            record["confirmation"] = "CONFIRMED" if all(confirmation.values()) else "CANCELLED"
+            if record["confirmation"] == "CONFIRMED":
+                closure = {**pending, "confirmation_frame_index": detection.frame_index}
+            pending = None
         if closure is not None:
             record.update(closure)
-            if usable and not opposed:
+            if record.get("confirmation") == "CONFIRMED":
+                record["reason"] = "TOP_EXIT_FULL_CONFIRMED"
+            elif usable and not opposed:
                 record["reason"] = "TOP_EXIT_FULL_CONTINUING"
             else:
                 record["reason"] = "TOP_EXIT_FULL_FRAME_UNAVAILABLE"
@@ -202,13 +220,13 @@ def close_top_exit_full(
                 for row in window
             ]
             if all(predicates.values()):
-                closure = {"witness": record["witness"], "owner": last.tracklet_id,
+                pending = {"witness": record["witness"], "owner": last.tracklet_id,
                            "anchor_source": record["anchor_source"],
-                           "confirmation_frame_index": detection.frame_index,
+                           "disappearance_frame_index": detection.frame_index,
                            "maximum_gap_sec": maximum_gap,
                            "confidence": min(_oil_confidence(ref) for ref in refs)}
-                record.update(closure)
-                record["reason"] = "TOP_EXIT_FULL_CONFIRMED"
+                record["confirmation"] = "PENDING"
+                record["reason"] = "TOP_EXIT_FULL_PENDING"
             else:
                 record["reason"] = "TOP_EXIT_NOT_PROVEN"
             window = []
