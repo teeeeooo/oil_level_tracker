@@ -45,8 +45,20 @@ is COMPLETE (desk only).
   - "Almost full" is about 0.18H below the top, which supports an upper-band
     top-exit endpoint (D1b′).
 - **User decision:** adopt the top-exit revision direction (OTR-1 items 1–5).
-  First, a [read-only 673 s selection-cause extraction](../40-operations/s11-current-windows-field-qualification.md#673-second-selection-cause-extraction)
-  was requested (decision-witness `publishable` flag); its receipt is pending.
+  The [673 s selection-cause receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)
+  is RECORDED:
+  - the 673.0 s Y329 row was publishable and allowed; the bounded path chose
+    unknown (path cost, not publishability);
+  - the last row before a top exit competes alone against the unknown node,
+    and the fast 23 px step raised the bar (structural, S5).
+- **Open for the user:**
+  - item 3: 3a, the top-exit window counts the unselected publishable row
+    (agent lean); 3b, change the selector; or 3c, treat 673.0 s as the
+    disappearance;
+  - a proposed read-only [top-exit predicate check](../40-operations/s11-current-windows-field-qualification.md#top-exit-predicate-check).
+    Every reported window row is `CONTINUATION_ELIGIBLE`, so T9's
+    `independent_anchor` may still fail on ④ (S6).
+
   Nothing is implemented; any Windows comparison needs a separate go.
 
 Facts it records:

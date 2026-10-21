@@ -3,15 +3,18 @@
 **Status: REVIEW COMPLETE — D1, D1b, D2 and D3 DECIDED by the user ([decision record](#decision-record--2026-10-21)).**
 The [§6 ④ trace receipt](#6-windows-trace-receipt--2026-10-21) is recorded.
 - **27 % rules:** not involved on Windows BASE.
-- **Selection:** the last selected row is Y352; at 673.0 s an admitted Y329 is
-  not selected.
+- **Selection:** the last selected row is Y352. At 673.0 s the publishable Y329
+  owner row loses to unknown on path cost
+  ([receipt](#673-s-selection-cause-receipt--2026-10-21)).
 - **Evidence:** from 673.5 s no proposal exists in Y243–339.
-- **Decided top-exit design:** would not change ④ BASE.
+- **Decided top-exit design:** would not change ④ BASE. The adopted revision
+  (items 1–5) waits for the user's item 3 choice and a proposed anchor-predicate
+  check.
 
-A human visibility check is proposed before implementing. Desk review
-only: source reading, closed records, the retained LBT-1 CSV and one geometry
-computation with the real mask builder on retained local Recipes. No detector run,
-flag, tuning or Windows request was sent. Base HEAD `b9ff06b`. Current authority:
+Desk review plus transferred Windows evidence: source reading, closed records,
+the retained LBT-1 CSV, one geometry computation with the real mask builder on
+retained local Recipes, two read-only ④ trace extractions and review-011, all
+relayed by the user. No detector run, flag or tuning. Base HEAD `b9ff06b`. Current authority:
 [Work Plan](../../00-project/work-plan.md). Context:
 [FULL observable-top handoff](../../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).
 
@@ -562,8 +565,109 @@ implemented):**
 **User decision (2026-10-21):** adopt D1b′ and items 1–5 as the design
 direction. Separate the 673.0 s cause first: the
 [read-only extraction](../../40-operations/s11-current-windows-field-qualification.md#673-second-selection-cause-extraction)
-reads the decision witness's per-row `publishable` flag. Its receipt is pending.
+reads the decision witness's per-row `publishable` flag. Its
+[receipt](#673-s-selection-cause-receipt--2026-10-21) is recorded below.
 Nothing is implemented.
+
+### 673 s selection-cause receipt — 2026-10-21
+
+**RECEIVED.** The user relayed the Windows agent's read-only extraction made with
+the [673 s request](../../40-operations/s11-current-windows-field-qualification.md#673-second-selection-cause-extraction)
+(`a43c737`).
+- **Identity:** run `a9ccece3-49bf-47af-a570-b1ca6e9777a4`, BASE 601 records.
+- **Read:** `debug/debug_index.json`, `debug/debug_trace.jsonl` and
+  `recipe_snapshot.oilrecipe` only. No run, new bundle, tuning or human review.
+
+**Table D — decision witness.** In all five rows the phase is
+`observed_interface / INITIAL_FULL_INTERFACE_OBSERVED`, the allowed set is
+[`oil-tracklet:000366:0319`], and every 0319 member is `CONTINUATION_ELIGIBLE`
+and `continuing`. Each frame has exactly one publishable row, the 0319 row.
+
+| Time (frame) | Resolved | Selected | 0319 row (`oil-row:`) | Admitted / publishable | Members (* = selected) |
+|---|---|---|---|---|---|
+| 670.0 (16064) | oil | `calibrated_high_recall` 384 | `000380:002` | true / true | `oil_hypothesis` 385, `calibrated_high_recall` 384* |
+| 671.0 (16088) | oil | `material_path` 369 | `000382:000` | true / true | `material_path` 369*, `calibrated_high_recall` 369, `phase_transition_scan` 364 |
+| 672.0 (16112) | oil | `material_path` 350 | `000384:001` | true / true | `material_path` 350*, `calibrated_high_recall` 351 |
+| 672.5 (16124) | oil | `calibrated_high_recall` 352 | `000385:001` | true / true | `calibrated_high_recall` 352* |
+| 673.0 (16136) | **unknown** | MISSING | `000386:000` | **true / true** | `phase_transition_scan` 329 |
+
+The requested self-check passed at 670.0–672.5 s: each selected member lies in the
+publishable 0319 row.
+
+**Table E — candidate support.** Constant for every 0319 member: trajectory 1.0;
+cluster and semantic corridor 0.0; profile `anchor_corridor`; lifecycle
+`continuing`; tracklet material conflict 0.0703. Values below are rounded to four
+places; the relayed text keeps full precision.
+
+| Time | Source Y | Cross-representation | Effective track opposition | Reject stage |
+|---|---|---:|---:|---|
+| 670.0 | `oil_hypothesis` 385 | 0.0 | 0.2520 | GLOBAL_PATH_OR_RUN_BOUND |
+| 670.0 | `calibrated_high_recall` 384 | 0.0 | 0.2520 | ACCEPTED |
+| 671.0 | `material_path` 369 | 0.6471 | 0.0926 | ACCEPTED |
+| 671.0 | `calibrated_high_recall` 369 | 0.6602 | 0.0926 | GLOBAL_PATH_OR_RUN_BOUND |
+| 671.0 | `phase_transition_scan` 364 | 0.5915 | 0.3705 | GLOBAL_PATH_OR_RUN_BOUND |
+| 672.0 | `material_path` 350 | 0.6336 | 0.0926 | ACCEPTED |
+| 672.0 | `calibrated_high_recall` 351 | 0.7000 | 0.0926 | GLOBAL_PATH_OR_RUN_BOUND |
+| 672.5 | `calibrated_high_recall` 352 | 0.0 | 0.3705 | ACCEPTED |
+| 673.0 | `phase_transition_scan` 329 | 0.0 | 0.13960296975296926 | GLOBAL_PATH_OR_RUN_BOUND |
+
+**Table F — 673.0 s and Recipe**
+
+| `S.sequence_emission` | Ambiguity score | No-interface score | `minimum_final_confidence` | `temporal_max_jump_px` |
+|---:|---:|---:|---:|---:|
+| 0.25947473538089194 | 0.46606323498456764 | 0.4494745842432939 | 0.42 | 32.0 |
+
+**Transcription note:** the publishable `tracklet_id:y` column lists one entry per
+member, so a count of 1 can show two or three entries. All belong to the one 0319
+row.
+
+#### Findings
+
+| # | Finding | Evidence |
+|---|---|---|
+| S1 | **Cause (b): path cost.** At 673.0 s the 0319 row is phase-admitted, publishable and allowed, and it is the frame's only publishable row. All four stages are unknown (§6 Table A), so the bounded best path itself chose unknown over a valid Oil node. Publishability is excluded. The profile is `anchor_corridor`, not `anchor_trajectory`, so the row passed on confidence ≥ 0.42, not on the continuing-anchor witness | Tables D and E; `oil_candidate_is_publishable` |
+| S2 | **The choice reduces to one inequality.** From 673.5 s the allowed set is empty, so each later lookahead layer is a single unknown node (`_constrain_layer`). Both paths pay one Oil→unknown cost (−0.20): the unknown path at 673.0 s, the Oil path at 673.5 s. The later suffix is shared. Oil wins only if E_oil + T ≥ E_unknown + 0.02 (unknown persistence) | `BoundedOilInterfaceSelector.resolve`, `_transition_score` |
+| S3 | **The bar was E_oil ≥ 0.3007, and the row fell below it.** E_unknown = 0.2595 (stored; it matches the formula with best local quality ≈ 0.549). T = −0.0212 for 23 px in 0.5 s (n = 0.719). E_oil is not stored. Its stored terms sum to 0.0195: base −0.18, trajectory +0.30, opposition −0.1005; zero cluster, corridor and representation; no anchor bonus. The unstored terms (material, availability, motion, penalties) therefore sum below 0.2812 | Table F |
+| S4 | **The fast last step sets most of the bar.** A stationary same-owner step scores +0.22, for a bar of 0.060. The 23 px step raises the bar by 0.241. That step includes the 672.5 s lag: the committed Y352 is the reflection below the level (V2). On the unknown side, ambiguity 0.466 adds 0.158 | Bar by step: 0 px 0.060; 11 px 0.136; 21 px 0.267; 23 px 0.301 |
+| S5 | **This is structural, not a ④ accident.** Once the owner disappears, the barrier empties the allowed set, and the lookahead holds no Oil continuation to reward the last row. The highest row of a fast top exit competes alone against the frame's unknown node and pays the jump cost. A window built only from selected rows will tend to lose that row; whether it does depends on E_oil | S2–S4 |
+
+#### Item 3 options (the user chooses)
+
+| Option | What changes | For | Against |
+|---|---|---|---|
+| **3a. The window counts the unselected row** (agent lean) | Inside top-exit only. At a frame the selector resolved unknown, the window may count the same owner's row if it is publishable and allowed. Never when a different Oil row was selected | Numeric output unchanged; no new constant; reuses the selector's own publishability predicate. Matches S5: the miss sits in the exit frame itself | FULL rests on a row the numeric output did not publish: the CSV shows UNKNOWN at 673.0 s, then FULL, with no row above Y352. The witness must name the unselected row |
+| **3b. Change the selector** | Unknown emission, unknown persistence, jump cost, or a lag-aware jump | 673.0 s Y329 would publish as Oil (V1: it is the level) | A global cost change on every frame of every video; more 721 s-class false rows may be selected. A cost chosen after seeing this result is tuning (F10, freeze rule) |
+| **3c. Treat 673.0 s as the disappearance** | The window uses selected rows only; "disappearance" means no selected Oil | Simplest; FULL from 673.0 s | FULL while an admitted, real interface is visible at 0.15H. Weakens "new interface evidence clears" in every video |
+
+#### S6 — a further gap: the anchor predicate
+
+Items 1–5 do not cover every T9 predicate. `independent_anchor` needs a window row
+with `ANCHOR_ELIGIBLE` authority and `direct_interface` or
+`ordered_lower_interface` identity.
+- **Reported:** every 0319 member at 670.0/671.0/672.0/672.5/673.0 s is
+  `CONTINUATION_ELIGIBLE`. The 673.0 s row is `continuation_only` (§6 Table B).
+- **Window:** with item 2 and 3a, the six-row window evaluated at 673.5 s is
+  670.5–673.0 s. Rows 670.5 and 671.5 s are unreported. If neither is an anchor,
+  T9 still fails on ④.
+
+Also unreported for the window frames:
+- the last row's recent directional agreement (≥ 0.60);
+- material-texture availability and conflict for each window row;
+- a single admitted tracklet in each window frame;
+- any identity contradiction or phase ambiguity;
+- a usable raster at 673.5 s. `effective_gray_*` is always written
+  (`phase_frame_detection.py:941–948`), so it is likely present.
+
+The artifact and optics terms of the hard contradiction are derived from
+candidate features and not stored; checking them would need a recompute.
+
+**Proposed (not sent):** one read-only
+[T9 predicate check](../../40-operations/s11-current-windows-field-qualification.md#top-exit-predicate-check)
+on the saved trace before the design freeze. If no window row is an anchor, the
+user decides a new item 6:
+- accept the owner's tracklet-level anchor profile as the anchor proof; or
+- keep the per-row rule, and accept that top-exit cannot meet the 672 s target
+  on ④.
 
 ## Constraints preserved
 
@@ -586,8 +690,8 @@ Nothing is implemented.
     verified in the retained CSV).
   - **Windows BASE (§6):** the run stays in the `OIL-PHASE-INITIAL` barrier
     throughout, so no 27 % rule acts. The first loss is at `OIL-SELECTOR` at
-    673.0 s: the admitted Y329 owner is not selected, for an unstored reason
-    (publishability or path cost). From 673.5 s there is no proposal in Y243–339
+    673.0 s: the publishable Y329 owner row loses to unknown on path cost
+    (S1–S5). From 673.5 s there is no proposal in Y243–339
     (`OIL-PROPOSAL` / `OIL-RAW-EVIDENCE`). Whether the interface is physically
     visible there is unknown.
 - Existing feature coverage:
@@ -597,9 +701,9 @@ Nothing is implemented.
     snapshot, the October 15 interior Recipe and base_sample_1.
   - Windows BASE geometry comes from the transferred ④ receipt.
   - Top-exit, cost-first, RGB and Local XY are OFF in ④; IFO v2 is ON in ④.
-- Execution scope: desk review plus one transferred read-only Windows trace
-  extraction (§6) from the existing ④ bundle; no detector, pipeline or replay
-  run anywhere; no human review. The local work was a read-only geometry
+- Execution scope: desk review plus two transferred read-only Windows trace
+  extractions (§6 and the 673 s receipt) and one human review (review-011), all
+  on the existing ④ bundle; no detector, pipeline or replay run anywhere. The local work was a read-only geometry
   computation and a read of the retained LBT-1 CSV.
 - Logic-map impact: NONE — review only. The map already states that FULL barrier
   frames are coordinate-free and that top-exit uses the configured top.

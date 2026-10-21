@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: 673 s selection-cause extraction (read-only)` — see [below](#673-second-selection-cause-extraction). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / PROPOSED (not sent): top-exit predicate check (read-only)` — see [below](#top-exit-predicate-check). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -21,9 +21,62 @@ be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
 
+## Top-exit predicate check
+
+**PROPOSED 2026-10-21 — not sent; the user decides.** Saved ④ trace only; no run.
+The [673 s receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)
+(S6) found that the adopted revision items 1–5 do not cover every top-exit
+predicate. The likely blocker is `independent_anchor`: a window row must be
+`ANCHOR_ELIGIBLE` with `direct_interface` or `ordered_lower_interface` identity.
+Every reported 0319 member is `CONTINUATION_ELIGIBLE`; rows at 670.5 and 671.5 s
+are unreported. This request copies the stored inputs of the remaining
+predicates for 670.0–673.5 s. It does not evaluate them; the artifact and optics
+terms are not stored and are not requested.
+
+```text
+S11 top-exit 판정 조건 점검 — 저장된 ④ trace 읽기 전용 추출이야.
+재실행·새 bundle·튜닝·비교 실행·새 사람 검토는 하지 마.
+파일은 수정·이동하지 말고 결과 파일도 만들지 마.
+
+목적: top-exit FULL의 나머지 판정 조건 입력값을 ④ BASE 670.0~673.5초에서
+저장값 그대로 옮겨 적는다. 충족 여부는 판정하지 않는다.
+
+1. 지난번처럼 ④ bundle의 debug/debug_index.json과 debug/debug_trace.jsonl만 읽는다.
+   index에서 glass_name=BASE, timestamp_sec로 record를 찾아 byte_offset으로 읽는다.
+   경로 표기: S = sequence.state, W = S.sequence_decision_witness,
+   C = sequence.candidates[], R = record 최상위.
+
+2. 표 G — f16064 / f16076 / f16088 / f16100 / f16112 / f16124 / f16136 / f16148
+   (670.0~673.5초, 0.5초 간격) 각 한 줄:
+   frame | effective_gray_mean / effective_gray_std / effective_gray_dynamic_range |
+   oil_no_interface_empty_likelihood | S.sequence_material_phase_ambiguous |
+   W.rows 중 phase_admitted=true인 row의 tracklet_id 목록(중복 제거) |
+   C 중 identity_contradiction이 none이 아닌 항목 수와 그 source:y:값
+   앞의 두 칸은 S에서 읽고, S에 키가 없으면 R.state 값을 쓰고 "(R)"을 붙인다.
+
+3. 표 H — 같은 8개 frame에서 W.rows 중 tracklet_id = oil-tracklet:000366:0319인
+   row의 member마다, source와 y가 같은 C 항목을 찾아 한 줄:
+   frame | row_hypothesis_id | source | y | selected | authority | phase_identity |
+   identity_contradiction | tracklet_admitted | tracklet_incompatible |
+   tracklet_lifecycle | tracklet_material_conflict | tracklet_recent_direction |
+   tracklet_recent_directional_agreement | tracklet_recent_net_progress_px |
+   material_texture_conflict(C.features 또는 C.penalties의 값, 둘 다 없으면 MISSING)
+   0319 row가 없으면 "0319 없음", 같은 source·y가 여럿이거나 없으면 "대응 불명".
+
+4. 머리줄(run_id, BASE record 수)과 표 G/H를 텍스트 원문 그대로 돌려준다.
+   값은 고치거나 반올림하지 않는다. 키가 없으면 MISSING, 값이 null이면 null.
+   결론은 "authority가 ANCHOR_ELIGIBLE인 0319 member가 있는 frame" 같은 관찰 한 줄만 쓴다.
+   원인 판정·수정 제안 없이 반환 후 멈춘다.
+   FIELD FAIL / O2 OPEN, review-006 pending, ⑧ NOT RUN 상태는 바뀌지 않는다.
+```
+
+Record the receipt in OTR-1.
+
 ## 673-second selection-cause extraction
 
-**REQUESTED 2026-10-21 — saved ④ trace only; no run.** This is item 3 of the
+**COMPLETE 2026-10-21 — reference record; do not re-ask.** [Receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21):
+the 673.0 s row was publishable; the bounded path chose unknown (path cost).
+Saved ④ trace only; no run. This is item 3 of the
 [top-exit revision](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21).
 Review-011 confirmed that Y329 at 673.0 s (`oil-tracklet:000366:0319`) is the
 level, yet nothing was selected.
