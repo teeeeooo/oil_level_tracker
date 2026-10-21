@@ -455,6 +455,46 @@ the ④ bundle (BASE 673.0, 673.5, 674.0, 674.5, 675.0 s). The question must all
 earmarked it for Accum 672–677.5 s; IDs are assigned in order, so that line
 would take the next one.
 
+### User video review — 2026-10-21 (replaces the proposed review)
+
+The user re-checked the source video. The level rises slowly, rises fast from
+about 670 s, and is almost full near 672 s. A very small void disappears near
+674–675 s. **FULL output is acceptable from about 672 s**, now recorded in the
+[reviewed truth](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#base-full-acceptance--2026-10-21).
+No review-011 is needed for this question.
+
+**What this changes:**
+- **The target is now "FULL from about 672 s", not "FULL after the void
+  vanishes".** By the user's reading of the video, the 673.5–675.5 s frames hold
+  an almost-full Glass with a tiny void. Absence of proposals in Y243–339 (R4)
+  there is therefore not established as a recall failure.
+- **D1b as decided cannot meet this target on ④.** The last evidence lies 86–109
+  px (0.11–0.14H) below the observable limit. FULL from about 672–674 s needs an
+  endpoint that accepts disappearance inside an upper band, not only at the
+  observable limit.
+- **The existing 27 % band would cover it.** Y329 and Y352 lie at 0.15–0.18H
+  (band end Y420). Using that band moves top-exit into the proximity class that
+  produced G, so it needs a two-sided local check (sample4 G, base_sample_1,
+  sample2).
+- **Even with a band endpoint, current T9 would not fire on ④:**
+  - the 2 px downward step at 672.5 s resets its window (R6);
+  - the admitted but unselected Y329 at 673.0 s counts as a current interface
+    and resets it again (R3).
+
+  A design would need a bounded jitter allowance (for example the existing
+  reversal tolerance, 9.27 px for BASE) and a rule for the admitted owner at
+  673.0 s. Both must be frozen before any run.
+
+**Open identity question:** "Almost full at about 672 s" may conflict with a
+level at Y350 (0.18H below the top). If the real level was already near the top
+at 672 s, the selected rows Y350/352 and the Y329 owner are not the level. FULL
+by their disappearance would then be right for the wrong reason. Only the user
+can say where the level was at about 672 s.
+
+**Reopened for the user:** the D1b endpoint, observable limit (as decided) or
+the existing 27 % band, given the 672 s acceptance. D2 (S + persistence) is
+unchanged.
+
 ## Constraints preserved
 
 - **Unchanged:** default R22 + R22-3/O1 and every experiment flag; FULL CONDITION

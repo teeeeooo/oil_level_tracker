@@ -28,8 +28,15 @@ is COMPLETE (desk only).
   - Image FULL evidence is `not_available`.
 
   The decided top-exit design would not change ④ BASE.
-- **Proposed next step (user's choice):** one human visibility review (BASE
-  673.0–675.0 s, next free ID review-011) before any D1b/D2 implementation.
+- **User video review (2026-10-21), recorded in the
+  [reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#base-full-acceptance--2026-10-21):**
+  - Fast rise from about 670 s; almost full near 672 s; a tiny void vanishes at
+    674–675 s.
+  - **FULL output is acceptable from about 672 s.** The proposed review-011 is no
+    longer needed.
+- **Reopened:** the D1b endpoint. The observable limit cannot meet this target on
+  ④; the existing 27 % band could, at G risk. Open identity question: where was
+  the real level at about 672 s relative to the selected Y350?
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.

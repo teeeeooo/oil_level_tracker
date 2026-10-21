@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "truth_revision": "2026-10-15-base-timing-correction",
+  "truth_revision": "2026-10-21-base-full-acceptance",
   "sample_id": "windows_sample1_heating_coldstart",
   "sample_alias_only": true,
   "actual_source_filename_recorded": false,
   "private_source_stored_in_repository": false,
   "review_authority": {
     "kind": "user_direct_source_video_review",
-    "last_reconciled_date": "2026-10-15",
+    "last_reconciled_date": "2026-10-21",
     "base_timeline_correction": {
       "supersedes_review_date": "2026-08-25",
       "user_statement": "550--652 유면 서서히 감소 / 652--674 유면 회복 / 674--675 사이에 Full 도달",
@@ -18,7 +18,12 @@
       "R15",
       "R16",
       "R17"
-    ]
+    ],
+    "base_full_acceptance": {
+      "date": "2026-10-21",
+      "user_statement": "영상을 다시 확인해보니 oil이 서서히 올라오다가 670s부터 빠른 속도로 차오르기 시작해서 672s 부근에서 거의 full 상태가 돼. 아주 미세한 공동이 674s~675s 부근에 소멸되고. 이정도의 추세면 672s 부터는 full 판정을해도 무방하다고 생각돼",
+      "scope": "BASE FULL output acceptance onset; no exact Y or candidate identity annotation; segments and Accum unchanged"
+    }
   },
   "source_identity": {
     "sha256": null,
@@ -47,7 +52,16 @@
       "end": 675.0,
       "exact_transition_sec": null
     },
-    "base_full_transition_scoring": "report separately; frame-level presence/absence needs direct review"
+    "base_full_transition_scoring": "report separately; frame-level presence/absence needs direct review",
+    "base_full_output_acceptance_sec": {
+      "start": 672.0,
+      "start_is_approximate": true,
+      "semantics": "FULL output is correct from about 672 s; 672-675 s is a FULL-acceptable transition; numeric Oil rows there receive no true/false label from time alone",
+      "physical_completion_window_sec": {
+        "start": 674.0,
+        "end": 675.0
+      }
+    }
   },
   "segments": [
     {

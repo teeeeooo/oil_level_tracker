@@ -9,6 +9,8 @@ video is not stored in this repository.
 
 The timeline below comes from direct user review of the source video and was
 last reconciled on 2026-10-15, when the user corrected the earlier BASE timing.
+On 2026-10-21 the user added a FULL acceptance onset for BASE
+([below](#base-full-acceptance--2026-10-21)).
 The operator confirms that the R14 through R17
 Windows comparisons refer to the same physical video. Detector output, graph
 shape, a prior implementation's selected row and a prior evidence document
@@ -70,6 +72,35 @@ report 652--674 s refill and 674--675 s FULL transition separately. Use 675 s as
 the start of the post-transition FULL counting bucket, not as an exact observed
 transition time. The correction does not establish candidate identities or Y
 coordinates and must not become a timestamp rule in detector code.
+
+## BASE FULL acceptance — 2026-10-21
+
+The user re-checked the source video and stated:
+
+> 영상을 다시 확인해보니 oil이 서서히 올라오다가 670s부터 빠른 속도로 차오르기
+> 시작해서 672s 부근에서 거의 full 상태가 돼. 아주 미세한 공동이 674s~675s 부근에
+> 소멸되고. 이정도의 추세면 672s 부터는 full 판정을해도 무방하다고 생각돼
+
+| Interval | Reviewed behaviour |
+|---|---|
+| 652--about 670 s | Slow rise |
+| About 670--672 s | Fast rise |
+| About 672 s | Almost full |
+| About 674--675 s | A very small remaining void disappears. This agrees with the 2026-10-15 statement that FULL is reached within 674--675 s |
+
+**Acceptance (user decision):**
+- **FULL output for BASE is correct from about 672 s.** The 672--675 s span is a
+  FULL-acceptable transition: FULL there is not a false state.
+- **Numeric Oil rows in 672--675 s** keep the existing rule. They get no
+  true/false label from time alone.
+- **Unchanged:** segment IDs, the `WS1-BASE-FULL-SUFFIX` counting bucket from
+  675 s, and the rule that reviewed times never become detector timestamp rules.
+
+**Open:** where the level actually is at about 672 s has not been reviewed. In
+④ the selected rows at 672.0/672.5 s are Y350/Y352, and an admitted Y329 exists at
+673.0 s. These are about 0.15--0.18 of the ellipse height below its top
+([OTR-1 §6](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#6-windows-trace-receipt--2026-10-21)).
+"Almost full" does not establish whether those rows are the real level.
 
 ## Accum Foam-collapse target — 2026-10-20
 
