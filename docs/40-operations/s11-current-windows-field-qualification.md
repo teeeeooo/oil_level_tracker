@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: ⑨ top-exit v2 comparison (one run)` — see [below](#top-exit-v2-comparison). The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / NO CURRENT REQUEST`. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -23,7 +23,14 @@ This document is the executable target-Windows field procedure for whichever S11
 
 ## Top-exit v2 comparison
 
-**REQUESTED 2026-10-21 — one run, authorized by the user.** The comparison is
+**COMPLETE 2026-10-21 — FAIL against the pre-registered outcome.** The
+[receipt and verdict](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)
+are recorded in the v2 evidence. BASE FULL started at 663.0 s (18 rows before
+672 s). Accum, the rows before closure and the 675–780 s hold passed. Do not
+rerun; any successor needs a new frozen design and the user's go. The procedure
+below is kept as the record of what was requested.
+
+**Requested 2026-10-21 — one run, authorized by the user.** The comparison is
 ④ FULL+ON v2 (existing bundle, reused) against ⑨ FULL+ON v2 + top-exit v2.
 Only `initial_full_observation` and `top_exit_full` are ON; cost-first, RGB and
 Local XY stay OFF. ⑧ named the v1 run, which was never executed; v2 takes ⑨ so

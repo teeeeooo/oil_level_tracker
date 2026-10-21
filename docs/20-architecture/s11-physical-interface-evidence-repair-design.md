@@ -190,7 +190,11 @@ does not establish physical identity or field acceptance.
 ## October 21 top-exit revision (v2)
 
 **Status: FROZEN 2026-10-21 before implementation; IMPLEMENTED (default OFF);
-[local controls PASS](../60-evidence/s11/2026-10-21-top-exit-v2-local.md).** The
+[local controls PASS](../60-evidence/s11/2026-10-21-top-exit-v2-local.md);
+[Windows ⑨ FAIL against the pre-registered outcome — NOT ADOPTED](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21).**
+BASE FULL started at 663.0 s, on a refill blank frame with a reviewed visible
+interface. The closure needed items 1 and 2, and item 4 held it. The
+pre-registration below is unchanged. The
 user chose item 6 = 6a and authorized implementation with the local controls
 below. A Windows comparison needs a separate go. The
 [predicate-check receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)

@@ -4,8 +4,8 @@
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** Default R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The initial-FULL comparison has quantified Windows output recovery and a newly exposed false-output checkpoint, remains opt-in and is not a promoted baseline. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior.
-**Next transition:** The [HPA-1 history/phase study](../50-diagnostics/s11/2026-10-17-history-phase-amplification.md#results-and-decisions) is COMPLETE / CLOSED WITHOUT PRODUCTION PROMOTION. The primary SOI gap is now localized to internal row geometry/association followed by inherited fill-barrier authority, not its recurrence scalars alone. A successor must qualify input-local physical role/continuity before association and phase can inherit authority. Donor medians/history are not deployable; terminal-veto quarantine alone recovers points but introduces unassessed selections/late extrema. Preserve the accepted 52 s Oil, practical 004/005 alternatives and genuine FULL/EMPTY protections. Do not repeat H1/H2, Y818 exclusion, cost-first, profile tuning, generic anchor privilege or report repair. Point-local equality is not a new acceptance target. **721 s intake remains COMPLETE**, with optical/peer cause unknown. No new Windows run is queued. **FULL remains INCOMPLETE: CONDITION FAILED / ⑧ NOT RUN**; no mask-edge substitution or margin reduction.
-**Windows comparison source:** **④ FULL+ON v2** is the baseline. One new comparison is queued: ⑨ = ④ + top-exit v2 (`1f68c46`, `+initial-full-observation-v2+top-exit-full-v2`), default OFF and not promoted. The v1 implementation (⑧, `6248e08`) failed its preflight, was never run, and is replaced in place. Top-exit/cost-first/RGB/Local XY stay OFF outside retained trials. The earlier ⑦ identity limit remains in its retained record; no hash-driven rerun.
+**Next transition:** The [HPA-1 history/phase study](../50-diagnostics/s11/2026-10-17-history-phase-amplification.md#results-and-decisions) is COMPLETE / CLOSED WITHOUT PRODUCTION PROMOTION. The primary SOI gap is now localized to internal row geometry/association followed by inherited fill-barrier authority, not its recurrence scalars alone. A successor must qualify input-local physical role/continuity before association and phase can inherit authority. Donor medians/history are not deployable; terminal-veto quarantine alone recovers points but introduces unassessed selections/late extrema. Preserve the accepted 52 s Oil, practical 004/005 alternatives and genuine FULL/EMPTY protections. Do not repeat H1/H2, Y818 exclusion, cost-first, profile tuning, generic anchor privilege or report repair. Point-local equality is not a new acceptance target. **721 s intake remains COMPLETE**, with optical/peer cause unknown. No new Windows run is queued. **FULL remains INCOMPLETE: v1 CONDITION FAILED / ⑧ NOT RUN; v2 ⑨ FAIL / NOT ADOPTED**; no mask-edge substitution or margin reduction.
+**Windows comparison source:** **④ FULL+ON v2** is the baseline. ⑨ = ④ + top-exit v2 (`1f68c46`, `+initial-full-observation-v2+top-exit-full-v2`) ran once and FAILED its pre-registered outcome; it is NOT ADOPTED and stays default OFF. No Windows run is queued. The v1 implementation (⑧, `6248e08`) failed its preflight, was never run, and is replaced in place. Top-exit/cost-first/RGB/Local XY stay OFF outside retained trials. The earlier ⑦ identity limit remains in its retained record; no hash-driven rerun.
 **Latest checkpoint:** The [HPA-1 handoff](../60-evidence/s11/2026-10-17-history-phase-handoff.md) closes three experimental rounds: 10 scalar/control windows, eight complete row-feature combinations and all 246 SOI baseline/withdrawal conditions. 264 stored conditions / 29,832 rows verify with zero source/event/CSV mismatches; 14 publication replays bring actual resolver executions to 278. In the primary loss, median restoration confines the miss but is oracle-only; input-local quarantine raises 84→103 Oil points without recovering the accepted 52 s candidate and exposes new +45 px late extrema in two whole-Oil losses. Four public outputs change / seven quarantined frames; no paired Foam-coordinate change. Full unit suite 2,300 PASS; added focused tests 33 PASS. Three new managed runs are closed, 56 unique files / 12,012,683 bytes; all 94 managed runs check clean. A local HTML shows every activated condition and its ordinary-policy control, with 11 verified source/graph links. Nine video identities were inventoried; only saved sample4 raw was newly replayed. Prior dirty SOI closeout was preserved in b795e40. Production/default/Recipe/truth and Windows nine-segment constraints are unchanged. Independent report-only acceptance remains unresolved: O2 OPEN / FIELD FAIL.
 
 This is the sole current state, authorization, unknowns and next-action owner.
@@ -70,10 +70,28 @@ is COMPLETE (desk only).
     sample2): zero top-exit FULL rows and identical output. None reached a
     disappearance evaluation, so the new rules are exercised only
     synthetically.
-- **REQUESTED (user's go, 2026-10-21):** one [⑨ Windows comparison](../40-operations/s11-current-windows-field-qualification.md#top-exit-v2-comparison)
-  on ④'s inputs, ④ v2 vs ④ v2 + top-exit v2, against the pre-registered
-  outcome: BASE FULL from 672–675 s, held through 780 s; no Accum FULL. The
-  receipt is pending.
+- **[⑨ Windows comparison](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)
+  RECEIVED — FAIL against the pre-registered outcome; NOT ADOPTED:**
+  - **Failed:** BASE FULL started at 663.0 s (f15896), with 18 rows before
+    672 s.
+  - **Passed:** Accum had zero FULL rows; the rows before closure match ④; FULL
+    held through 675–780 s with no numeric Oil (9 D2b fail-closed rows).
+  - **Mechanism:**
+    - The closure fired on a refill blank frame. Review-004 sees a visible
+      interface there (the `INCOMPATIBLE_BRANCH` exclusion).
+    - It needed item 1 (Y409 endpoint inside the band) and item 2 (two 7.5 px
+      lag steps).
+    - D2b then held FULL over 19 refill Oil rows (663.5–672.5 s).
+  - **Not tested:** the intended 673.5 s closure was never evaluated.
+- **DECISION PENDING (user):** the
+  [options](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#options-the-user-decides)
+  are:
+  - **A.** Stop top-exit here.
+  - **B.** v3 = v2 + a disappearance confirmed by the next frame
+    (recommended); freeze, then local controls and one ⑩ run.
+  - **C.** Repair the 663.0 s exclusion first.
+
+  Nothing is retuned or rerun until the user decides.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
