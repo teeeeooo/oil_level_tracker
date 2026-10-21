@@ -82,7 +82,8 @@ is excluded from retrospective state projection.
 
 ## Modern-stream continuing-run rule — 2026-10-21
 
-**Status: FROZEN 2026-10-21 before implementation**, with the user's decisions
+**Status: FROZEN 2026-10-21 before implementation (`67f1484`); IMPLEMENTED;
+[local verification](../60-evidence/s11/2026-10-21-initial-state-report-local.md)**, with the user's decisions
 recorded in the [Work Plan](../00-project/work-plan.md). It replaces the
 two-observation direction test for modern (non-legacy-R7) streams. Legacy R7
 anchor handling is unchanged.

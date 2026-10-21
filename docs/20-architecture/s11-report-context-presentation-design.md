@@ -74,7 +74,8 @@ same 101 Oil values. Band: 5.2 px.
 
 ## FULL/EMPTY bands and judgment reason — 2026-10-21
 
-**Status: FROZEN 2026-10-21 before implementation.** The user chose these
+**Status: FROZEN 2026-10-21 before implementation (`67f1484`); IMPLEMENTED;
+[local verification](../60-evidence/s11/2026-10-21-initial-state-report-local.md).** The user chose these
 changes after the
 [⑩ report receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#report-and-judgment-receipt--2026-10-21).
 That receipt found two problems:
@@ -128,6 +129,6 @@ The paired initial-state rule is owned by the
 - Preserved contracts: immutable stored observations, same-frame provenance, independent series, actual legacy anchor protection, bounded existing episode/landmark selection, unchanged event history and separate field qualification.
 - Difference from prior failures: repair report interpretation inside its existing owner without changing upstream identity, numeric publication, detector thresholds or candidate selection; summary and landmarks share extrema eligibility, long display connections are bounded and context-only captures cannot create measurements. The 2026-10-20 support rule selects only which stored value is labeled; it neither removes nor rewrites values.
 - Existing feature coverage: reuses the Recipe ellipse `radius_y` already used by the movement-summary tolerance, the R7 anchor eligibility and the existing landmark consumers (graph renderer, source-review window planner, capture store). No Recipe, session or detector setting is added.
-- Execution scope: unit tests through `build_glass_report_presentation` cover isolated spikes, window/band edges, no supported point, R7 anchors and missing geometry. No detector run, full report bundle replay or Windows run was exercised; field disposition is unchanged. The 2026-10-21 band/reason section is frozen from the read-only ⑩ receipt before any code change.
-- Logic-map impact: NONE — the 2026-10-21 section is frozen but unimplemented; the `RESULT-PRESENTATION` row (which already records the supported-extremum rule) changes with its implementation.
+- Execution scope: unit tests through `build_glass_report_presentation` cover isolated spikes, window/band edges, no supported point, R7 anchors and missing geometry. No detector run, full report bundle replay or Windows run was exercised; field disposition is unchanged. The 2026-10-21 band/reason section was frozen from the read-only ⑩ receipt before any code change, then implemented with renderer and presentation unit tests and a rendered ⑩-like check; no Windows run.
+- Logic-map impact: UPDATED — the `RESULT-PRESENTATION` row now records the source-labelled FULL/EMPTY bands and the plain judgment reason, beside the supported-extremum rule; runtime owners and pipeline edges remain unchanged.
 - Failure-registry impact: NONE — existing F09/F10 guards apply; no failed detector mechanism is retired or promoted.

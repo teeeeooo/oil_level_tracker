@@ -163,3 +163,46 @@ def test_foam_long_timestamp_gap_breaks_in_combined_and_detail(tmp_path, monkeyp
         assert values[0] == 4 and values[-1] == 5
         assert math.isnan(values[1])
     assert [s.raw_foam_front_px_from_zero for s in glass.samples] == [4, 5]
+
+
+def test_detail_graph_labels_detector_and_reconstructed_state_bands(tmp_path, monkeypatch) -> None:
+    spans: list[tuple[str | None, float]] = []
+    original = Axes.axvspan
+
+    def recording_span(self, xmin, xmax, *args, **kwargs):
+        spans.append((kwargs.get("label"), kwargs.get("alpha")))
+        return original(self, xmin, xmax, *args, **kwargs)
+
+    monkeypatch.setattr(Axes, "axvspan", recording_span)
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    full = [TrackingSample(run_id="run", glass_id=config.id, frame_index=40 + i, timestamp_sec=4.0 + i,
+                           fill_state=FillState.FULL_NO_INTERFACE, is_valid=True,
+                           flags=["OIL_TOP_EXIT_FULL"]) for i in range(3)]
+    result = GlassAnalysisResult(
+        glass_id=config.id,
+        glass_name=config.name,
+        result_state=ResultState.PASS,
+        samples=[
+            _sample(config.id, 0.0, None, None),
+            _sample(config.id, 1.0, None, None),
+            _sample(config.id, 2.0, 10.0, None),
+            _sample(config.id, 3.0, 12.0, None),
+            *full,
+        ],
+        retrospective=RetrospectiveInterpretation(
+            glass_id=config.id,
+            status=RetrospectiveStatus.ACCEPTED,
+            confirmed_prior=InitialObservationState.FULL_NO_INTERFACE,
+            interpreted_state=FillState.FULL_NO_INTERFACE,
+            start_time_sec=0.0,
+            end_time_sec=1.0,
+            provenance="initial_state_retrospective_v2",
+        ),
+    )
+
+    GraphRenderer()._render_glass(result, config, tmp_path / "bands.png")
+
+    labels = dict(spans)
+    assert labels["초기 상태 재구성 (FULL)"] == 0.09
+    assert labels["FULL 판정"] == 0.09
+    assert "확정 초기 상태 유지 가정 (FULL)" not in labels

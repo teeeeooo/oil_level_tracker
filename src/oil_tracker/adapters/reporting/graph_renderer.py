@@ -206,59 +206,66 @@ class GraphRenderer:
             glass.samples,
             glass.retrospective,
         )
-        initial_hold = bool(
-            glass.retrospective is not None
-            and glass.retrospective.accepted
-            and glass.retrospective.provenance
-            == "confirmed_initial_state_hold_v1"
-        )
         groups = []
         start = samples[0]
         previous = start
         for current in samples[1:]:
-            if current.fill_state != start.fill_state:
+            if _band_key(current) != _band_key(start):
                 groups.append((start, previous))
                 start = current
             previous = current
         groups.append((start, previous))
-        unknown_labeled = False
-        hold_labeled = False
+        labeled: set[str] = set()
         for begin, end in groups:
-            if begin.fill_state in {FillState.FULL_NO_INTERFACE, FillState.FULL_WITH_FOAM}:
+            state, source = _band_key(begin)
+            if state in {"FULL", "EMPTY"}:
+                label = _STATE_BAND_LABELS[source].format(state=state)
                 ax.axvspan(
                     begin.timestamp_sec,
                     end.timestamp_sec,
-                    alpha=0.09 if initial_hold else 0.035,
-                    color="#3b82f6",
-                    label=(
-                        "확정 초기 상태 유지 가정 (FULL)"
-                        if initial_hold and not hold_labeled
-                        else None
-                    ),
+                    alpha=0.09,
+                    color="#3b82f6" if state == "FULL" else "#f59e0b",
+                    label=None if label in labeled else label,
                 )
-                hold_labeled = hold_labeled or initial_hold
-            elif begin.fill_state == FillState.EMPTY_NO_INTERFACE:
-                ax.axvspan(
-                    begin.timestamp_sec,
-                    end.timestamp_sec,
-                    alpha=0.09 if initial_hold else 0.035,
-                    color="#f59e0b",
-                    label=(
-                        "확정 초기 상태 유지 가정 (EMPTY)"
-                        if initial_hold and not hold_labeled
-                        else None
-                    ),
-                )
-                hold_labeled = hold_labeled or initial_hold
-            elif begin.fill_state == FillState.UNKNOWN_REVIEW:
+                labeled.add(label)
+            elif state == "UNKNOWN":
+                label = "직접 유면 확인 어려움"
                 ax.axvspan(
                     begin.timestamp_sec,
                     end.timestamp_sec,
                     alpha=0.065,
                     color="#64748b",
-                    label="직접 유면 확인 어려움" if not unknown_labeled else None,
+                    label=None if label in labeled else label,
                 )
-                unknown_labeled = True
+                labeled.add(label)
+
+
+# Every FULL/EMPTY band names where its state came from: the detector itself
+# (including top-exit FULL), an accepted initial-state reconstruction, or the
+# all-missing confirmed-state hold.
+_STATE_BAND_LABELS = {
+    "detector": "{state} 판정",
+    "retrospective": "초기 상태 재구성 ({state})",
+    "hold": "확정 초기 상태 유지 가정 ({state})",
+}
+
+
+def _band_key(sample) -> tuple[str | None, str]:
+    if sample.fill_state in {FillState.FULL_NO_INTERFACE, FillState.FULL_WITH_FOAM}:
+        state = "FULL"
+    elif sample.fill_state == FillState.EMPTY_NO_INTERFACE:
+        state = "EMPTY"
+    elif sample.fill_state == FillState.UNKNOWN_REVIEW:
+        state = "UNKNOWN"
+    else:
+        state = None
+    flags = set(sample.flags)
+    source = (
+        "hold" if "R8_CONFIRMED_INITIAL_STATE_HOLD" in flags
+        else "retrospective" if "RETROSPECTIVE_INITIAL_STATE" in flags
+        else "detector"
+    )
+    return state, source
 
 
 def _plot_oil_trajectory(

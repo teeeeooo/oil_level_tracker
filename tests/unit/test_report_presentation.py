@@ -580,3 +580,26 @@ def test_timestamp_jump_alone_is_disclosed_without_claiming_observed_mixed_movem
     assert "상승과 하강이 모두 관측" not in report.movement_summary
     assert "2초를 초과하면" in report.observation_note
     assert [scene.timestamp_sec for scene in report.scene_captures] == [0, 5, 10]
+
+
+@pytest.mark.parametrize(("state", "note", "expected", "absent"), [
+    (ResultState.REVIEW_REQUIRED, "Valid sample coverage 69.2% is below 70.0%.",
+     "전체의 69.2%로, 설정 기준 70.0%보다 적습니다", "Valid sample"),
+    (ResultState.PASS, "Oil level remained above zero within configured tolerance.; "
+     "provenance=retrospective_initial_state", "기준선 위를 유지했습니다", "provenance"),
+    (ResultState.REVIEW_REQUIRED, "Below-zero violation duration: 3.50s. "
+     "Retrospective initial-state conflict requires review.", "3.50초", "Retrospective"),
+    (ResultState.PASS, "an unrecognised note", "설정된 판정 기준을 충족했습니다.", "unrecognised"),
+])
+def test_judgment_guidance_states_the_stored_reason_in_plain_language(state, note, expected, absent):
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    glass = GlassAnalysisResult(config.id, config.name, state,
+                                samples=[_sample(config.id, 0.0), _sample(config.id, 1.0)],
+                                judgment_note=note)
+
+    summary = build_glass_report_presentation(glass, config).judgment_summary
+
+    assert expected in summary
+    assert absent not in summary
+    if "provenance" in note:
+        assert "초기 상태로 재구성해 판정에 포함" in summary

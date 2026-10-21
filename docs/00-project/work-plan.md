@@ -141,8 +141,18 @@ is COMPLETE (desk only).
     - **BASE:** ACCEPTED, with the decisive move at 567.5/568.0 s and a FULL
       prefix of 479.98–548.0 s. Judgment coverage becomes 92.0%.
     - **Accum:** UNRESOLVED (Foam barrier).
-  - **Next:** implementation, then the passed opt-in v3 and the paused
-    layered-Foam line.
+  - **IMPLEMENTED,
+    [local verification PASS](../60-evidence/s11/2026-10-21-initial-state-report-local.md):**
+    - 51 reconstruction tests, including the ⑩ BASE/Accum shapes and two
+      mutation checks;
+    - renderer and presentation tests;
+    - full suite 3,801 → 3,821 passed, 12 skipped;
+    - a rendered ⑩-like check shows both labelled bands.
+
+    The ⑩ bundle's official outputs are unchanged; seeing the change on Windows
+    needs a new run (user's decision).
+  - **Next:** the user's choice of a Windows confirmation run, then the passed
+    opt-in v3 and the paused layered-Foam line.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from bisect import bisect_left, bisect_right
+import re
 from dataclasses import dataclass
 import math
 from statistics import median
@@ -210,7 +211,7 @@ def build_glass_report_presentation(
         result_state_label=_result_state_label(glass.result_state),
         movement_summary=movement_summary,
         observation_note=observation_note,
-        judgment_summary=_judgment_summary(glass.result_state),
+        judgment_summary=_judgment_summary(glass.result_state, glass.judgment_note),
         landmarks=selected,
         unavailable_intervals=unavailable,
         finite_oil_count=len(numeric),
@@ -819,10 +820,46 @@ def _result_state_label(state: ResultState) -> str:
     }.get(state, state.value)
 
 
-def _judgment_summary(state: ResultState) -> str:
-    return {
+def _judgment_summary(state: ResultState, note: str = "") -> str:
+    summary = {
         ResultState.PASS: "설정된 판정 기준을 충족했습니다.",
         ResultState.FAIL: "설정된 판정 기준을 충족하지 못했습니다.",
         ResultState.REVIEW_REQUIRED: "자동 판정을 확정할 수 없어 사용자 확인이 필요합니다.",
         ResultState.NOT_APPLICABLE: "이 Glass는 판정 대상이 아닙니다.",
     }.get(state, "판정 내용을 확인해 주세요.")
+    return " ".join((summary, *_judgment_reasons(note or "")))
+
+
+# Plain-language reasons for the fixed notes `judge_samples` and the
+# retrospective annotations write. Unknown note forms add nothing, so the raw
+# English note never reaches the main report.
+_JUDGMENT_NOTE_REASONS = (
+    (re.compile(r"Valid sample coverage ([\d.]+)% is below ([\d.]+)%\."),
+     "유면 위치나 FULL/EMPTY 상태를 확인한 시점이 전체의 {0}%로, 설정 기준 {1}%보다 적습니다."),
+    (re.compile(r"No tracking samples were produced\."), "분석된 시점이 없어 판정할 수 없습니다."),
+    (re.compile(r"Compressor start is required for RECOVERY\."),
+     "회복 판정에 필요한 압축기 시작 시점이 설정되지 않았습니다."),
+    (re.compile(r"Recovered above zero at ([\d.]+)s and held\."), "{0}초에 기준선 위로 회복해 유지했습니다."),
+    (re.compile(r"Recovery occurred after the configured deadline\."),
+     "기준선 위로 회복했지만 설정한 제한 시간이 지난 뒤였습니다."),
+    (re.compile(r"Stable recovery above zero was not detected\."),
+     "기준선 위로 안정적으로 회복한 구간을 찾지 못했습니다."),
+    (re.compile(r"Oil level remained below zero within configured tolerance\."),
+     "유면이 허용 범위 안에서 기준선 아래를 유지했습니다."),
+    (re.compile(r"Oil level remained above zero within configured tolerance\."),
+     "유면이 허용 범위 안에서 기준선 위를 유지했습니다."),
+    (re.compile(r"Above-zero excursion duration: ([\d.]+)s\."), "유면이 기준선 위로 벗어난 시간은 {0}초입니다."),
+    (re.compile(r"Below-zero violation duration: ([\d.]+)s\."), "유면이 기준선 아래로 내려간 시간은 {0}초입니다."),
+    (re.compile(r"provenance=retrospective_initial_state"),
+     "첫 검출 이전 구간은 확정한 초기 상태로 재구성해 판정에 포함했습니다."),
+    (re.compile(r"Retrospective initial-state conflict requires review\."),
+     "확정한 초기 상태와 관측된 움직임이 맞지 않습니다."),
+)
+
+
+def _judgment_reasons(note: str) -> tuple[str, ...]:
+    return tuple(
+        template.format(*match.groups())
+        for pattern, template in _JUDGMENT_NOTE_REASONS
+        if (match := pattern.search(note))
+    )

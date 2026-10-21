@@ -22,6 +22,16 @@ _BARRIER_FLAGS = {
     "UNAVAILABLE",
 }
 _FOAM_STATES = {FillState.FULL_WITH_FOAM, FillState.FOAMING_VISIBLE}
+# Sequence resolvers mark every frame they leave UNKNOWN with these flags. They
+# mean "no direct observation here", not a failed or obscured raster.
+_SEQUENCE_UNKNOWN_FLAGS = {
+    "R6_OBSERVATION_UNAVAILABLE",
+    "R7_OBSERVATION_UNAVAILABLE",
+    "R16_OBSERVATION_UNAVAILABLE",
+    "R17_OBSERVATION_UNAVAILABLE",
+    "SEQUENCE_UNAVAILABLE",
+}
+_CONTINUING_RUN_PROVENANCE = "initial_state_retrospective_v2"
 
 
 def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation) -> RetrospectiveInterpretation:
@@ -105,6 +115,9 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
             provenance="confirmed_initial_state_hold_v1",
         )
 
+    if not r7_stream:
+        return _continuing_run_interpretation(glass, samples, prior)
+
     accepted: list[tuple[int, TrackingSample, float]] = []
     first_boundary_index: int | None = None
     for index, sample in enumerate(samples):
@@ -150,10 +163,7 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
     first_index, first, first_relative = accepted[0]
     _second_index, second, second_relative = accepted[1]
     delta_y = float(second.raw_oil_air_level_y) - float(first.raw_oil_air_level_y)
-    direction_tolerance = max(
-        2.0,
-        0.01 * float(glass.geometry.ellipse.radius_y) * 2.0,
-    )
+    direction_tolerance = _direction_tolerance(glass)
     if prior is InitialObservationState.FULL_NO_INTERFACE:
         topology_ok = first_relative <= TOP_ENTRANCE_MAX_RELATIVE_POSITION
         topology_opposite = first_relative >= BOTTOM_ENTRANCE_MIN_RELATIVE_POSITION
@@ -211,6 +221,140 @@ def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation
         ),
         **evidence_kwargs,
     )
+
+
+def _continuing_run_interpretation(glass, samples: list[TrackingSample], prior) -> RetrospectiveInterpretation:
+    """Judge the boundaries that continue from the first accepted observation.
+
+    The first decisive move, two consecutive boundaries beyond the direction
+    tolerance on the same side, must point toward the confirmed prior's
+    direction. Later motion is not inspected, so a fall followed by a rise is
+    still accepted. A large step or a barrier ends the run undecided.
+    """
+    ellipse = glass.geometry.ellipse
+    top = ellipse.center_y - ellipse.radius_y
+    bottom = ellipse.center_y + ellipse.radius_y
+    tolerance = _direction_tolerance(glass)
+    maximum_step = float(glass.detector_settings.temporal_max_jump_px)
+    full = prior is InitialObservationState.FULL_NO_INTERFACE
+    toward = 1 if full else -1
+    first: tuple[int, TrackingSample, float] | None = None
+    previous_y = 0.0
+    pending: tuple[TrackingSample, int] | None = None
+    for index, sample in enumerate(samples):
+        boundary_y = _accepted_boundary_y(sample)
+        barrier = _barrier_reason(sample, has_numeric_boundary=boundary_y is not None)
+        if barrier:
+            reason = (
+                "Inference barrier before sufficient positive evidence."
+                if first is None
+                else "Inference barrier inside the continuing run before a decisive move."
+            )
+            return _unresolved(glass.id, prior, reason, (barrier,), provenance=_CONTINUING_RUN_PROVENANCE)
+        if boundary_y is None:
+            continue
+        if first is None:
+            if index == 0:
+                return RetrospectiveInterpretation(
+                    glass_id=glass.id,
+                    status=RetrospectiveStatus.NOT_APPLICABLE,
+                    confirmed_prior=prior,
+                    reason="No leading unresolved interval precedes direct numeric Oil evidence.",
+                    provenance=_CONTINUING_RUN_PROVENANCE,
+                )
+            first = (index, sample, boundary_y)
+            previous_y = boundary_y
+            continue
+        if abs(boundary_y - previous_y) > maximum_step:
+            return _unresolved(
+                glass.id,
+                prior,
+                "The continuing run broke on a step above temporal_max_jump_px before a decisive move.",
+                provenance=_CONTINUING_RUN_PROVENANCE,
+            )
+        previous_y = boundary_y
+        offset = boundary_y - first[2]
+        side = 0 if abs(offset) < tolerance else (1 if offset > 0 else -1)
+        if side == 0 or pending is None or pending[1] != side:
+            pending = None if side == 0 else (sample, side)
+            continue
+        first_index, first_sample, first_y = first
+        evidence = (first_sample, pending[0], sample)
+        evidence_kwargs = dict(
+            evidence_frame_indices=tuple(item.frame_index for item in evidence),
+            evidence_timestamps_sec=tuple(item.timestamp_sec for item in evidence),
+            evidence_relative_positions=tuple(
+                boundary_relative_position(float(item.raw_oil_air_level_y), top, bottom)
+                for item in evidence
+            ),
+        )
+        topology = _first_topology(
+            boundary_relative_position(first_y, top, bottom), full
+        )
+        if side != toward:
+            return RetrospectiveInterpretation(
+                glass_id=glass.id,
+                status=RetrospectiveStatus.CONFLICT,
+                confirmed_prior=prior,
+                reason=(
+                    "The first decisive move of the continuing Oil run contradicts "
+                    f"the confirmed prior. The first observed boundary topology was {topology}."
+                ),
+                provenance=_CONTINUING_RUN_PROVENANCE,
+                **evidence_kwargs,
+            )
+        prefix = samples[:first_index]
+        return RetrospectiveInterpretation(
+            glass_id=glass.id,
+            status=RetrospectiveStatus.ACCEPTED,
+            confirmed_prior=prior,
+            interpreted_state=(
+                FillState.FULL_NO_INTERFACE if full else FillState.EMPTY_NO_INTERFACE
+            ),
+            start_time_sec=prefix[0].timestamp_sec,
+            end_time_sec=prefix[-1].timestamp_sec,
+            start_frame_index=prefix[0].frame_index,
+            end_frame_index=prefix[-1].frame_index,
+            reason=(
+                "Leading unresolved interval reconstructed from the confirmed prior: "
+                "the Oil run continuing from the first accepted boundary made its first "
+                "decisive move toward the prior's direction on two consecutive observations. "
+                f"The first observed boundary topology was {topology}."
+            ),
+            provenance=_CONTINUING_RUN_PROVENANCE,
+            **evidence_kwargs,
+        )
+    if first is None:
+        return _unresolved(
+            glass.id,
+            prior,
+            "No accepted numeric Oil boundary establishes direction.",
+            provenance=_CONTINUING_RUN_PROVENANCE,
+        )
+    return _unresolved(
+        glass.id,
+        prior,
+        "The continuing Oil run ended without a decisive move.",
+        provenance=_CONTINUING_RUN_PROVENANCE,
+    )
+
+
+def _direction_tolerance(glass) -> float:
+    return max(2.0, 0.01 * float(glass.geometry.ellipse.radius_y) * 2.0)
+
+
+def _first_topology(relative: float, full: bool) -> str:
+    compatible = (
+        relative <= TOP_ENTRANCE_MAX_RELATIVE_POSITION
+        if full
+        else relative >= BOTTOM_ENTRANCE_MIN_RELATIVE_POSITION
+    )
+    opposite = (
+        relative >= BOTTOM_ENTRANCE_MIN_RELATIVE_POSITION
+        if full
+        else relative <= TOP_ENTRANCE_MAX_RELATIVE_POSITION
+    )
+    return "edge-compatible" if compatible else ("opposite-edge" if opposite else "mid-Glass")
 
 
 def project_state_aware_samples(
@@ -427,7 +571,7 @@ def _barrier_reason(
         # Missing/unknown/rejected-Foam frames neither prove nor contradict the
         # confirmed prior, so they cannot erase a later compatible entrance.
         return ""
-    for flag in sorted(flags):
+    for flag in sorted(flags - _SEQUENCE_UNKNOWN_FLAGS):
         if (
             flag in _BARRIER_FLAGS
             or "UNAVAILABLE" in flag
@@ -448,13 +592,14 @@ def _barrier_reason(
     return ""
 
 
-def _unresolved(glass_id, prior, reason, barriers=()):
+def _unresolved(glass_id, prior, reason, barriers=(), *, provenance="initial_state_retrospective_v1"):
     return RetrospectiveInterpretation(
         glass_id=glass_id,
         status=RetrospectiveStatus.UNRESOLVED,
         confirmed_prior=prior,
         barriers=tuple(barriers),
         reason=reason,
+        provenance=provenance,
     )
 
 

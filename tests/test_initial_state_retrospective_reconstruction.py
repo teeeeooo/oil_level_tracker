@@ -55,16 +55,17 @@ def _accepted_sequence(prior: InitialObservationState):
     top = glass.geometry.ellipse.center_y - glass.geometry.ellipse.radius_y
     bottom = glass.geometry.ellipse.center_y + glass.geometry.ellipse.radius_y
     if prior is InitialObservationState.FULL_NO_INTERFACE:
-        first, second = top + 10, top + 20
+        first, second, third = top + 10, top + 20, top + 25
         visible = FillState.DRAINING_VISIBLE
     else:
-        first, second = bottom - 10, bottom - 20
+        first, second, third = bottom - 10, bottom - 20, bottom - 25
         visible = FillState.FILLING_VISIBLE
     samples = [
         _sample(0),
         _sample(1),
         _sample(2, visible, y=first, valid=True),
         _sample(3, visible, y=second, valid=True),
+        _sample(4, visible, y=third, valid=True),
     ]
     return glass, samples
 
@@ -83,7 +84,8 @@ def test_full_and_empty_reconstruction_are_symmetric(prior, expected):
     assert result.status is RetrospectiveStatus.ACCEPTED
     assert result.interpreted_state is expected
     assert (result.start_frame_index, result.end_frame_index) == (0, 1)
-    assert result.evidence_frame_indices == (2, 3)
+    assert result.evidence_frame_indices == (2, 3, 4)
+    assert result.provenance == "initial_state_retrospective_v2"
 
 
 @pytest.mark.parametrize(
@@ -275,7 +277,7 @@ def test_projection_is_separate_and_does_not_fabricate_numeric_oil():
     assert projected[0].smoothed_oil_air_level_px_from_zero is None
     assert "RETROSPECTIVE_INITIAL_STATE" in projected[0].flags
     assert projected[2] is samples[2]
-    assert observed_coverage(samples) == pytest.approx(0.5)
+    assert observed_coverage(samples) == pytest.approx(0.6)
     assert effective_state_aware_coverage(samples, result) == pytest.approx(1.0)
 
 
@@ -357,6 +359,13 @@ def test_authoritative_foam_with_independent_numeric_oil_remains_direction_evide
             valid=True,
             flags=("FOAM_STRONG_EVIDENCE",),
         ),
+        _sample(
+            4,
+            FillState.FOAMING_VISIBLE,
+            y=top + 25,
+            valid=True,
+            flags=("FOAM_STRONG_EVIDENCE",),
+        ),
     ]
 
     result = reconstruct_initial_state(
@@ -367,7 +376,7 @@ def test_authoritative_foam_with_independent_numeric_oil_remains_direction_evide
     projected = project_state_aware_samples(samples, result)
 
     assert result.status is RetrospectiveStatus.ACCEPTED
-    assert result.evidence_frame_indices == (2, 3)
+    assert result.evidence_frame_indices == (2, 3, 4)
     assert projected[0].fill_state is FillState.FULL_NO_INTERFACE
     assert projected[2] is samples[2]
     assert projected[2].fill_state is FillState.FOAMING_VISIBLE
@@ -432,6 +441,7 @@ def test_contradictory_direct_topology_is_conflict_without_interval():
         _sample(0),
         _sample(1, FillState.FILLING_VISIBLE, y=bottom - 10, valid=True),
         _sample(2, FillState.FILLING_VISIBLE, y=bottom - 20, valid=True),
+        _sample(3, FillState.FILLING_VISIBLE, y=bottom - 25, valid=True),
     ]
     result = reconstruct_initial_state(
         glass,
@@ -461,7 +471,7 @@ def test_insufficient_or_canonical_ambiguous_evidence_stays_unresolved():
 
 def test_only_leading_prefix_is_projected_not_middle_run_unknowns():
     glass, samples = _accepted_sequence(InitialObservationState.FULL_NO_INTERFACE)
-    samples.append(_sample(4))
+    samples.append(_sample(5))
     result = reconstruct_initial_state(
         glass,
         samples,
@@ -469,8 +479,8 @@ def test_only_leading_prefix_is_projected_not_middle_run_unknowns():
     )
     projected = project_state_aware_samples(samples, result)
     assert projected[0].fill_state is FillState.FULL_NO_INTERFACE
-    assert projected[4].fill_state is FillState.UNKNOWN_REVIEW
-    assert projected[4].is_valid is False
+    assert projected[5].fill_state is FillState.UNKNOWN_REVIEW
+    assert projected[5].is_valid is False
 
 
 def test_unknown_and_auto_confirmations_do_not_grant_reconstruction_authority():
@@ -595,3 +605,112 @@ def test_shared_outcome_assembly_preserves_modern_oil_meaning_with_foam_legacy_f
     before = deepcopy(variant)
     assert assembler.assemble(samples=variant, **kwargs) == baseline
     assert variant == before
+
+
+_SEQUENCE_UNKNOWN = ("R17_INITIAL_STATE_CONTEXT_ONLY", "R17_MATERIAL_PHASE_BARRIER",
+                     "R17_OBSERVATION_UNAVAILABLE", "SEQUENCE_UNAVAILABLE")
+
+
+def _run(prior, ys, *, glass=None, unknown_flags=_SEQUENCE_UNKNOWN):
+    """Two leading UNKNOWN frames, then one sample per entry (None = UNKNOWN)."""
+    glass = glass or glass_config()
+    visible = (FillState.DRAINING_VISIBLE if prior is InitialObservationState.FULL_NO_INTERFACE
+               else FillState.FILLING_VISIBLE)
+    samples = [_sample(0, flags=unknown_flags), _sample(1, flags=unknown_flags)]
+    for offset, y in enumerate(ys, start=2):
+        samples.append(_sample(offset, flags=unknown_flags) if y is None
+                       else _sample(offset, visible, y=y, valid=True))
+    return glass, samples, reconstruct_initial_state(glass, samples, _confirmation(prior))
+
+
+def test_ordinary_sequence_unknown_markers_neither_confirm_nor_block():
+    _, _, result = _run(InitialObservationState.FULL_NO_INTERFACE, (30., None, 40., None, 45.))
+    assert result.status is RetrospectiveStatus.ACCEPTED
+    assert result.evidence_frame_indices == (2, 4, 6)
+    _, _, unknown_only = _run(InitialObservationState.FULL_NO_INTERFACE, (None, None))
+    assert unknown_only.provenance == "confirmed_initial_state_hold_v1"
+
+
+@pytest.mark.parametrize("flag", ["FRAME_UNAVAILABLE", "FOGGED_OR_GLARE", "DETECTION_LOST",
+                                  "NO_INTERFACE_EVIDENCE_UNAVAILABLE"])
+def test_hard_failure_inside_the_run_before_a_decision_stays_unresolved(flag):
+    glass, samples, _ = _run(InitialObservationState.FULL_NO_INTERFACE, (30., None, 40., 45.))
+    samples[3] = _sample(3, flags=(*_SEQUENCE_UNKNOWN, flag))
+    result = reconstruct_initial_state(glass, samples, _confirmation(InitialObservationState.FULL_NO_INTERFACE))
+    assert result.status is RetrospectiveStatus.UNRESOLVED
+    assert result.barriers == (flag,)
+
+
+@pytest.mark.parametrize("ys", [
+    (30., 40., 31., 29.),  # one boundary beyond, then back within the tolerance
+    (30., 31., 30.5, 31.),  # stationary: never beyond
+    (30., 40.),  # the sequence ends after a single beyond
+])
+def test_a_single_beyond_or_no_move_is_not_decisive(ys):
+    _, _, result = _run(InitialObservationState.FULL_NO_INTERFACE, ys)
+    assert result.status is RetrospectiveStatus.UNRESOLVED
+    assert result.provenance == "initial_state_retrospective_v2"
+
+
+@pytest.mark.parametrize(("prior", "ys"), [
+    (InitialObservationState.FULL_NO_INTERFACE, (30., 36., 37., 25., 20.)),  # falls, then rises
+    (InitialObservationState.EMPTY_NO_INTERFACE, (210., 204., 203., 215., 218.)),  # rises, then falls
+])
+def test_first_decisive_move_toward_the_prior_is_accepted_despite_later_reversal(prior, ys):
+    _, _, result = _run(prior, ys)
+    assert result.status is RetrospectiveStatus.ACCEPTED
+    assert result.evidence_frame_indices == (2, 3, 4)
+
+
+@pytest.mark.parametrize(("prior", "ys"), [
+    (InitialObservationState.FULL_NO_INTERFACE, (60., 54., 52., 70.)),  # rises first
+    (InitialObservationState.EMPTY_NO_INTERFACE, (180., 186., 188., 170.)),  # falls first
+])
+def test_first_decisive_move_against_the_prior_is_conflict(prior, ys):
+    _, _, result = _run(prior, ys)
+    assert result.status is RetrospectiveStatus.CONFLICT
+    assert result.start_time_sec is None
+    assert "contradicts" in result.reason
+
+
+def test_step_above_the_jump_limit_ends_the_run_undecided():
+    _, _, result = _run(InitialObservationState.FULL_NO_INTERFACE, (30., 63., 64., 65.))
+    assert result.status is RetrospectiveStatus.UNRESOLVED
+    assert "temporal_max_jump_px" in result.reason
+
+
+def _windows_glass(center_y, radius_y):
+    from oil_tracker.domain.geometry import EllipseGeometry, GlassGeometry
+    from oil_tracker.domain.recipe import GlassInspectionConfig
+
+    return GlassInspectionConfig("glass", "Glass", GlassGeometry(
+        EllipseGeometry(288.5, center_y, 288.5, radius_y), zero_line_y=center_y, margin_ratio=0.08))
+
+
+def test_windows_base_slow_drain_with_jitter_and_gaps_is_accepted():
+    # ⑩ BASE numeric Oil, 548.5-568.0 s, as returned read-only (None = UNKNOWN rows).
+    ys = (363., 367., 367., 367., 367., 366., 366., 366., 366., 366., 364., 365., 364., 365.,
+          363., 363., 363., 364., *([None] * 11), 370., 370., 370., 370., 370., 371., 363., 370.,
+          363., 374., 375.)
+    glass = _windows_glass(597.7099236641221, 386.10687022900765)
+    assert glass.detector_settings.temporal_max_jump_px == 32.0
+    _, samples, result = _run(InitialObservationState.FULL_NO_INTERFACE, ys, glass=glass)
+    assert result.status is RetrospectiveStatus.ACCEPTED
+    decisive = [index for index, sample in enumerate(samples) if sample.raw_oil_air_level_y in (374., 375.)]
+    assert result.evidence_frame_indices == (2, *decisive)
+    assert (result.start_frame_index, result.end_frame_index) == (0, 1)
+    assert result.evidence_relative_positions[0] == pytest.approx(0.196, abs=1e-3)
+
+
+def test_windows_accum_foam_before_entry_and_fast_first_step_stay_unresolved():
+    glass = _windows_glass(347.63358778625957, 291.6)
+    _, samples, with_foam = _run(InitialObservationState.EMPTY_NO_INTERFACE,
+                                 (None, None, 515., 482., 472., 461.), glass=glass)
+    samples[3] = _sample(3, FillState.FOAMING_VISIBLE, flags=_SEQUENCE_UNKNOWN)
+    with_foam = reconstruct_initial_state(glass, samples, _confirmation(InitialObservationState.EMPTY_NO_INTERFACE))
+    assert with_foam.status is RetrospectiveStatus.UNRESOLVED
+    assert with_foam.barriers == ("AUTHORITATIVE_FOAM",)
+    _, _, without_foam = _run(InitialObservationState.EMPTY_NO_INTERFACE,
+                              (None, None, 515., 482., 472., 461.), glass=glass)
+    assert without_foam.status is RetrospectiveStatus.UNRESOLVED
+    assert "temporal_max_jump_px" in without_foam.reason
