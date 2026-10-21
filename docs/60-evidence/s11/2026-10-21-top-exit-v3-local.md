@@ -230,12 +230,75 @@ written before the run. Over the whole BASE run the confirmation states are:
 - **The 9 fail-closed frames at 768.5–774.5 s** publish UNKNOWN, not FULL, as in
   ⑨.
 
+## Report and judgment receipt — 2026-10-21
+
+**Question (user):** the ⑩ report has three problems:
+- the graph does not show FULL after about 672 s;
+- the interval before the first observation does not look FULL;
+- BASE is "사용자 확인 필요" although its level never went below the baseline.
+
+**Source:** a read-only Windows extraction from the ⑩ bundle; values are kept as
+reported.
+
+**Receipt note:** the return labels the ⑩ tracking data "⑨". Its counts (FULL
+204, numeric Oil 212, valid 416) are ⑩'s; ⑨ had FULL 226 and numeric Oil 193.
+
+| Item | BASE | Accum |
+|---|---|---|
+| Judgment rule | `HOLD_ABOVE_ZERO`, minimum valid coverage 0.70, minimum final confidence 0.42 | `HOLD_BELOW_ZERO`, 0.70, 0.42 |
+| Result | `REVIEW_REQUIRED`: "Valid sample coverage 69.2% is below 70.0%." | `REVIEW_REQUIRED`: "Valid sample coverage 6.0% is below 70.0%." |
+| Valid rows | 416 of 601: FULL 204/204 and PARTIAL_VISIBLE 212/212 valid; UNKNOWN 185/185 invalid | 36 of 601; UNKNOWN 565/565 invalid |
+| Retrospective initial state | `UNRESOLVED`, barrier `R17_OBSERVATION_UNAVAILABLE`, "Inference barrier before sufficient positive evidence." | same |
+| Effective coverage | 0.692 (= observed) | 0.060 (= observed) |
+
+- **The first BASE rows carry the barrier flag.** Rows f11508–f11532
+  (479.98–480.98 s) are UNKNOWN with `R17_INITIAL_STATE_CONTEXT_ONLY`,
+  `R17_MATERIAL_PHASE_BARRIER`, `R17_OBSERVATION_UNAVAILABLE` and
+  `SEQUENCE_UNAVAILABLE`.
+- **First numeric Oil:** f13151 at 548.5 s, Y363 (208.6 px above zero), then
+  f13163 at 549.0 s, Y367.
+  - The 18 numeric rows at 548.5–557.0 s stay at Y363–367.
+  - The three rows Table R places in 480–550 s are 548.5, 549.0 and 549.5 s, at
+    the start of the reviewed drain.
+
+**Causes (from source, confirmed by this receipt):**
+1. **FULL after 674 s is drawn but nearly invisible.**
+   - In the Glass graph, `_state_bands` draws a FULL band at alpha 0.035 with no
+     legend; only a confirmed initial hold gets alpha 0.09 and a label.
+   - The Oil line ends at the last numeric row.
+   - The combined graph draws no state bands at all.
+2. **The prefix is not reconstructed.**
+   - `reconstruct_initial_state` treats any flag containing `UNAVAILABLE` as a
+     barrier. Only legacy R7 streams are exempt.
+   - The current resolver marks every UNKNOWN frame `R17_OBSERVATION_UNAVAILABLE`,
+     so the first frame stops the reconstruction.
+3. **Coverage decides the BASE status before any level check.**
+   - `judge_samples` returns `REVIEW_REQUIRED` when valid coverage is below the
+     rule's minimum.
+   - The report's "판정 안내" shows only a fixed sentence, not this note.
+
+**Further finding: the barrier is not the only block.** The rule also needs the
+first two accepted observations to move by the direction tolerance:
+max(2, 1 % of the Glass height) ≈ 7.7 px for BASE. f13151 → f13163 moves 4 px.
+- **Topology passes:** Y363 is at 0.196 of the Glass, inside the top 0.32.
+- **Direction fails:** so removing the barrier alone would still leave BASE
+  `UNRESOLVED`.
+- **Arithmetic if both were relaxed:**
+  - the 137 rows before f13151 would be projected FULL;
+  - `HOLD_ABOVE_ZERO` judges on projected samples, so coverage would be
+    553/601 = 92.0%;
+  - BASE would then be judged on its level.
+- **Accum stays below 70% in any case:** 565 UNKNOWN rows, no numeric Oil before
+  653 s. The overall status stays `REVIEW_REQUIRED`.
+
+No code, rule or report changed; the user decides the follow-up.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`, `S11-F10`
 - First harmful stage: in ⑨ it was `OIL-PHASE-FILL` (the top-exit closure) at 663.0 s, which turned the review-004 `INCOMPATIBLE_BRANCH` blank (`OIL-TRACKLET`) into FULL ([v2 evidence](2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)). v3 changes only that closure: a disappearance must be repeated on the next frame. Selection and the upstream exclusion are unchanged.
 - Existing feature coverage: production detector path with IFO v2 in both arms, on the original sample4/base_sample_1/sample2 Recipes and the frozen October 15 sample4 interior Recipe. Effective masks and margin are as configured; cost-first, RGB and Local XY are OFF. Top-exit v3 is exercised synthetically through the full resolver and CSV export, and on four local videos where it never reaches an evaluation. ④/Windows media were not accessed.
-- Execution scope: unit tests with a mutation check, the full unit suite and one managed local comparison run (four controls, NONE debug). One user-authorized Windows run (⑩), with values returned as transferred evidence. No private media on the Mac, no human review, tuning or post-result rule change.
+- Execution scope: unit tests with a mutation check, the full unit suite and one managed local comparison run (four controls, NONE debug). One user-authorized Windows run (⑩) and one read-only extraction from its bundle (report and judgment files), with values returned as transferred evidence. No private media on the Mac, no human review, tuning or post-result rule change.
 - Logic-map impact: NONE — this update records the ⑩ receipt and changes no detector code. The v3 logic-map update was committed with the implementation (`5971b30`), and top-exit stays default OFF.
 - Failure-registry impact: NONE — no new failure mechanism was found. Item 7 narrows the existing S11-F05 risk seen in ⑨ (a FULL gate locking a real owner after a one-frame blank). A blank of two or more frames remains within F05; F04, F08 and F10 are unchanged, and no threshold was added.

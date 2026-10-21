@@ -106,8 +106,20 @@ is COMPLETE (desk only).
     - **721 s:** the Y694 false anchor is now FULL.
     - **Scope:** one Glass on one video. Top-exit v3 stays default OFF and is
       not promoted; FIELD FAIL / O2 OPEN are unchanged.
-  - **NEXT (user decision):** what to do with the passed opt-in v3, and whether
-    to resume the paused layered-Foam line.
+  - **[Report and judgment receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#report-and-judgment-receipt--2026-10-21)
+    RECORDED (read-only):**
+    - **Graph:** the FULL band after 674 s is drawn at alpha 0.035 with no
+      legend.
+    - **Prefix:** reconstruction is `UNRESOLVED`; every R17 UNKNOWN frame is
+      treated as a barrier. The first two observations (Y363 → Y367, 4 px) also
+      miss the ~7.7 px direction tolerance.
+    - **Status:** BASE `REVIEW_REQUIRED` from coverage 69.2% < 70%; Accum
+      coverage 6.0%.
+  - **NEXT (user decision):**
+    - report options A (visible FULL bands), B (prefix reconstruction: barrier
+      scope and direction rule; changes the BASE judgment) and C (show the
+      judgment note);
+    - then the passed opt-in v3 and the paused layered-Foam line.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
