@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / NO CURRENT EXECUTION REQUEST` — review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: review-011 (human review only)` — see [Review-011](#review-011-base-level-at-the-fast-rise-onset). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -20,6 +20,81 @@ Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
+
+## Review-011 BASE level at the fast-rise onset
+
+**REQUESTED 2026-10-21 — human review only; no run or extraction.** This answers
+the open identity question in
+[OTR-1 §6](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#6-windows-trace-receipt--2026-10-21).
+
+The user's video review says:
+- the level rises fast from about 670 s;
+- it is almost full near 672 s;
+- FULL is acceptable from about 672 s
+  ([reviewed truth](../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md#base-full-acceptance--2026-10-21)).
+
+In ④ the IFO v2 owner `000366:0319` is selected at Y384 → Y350 → Y352
+(670.0–672.5 s), and an admitted Y329 is not selected at 673.0 s. The question is
+whether those rows are the real level.
+- **If they are:** an upper-band top-exit endpoint is physically justified.
+- **If the level was far above them:** the detector missed the fast rise.
+
+Reuse:
+- **Source:** the review-010 source folder (`87817ad`). Neither `src/` nor the O2
+  tool has changed since.
+- **ID:** review-011 is the next free case ID. The paused layered-Foam line had
+  earmarked it; that line takes the next ID instead.
+
+```text
+S11 review-011 — BASE 빠른 상승 구간의 실제 유면 위치 확인. 기존 ④ bundle로 사람 검토만 해.
+실행·재실행·추출·튜닝은 하지 마.
+
+목적: 사용자가 영상에서 본 "670초부터 빠르게 차올라 672초 부근 거의 full"과
+④ 검출선(670초 Y384 → 672초 Y350 → 672.5초 Y352, 673초 미선택 Y329)이
+같은 유면인지 사용자가 직접 확인한다.
+
+0. 소스는 review-010 때 쓴 소스 폴더(87817ad)를 그대로 쓴다. O2 도구와 src는 그 뒤 바뀌지 않았다.
+   bundle은 같은 ④ FULL+ON v2 bundle이다. 이동·수정하지 않는다.
+
+1. s11-o2-local-shadow-evaluation.md의 "3. 에이전트 질문 → 사용자 회신 → 기록·재개"
+   절차를 그대로 쓴다. 같은 ④ bundle로 새 review-011을 prepare한다
+   (BASE, f16064 / f16088 / f16112 / f16124 / f16136) → link-bundle.
+   selection의 recording_group/partition은 review-010과 같게 둔다.
+   review-001~010(특히 006)은 열거나 고치지 않는다.
+
+2. 표시할 후보. packet 후보 목록에서 canonical_y를 반올림한 값이 일치하는 idx를 찾아
+   가이드에 표시한다. 같은 Y에 idx가 여럿이면 모두 표시한다.
+   못 찾으면 "없음"으로 보고하고 다른 후보로 바꾸지 않는다.
+   - f16064 / 670.0초: Y384 (출력)
+   - f16088 / 671.0초: Y369 (출력)
+   - f16112 / 672.0초: Y350 (출력)
+   - f16124 / 672.5초: Y352 (출력), Y336, Y338
+   - f16136 / 673.0초: Y329 (미선택), Y343
+
+3. 질문 전에 plain / idx-guide 이미지를 열고 파일 경로를 알려준다.
+   프레임마다 두 가지만 묻는다.
+   Q1 "실제 유면(오일–공기 경계)이 보이나요? 보이면 표시한 후보 중 유면에 있는 idx는?
+       유면이 표시한 후보들보다 위에 있으면 '후보보다 위', 아래면 '후보보다 아래'."
+   Q2 "표시한 각 후보는 무엇인가요? 유면 / 유면 아님(구조·반사·기타) / 판단 보류"
+   거의 가득 차서 경계가 안 보이면 '안 보임'으로 답해도 된다.
+   여러 idx와 판단 보류를 허용한다. 에이전트가 고르거나 좌표를 추정하지 않는다.
+   사용자가 가이드 눈금으로 대략 위치를 말하면 그 말만 비고에 그대로 적는다.
+
+4. 사용자 답을 record로 저장한다.
+   - visibility: 유면 보임 → visible, 안 보임 → not_visible, 판단 어려움 → uncertain
+   - 후보 identity: 유면 → interface, 유면 아님 → non_interface
+     (구조·반사면 artifact_tags에 structure/reflection), 판단 보류 → uncertain
+   - '후보보다 위/아래'와 대략 위치는 reply note에 한 줄로 남긴다. contour는 비워 둔다.
+
+5. 프레임별로 한 줄만 반환한다.
+   frame | 유면 보임 | 유면 idx (또는 후보보다 위/아래) | 후보별 판정(idx=유면/아님/보류 …) | 비고
+   영상·이미지·JSON 원본은 보내지 않는다. 원인 판정이나 수정 제안 없이 멈춘다.
+   FIELD FAIL / O2 OPEN, review-006 pending, ⑧ NOT RUN 상태는 바뀌지 않는다.
+```
+
+Record the receipt in OTR-1. Then the user chooses the D1b endpoint:
+- **Rows are the level:** the upper band, with a frozen local two-sided check first.
+- **Level far above:** fast-rise recall comes first.
 
 ## Review-010 upper-row roles at Foam-collapse onset
 
