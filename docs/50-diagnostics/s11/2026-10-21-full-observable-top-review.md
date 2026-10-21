@@ -489,7 +489,9 @@ No review-011 is needed for this question.
 level at Y350 (0.18H below the top). If the real level was already near the top
 at 672 s, the selected rows Y350/352 and the Y329 owner are not the level. FULL
 by their disappearance would then be right for the wrong reason. Only the user
-can say where the level was at about 672 s.
+can say where the level was at about 672 s. This is asked as
+[review-011](../../40-operations/s11-current-windows-field-qualification.md#review-011-base-level-at-the-fast-rise-onset)
+(requested 2026-10-21; BASE 670.0/671.0/672.0/672.5/673.0 s).
 
 **Reopened for the user:** the D1b endpoint, observable limit (as decided) or
 the existing 27 % band, given the 672 s acceptance. D2 (S + persistence) is

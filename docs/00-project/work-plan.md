@@ -37,6 +37,8 @@ is COMPLETE (desk only).
 - **Reopened:** the D1b endpoint. The observable limit cannot meet this target on
   ④; the existing 27 % band could, at G risk. Open identity question: where was
   the real level at about 672 s relative to the selected Y350?
+  [Review-011](../40-operations/s11-current-windows-field-qualification.md#review-011-base-level-at-the-fast-rise-onset)
+  was requested on 2026-10-21 (human review only); its receipt is pending.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
