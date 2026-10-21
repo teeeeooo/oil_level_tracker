@@ -121,10 +121,11 @@ before the run.
   timestamp difference.
 
 **Receipt notes (values kept as reported):**
-- **Run labels shifted again.** The return calls this run "⑨" and the v2 run
-  "⑧", although the request asked for "⑩". The run ID, run name, version suffix
-  and bundle name identify this run as ⑩ (v3), and its "⑧" bundle as ⑨ (v2).
-  This record uses ⑨ and ⑩.
+- **Run labels shifted again.** The relayed text calls this run "⑨" and the v2
+  run "⑧". The user relays Windows returns by OCR transcription and confirmed
+  that such label shifts are transcription artifacts, not agent errors. The run
+  ID, run name, version suffix and bundle name identify this run as ⑩ (v3), and
+  its "⑧" bundle as ⑨ (v2). This record uses ⑨ and ⑩.
 - **⑨ bundle location resolved.** The Windows agent moved the ⑨ bundle into the
   common bundle folder. It reports a single location,
   `…\0.windows_diagnostic\bundle\oil_level_analysis_22-3_initial_ON_v2_top_exit_20261021_154451`,
@@ -240,8 +241,9 @@ written before the run. Over the whole BASE run the confirmation states are:
 **Source:** a read-only Windows extraction from the ⑩ bundle; values are kept as
 reported.
 
-**Receipt note:** the return labels the ⑩ tracking data "⑨". Its counts (FULL
-204, numeric Oil 212, valid 416) are ⑩'s; ⑨ had FULL 226 and numeric Oil 193.
+**Receipt note:** the relayed text labels the ⑩ tracking data "⑨", an OCR
+transcription artifact. Its counts (FULL 204, numeric Oil 212, valid 416) are
+⑩'s; ⑨ had FULL 226 and numeric Oil 193.
 
 | Item | BASE | Accum |
 |---|---|---|
