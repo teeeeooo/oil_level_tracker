@@ -59,13 +59,12 @@ is COMPLETE (desk only).
   RECORDED:** with items 1, 2 and 3a, every stored top-exit predicate passes on
   ④ except `independent_anchor`. No 0319 row is `ANCHOR_ELIGIBLE`, but the owner
   holds an `anchor_corridor` tracklet profile.
-- **Open for the user:** item 6. 6a (agent lean) accepts the tracklet-level
-  anchor plus a direct-interface window row; 6c keeps the per-row rule, so ④
-  cannot fire.
-- **Drafted:** the [top-exit v2 design](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2--draft)
-  (items 1, 2, 3a, 4, 5; tests; local controls; pre-registered Windows
-  outcomes). It is frozen after item 6. Nothing is implemented; any Windows
-  comparison needs a separate go.
+- **User decision:** item 6 = 6a. The anchor may be the owner's tracklet-level
+  anchor profile plus a direct-interface window row.
+- **FROZEN and authorized:** the [top-exit v2 design](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2)
+  (items 1, 2, 3a, 4, 6a; tests; local controls; pre-registered Windows
+  outcomes). The user authorized implementation and the local controls. Any
+  Windows comparison needs a separate go.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.

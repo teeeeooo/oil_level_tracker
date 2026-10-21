@@ -187,17 +187,21 @@ Foam still resolves independently afterward, so compare final composition as
 well as its raw coordinates. This option can expose a mechanical transition but
 does not establish physical identity or field acceptance.
 
-## October 21 top-exit revision (v2) — draft
+## October 21 top-exit revision (v2)
 
-**Status: DRAFT — not frozen, not implemented.** The
+**Status: FROZEN 2026-10-21 before implementation.** The user chose item 6 = 6a
+and authorized implementation with the local controls below. A Windows comparison
+needs a separate go. The
 [predicate-check receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)
-shows that only `independent_anchor` fails on ④. Freeze the draft after the user
-decides item 6. The user's decisions are recorded in
+showed that only `independent_anchor` failed on ④. The user's decisions are
+recorded in
 [OTR-1](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#decision-record--2026-10-21):
 - D1: the ellipse is the Glass;
-- D2: S with D2b persistence;
+- D2: S with D2b persistence, failing closed per frame;
 - D1b′ and revision items 1–5;
-- item 3 = 3a.
+- item 3 = 3a; item 6 = 6a.
+
+The rules, tests, controls and pass criteria below do not change after results.
 
 v2 replaces v1's configured-top endpoint and its episode-ending rules. v1 keeps
 its local evidence above; it was never run on Windows.
@@ -214,20 +218,21 @@ its local evidence above; it was never run on Windows.
   identity enters the rule. T1–T8 and T10 are unchanged (D1b′ moves the endpoint
   only).
 
-| Item | v1 | v2 draft | Reused quantity |
+| Item | v1 | v2 | Reused quantity |
 |---|---|---|---|
 | 1. Endpoint (D1b′) | Last row within max(1, 0.012H) of the configured top | Last window row inside the top band: (y_last − top) / H ≤ 0.27 | `entrance_band_ratio` (T1, T7) |
 | 2. Continuity | Any downward step resets the window | A downward step up to the reversal tolerance keeps it. Upward steps stay bounded by the maximum jump. Progress is still first to last row | `handoff_direction_reversal_tolerance_px` = max(1, 0.012H) |
 | 3a. Unselected exit row | Any phase-admitted Oil at an unknown frame resets | The owner's publishable row may close the window (below) | Selector publishability, allowed set |
 | 4. Ending (D2b) | Any admitted Oil, EMPTY, ambiguity or unusable frame ends the episode | Only DRAINING (a qualified T5 release) or EMPTY evidence ends it (below) | Material phase from the lifecycle |
-| 6. Anchor | One window row `ANCHOR_ELIGIBLE` with direct or ordered-lower identity | **User decides:** 6a also accepts the owner's `anchor_corridor`/`anchor_trajectory` profile plus one direct or ordered-lower window row; 6c keeps v1 | Tracklet confirmation profile |
+| 6a. Anchor | One window row `ANCHOR_ELIGIBLE` with direct or ordered-lower identity | v1's rule, **or** the last window row's tracklet profile is `anchor_corridor` or `anchor_trajectory` and at least one window row is `direct_interface` or `ordered_lower_interface` | Tracklet confirmation profile |
 
 **3a — the unselected exit row.**
 - **Applies only** at a frame where the bounded path resolved unknown, the window
   is not empty, and the frame is usable, not EMPTY and not opposed.
 - **The row:** the owner is the window's last tracklet. The frame's publishable
   layer must hold exactly one row of that owner, and the owner must be in the
-  frame's allowed set. The row passes the same per-row checks as a selected row
+  frame's allowed set (read from the phase diagnostics; an unconstrained frame
+  allows it). The row passes the same per-row checks as a selected row
   and the continuity rule. The phase layer holds no other tracklet.
 - **Bounds:**
   - it only extends a window of selected rows; it never seeds one;
@@ -245,8 +250,9 @@ its local evidence above; it was never run on Windows.
   class; those rows are not published.
 - **Fail closed per frame (confirmed by the user, 2026-10-21).** An unusable or
   opposed frame publishes UNKNOWN without ending the episode.
-- **End.** DRAINING (`DRAIN_RELEASE_CONFIRMED` or a recovery release) or EMPTY
-  evidence ends the episode. It cannot resume, and normal selection continues.
+- **End.** DRAINING (`DRAIN_RELEASE_CONFIRMED` or a recovery release; read from
+  the lifecycle's material phase before top-exit rewrites it) or EMPTY evidence
+  ends the episode. It cannot resume, and normal selection continues.
 - **Risk.** A real drain that the lifecycle does not release would stay FULL.
   On ④ the lifecycle stayed in `INITIAL_FULL_BARRIER` in every sampled window.
   The reviewed interval ends at 780 s, so it does not score this.
@@ -272,23 +278,27 @@ Rewritten v1 cases:
 - "new numeric interface ends FULL" becomes FULL until DRAINING, plus a release
   case.
 
-**Local controls.** Production path, top-exit v2 ON against OFF, through the
-existing comparison entry. Its sample list gains sample2.
+**Local controls.** Production path through the existing
+`tests.diagnostics.s11_initial_full_comparison --top-exit-comparison` entry: IFO v2
+in both arms, top-exit v2 ON against OFF, 2 fps, the qualification windows, debug
+NONE, in one managed run. The entry gains sample2, an original-Recipe option for
+sample4 and an UNKNOWN initial-state option; nothing else in it changes.
 
-| Input | Truth | Pass |
-|---|---|---|
-| sample4, original Recipe, default initial state | Never FULL | Zero top-exit FULL rows, in particular none at 54.5–56 s (G) |
-| sample4, October 15 interior Recipe (initial FULL stress) | Never FULL | Zero top-exit FULL rows |
-| base_sample_1, original Recipe | No FULL | Zero top-exit FULL rows |
-| sample2, original Recipe | Full-like, no interface, no rise | Zero top-exit FULL rows (prior-only FULL is forbidden) |
+| Input | Initial state | Truth | Pass |
+|---|---|---|---|
+| sample4, original Recipe, 0–56 s | UNKNOWN (qualification state) | Never FULL | Zero top-exit FULL rows, in particular none at 54.5–56 s (G) |
+| sample4, October 15 interior Recipe | FULL (stress, as on October 16) | Never FULL | Zero top-exit FULL rows |
+| base_sample_1, original Recipe | FULL (stress, as on October 16) | No FULL | Zero top-exit FULL rows |
+| sample2, original Recipe, 0–2 s | FULL (stress) | Full-like, no interface, no rise | Zero top-exit FULL rows (prior-only FULL is forbidden) |
 
-In every control, rows before any closure must match ON and OFF exactly. Any
-failing control stops the work; nothing is retuned.
+In every control the raw inputs and all rows must match ON and OFF exactly; with
+zero closures that is the whole output. Any failing control stops the work;
+nothing is retuned.
 
 **Windows (needs a separate go).** One comparison on ④'s inputs: ④ v2 against
 ④ v2 + top-exit v2. Pre-registered:
 - **BASE:**
-  - FULL starts within 672–675 s; 673.5 s is expected under 6a;
+  - FULL starts within 672–675 s; 673.5 s is expected;
   - no FULL before 672 s;
   - FULL holds through 675–780 s with no numeric Oil row.
 - **Accum:** zero top-exit FULL rows; the truth has no FULL.

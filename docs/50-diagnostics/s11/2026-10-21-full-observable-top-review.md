@@ -9,9 +9,10 @@ The [§6 ④ trace receipt](#6-windows-trace-receipt--2026-10-21) is recorded.
 - **Evidence:** from 673.5 s no proposal exists in Y243–339.
 - **Decided top-exit design:** would not change ④ BASE. The adopted revision
   (items 1–5, item 3 = 3a) is in a
-  [design draft](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2--draft).
+  [design draft](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2).
   The [predicate check](#predicate-check-receipt--2026-10-21) shows that only
-  `independent_anchor` fails on ④; the user decides item 6.
+  `independent_anchor` fails on ④. The user chose item 6 = 6a, and the design
+  is frozen.
 
 Desk review plus transferred Windows evidence: source reading, closed records,
 the retained LBT-1 CSV, one geometry computation with the real mask builder on
@@ -674,7 +675,7 @@ user decides a new item 6:
 **User decision (2026-10-21):** item 3 = **3a**. The user sends the
 [predicate check](../../40-operations/s11-current-windows-field-qualification.md#top-exit-predicate-check)
 to the Windows agent; its receipt is pending. The
-[v2 design draft](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2--draft)
+[v2 design draft](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2)
 collects items 1, 2, 3a, 4 and 5. It is frozen after the receipt settles
 item 6. Nothing is implemented.
 
@@ -742,6 +743,11 @@ Y898–953. T9's `opposed` reads refs only, so none of them is a contradiction.
 
 A wider window or an anchor recency bound would need a new constant, so neither
 is proposed.
+
+**User decision (2026-10-21):** item 6 = **6a**. The v2 design is
+[frozen](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2)
+and implementation with the local controls is authorized. A Windows comparison
+needs a separate go.
 
 ## Constraints preserved
 
