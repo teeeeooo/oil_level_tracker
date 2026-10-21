@@ -559,8 +559,11 @@ implemented):**
    - **Positive:** exists only on Windows, so one Windows comparison on ④'s
      inputs is needed. That run needs the user's go.
 
-**Waiting for the user:** whether to adopt D1b′ and items 2–5 as the design
-direction, and whether to separate the 673.0 s cause first (item 3).
+**User decision (2026-10-21):** adopt D1b′ and items 1–5 as the design
+direction. Separate the 673.0 s cause first: the
+[read-only extraction](../../40-operations/s11-current-windows-field-qualification.md#673-second-selection-cause-extraction)
+reads the decision witness's per-row `publishable` flag. Its receipt is pending.
+Nothing is implemented.
 
 ## Constraints preserved
 

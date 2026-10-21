@@ -44,8 +44,9 @@ is COMPLETE (desk only).
   - At 672.5 s the published Y352 is a reflection.
   - "Almost full" is about 0.18H below the top, which supports an upper-band
     top-exit endpoint (D1b′).
-- **Waiting for the user:** adopt the top-exit revision direction (OTR-1 items
-  1–5), and decide whether to first separate the 673.0 s non-selection cause.
+- **User decision:** adopt the top-exit revision direction (OTR-1 items 1–5).
+  First, a [read-only 673 s selection-cause extraction](../40-operations/s11-current-windows-field-qualification.md#673-second-selection-cause-extraction)
+  was requested (decision-witness `publishable` flag); its receipt is pending.
   Nothing is implemented; any Windows comparison needs a separate go.
 
 Facts it records:

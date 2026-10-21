@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / NO CURRENT EXECUTION REQUEST` — review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: 673 s selection-cause extraction (read-only)` — see [below](#673-second-selection-cause-extraction). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -20,6 +20,77 @@ Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
+
+## 673-second selection-cause extraction
+
+**REQUESTED 2026-10-21 — saved ④ trace only; no run.** This is item 3 of the
+[top-exit revision](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21).
+Review-011 confirmed that Y329 at 673.0 s (`oil-tracklet:000366:0319`) is the
+level, yet nothing was selected.
+
+The trace splits two causes:
+- **(a) publishability:** the row was never in the publishable layer.
+- **(b) path cost:** it was publishable, but the bounded path chose unknown.
+
+`sequence.state.sequence_decision_witness.rows[]` (`r21-decision-witness-v1`,
+present since `fe6eb95`, so also in ④'s `4c72ebb`) stores each row's
+`publishable` flag. That flag is computed before the allowed-set filter, so one
+saved value separates (a) from (b):
+- **For (a):** `sequence.candidates[]` gives the clause inputs
+  (`trajectory_support`, `tracklet_confirmation_profile`).
+- **For (b):** the stored unknown-node emission and the Recipe jump limit explain
+  the path choice.
+
+The confidence value itself is not stored. Recomputing it would need a frozen
+tool and is left for a later step only if needed.
+
+```text
+S11 673초 선택 누락 원인 확인 — 저장된 ④ trace 읽기 전용 추출이야.
+재실행·새 bundle·튜닝·비교 실행·새 사람 검토는 하지 마.
+파일은 수정·이동하지 말고 결과 파일도 만들지 마.
+
+목적: review-011에서 실제 유면으로 확인된 673.0초 Y329(oil-tracklet:000366:0319)가
+왜 선택되지 않았는지 저장값으로 구분한다.
+(가) 출력 후보 자격(publishable)에서 빠졌는지,
+(나) 자격은 있었는데 경로 선택이 unknown을 골랐는지.
+
+1. ④ bundle의 debug/debug_index.json, debug/debug_trace.jsonl, recipe_snapshot.oilrecipe만 읽는다.
+   지난번처럼 index에서 glass_name=BASE, timestamp_sec로 record를 찾아 byte_offset으로 읽는다.
+   경로 표기: S = sequence.state, W = S.sequence_decision_witness,
+   C = sequence.candidates[], R = record 최상위.
+
+2. 표 D — f16064 / f16088 / f16112 / f16124 / f16136
+   (670.0 / 671.0 / 672.0 / 672.5 / 673.0초) 각 한 줄:
+   frame | W.phase.value / W.phase.reason | W.phase.allowed_tracklet_ids |
+   W.selection.resolved_kind | W.selection.selected_candidate(source, y, row_hypothesis_id) |
+   W.rows 중 tracklet_id = oil-tracklet:000366:0319인 각 row:
+     row_hypothesis_id, phase_admitted, publishable,
+     members(source:y:authority:tracklet_lifecycle:selected) |
+   W.rows 중 publishable=true인 row 수와 그 tracklet_id:y 목록
+   0319 row가 없으면 "0319 없음"으로 둔다.
+
+3. 표 E — 표 D의 0319 member마다, source와 y가 같은 C 항목을 찾아 한 줄:
+   frame | source | y | trajectory_support | cluster_support | semantic_corridor_support |
+   cross_representation_support | effective_track_opposition | tracklet_confirmation_profile |
+   tracklet_lifecycle | tracklet_material_conflict | reject_stage
+   같은 source·y가 여럿이거나 없으면 "대응 불명"으로 두고 다른 항목으로 채우지 않는다.
+
+4. 표 F — f16136(673.0초)과 Recipe 값 한 줄:
+   S.sequence_emission | R.state.oil_ambiguity_score | R.state.oil_no_interface_score |
+   recipe_snapshot의 BASE glass detector_settings.minimum_final_confidence |
+   detector_settings.temporal_max_jump_px
+
+5. 자체 확인: 670.0~672.5초에 선택된 0319 row는 publishable=true여야 한다.
+   아니면 그 행에 "불일치"만 표시하고 원인은 조사하지 않는다.
+
+6. 머리줄(run_id, BASE record 수)과 표 D/E/F를 텍스트 원문 그대로 돌려준다.
+   값은 고치거나 반올림하지 않는다. 키가 없으면 MISSING, 값이 null이면 null.
+   결론은 "673.0초 0319 row의 publishable 값" 같은 관찰 한 줄만 쓴다.
+   원인 판정·수정 제안 없이 반환 후 멈춘다.
+   FIELD FAIL / O2 OPEN, review-006 pending, ⑧ NOT RUN 상태는 바뀌지 않는다.
+```
+
+Record the receipt in OTR-1.
 
 ## Review-011 BASE level at the fast-rise onset
 
