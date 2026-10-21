@@ -9,12 +9,13 @@ The [§6 ④ trace receipt](#6-windows-trace-receipt--2026-10-21) is recorded.
 - **Evidence:** from 673.5 s no proposal exists in Y243–339.
 - **Decided top-exit design:** would not change ④ BASE. The adopted revision
   (items 1–5, item 3 = 3a) is in a
-  [design draft](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2--draft);
-  it waits for the anchor-predicate check (item 6).
+  [design draft](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2--draft).
+  The [predicate check](#predicate-check-receipt--2026-10-21) shows that only
+  `independent_anchor` fails on ④; the user decides item 6.
 
 Desk review plus transferred Windows evidence: source reading, closed records,
 the retained LBT-1 CSV, one geometry computation with the real mask builder on
-retained local Recipes, two read-only ④ trace extractions and review-011, all
+retained local Recipes, three read-only ④ trace extractions and review-011, all
 relayed by the user. No detector run, flag or tuning. Base HEAD `b9ff06b`. Current authority:
 [Work Plan](../../00-project/work-plan.md). Context:
 [FULL observable-top handoff](../../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).
@@ -677,6 +678,71 @@ to the Windows agent; its receipt is pending. The
 collects items 1, 2, 3a, 4 and 5. It is frozen after the receipt settles
 item 6. Nothing is implemented.
 
+**User confirmation (2026-10-21):** under D2b, an unusable or opposed frame inside
+a top-exit FULL episode publishes UNKNOWN for that frame without ending the
+episode.
+
+### Predicate-check receipt — 2026-10-21
+
+**RECEIVED.** The user relayed the Windows agent's read-only extraction made with
+the [predicate check](../../40-operations/s11-current-windows-field-qualification.md#top-exit-predicate-check)
+(`c94b140`).
+- **Identity:** run `a9ccece3-49bf-47af-a570-b1ca6e9777a4`, BASE 601 records.
+- **Read:** `debug/debug_index.json` and `debug/debug_trace.jsonl` only. No run,
+  new bundle, tuning or human review.
+
+**Table G — frame inputs (670.0–673.5 s, eight frames).**
+- **Raster:** the effective gray values were read from `R.state`; they are
+  absent from `S`. Mean 93.1–93.5, std 28.7–29.2, range 92–96.
+- **State:** EMPTY likelihood 0.0 and `sequence_material_phase_ambiguous` 0.0 in
+  every frame.
+- **Admitted tracklets:** [`000366:0319`] at 670.0–673.0 s; none at 673.5 s.
+- **Identity contradiction:** 8–12 entries per frame are listed as "not none".
+  All have the value null.
+
+**Table H — 0319 members.** Constant in every member:
+- `CONTINUATION_ELIGIBLE`; identity contradiction `none`; admitted 1.0;
+  incompatible 0.0; `continuing`;
+- tracklet material conflict 0.0703; recent direction −1;
+- `material_texture_conflict` MISSING, because `sequence.candidates` holds no
+  features or penalties.
+
+| Time | Row (`oil-row:`) | Members (* = selected) and identity | Recent net progress | Recent agreement |
+|---|---|---|---:|---:|
+| 670.0 | `000380:002` | `calibrated_high_recall` 384* and `oil_hypothesis` 385: `continuation_only` | 12.0 | 0.8 |
+| 670.5 | `000381:001` | `material_path` 377*, `calibrated_high_recall` 377: `direct_interface` | 16.0 | 0.8 |
+| 671.0 | `000382:000` | `material_path` 369*, `calibrated_high_recall` 369: `direct_interface`; `phase_transition_scan` 364: `continuation_only` | 19.25 | 0.8 |
+| 671.5 | `000383:000` | `material_path` 362*, `calibrated_high_recall` 362: `direct_interface`; `distributed_sobel_path` 352: `continuation_only` | 25.5 | 0.8 |
+| 672.0 | `000384:001` | `material_path` 350*, `calibrated_high_recall` 351: `direct_interface` | 42.5 | 1.0 |
+| 672.5 | `000385:001` | `calibrated_high_recall` 352*: `continuation_only` | 32.5 | 0.8 |
+| 673.0 | `000386:000` | `phase_transition_scan` 329 (not selected): `continuation_only` | 48.0 | 0.8 |
+| 673.5 | — | 0319 absent | — | — |
+
+**Transcription note:** the identity contradiction is serialized only for
+candidates that hold a sequence ref (`_project_candidates`). The null entries are
+candidates without a ref: Foam evidence, raw hypotheses and far rows such as
+Y898–953. T9's `opposed` reads refs only, so none of them is a contradiction.
+
+#### Findings
+
+| # | Finding |
+|---|---|
+| P1 | **`independent_anchor` fails on ④.** No 0319 member at 670.0–673.0 s is `ANCHOR_ELIGIBLE`. With items 1, 2 and 3a, the six-row window evaluated at 673.5 s (670.5–673.0 s) holds no anchor, so v2 as drafted would not fire. Item 6 is needed |
+| P2 | **Every other stored predicate passes.** Usable raster (far above the black limits); EMPTY 0; no ambiguity; no ref contradiction; one admitted tracklet per window frame; disappearance at 673.5 s (none admitted). Rows are admitted, compatible and `continuing`, with material conflict 0.07 < 0.45. The last row's direction is upward with agreement 0.8 ≥ 0.60. Progress is 48 px (Y377 → Y329) ≥ 19.3. The endpoint is at 0.152H ≤ 0.27. Steps are −8, −7, −12, +2 (the lag, within 9.27) and −23 (≤ 32). Gaps are 0.5 s |
+| P3 | **Material texture is inferred, not stored.** IFO v2 qualified 0319 at 670.0–673.0 s (§6 Table A). Its `current_material_conflict` predicate takes the minimum conflict over the row's texture-available members (default 1.0) and needs < 0.45. So each 0319 row had such a member below the limit. For the single-member rows at 672.5 and 673.0 s that member is the window row itself. Elsewhere the representative is `material_path`, which always sets the key (`oil_material_path.py`) |
+| P4 | **Not covered:** the artifact and optics terms of the hard contradiction (not stored), and the hard-unavailable input flags at 673.5 s. The gray values rule out a black frame; the input flags were not extracted |
+| P5 | **The owner holds a tracklet-level anchor confirmation.** Every window row has profile `anchor_corridor` (Table E). The tracklet policy assigns it after at least 3 frames with an `ANCHOR_ELIGIBLE` member in the confirmation window (1 for a short observation; `oil_interface_tracklets.py:1068–1089`). The ID prefix 000366 suggests the tracklet began at record offset 366 (663.0 s), inside this refill; row IDs follow the same offsets (000380 = 670.0 s). Four window rows (670.5–672.0 s) are `direct_interface` |
+
+#### Item 6 options (the user chooses)
+
+| Option | Rule | For | Against |
+|---|---|---|---|
+| **6a. Tracklet-level anchor** (agent lean) | `independent_anchor` passes as in v1 (a window row `ANCHOR_ELIGIBLE` with direct or ordered-lower identity), **or** when the owner's profile is `anchor_corridor`/`anchor_trajectory` and at least one window row is `direct_interface` or `ordered_lower_interface` | Reuses the tracklet policy's anchor confirmation, which the lifecycle already trusts (`_chain_is_strong_anchor_interface`, `_is_current_fill_anchor_handoff`). Keeps a physical-interface row in the window. No new constant. ④ passes (P5) | The anchor can predate the window. Continuing admission bounds this only partly: each row needs an anchor within the grace or corridor bound, or registered aggregate motion. A tracklet confirmed on the real level that later drifts onto a reflection near the top could close (F04-like). The local controls must show it does not |
+| **6c. Keep the per-row rule** | No change | Strictest | v2 cannot fire on ④; no Windows positive; top-exit does not meet the 672 s target. The next work moves to the evidence side: why the rows near the top are only `CONTINUATION_ELIGIBLE` |
+
+A wider window or an anchor recency bound would need a new constant, so neither
+is proposed.
+
 ## Constraints preserved
 
 - **Unchanged:** default R22 + R22-3/O1 and every experiment flag; FULL CONDITION
@@ -709,9 +775,10 @@ item 6. Nothing is implemented.
     snapshot, the October 15 interior Recipe and base_sample_1.
   - Windows BASE geometry comes from the transferred ④ receipt.
   - Top-exit, cost-first, RGB and Local XY are OFF in ④; IFO v2 is ON in ④.
-- Execution scope: desk review plus two transferred read-only Windows trace
-  extractions (§6 and the 673 s receipt) and one human review (review-011), all
-  on the existing ④ bundle; no detector, pipeline or replay run anywhere. The local work was a read-only geometry
+- Execution scope: desk review plus three transferred read-only Windows trace
+  extractions (§6, the 673 s receipt and the predicate check) and one human
+  review (review-011), all on the existing ④ bundle; no detector, pipeline or
+  replay run anywhere. The local work was a read-only geometry
   computation and a read of the retained LBT-1 CSV.
 - Logic-map impact: NONE — review only. The map already states that FULL barrier
   frames are coordinate-free and that top-exit uses the configured top.

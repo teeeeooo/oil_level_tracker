@@ -189,9 +189,10 @@ does not establish physical identity or field acceptance.
 
 ## October 21 top-exit revision (v2) — draft
 
-**Status: DRAFT — not frozen, not implemented.** Freeze it once the
-[top-exit predicate check](../40-operations/s11-current-windows-field-qualification.md#top-exit-predicate-check)
-receipt settles item 6. The user's decisions are recorded in
+**Status: DRAFT — not frozen, not implemented.** The
+[predicate-check receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)
+shows that only `independent_anchor` fails on ④. Freeze the draft after the user
+decides item 6. The user's decisions are recorded in
 [OTR-1](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#decision-record--2026-10-21):
 - D1: the ellipse is the Glass;
 - D2: S with D2b persistence;
@@ -219,7 +220,7 @@ its local evidence above; it was never run on Windows.
 | 2. Continuity | Any downward step resets the window | A downward step up to the reversal tolerance keeps it. Upward steps stay bounded by the maximum jump. Progress is still first to last row | `handoff_direction_reversal_tolerance_px` = max(1, 0.012H) |
 | 3a. Unselected exit row | Any phase-admitted Oil at an unknown frame resets | The owner's publishable row may close the window (below) | Selector publishability, allowed set |
 | 4. Ending (D2b) | Any admitted Oil, EMPTY, ambiguity or unusable frame ends the episode | Only DRAINING (a qualified T5 release) or EMPTY evidence ends it (below) | Material phase from the lifecycle |
-| 6. Anchor | One window row `ANCHOR_ELIGIBLE` with direct or ordered-lower identity | **Pending** the predicate check | — |
+| 6. Anchor | One window row `ANCHOR_ELIGIBLE` with direct or ordered-lower identity | **User decides:** 6a also accepts the owner's `anchor_corridor`/`anchor_trajectory` profile plus one direct or ordered-lower window row; 6c keeps v1 | Tracklet confirmation profile |
 
 **3a — the unselected exit row.**
 - **Applies only** at a frame where the bounded path resolved unknown, the window
@@ -242,9 +243,8 @@ its local evidence above; it was never run on Windows.
   material phase is not DRAINING and EMPTY evidence is clear. This includes
   frames where the selector chose Oil, such as IFO v2 exposures of the 721 s
   class; those rows are not published.
-- **Fail closed per frame (agent's reading of D2b; the user confirms it at the
-  freeze).** An unusable or opposed frame publishes UNKNOWN without ending the
-  episode.
+- **Fail closed per frame (confirmed by the user, 2026-10-21).** An unusable or
+  opposed frame publishes UNKNOWN without ending the episode.
 - **End.** DRAINING (`DRAIN_RELEASE_CONFIRMED` or a recovery release) or EMPTY
   evidence ends the episode. It cannot resume, and normal selection continues.
 - **Risk.** A real drain that the lifecycle does not release would stay FULL.
@@ -288,7 +288,7 @@ failing control stops the work; nothing is retuned.
 **Windows (needs a separate go).** One comparison on ④'s inputs: ④ v2 against
 ④ v2 + top-exit v2. Pre-registered:
 - **BASE:**
-  - FULL starts within 672–675 s; 673.5 s is expected if item 6 passes;
+  - FULL starts within 672–675 s; 673.5 s is expected under 6a;
   - no FULL before 672 s;
   - FULL holds through 675–780 s with no numeric Oil row.
 - **Accum:** zero top-exit FULL rows; the truth has no FULL.

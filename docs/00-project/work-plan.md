@@ -53,12 +53,18 @@ is COMPLETE (desk only).
     and the fast 23 px step raised the bar (structural, S5).
 - **User decision:** item 3 = 3a. The top-exit window may close on the owner's
   unselected, publishable, allowed exit row; numeric output is unchanged.
-- **Requested:** a read-only [top-exit predicate check](../40-operations/s11-current-windows-field-qualification.md#top-exit-predicate-check)
-  (receipt pending). Every reported window row is `CONTINUATION_ELIGIBLE`, so
-  T9's `independent_anchor` may still fail on ④ (S6, item 6).
+- **User confirmation:** under D2b, an unusable or opposed frame inside the
+  FULL episode publishes UNKNOWN without ending it.
+- **[Predicate check](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)
+  RECORDED:** with items 1, 2 and 3a, every stored top-exit predicate passes on
+  ④ except `independent_anchor`. No 0319 row is `ANCHOR_ELIGIBLE`, but the owner
+  holds an `anchor_corridor` tracklet profile.
+- **Open for the user:** item 6. 6a (agent lean) accepts the tracklet-level
+  anchor plus a direct-interface window row; 6c keeps the per-row rule, so ④
+  cannot fire.
 - **Drafted:** the [top-exit v2 design](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-21-top-exit-revision-v2--draft)
   (items 1, 2, 3a, 4, 5; tests; local controls; pre-registered Windows
-  outcomes). It is frozen after the receipt. Nothing is implemented; any Windows
+  outcomes). It is frozen after item 6. Nothing is implemented; any Windows
   comparison needs a separate go.
 
 Facts it records:
