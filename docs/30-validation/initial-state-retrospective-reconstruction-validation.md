@@ -49,6 +49,25 @@ Focused tests must cover symmetric `FULL_NO_INTERFACE` and `EMPTY_NO_INTERFACE` 
 - observed detector state and observed validity are immutable;
 - no numeric Oil value is fabricated for retrospective FULL/EMPTY.
 
+### Modern-stream continuing-run rule — 2026-10-21
+
+For modern streams, focused tests must also prove the
+[continuing-run rule](../20-architecture/initial-state-retrospective-reconstruction-architecture.md#modern-stream-continuing-run-rule--2026-10-21):
+- ordinary-UNKNOWN sequence markers neither confirm nor block; hard-failure
+  markers and published Foam before the first boundary still leave it
+  unresolved;
+- a single boundary beyond the tolerance is not a decisive move; two consecutive
+  ones on the same side are;
+- a first decisive move toward the prior's direction is accepted, even when the
+  level later reverses;
+- a first decisive move the other way is a conflict;
+- a run that ends (a step above `temporal_max_jump_px`, or a barrier) or a
+  sequence that ends before a decisive move stays unresolved;
+- the ⑩ BASE shape (slow drain with jitter and UNKNOWN gaps) is accepted, and
+  the ⑩ Accum shape (Foam before the first boundary; a 33 px first step) stays
+  unresolved;
+- legacy R7 anchor streams keep their existing behavior.
+
 ## Oil compatibility controls
 
 - Modern FULL/EMPTY reconstruction with unrelated R7 Foam flags equals the same

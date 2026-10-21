@@ -127,10 +127,22 @@ is COMPLETE (desk only).
       leaves it unresolved.
     - **Unchanged:** only hard failures act as barriers; the entrance topology
       stays.
-    - **Pending:** a read-only ⑩ extraction (BASE 548–620 s Y, geometry, jump
-      limit, Accum first rows). Then freeze the rule before code.
-  - **Also open:** report options A (visible FULL bands) and C (show the
-    judgment note); then the passed opt-in v3 and the paused layered-Foam line.
+    - **Topology:** no entrance-topology gate; it stays provenance only.
+    - **Scope:** B together with A (visible FULL/EMPTY bands) and C (a plain
+      judgment reason).
+  - **FROZEN before implementation:**
+    - B in the
+      [reconstruction architecture](../20-architecture/initial-state-retrospective-reconstruction-architecture.md#modern-stream-continuing-run-rule--2026-10-21)
+      and its
+      [validation](../30-validation/initial-state-retrospective-reconstruction-validation.md#modern-stream-continuing-run-rule--2026-10-21);
+    - A/C in the
+      [report design](../20-architecture/s11-report-context-presentation-design.md#fullempty-bands-and-judgment-reason--2026-10-21).
+  - **Expected on ⑩ (from the read-only extraction):**
+    - **BASE:** ACCEPTED, with the decisive move at 567.5/568.0 s and a FULL
+      prefix of 479.98–548.0 s. Judgment coverage becomes 92.0%.
+    - **Accum:** UNRESOLVED (Foam barrier).
+  - **Next:** implementation, then the passed opt-in v3 and the paused
+    layered-Foam line.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.

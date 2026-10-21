@@ -80,6 +80,78 @@ authority. A valid anchor-grade Oil observation may contribute direction even
 when confirmed Foam coexists, while the Foam sample itself remains immutable and
 is excluded from retrospective state projection.
 
+## Modern-stream continuing-run rule — 2026-10-21
+
+**Status: FROZEN 2026-10-21 before implementation**, with the user's decisions
+recorded in the [Work Plan](../00-project/work-plan.md). It replaces the
+two-observation direction test for modern (non-legacy-R7) streams. Legacy R7
+anchor handling is unchanged.
+
+**Why.** The ⑩ Windows BASE bundle shows two blocks, recorded in the
+[report receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#report-and-judgment-receipt--2026-10-21):
+- **Every UNKNOWN frame is a barrier.** The current resolver marks each such
+  frame `R17_OBSERVATION_UNAVAILABLE`, and the barrier test matched the
+  substring `UNAVAILABLE`. So the first frame stopped the interpretation.
+- **The first two observations hardly moved.** They went Y363 → Y367 (4 px),
+  below the 7.7 px tolerance, although the reviewed truth has a real drain from
+  about 550 s.
+
+**Rule:**
+1. **Barriers.** These stay barriers:
+   - hard-failure markers: the exact barrier flags, and any marker containing
+     `UNAVAILABLE`, `FAILURE`, `FAILED`, `GLARE`, `FOG` or `DETECTION_LOST`;
+   - published Foam without a numeric Oil boundary.
+
+   The sequence resolvers' ordinary-UNKNOWN markers (`R6`/`R7`/`R16`/
+   `R17_OBSERVATION_UNAVAILABLE` and `SEQUENCE_UNAVAILABLE`) are not barriers.
+   A barrier before the first accepted boundary, or inside the run before a
+   decision, leaves the interval UNRESOLVED.
+2. **Run.** The run starts at the first accepted numeric boundary and continues
+   through later accepted boundaries. Samples without one, such as UNKNOWN
+   frames, are skipped. The run ends when consecutive accepted boundaries differ
+   by more than the Glass's `temporal_max_jump_px`.
+3. **Decisive move.** An accepted boundary is *beyond* when it differs from the
+   first boundary by at least the existing direction tolerance:
+   max(2 px, 1 % of the Glass diameter `2 × radius_y`). The first decisive move
+   is two consecutive accepted boundaries beyond the tolerance on the same side.
+4. **Decision.**
+   - **Toward the prior's direction** (FULL: Y increases, the level falls;
+     EMPTY: Y decreases, the level rises): ACCEPTED over the leading interval
+     before the first accepted boundary.
+   - **Opposite:** CONFLICT, the existing meaning of incompatible trusted
+     direction.
+   - **No decisive move** before the run or the sequence ends: UNRESOLVED.
+
+   Motion after the decision is not inspected, so a fall followed by a rise is
+   still accepted.
+5. **Unchanged:**
+   - eligibility, the global contradiction scan and the all-missing hold;
+   - NOT_APPLICABLE when the first sample already has a boundary;
+   - no entrance-topology gate: topology stays provenance only;
+   - projection, event and judgment consumption, and RECOVERY's observed-only
+     input.
+6. **Provenance.** Interpretations decided by this rule record
+   `initial_state_retrospective_v2`. The evidence is the first boundary plus the
+   two decisive boundaries.
+
+**Expected on ⑩ from the receipt (not a pass criterion):**
+- **BASE: ACCEPTED.**
+  - The first boundary is at 548.5 s (Y363).
+  - The 565.5 s Y371 is beyond, but 566.0 s returns to Y363.
+  - The decisive move is 567.5/568.0 s at Y374/375, downward.
+  - The FULL prefix is 479.98–548.0 s, 137 rows.
+  - Under `HOLD_ABOVE_ZERO`, judgment coverage becomes 553/601 = 92.0%. The
+    level then decides.
+- **Accum: UNRESOLVED.**
+  - Five published-Foam rows precede the first boundary.
+  - Separately, the first step (Y515 → Y482, 33 px) exceeds 32 px.
+  - The reviewed truth has Oil entering from about 653 s, 16 s before the first
+    boundary, so an EMPTY prefix to 669.5 s would have been wrong.
+
+**Limit.** The Accum protection comes from the Foam barrier and the continuity
+bound, not from the direction rule. A late first catch with neither would still
+be accepted.
+
 ## Non-authorities
 
 This responsibility must not introduce:

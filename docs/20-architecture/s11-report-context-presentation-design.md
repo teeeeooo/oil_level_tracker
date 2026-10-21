@@ -72,6 +72,53 @@ same 101 Oil values. Band: 5.2 px.
   neighbor. It therefore remains a visible A-class failure check, not one the
   rule hides.
 
+## FULL/EMPTY bands and judgment reason — 2026-10-21
+
+**Status: FROZEN 2026-10-21 before implementation.** The user chose these
+changes after the
+[⑩ report receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#report-and-judgment-receipt--2026-10-21).
+That receipt found two problems:
+- the top-exit FULL suffix and any reconstructed prefix are drawn at alpha 0.035
+  with no legend;
+- the report states only a fixed sentence for `REVIEW_REQUIRED`.
+
+The paired initial-state rule is owned by the
+[reconstruction architecture](initial-state-retrospective-reconstruction-architecture.md#modern-stream-continuing-run-rule--2026-10-21).
+
+**A. Detail-graph state bands.**
+- **Emphasis:** every FULL or EMPTY interval uses the existing hold emphasis
+  (alpha 0.09) and a legend label that names its source:
+  - detector state, including top-exit FULL: `FULL 판정` / `EMPTY 판정`;
+  - an accepted retrospective prefix: `초기 상태 재구성 (FULL)` /
+    `초기 상태 재구성 (EMPTY)`;
+  - the all-missing hold: the existing `확정 초기 상태 유지 가정 (…)`.
+- **Grouping:** intervals are grouped by state and source. The UNKNOWN band is
+  unchanged.
+- **No new data:** no Oil line, vertex or value is added.
+- **Combined graph:** unchanged and lines only. Bands from several Glass on one
+  axis would be ambiguous.
+
+**C. Judgment guidance.** The `판정 안내` sentence gains a plain-Korean reason.
+- **Source:** the reason is mapped from the stored judgment note's known forms:
+  - valid-coverage shortfall, with both percentages;
+  - no samples, or no compressor start for RECOVERY;
+  - recovery found, late or absent;
+  - hold maintained, or the excursion/violation duration;
+  - retrospective provenance or conflict.
+- **Fallback:** an unknown form adds nothing.
+- **No raw text:** the raw English note is never shown, which keeps the main
+  report free of debug strings.
+
+**Unchanged:** events, judgment, CSV, bundle files and Result Review.
+
+**Expected on ⑩:**
+- the BASE graph shows the 674–780 s top-exit FULL as a labelled band;
+- with the paired rule, it also shows the 480–548 s prefix as `초기 상태 재구성
+  (FULL)`;
+- BASE `판정 안내` names the coverage reason or, after the paired rule, the level
+  result;
+- Accum names its 6.0% coverage shortfall.
+
 ## History Review
 
 - Logic-map nodes: `RESULT-PRESENTATION`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`.
@@ -81,6 +128,6 @@ same 101 Oil values. Band: 5.2 px.
 - Preserved contracts: immutable stored observations, same-frame provenance, independent series, actual legacy anchor protection, bounded existing episode/landmark selection, unchanged event history and separate field qualification.
 - Difference from prior failures: repair report interpretation inside its existing owner without changing upstream identity, numeric publication, detector thresholds or candidate selection; summary and landmarks share extrema eligibility, long display connections are bounded and context-only captures cannot create measurements. The 2026-10-20 support rule selects only which stored value is labeled; it neither removes nor rewrites values.
 - Existing feature coverage: reuses the Recipe ellipse `radius_y` already used by the movement-summary tolerance, the R7 anchor eligibility and the existing landmark consumers (graph renderer, source-review window planner, capture store). No Recipe, session or detector setting is added.
-- Execution scope: unit tests through `build_glass_report_presentation` cover isolated spikes, window/band edges, no supported point, R7 anchors and missing geometry. No detector run, full report bundle replay or Windows run was exercised; field disposition is unchanged.
-- Logic-map impact: UPDATED — the `RESULT-PRESENTATION` row records the supported-extremum landmark rule; runtime owners and pipeline edges remain unchanged.
+- Execution scope: unit tests through `build_glass_report_presentation` cover isolated spikes, window/band edges, no supported point, R7 anchors and missing geometry. No detector run, full report bundle replay or Windows run was exercised; field disposition is unchanged. The 2026-10-21 band/reason section is frozen from the read-only ⑩ receipt before any code change.
+- Logic-map impact: NONE — the 2026-10-21 section is frozen but unimplemented; the `RESULT-PRESENTATION` row (which already records the supported-extremum rule) changes with its implementation.
 - Failure-registry impact: NONE — existing F09/F10 guards apply; no failed detector mechanism is retired or promoted.
