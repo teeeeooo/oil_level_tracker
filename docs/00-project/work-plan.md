@@ -151,8 +151,11 @@ is COMPLETE (desk only).
 
     The ⑩ bundle's official outputs are unchanged; seeing the change on Windows
     needs a new run (user's decision).
-  - **Next:** the user's choice of a Windows confirmation run, then the passed
-    opt-in v3 and the paused layered-Foam line.
+  - **REQUESTED (user, 2026-10-21):** one
+    [report confirmation run](../40-operations/s11-current-windows-field-qualification.md#report-confirmation-run)
+    under ⑩'s conditions, with expectations written before the run. The return
+    goes to a new session.
+  - **Then:** the passed opt-in v3 and the paused layered-Foam line.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
@@ -163,7 +166,16 @@ Facts it records:
 
 No detector change, flag, run or Windows request is queued.
 
-**Resume checkpoint — 2026-10-20:** start with the
+**Resume checkpoint — 2026-10-21 (latest):** start with the
+[top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md).
+- **Top-exit v3:** ⑩ PASS; default OFF; not promoted.
+- **Downstream changes at `139ba87`:** the continuing-run initial-state rule,
+  labelled FULL/EMPTY bands and a plain judgment reason.
+- **Pending:** one
+  [report confirmation run](../40-operations/s11-current-windows-field-qualification.md#report-confirmation-run).
+  The user relays its return to the next session.
+
+**Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).
 The layered-Foam line (ATG-1 → LBT-1) is **paused**. The user chose B next:
 define the observable top that FULL inference uses. It is too early on
