@@ -316,7 +316,8 @@ or FULL ending inside 675–780 s.
 
 **Status: FROZEN 2026-10-21 before implementation (`e88d387`); IMPLEMENTED
 (default OFF); [local controls PASS](../60-evidence/s11/2026-10-21-top-exit-v3-local.md);
-Windows ⑩ requested.** After the
+[Windows ⑩ PASS against the pre-registered outcome](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)
+(BASE FULL from 674.0 s; not promoted).** After the
 [⑨ FAIL](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)
 the user chose option B: v2 plus a disappearance confirmed by the next frame.
 The rules, tests, controls and pass criteria below do not change after results.
