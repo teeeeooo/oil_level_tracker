@@ -10,7 +10,23 @@
 
 This is the sole current state, authorization, unknowns and next-action owner.
 
-**Resume checkpoint — 2026-10-20 (latest):** start with the
+**B review — 2026-10-21 (latest):** [OTR-1 FULL observable-top review](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#4-decisions-for-the-user)
+is COMPLETE (desk only) and **waits for the user's decisions D1–D3**:
+- **D1:** the meaning of the observable top.
+- **D2:** whether top-exit replaces or adds to the 27 % rule.
+- **D3:** how to investigate the Windows Y352 gap. A read-only ④ trace request
+  is drafted but not sent.
+
+Facts it records:
+- Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
+- LBT-1 G is Oil lost under a false cap, not false FULL rows.
+- Sampled ④ BASE records stay in `INITIAL_FULL_BARRIER` (IFO v2), so the 27 %
+  closures probably do not govern the Windows miss.
+- sample4 Y808 belongs to the October 15 interior comparison Recipe.
+
+No detector change, flag, run or Windows request is queued.
+
+**Resume checkpoint — 2026-10-20:** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).
 The layered-Foam line (ATG-1 → LBT-1) is **paused**. The user chose B next:
 define the observable top that FULL inference uses. It is too early on

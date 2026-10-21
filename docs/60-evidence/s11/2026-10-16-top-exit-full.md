@@ -68,7 +68,7 @@ Direct inspection with the real mask builder and frozen local Recipes shows:
 | Input | Configured top Y | Effective-mask top Y | Endpoint tolerance | Band reachable in mask |
 |---|---:|---:|---:|---|
 | base_sample_1 | 218 | 230 | 3.552 | No |
-| sample4 | 808 | 811 | 1 | No |
+| sample4, Oct 15 interior comparison Recipe `(595, 842, 37, 34)`, not `sample/sample4.oilrecipe` (top Y798); see [OTR-1](../../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#2-sample4-y808-versus-y798) | 808 | 811 | 1 | No |
 
 This is an unresolved input/geometry limitation, not successful real-video FULL
 recovery. The synthetic resolver fixture bypasses pixel masking and cannot
