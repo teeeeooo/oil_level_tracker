@@ -1,6 +1,8 @@
 # OTR-1 — FULL observable-top design review (B)
 
-**Status: REVIEW COMPLETE — waiting for the user's decisions D1–D3.** Desk review
+**Status: REVIEW COMPLETE — D1 DECIDED by the user ([decision record](#decision-record--2026-10-21)).**
+The user broadly agreed with the agent leans for D1b, D2 and D3. Each still needs
+an explicit go before any implementation or Windows request. Desk review
 only: source reading, closed records, the retained LBT-1 CSV and one geometry
 computation with the real mask builder on retained local Recipes. No detector run,
 flag, tuning or Windows request was sent. Base HEAD `b9ff06b`. Current authority:
@@ -228,6 +230,41 @@ from the Windows miss. Decide D2 after D3 stage 1.
 
 **Agent lean (not binding):** (a) now. Do (c) only if D1 is B or C, choosing the
 review ID at that time.
+
+## Decision record — 2026-10-21
+
+**D1 (user):** the analysis ellipse **is** the Glass region. The user draws its
+top at the end of the Glass. This is part of the existing ROI setup, not a new
+step.
+
+| Quantity | Meaning |
+|---|---|
+| Physical top | Configured ellipse top `center_y − radius_y`. FULL keeps its physical meaning; T1–T10 already use this top |
+| Observable limit | Effective-mask top, `margin_ratio × radius_y` below the physical top. This is the last row any candidate can occupy (BASE Y243, 31 px band; sample4 Y802, 4 px band) |
+| FULL precision | The top band. A top-exit FULL means the level has entered the band that cannot be measured |
+
+What this settles:
+- **Option C's per-Glass confirmation is the existing ROI drawing.** No new
+  Recipe field, checkbox or separate review is needed.
+- **The earlier rule is met.** The mask edge does not replace the physical top;
+  it only marks how far the rise can be seen below that top.
+
+Caveats:
+- **An ellipse drawn smaller than the Glass breaks the contract.** Top-exit would
+  then report FULL when the liquid leaves the region, while the Glass continues
+  above. The ROI editor text does not state the contract yet; making it explicit
+  is a possible UI-text follow-up.
+- **sample4's original ellipse does not follow the Glass at the bottom.** The
+  October 15 review found the rim (Y880/882/887) inside its mask. That Recipe is
+  therefore weak evidence for top behaviour. sample4 never reaches FULL in truth,
+  so this does not block the Windows question.
+- **The Windows Y352 gap is unaffected.** It is 109 px below the observable limit,
+  so D3 remains the first evidence step.
+
+**Still open, with the user's broad agreement to the leans:**
+- **D1b:** move only the top-exit endpoint, to the observable limit.
+- **D2:** S plus D2b persistence; G handled as a separate follow-up.
+- **D3:** (a) direct read with the §5 request.
 
 ## 5. Windows agent request — not sent; send only after the user approves D3 (a)
 

@@ -11,11 +11,14 @@
 This is the sole current state, authorization, unknowns and next-action owner.
 
 **B review — 2026-10-21 (latest):** [OTR-1 FULL observable-top review](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#4-decisions-for-the-user)
-is COMPLETE (desk only) and **waits for the user's decisions D1–D3**:
-- **D1:** the meaning of the observable top.
-- **D2:** whether top-exit replaces or adds to the 27 % rule.
-- **D3:** how to investigate the Windows Y352 gap. A read-only ④ trace request
-  is drafted but not sent.
+is COMPLETE (desk only).
+- **D1 is DECIDED:** the analysis ellipse is the Glass region. Its top is the
+  physical top; the effective-mask top is the observable limit; the margin band
+  between them sets FULL precision.
+- **Still need an explicit go** (the user broadly agreed with the leans):
+  - D1b: move only the top-exit endpoint.
+  - D2: S plus FULL persistence until a drain release.
+  - D3: run the drafted read-only ④ trace request, not yet sent.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
