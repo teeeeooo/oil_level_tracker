@@ -3,8 +3,10 @@
 **Status: COMPLETE — outcome P: no stop rule fired under the frozen N
 ([result](#results-and-decision)).** The user chose every recommendation
 ([decision](#decision--2026-10-22)) and answered review-013
-([result](#review-013-result--2026-10-22)). The
-[protocol](#protocol-frozen-2026-10-22), the tool
+([result](#review-013-result--2026-10-22)). After the result the user answered
+the 52 s/54.5 s question: the two readings use different Foam/Oil boundaries
+([answer](#user-answer-two-boundaries--2026-10-23)); which one the Oil output
+follows is not decided yet. The [protocol](#protocol-frozen-2026-10-22), the tool
 `tests/diagnostics/s11_layer_bottom_topology_2.py` and its tests were frozen
 together at `1447cd6` before the run. Step 5 (B) of the Mac-only order in the
 [Work Plan](../../00-project/work-plan.md), started by the user on 2026-10-22.
@@ -155,6 +157,7 @@ byte.
   2.5 s later. Either the level moves in between, or the readings describe
   different boundaries. LBT-2 applies each judgment at its own frame and does
   not resolve this.
+  **Answered 2026-10-23:** different boundaries ([answer](#user-answer-two-boundaries--2026-10-23)).
 
 ## Protocol (frozen 2026-10-22)
 
@@ -362,11 +365,109 @@ exactly these.
      2.0 s full-like).
   5. The open 52 s versus 54.5 s level question in the
      [review-013 result](#review-013-result--2026-10-22).
+     Answered 2026-10-23: two boundaries; the Oil definition is pending
+     ([answer](#user-answer-two-boundaries--2026-10-23)).
 - **Next, as frozen:** P allows proposing Windows S2 in step 7. Review-012 (the
   unread Accum frames 672–677.5 s) comes first, then a separate go. No tuning
   or widening follows.
 
 S11 ACTIVE / O2 OPEN / FIELD FAIL is unchanged by this local result.
+
+## User answer: two boundaries — 2026-10-23
+
+Asked after the result whether the level moves between 52 s (accepted Y833)
+and 54.5 s (marked Y857–860 near the centre), or the two readings describe
+different boundaries. Reply, verbatim:
+
+> 두 판단이 서로 다른 경계를 본 거야. foam을 엄격하게 구분하면 Y=833까지만 foam이고 나머지는 oil로 판정한거고, foam을 러프하게 구분하면 Y=857-860 까지를 foam이라고 본거고
+
+**What it settles.** The level does not move. The scene holds two Foam/Oil
+boundaries, and each judgment used one:
+- **Strict:** Foam reaches only about Y833; everything below is Oil.
+- **Rough:** Foam reaches about Y857–860; the zone in between counts as Foam.
+
+No owner says yet which boundary the Oil output follows. The
+[SSOT spec](../../rotary_oil_level_tracker_ssot_spec.md) asks for the real Oil
+surface to be told apart from Foam and defines the Foam front as the top of the
+foam/bubbly-oil region, but it does not place the Oil surface inside such a
+layer.
+
+**The references mix both.** The answer covers 52 s and 54.5 s; the rest of
+this table is the assistant's reading of each record against Y833 and
+Y857–860.
+
+| Boundary | References |
+|---|---|
+| Strict | P0 52 s Y833 (accepted) and 49.5 s Y841 (practical). CAF-1's wrong Y861.5–862 at 51.0–52.0 s lies at the rough depth. |
+| Rough | Official `sample4.oiltruth` (2026-08-01): Oil Y848.5–860.5 at 0, 15, 30, 49 and 56 s. Review-013 Q2 at 54.5–56 s. The 2026-10-09 reply, which puts Foam on both sides of Y833–838 at 54–56 s; LBT-2 scored these values as wrong Oil. |
+| Not recorded | The 38–44 s accepted values and the 40 s rejection (2026-10-07): no rough reading exists there. |
+
+The 14 px gap between P0 and the official truth around 49–52 s
+([desk readings](#desk-readings-from-lbt-1s-kept-records)) is this split.
+Values above both boundaries (42.5 s Y805, 44 s Y822) and the tentative lower
+rim (42 s Y868) are wrong under either.
+
+**The output follows both.** Baseline Oil Y in the kept population:
+
+| Time | Ordinary | LBT-2 |
+|---|---|---|
+| 46.0–49.5 s | Y833–840 | Y833–840 |
+| 50.0–51.5 s | none | Y828–833 |
+| 52.0–53.5 s | Y829–833 | Y829–833 |
+| 54.0 s | none | Y844 |
+| 54.5–56.0 s | Y851–852 | Y851–852 |
+
+The output steps 18 px down within one second at 54 s, where the level does
+not move. Under either single definition one side of the step is wrong:
+- **strict:** Y851–852 at 54.5–56 s lie 18–19 px below Y833;
+- **rough:** Y833 at 49 s lies 22 px above the official Y855, and Y833 at 52 s
+  lies 24–27 px above Y857–860.
+
+**What it means for LBT-2.** The verdict stays as recorded: N was frozen with
+these references, and nothing is re-scored. A read-only recount of the kept
+population with the frozen `references`, `outcome` and `transition`
+reproduces 800 better, 8 worse and 2,618 the same, and places them:
+
+| Frames | Better | Worse | Reference basis |
+|---|---|---|---|
+| 40–44 s | 705 | 1 | 2026-10-07 and LBQ-1 values; 685 of the better units remove a rejected value |
+| 49.5–52 s | 63 | 0 | strict |
+| 54.0–56 s | 32 | 7 | rough |
+
+- **The net does not hinge on the choice.** 458 of the 685 removals (42–44 s)
+  drop values that are wrong under either definition. The 63 strict-based and
+  39 rough-based units are small beside them.
+- **54–56 s flips under strict.** If the strict boundary stays near Y833, the
+  scored-A Y828 (54.0 s) and Y829 (55.0 s) in the two 54.0 s conditions lie
+  within C1 of it, while the scored-C Y851–852 lie 18–19 px below it. Both
+  baseline arms would then be wrong at 54.5–56 s. Under rough, the 63 units at
+  49.5–52 s reverse instead.
+- **F's premise holds under either.** Both readings put Foam above the level at
+  54.5 s, so the Glass is not Oil-full there.
+
+**What the choice decides:**
+- the Oil target the detector must hold through 54 s, where the current output
+  changes boundary;
+- how sample4's references are labelled for the next comparison;
+- which boundary review-012 asks for in Windows Accum 672–677.5 s, the reviewed
+  layered-Foam interval.
+
+**Decision for the user: which boundary does the Oil output follow?**
+- **S, strict:** Oil starts below the dense Foam (Y833 here), and the bubbly
+  zone is Oil. It matches P0, the current evaluation authority, and the output
+  through 53.5 s. Needs a strict reading at 54.5–56 s. The official file's Oil
+  values, review-013 Q2 and the 2026-10-09 reading stay as rough readings.
+- **R, rough:** Oil is the top of the clear oil (Y857–860 here), and the bubbly
+  zone belongs to Foam. It matches the official file, review-013 and the output
+  from 54.5 s. Needs P0's 49.5–52 s values and CAF-1's 51–52 s judgment
+  re-labelled.
+- **Both, no switch:** either boundary scores C, but one episode keeps one
+  boundary. Needs a new continuity rule in the P0 contract.
+
+**Recommended: S.** In the user's words the strict reading separates Foam
+rigorously and review-013's reading loosely. S keeps P0 as it is; only
+54–56 s needs a new reading. R is right if the product needs the clear-oil level without the
+bubbly zone.
 
 ## Detector Governance
 
@@ -374,6 +475,6 @@ S11 ACTIVE / O2 OPEN / FIELD FAIL is unchanged by this local result.
 - Failure-registry entries: `S11-F01`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F10`
 - First harmful stage: G — `OIL-PHASE-FILL`: the 27 % proximity rule confirms a fill from an in-unit row under a visible Foam row (54.5 s Y820 under Y808). The 40 s condition — `OIL-SELECTOR`/`OIL-TRACKLET`: with the level's 39.5 s row withdrawn, a lower-structure tracklet wins in a frame outside the context. Foam changes — `SEQUENCE-COMPOSITION`: Foam publication follows Oil publication (`S11-F06`).
 - Existing feature coverage: reuses LBT-1's witness, context, E1, support consumer, runner, controls and P0 bounds unchanged. F reuses the Foam material identity row, the 3 s seed-age limit and the lower separation (`foam_material_identity_tolerance + 2 px`) that already define `ORDERED_LOWER_INTERFACE`, and the existing fill confirmation profile. Top-exit v3 and the contested fill-owner gate stay OFF.
-- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files. Review-013 material: one managed run decoded 34 sample4 frames and wrote raw ROI crops with a source-Y ruler; the user's reply was read from the marked image. Freeze: the tool and focused tests are committed with the protocol; the focused tests and ten resolver/phase suites (plain and under the wrapper, zero activations) ran before freezing. Run: one managed development run at `1447cd6` (sample4 baseline and 245 SOI conditions under the wrapper, the layer report, the N evaluation, and four descriptive controls through the ordinary analysis entry); no Windows run, top-exit or fill-owner gate.
+- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files. Review-013 material: one managed run decoded 34 sample4 frames and wrote raw ROI crops with a source-Y ruler; the user's reply was read from the marked image. Freeze: the tool and focused tests are committed with the protocol; the focused tests and ten resolver/phase suites (plain and under the wrapper, zero activations) ran before freezing. Run: one managed development run at `1447cd6` (sample4 baseline and 245 SOI conditions under the wrapper, the layer report, the N evaluation, and four descriptive controls through the ordinary analysis entry); no Windows run, top-exit or fill-owner gate. After the result (2026-10-23): a read-only recount of the kept population with the frozen evaluation functions, grouped by frame; no run and no output files.
 - Logic-map impact: NONE — a diagnostic wrapper under tests/diagnostics; no production code, owner or edge changes.
 - Failure-registry impact: NONE — a diagnostic wrapper with no runtime mechanism; its limits map to existing entries (`S11-F04` association after a withdrawn row, `S11-F06` Foam following Oil, `S11-F05` for the guard's false-Foam risk) and are recorded here.

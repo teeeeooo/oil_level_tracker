@@ -329,6 +329,13 @@ is COMPLETE (desk only).
         the Foam after a withdrawn 54.0 s row. Foam: 12 right, 3 wrong.
       - **Controls:** sample5/sample7 (EMPTY) and base_sample_1 unchanged;
         sample2 2.0 s as in LBT-1.
+      - **52 s vs 54.5 s answered (user, 2026-10-23):**
+        [two boundaries](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#user-answer-two-boundaries--2026-10-23).
+        Strictly, Foam ends at about Y833 and the zone below is Oil; roughly,
+        Foam reaches Y857–860. The sample4 references and the output (strict
+        through 53.5 s, rough from 54.5 s) mix them; LBT-2's verdict stands.
+        **Pending:** which boundary Oil follows (S, strict, recommended);
+        review-012 and the next sample4 comparison need it.
       - **Next:** Windows S2 joins the step-7 request, after review-012.
       - **Why the guard returns:** D2 = S kept the 27 % cap, so LBT-1's G
         (a fill confirmed at 54.5 s from an in-unit row under Foam) remains.
@@ -345,7 +352,8 @@ is COMPLETE (desk only).
         39.5–56 s, and the user marked the Oil surface at about Y843–860 at
         54.5–56 s ([reply](../50-diagnostics/s11/2026-10-22-review-013-sample4-reply.json)).
         That is the ordinary output's level; the LBW-3 unit (Y820–829) lies
-        in the Foam there.
+        in the Foam there. By the 2026-10-23 answer this mark is the rough
+        boundary.
       - **Frozen before any run:** the protocol, tool and tests, with the
         review answers as references and the stop rules N.
 
@@ -406,8 +414,11 @@ remains background; its pending run is received.
   PASS. FULL needs the first catch in the top band; EMPTY needs it in the
   bottom band and within one continuity step of the effective-mask bottom.
   No known real output changes.
-- **Next:** step 6 (가), fast-fill FULL, or another step the user chooses.
-  LBT-2's Windows S2 joins the step-7 request after review-012.
+- **Next:** the user decides which Foam/Oil boundary the Oil output follows
+  ([LBT-2 answer](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#user-answer-two-boundaries--2026-10-23);
+  S, strict, recommended). Then step 6 (가), fast-fill FULL, or another step
+  the user chooses. LBT-2's Windows S2 joins the step-7 request after
+  review-012.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
   Windows is unavailable for now. When it returns, the next report also
   confirms the band cells, E2 and the first-catch guard, and the step-7
