@@ -97,7 +97,8 @@ The paired initial-state rule is owned by the
   unchanged.
 - **No new data:** no Oil line, vertex or value is added.
 - **Combined graph:** unchanged and lines only. Bands from several Glass on one
-  axis would be ambiguous.
+  axis would be ambiguous. (Superseded on 2026-10-22 by the per-Glass strip
+  below.)
 
 **C. Judgment guidance.** The `판정 안내` sentence gains a plain-Korean reason.
 - **Source:** the reason is mapped from the stored judgment note's known forms:
@@ -120,6 +121,44 @@ The paired initial-state rule is owned by the
   result;
 - Accum names its 6.0% coverage shortfall.
 
+## Combined-graph state strip and source patterns — 2026-10-22
+
+**Status: FROZEN 2026-10-22 before implementation.** The user chose E1/E2 from
+the graph limits named in the
+[top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md#open-choices-after-that-the-user-decides):
+- the combined graph has no state bands;
+- bands from different sources share one colour, so only the legend tells a
+  reconstructed FULL from a detector FULL.
+
+**E2. Source patterns, both graphs.**
+- **Colour stays by state:** FULL blue, EMPTY amber; UNKNOWN keeps its grey.
+- **Pattern by source:**
+  - detector state, including top-exit FULL (`FULL 판정` / `EMPTY 판정`):
+    solid, as now;
+  - an accepted initial-state reconstruction (`초기 상태 재구성 (…)`):
+    diagonal hatching;
+  - the all-missing hold (`확정 초기 상태 유지 가정 (…)`): dots.
+- **Emphasis:** the detail-graph fill keeps the 2026-10-21 alpha (0.09;
+  UNKNOWN 0.065). Hatching and dots use the state colour at a stronger alpha so
+  they read at a glance. The legend shows each pattern.
+
+**E1. Combined-graph state strip.**
+- **Layout:** a strip under the combined lines shares their time axis. It has
+  one row per Glass, in result order, labelled with the Glass name.
+- **Content:** each row draws exactly that Glass's detail-graph bands, with the
+  same grouping, extents, labels and patterns, UNKNOWN included. The fill is
+  stronger than in the detail graph because no line runs over it.
+- **Lines stay separate:** the line plot above stays lines only. Each Glass
+  gets its own row, which removes the 2026-10-21 objection to bands from
+  several Glass on one axis.
+- **Fallback:** no strip is drawn when no Glass has a band.
+
+**Unchanged:** samples, events, judgment, CSV, bundle files, the report
+template and Result Review. No Oil line, vertex or value is added.
+
+**Confirmation on the next Windows report:** each strip row matches its Glass's
+detail-graph bands, and each band's pattern matches its legend entry.
+
 ## History Review
 
 - Logic-map nodes: `RESULT-PRESENTATION`, `PUBLICATION-PROVENANCE`, `CSV-PUBLICATION`.
@@ -129,6 +168,6 @@ The paired initial-state rule is owned by the
 - Preserved contracts: immutable stored observations, same-frame provenance, independent series, actual legacy anchor protection, bounded existing episode/landmark selection, unchanged event history and separate field qualification.
 - Difference from prior failures: repair report interpretation inside its existing owner without changing upstream identity, numeric publication, detector thresholds or candidate selection; summary and landmarks share extrema eligibility, long display connections are bounded and context-only captures cannot create measurements. The 2026-10-20 support rule selects only which stored value is labeled; it neither removes nor rewrites values.
 - Existing feature coverage: reuses the Recipe ellipse `radius_y` already used by the movement-summary tolerance, the R7 anchor eligibility and the existing landmark consumers (graph renderer, source-review window planner, capture store). No Recipe, session or detector setting is added.
-- Execution scope: unit tests through `build_glass_report_presentation` cover isolated spikes, window/band edges, no supported point, R7 anchors and missing geometry. No detector run, full report bundle replay or Windows run was exercised; field disposition is unchanged. The 2026-10-21 band/reason section was frozen from the read-only ⑩ receipt before any code change, then implemented with renderer and presentation unit tests and a rendered ⑩-like check; no Windows run.
-- Logic-map impact: UPDATED — the `RESULT-PRESENTATION` row now records the source-labelled FULL/EMPTY bands and the plain judgment reason, beside the supported-extremum rule; runtime owners and pipeline edges remain unchanged.
+- Execution scope: unit tests through `build_glass_report_presentation` cover isolated spikes, window/band edges, no supported point, R7 anchors and missing geometry. No detector run, full report bundle replay or Windows run was exercised; field disposition is unchanged. The 2026-10-21 band/reason section was frozen from the read-only ⑩ receipt before any code change, then implemented with renderer and presentation unit tests and a rendered ⑩-like check; no Windows run. The 2026-10-22 strip/pattern section is frozen before any code change; it is not yet implemented.
+- Logic-map impact: NONE — the 2026-10-22 strip/pattern section is frozen but unimplemented; the `RESULT-PRESENTATION` row, which already records the source-labelled bands, changes with its implementation.
 - Failure-registry impact: NONE — existing F09/F10 guards apply; no failed detector mechanism is retired or promoted.
