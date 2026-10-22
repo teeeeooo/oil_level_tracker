@@ -266,6 +266,19 @@ is COMPLETE (desk only).
         dynamic fill ownership.
       - **Use:** sample5 is a local case for the stale owner. Fast-fill FULL
         keeps SPL#4 as its only case.
+    - **Step 3 done:**
+      [DSR-1](../50-diagnostics/s11/2026-10-22-d-scope-review.md), a desk
+      review with no run.
+      - **Accum on SPL#1 (⑩):** numeric Oil in entry 4 of ~39 rows, post-Foam 0
+        of ~41, drain 22 of ~161.
+      - **Blocks:** post-Foam is blocked by tracklet association ambiguity
+        (`INCOMPATIBLE_BRANCH`), and drain by partial release (F08). The entry
+        block is unknown.
+      - **Options:** 1 fill-owner validity (the stale owner; local cases
+        sample5/7), 2 post-Foam association, 3 drain release. Options 2 and 3
+        need Windows readouts first.
+      - **Recommendation:** option 1 first, possibly ahead of E3 and B. The
+        user decides.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
