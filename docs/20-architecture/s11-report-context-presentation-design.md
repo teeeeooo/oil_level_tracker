@@ -123,7 +123,9 @@ The paired initial-state rule is owned by the
 
 ## Combined-graph state strip and source patterns — 2026-10-22
 
-**Status: FROZEN 2026-10-22 before implementation.** The user chose E1/E2 from
+**Status: FROZEN 2026-10-22 before implementation (`db83c59`); IMPLEMENTED;
+[local verification](../60-evidence/s11/2026-10-21-initial-state-report-local.md#combined-graph-strip-and-band-patterns-e1e2--2026-10-22).**
+The user chose E1/E2 from
 the graph limits named in the
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md#open-choices-after-that-the-user-decides):
 - the combined graph has no state bands;
@@ -168,6 +170,6 @@ detail-graph bands, and each band's pattern matches its legend entry.
 - Preserved contracts: immutable stored observations, same-frame provenance, independent series, actual legacy anchor protection, bounded existing episode/landmark selection, unchanged event history and separate field qualification.
 - Difference from prior failures: repair report interpretation inside its existing owner without changing upstream identity, numeric publication, detector thresholds or candidate selection; summary and landmarks share extrema eligibility, long display connections are bounded and context-only captures cannot create measurements. The 2026-10-20 support rule selects only which stored value is labeled; it neither removes nor rewrites values.
 - Existing feature coverage: reuses the Recipe ellipse `radius_y` already used by the movement-summary tolerance, the R7 anchor eligibility and the existing landmark consumers (graph renderer, source-review window planner, capture store). No Recipe, session or detector setting is added.
-- Execution scope: unit tests through `build_glass_report_presentation` cover isolated spikes, window/band edges, no supported point, R7 anchors and missing geometry. No detector run, full report bundle replay or Windows run was exercised; field disposition is unchanged. The 2026-10-21 band/reason section was frozen from the read-only ⑩ receipt before any code change, then implemented with renderer and presentation unit tests and a rendered ⑩-like check; no Windows run. The 2026-10-22 strip/pattern section is frozen before any code change; it is not yet implemented.
-- Logic-map impact: NONE — the 2026-10-22 strip/pattern section is frozen but unimplemented; the `RESULT-PRESENTATION` row, which already records the source-labelled bands, changes with its implementation.
+- Execution scope: unit tests through `build_glass_report_presentation` cover isolated spikes, window/band edges, no supported point, R7 anchors and missing geometry. No detector run, full report bundle replay or Windows run was exercised; field disposition is unchanged. The 2026-10-21 band/reason section was frozen from the read-only ⑩ receipt before any code change, then implemented with renderer and presentation unit tests and a rendered ⑩-like check; no Windows run. The 2026-10-22 strip/pattern section was frozen before any code change, then implemented with renderer unit tests and rendered SPL#4-like, ⑩-like and no-band checks from synthetic values; no Windows run yet.
+- Logic-map impact: UPDATED — the `RESULT-PRESENTATION` row now records the source patterns and the combined-graph state strip beside the source labels, the supported-extremum rule and the judgment reason; runtime owners and pipeline edges remain unchanged.
 - Failure-registry impact: NONE — existing F09/F10 guards apply; no failed detector mechanism is retired or promoted.

@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 
 from oil_tracker.adapters.reporting.graph_renderer import GraphRenderer
 from oil_tracker.domain.enums import (
@@ -109,10 +110,12 @@ def test_detail_graph_renders_confirmed_initial_state_hold_without_oil_line(
     monkeypatch,
 ) -> None:
     spans: list[str | None] = []
+    hatches: dict[str | None, str | None] = {}
     original = Axes.axvspan
 
     def recording_span(self, xmin, xmax, *args, **kwargs):
         spans.append(kwargs.get("label"))
+        hatches[kwargs.get("label")] = kwargs.get("hatch")
         return original(self, xmin, xmax, *args, **kwargs)
 
     monkeypatch.setattr(Axes, "axvspan", recording_span)
@@ -139,6 +142,7 @@ def test_detail_graph_renders_confirmed_initial_state_hold_without_oil_line(
     GraphRenderer()._render_glass(result, config, tmp_path / "initial-hold.png")
 
     assert "확정 초기 상태 유지 가정 (FULL)" in spans
+    assert hatches["확정 초기 상태 유지 가정 (FULL)"] == ".."
 
 
 def test_foam_long_timestamp_gap_breaks_in_combined_and_detail(tmp_path, monkeypatch):
@@ -166,19 +170,101 @@ def test_foam_long_timestamp_gap_breaks_in_combined_and_detail(tmp_path, monkeyp
 
 
 def test_detail_graph_labels_detector_and_reconstructed_state_bands(tmp_path, monkeypatch) -> None:
-    spans: list[tuple[str | None, float]] = []
+    spans = _record_spans(monkeypatch)
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    result = _reconstructed_then_top_exit_full(config)
+
+    GraphRenderer()._render_glass(result, config, tmp_path / "bands.png")
+
+    styles = {span["label"]: span for span in spans if span["label"]}
+    assert styles["초기 상태 재구성 (FULL)"]["face_alpha"] == 0.09
+    assert styles["초기 상태 재구성 (FULL)"]["hatch"] == "///"
+    assert styles["FULL 판정"]["face_alpha"] == 0.09
+    assert styles["FULL 판정"]["hatch"] is None
+    assert "확정 초기 상태 유지 가정 (FULL)" not in styles
+
+
+def test_combined_graph_adds_one_state_row_per_glass_under_the_lines(tmp_path, monkeypatch) -> None:
+    spans = _record_spans(monkeypatch)
+    base = InspectionRecipe.default_glass(320, 240, 1)
+    accum = InspectionRecipe.default_glass(320, 240, 2)
+    first = _reconstructed_then_top_exit_full(base)
+    second = GlassAnalysisResult(
+        glass_id=accum.id,
+        glass_name="Accum",
+        result_state=ResultState.REVIEW_REQUIRED,
+        samples=[_sample(accum.id, 0.0, None, 4.0), _sample(accum.id, 1.0, None, 5.0)],
+    )
+    from types import SimpleNamespace
+    result = SimpleNamespace(glass_results=[first, second], overall_state=ResultState.REVIEW_REQUIRED)
+
+    GraphRenderer()._render_combined(result, None, tmp_path / "combined.png")
+
+    strip = spans[0]["axes"]
+    lines = next(axes for axes in strip.figure.axes if axes is not strip)
+    assert all(span["axes"] is strip for span in spans)
+    assert not lines.patches
+    assert [label.get_text() for label in strip.get_yticklabels()] == [first.glass_name, "Accum"]
+    rows = {(span["label"], span["hatch"], span["ymin"] >= 0.5) for span in spans}
+    assert rows == {
+        ("초기 상태 재구성 (FULL)", "///", True),
+        ("FULL 판정", None, True),
+        ("직접 유면 확인 어려움", None, False),
+    }
+    # The strip draws the detail-graph runs, only filled more strongly.
+    assert {span["face_alpha"] for span in spans if span["label"] == "FULL 판정"} == {0.27}
+
+
+def test_combined_graph_without_state_bands_keeps_lines_only(tmp_path, monkeypatch) -> None:
+    spans = _record_spans(monkeypatch)
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    glass = GlassAnalysisResult(
+        glass_id=config.id,
+        glass_name=config.name,
+        result_state=ResultState.PASS,
+        samples=[_sample(config.id, 0.0, 1.0, None), _sample(config.id, 1.0, 2.0, None)],
+    )
+    from types import SimpleNamespace
+    figures = []
+    original = Figure.savefig
+
+    def recording_savefig(self, *args, **kwargs):
+        figures.append(len(self.axes))
+        return original(self, *args, **kwargs)
+
+    monkeypatch.setattr(Figure, "savefig", recording_savefig)
+    result = SimpleNamespace(glass_results=[glass], overall_state=ResultState.PASS)
+
+    GraphRenderer()._render_combined(result, None, tmp_path / "combined.png")
+
+    assert figures == [1]
+    assert spans == []
+
+
+def _record_spans(monkeypatch) -> list[dict]:
+    spans: list[dict] = []
     original = Axes.axvspan
 
     def recording_span(self, xmin, xmax, *args, **kwargs):
-        spans.append((kwargs.get("label"), kwargs.get("alpha")))
-        return original(self, xmin, xmax, *args, **kwargs)
+        patch = original(self, xmin, xmax, *args, **kwargs)
+        spans.append({
+            "axes": self,
+            "label": kwargs.get("label"),
+            "face_alpha": round(patch.get_facecolor()[3], 6),
+            "hatch": patch.get_hatch(),
+            "ymin": kwargs.get("ymin", 0.0),
+        })
+        return patch
 
     monkeypatch.setattr(Axes, "axvspan", recording_span)
-    config = InspectionRecipe.default_glass(320, 240, 1)
+    return spans
+
+
+def _reconstructed_then_top_exit_full(config) -> GlassAnalysisResult:
     full = [TrackingSample(run_id="run", glass_id=config.id, frame_index=40 + i, timestamp_sec=4.0 + i,
                            fill_state=FillState.FULL_NO_INTERFACE, is_valid=True,
                            flags=["OIL_TOP_EXIT_FULL"]) for i in range(3)]
-    result = GlassAnalysisResult(
+    return GlassAnalysisResult(
         glass_id=config.id,
         glass_name=config.name,
         result_state=ResultState.PASS,
@@ -199,10 +285,3 @@ def test_detail_graph_labels_detector_and_reconstructed_state_bands(tmp_path, mo
             provenance="initial_state_retrospective_v2",
         ),
     )
-
-    GraphRenderer()._render_glass(result, config, tmp_path / "bands.png")
-
-    labels = dict(spans)
-    assert labels["초기 상태 재구성 (FULL)"] == 0.09
-    assert labels["FULL 판정"] == 0.09
-    assert "확정 초기 상태 유지 가정 (FULL)" not in labels

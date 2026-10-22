@@ -6,6 +6,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.colors import to_rgba
 
 from oil_tracker.application.ports.progress import AnalysisCancelled
 from oil_tracker.application.services.graph_axis import (
@@ -81,7 +82,17 @@ class GraphRenderer:
         recipe: InspectionRecipe | None,
         path: Path,
     ) -> None:
-        fig, ax = plt.subplots(figsize=(12, 5.5))
+        rows = [(glass.glass_name, _state_band_runs(glass)) for glass in result.glass_results]
+        strip = None
+        if any(runs for _, runs in rows):
+            # One state row per Glass under the lines; the line plot stays lines only.
+            strip_height = _STRIP_ROW_HEIGHT_IN * len(rows)
+            fig = plt.figure(figsize=(12, 5.5 + strip_height + 0.8), layout="constrained")
+            grid = fig.add_gridspec(2, 1, height_ratios=(5.5, strip_height))
+            ax = fig.add_subplot(grid[0])
+            strip = fig.add_subplot(grid[1], sharex=ax)
+        else:
+            fig, ax = plt.subplots(figsize=(12, 5.5))
         observed: list[float | None] = []
         for glass_index, glass in enumerate(result.glass_results):
             times = [sample.timestamp_sec for sample in glass.samples]
@@ -119,7 +130,10 @@ class GraphRenderer:
                 ax.axhline(axis_range.analysis_top_boundary, linestyle="--", linewidth=0.9, alpha=0.65, label="전체 분석 영역 위쪽 경계")
             if axis_range.analysis_bottom_boundary is not None:
                 ax.axhline(axis_range.analysis_bottom_boundary, linestyle="--", linewidth=0.9, alpha=0.65, label="전체 분석 영역 아래쪽 경계")
-        ax.set_xlabel("시간 (초)")
+        if strip is None:
+            ax.set_xlabel("시간 (초)")
+        else:
+            ax.tick_params(labelbottom=False)
         ax.set_ylabel("기준선 대비 높이 (px)")
         ax.set_title(f"전체 Glass 유면 추적 — {_result_state_label(result.overall_state)}")
         ax.grid(True, alpha=0.25)
@@ -128,9 +142,45 @@ class GraphRenderer:
             unique = dict(zip(labels, handles))
             ax.legend(unique.values(), unique.keys(), loc="best", prop=self.font_selection.properties)
         apply_font_to_axes(ax, self.font_selection)
-        fig.tight_layout()
+        if strip is None:
+            fig.tight_layout()
+        else:
+            self._state_strip(fig, strip, rows)
         fig.savefig(path, dpi=140)
         plt.close(fig)
+
+    def _state_strip(self, fig, strip, rows) -> None:
+        """Draw each Glass's detail-graph bands on its own row, top to bottom."""
+        count = len(rows)
+        for index, (_, runs) in enumerate(rows):
+            top = count - index
+            for begin, end, state, source in runs:
+                label, style = _band_style(state, source, emphasis=_STRIP_EMPHASIS)
+                strip.axvspan(
+                    begin,
+                    end,
+                    ymin=(top - 1 + _STRIP_ROW_PAD) / count,
+                    ymax=(top - _STRIP_ROW_PAD) / count,
+                    label=label,
+                    **style,
+                )
+        strip.set_ylim(0, count)
+        strip.set_yticks([count - index - 0.5 for index in range(count)])
+        strip.set_yticklabels([name for name, _ in rows])
+        strip.tick_params(axis="y", length=0)
+        strip.set_xlabel("시간 (초)")
+        strip.grid(True, axis="x", alpha=0.25)
+        handles, labels = strip.get_legend_handles_labels()
+        unique = dict(zip(labels, handles))
+        fig.legend(
+            unique.values(),
+            unique.keys(),
+            loc="outside lower center",
+            ncol=min(4, len(unique)),
+            frameon=False,
+            prop=self.font_selection.properties,
+        )
+        apply_font_to_axes(strip, self.font_selection)
 
     def _render_glass(
         self,
@@ -200,54 +250,73 @@ class GraphRenderer:
         plt.close(fig)
 
     def _state_bands(self, ax, glass: GlassAnalysisResult) -> None:
-        if not glass.samples:
-            return
-        samples = project_state_aware_samples(
-            glass.samples,
-            glass.retrospective,
-        )
-        groups = []
-        start = samples[0]
-        previous = start
-        for current in samples[1:]:
-            if _band_key(current) != _band_key(start):
-                groups.append((start, previous))
-                start = current
-            previous = current
-        groups.append((start, previous))
         labeled: set[str] = set()
-        for begin, end in groups:
-            state, source = _band_key(begin)
-            if state in {"FULL", "EMPTY"}:
-                label = _STATE_BAND_LABELS[source].format(state=state)
-                ax.axvspan(
-                    begin.timestamp_sec,
-                    end.timestamp_sec,
-                    alpha=0.09,
-                    color="#3b82f6" if state == "FULL" else "#f59e0b",
-                    label=None if label in labeled else label,
-                )
-                labeled.add(label)
-            elif state == "UNKNOWN":
-                label = "직접 유면 확인 어려움"
-                ax.axvspan(
-                    begin.timestamp_sec,
-                    end.timestamp_sec,
-                    alpha=0.065,
-                    color="#64748b",
-                    label=None if label in labeled else label,
-                )
-                labeled.add(label)
+        for begin, end, state, source in _state_band_runs(glass):
+            label, style = _band_style(state, source, emphasis=1.0)
+            ax.axvspan(
+                begin,
+                end,
+                label=None if label in labeled else label,
+                **style,
+            )
+            labeled.add(label)
 
 
-# Every FULL/EMPTY band names where its state came from: the detector itself
-# (including top-exit FULL), an accepted initial-state reconstruction, or the
-# all-missing confirmed-state hold.
-_STATE_BAND_LABELS = {
-    "detector": "{state} 판정",
-    "retrospective": "초기 상태 재구성 ({state})",
-    "hold": "확정 초기 상태 유지 가정 ({state})",
+# Every FULL/EMPTY band names where its state came from and draws it in that
+# source's pattern: solid for the detector itself (including top-exit FULL),
+# diagonal hatching for an accepted initial-state reconstruction and dots for
+# the all-missing confirmed-state hold. Colour follows the state.
+_STATE_BAND_SOURCES = {
+    "detector": ("{state} 판정", None),
+    "retrospective": ("초기 상태 재구성 ({state})", "///"),
+    "hold": ("확정 초기 상태 유지 가정 ({state})", ".."),
 }
+_STATE_BAND_COLORS = {"FULL": "#3b82f6", "EMPTY": "#f59e0b", "UNKNOWN": "#64748b"}
+_UNKNOWN_BAND_LABEL = "직접 유면 확인 어려움"
+# The combined graph's state strip has no line over it, so it fills more strongly.
+_STRIP_EMPHASIS = 3.0
+_STRIP_ROW_HEIGHT_IN = 0.42
+_STRIP_ROW_PAD = 0.12
+
+
+def _state_band_runs(glass: GlassAnalysisResult) -> list[tuple[float, float, str, str]]:
+    """Contiguous (start, end, state, source) runs shared by both graphs."""
+    if not glass.samples:
+        return []
+    samples = project_state_aware_samples(
+        glass.samples,
+        glass.retrospective,
+    )
+    groups = []
+    start = samples[0]
+    previous = start
+    for current in samples[1:]:
+        if _band_key(current) != _band_key(start):
+            groups.append((start, previous))
+            start = current
+        previous = current
+    groups.append((start, previous))
+    return [
+        (begin.timestamp_sec, end.timestamp_sec, *_band_key(begin))
+        for begin, end in groups
+        if _band_key(begin)[0] is not None
+    ]
+
+
+def _band_style(state: str, source: str, *, emphasis: float) -> tuple[str, dict]:
+    """Legend label and patch style; emphasis 1.0 keeps the detail-graph alphas."""
+    color = _STATE_BAND_COLORS[state]
+    if state == "UNKNOWN":
+        return _UNKNOWN_BAND_LABEL, {
+            "facecolor": to_rgba(color, 0.065 * emphasis),
+            "linewidth": 0.0,
+        }
+    template, hatch = _STATE_BAND_SOURCES[source]
+    style = {"facecolor": to_rgba(color, 0.09 * emphasis), "linewidth": 0.0}
+    if hatch is not None:
+        # The hatch takes the edge colour; linewidth 0 leaves no outline.
+        style.update(hatch=hatch, edgecolor=to_rgba(color, min(1.0, 0.5 * emphasis)))
+    return template.format(state=state), style
 
 
 def _band_key(sample) -> tuple[str | None, str]:

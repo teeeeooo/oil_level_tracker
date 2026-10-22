@@ -7,6 +7,11 @@ downstream of the detector; detector output and the top-exit v3 option are
 unchanged. O2 OPEN / FIELD FAIL and review-006 pending are unchanged. Current
 authority is the [Work Plan](../../00-project/work-plan.md).
 
+**2026-10-22 addition:** the combined-graph state strip and source band
+patterns (E1/E2) are IMPLEMENTED / LOCAL VERIFICATION PASS
+([section](#combined-graph-strip-and-band-patterns-e1e2--2026-10-22)); their
+Windows confirmation rides on the SPL#4 evidence request.
+
 ## What was built
 
 The rules were frozen at `67f1484` before any code change, from the
@@ -263,12 +268,60 @@ field qualification; FIELD FAIL / O2 OPEN are unchanged.
 - **Report:** only the requested strings and the legend were returned; the full
   HTML was not inspected.
 
+## Combined-graph strip and band patterns (E1/E2) — 2026-10-22
+
+**Status: IMPLEMENTED / LOCAL VERIFICATION PASS.** Frozen at `db83c59` in the
+[report design](../../20-architecture/s11-report-context-presentation-design.md#combined-graph-state-strip-and-source-patterns--2026-10-22)
+before any code change. The Windows confirmation is part of the SPL#4 evidence
+request.
+
+**What changed (`graph_renderer.py` only):**
+- **E2, both graphs:** each FULL/EMPTY band keeps its state colour and draws
+  its source as a pattern.
+  - Solid for the detector, top-exit FULL included; `///` hatching for an
+    accepted reconstruction; dots for the all-missing hold.
+  - The detail graph keeps alpha 0.09 (UNKNOWN 0.065). Hatching uses the state
+    colour at alpha 0.5, with no outline.
+- **E1, combined graph:** when any Glass has a band, a strip sits under the
+  lines.
+  - One row per Glass, in result order, labelled with its name.
+  - Each row draws the same runs as that Glass's detail graph, at three times
+    the fill alpha. The strip legend sits under the figure.
+  - Without any band, the combined graph keeps its earlier single-axes layout.
+- **Shared runs:** one helper builds the contiguous (start, end, state, source)
+  runs for both graphs, so the strip cannot disagree with the detail graph.
+
+**Verification:**
+- **Renderer tests, 6 pass:**
+  - the detail graph draws a reconstructed FULL hatched and a detector FULL
+    solid, both at alpha 0.09; the hold draws dots;
+  - the combined graph puts every band on the strip and none on the line axes;
+    rows follow the result order, each with its Glass's labels and patterns;
+  - without a band, the combined figure has one axes and no span.
+- **Full suite:** 3,823 passed, 12 skipped (sample3 quarantine).
+- **Rendered checks** (scratch, synthetic values):
+  - an SPL#4-like pair: BASE reconstructed EMPTY, a rise, top-exit FULL and a
+    drain; Accum mostly UNKNOWN;
+  - a ⑩-like pair: a reconstructed FULL prefix and a top-exit FULL suffix,
+    with an Accum hold;
+  - a run with no band.
+
+  Each strip row matches its detail graph, and the no-band run keeps the old
+  layout.
+
+**Limits:**
+- **Versions:** matplotlib is pinned at ≥3.11 on both platforms. The hatch
+  takes the edge colour, which older releases also honour.
+- **Single samples:** a one-sample run still has zero width in both graphs, as
+  before.
+- **Not yet seen:** Windows rendering and real data.
+
 ## Detector Governance
 
 - Logic-map nodes: `RESULT-PRESENTATION`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F05`, `S11-F09`, `S11-F10`
 - First harmful stage: none in the detector. The ⑩ report problems arose downstream of `PUBLICATION-PROVENANCE`: the retrospective owner treated the resolver's ordinary-UNKNOWN marker as a barrier and required a move between the first two boundaries; `RESULT-PRESENTATION` drew FULL bands at alpha 0.035 without labels and gave no judgment reason. Both were fixed at `139ba87`, and the Windows confirmation run passed.
 - Existing feature coverage: the existing confirmed initial state, retrospective projection, `HOLD_ABOVE_ZERO`/`HOLD_BELOW_ZERO` judgment consumption, Recipe `radius_y` tolerance and `temporal_max_jump_px`, and the existing hold band label are reused. Detector output, top-exit v3 and the event, CSV and bundle code are unchanged; RECOVERY still receives observed samples only. The Windows run reported ⑩'s session and detector options, and its tracking data equals ⑩'s; the accepted prefix reached `events.csv` through the existing retrospective event.
-- Execution scope: locally, unit tests with two mutation checks, the full unit suite and one scratch rendered check built from transferred ⑩ values. On Windows, one user-authorized run under ⑩'s conditions, returned as transferred OCR evidence and judged against the expectation written before it. No private media on the Mac, no human review, tuning or post-result rule change.
-- Logic-map impact: NONE — this update records the Windows receipt and changes no code, owner or control flow. The `RESULT-PRESENTATION` row was updated with the implementation (`139ba87`) and matches what the run shows.
+- Execution scope: locally, unit tests with two mutation checks, the full unit suite and one scratch rendered check built from transferred ⑩ values. On Windows, one user-authorized run under ⑩'s conditions, returned as transferred OCR evidence and judged against the expectation written before it. No private media on the Mac, no human review, tuning or post-result rule change. E1/E2 (2026-10-22): renderer unit tests, the full suite and three scratch rendered checks from synthetic values; no detector run or Windows execution.
+- Logic-map impact: UPDATED — E1/E2 add source patterns and the combined-graph state strip to the `RESULT-PRESENTATION` row; owners and control flow are unchanged. The earlier row update (`139ba87`) matches what the Windows confirmation run showed.
 - Failure-registry impact: NONE — no detector mechanism changed, and the receipt adds no failure. The rule narrows a downstream F05-shaped risk (a confirmed state hidden by soft UNKNOWN markers) without adding a threshold (F10); report wording still adds no measurement (F09).
