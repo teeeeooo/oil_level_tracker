@@ -45,9 +45,10 @@ from direction.
     absent at entry, so this is a false ENTRY-SPLASH Foam (`S11-F07`);
   - a 33 px first step, one pixel over the 32 px limit.
 
-  On sample5 and sample7 the runs also end only on continuity breaks. The
-  planned detector repairs (D: Accum entry; step 5, LBT-2: layered Foam) target
-  exactly these.
+  On sample5 and sample7 the runs also end only on continuity breaks. Detector
+  repairs can remove both accidents: D's Accum-entry scope covers the false
+  entry Foam, and any repair that tracks the level more continuously removes
+  the step breaks.
 
 ## What the reconstruction can see
 
