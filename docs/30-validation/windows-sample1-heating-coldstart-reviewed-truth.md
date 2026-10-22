@@ -178,6 +178,13 @@ records the detector comparison.
 BASE Foam is absent throughout the reviewed 480--780 s interval. Accum Foam is
 present only in the reviewed `WS1-ACCUM-FOAM-LAYERED` interval.
 
+**Oil boundary inside a Foam layer (user, 2026-10-23):** where a bubbly zone
+lies between the dense Foam and clear Oil, the zone is Oil and the Oil boundary
+is the bottom of the dense Foam (the strict rule in the
+[P0 contract](s11-interface-observability-witness-validation.md#oil-reference-boundary-inside-a-foam-layer--2026-10-23)).
+It applies to `WS1-ACCUM-FOAM-LAYERED`; review-012 reads 672–677.5 s on it. No
+reviewed Windows coordinate changes.
+
 ## Superseded prior interpretations
 
 The latest direct review supersedes these older interpretations wherever they

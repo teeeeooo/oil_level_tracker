@@ -1973,6 +1973,24 @@ becomes one targeted user question rather than an automatic closure; other
 unassessed points stay U and do not block alone. Freeze bounds and windows before
 outputs; do not adjust them afterward.
 
+#### Oil reference boundary inside a Foam layer — 2026-10-23
+
+The user chose the strict boundary after
+[LBT-2's two-boundary answer](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#user-answer-two-boundaries--2026-10-23)
+([product rule](../rotary_oil_level_tracker_ssot_spec.md#다층-유체의-추적-대상)). Where a bubbly zone
+lies between dense Foam and clear Oil, the zone is Oil and the Oil reference is
+the bottom of the dense Foam.
+- **Oil references follow it.** A reading of the clear-oil top (rough) stays as
+  recorded but is not an Oil reference.
+- **sample4:** P0's values and CAF-1's 51–52 s rejection stay; the 38–44 s
+  values count as strict, since no rough reading exists there. The official
+  `sample4.oiltruth` Oil values (2026-08-01) and review-013 Q2 are rough. The
+  2026-10-09 values Y833–838 remain "not the Foam front" but are no longer
+  wrong-Oil references. 54.0–56.0 s have no Oil reference until review-014.
+- **Windows:** review-012 reads the layered-Foam Oil boundary on this rule.
+- Closed experiments keep their recorded dispositions and are not re-scored
+  automatically. This is not field acceptance.
+
 #### Progression and existing acceptance boundaries
 
 <a id="product-scope-choice-before-successor-selection"></a>

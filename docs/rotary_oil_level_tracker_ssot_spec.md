@@ -1189,6 +1189,16 @@ Oil/Foam에는 각자의 물리적 대상과 관측 가능성을 독립적으로
 [구체 계약](20-architecture/s11-interface-observability-witness-architecture.md#same-surface-projected-branches--upper-image-projection-selected)을
 따르며, 현재 운영 검출기나 과거 정답 좌표를 자동으로 변경하지 않는다.
 
+Foam 층 안의 Oil 경계 명확화(2026-10-23, 사용자 선택 "엄격"): 촘촘한 Foam과 맑은
+Oil 사이에 기포가 섞인 구간이 보이면 그 구간은 Oil이다. Oil 출력의 목표는
+**촘촘한 Foam이 끝나는 하단 경계**이며, 기포 섞인 구간 아래의 맑은 Oil 윗면이
+아니다. 기포 섞인 구간까지 Foam으로 본 기존 판독은 그대로 보존하되 Oil 기준값으로
+쓰지 않는다. Foam front 정의(11.7)는 바뀌지 않으며, 현재 운영 검출기나 닫힌 실험의
+판정을 자동으로 바꾸지 않는다.
+[결정 기록](50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#decision--2026-10-23)과
+[평가 계약](30-validation/s11-interface-observability-witness-validation.md#oil-reference-boundary-inside-a-foam-layer--2026-10-23)을
+따른다.
+
 ## 11.7 Foam Front 정의
 
 Foam front는 단순히 ROI 내 가장 높은 기포가 아니다.

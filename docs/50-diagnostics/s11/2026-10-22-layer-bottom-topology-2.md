@@ -5,8 +5,9 @@
 ([decision](#decision--2026-10-22)) and answered review-013
 ([result](#review-013-result--2026-10-22)). After the result the user answered
 the 52 s/54.5 s question: the two readings use different Foam/Oil boundaries
-([answer](#user-answer-two-boundaries--2026-10-23)); which one the Oil output
-follows is not decided yet. The [protocol](#protocol-frozen-2026-10-22), the tool
+([answer](#user-answer-two-boundaries--2026-10-23)), and the user chose the strict
+one for the Oil output ([decision](#decision--2026-10-23)). The
+[protocol](#protocol-frozen-2026-10-22), the tool
 `tests/diagnostics/s11_layer_bottom_topology_2.py` and its tests were frozen
 together at `1447cd6` before the run. Step 5 (B) of the Mac-only order in the
 [Work Plan](../../00-project/work-plan.md), started by the user on 2026-10-22.
@@ -365,8 +366,9 @@ exactly these.
      2.0 s full-like).
   5. The open 52 s versus 54.5 s level question in the
      [review-013 result](#review-013-result--2026-10-22).
-     Answered 2026-10-23: two boundaries; the Oil definition is pending
-     ([answer](#user-answer-two-boundaries--2026-10-23)).
+     Answered 2026-10-23: two boundaries
+     ([answer](#user-answer-two-boundaries--2026-10-23)); the user chose the
+     strict one ([decision](#decision--2026-10-23)).
 - **Next, as frozen:** P allows proposing Windows S2 in step 7. Review-012 (the
   unread Accum frames 672–677.5 s) comes first, then a separate go. No tuning
   or widening follows.
@@ -468,6 +470,28 @@ reproduces 800 better, 8 worse and 2,618 the same, and places them:
 rigorously and review-013's reading loosely. S keeps P0 as it is; only
 54–56 s needs a new reading. R is right if the product needs the clear-oil level without the
 bubbly zone.
+
+## Decision — 2026-10-23
+
+The user chose **S, strict** ("엄격으로 가자"). The rule is recorded in the
+[product spec](../../rotary_oil_level_tracker_ssot_spec.md#다층-유체의-추적-대상),
+the [P0 contract](../../30-validation/s11-interface-observability-witness-validation.md#oil-reference-boundary-inside-a-foam-layer--2026-10-23)
+and the [Windows reviewed truth](../../30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
+
+**sample4 Oil references under S:**
+
+| Status | References |
+|---|---|
+| Kept | P0's accepted values at 38–52 s and their wrong values; LBQ-1 42.5 s Y805; CAF-1's 51.0–52.0 s Y861.5–862. The 38–44 s values count as strict, since no rough reading exists there. |
+| Rough, not Oil references | The official file's Oil values; review-013 Q2. The 2026-10-09 values Y833–838 stay "not the Foam front" but are no longer wrong Oil. |
+| Missing | 54.0–56.0 s, to be read by review-014. |
+
+**Known error under S:** both baseline arms publish the rough boundary at
+54.5–56 s (Y851–852, 18–19 px below Y833), so the output changes boundary at
+54 s. Its first harmful stage is not located. LBT-2's verdict is unchanged.
+
+**Next:** review-014 reads the strict boundary at 52.0–56.0 s; 52.0 s checks
+consistency with the answer's Y833.
 
 ## Detector Governance
 

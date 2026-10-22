@@ -2840,6 +2840,19 @@ or retuning is introduced. F02/F04/F07/F09/F10 and the completed block below app
 logic-map/failure-registry impact is NONE because executing owners and causal
 findings are unchanged.
 
+2026-10-23 Oil reference boundary inside a Foam layer: after LBT-2 the user
+explained that sample4's 52 s and 54.5 s readings used two boundaries, and
+chose the strict one: a bubbly zone between dense Foam and clear Oil is Oil,
+and the Oil reference is the bottom of the dense Foam. The P0 contract and the
+product spec record it; rough readings stay but leave the Oil reference set.
+This defines the measurement target only. It adds no detector operation,
+threshold or runtime branch, relabels no stored truth file, and keeps the
+separate Foam front definition. Closed results keep their dispositions.
+Under the rule the current output's 54.5–56 s sample4 values are a known
+error whose first harmful stage is not located (F02/F04 candidates).
+Logic-map/failure-registry impact is NONE because executing detector owners
+and causal findings are unchanged.
+
 2026-10-20 local-residual bounds: after the HPA-1 closeout, the user adopted
 numerical C bounds, a supported-extremum report landmark rule and a net
 baseline/candidate comparison in the P0 contract. The position scale reuses
@@ -3162,7 +3175,7 @@ ambiguity; this is not a new executing detector node or identity acceptance.
 - Prior mechanisms rejected: edge/peak-only identity, scalar near/far threshold identity, source-family independence, generator votes, motion-only bootstrap, polarity vetoes, global jump/texture relaxation, private coordinate conditions, stale ID/coordinate transfer, interpolation/carry and downstream repair.
 - Preserved contracts: one generic bounded detector, exact current-frame provenance, independent Oil/Foam, typed no-interface state, fail-closed ambiguity/unobservability, bounded history/resources and separate target-Windows qualification.
 - Difference from prior failures: the new boundary first measures whether the optical scene is informative, retains contour geometry/uncertainty and derivation lineage, and postpones all temporal authority until interface-versus-structure discrimination is demonstrated. The user-selected upper projected branch defines the measurement target without treating image Y order as material identity, relabeling legacy truth or installing a selector; separately reviewed source intervals retain their uncertainty and scope.
-- Existing feature coverage: the dated entries above record their own Recipe/mask/Local XY/template input states. The 2026-10-20 evaluation update reuses the existing report landmark owner (`report_presentation._extrema_landmarks`), review-004's allowed alternatives and the Recipe ellipse `radius_y` as the position scale. No Recipe, session or detector setting changes.
-- Execution scope: for the 2026-10-20 update, no detector, report or Windows runtime was exercised. It reviews the evaluation/acceptance responsibility only. The landmark rule's implementation and verification remain separate, and closed results are not re-scored.
+- Existing feature coverage: the dated entries above record their own Recipe/mask/Local XY/template input states. The 2026-10-20 evaluation update reuses the existing report landmark owner (`report_presentation._extrema_landmarks`), review-004's allowed alternatives and the Recipe ellipse `radius_y` as the position scale. No Recipe, session or detector setting changes. The 2026-10-23 boundary rule reuses the existing P0 references and the user's sample4 answer; no Recipe, session or detector setting changes.
+- Execution scope: for the 2026-10-20 update, no detector, report or Windows runtime was exercised. It reviews the evaluation/acceptance responsibility only. The landmark rule's implementation and verification remain separate, and closed results are not re-scored. For the 2026-10-23 rule, only a read-only recount of LBT-2's kept population was made; no runtime was exercised.
 - Logic-map impact: NONE — the fixed-center contract and implemented CBR-1 offline measurement reuse existing owners without a production consumer; no executing detector route changes. Previously documented Local XY routing remains as mapped.
 - Failure-registry impact: NONE — existing F02/F04/F06/F07 representation, role and coupling limits plus F09/F10 provenance and tuning guards cover the reviewed H0/G1 and CBR-1 results; no new field cause or repair is claimed.

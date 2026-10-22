@@ -334,8 +334,11 @@ is COMPLETE (desk only).
         Strictly, Foam ends at about Y833 and the zone below is Oil; roughly,
         Foam reaches Y857–860. The sample4 references and the output (strict
         through 53.5 s, rough from 54.5 s) mix them; LBT-2's verdict stands.
-        **Pending:** which boundary Oil follows (S, strict, recommended);
-        review-012 and the next sample4 comparison need it.
+        **Decided (user, 2026-10-23): S, strict**
+        ([decision](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#decision--2026-10-23)):
+        Oil starts below the dense Foam. Under S both arms' 54.5–56 s values
+        (Y851–852) are wrong; review-014 reads the strict boundary at
+        52.0–56.0 s, and review-012 asks for it on Windows.
       - **Next:** Windows S2 joins the step-7 request, after review-012.
       - **Why the guard returns:** D2 = S kept the 27 % cap, so LBT-1's G
         (a fill confirmed at 54.5 s from an in-unit row under Foam) remains.
@@ -414,9 +417,9 @@ remains background; its pending run is received.
   PASS. FULL needs the first catch in the top band; EMPTY needs it in the
   bottom band and within one continuity step of the effective-mask bottom.
   No known real output changes.
-- **Next:** the user decides which Foam/Oil boundary the Oil output follows
-  ([LBT-2 answer](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#user-answer-two-boundaries--2026-10-23);
-  S, strict, recommended). Then step 6 (가), fast-fill FULL, or another step
+- **Next:** the user's review-014 reply (the sample4 strict Oil boundary at
+  52.0–56.0 s; [decision S](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#decision--2026-10-23)).
+  Then step 6 (가), fast-fill FULL, the 54 s boundary switch, or another step
   the user chooses. LBT-2's Windows S2 joins the step-7 request after
   review-012.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
