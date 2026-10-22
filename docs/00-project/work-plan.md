@@ -291,8 +291,13 @@ is COMPLETE (desk only).
         obliquely viewed surface). The gate's local cost is therefore 20
         correct rows against 17 wrong ones. The user accepted it because
         product videos are mostly head-on.
-      - **Next:** implementation and the frozen
-        [local checks](../30-validation/s11-physical-interface-evidence-repair-validation.md#contested-fill-owner-gate-checks--2026-10-22).
+      - **Implemented** at `2cb0b52` (opt-in, default OFF).
+        [Local checks PASS](../60-evidence/s11/2026-10-22-fill-owner-contest-local.md)
+        on all six controls:
+        - sample4, base_sample_1 and sample2 are unchanged;
+        - sample5 loses exactly the 17 predicted wrong rows;
+        - sample7 loses the 20 correct rows, as pre-registered.
+        The Windows comparison joins the step-7 request.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
@@ -301,8 +306,8 @@ Facts it records:
   closures probably do not govern the Windows miss.
 - sample4 Y808 belongs to the October 15 interior comparison Recipe.
 
-The gate's implementation and local check follow (user-approved). No Windows
-request is queued.
+The gate is implemented and its local check passed. No Windows request is
+queued.
 
 **Resume checkpoint — 2026-10-22 (latest):** start with the
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md).
@@ -339,13 +344,14 @@ Its pending run is now received.
   Windows readouts, to join the step-7 request.
 - **Fill-owner gate:** the
   [contested fill-owner gate](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-22-contested-fill-owner-gate)
-  is frozen (opt-in, default OFF). Its known local cost is sample7's 20
-  correct rows (oblique view), accepted by the user.
-- **Next:** implement the gate and run its frozen local checks (user-approved
-  2026-10-22). Then E3 and B in the original order. Fast-fill FULL (owner
-  tracking or owner-free FULL evidence) stays in step 6. Windows is
-  unavailable for now. When it returns, the next report also confirms the band
-  cells and E2, and the step-7 request adds the gate's SPL#4/SPL#1 comparison.
+  is implemented (`2cb0b52`, opt-in, default OFF), and its
+  [local checks PASS](../60-evidence/s11/2026-10-22-fill-owner-contest-local.md).
+  It removes 17 wrong sample5 rows and, as accepted by the user, 20 correct
+  sample7 rows (oblique view).
+- **Next:** E3, then B, in the original order. Fast-fill FULL (owner tracking
+  or owner-free FULL evidence) stays in step 6. Windows is unavailable for now.
+  When it returns, the next report also confirms the band cells and E2, and
+  the step-7 request adds the gate's SPL#4/SPL#1 comparison.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).

@@ -235,6 +235,8 @@ is unchanged; this fixes how it applies here.
 checks accompany the
 [contested fill-owner gate](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-22-contested-fill-owner-gate).
 They do not change after results.
+**Local result:** [PASS on all six controls](../60-evidence/s11/2026-10-22-fill-owner-contest-local.md)
+(run at `2cb0b52`).
 
 **Unit (synthetic lifecycle layers):**
 - A contested survivor gives `FILL_OWNER_CONTESTED` with an empty allowed set.
