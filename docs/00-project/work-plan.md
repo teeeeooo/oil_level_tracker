@@ -318,6 +318,21 @@ is COMPLETE (desk only).
         (state, flags, Oil Y, Foam Y) and the Accum Glass geometry
         (center_y, radius_y, margin_ratio, `temporal_max_jump_px`). The
         480–653 s question is decided after the receipt.
+    - **Step 5 (B), LBT-2 draft, started by the user:**
+      [LBT-2](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md),
+      desk only, not frozen.
+      - **Why the guard returns:** D2 = S kept the 27 % cap, so LBT-1's G
+        (a fill confirmed at 54.5 s from an in-unit row under Foam) remains.
+      - **Draft:** LBT-1's E1 and support consumer, plus F: no fill
+        confirmation while a recent Foam row lies above the chain's last
+        row (the user's 10/20 proposal).
+      - **Readings:** LBT-1 added 1 opposed selection (40 s, one
+        condition) and removed 685 across 231 conditions. Its Foam changes
+        are 12 additions and 3 removals with no truth at those frames.
+      - **Awaits the user:** F; the stop policy (S, LBT-1's rule, or N,
+        the P0 net procedure); a pre-run sample4 review-013 (Foam presence
+        39.5–56 s, Oil at 54.5–56 s); sample5/sample7 as descriptive
+        controls.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
@@ -331,9 +346,9 @@ queued.
 
 **Resume checkpoint — 2026-10-22 (latest):** start with the
 [Mac-only steps handoff](../60-evidence/s11/2026-10-22-mac-only-steps-handoff.md)
-(steps 1–3 and 6 (나) done; step 4, E3, done: the user chose L2 in
-[LCR-1](../50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md),
-frozen and implemented). The earlier
+(steps 1–4 and 6 (나) done; step 5, B: the
+[LBT-2 draft](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md)
+awaits the user's decisions). The earlier
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md)
 remains background; its pending run is received.
 - **Top-exit v3:** ⑩ PASS; default OFF.
@@ -376,7 +391,8 @@ remains background; its pending run is received.
   PASS. FULL needs the first catch in the top band; EMPTY needs it in the
   bottom band and within one continuity step of the effective-mask bottom.
   No known real output changes.
-- **Next:** B (LBT-2), step 5 in the original order, when the user starts it.
+- **Next:** the user's LBT-2 decisions; then review-013 if chosen, the frozen
+  protocol, tool and tests, and the local run.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
   Windows is unavailable for now. When it returns, the next report also
   confirms the band cells, E2 and the first-catch guard, and the step-7

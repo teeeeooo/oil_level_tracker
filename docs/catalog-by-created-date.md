@@ -1689,11 +1689,12 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-17 | [HPA-1 summary](50-diagnostics/s11/2026-10-17-history-phase-amplification/summary.json) | 조건별 결과·검증·보존 manifest 연결 |
 | 2026-10-17 | [HPA-1 handoff](60-evidence/s11/2026-10-17-history-phase-handoff.md) | 재현·로컬 증거·후속 설계 경계 |
 
-## 2026-10-22 추가 등록 — E3 후보 검토 (LCR-1)
+## 2026-10-22 추가 등록 — E3 후보 검토 (LCR-1)·LBT-2 초안
 
 | 최초 Git 등록일 (KST) | 문서 | 역할 |
 |---|---|---|
-| 2026-10-22 | [LCR-1 review](50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md) | 초기 상태 재구성의 늦은 첫 포착 보호 후보 비교·L2 추천·사용자 결정 대기 |
+| 2026-10-22 | [LCR-1 review](50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md) | 초기 상태 재구성의 늦은 첫 포착 보호 후보 비교·사용자가 L2 선택, 구현 완료 |
+| 2026-10-22 | [LBT-2 draft](50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md) | LBT-1 후속 초안: E1 + Foam 보임 시 가득 참 확정 보류(F); 판정 방식·review-013·대조군은 사용자 결정 대기 |
 
 ## 2026-10-22 누락 보완 등록 — 166개
 
