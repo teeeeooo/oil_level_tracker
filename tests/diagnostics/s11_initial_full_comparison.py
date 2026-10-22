@@ -32,9 +32,11 @@ EMPTY_FILL_FROZEN_AT = "2026-10-22T00:00:00+00:00"
 # vessel interior, from the inner rim to the top of the solid base, measured on
 # the empty first frame before any detector run; it is not fitted to the level.
 EMPTY_FILL_CONTROLS = {
+    # The nominal 54.855 s end lies past the last decodable frame (about
+    # 54.82 s), where seeking near EOF fails, so the window ends at 54.8 s.
     "sample5": {"label": "water", "views": "public_water_fill_pexels_6381722",
                 "frames": (0, 822, 1643), "ellipse": (960.5, 593.0, 142.5, 257.0),
-                "window": (0.0, 54.855)},
+                "window": (0.0, 54.8)},
     "sample7": {"label": "milk", "views": "public_milk_fill_pexels_11158788",
                 "frames": (0, 532, 1063), "ellipse": (1130.0, 600.0, 287.0, 303.0),
                 "window": (0.0, 44.378)},
