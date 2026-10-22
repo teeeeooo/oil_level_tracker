@@ -280,27 +280,39 @@ _STRIP_ROW_PAD = 0.12
 
 
 def _state_band_runs(glass: GlassAnalysisResult) -> list[tuple[float, float, str, str]]:
-    """Contiguous (start, end, state, source) runs shared by both graphs."""
+    """Contiguous (start, end, state, source) runs shared by both graphs.
+
+    Each sample owns the time halfway to its neighbours, at most half the
+    report's line-connection gap and never past the first or last sample. A
+    one-sample run therefore keeps one sample interval of width, neighbouring
+    runs meet, and a longer gap stays blank and ends the run.
+    """
     if not glass.samples:
         return []
     samples = project_state_aware_samples(
         glass.samples,
         glass.retrospective,
     )
-    groups = []
-    start = samples[0]
-    previous = start
-    for current in samples[1:]:
-        if _band_key(current) != _band_key(start):
-            groups.append((start, previous))
-            start = current
-        previous = current
-    groups.append((start, previous))
-    return [
-        (begin.timestamp_sec, end.timestamp_sec, *_band_key(begin))
-        for begin, end in groups
-        if _band_key(begin)[0] is not None
-    ]
+    times = [sample.timestamp_sec for sample in samples]
+    reach = REPORT_MAX_CONTEXT_GAP_SEC / 2
+    pairs = list(zip(times, times[1:]))
+    starts = [times[0], *(max(after - reach, (before + after) / 2) for before, after in pairs)]
+    ends = [*(min(before + reach, (before + after) / 2) for before, after in pairs), times[-1]]
+    runs = []
+    first = 0
+    for index in range(1, len(samples) + 1):
+        if (
+            index < len(samples)
+            and _band_key(samples[index]) == _band_key(samples[first])
+            and times[index] - times[index - 1] <= REPORT_MAX_CONTEXT_GAP_SEC
+        ):
+            continue
+        state, source = _band_key(samples[first])
+        # Only a lone sample has no cell width; it draws no band.
+        if state is not None and ends[index - 1] > starts[first]:
+            runs.append((starts[first], ends[index - 1], state, source))
+        first = index
+    return runs
 
 
 def _band_style(state: str, source: str, *, emphasis: float) -> tuple[str, dict]:

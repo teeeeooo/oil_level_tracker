@@ -212,7 +212,8 @@ is COMPLETE (desk only).
         census is incomplete (34 rows unlisted).
       - **E1/E2 on Windows:** E1 confirmed; E2 not exercised (no FULL, EMPTY
         or reconstruction band had width). A zero-width single-sample band
-        still adds a legend entry.
+        still adds a legend entry (fixed locally the same day by per-sample
+        band cells).
       - The user may still supply SPL#1 scenes after 780 s.
   - **Order (2026-10-22):**
     - The user approved steps 1–2: the A-1 criteria, then the local negatives.
@@ -237,8 +238,22 @@ is COMPLETE (desk only).
         27.5–34.0 s (Y704–739) from the re-adopted low owner, A class.
       - **⑩ Accum census:** four 3-row in-band blank runs, never after an
         active witness; no option C repair is called for.
-    - **Then, each awaiting the user:** a legend fix for zero-width bands; E3,
-      B and D.
+    - **Mac-only order while Windows is unavailable** (proposed 2026-10-22;
+      the user started step 1; each step awaits the user):
+      1. the legend fix for zero-width bands;
+      2. a local check whether sample5/sample7 reproduce the SPL#4 opposition
+         (debug traces);
+      3. the D scope review, with the stale-owner wrong target;
+      4. E3;
+      5. B (LBT-2) local development;
+      6. fast-fill FULL and stale-owner design;
+      7. one combined Windows request for when Windows returns.
+    - **Step 1 done:** per-sample band cells, frozen (`0b5d234`) and
+      implemented,
+      [local verification PASS](../60-evidence/s11/2026-10-21-initial-state-report-local.md#per-sample-band-cells--2026-10-22):
+      unit tests, equality with the chosen option on 47 local CSVs and a
+      production-CLI report that also draws the hold dots. Windows
+      confirmation waits for the next report.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
@@ -268,14 +283,18 @@ Its pending run is now received.
   reference; the default stays OFF
   ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)).
 - **E1/E2 report bands:** implemented (`5e5c8bc`), local verification PASS; on
-  Windows E1 confirmed, E2 not exercised.
+  Windows E1 confirmed, E2 not exercised. The zero-width legend defect is fixed
+  by per-sample band cells (frozen `0b5d234`, local PASS including a
+  production-CLI report with the hold dots); Windows confirmation pending.
 - **SPL#4 follow-up:** received. The opposing source is `OIL-PHASE-FILL`
   `FILL_OWNER_AMBIGUOUS`; upstream, the fast-rising level was never admitted as
   an owner (inference). The production default published 14 wrong-target
   numeric rows at 27.5–34.0 s.
-- **Next (each awaiting the user):** a legend fix for zero-width bands; E3, B
-  and D. Fast-fill FULL (owner tracking or owner-free FULL evidence) and the
-  stale-owner wrong target are new candidate items for the user to schedule.
+- **Next (each awaiting the user):** Windows is unavailable for now, so the
+  Mac-only order above continues at step 2, the sample5/sample7 check against
+  the SPL#4 opposition. Fast-fill FULL (owner tracking or owner-free FULL
+  evidence) and the stale-owner wrong target sit in steps 3 and 6. When
+  Windows returns, the next report also confirms the band cells and E2.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).

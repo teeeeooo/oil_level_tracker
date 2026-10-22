@@ -11,7 +11,10 @@ authority is the [Work Plan](../../00-project/work-plan.md).
 patterns (E1/E2) are IMPLEMENTED / LOCAL VERIFICATION PASS
 ([section](#combined-graph-strip-and-band-patterns-e1e2--2026-10-22)). On
 Windows (SPL#4 run) E1 is confirmed and E2 was not exercised; a zero-width
-band still adds a legend entry.
+band added a legend entry. That defect is fixed by
+[per-sample band cells](#per-sample-band-cells--2026-10-22), IMPLEMENTED /
+LOCAL VERIFICATION PASS, including the dot pattern on a local CLI report;
+Windows confirmation is pending.
 
 ## What was built
 
@@ -320,15 +323,71 @@ before any code change.
 - **Versions:** matplotlib is pinned at ≥3.11 on both platforms. The hatch
   takes the edge colour, which older releases also honour.
 - **Single samples:** a one-sample run still has zero width in both graphs, as
-  before.
+  before. Fixed later the same day by
+  [per-sample band cells](#per-sample-band-cells--2026-10-22).
 - **Not yet seen:** Windows rendering and real data.
+
+## Per-sample band cells — 2026-10-22
+
+**Status: IMPLEMENTED / LOCAL VERIFICATION PASS; Windows confirmation
+pending.** Frozen at `0b5d234` in the
+[report design](../../20-architecture/s11-report-context-presentation-design.md#per-sample-band-cells--2026-10-22)
+before any code change. The user chose option A after a scratch rendered
+comparison with option B, which drops zero-width runs.
+
+**What changed (`graph_renderer.py`, `_state_band_runs` only):**
+- Each sample owns the time halfway to its neighbours, at most 1 s
+  (`REPORT_MAX_CONTEXT_GAP_SEC` / 2), and never before the first or after the
+  last sample. A run covers its samples' cells.
+- A gap over 2 s splits a run and stays blank. A Glass with a single sample
+  draws no band.
+- Both graphs and the strip read these runs. Grouping, labels, colours,
+  patterns and emphasis are unchanged.
+
+**Verification:**
+- **Renderer tests, 9 pass (3 new):**
+  - cells meet halfway, a numeric sample leaves its own cell blank, and the
+    ends stop at the first and last sample;
+  - a gap over 2 s leaves 1 s on each side and splits the run; a lone sample
+    draws nothing;
+  - a one-sample `EMPTY 판정` is drawn 24.25–24.75 s in both the detail graph
+    and the strip, and no span has zero width.
+- **Mutations:** each new test fails on the previous renderer. Removing the
+  gap split or the lone-sample guard fails the gap test.
+- **Full suite:** 3,826 passed, 12 skipped (sample3 quarantine).
+- **Same as the chosen option:** on all 47 unique local `tracking.csv` files
+  (47 Glass, 260 runs), the new runs equal the scratch option A the user saw.
+  The largest local sample spacing is 0.534 s, so the gap rule never acted.
+- **Production CLI report:** managed run
+  `sample/output/s11-band-cells-report-20261022-001` (`summary.json`
+  `662046d2…`), at `0b5d234` plus this renderer. Its recorded source hashes
+  match the committed files.
+  - `oil-tracker-cli analyze` with the production default detector, 2 fps,
+    compressor start 0.0 s.
+  - **sample4 0–56 s, confirmed UNKNOWN** (the qualification replay
+    condition): 6 UNKNOWN bands per graph, the narrowest 0.5 s (one sample).
+    The cells sit under the dashed bridge segments.
+  - **sample2 0–2 s, confirmed FULL** (the negatives-run stress condition, not
+    physical truth): retrospective `ACCEPTED` hold over 0–2 s, drawn with dots
+    in both graphs under the legend entry `확정 초기 상태 유지 가정 (FULL)`.
+  - In every saved graph no band has zero width, and every legend band entry
+    has a drawn band. PASS.
+
+**Limits:**
+- **E2 hatching:** no local run examined accepts a reconstruction. In the six
+  negatives controls (run 003) sample2 accepts only the hold, and the other
+  five end CONFLICT, UNRESOLVED or NOT_APPLICABLE. The `///` pattern is still
+  seen only in unit tests and synthetic renders.
+- **Long graphs:** one cell can be narrower than a pixel and shows only as a
+  faint line.
+- **Not yet seen:** Windows rendering.
 
 ## Detector Governance
 
 - Logic-map nodes: `RESULT-PRESENTATION`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F05`, `S11-F09`, `S11-F10`
-- First harmful stage: none in the detector. The ⑩ report problems arose downstream of `PUBLICATION-PROVENANCE`: the retrospective owner treated the resolver's ordinary-UNKNOWN marker as a barrier and required a move between the first two boundaries; `RESULT-PRESENTATION` drew FULL bands at alpha 0.035 without labels and gave no judgment reason. Both were fixed at `139ba87`, and the Windows confirmation run passed.
+- First harmful stage: none in the detector. The ⑩ report problems arose downstream of `PUBLICATION-PROVENANCE`: the retrospective owner treated the resolver's ordinary-UNKNOWN marker as a barrier and required a move between the first two boundaries; `RESULT-PRESENTATION` drew FULL bands at alpha 0.035 without labels and gave no judgment reason. Both were fixed at `139ba87`, and the Windows confirmation run passed. The zero-width band seen on Windows (2026-10-22) came from the `RESULT-PRESENTATION` run extent (first to last sample); per-sample cells fix it.
 - Existing feature coverage: the existing confirmed initial state, retrospective projection, `HOLD_ABOVE_ZERO`/`HOLD_BELOW_ZERO` judgment consumption, Recipe `radius_y` tolerance and `temporal_max_jump_px`, and the existing hold band label are reused. Detector output, top-exit v3 and the event, CSV and bundle code are unchanged; RECOVERY still receives observed samples only. The Windows run reported ⑩'s session and detector options, and its tracking data equals ⑩'s; the accepted prefix reached `events.csv` through the existing retrospective event.
-- Execution scope: locally, unit tests with two mutation checks, the full unit suite and one scratch rendered check built from transferred ⑩ values. On Windows, one user-authorized run under ⑩'s conditions, returned as transferred OCR evidence and judged against the expectation written before it. No private media on the Mac, no human review, tuning or post-result rule change. E1/E2 (2026-10-22): renderer unit tests, the full suite and three scratch rendered checks from synthetic values, then a look at the SPL#4 candidate report's graphs on Windows (relayed by OCR).
-- Logic-map impact: NONE — this update records the Windows E1/E2 status and changes no code, owner or control flow. The `RESULT-PRESENTATION` row was updated with the E1/E2 implementation (`5e5c8bc`), and the earlier update (`139ba87`) matches what the report confirmation run showed.
+- Execution scope: locally, unit tests with two mutation checks, the full unit suite and one scratch rendered check built from transferred ⑩ values. On Windows, one user-authorized run under ⑩'s conditions, returned as transferred OCR evidence and judged against the expectation written before it. No private media on the Mac, no human review, tuning or post-result rule change. E1/E2 (2026-10-22): renderer unit tests, the full suite and three scratch rendered checks from synthetic values, then a look at the SPL#4 candidate report's graphs on Windows (relayed by OCR). Band cells (2026-10-22): renderer unit tests with mutation checks, the full suite, a scratch equality check on 47 local `tracking.csv` files and one managed production-CLI run on two local videos; no Windows run.
+- Logic-map impact: NONE — this evidence changes no owner. The `RESULT-PRESENTATION` row records the band cells with their implementation, as the report design's History Review states; the earlier updates (`139ba87`, `5e5c8bc`) match what the runs showed.
 - Failure-registry impact: NONE — no detector mechanism changed, and the receipt adds no failure. The rule narrows a downstream F05-shaped risk (a confirmed state hidden by soft UNKNOWN markers) without adding a threshold (F10); report wording still adds no measurement (F09).

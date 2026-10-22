@@ -5,7 +5,7 @@ import math
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from oil_tracker.adapters.reporting.graph_renderer import GraphRenderer
+from oil_tracker.adapters.reporting.graph_renderer import GraphRenderer, _state_band_runs
 from oil_tracker.domain.enums import (
     FillState,
     InitialObservationState,
@@ -241,6 +241,75 @@ def test_combined_graph_without_state_bands_keeps_lines_only(tmp_path, monkeypat
     assert spans == []
 
 
+def test_state_band_runs_give_each_sample_its_own_cell() -> None:
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    glass = _glass_with_states(config, [
+        (0.0, FillState.UNKNOWN_REVIEW),
+        (0.5, FillState.EMPTY_NO_INTERFACE),
+        (1.0, FillState.UNKNOWN_REVIEW),
+        (1.5, FillState.PARTIAL_VISIBLE),
+        (2.0, FillState.UNKNOWN_REVIEW),
+    ])
+
+    # Neighbouring runs meet halfway, the numeric sample keeps its own cell
+    # blank, and no band reaches past the first or last sample.
+    assert _state_band_runs(glass) == [
+        (0.0, 0.25, "UNKNOWN", "detector"),
+        (0.25, 0.75, "EMPTY", "detector"),
+        (0.75, 1.25, "UNKNOWN", "detector"),
+        (1.75, 2.0, "UNKNOWN", "detector"),
+    ]
+
+
+def test_state_band_runs_leave_long_gaps_blank() -> None:
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    unknown = FillState.UNKNOWN_REVIEW
+    glass = _glass_with_states(config, [(0.0, unknown), (0.5, unknown), (4.0, unknown), (4.5, unknown)])
+
+    # Over the 2 s line-connection limit each side reaches 1 s and the run splits.
+    assert _state_band_runs(glass) == [
+        (0.0, 1.5, "UNKNOWN", "detector"),
+        (3.0, 4.5, "UNKNOWN", "detector"),
+    ]
+    assert _state_band_runs(_glass_with_states(config, [(0.0, unknown)])) == []
+
+
+def test_one_sample_state_is_drawn_where_the_legend_lists_it(tmp_path, monkeypatch) -> None:
+    spans = _record_spans(monkeypatch)
+    config = InspectionRecipe.default_glass(320, 240, 1)
+    glass = _glass_with_states(config, [
+        (24.0, FillState.UNKNOWN_REVIEW),
+        (24.5, FillState.EMPTY_NO_INTERFACE),
+        (25.0, FillState.UNKNOWN_REVIEW),
+    ])
+    from types import SimpleNamespace
+    renderer = GraphRenderer()
+
+    renderer._render_glass(glass, config, tmp_path / "detail.png")
+    renderer._render_combined(
+        SimpleNamespace(glass_results=[glass], overall_state=ResultState.REVIEW_REQUIRED),
+        None,
+        tmp_path / "combined.png",
+    )
+
+    empty = [(span["xmin"], span["xmax"]) for span in spans if span["label"] == "EMPTY 판정"]
+    assert empty == [(24.25, 24.75), (24.25, 24.75)]
+    assert all(span["xmax"] > span["xmin"] for span in spans)
+
+
+def _glass_with_states(config, timed_states) -> GlassAnalysisResult:
+    return GlassAnalysisResult(
+        glass_id=config.id,
+        glass_name=config.name,
+        result_state=ResultState.REVIEW_REQUIRED,
+        samples=[
+            TrackingSample(run_id="run", glass_id=config.id, frame_index=index,
+                           timestamp_sec=timestamp, fill_state=state)
+            for index, (timestamp, state) in enumerate(timed_states)
+        ],
+    )
+
+
 def _record_spans(monkeypatch) -> list[dict]:
     spans: list[dict] = []
     original = Axes.axvspan
@@ -249,6 +318,8 @@ def _record_spans(monkeypatch) -> list[dict]:
         patch = original(self, xmin, xmax, *args, **kwargs)
         spans.append({
             "axes": self,
+            "xmin": xmin,
+            "xmax": xmax,
             "label": kwargs.get("label"),
             "face_alpha": round(patch.get_facecolor()[3], 6),
             "hatch": patch.get_hatch(),
