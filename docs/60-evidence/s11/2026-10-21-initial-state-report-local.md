@@ -16,6 +16,11 @@ band added a legend entry. That defect is fixed by
 LOCAL VERIFICATION PASS, including the dot pattern on a local CLI report;
 Windows confirmation is pending.
 
+**2026-10-22 addition:** the
+[first-catch position guard](#first-catch-position-guard-l2--2026-10-22)
+(E3, L2) is IMPLEMENTED / LOCAL VERIFICATION PASS. It amends the continuing-run
+rule below; the next Windows report will show it in use.
+
 ## What was built
 
 The rules were frozen at `67f1484` before any code change, from the
@@ -108,7 +113,9 @@ and the user's decisions:
   judgment and report stay as written.
 - **The Accum protection is incidental.** It comes from the Foam barrier and the
   continuity bound, not from direction. A late first catch with neither would be
-  accepted. On Windows the Foam barrier acted.
+  accepted. On Windows the Foam barrier acted. (2026-10-22: the
+  [first-catch position guard](#first-catch-position-guard-l2--2026-10-22)
+  now refuses such a catch.)
 - **No visual difference between sources.** Bands from different sources share
   one colour and emphasis; only the legend tells them apart.
 - **Combined graph unchanged.** It still draws no state bands.
@@ -382,12 +389,84 @@ comparison with option B, which drops zero-width runs.
   faint line.
 - **Not yet seen:** Windows rendering.
 
+## First-catch position guard (L2) — 2026-10-22
+
+**Status: IMPLEMENTED / LOCAL VERIFICATION PASS; Windows not yet seen.** The
+user chose L2 from
+[LCR-1](../../50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md#decision--2026-10-22).
+The rule and its acceptance were frozen at `875c0f2` before any code change
+([architecture](../../20-architecture/initial-state-retrospective-reconstruction-architecture.md#modern-stream-first-catch-position-guard--2026-10-22),
+[validation](../../30-validation/initial-state-retrospective-reconstruction-validation.md#first-catch-position-guard--2026-10-22)).
+
+**What changed (`initial_state_reconstruction.py`, modern streams only):**
+- **Guard:** after a first decisive move toward the prior, `_late_first_catch`
+  checks the first accepted boundary.
+  - FULL: relative ≤ 0.32.
+  - EMPTY: relative ≥ 0.68, and at most `temporal_max_jump_px` above the
+    effective-mask bottom (`center_y + radius_y × (1 − margin_ratio)`, as
+    `graph_axis` draws it).
+- **Otherwise UNRESOLVED:** no interval. The reason names the position, and the
+  evidence is the first boundary plus the decisive pair, as for CONFLICT.
+- **Provenance:** every continuing-run outcome records
+  `initial_state_retrospective_v3`.
+- **Unchanged:** CONFLICT (decided first), barriers, the run, the all-missing
+  hold and legacy R7. The renderer, presentation and Result Review read only
+  the hold provenance, so v3 needs no consumer change.
+
+**Module SHA-256:**
+
+| File | SHA-256 |
+|---|---|
+| `initial_state_reconstruction.py` | `eceac0e8b594f3d9aa761b0ad4bbf9ca6b0e75a71b50a8a4542ace10420fd82f` |
+| `test_initial_state_retrospective_reconstruction.py` | `100d43357e1eadb40688e790b760b810e8400a65384a5a6e58a616113ef6d42f` |
+
+**Verification:**
+- **Before the code:** the new and updated tests ran against the unchanged
+  module; 18 failed (late catches accepted, provenance v2).
+- **Reconstruction tests:** 64 passed (51 earlier, 13 new). Every validation
+  item has a case:
+  - **Accepted:** FULL emerging below the mask top and at the band end (Y84,
+    0.32); EMPTY 10 px and exactly 32 px above the mask bottom.
+  - **Unresolved, with no interval and the decisive evidence:** FULL just below
+    the band (0.325), 20 px below it and mid-Glass; EMPTY 33 px up; a standing
+    layer 56 px up that later rises.
+  - **⑩ Accum without Foam and with a 30 px first step:** UNRESOLVED, first
+    catch relative 0.787.
+  - **Small Glass** (radius_y 34): an EMPTY catch within one step of the mask
+    bottom but above the band is UNRESOLVED; one inside the band is accepted.
+  - **Conflict first:** a mid-Glass FULL catch that rises, and a high EMPTY
+    catch that falls, stay CONFLICT.
+  - **Unchanged:** the ⑩ BASE shape is accepted and the ⑩ Accum shape stays
+    unresolved. The R7 mid-Glass case is still accepted under its v1
+    provenance.
+- **Mutation checks:** scratch pytest plugins replaced the guard; no source
+  was edited.
+  - Without the guard, 7 cases fail, exactly the late-catch ones.
+  - Without the EMPTY band, 1 fails (small Glass).
+  - Without the EMPTY step, 3 fail (33 px, the standing layer, Accum).
+- **Frozen control:** the reconstruction was replayed on the LCR-1 desk run's
+  24 kept local row lists. This was a scratch replay with stdout only and no
+  kept output.
+  - 8 are identical: the sample2 holds and the sample4 UNKNOWN-prior cases.
+  - 16 differ only in provenance, v2 → v3: the base_sample_1 CONFLICTs and
+    the UNRESOLVED results of sample4 interior, sample5 and sample7.
+  - Status, interval, reason, barriers and evidence are unchanged. PASS.
+- **Full suite:** 3,859 passed, 12 skipped (the sample3 quarantine).
+
+**Limits:**
+- **No real accepted reconstruction is exercised locally.** None of the kept
+  local runs reaches the guard, so its acceptances and refusals are synthetic.
+  ⑩ BASE is checked only through its received values.
+- **Windows:** the next report shows the rule in use. The step-7 request adds
+  the Accum readout (640–672 s rows and the Accum Glass geometry).
+- **Accum 480–653 s:** still UNKNOWN, not EMPTY; the guard does not address it.
+
 ## Detector Governance
 
 - Logic-map nodes: `RESULT-PRESENTATION`, `PUBLICATION-PROVENANCE`
-- Failure-registry entries: `S11-F05`, `S11-F09`, `S11-F10`
-- First harmful stage: none in the detector. The ⑩ report problems arose downstream of `PUBLICATION-PROVENANCE`: the retrospective owner treated the resolver's ordinary-UNKNOWN marker as a barrier and required a move between the first two boundaries; `RESULT-PRESENTATION` drew FULL bands at alpha 0.035 without labels and gave no judgment reason. Both were fixed at `139ba87`, and the Windows confirmation run passed. The zero-width band seen on Windows (2026-10-22) came from the `RESULT-PRESENTATION` run extent (first to last sample); per-sample cells fix it.
-- Existing feature coverage: the existing confirmed initial state, retrospective projection, `HOLD_ABOVE_ZERO`/`HOLD_BELOW_ZERO` judgment consumption, Recipe `radius_y` tolerance and `temporal_max_jump_px`, and the existing hold band label are reused. Detector output, top-exit v3 and the event, CSV and bundle code are unchanged; RECOVERY still receives observed samples only. The Windows run reported ⑩'s session and detector options, and its tracking data equals ⑩'s; the accepted prefix reached `events.csv` through the existing retrospective event.
-- Execution scope: locally, unit tests with two mutation checks, the full unit suite and one scratch rendered check built from transferred ⑩ values. On Windows, one user-authorized run under ⑩'s conditions, returned as transferred OCR evidence and judged against the expectation written before it. No private media on the Mac, no human review, tuning or post-result rule change. E1/E2 (2026-10-22): renderer unit tests, the full suite and three scratch rendered checks from synthetic values, then a look at the SPL#4 candidate report's graphs on Windows (relayed by OCR). Band cells (2026-10-22): renderer unit tests with mutation checks, the full suite, a scratch equality check on 47 local `tracking.csv` files and one managed production-CLI run on two local videos; no Windows run.
-- Logic-map impact: NONE — this evidence changes no owner. The `RESULT-PRESENTATION` row records the band cells with their implementation, as the report design's History Review states; the earlier updates (`139ba87`, `5e5c8bc`) match what the runs showed.
-- Failure-registry impact: NONE — no detector mechanism changed, and the receipt adds no failure. The rule narrows a downstream F05-shaped risk (a confirmed state hidden by soft UNKNOWN markers) without adding a threshold (F10); report wording still adds no measurement (F09).
+- Failure-registry entries: `S11-F05`, `S11-F07`, `S11-F09`, `S11-F10`
+- First harmful stage: none in the detector. The ⑩ report problems arose downstream of `PUBLICATION-PROVENANCE`: the retrospective owner treated the resolver's ordinary-UNKNOWN marker as a barrier and required a move between the first two boundaries; `RESULT-PRESENTATION` drew FULL bands at alpha 0.035 without labels and gave no judgment reason. Both were fixed at `139ba87`, and the Windows confirmation run passed. The zero-width band seen on Windows (2026-10-22) came from the `RESULT-PRESENTATION` run extent (first to last sample); per-sample cells fix it. The late-catch gap (LCR-1) is in the same downstream owner: the continuing-run rule accepted the prior wherever the first catch lay, and on ⑩ Accum only a false entry Foam (`S11-F07`) and a 33 px step blocked it. The first-catch position guard closes it (2026-10-22).
+- Existing feature coverage: the existing confirmed initial state, retrospective projection, `HOLD_ABOVE_ZERO`/`HOLD_BELOW_ZERO` judgment consumption, Recipe `radius_y` tolerance and `temporal_max_jump_px`, and the existing hold band label are reused. Detector output, top-exit v3 and the event, CSV and bundle code are unchanged; RECOVERY still receives observed samples only. The Windows run reported ⑩'s session and detector options, and its tracking data equals ⑩'s; the accepted prefix reached `events.csv` through the existing retrospective event. The first-catch guard reuses the 0.32/0.68 entrance constants, `temporal_max_jump_px` and the Recipe ellipse and `margin_ratio`; it does not read exclusions, and no local Recipe has any.
+- Execution scope: locally, unit tests with two mutation checks, the full unit suite and one scratch rendered check built from transferred ⑩ values. On Windows, one user-authorized run under ⑩'s conditions, returned as transferred OCR evidence and judged against the expectation written before it. No private media on the Mac, no human review, tuning or post-result rule change. E1/E2 (2026-10-22): renderer unit tests, the full suite and three scratch rendered checks from synthetic values, then a look at the SPL#4 candidate report's graphs on Windows (relayed by OCR). Band cells (2026-10-22): renderer unit tests with mutation checks, the full suite, a scratch equality check on 47 local `tracking.csv` files and one managed production-CLI run on two local videos; no Windows run. First-catch guard (2026-10-22): reconstruction unit tests with three mutation checks, the full suite, and a scratch stdout-only replay of the LCR-1 desk run's 24 kept local row lists (the frozen control); no detector run, video decode or Windows run.
+- Logic-map impact: UPDATED — the `PUBLICATION-PROVENANCE` row now records the first-catch position guard on the accepted initial-state reconstruction. The `RESULT-PRESENTATION` row records the band cells with their implementation, as the report design's History Review states; the earlier updates (`139ba87`, `5e5c8bc`) match what the runs showed.
+- Failure-registry impact: NONE — no detector mechanism changed, and the receipt adds no failure. The rule narrows a downstream F05-shaped risk (a confirmed state hidden by soft UNKNOWN markers) without adding a threshold (F10); report wording still adds no measurement (F09). The first-catch guard narrows an F09/F10-shaped risk (coverage from a prior projected past an unobserved transit) with existing constants only; the false entry Foam is the known F07 class.

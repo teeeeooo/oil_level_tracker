@@ -163,7 +163,9 @@ outside the prior's entry region.
 
 ## Modern-stream first-catch position guard — 2026-10-22
 
-**Status: FROZEN 2026-10-22 before implementation.** The user chose L2 from
+**Status: FROZEN 2026-10-22 before implementation (`875c0f2`); IMPLEMENTED;
+[local verification](../60-evidence/s11/2026-10-21-initial-state-report-local.md#first-catch-position-guard-l2--2026-10-22).**
+The user chose L2 from
 [LCR-1](../50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md#recommendation-l2)
 on 2026-10-22. It amends the continuing-run rule above for modern streams only;
 legacy R7 anchor handling is unchanged.

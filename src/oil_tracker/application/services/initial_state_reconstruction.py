@@ -31,7 +31,7 @@ _SEQUENCE_UNKNOWN_FLAGS = {
     "R17_OBSERVATION_UNAVAILABLE",
     "SEQUENCE_UNAVAILABLE",
 }
-_CONTINUING_RUN_PROVENANCE = "initial_state_retrospective_v2"
+_CONTINUING_RUN_PROVENANCE = "initial_state_retrospective_v3"
 
 
 def reconstruct_initial_state(glass, samples: list[TrackingSample], confirmation) -> RetrospectiveInterpretation:
@@ -229,7 +229,9 @@ def _continuing_run_interpretation(glass, samples: list[TrackingSample], prior) 
     The first decisive move, two consecutive boundaries beyond the direction
     tolerance on the same side, must point toward the confirmed prior's
     direction. Later motion is not inspected, so a fall followed by a rise is
-    still accepted. A large step or a barrier ends the run undecided.
+    still accepted. A large step or a barrier ends the run undecided. The first
+    accepted boundary must also lie where the prior's level is first seen;
+    otherwise the level moved unobserved before it and the run stays undecided.
     """
     ellipse = glass.geometry.ellipse
     top = ellipse.center_y - ellipse.radius_y
@@ -288,9 +290,8 @@ def _continuing_run_interpretation(glass, samples: list[TrackingSample], prior) 
                 for item in evidence
             ),
         )
-        topology = _first_topology(
-            boundary_relative_position(first_y, top, bottom), full
-        )
+        first_relative = boundary_relative_position(first_y, top, bottom)
+        topology = _first_topology(first_relative, full)
         if side != toward:
             return RetrospectiveInterpretation(
                 glass_id=glass.id,
@@ -300,6 +301,16 @@ def _continuing_run_interpretation(glass, samples: list[TrackingSample], prior) 
                     "The first decisive move of the continuing Oil run contradicts "
                     f"the confirmed prior. The first observed boundary topology was {topology}."
                 ),
+                provenance=_CONTINUING_RUN_PROVENANCE,
+                **evidence_kwargs,
+            )
+        late = _late_first_catch(glass, first_y, first_relative, full, maximum_step)
+        if late:
+            return RetrospectiveInterpretation(
+                glass_id=glass.id,
+                status=RetrospectiveStatus.UNRESOLVED,
+                confirmed_prior=prior,
+                reason=late,
                 provenance=_CONTINUING_RUN_PROVENANCE,
                 **evidence_kwargs,
             )
@@ -341,6 +352,33 @@ def _continuing_run_interpretation(glass, samples: list[TrackingSample], prior) 
 
 def _direction_tolerance(glass) -> float:
     return max(2.0, 0.01 * float(glass.geometry.ellipse.radius_y) * 2.0)
+
+
+def _late_first_catch(glass, first_y: float, relative: float, full: bool, step: float) -> str:
+    """Return why the first catch lies outside where the prior's level is first seen.
+
+    A full glass can show its level inside the top band. An empty glass shows
+    none, so a rising level is first seen inside the bottom band, within one
+    continuity step of the effective-mask bottom.
+    """
+    if full:
+        if relative <= TOP_ENTRANCE_MAX_RELATIVE_POSITION:
+            return ""
+        return (
+            f"The first accepted boundary lies below the top entrance band (relative {relative:.3f}), "
+            "so the level fell unobserved before its first catch."
+        )
+    ellipse = glass.geometry.ellipse
+    # The inner ellipse left by the margin, as graph_axis draws it.
+    mask_bottom = ellipse.center_y + ellipse.radius_y * (1.0 - float(glass.geometry.margin_ratio))
+    rise = mask_bottom - first_y
+    if relative < BOTTOM_ENTRANCE_MIN_RELATIVE_POSITION:
+        where = f"above the bottom entrance band (relative {relative:.3f})"
+    elif rise > step:
+        where = f"{rise:.1f} px above the effective-mask bottom, more than temporal_max_jump_px"
+    else:
+        return ""
+    return f"The first accepted boundary lies {where}, so the level rose unobserved before its first catch."
 
 
 def _first_topology(relative: float, full: bool) -> str:

@@ -298,7 +298,7 @@ is COMPLETE (desk only).
         - sample5 loses exactly the 17 predicted wrong rows;
         - sample7 loses the 20 correct rows, as pre-registered.
         The Windows comparison joins the step-7 request.
-    - **Step 4 (E3), L2 chosen:**
+    - **Step 4 (E3) done, L2:**
       [LCR-1](../50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md),
       a desk review with one closed desk run.
       - **Gap:** the continuing-run rule ignores where the first catch was
@@ -310,7 +310,10 @@ is COMPLETE (desk only).
         bottom band and within one `temporal_max_jump_px` of the effective-mask
         bottom. Otherwise UNRESOLVED; provenance v3. Frozen with its
         [acceptance](../30-validation/initial-state-retrospective-reconstruction-validation.md#first-catch-position-guard--2026-10-22)
-        before implementation. No known real output changes.
+        at `875c0f2`, then implemented;
+        [local verification PASS](../60-evidence/s11/2026-10-21-initial-state-report-local.md#first-catch-position-guard-l2--2026-10-22).
+        The 24 kept local streams change only provenance; known real outputs
+        are unchanged. Windows sees it on the next report.
       - **Step-7 readout (user, 2026-10-22):** SPL#1 Accum rows 640–672 s
         (state, flags, Oil Y, Foam Y) and the Accum Glass geometry
         (center_y, radius_y, margin_ratio, `temporal_max_jump_px`). The
@@ -328,9 +331,9 @@ queued.
 
 **Resume checkpoint — 2026-10-22 (latest):** start with the
 [Mac-only steps handoff](../60-evidence/s11/2026-10-22-mac-only-steps-handoff.md)
-(steps 1–3 and 6 (나) done; step 4, E3: the user chose L2 in
+(steps 1–3 and 6 (나) done; step 4, E3, done: the user chose L2 in
 [LCR-1](../50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md),
-frozen before implementation). The earlier
+frozen and implemented). The earlier
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md)
 remains background; its pending run is received.
 - **Top-exit v3:** ⑩ PASS; default OFF.
@@ -369,16 +372,15 @@ remains background; its pending run is received.
   [local checks PASS](../60-evidence/s11/2026-10-22-fill-owner-contest-local.md).
   It removes 17 wrong sample5 rows and, as accepted by the user, 20 correct
   sample7 rows (oblique view).
-- **E3 (LCR-1):** the user chose L2, frozen as the first-catch position guard.
-  FULL needs the first catch in the top band; EMPTY needs it in the bottom band
-  and within one continuity step of the effective-mask bottom. No known real
-  output changes.
-- **Next:** E3's synthetic tests and implementation. Then B (LBT-2) in the
-  original order, when the user starts it. Fast-fill FULL (owner tracking or
-  owner-free FULL evidence) stays in step 6. Windows is unavailable for now.
-  When it returns, the next report also confirms the band cells and E2, and the
-  step-7 request adds the gate's SPL#4/SPL#1 comparison and the E3 Accum
-  readout.
+- **E3 (LCR-1):** the first-catch position guard (L2) is implemented, local
+  PASS. FULL needs the first catch in the top band; EMPTY needs it in the
+  bottom band and within one continuity step of the effective-mask bottom.
+  No known real output changes.
+- **Next:** B (LBT-2), step 5 in the original order, when the user starts it.
+  Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
+  Windows is unavailable for now. When it returns, the next report also
+  confirms the band cells, E2 and the first-catch guard, and the step-7
+  request adds the gate's SPL#4/SPL#1 comparison and the E3 Accum readout.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).

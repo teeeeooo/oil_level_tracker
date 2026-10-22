@@ -85,7 +85,7 @@ def test_full_and_empty_reconstruction_are_symmetric(prior, expected):
     assert result.interpreted_state is expected
     assert (result.start_frame_index, result.end_frame_index) == (0, 1)
     assert result.evidence_frame_indices == (2, 3, 4)
-    assert result.provenance == "initial_state_retrospective_v2"
+    assert result.provenance == "initial_state_retrospective_v3"
 
 
 @pytest.mark.parametrize(
@@ -192,6 +192,7 @@ def test_r7_mid_glass_first_catch_still_reconstructs_confirmed_prefix(
     assert result.interpreted_state is expected
     assert result.evidence_frame_indices == (2, 3)
     assert all(0.32 < value < 0.68 for value in result.evidence_relative_positions)
+    assert result.provenance == "initial_state_retrospective_v1"
 
 
 def test_r7_continuation_only_cannot_confirm_initial_state() -> None:
@@ -649,7 +650,7 @@ def test_hard_failure_inside_the_run_before_a_decision_stays_unresolved(flag):
 def test_a_single_beyond_or_no_move_is_not_decisive(ys):
     _, _, result = _run(InitialObservationState.FULL_NO_INTERFACE, ys)
     assert result.status is RetrospectiveStatus.UNRESOLVED
-    assert result.provenance == "initial_state_retrospective_v2"
+    assert result.provenance == "initial_state_retrospective_v3"
 
 
 @pytest.mark.parametrize(("prior", "ys"), [
@@ -714,3 +715,66 @@ def test_windows_accum_foam_before_entry_and_fast_first_step_stay_unresolved():
                               (None, None, 515., 482., 472., 461.), glass=glass)
     assert without_foam.status is RetrospectiveStatus.UNRESOLVED
     assert "temporal_max_jump_px" in without_foam.reason
+
+
+# First-catch position guard (L2, 2026-10-22). glass_config(): ellipse Y20-220,
+# effective mask Y26-214, top band end Y84 (0.32), bottom band start Y156 (0.68),
+# one temporal_max_jump_px step 32 px.
+@pytest.mark.parametrize(("prior", "ys"), [
+    (InitialObservationState.FULL_NO_INTERFACE, (34., 47., 60.)),  # emerging below the mask top
+    (InitialObservationState.FULL_NO_INTERFACE, (84., 90., 96.)),  # at the top band end
+    (InitialObservationState.EMPTY_NO_INTERFACE, (204., 189., 174.)),  # 10 px above the mask bottom
+    (InitialObservationState.EMPTY_NO_INTERFACE, (182., 175., 168.)),  # exactly one step above it
+])
+def test_first_catch_inside_the_entry_region_is_accepted(prior, ys):
+    _, _, result = _run(prior, ys)
+    assert result.status is RetrospectiveStatus.ACCEPTED
+    assert result.evidence_frame_indices == (2, 3, 4)
+    assert result.provenance == "initial_state_retrospective_v3"
+
+
+@pytest.mark.parametrize(("prior", "ys", "evidence"), [
+    (InitialObservationState.FULL_NO_INTERFACE, (85., 91., 97.), (2, 3, 4)),  # just below the band
+    (InitialObservationState.FULL_NO_INTERFACE, (104., 116., 129.), (2, 3, 4)),  # 20 px below it
+    (InitialObservationState.FULL_NO_INTERFACE, (120., 133., 146.), (2, 3, 4)),  # mid-Glass
+    (InitialObservationState.EMPTY_NO_INTERFACE, (181., 174., 167.), (2, 3, 4)),  # 33 px up
+    # A standing layer 56 px up, inside the bottom band, that later rises.
+    (InitialObservationState.EMPTY_NO_INTERFACE, (158., 159., 158., 157., 143., 128.), (2, 6, 7)),
+])
+def test_late_first_catch_is_unresolved_without_an_interval(prior, ys, evidence):
+    _, _, result = _run(prior, ys)
+    assert result.status is RetrospectiveStatus.UNRESOLVED
+    assert (result.start_time_sec, result.end_time_sec) == (None, None)
+    assert result.evidence_frame_indices == evidence
+    assert "first accepted boundary" in result.reason
+    assert result.provenance == "initial_state_retrospective_v3"
+
+
+def test_windows_accum_shape_without_foam_and_a_30_px_first_step_is_unresolved_by_position():
+    glass = _windows_glass(347.63358778625957, 291.6)
+    _, _, result = _run(InitialObservationState.EMPTY_NO_INTERFACE,
+                        (None, None, 515., 485., 472., 461.), glass=glass)
+    assert result.status is RetrospectiveStatus.UNRESOLVED
+    assert "effective-mask bottom" in result.reason
+    assert result.evidence_frame_indices == (4, 5, 6)
+    assert result.evidence_relative_positions[0] == pytest.approx(0.787, abs=1e-3)
+
+
+def test_small_glass_bottom_band_caps_the_entry_step():
+    # Ellipse Y66-134, effective-mask bottom Y131.3, bottom band start Y112.2.
+    glass = _windows_glass(100.0, 34.0)
+    _, _, above_band = _run(InitialObservationState.EMPTY_NO_INTERFACE, (105., 100., 95.), glass=glass)
+    assert above_band.status is RetrospectiveStatus.UNRESOLVED
+    assert "bottom entrance band" in above_band.reason
+    _, _, in_band = _run(InitialObservationState.EMPTY_NO_INTERFACE, (125., 120., 115.), glass=glass)
+    assert in_band.status is RetrospectiveStatus.ACCEPTED
+
+
+@pytest.mark.parametrize(("prior", "ys"), [
+    (InitialObservationState.FULL_NO_INTERFACE, (120., 110., 100.)),  # mid-Glass, rises first
+    (InitialObservationState.EMPTY_NO_INTERFACE, (100., 110., 120.)),  # high up, falls first
+])
+def test_conflict_keeps_precedence_over_the_first_catch_position(prior, ys):
+    _, _, result = _run(prior, ys)
+    assert result.status is RetrospectiveStatus.CONFLICT
+    assert result.provenance == "initial_state_retrospective_v3"
