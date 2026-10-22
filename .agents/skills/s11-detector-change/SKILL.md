@@ -49,3 +49,5 @@ Before generating probe/replay artifacts, use the [artifact lifecycle procedure]
 When the task changes detector code, S11 detector design/validation, or S11 diagnostics/evidence, follow `docs/30-validation/s11-detector-change-governance.md` for the required History Review / Detector Governance block and checker contract.
 
 Run `python3 scripts/check_detector_governance.py --base-ref <base-ref> --include-worktree` while editing. Then use the narrowest validation owned by the current architecture/validation contract; local PASS never implies Windows field PASS.
+
+A new file under `docs/`, including a record's JSON, image or script companions, enters the [date catalog](../../../docs/catalog-by-created-date.md) in the same change ([rule](../../../docs/README.md#날짜와-탐색)); `python3 scripts/check_docs_catalog.py` checks it, and the pre-push hook runs it.

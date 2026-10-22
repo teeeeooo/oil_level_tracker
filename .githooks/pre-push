@@ -22,6 +22,8 @@ while read -r local_ref local_sha remote_ref remote_sha; do
         base_ref="$remote_sha"
     fi
     python3 "$checker" --base-ref "$base_ref" --head-ref "$local_sha"
+    # docs/README.md owns the rule: every tracked docs/ file is in the date catalog.
+    python3 "$repo_root/scripts/check_docs_catalog.py" --ref "$local_sha"
     checked=1
 done
 

@@ -18,6 +18,7 @@ Git 미등록 파일은 마지막에 두고 작성일을 별도로 표시합니�
 이동 상세 날짜·추가 커밋은 [manifest](90-archive/00-project/2026/2026-10-03-docs-migration.json)에 있습니다.
 이번 정리에서 추가한 색인·이동 manifest·정리 기록 3개는 `a5ae21cf18f0b50ba930e4f34cda3fc07148d69c`의 author 날짜(KST)로 최초 추가일을 확정했습니다.
 새 파일을 Git에 등록하면 해당 미등록 행의 최초 추가일을 확정합니다. 파일 생성·이동 시 이 색인도 갱신합니다.
+[`scripts/check_docs_catalog.py`](../scripts/check_docs_catalog.py)가 pre-push에서 누락된 등록 파일과 Git에 없는 링크를 검사합니다.
 Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 추가 author 날짜(KST)로 확정했습니다.
 
 ## 폴더별 목록
@@ -517,8 +518,8 @@ Report source-context 설계는 `f6c9e10`, 실행 증거는 `9414f2a`의 최초 
 | 2026-10-09 | [native-evidence/contract-results.json](70-reference/s11-local-xy-2026-10-09/native-evidence/contract-results.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
 | 2026-10-09 | [native-evidence/detailed-summary.json](70-reference/s11-local-xy-2026-10-09/native-evidence/detailed-summary.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
 | 2026-10-09 | [native-evidence/foam-comparison.png](70-reference/s11-local-xy-2026-10-09/native-evidence/foam-comparison.png) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
-| 2026-10-09 | [native-evidence/focused-tests.log](70-reference/s11-local-xy-2026-10-09/native-evidence/focused-tests.log) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
-| 2026-10-09 | [native-evidence/governance-check.log](70-reference/s11-local-xy-2026-10-09/native-evidence/governance-check.log) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
+| 2026-10-22 | [native-evidence/focused-tests.log](70-reference/s11-local-xy-2026-10-09/native-evidence/focused-tests.log) | 실험 당시(2026-10-09) native bytes 보존; `*.log` 무시 규칙으로 빠졌다가 manifest SHA-256 확인 후 등록 |
+| 2026-10-22 | [native-evidence/governance-check.log](70-reference/s11-local-xy-2026-10-09/native-evidence/governance-check.log) | 실험 당시(2026-10-09) native bytes 보존; `*.log` 무시 규칙으로 빠졌다가 manifest SHA-256 확인 후 등록 |
 | 2026-10-09 | [native-evidence/inspect_supporting_media.py](70-reference/s11-local-xy-2026-10-09/native-evidence/inspect_supporting_media.py) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
 | 2026-10-09 | [native-evidence/measurement-scope-preflight.json](70-reference/s11-local-xy-2026-10-09/native-evidence/measurement-scope-preflight.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
 | 2026-10-09 | [native-evidence/measurement-scope-results.json](70-reference/s11-local-xy-2026-10-09/native-evidence/measurement-scope-results.json) | 실험 당시 native bytes 보존; 문서 원본/제품 코드와 구분 |
@@ -1693,3 +1694,198 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 최초 Git 등록일 (KST) | 문서 | 역할 |
 |---|---|---|
 | 2026-10-22 | [LCR-1 review](50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md) | 초기 상태 재구성의 늦은 첫 포착 보호 후보 비교·L2 추천·사용자 결정 대기 |
+
+## 2026-10-22 누락 보완 등록 — 166개
+
+2026-10-06부터 Git에 추가됐지만 이 색인에 없던 파일 166개를 폴더별 → 최초 Git 등록일(KST) → 파일명 순으로 보완합니다.
+날짜는 각 파일의 Git 추가 커밋 author 시각(KST)이고 행마다 그 커밋을 붙였습니다. 누락분 중 이동된 파일은 없습니다.
+기존 파일을 복사해 만든 3개(`2026-10-07-event-compatibility-verification.json`, `2026-10-07-report-gap-verification.json`,
+`2026-10-12-cr1-context-comparison/preflight.json`)는 `git log --follow`가 복사 원본의 추가일을 돌려주므로 자기 추가 커밋을 썼습니다.
+
+### `docs/20-architecture/` — 1개
+
+| 최초 Git 등록일 (KST) | 문서 | 역할 |
+|---|---|---|
+| 2026-10-07 (`ccfb6fa`) | [s11-oil-compatibility-design.md](20-architecture/s11-oil-compatibility-design.md) | legacy R7 Oil 플래그 판별을 `domain/results.py`로 일원화한 호환 설계; 이벤트·보고서·초기 상태 재구성이 공유 |
+
+### `docs/50-diagnostics/s11/` — 123개
+
+| 최초 Git 등록일 (KST) | 문서 | 역할 |
+|---|---|---|
+| 2026-10-06 (`ee98d39`) | [2026-10-06-foam-structure-reference-audit.md](50-diagnostics/s11/2026-10-06-foam-structure-reference-audit.md) | 저장 raster로 본 Foam 구조 문맥과 물리 기준 공백 감사; 실행·라벨 변경 없음 |
+| 2026-10-06 (`a1bf512`) | [s11-passive-001-target-role-mapping.json](50-diagnostics/s11/s11-passive-001-target-role-mapping.json) | passive 001 사례의 목표 역할 대응표(원본 라벨 해시 고정) |
+| 2026-10-06 (`f0e0f87`) | [s11-w4-post-region-design-assessment.md](50-diagnostics/s11/s11-w4-post-region-design-assessment.md) | W4 이후 영역 설계의 로컬 평가; 새 분류기·현장 실행 없음 |
+| 2026-10-07 (`76a2f81`) | [2026-10-07-sample4-candidate-human-reply.json](50-diagnostics/s11/2026-10-07-sample4-candidate-human-reply.json) | sample4 후보 구간 사람 응답 원문과 검토 바인딩 |
+| 2026-10-07 (`619cc2b`) | [2026-10-07-sample4-interval-candidate-manifest.json](50-diagnostics/s11/2026-10-07-sample4-interval-candidate-manifest.json) | sample4 구간 후보 검토 manifest(캡처·검토 해시) |
+| 2026-10-09 (`7bc44db`) | [2026-10-09-beer-boundary-context.png](50-diagnostics/s11/2026-10-09-beer-boundary-context.png) | 공개 맥주 영상 경계 문맥 이미지(기준 대응 조사) |
+| 2026-10-09 (`7bc44db`) | [2026-10-09-beer-boundary-review.png](50-diagnostics/s11/2026-10-09-beer-boundary-review.png) | 공개 맥주 영상 경계 검토 이미지(기준 대응 조사) |
+| 2026-10-09 (`40e870d`) | [2026-10-09-fixed-center-choice.json](50-diagnostics/s11/2026-10-09-fixed-center-choice.json) | 고정 Glass 중심 높이 선택에 대한 사용자 지시 원문과 해석 |
+| 2026-10-09 (`40e870d`) | [2026-10-09-fixed-center-foam.png](50-diagnostics/s11/2026-10-09-fixed-center-foam.png) | 고정 중심 판독의 Foam 그림 |
+| 2026-10-09 (`40e870d`) | [2026-10-09-fixed-center-oil.png](50-diagnostics/s11/2026-10-09-fixed-center-oil.png) | 고정 중심 판독의 Oil 그림 |
+| 2026-10-09 (`40e870d`) | [2026-10-09-fixed-center-readout.json](50-diagnostics/s11/2026-10-09-fixed-center-readout.json) | 고정 중심 저장 배열 판독 기계 기록 |
+| 2026-10-09 (`40e870d`) | [2026-10-09-fixed-center-readout.md](50-diagnostics/s11/2026-10-09-fixed-center-readout.md) | 고정 중심 높이 선택과 저장 배열 판독 |
+| 2026-10-09 (`98466be`) | [2026-10-09-foam-cross-appearance-support.json](50-diagnostics/s11/2026-10-09-foam-cross-appearance-support.json) | 외관 채널별 Foam 지지 측정 기계 기록 |
+| 2026-10-09 (`98466be`) | [2026-10-09-foam-cross-appearance-support.md](50-diagnostics/s11/2026-10-09-foam-cross-appearance-support.md) | 외관 채널 간 Foam 지지 측정; 동작 후보 미승격 |
+| 2026-10-09 (`541d140`) | [2026-10-09-foam-gap-local-context.json](50-diagnostics/s11/2026-10-09-foam-gap-local-context.json) | 후보 국소 Foam 간격 문맥 기계 기록 |
+| 2026-10-09 (`541d140`) | [2026-10-09-foam-gap-local-context.md](50-diagnostics/s11/2026-10-09-foam-gap-local-context.md) | 후보 국소 Foam 간격 문맥 조사(저장 raster) |
+| 2026-10-09 (`c2e4def`) | [2026-10-09-foam-gap-relative-context.json](50-diagnostics/s11/2026-10-09-foam-gap-relative-context.json) | 상부 간격 사람 응답과 상대 간격 판독 기록 |
+| 2026-10-09 (`c2e4def`) | [2026-10-09-foam-gap-upper-side-reply.json](50-diagnostics/s11/2026-10-09-foam-gap-upper-side-reply.json) | Foam 상부 간격 사용자 응답 원문 |
+| 2026-10-09 (`541d140`) | [2026-10-09-foam-gap-upper-side-review.png](50-diagnostics/s11/2026-10-09-foam-gap-upper-side-review.png) | Foam 상부 간격 검토 이미지 |
+| 2026-10-09 (`04d521d`) | [2026-10-09-foam-texture-geometry-audit.json](50-diagnostics/s11/2026-10-09-foam-texture-geometry-audit.json) | Foam 질감·기하 감사 기계 기록(입력 고정) |
+| 2026-10-09 (`04d521d`) | [2026-10-09-foam-texture-reply.json](50-diagnostics/s11/2026-10-09-foam-texture-reply.json) | Foam 질감 검토 응답 원문 |
+| 2026-10-09 (`99aa9d8`) | [2026-10-09-foam-two-side-transport.json](50-diagnostics/s11/2026-10-09-foam-two-side-transport.json) | 순서 있는 양측 외관 전달 결과·검증 기록 |
+| 2026-10-09 (`99aa9d8`) | [2026-10-09-foam-two-side-transport.md](50-diagnostics/s11/2026-10-09-foam-two-side-transport.md) | 순서 있는 양측 외관 전달 조사 |
+| 2026-10-09 (`99aa9d8`) | [2026-10-09-foam-two-side-transport.png](50-diagnostics/s11/2026-10-09-foam-two-side-transport.png) | 양측 외관 전달 검토 이미지 |
+| 2026-10-09 (`2e5d6ac`) | [2026-10-09-foam-upper-gap-representation.json](50-diagnostics/s11/2026-10-09-foam-upper-gap-representation.json) | Foam 상부면·순서 간격 표현 기계 기록 |
+| 2026-10-09 (`2e5d6ac`) | [2026-10-09-foam-upper-gap-representation.md](50-diagnostics/s11/2026-10-09-foam-upper-gap-representation.md) | 보이는 Foam 상부면과 순서 간격 표현; 오프라인 진단 helper만 변경 |
+| 2026-10-09 (`2e5d6ac`) | [2026-10-09-foam-upper-visibility-reply.json](50-diagnostics/s11/2026-10-09-foam-upper-visibility-reply.json) | Foam 상부 가시성 사용자 응답 원문 |
+| 2026-10-09 (`98466be`) | [2026-10-09-foam-upper-visibility-review.png](50-diagnostics/s11/2026-10-09-foam-upper-visibility-review.png) | Foam 상부 가시성 검토 이미지 |
+| 2026-10-09 (`5d9788a`) | [2026-10-09-local-xy-foam-front-review.png](50-diagnostics/s11/2026-10-09-local-xy-foam-front-review.png) | Local XY Foam 앞면 검토 이미지 |
+| 2026-10-09 (`5d9788a`) | [2026-10-09-local-xy-sequence-causality.json](50-diagnostics/s11/2026-10-09-local-xy-sequence-causality.json) | Local XY sequence 인과 기계 기록(전체 캡처 검증 포함) |
+| 2026-10-09 (`5d9788a`) | [2026-10-09-local-xy-sequence-causality.md](50-diagnostics/s11/2026-10-09-local-xy-sequence-causality.md) | Local XY 쌍의 세 손실(Oil owner 선택·연관·Foam 앞면) 인과 분석 |
+| 2026-10-09 (`f424e34`) | [2026-10-09-material-reference-design-choice.md](50-diagnostics/s11/2026-10-09-material-reference-design-choice.md) | 선택적 물질 기준 설계 선택안; 옵션 B의 오프라인 타당성만 승인 |
+| 2026-10-09 (`d1cdab4`) | [2026-10-09-material-reference-feasibility.json](50-diagnostics/s11/2026-10-09-material-reference-feasibility.json) | 선택적 Oil/Foam 초기화 타당성 기계 기록 |
+| 2026-10-09 (`d1cdab4`) | [2026-10-09-material-reference-feasibility.md](50-diagnostics/s11/2026-10-09-material-reference-feasibility.md) | 선택적 양성 기준(Oil/Foam 초기화) 오프라인 타당성 조사 |
+| 2026-10-09 (`d1cdab4`) | [2026-10-09-material-reference-fixed-oil.png](50-diagnostics/s11/2026-10-09-material-reference-fixed-oil.png) | 물질 기준 타당성 그림(고정 Oil) |
+| 2026-10-09 (`d1cdab4`) | [2026-10-09-material-reference-foam.png](50-diagnostics/s11/2026-10-09-material-reference-foam.png) | 물질 기준 타당성 그림(Foam) |
+| 2026-10-09 (`67d2ad3`) | [2026-10-09-material-reference-late-oil-reply.json](50-diagnostics/s11/2026-10-09-material-reference-late-oil-reply.json) | 늦은 Oil 질문에 대한 사용자 응답 원문 |
+| 2026-10-09 (`d1cdab4`) | [2026-10-09-material-reference-late-oil.png](50-diagnostics/s11/2026-10-09-material-reference-late-oil.png) | 물질 기준 타당성 그림(늦은 Oil) |
+| 2026-10-09 (`7406903`) | [2026-10-09-milk-interface-context.png](50-diagnostics/s11/2026-10-09-milk-interface-context.png) | 공개 우유 영상 경계면 문맥 이미지 |
+| 2026-10-09 (`5c28382`) | [2026-10-09-observed-edge-fragments.json](50-diagnostics/s11/2026-10-09-observed-edge-fragments.json) | 관측 edge 조각 표현 기계 기록 |
+| 2026-10-09 (`5c28382`) | [2026-10-09-observed-edge-fragments.md](50-diagnostics/s11/2026-10-09-observed-edge-fragments.md) | 관측 edge 조각 표현 구현과 고정 입력 점검 |
+| 2026-10-09 (`5c28382`) | [2026-10-09-observed-edge-fragments.png](50-diagnostics/s11/2026-10-09-observed-edge-fragments.png) | 관측 edge 조각 그림 |
+| 2026-10-09 (`9f8dfe7`) | [2026-10-09-observed-side-regions.json](50-diagnostics/s11/2026-10-09-observed-side-regions.json) | 관측 측면 영역 전제 감사 기계 기록 |
+| 2026-10-09 (`9f8dfe7`) | [2026-10-09-observed-side-regions.md](50-diagnostics/s11/2026-10-09-observed-side-regions.md) | 관측 측면 영역 전제 감사 |
+| 2026-10-09 (`9f8dfe7`) | [2026-10-09-observed-side-regions.png](50-diagnostics/s11/2026-10-09-observed-side-regions.png) | 관측 측면 영역 그림 |
+| 2026-10-09 (`7406903`) | [2026-10-09-public-beer-layer-reply.json](50-diagnostics/s11/2026-10-09-public-beer-layer-reply.json) | 공개 맥주 층 사례 사용자 응답 원문 |
+| 2026-10-09 (`7406903`) | [2026-10-09-public-milk-interface-reply.json](50-diagnostics/s11/2026-10-09-public-milk-interface-reply.json) | 공개 우유 경계면 사례 사용자 응답 원문 |
+| 2026-10-09 (`3b73f26`) | [2026-10-09-public-path-representation.json](50-diagnostics/s11/2026-10-09-public-path-representation.json) | 공개 영상 native 경로 표현 감사 기계 기록 |
+| 2026-10-09 (`3b73f26`) | [2026-10-09-public-path-representation.md](50-diagnostics/s11/2026-10-09-public-path-representation.md) | 공개 영상 native 경로 표현 감사 |
+| 2026-10-09 (`3b73f26`) | [2026-10-09-public-path-representation.png](50-diagnostics/s11/2026-10-09-public-path-representation.png) | 공개 영상 native 경로 표현 그림 |
+| 2026-10-09 (`65a6951`) | [2026-10-09-public-scene-controls.json](50-diagnostics/s11/2026-10-09-public-scene-controls.json) | 공개 영상 장면 대조군 기계 기록 |
+| 2026-10-09 (`65a6951`) | [2026-10-09-public-scene-controls.md](50-diagnostics/s11/2026-10-09-public-scene-controls.md) | detector 비교 전 공개 영상 장면 대조군 |
+| 2026-10-09 (`642db62`) | [2026-10-09-public-video-intake.json](50-diagnostics/s11/2026-10-09-public-video-intake.json) | 공개 영상 3개 접수 기계 기록 |
+| 2026-10-09 (`642db62`) | [2026-10-09-public-video-intake.md](50-diagnostics/s11/2026-10-09-public-video-intake.md) | 공개 영상 3개 육안 접수 평가; detector 실행 아님 |
+| 2026-10-09 (`2f5d814`) | [2026-10-09-public-video-rename.json](50-diagnostics/s11/2026-10-09-public-video-rename.json) | 공개 영상 경로만 바꾼 이름 변경 기록(원 접수 기록 보존) |
+| 2026-10-09 (`ca71439`) | [2026-10-09-public-water-surface-reply.json](50-diagnostics/s11/2026-10-09-public-water-surface-reply.json) | 기울어진 물 표면 사용자 응답 원문 |
+| 2026-10-09 (`7bc44db`) | [2026-10-09-reference-correspondence.json](50-diagnostics/s11/2026-10-09-reference-correspondence.json) | 기준 대응과 연속 프레임 조사 기계 기록 |
+| 2026-10-09 (`7bc44db`) | [2026-10-09-reference-correspondence.md](50-diagnostics/s11/2026-10-09-reference-correspondence.md) | 기준 대응과 연속 프레임 조사 |
+| 2026-10-09 (`7bc44db`) | [2026-10-09-reference-correspondence.png](50-diagnostics/s11/2026-10-09-reference-correspondence.png) | 기준 대응 그림 |
+| 2026-10-09 (`67d2ad3`) | [2026-10-09-reference-current-boundary-oil.png](50-diagnostics/s11/2026-10-09-reference-current-boundary-oil.png) | 부분 기준 연속·현재 경계 그림(Oil) |
+| 2026-10-09 (`67d2ad3`) | [2026-10-09-reference-current-boundary.json](50-diagnostics/s11/2026-10-09-reference-current-boundary.json) | 부분 기준 연속과 현재 경계 전제 기계 기록 |
+| 2026-10-09 (`67d2ad3`) | [2026-10-09-reference-current-boundary.md](50-diagnostics/s11/2026-10-09-reference-current-boundary.md) | 부분 기준 연속과 현재 경계 전제 |
+| 2026-10-09 (`67d2ad3`) | [2026-10-09-reference-height-target-choice.png](50-diagnostics/s11/2026-10-09-reference-height-target-choice.png) | 기준 높이 목표 선택 그림 |
+| 2026-10-09 (`7bc44db`) | [2026-10-09-reference-pixel-opposition.png](50-diagnostics/s11/2026-10-09-reference-pixel-opposition.png) | 기준 픽셀 대립 그림 |
+| 2026-10-09 (`7406903`) | [2026-10-09-retained-support-boundaries.json](50-diagnostics/s11/2026-10-09-retained-support-boundaries.json) | 보존 지지 경계 소속 기계 기록 |
+| 2026-10-09 (`7406903`) | [2026-10-09-retained-support-boundaries.md](50-diagnostics/s11/2026-10-09-retained-support-boundaries.md) | 보존 지지 경계 소속 조사 |
+| 2026-10-09 (`7406903`) | [2026-10-09-retained-support-boundaries.png](50-diagnostics/s11/2026-10-09-retained-support-boundaries.png) | 보존 지지 경계 그림 |
+| 2026-10-10 (`52598f0`) | [2026-10-10-cadence-gap-source-reply.json](50-diagnostics/s11/2026-10-10-cadence-gap-source-reply.json) | sample4 cadence 간격 원인 질문과 사용자 응답 원문 |
+| 2026-10-10 (`52598f0`) | [2026-10-10-cadence-owner-causality.json.gz](50-diagnostics/s11/2026-10-10-cadence-owner-causality.json.gz) | sample4 cadence 간격 owner 인과 압축 원자료(전체 trace·행 witness) |
+| 2026-10-10 (`52598f0`) | [2026-10-10-cadence-owner-causality.md](50-diagnostics/s11/2026-10-10-cadence-owner-causality.md) | sample4 cadence 간격 원인 응답과 owner 인과 |
+| 2026-10-10 (`71500cc`) | [2026-10-10-sample3-confirmation-role-reply.json](50-diagnostics/s11/2026-10-10-sample3-confirmation-role-reply.json) | sample3 확인 역할 질문(C/D) 사용자 응답 원문 |
+| 2026-10-10 (`c4ad126`) | [2026-10-10-sample3-confirmation-role-review.json](50-diagnostics/s11/2026-10-10-sample3-confirmation-role-review.json) | sample3 확인 역할 검토 질문 기록 |
+| 2026-10-10 (`c4ad126`) | [2026-10-10-sample3-confirmation-role-review.png](50-diagnostics/s11/2026-10-10-sample3-confirmation-role-review.png) | sample3 확인 역할 검토 이미지 |
+| 2026-10-10 (`71500cc`) | [2026-10-10-sample3-evaluation-scope.md](50-diagnostics/s11/2026-10-10-sample3-evaluation-scope.md) | sample3 원본 역할 종결과 제한적 평가 사용 범위 |
+| 2026-10-10 (`52598f0`) | [2026-10-10-sample3-gap-contact.png](50-diagnostics/s11/2026-10-10-sample3-gap-contact.png) | sample3 최장 간격 contact sheet |
+| 2026-10-10 (`52598f0`) | [2026-10-10-sample3-gap-role-review.json](50-diagnostics/s11/2026-10-10-sample3-gap-role-review.json) | sample3 간격 역할 검토 질문 기록 |
+| 2026-10-10 (`52598f0`) | [2026-10-10-sample3-gap-role-review.png](50-diagnostics/s11/2026-10-10-sample3-gap-role-review.png) | sample3 간격 역할 검토 이미지 |
+| 2026-10-10 (`c4ad126`) | [2026-10-10-sample3-gap-source-reply.json](50-diagnostics/s11/2026-10-10-sample3-gap-source-reply.json) | sample3 간격 원인 사용자 응답 원문 |
+| 2026-10-10 (`52598f0`) | [2026-10-10-sample3-gap-source.json.gz](50-diagnostics/s11/2026-10-10-sample3-gap-source.json.gz) | sample3 최장 수치 간격 원인 압축 원자료 |
+| 2026-10-10 (`52598f0`) | [2026-10-10-sample3-gap-source.md](50-diagnostics/s11/2026-10-10-sample3-gap-source.md) | sample3 최장 수치 간격의 제한적 원인 규명 |
+| 2026-10-10 (`c4ad126`) | [2026-10-10-sample3-gap-user-marking.png](50-diagnostics/s11/2026-10-10-sample3-gap-user-marking.png) | sample3 간격 사용자 표시 이미지 |
+| 2026-10-10 (`c4ad126`) | [2026-10-10-sample3-reappearance-candidates.png](50-diagnostics/s11/2026-10-10-sample3-reappearance-candidates.png) | sample3 재등장 후보 이미지 |
+| 2026-10-10 (`c4ad126`) | [2026-10-10-sample3-reappearance-causality.json.gz](50-diagnostics/s11/2026-10-10-sample3-reappearance-causality.json.gz) | sample3 Oil 재등장 해제 인과 압축 원자료 |
+| 2026-10-10 (`c4ad126`) | [2026-10-10-sample3-reappearance-causality.md](50-diagnostics/s11/2026-10-10-sample3-reappearance-causality.md) | sample3 보이는 Oil 재등장: 원인 응답과 해제 인과 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison.md](50-diagnostics/s11/2026-10-12-cr1-context-comparison.md) | CR-1 후보 문맥 비교와 유용성 검토; 범위 제한, 제품 승격 없음 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/followup-preflight.json](50-diagnostics/s11/2026-10-12-cr1-context-comparison/followup-preflight.json) | CR-1 후속 시험 사전 고정 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/followup-readout.json.gz](50-diagnostics/s11/2026-10-12-cr1-context-comparison/followup-readout.json.gz) | CR-1 후속 시험 판독 압축 원자료 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/followup-verification.json](50-diagnostics/s11/2026-10-12-cr1-context-comparison/followup-verification.json) | CR-1 후속 시험 검증 결과 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/followup.py](50-diagnostics/s11/2026-10-12-cr1-context-comparison/followup.py) | CR-1 후속 시험 스크립트 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/interpretation.json](50-diagnostics/s11/2026-10-12-cr1-context-comparison/interpretation.json) | CR-1 결과 해석·처분 기록 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/preflight.json](50-diagnostics/s11/2026-10-12-cr1-context-comparison/preflight.json) | CR-1 첫 시험 사전 고정(입력·원 캡처 pin) |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/prepare.py](50-diagnostics/s11/2026-10-12-cr1-context-comparison/prepare.py) | CR-1 입력 준비 스크립트 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/primary-pair-and-references.png](50-diagnostics/s11/2026-10-12-cr1-context-comparison/primary-pair-and-references.png) | CR-1 주 비교 쌍과 참조 그림 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/probe.py](50-diagnostics/s11/2026-10-12-cr1-context-comparison/probe.py) | CR-1 문맥 비교 probe 스크립트 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/readiness.json](50-diagnostics/s11/2026-10-12-cr1-context-comparison/readiness.json) | CR-1 실행 전 runtime 준비 고정 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/readout.json](50-diagnostics/s11/2026-10-12-cr1-context-comparison/readout.json) | CR-1 첫 시험 판독 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/requirements.lock](50-diagnostics/s11/2026-10-12-cr1-context-comparison/requirements.lock) | CR-1 실행 의존성 고정 목록 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/retention.json](50-diagnostics/s11/2026-10-12-cr1-context-comparison/retention.json) | CR-1 환경 정리·보존 기록 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/verification.json](50-diagnostics/s11/2026-10-12-cr1-context-comparison/verification.json) | CR-1 첫 시험 검증 결과 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/verify.py](50-diagnostics/s11/2026-10-12-cr1-context-comparison/verify.py) | CR-1 첫 시험 검증 스크립트 |
+| 2026-10-12 (`0bc5af7`) | [2026-10-12-cr1-context-comparison/verify_followup.py](50-diagnostics/s11/2026-10-12-cr1-context-comparison/verify_followup.py) | CR-1 후속 시험 검증 스크립트 |
+| 2026-10-12 (`fb316e9`) | [2026-10-12-cr1-reference-preflight.md](50-diagnostics/s11/2026-10-12-cr1-reference-preflight.md) | CR-1 WP1 참조·입력 준비 점검; 입력 보존 VERIFIED |
+| 2026-10-12 (`fb316e9`) | [2026-10-12-cr1-reference-preflight/audit.json](50-diagnostics/s11/2026-10-12-cr1-reference-preflight/audit.json) | CR-1 참조 점검 감사 결과 |
+| 2026-10-12 (`fb316e9`) | [2026-10-12-cr1-reference-preflight/audit.py](50-diagnostics/s11/2026-10-12-cr1-reference-preflight/audit.py) | CR-1 참조 점검 감사 스크립트 |
+| 2026-10-12 (`fb316e9`) | [2026-10-12-cr1-reference-preflight/preflight.json](50-diagnostics/s11/2026-10-12-cr1-reference-preflight/preflight.json) | CR-1 참조 점검 사전 고정 |
+| 2026-10-16 (`7ee6d90`) | [2026-10-16-corroboration-geometry-screen.md](50-diagnostics/s11/2026-10-16-corroboration-geometry-screen.md) | corroboration 기하 선별; 입력 공백 확인, G2 평가 불가, 승격 없음 |
+| 2026-10-16 (`20d5d4d`) | [2026-10-16-corroboration-geometry-screen/readout.json.gz](50-diagnostics/s11/2026-10-16-corroboration-geometry-screen/readout.json.gz) | corroboration 기하 선별 판독 압축 원자료 |
+| 2026-10-16 (`20d5d4d`) | [2026-10-16-corroboration-geometry-screen/verification.json](50-diagnostics/s11/2026-10-16-corroboration-geometry-screen/verification.json) | corroboration 기하 선별 테스트 실행 검증 기록 |
+| 2026-10-16 (`e00dffb`) | [2026-10-16-single-observation-influence.md](50-diagnostics/s11/2026-10-16-single-observation-influence.md) | SOI-1 단일 관측 손실과 보고서 문맥 영향 연구 |
+| 2026-10-20 (`eecf48a`) | [2026-10-20-accum-texture-gate.md](50-diagnostics/s11/2026-10-20-accum-texture-gate.md) | ATG-1 Accum 질감 게이트 추출; 같은 기제와 두 번째 차단 요인, 종료 |
+| 2026-10-20 (`6757191`) | [2026-10-20-anchor-authority-trace.md](50-diagnostics/s11/2026-10-20-anchor-authority-trace.md) | AAT-1 sample4 수락 경계 행이 anchor 권한을 못 받는 이유 추적 |
+| 2026-10-20 (`bc864ce`) | [2026-10-20-approach-review.md](50-diagnostics/s11/2026-10-20-approach-review.md) | ARV-1 layer-bottom witness 이후 접근 검토(review-010) |
+| 2026-10-20 (`7895741`) | [2026-10-20-clean-anchor-fill.md](50-diagnostics/s11/2026-10-20-clean-anchor-fill.md) | CAF-1 clean-anchor fill 자격 검토 |
+| 2026-10-20 (`0429a53`) | [2026-10-20-layer-bottom-qualified-authority.md](50-diagnostics/s11/2026-10-20-layer-bottom-qualified-authority.md) | LBQ-1 layer-bottom 자격 ordered-lower 권한; 미승격 종료 |
+| 2026-10-20 (`4e91cf4`) | [2026-10-20-layer-bottom-topology.md](50-diagnostics/s11/2026-10-20-layer-bottom-topology.md) | LBT-1 ordered-lower 문맥의 layer-bottom topology; 미승격 종료(결과 G) |
+| 2026-10-20 (`7b03ec8`) | [2026-10-20-layer-bottom-witness-2.md](50-diagnostics/s11/2026-10-20-layer-bottom-witness-2.md) | LBW-2 최소 Oil 띠 두께 없는 layer-bottom witness; S0 실패, 미승격 |
+| 2026-10-20 (`87817ad`) | [2026-10-20-layer-bottom-witness-3.md](50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md) | LBW-3 첫 지지 layer bottom; Windows held-out 실패, 미승격 |
+| 2026-10-20 (`f8530de`) | [2026-10-20-layer-bottom-witness.md](50-diagnostics/s11/2026-10-20-layer-bottom-witness.md) | LBW-1 Foam layer-bottom witness; S0 실패, 미승격 |
+| 2026-10-20 (`a7fa2e4`) | [2026-10-20-selection-fill-review.md](50-diagnostics/s11/2026-10-20-selection-fill-review.md) | SFR-1 LBQ-1 이후 선택·fill 단계 검토 |
+| 2026-10-20 (`2302b7c`) | [2026-10-20-terminal-partition-support.md](50-diagnostics/s11/2026-10-20-terminal-partition-support.md) | TPA-1 terminal partition 표현 간 지지 검토 |
+| 2026-10-21 (`f85c560`) | [2026-10-21-full-observable-top-review.md](50-diagnostics/s11/2026-10-21-full-observable-top-review.md) | OTR-1 FULL 관측 상단 설계 검토; D1·D1b·D2·D3 사용자 결정 |
+| 2026-10-22 (`84d7431`) | [2026-10-22-d-scope-review.md](50-diagnostics/s11/2026-10-22-d-scope-review.md) | DSR-1 D 범위 검토(Accum 진입·post-Foam·drain, stale fill owner) |
+| 2026-10-22 (`6e8c412`) | [2026-10-22-fill-owner-ambiguity-local.md](50-diagnostics/s11/2026-10-22-fill-owner-ambiguity-local.md) | FOA-1 SPL#4 fill-owner 모호성의 로컬 재현 확인 |
+
+### `docs/60-evidence/s11/` — 28개
+
+| 최초 Git 등록일 (KST) | 문서 | 역할 |
+|---|---|---|
+| 2026-10-06 (`1d4343a`) | [2026-10-06-boundary-temporal-residuals.md](60-evidence/s11/2026-10-06-boundary-temporal-residuals.md) | 저장 sequence 경계의 시간 잔차 측정; 미평가, FIELD FAIL 유지 |
+| 2026-10-06 (`7fa7e34`) | [2026-10-06-foam-edge-selection-feasibility.md](60-evidence/s11/2026-10-06-foam-edge-selection-feasibility.md) | Foam edge 선택 외관 규칙 감사와 두 시점 검토; 규칙 미승격 |
+| 2026-10-06 (`fc775be`) | [2026-10-06-foam-front-alternatives.md](60-evidence/s11/2026-10-06-foam-front-alternatives.md) | 로컬 Foam 앞면 대안 비교와 움직임 검토 준비 |
+| 2026-10-06 (`97c0877`) | [s11-o2-passive-control-review-001.md](60-evidence/s11/s11-o2-passive-control-review-001.md) | Windows 보고서 기반 passive 대조군 첫 묶음 접수 검토 |
+| 2026-10-07 (`4d91c1c`) | [2026-10-07-a0b-adoption-verification.json](60-evidence/s11/2026-10-07-a0b-adoption-verification.json) | A0b 채택 검증 실행 기록 |
+| 2026-10-07 (`df3a99b`) | [2026-10-07-a1-measurement-lineage.json](60-evidence/s11/2026-10-07-a1-measurement-lineage.json) | A1 측정 계보 비교 기록(소스 해시·실행) |
+| 2026-10-07 (`ccfb6fa`) | [2026-10-07-event-compatibility-verification.json](60-evidence/s11/2026-10-07-event-compatibility-verification.json) | legacy Oil 이벤트 호환 검증 기록(입력 pin·이전 이벤트 소스 해시) |
+| 2026-10-07 (`ccfb6fa`) | [2026-10-07-event-compatibility.md](60-evidence/s11/2026-10-07-event-compatibility.md) | legacy Oil 이벤트 호환 로컬 검증 |
+| 2026-10-07 (`6f7c309`) | [2026-10-07-report-context-verification.json](60-evidence/s11/2026-10-07-report-context-verification.json) | 보고서 문맥(Oil 극값 보존·관측 요약) 검증 기록 |
+| 2026-10-07 (`31f51c5`) | [2026-10-07-report-gap-verification.json](60-evidence/s11/2026-10-07-report-gap-verification.json) | 보고서 간격선 제한·원본 문맥 장면 검증 기록 |
+| 2026-10-07 (`c9a61ce`) | [2026-10-07-sample4-interval-human-reply.json](60-evidence/s11/2026-10-07-sample4-interval-human-reply.json) | sample4 구간 사람 해석 응답 원문 |
+| 2026-10-07 (`83415c5`) | [2026-10-07-source-report-interval-review.md](60-evidence/s11/2026-10-07-source-report-interval-review.md) | 원본·보고서 구간 검토(sample4 첫 사람 해석 포함) |
+| 2026-10-07 (`83415c5`) | [2026-10-07-source-report-review-manifest.json](60-evidence/s11/2026-10-07-source-report-review-manifest.json) | 원본·보고서 구간 검토 manifest |
+| 2026-10-09 (`3c6df8e`) | [2026-10-09-local-xy-checkpoint-comparison.png](60-evidence/s11/2026-10-09-local-xy-checkpoint-comparison.png) | Local XY checkpoint 비교 그림 |
+| 2026-10-09 (`3c6df8e`) | [2026-10-09-local-xy-endpoint-review.png](60-evidence/s11/2026-10-09-local-xy-endpoint-review.png) | Local XY 끝점 검토 그림 |
+| 2026-10-09 (`3c6df8e`) | [2026-10-09-local-xy-implementation.json](60-evidence/s11/2026-10-09-local-xy-implementation.json) | Local XY 구현 동등성·변경 행 기록 |
+| 2026-10-09 (`3c6df8e`) | [2026-10-09-local-xy-implementation.md](60-evidence/s11/2026-10-09-local-xy-implementation.md) | opt-in Local XY 입력·측정 계보 구현과 고정 전체 창 비교; `oil-local-xy-v1` CLOSED |
+| 2026-10-16 (`20d5d4d`) | [2026-10-16-corroboration-geometry-handoff.md](60-evidence/s11/2026-10-16-corroboration-geometry-handoff.md) | native 경로·원본 측정 검증 인수인계; 성능 개선 입증 아님 |
+| 2026-10-16 (`6248e08`) | [2026-10-16-top-exit-full.md](60-evidence/s11/2026-10-16-top-exit-full.md) | 선택적 top-exit FULL 종결 로컬 준비; v2로 대체 |
+| 2026-10-20 (`477c135`) | [2026-10-20-full-observable-top-handoff.md](60-evidence/s11/2026-10-20-full-observable-top-handoff.md) | FULL 관측 상단 작업 인수인계 |
+| 2026-10-20 (`10c5455`) | [2026-10-20-texture-authority-handoff.md](60-evidence/s11/2026-10-20-texture-authority-handoff.md) | 질감 권한(texture authority) 작업 인수인계 |
+| 2026-10-21 (`139ba87`) | [2026-10-21-initial-state-report-local.md](60-evidence/s11/2026-10-21-initial-state-report-local.md) | 초기 상태 continuing-run 규칙·보고서 band 로컬 구현과 Windows 확인; 첫 포착 위치 가드(L2) 포함 |
+| 2026-10-21 (`435bec8`) | [2026-10-21-top-exit-report-handoff.md](60-evidence/s11/2026-10-21-top-exit-report-handoff.md) | top-exit·보고서 작업 인수인계 |
+| 2026-10-21 (`1f68c46`) | [2026-10-21-top-exit-v2-local.md](60-evidence/s11/2026-10-21-top-exit-v2-local.md) | top-exit FULL v2 로컬 구현·대조군; v3로 대체 |
+| 2026-10-21 (`5971b30`) | [2026-10-21-top-exit-v3-local.md](60-evidence/s11/2026-10-21-top-exit-v3-local.md) | top-exit FULL v3 로컬 구현·대조군과 Windows ⑩ PASS; 기본 OFF |
+| 2026-10-22 (`bbfe246`) | [2026-10-22-fill-owner-contest-local.md](60-evidence/s11/2026-10-22-fill-owner-contest-local.md) | contested fill-owner gate 로컬 구현·점검 PASS(opt-in, 기본 OFF) |
+| 2026-10-22 (`19b3aee`) | [2026-10-22-mac-only-steps-handoff.md](60-evidence/s11/2026-10-22-mac-only-steps-handoff.md) | Mac 전용 단계 인수인계(1~3단계·6(나) 완료 시점) |
+| 2026-10-22 (`ba31295`) | [2026-10-22-top-exit-promotion-evidence.md](60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md) | top-exit v3 승격 증거(N PASS, SPL#4 P FAIL; 기본 OFF 유지) |
+
+### `docs/70-reference/s11-audit-2026-10-07/` — 14개
+
+모두 원문 보존 자료이며 [import manifest](70-reference/s11-audit-2026-10-07/import-manifest.json)가 각 파일의 hash를 기록합니다.
+
+| 최초 Git 등록일 (KST) | 문서 | 역할 |
+|---|---|---|
+| 2026-10-07 (`0333a08`) | [managed-validation-worktree-recovery.zip](70-reference/s11-audit-2026-10-07/managed-validation-worktree-recovery.zip) | 미채택 관리 검증 worktree 변경 복구 자료 |
+| 2026-10-07 (`4d91c1c`) | [s11-audit-execution-summary-2026-10-07.json](70-reference/s11-audit-2026-10-07/s11-audit-execution-summary-2026-10-07.json) | 첫 감사 실행 요약 원본 |
+| 2026-10-07 (`4d91c1c`) | [s11-second-audit-code-and-evidence-2026-10-07.zip](70-reference/s11-audit-2026-10-07/s11-second-audit-code-and-evidence-2026-10-07.zip) | 두 번째 감사 코드·증거 묶음 원본 |
+| 2026-10-07 (`4d91c1c`) | [s11-second-audit-execution-summary-2026-10-07.json](70-reference/s11-audit-2026-10-07/s11-second-audit-execution-summary-2026-10-07.json) | 두 번째 감사 실행 요약 원본 |
+| 2026-10-07 (`0333a08`) | [s11-third-audit-code-and-evidence-2026-10-07.zip](70-reference/s11-audit-2026-10-07/s11-third-audit-code-and-evidence-2026-10-07.zip) | 세 번째 감사 코드·증거 묶음 원본 |
+| 2026-10-07 (`0333a08`) | [s11-third-audit-execution-summary-2026-10-07.json](70-reference/s11-audit-2026-10-07/s11-third-audit-execution-summary-2026-10-07.json) | 세 번째 감사 실행 요약 원본 |
+| 2026-10-07 (`4d91c1c`) | [second-audit-execution-summary.json](70-reference/s11-audit-2026-10-07/second-audit-execution-summary.json) | 두 번째 감사 native 실행 요약 |
+| 2026-10-07 (`4d91c1c`) | [second-audit-final_receipt.json](70-reference/s11-audit-2026-10-07/second-audit-final_receipt.json) | 두 번째 감사 최종 receipt |
+| 2026-10-07 (`4d91c1c`) | [second-audit-qt-initial-stall-native.txt](70-reference/s11-audit-2026-10-07/second-audit-qt-initial-stall-native.txt) | 두 번째 감사 Qt 초기 정지 native 로그 |
+| 2026-10-07 (`4d91c1c`) | [second-audit-qt_preflight_stability_probe.json](70-reference/s11-audit-2026-10-07/second-audit-qt_preflight_stability_probe.json) | 두 번째 감사 Qt preflight 안정성 probe |
+| 2026-10-07 (`0333a08`) | [sibling-audit-worktree-recovery.zip](70-reference/s11-audit-2026-10-07/sibling-audit-worktree-recovery.zip) | 미채택 형제 감사 worktree 변경 복구 자료 |
+| 2026-10-07 (`0333a08`) | [third-audit-native-evidence-manifest.json](70-reference/s11-audit-2026-10-07/third-audit-native-evidence-manifest.json) | 세 번째 감사 native 증거 manifest |
+| 2026-10-07 (`0333a08`) | [third-audit-preservation-receipt.json](70-reference/s11-audit-2026-10-07/third-audit-preservation-receipt.json) | 세 번째 감사 보존 receipt |
+| 2026-10-07 (`0333a08`) | [third-report-worktree-recovery.zip](70-reference/s11-audit-2026-10-07/third-report-worktree-recovery.zip) | 미채택 세 번째 보고서 worktree 변경 복구 자료 |
