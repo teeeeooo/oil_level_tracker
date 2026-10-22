@@ -3,7 +3,7 @@
 **Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery` / `ACTIVE`.
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
-**Accepted baseline:** Default R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The initial-FULL comparison has quantified Windows output recovery and a newly exposed false-output checkpoint, remains opt-in and is not a promoted baseline. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior.
+**Accepted baseline:** Default R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The initial-FULL comparison has quantified Windows output recovery and a newly exposed false-output checkpoint, remains opt-in and is not a promoted baseline. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior. Downstream of the detector, the initial-state continuing-run rule, labelled FULL/EMPTY bands and plain judgment reason (`139ba87`) are in main and always on; one Windows report confirmation run passed its written expectation.
 **Next transition:** The [HPA-1 history/phase study](../50-diagnostics/s11/2026-10-17-history-phase-amplification.md#results-and-decisions) is COMPLETE / CLOSED WITHOUT PRODUCTION PROMOTION. The primary SOI gap is now localized to internal row geometry/association followed by inherited fill-barrier authority, not its recurrence scalars alone. A successor must qualify input-local physical role/continuity before association and phase can inherit authority. Donor medians/history are not deployable; terminal-veto quarantine alone recovers points but introduces unassessed selections/late extrema. Preserve the accepted 52 s Oil, practical 004/005 alternatives and genuine FULL/EMPTY protections. Do not repeat H1/H2, Y818 exclusion, cost-first, profile tuning, generic anchor privilege or report repair. Point-local equality is not a new acceptance target. **721 s intake remains COMPLETE**, with optical/peer cause unknown. No new Windows run is queued. **FULL: v1 CONDITION FAILED / ⑧ NOT RUN; v2 ⑨ FAIL / NOT ADOPTED; v3 ⑩ PASS at single-Glass comparison scope, default OFF and not promoted**; no mask-edge substitution or margin reduction.
 **Windows comparison source:** **④ FULL+ON v2** is the baseline. ⑨ = ④ + top-exit v2 (`1f68c46`, `+initial-full-observation-v2+top-exit-full-v2`) ran once and FAILED its pre-registered outcome; it is NOT ADOPTED. ⑩ = ④ + top-exit v3 (`+top-exit-full-v3`, default OFF) ran once and PASSED its pre-registered outcome; it is opt-in and not promoted. No Windows run is queued. The v1 implementation (⑧, `6248e08`) failed its preflight, was never run, and is replaced in place. Top-exit/cost-first/RGB/Local XY stay OFF outside retained trials. The earlier ⑦ identity limit remains in its retained record; no hash-driven rerun.
 **Latest checkpoint:** The [HPA-1 handoff](../60-evidence/s11/2026-10-17-history-phase-handoff.md) closes three experimental rounds: 10 scalar/control windows, eight complete row-feature combinations and all 246 SOI baseline/withdrawal conditions. 264 stored conditions / 29,832 rows verify with zero source/event/CSV mismatches; 14 publication replays bring actual resolver executions to 278. In the primary loss, median restoration confines the miss but is oracle-only; input-local quarantine raises 84→103 Oil points without recovering the accepted 52 s candidate and exposes new +45 px late extrema in two whole-Oil losses. Four public outputs change / seven quarantined frames; no paired Foam-coordinate change. Full unit suite 2,300 PASS; added focused tests 33 PASS. Three new managed runs are closed, 56 unique files / 12,012,683 bytes; all 94 managed runs check clean. A local HTML shows every activated condition and its ordinary-policy control, with 11 verified source/graph links. Nine video identities were inventoried; only saved sample4 raw was newly replayed. Prior dirty SOI closeout was preserved in b795e40. Production/default/Recipe/truth and Windows nine-segment constraints are unchanged. Independent report-only acceptance remains unresolved: O2 OPEN / FIELD FAIL.
@@ -151,11 +151,22 @@ is COMPLETE (desk only).
 
     The ⑩ bundle's official outputs are unchanged; seeing the change on Windows
     needs a new run (user's decision).
-  - **REQUESTED (user, 2026-10-21):** one
-    [report confirmation run](../40-operations/s11-current-windows-field-qualification.md#report-confirmation-run)
-    under ⑩'s conditions, with expectations written before the run. The return
-    goes to a new session.
-  - **Then:** the passed opt-in v3 and the paused layered-Foam line.
+  - **[Report confirmation run](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)
+    RECEIVED (2026-10-22) — PASS against the expectation written before the
+    run; no failure condition occurred:**
+    - **Tracking data:** identical to ⑩, with no differing row in either Glass.
+    - **BASE:** reconstruction ACCEPTED, 479.98–548.01 s, evidence at 548.5 /
+      567.5 / 568.0 s; effective coverage 92.0 %. The judgment is PASS on its
+      level (minimum +113.6 px), with the plain reconstruction sentence and
+      both labelled bands.
+    - **Accum:** UNRESOLVED (`AUTHORITATIVE_FOAM`); REVIEW_REQUIRED at 6.0 %.
+      The overall REVIEW_REQUIRED is derived; it was not returned.
+    - **Receipt notes:** one evidence frame index is read from its timestamp
+      (OCR); the import path was not reported.
+    - **Scope:** one video; a downstream report and judgment change, not field
+      qualification. FIELD FAIL / O2 OPEN are unchanged.
+  - **NEXT (user decision):** the passed opt-in top-exit v3, the paused
+    layered-Foam line and option C (the 663.0 s exclusion).
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
@@ -166,14 +177,17 @@ Facts it records:
 
 No detector change, flag, run or Windows request is queued.
 
-**Resume checkpoint — 2026-10-21 (latest):** start with the
+**Resume checkpoint — 2026-10-22 (latest):** start with the
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md).
+Its pending run is now received.
 - **Top-exit v3:** ⑩ PASS; default OFF; not promoted.
 - **Downstream changes at `139ba87`:** the continuing-run initial-state rule,
   labelled FULL/EMPTY bands and a plain judgment reason.
-- **Pending:** one
-  [report confirmation run](../40-operations/s11-current-windows-field-qualification.md#report-confirmation-run).
-  The user relays its return to the next session.
+- **Report confirmation run:** RECEIVED 2026-10-22 — PASS
+  ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)).
+  No Windows request is pending.
+- **Next:** the user chooses among the handoff's
+  [open choices](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md#open-choices-after-that-the-user-decides).
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).
