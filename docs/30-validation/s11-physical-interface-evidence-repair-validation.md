@@ -229,6 +229,61 @@ is unchanged; this fixes how it applies here.
 - **Local negatives:** they ran at `cba4067`/`60d6a9d`. If the frozen head of
   the SPL#4 run differs, the six controls rerun there before the decision.
 
+## Contested fill-owner gate checks — 2026-10-22
+
+**Status: FROZEN 2026-10-22 with the design, before any code or run.** These
+checks accompany the
+[contested fill-owner gate](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-22-contested-fill-owner-gate).
+They do not change after results.
+
+**Unit (synthetic lifecycle layers):**
+- A contested survivor gives `FILL_OWNER_CONTESTED` with an empty allowed set.
+- A single owner that was never contested publishes as before.
+- After a contest, a fresh uncontested chain publishes as before.
+- A handoff successor of a contested chain is gated.
+- Re-entry and a current-anchor handoff by a contested tracklet are gated.
+- Fill-span completion and drain releases are not gated.
+- The marks clear at `FILLED_BARRIER` and at `DRAINING`.
+- With the option OFF the lifecycle output is identical, and the existing suites
+  pass unchanged.
+
+**Wiring:**
+- The flag reaches the lifecycle through the real GUI detector-factory paths.
+- The detector and the completed resolver versions carry
+  `+fill-owner-contest-v1`.
+- Cost-first, candidate RGB and Local XY combinations are refused.
+
+**Local controls.** Six controls with the same Recipes, ROI inputs and initial
+states as the top-exit negatives (run 003), at 2 fps with debug NONE.
+- **Arms:** the reference is IFO v2 + top-exit v3; the candidate adds the gate.
+- **Identity anchor:** the reference arm must equal the kept top-exit arm of runs
+  001/002 (rows, events, report; `run_id` aside). Otherwise the run is void.
+
+| Check | Controls | Prediction (pass condition) |
+|---|---|---|
+| C1 identity | base_sample_1-full, sample2-full, sample4-interior-full, sample4-original-unknown | None reports `FILL_OWNER_AMBIGUOUS` in the reference. Rows, phases, events and report are equal between the arms (version aside) |
+| C2 removal | sample5-empty | 32 frames become `FILL_OWNER_CONTESTED`: 20.0–22.0, 35.5–36.0 and 40.5–52.5 s. The 17 numeric rows at 20.0, 36.0, 40.5, 41.5, 42.0, 42.5, 43.5, 44.0, 46.0, 46.5, 47.0, 48.0, 48.5, 49.0, 49.5, 50.0 and 50.5 s become UNKNOWN. The rows at 8.5, 9.0, 24.5, 25.5, 54.0 and 54.5 s are unchanged |
+| C3 known loss | sample7-empty | 24 frames become `FILL_OWNER_CONTESTED`: 22.0–33.5 s. 0016's 20 rows (22.0–31.5 s) become UNKNOWN; the 9.5 s row is unchanged. The user judged these rows correct before any run, so this is a pre-registered loss of 20 correct rows, accepted by the user. Exactly these rows must go; the loss is reported against C2's 17 removed wrong rows |
+
+**Stop conditions.** Any of these fails the check, with no promotion and no
+retuning:
+- a numeric Oil row added, or moved in Y, in any control;
+- any difference in a C1 control;
+- any Foam coordinate change;
+- a FULL or EMPTY state change;
+- a gated frame outside the predicted set.
+
+Events, the retrospective and the report may change in C2 and C3 only as a
+consequence of the removed rows. Every such change is reported.
+
+**Windows (step 7, later):**
+- **SPL#4 0–90 s, reference vs candidate.** Predicted: the 14 rows at
+  27.5–34.0 s become UNKNOWN if 0018 shared the 22.5–27.0 s ambiguity, and
+  nothing else changes.
+- **SPL#1 under ⑩ conditions.** Rows change only after a `FILL_OWNER_AMBIGUOUS`.
+  Every changed row is listed with its phase reason and owner.
+- **Promotion** is a separate decision.
+
 ## Cost-first comparison checks
 
 The option repeats the frozen first-sort intervention; it does not claim physical
@@ -438,8 +493,8 @@ focused tests before the broader candidate suite.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- First harmful stage: BASE association across a reviewed location mismatch and Accum boundary-owner exclusion are distinct targets; private physical-identity continuity remains unresolved. The local polarity-only association prototype failed protected truth and photometric positive controls.
-- Existing feature coverage: the new E3/E4 control reuses fixed current-frame candidate kinds, original raster/visibility and O1 native/center evidence without changing Recipe, masks, Artifact/static setup or experimental modes. The 187-unit population retains all accepted, opposed and unassessed records and the seven historical declared-kind mismatches.
-- Execution scope: linked native geometry availability and CRW-1 paired-raster input checks only; the latter has 123 focused tests and separate direct-loop arithmetic. No continuous contour qualification, completed sequence, private Windows replay or actual reader response is supplied by this change. Earlier RGB/initial-FULL/top-exit checks retain their scopes. Partial descriptive support does not establish a physical classifier or report acceptance. The 2026-10-22 top-exit promotion criteria are pre-registered before any new evidence; no run, review or Windows execution accompanies them.
-- Logic-map impact: NONE — this adds a validation precondition for a proposed witness, not a production route or a new consumer.
-- Failure-registry impact: NONE — existing identity/provenance/no-threshold-shortcut guards cover missing contour input; prior rejected comparisons and full physical-witness acceptance are unchanged.
+- First harmful stage: BASE association across a reviewed location mismatch and Accum boundary-owner exclusion are distinct targets; private physical-identity continuity remains unresolved. The local polarity-only association prototype failed protected truth and photometric positive controls. Contested fill-owner draft: on sample5 and sample7 the first harmful stage is `OIL-PHASE-FILL`, where a survivor of `FILL_OWNER_AMBIGUOUS` becomes the publishing owner by attrition; on SPL#4 this is inferred, not confirmed.
+- Existing feature coverage: the new E3/E4 control reuses fixed current-frame candidate kinds, original raster/visibility and O1 native/center evidence without changing Recipe, masks, Artifact/static setup or experimental modes. The 187-unit population retains all accepted, opposed and unassessed records and the seven historical declared-kind mismatches. The fill-owner checks reuse the top-exit negative controls (same Recipes, ROI inputs and initial states as run 003), the comparison runner and the kept runs 001/002 as the identity anchor.
+- Execution scope: linked native geometry availability and CRW-1 paired-raster input checks only; the latter has 123 focused tests and separate direct-loop arithmetic. No continuous contour qualification, completed sequence, private Windows replay or actual reader response is supplied by this change. Earlier RGB/initial-FULL/top-exit checks retain their scopes. Partial descriptive support does not establish a physical classifier or report acceptance. The 2026-10-22 top-exit promotion criteria are pre-registered before any new evidence; no run, review or Windows execution accompanies them. The 2026-10-22 contested fill-owner checks were frozen before any code or run; the only execution behind them is the closed desk run `s11-fill-owner-contest-desk-20261022-001` over kept FOA-1 readouts, plus the user's sample7 judgment.
+- Logic-map impact: NONE — this adds a validation precondition for a proposed witness, not a production route or a new consumer. The fill-owner checks add a frozen validation section only.
+- Failure-registry impact: NONE — existing identity/provenance/no-threshold-shortcut guards cover missing contour input; prior rejected comparisons and full physical-witness acceptance are unchanged. The fill-owner attrition path fits F04, F05 and F08; no new entry.

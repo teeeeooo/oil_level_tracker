@@ -84,12 +84,25 @@ frozen before any code change. B's sample4 baseline may then shift; B would
 develop on top of it. Keeping the original order (E3, then B, then step 6) is
 equally valid. The user decides.
 
+**Later (2026-10-22):** the user chose option 1 first.
+- **Changed form:** a desk reading showed that motion does not separate the
+  owners. Option 1 therefore became the
+  [contested fill-owner gate](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-22-contested-fill-owner-gate),
+  frozen before implementation as an opt-in comparison.
+- **sample7 corrected:** its "low owner" is the front arc of the same,
+  obliquely viewed surface (user judgment), not a stale owner.
+- **Cost:** locally the gate removes 17 wrong sample5 rows and 20 correct
+  sample7 rows. The user accepted this because product videos are mostly
+  head-on.
+- **sample4:** it never reports `FILL_OWNER_AMBIGUOUS`, so B's baseline should
+  not move.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F08`
 - First harmful stage: per segment. Accum entry: unknown on the current detector. Collapse onset: the selector publishes another row although the target is anchored (678.5 s); in the R18-era readout the reviewed interface was lost before the retained refs (679.0 s). Post-Foam: `OIL-TRACKLET` association ambiguity near the level. Drain: `OIL-PHASE-DRAIN` partial release (F08). Stale owner: `OIL-PHASE-FILL` ownership (FOA-1, SPL#4).
 - Existing feature coverage: reuses the reviewed SPL#1 truth segments, the ⑩ interval counts, the ⑩ census, the closed D1 readout, ARV-1 and review-010, the F08 entry and FOA-1. No new extraction, run or Recipe use.
-- Execution scope: desk review of committed records; no run, Windows request, tuning, flag or threshold change.
+- Execution scope: desk review of committed records; no run, Windows request, tuning, flag or threshold change. A later note (2026-10-22) records the step-6 outcome and the user's sample7 judgment; no run.
 - Logic-map impact: NONE — review only; detector code and owners are unchanged.
 - Failure-registry impact: NONE — every gap maps to an existing entry (F04, F05, F08); no new mechanism or failure.

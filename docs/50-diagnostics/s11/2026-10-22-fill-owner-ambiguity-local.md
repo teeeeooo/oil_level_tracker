@@ -170,12 +170,23 @@ Unadmitted near-level candidates mostly carry no recorded failure reason
 - **Not decided here:** nothing is changed or tuned. Owner persistence is
   input for the step-3 D review and the step-6 design.
 
+**Later (2026-10-22):** two readings above are corrected.
+- **Owner motion:** a desk reading of these readouts (closed run
+  `s11-fill-owner-contest-desk-20261022-001`) finds most low owners rising in
+  parallel with the level. "Stopped following the level" fits sample5 0004
+  only. The wrong rows come from a survivor of the ambiguity; see the
+  [contested fill-owner gate](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-22-contested-fill-owner-gate).
+- **sample7:** the user judged 0016's rows correct. 0016 and the upper owners
+  (0006, 0013) are the front and back arcs of one obliquely viewed surface. So
+  sample7's "low" owner is not a wrong target, and its M5 target is decided:
+  correct.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F05`, `S11-F08`
 - First harmful stage: on the local fills, `OIL-PHASE-FILL` ownership. A tracklet that stopped following the level stays a dynamic fill owner, so the lifecycle fails closed (`FILL_OWNER_AMBIGUOUS`) and later re-adopts a low owner, which publishes wrong-target Oil on sample5. `OIL-TRACKLET` admission is not the first harmful stage locally, because the level is admitted. On SPL#4 the admission inference stays open.
 - Existing feature coverage: reuses the initial-FULL/top-exit comparison runner and its frozen empty-fill Recipes (`temporal_max_jump_px` 32), the EMPTY initial-state confirmation, the IFO v2 and top-exit v3 options as in run 003, the ROI overlay and fields the resolver already writes into completed detections. The readout and the grid add no decision; the overlay without the grid stays byte-identical.
-- Execution scope: one closed local managed run (`s11-fill-owner-readout-20261022-001`, at `6e8c412`) at 2 fps with debug NONE: grid frames on sample5 and sample7, agent estimates written before the readout, then the readout comparison on both, identity gate PASS against runs 001/002. Agent frame estimates only; no user review, Windows run, tuning, flag or threshold change.
+- Execution scope: one closed local managed run (`s11-fill-owner-readout-20261022-001`, at `6e8c412`) at 2 fps with debug NONE: grid frames on sample5 and sample7, agent estimates written before the readout, then the readout comparison on both, identity gate PASS against runs 001/002. Agent frame estimates only; no user review, Windows run, tuning, flag or threshold change. A later note (2026-10-22) cites the desk run and the user's sample7 judgment; no new run.
 - Logic-map impact: NONE — diagnostics only; detector code and owners are unchanged.
 - Failure-registry impact: NONE — the findings fit existing entries: stale continuation blocking the level (`S11-F04`), EMPTY-phase fill ownership locking out an admitted level (`S11-F05`) and re-adoption after owner loss (`S11-F08`). `S11-F02` (the level not admitted) is not reproduced locally.

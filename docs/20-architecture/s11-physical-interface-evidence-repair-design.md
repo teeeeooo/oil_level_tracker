@@ -483,6 +483,144 @@ promotion state; this section defines what a promotion would consist of.
 **Not part of this preparation:** any rule change or tuning, the 27 % cap
 (LBT-1 outcome G) and option C.
 
+## October 22 contested fill-owner gate
+
+**Status: FROZEN 2026-10-22 before implementation; no code.** This is the (나)
+half of step 6 in the Mac-only order of the
+[Work Plan](../00-project/work-plan.md). The user moved it ahead of E3 and B
+after [DSR-1](../50-diagnostics/s11/2026-10-22-d-scope-review.md#recommendation).
+It replaces DSR-1 option 1's wording ("a fill owner keeps ownership only while
+it follows the level"), for the reason below.
+
+**User decisions (2026-10-22):**
+- **Rule:** adopt this gate in place of motion validity.
+- **Activation:** opt-in, default OFF, as proposed below.
+- **sample7 target:** 0016's published Y is correct. The line where 0006/0013
+  ran is the same surface. The video is shot slightly from above, so the milk
+  surface shows as an ellipse: 0016 follows its front arc, 0006/0013 its back
+  arc. The user checked 0016 at 21.5, 25.0 and 31.5 s; the rows between follow
+  the same tracklet (inference).
+- **Product geometry:** product videos are mostly shot head-on, like local
+  sample4 (a round sight glass), where the surface shows as a line.
+- **Cost accepted:** the gate removes sample7's 20 correct rows (below), on the
+  ground that such arc pairs should be rare in head-on product videos.
+
+### What the kept readouts show
+
+A desk reading of the kept [FOA-1](../50-diagnostics/s11/2026-10-22-fill-owner-ambiguity-local.md)
+readouts (closed managed run `s11-fill-owner-contest-desk-20261022-001`; no
+detector run).
+
+- **Motion does not separate the owners.**
+  - **Method:** each owner's recent trajectory is rebuilt over six frames and
+    tested with the existing R21 topward predicate (upward, agreement ≥ 0.60,
+    progress ≥ max(4, 0.025 H)).
+  - **Result:** the lower owners pass about as often as the upper ones. They
+    rise in parallel, below them.
+
+    | Video | Lower owners pass | Upper owners pass | Lower owners sit |
+    |---|---:|---:|---|
+    | sample5 | 40 of 61 frames | 12 of 17 frames | 140–270 px below the surface, in the bubbly water |
+    | sample7 | 26 of 33 frames | 11 of 16 frames | 50–85 px below the upper owners: the front arc of the same surface (user) |
+
+  - **Exception:** only sample5 0004 is mostly stationary (4 of 10).
+  - **What stands from FOA-1:** its source reading. A continuing row carries
+    its confirmation witness's direction, net progress and agreement for the
+    tracklet's whole life.
+  - **What does not:** "stopped following the level" fits 0004 only. The other
+    sample5 owners follow another rising boundary inside the water.
+  - **So:** a rule that keeps ownership only while the owner rises would keep
+    most wrong owners.
+- **Two lifecycle paths publish the wrong rows.** Both are verified in source.
+  - **Win by attrition (main path).**
+    - `FILL_OWNER_AMBIGUOUS` keeps every contested chain. By contrast,
+      `FILL_COMPLETION_AMBIGUOUS`, `FILL_CHAIN_AMBIGUOUS` and
+      `FILL_PHASE_REENTRY_AMBIGUOUS` drop the chains they cannot separate.
+    - When the other owners age out, the survivor becomes the single
+      `FILL_MOTION_OWNER`, replaces the established fill and publishes.
+
+    | Recording | Rows from this path | Status |
+    |---|---|---|
+    | sample5 | 17 of the 21 wrong rows: 20.0 s, 36.0 s, 40.5–44.0 s and 46.0–50.5 s (via 0064's handoff successor 0106) | Agent-checked against the surface estimates |
+    | sample7 | all 20 rows of 0016, 22.0–31.5 s | Correct (user): the front arc of the same surface |
+    | SPL#4 | the re-adopted low owner 0018 (14 rows) fits this path | Not confirmed; Windows must check |
+
+  - **Fresh low start.** After a fill is established, a new chain from the
+    lower entrance band becomes the owner although it lies far below the
+    established level. sample5 24.5–25.5 s and 54.0–54.5 s: 4 rows, 193–226 px
+    below. This design does not address it.
+
+### Rule
+
+A tracklet that shared a fill-owner ambiguity cannot become the publishing fill
+owner by outlasting the others.
+
+1. **Mark.** Every tracklet in the dynamic-owner set of a `FILL_OWNER_AMBIGUOUS`
+   frame is contested. A tracklet whose current fill chain lists a contested
+   tracklet (a handoff successor) is contested too.
+2. **Gate.** The gate applies in OPEN or FILLING when both hold:
+   - the lifecycle would allow one fill owner (`FILL_MOTION_OWNER`,
+     `FILL_PHASE_REENTRY`, `FILL_CURRENT_ANCHOR_HANDOFF`, or the single owner
+     under `FILL_CHAIN_AMBIGUOUS`);
+   - that tracklet or its owner chain is contested.
+
+   Then:
+   - the allowed set and the owner chain become empty;
+   - the reason becomes `FILL_OWNER_CONTESTED`;
+   - the frame counts as ambiguous, like `FILL_OWNER_AMBIGUOUS`;
+   - the fill-onset intent does not rewrite earlier frames for that owner.
+3. **No state change.** Chains, the established fill, the ownerless barrier and
+   the release, re-entry and recovery evaluations all evolve exactly as
+   without the gate. Only the frame decision differs. The selector, projection
+   and publication consume it unchanged.
+4. **End.** The marks clear when the phase becomes `FILLED_BARRIER` or
+   `DRAINING`. Fill-span completion (`FILL_SPAN_CONFIRMED`) and drain releases
+   are not gated.
+
+**Why:** while two dynamic fill owners coexist, the lifecycle has no evidence of
+which one is the fill surface. The others ageing out is not such evidence: the
+tracker can lose the true level as easily as a structure (sample5 0011 in a
+turbulent rise). The rule applies existing no-repeat rules to a path they missed:
+- `S11-F04`: ambiguous splits, merges and stale aliases terminate or abstain;
+- `S11-F08`: no release on an ambiguous row;
+- [section 3](#3-established-fill-owner-transfer): a still-valid competing
+  owner gives UNKNOWN.
+
+**sample7 is a false ambiguity.** Its two owners were the front and back arcs
+of one obliquely viewed surface. Counting them as two fill owners breaks an
+existing rule (`S11-F07`: do not count projected arcs as independent
+interfaces). The lifecycle has no view-geometry input to recognise such a pair.
+The gate therefore cannot tell sample7's correct survivor from sample5's wrong
+ones.
+
+**What it does not do:**
+- It adds no numeric Oil. It only empties allowed sets.
+- It does not mark owners on a chain-handoff ambiguity (`FILL_CHAIN_AMBIGUOUS`);
+  no local recording shows a win after one.
+- It does not find the true level. Under an EMPTY initial state an admitted
+  level that started mid-Glass still cannot own the fill (sample5 0059/0060).
+- The fresh low start remains (4 sample5 rows).
+- Fast-fill FULL ((가), SPL#4) is unaffected.
+- **Cost:** a true level that survives a contest also goes UNKNOWN until the
+  episode ends. Locally the gate removes 17 wrong sample5 rows and 20 correct
+  sample7 rows. The Windows check therefore reads every changed row.
+
+**Activation:** an opt-in comparison, default OFF.
+- **Path:** GUI `--oil-fill-owner-contest` → the existing detector factory →
+  `OpenCvPhaseDetector` → `ObservationSequenceResolver` →
+  `OilObservationResolverConfig` → `OilMaterialPhasePolicy` →
+  `OilMaterialPhaseLifecycleOwner`.
+- **Version suffix:** `+fill-owner-contest-v1`. The frame diagnostics gain the
+  contested IDs only when the option is ON.
+- **Combinations:** combinable with IFO v2 and top-exit v3, so the reference can
+  be the WP09 integrated candidate. Refused with cost-first, candidate RGB and
+  Local XY, as top-exit is.
+- **Default:** production is unchanged until a Windows comparison and the
+  user's decision.
+
+**Checks:** the [contested fill-owner gate checks](../30-validation/s11-physical-interface-evidence-repair-validation.md#contested-fill-owner-gate-checks--2026-10-22)
+fix the local controls, the predictions and the stop conditions before any run.
+
 ## Cost-first assignment comparison
 
 The first of the three authorized Windows candidates reuses the exact intervention
@@ -861,10 +999,10 @@ as the serialized array index. Diagnostic detail must not change output.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples; the cost-first Windows regression, qualified review-004/005 and frozen RGB model's rim failure/input contract.
-- Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto.
-- Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds.
-- Existing feature coverage: this clarification reuses the frozen A1/public original raster, visibility masks, O1 path/center bands and exact candidate provenance. Source review follows retained diagnostic paths through phase_candidate_assembler and phase_frame_detection to oil_interface_diagnostics, then contrasts the scalar authority consumer. Existing Recipe, Artifact/static/motion and all comparison options are unchanged; earlier top-exit/RGB/IFO scopes remain in their result owners.
+- Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples; the cost-first Windows regression, qualified review-004/005 and frozen RGB model's rim failure/input contract. For the 2026-10-22 contested fill-owner draft: FOA-1's owner readout, DSR-1, the R18 fill-ownership ambiguity outcomes (`FILL_OWNER_AMBIGUOUS` keeps the contested chains; completion, chain and re-entry ambiguity drop them) and the R21 recent topward predicate.
+- Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto. For the fill-owner draft: motion-only owner validity (the desk reading shows the low owners rising in parallel with the level) and vertical order as identity (topmost or lowest owner), which F04 forbids and which would pick a Foam top or a bubble boundary.
+- Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds. The fill-owner gate keeps the initial EMPTY lower-entry contract, all chain, barrier and release state and fill-span completion; it only empties allowed sets.
+- Existing feature coverage: this clarification reuses the frozen A1/public original raster, visibility masks, O1 path/center bands and exact candidate provenance. Source review follows retained diagnostic paths through phase_candidate_assembler and phase_frame_detection to oil_interface_diagnostics, then contrasts the scalar authority consumer. Existing Recipe, Artifact/static/motion and all comparison options are unchanged; earlier top-exit/RGB/IFO scopes remain in their result owners. The 2026-10-22 fill-owner draft reads the FOA-1 baseline readouts (IFO v2, top-exit OFF; both arms identical there) with the frozen empty-fill Recipes. Its planned check reuses the top-exit negative controls and the comparison runner, with IFO v2 + top-exit v3 as the reference arm.
 - Execution scope: the linked frozen 7ee6d90 diagnostic had no two-native comparison inputs; CRW-1 at 7845f89 adds diagnostic-only matched current-raster sector observations over the same 187 units and 85 relations. Its direct-loop arithmetic and 123 focused tests verify measurement contracts, not continuous contours or physical roles. This update selects no production extractor/consumer, fits no model and changes no sequence, report or private Windows execution. The 2026-10-20 top-exit move is behavior-preserving: the existing top-exit unit tests, resolver decomposition guards, production-surface test and R16 characterization goldens pass. No detector run or Windows execution was exercised. The 2026-10-21 top-exit v2
   section was implemented at `1f68c46` and failed its one Windows run (⑨); its
   record is in the v2 evidence. The v3 section was frozen from that receipt and
@@ -874,7 +1012,12 @@ as the serialized array index. Diagnostic detail must not change output.
   Windows execution. The SPL#4 entry conditions added the same day apply those
   criteria to the user's reviewed recording before any output on it; no run.
   Their recorded file size was later corrected from a relay typo, caught by
-  the Windows identity check before any detector run.
-- Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited.
-- Logic-map impact: NONE — this design update changes no detector owner; the v3 implementation evidence records the logic-map update for the top-exit row and paragraph. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands. The 2026-10-22 promotion preparation changes no owner, order or default.
-- Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair.
+  the Windows identity check before any detector run. The 2026-10-22
+  contested fill-owner gate and its checks were frozen the same day, before any
+  code or run. Its only execution so far is the closed desk run
+  `s11-fill-owner-contest-desk-20261022-001` over kept FOA-1 readouts: no
+  detector run, video decode, code or Windows execution. The user's sample7
+  judgment and product-geometry statement are recorded in the section.
+- Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state.
+- Logic-map impact: NONE — this design update changes no detector owner; the v3 implementation evidence records the logic-map update for the top-exit row and paragraph. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands. The 2026-10-22 promotion preparation changes no owner, order or default. The contested fill-owner gate is frozen but unimplemented; the map changes with its implementation.
+- Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair. The attrition path is an instance of F04 (stale continuation after an ambiguity), F05 (EMPTY-phase fill ownership) and F08 (owner re-adoption); no new entry.

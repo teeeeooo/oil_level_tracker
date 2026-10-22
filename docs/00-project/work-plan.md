@@ -279,6 +279,20 @@ is COMPLETE (desk only).
         need Windows readouts first.
       - **Recommendation:** option 1 first, possibly ahead of E3 and B. The
         user decides.
+    - **Step 6 (나) frozen, moved ahead by the user:** the
+      [contested fill-owner gate](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-22-contested-fill-owner-gate).
+      - **Why not motion validity:** a desk reading shows most low owners
+        rising in parallel with the level. The wrong rows come from a survivor
+        of `FILL_OWNER_AMBIGUOUS`: 17 of sample5's 21; SPL#4's 14 fit
+        (unconfirmed).
+      - **Rule:** a tracklet that shared the ambiguity cannot publish by
+        outlasting the others. Opt-in `--oil-fill-owner-contest`, default OFF.
+      - **sample7:** the user judged 0016 correct (the front arc of an
+        obliquely viewed surface). The gate's local cost is therefore 20
+        correct rows against 17 wrong ones. The user accepted it because
+        product videos are mostly head-on.
+      - **Next:** implementation and the frozen
+        [local checks](../30-validation/s11-physical-interface-evidence-repair-validation.md#contested-fill-owner-gate-checks--2026-10-22).
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
@@ -287,7 +301,8 @@ Facts it records:
   closures probably do not govern the Windows miss.
 - sample4 Y808 belongs to the October 15 interior comparison Recipe.
 
-No run, detector change, flag or Windows request is queued.
+The gate's implementation and local check follow (user-approved). No Windows
+request is queued.
 
 **Resume checkpoint — 2026-10-22 (latest):** start with the
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md).
@@ -317,15 +332,20 @@ Its pending run is now received.
   numeric rows at 27.5–34.0 s.
 - **Local fills (FOA-1):** they reproduce the fill-owner ambiguity, and on
   sample5 the stale-owner wrong target, but not the unadmitted fast rise.
-  Tracklets that stopped following the level keep fill ownership.
+  A later desk reading shows most low owners rising in parallel with the
+  level; the wrong rows come from a survivor of the ambiguity.
 - **D scope (DSR-1):** fill-owner validity (the stale owner) is the
   recommended first D sub-scope. Post-Foam association and drain release need
   Windows readouts, to join the step-7 request.
-- **Next (each awaiting the user):** Windows is unavailable for now. The user
-  chooses between freezing the fill-owner validity design next and keeping the
-  order (E3, then B, then step 6). Fast-fill FULL (owner tracking or owner-free
-  FULL evidence) sits in step 6. When Windows returns, the next report also
-  confirms the band cells and E2.
+- **Fill-owner gate:** the
+  [contested fill-owner gate](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-22-contested-fill-owner-gate)
+  is frozen (opt-in, default OFF). Its known local cost is sample7's 20
+  correct rows (oblique view), accepted by the user.
+- **Next:** implement the gate and run its frozen local checks (user-approved
+  2026-10-22). Then E3 and B in the original order. Fast-fill FULL (owner
+  tracking or owner-free FULL evidence) stays in step 6. Windows is
+  unavailable for now. When it returns, the next report also confirms the band
+  cells and E2, and the step-7 request adds the gate's SPL#4/SPL#1 comparison.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).
