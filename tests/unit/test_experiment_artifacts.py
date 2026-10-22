@@ -239,11 +239,15 @@ def test_real_pre_push_hook_blocks_open_run_then_accepts_closed_run(repository):
         pytest.skip("Repository shell hook requires bash")
     repo, plan = repository
     (repo / "scripts").mkdir()
-    for name in ("experiment_artifacts.py", "check_detector_governance.py"):
+    for name in ("experiment_artifacts.py", "check_detector_governance.py", "check_docs_catalog.py"):
         shutil.copyfile(ROOT / "scripts" / name, repo / "scripts" / name)
+    # The hook also checks the docs date catalog; a catalog that lists itself passes.
+    (repo / "docs").mkdir()
+    (repo / "docs" / "catalog-by-created-date.md").write_text(
+        "| [catalog](catalog-by-created-date.md) |\n", encoding="utf-8")
     base = git(repo, "rev-parse", "HEAD")
     (repo / "ordinary.txt").write_text("unrelated code change", encoding="utf-8")
-    git(repo, "add", "ordinary.txt")
+    git(repo, "add", "ordinary.txt", "docs/catalog-by-created-date.md")
     git(repo, "commit", "-qm", "ordinary change")
     head = git(repo, "rev-parse", "HEAD")
     name = "sample/output/run"
