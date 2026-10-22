@@ -156,8 +156,12 @@ def prepare_empty_fill(output: Path) -> None:
     (output / "roi-inputs.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def roi_overlay(video: Path, recipe_path: Path, times: list[float], output: Path) -> None:
-    """Show a Recipe's ellipses and top-band ends on source frames before any detector run."""
+def roi_overlay(video: Path, recipe_path: Path, times: list[float], output: Path, *, grid: bool = False) -> None:
+    """Show a Recipe's ellipses and top-band ends on source frames before any detector run.
+
+    With ``grid`` the panels keep source scale and carry a source-Y grid, five
+    frames per row, for reading a visible surface position off the frame.
+    """
     from oil_tracker.adapters.vision.oil_observation_resolver import OilObservationResolverConfig
     from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
 
@@ -173,10 +177,15 @@ def roi_overlay(video: Path, recipe_path: Path, times: list[float], output: Path
             image, index, actual = reader.read_at(requested)
             frames.append({"requested_sec": requested, "frame_index": index, "timestamp_sec": actual})
             for glass in glasses:
-                panels[glass.id].append(_roi_panel(image, glass, band, f"{glass.name} f{index} {actual:.2f}s"))
-    _write_sheet(output / "roi-overlay.png", [np.concatenate(panels[glass.id], axis=1) for glass in glasses])
+                panels[glass.id].append(_roi_panel(image, glass, band, f"{glass.name} f{index} {actual:.2f}s", grid=grid))
+    per_row = 5 if grid else len(times)
+    _write_sheet(output / "roi-overlay.png", [
+        np.concatenate(panels[glass.id][start:start + per_row], axis=1)
+        for glass in glasses for start in range(0, len(times), per_row)
+    ])
     manifest = {
-        "status": "ROI_OVERLAY_BEFORE_DETECTOR_RUN",
+        "status": "ROI_OVERLAY_WITH_Y_GRID" if grid else "ROI_OVERLAY_BEFORE_DETECTOR_RUN",
+        **({"grid": {"minor_px": _GRID_MINOR_PX, "labelled_px": _GRID_LABEL_PX, "scale": 1.0}} if grid else {}),
         "video": {"path": str(video), "sha256": _sha(video), "size_bytes": video.stat().st_size,
                   "fps": metadata.fps, "frame_count": metadata.frame_count,
                   "duration_sec": metadata.duration_sec, "width": metadata.width, "height": metadata.height},
@@ -202,7 +211,12 @@ def _band_end(glass: GlassInspectionConfig, band: float) -> float:
     return ellipse.center_y - ellipse.radius_y + band * 2.0 * ellipse.radius_y
 
 
-def _roi_panel(image: np.ndarray, glass: GlassInspectionConfig, band: float, title: str) -> np.ndarray:
+_GRID_MINOR_PX = 20
+_GRID_LABEL_PX = 40
+
+
+def _roi_panel(image: np.ndarray, glass: GlassInspectionConfig, band: float, title: str, *,
+               grid: bool = False) -> np.ndarray:
     """Ellipse (green), effective mask (yellow) and top-band end (red), cropped around the Glass."""
     ellipse = glass.geometry.ellipse
     cx, cy, rx, ry = ellipse.center_x, ellipse.center_y, ellipse.radius_x, ellipse.radius_y
@@ -210,13 +224,22 @@ def _roi_panel(image: np.ndarray, glass: GlassInspectionConfig, band: float, tit
     left, right = int(cx - rx) - 40, int(cx + rx) + 40
     top, bottom = max(int(cy - ry) - 30, 0), min(int(cy + ry) + 30, image.shape[0])
     canvas = image.copy()
+    if grid:
+        # Source-Y rows under the overlays: thin every 20 px, labelled every 40 px.
+        for y in range(top - top % _GRID_MINOR_PX + _GRID_MINOR_PX, bottom, _GRID_MINOR_PX):
+            labelled = y % _GRID_LABEL_PX == 0
+            cv2.line(canvas, (max(left, 0), y), (right, y), (255, 0, 255) if labelled else (160, 60, 160), 1)
+            if labelled:
+                cv2.putText(canvas, str(y), (max(left, 0) + 2, y - 3), cv2.FONT_HERSHEY_SIMPLEX, .45,
+                            (255, 255, 255), 1)
     cv2.ellipse(canvas, (round(cx), round(cy)), (round(rx), round(ry)), 0, 0, 360, (0, 255, 0), 2)
     mask = build_mask_bundle(image, glass)
     contours, _ = cv2.findContours(mask.effective_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(canvas, [c + np.array(mask.crop_origin) for c in contours], -1, (0, 215, 255), 1)
     cv2.line(canvas, (left, round(band_end)), (right, round(band_end)), (0, 0, 255), 1)
     crop = canvas[top:bottom, max(left, 0):right]
-    panel = cv2.resize(crop, None, fx=520 / crop.shape[0], fy=520 / crop.shape[0], interpolation=cv2.INTER_AREA)
+    scale = 1.0 if grid else 520 / crop.shape[0]
+    panel = cv2.resize(crop, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
     panel = cv2.copyMakeBorder(panel, 30, 0, 0, 4, cv2.BORDER_CONSTANT, value=(24, 24, 24))
     cv2.putText(panel, title, (6, 21), cv2.FONT_HERSHEY_SIMPLEX, .6, (255, 255, 255), 1)
     return panel
@@ -230,6 +253,37 @@ def _write_sheet(path: Path, sheets: list[np.ndarray]) -> None:
         raise OSError(f"Cannot save {path.name}")
 
 
+# Per-candidate tracklet fields the resolver already writes; the readout copies them only.
+OWNER_READOUT_FEATURES = (
+    "sequence_tracklet_id", "sequence_tracklet_lifecycle", "sequence_tracklet_admitted",
+    "sequence_tracklet_direction", "sequence_tracklet_net_progress_px", "sequence_tracklet_failure_reason",
+    "sequence_tracklet_confirmation_observation_count", "sequence_identity_contradiction",
+    "sequence_authority_reason",
+)
+
+
+def _owner_readout(detection: dict) -> dict:
+    """One frame's fill owners and Oil candidates, read from a completed detection."""
+    metrics = detection["debug_metrics"]
+    lifecycle = metrics.get("sequence_material_phase_diagnostics") or {}
+    return {
+        "frame_index": detection["frame_index"],
+        "phase": metrics.get("sequence_material_phase"),
+        "reason": metrics.get("sequence_material_phase_reason"),
+        "owner_chain": metrics.get("sequence_material_phase_owner_chain"),
+        **{key: lifecycle.get(key) for key in (
+            "allowed_mode", "allowed_tracklet_ids", "dynamic_fill_owner_ids",
+            "established_fill_owner", "established_fill_last_y",
+        )},
+        "published_oil_y": detection["raw_oil_air_level_y"],
+        "oil_candidates": [
+            {"y": candidate["y"], "selected": candidate["selected"],
+             **{key: candidate["features"].get(key) for key in OWNER_READOUT_FEATURES}}
+            for candidate in detection["candidates"] if candidate["kind"] == "oil_air"
+        ],
+    }
+
+
 def compare(
     output: Path, roi_inputs: Path, sample: str, *, debug_full: bool = False,
     cost_first_comparison: bool = False,
@@ -237,6 +291,7 @@ def compare(
     top_exit_comparison: bool = False,
     original_recipe: bool = False,
     initial_state: str = "full",
+    owner_readout: bool = False,
 ) -> None:
     from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
     from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
@@ -341,6 +396,8 @@ def compare(
                 "report": asdict(report),
                 "csv_and_selected_candidate_equality": "PASS",
             }
+            if owner_readout:
+                variants[mode]["owner_readout"] = [_owner_readout(d) for d in detector.completed]
             if candidate_rgb_comparison and enabled:
                 variants[mode]["rgb_annotations"] = [
                     {"frame_index": d["frame_index"], **d["debug_metrics"]["oil_candidate_rgb"]}
@@ -498,6 +555,9 @@ if __name__ == "__main__":
                         help="Use sample/<sample>.oilrecipe instead of the frozen sample4 interior Recipe")
     parser.add_argument("--initial-state", choices=("full", "unknown", "empty"), default="full")
     parser.add_argument("--debug-full", action="store_true")
+    parser.add_argument("--owner-readout", action="store_true",
+                        help="With --compare, also record each frame's fill owners and Oil candidate tracklet fields")
+    parser.add_argument("--grid", action="store_true", help="With --roi-overlay, source-scale panels with a Y grid")
     candidates = parser.add_mutually_exclusive_group()
     candidates.add_argument("--cost-first-comparison", action="store_true",
                         help="Compare FULL+observation v2 with/without cost-first assignment")
@@ -513,7 +573,8 @@ if __name__ == "__main__":
     elif args.roi_overlay:
         if args.video is None or args.recipe is None:
             parser.error("--roi-overlay requires --video and --recipe")
-        roi_overlay(args.video, args.recipe, [float(value) for value in args.times.split(",")], args.roi_overlay)
+        roi_overlay(args.video, args.recipe, [float(value) for value in args.times.split(",")], args.roi_overlay,
+                    grid=args.grid)
     elif args.summarize_top_exit:
         summarize_top_exit(args.summarize_top_exit)
     elif args.verify_rgb:
@@ -525,4 +586,5 @@ if __name__ == "__main__":
                 cost_first_comparison=args.cost_first_comparison,
                 candidate_rgb_comparison=args.candidate_rgb_comparison,
                 top_exit_comparison=args.top_exit_comparison,
-                original_recipe=args.original_recipe, initial_state=args.initial_state)
+                original_recipe=args.original_recipe, initial_state=args.initial_state,
+                owner_readout=args.owner_readout)
