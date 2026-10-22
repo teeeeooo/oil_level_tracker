@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / NO CURRENT REQUEST`. The [SPL#4 top-exit promotion evidence request](#spl4-top-exit-promotion-evidence) is COMPLETE / **P FAIL** ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)): no top-exit FULL row, candidate identical to the reference; R not evaluated; N and U pass; top-exit stays default OFF. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: SPL#4 opposition follow-up`. The read-only [SPL#4 opposition follow-up](#spl4-opposition-follow-up) is REQUESTED 2026-10-22; the user forwards it. The [SPL#4 top-exit promotion evidence request](#spl4-top-exit-promotion-evidence) is COMPLETE / **P FAIL** ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)): no top-exit FULL row, candidate identical to the reference; R not evaluated; N and U pass; top-exit stays default OFF. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -20,6 +20,85 @@ Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
+
+## SPL#4 opposition follow-up
+
+**REQUESTED 2026-10-22 — read-only; the user forwards it and relays the
+result.** The user chose this after the
+[SPL#4 receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22),
+as the diagnosis its decision rule requires. Nothing is run; two saved bundles
+are read.
+
+**What it answers:**
+- **Which source opposed BASE 22.5–27.0 s:** the fill lifecycle's chain
+  ambiguity or a candidate identity contradiction. Tables D and E give the
+  phase reason, the ambiguity flag, the stage at which each row became
+  UNKNOWN, and the Oil candidates with their tracklets, directions and
+  contradictions.
+- **The three failed disappearance evaluations** (table F).
+- **How much wrong-target numeric Oil** the production default publishes in
+  the reviewed FULL interval, 25–63 s (table G; both arms are identical).
+- **The full ⑩ Accum census:** all 64 rows, ungrouped. The agent grouped
+  them wrongly before; they will be regrouped here at adjacent 2 fps samples
+  (table H).
+
+**Readings fixed before the extraction:**
+- **Fill ambiguity:** `FILL_CHAIN_AMBIGUOUS` with the ambiguity flag 1 on the
+  opposed frames means `OIL-PHASE-FILL` handoff ambiguity, where several
+  upward tracklets compete for the chain.
+- **Identity contradiction:** a flag of 0 with a non-`none` identity
+  contradiction on a current candidate points to `OIL-AUTHORITY` /
+  `OIL-TRACKLET`.
+- **Anything else,** or a mix, is recorded as it is.
+- **Not decided here:** whether a candidate is the real level needs a human
+  review; the tables give positions only.
+- **Use:** no criterion, tuning or detector change follows. The answer informs
+  the user's choice of a later FULL route for fast fills.
+
+Prompt for the Windows agent (the user forwards it):
+
+```text
+S11 SPL#4 후속 진단 — 저장된 bundle 2개 읽기 전용 추출이야.
+재실행·새 bundle·튜닝·비교 실행·사람 검토는 하지 마. 파일은 수정·이동하지 말고 결과 파일도 만들지 마.
+값만 원문 그대로 돌려주고 원인 판정·수정 제안 없이 멈춰.
+
+대상:
+ (가) SPL#4 후보 bundle: ...\SPL4_top_exit_evidence\oil_level_analysis_SPL4_A_top_exit_v3_20261022_142048
+ (나) ⑩ bundle: …_top_exit_v3_20261021_170933 (지난 C 진단과 같은 bundle)
+각 bundle에서 debug/debug_index.json, debug/debug_trace.jsonl, tracking_data.csv만 읽는다.
+index에서 glass_name과 timestamp_sec로 record를 찾아 byte_offset으로 읽는다.
+표기: S = sequence.state, W = S.sequence_decision_witness, C = sequence.candidates[],
+T = S.sequence_material_phase_diagnostics.top_exit_full. 키가 없으면 MISSING, 값이 null이면 null.
+후보 위치는 C의 canonical_y를 쓴다.
+
+1. 표 D — (가) BASE, 21.0~28.0초 15개 record(0.5초 간격) 각 한 줄:
+   frame | time | fill_state | raw_oil_air_level_y | raw_foam_front_y |
+   S.sequence_material_phase / S.sequence_material_phase_reason | S.sequence_material_phase_ambiguous |
+   S.sequence_material_phase_owner_chain | W.phase.allowed_tracklet_ids |
+   S.sequence_stage_best_path_kind:y / sequence_stage_continuation_bound_kind:y /
+   sequence_stage_spike_suppressed_kind:y / sequence_stage_completed_fill_kind:y |
+   W.selection.resolved_kind | W.selection.selected_candidate(source:y:tracklet_id) |
+   C 중 identity_contradiction이 none이 아닌 항목 수와 그 source:canonical_y:값
+
+2. 표 E — (가) BASE, 22.0~24.5초 6개 record에서 C 중 kind = oil_air 이고 tracklet_id가 비어 있지 않은 항목,
+   canonical_y 오름차순 최대 8개, 각 한 줄:
+   frame | source | canonical_y | tracklet_id | row_hypothesis_id | tracklet_lifecycle | tracklet_admitted |
+   tracklet_incompatible | tracklet_failure_reason | tracklet_direction | tracklet_directional_agreement |
+   phase_identity | identity_contradiction | authority | selected | reject_stage
+
+3. 표 F — (가) BASE 0~90초에서 T.reason이 TOP_EXIT_NOT_PROVEN인 행 전부(지난번 3개), 각 한 줄:
+   frame | time | T.predicates 중 false인 키 | T.witness(frame_index:y:selected 목록) | T.anchor_source
+
+4. 표 G — (가) BASE 25.0~63.0초에서 raw_oil_air_level_y가 비어 있지 않은 행 수와 목록:
+   frame | time | raw_oil_air_level_y | fill_state | T.reason
+
+5. 표 H — (나) Accum: 지난 C 진단 c의 64개 행 전부를 시간 순서대로 각 한 줄(묶음은 만들지 않는다):
+   time | frame | 그 행의 INCOMPATIBLE_BRANCH 후보 중 최소 canonical_y | T.reason | T.witness 수
+
+6. 머리줄(두 bundle의 run_id, Glass별 record 수)과 표 D/E/F/G/H를 원문 그대로 돌려준다.
+   값은 고치거나 반올림하지 않는다. 결론은 "22.5~27.0초 record의 sequence_material_phase_reason 값" 같은
+   관찰 한 줄만 쓴다. top-exit 기본 OFF, FIELD FAIL / O2 OPEN, review-006 pending은 바뀌지 않는다.
+```
 
 ## SPL#4 top-exit promotion evidence
 

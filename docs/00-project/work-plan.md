@@ -224,9 +224,13 @@ is COMPLETE (desk only).
       ran at code head `933ff49` and is received (P FAIL).
     - The six local negatives reran at `933ff49`: N1/N2 PASS, output identical
       to the earlier runs.
-    - **Open for the user:** a read-only follow-up on the saved SPL#4 bundle
-      (which source made 22.5–27.0 s opposed) with the full Accum census; a
-      legend fix for zero-width bands; then E3, B and D. Each awaits the user.
+    - The user chose the read-only
+      [opposition follow-up](../40-operations/s11-current-windows-field-qualification.md#spl4-opposition-follow-up)
+      (2026-10-22): which source made 22.5–27.0 s opposed, the failed
+      disappearance evaluations, the wrong-target Oil count in 25–63 s and the
+      full Accum census. REQUESTED; the user forwards it.
+    - **Then, each awaiting the user:** a legend fix for zero-width bands; E3,
+      B and D.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
@@ -235,7 +239,7 @@ Facts it records:
   closures probably do not govern the Windows miss.
 - sample4 Y808 belongs to the October 15 interior comparison Recipe.
 
-No run, detector change, flag or Windows request is queued.
+One read-only Windows request is pending (SPL#4 opposition follow-up). No run, detector change or flag is queued.
 
 **Resume checkpoint — 2026-10-22 (latest):** start with the
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md).
@@ -257,9 +261,12 @@ Its pending run is now received.
   ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)).
 - **E1/E2 report bands:** implemented (`5e5c8bc`), local verification PASS; on
   Windows E1 confirmed, E2 not exercised.
-- **Next (the user decides):** an optional read-only SPL#4 follow-up to name
-  the opposing source in 22.5–27.0 s, with the full Accum census; a legend fix
-  for zero-width bands; then E3, B and D.
+- **Pending:** the read-only
+  [SPL#4 opposition follow-up](../40-operations/s11-current-windows-field-qualification.md#spl4-opposition-follow-up).
+- **Next:** record its receipt in the promotion evidence and name the opposing
+  source by the readings fixed before the extraction; regroup the Accum census
+  at adjacent 2 fps samples. Then, each awaiting the user: a legend fix for
+  zero-width bands; E3, B and D.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).

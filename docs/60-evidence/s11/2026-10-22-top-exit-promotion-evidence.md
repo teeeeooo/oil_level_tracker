@@ -271,6 +271,10 @@ with its own freeze.
   carries neither `T.motion_reason` nor the candidates.
 - **The known limit is now a demonstrated gap:** on an EMPTY-start, fast
   Foam + Oil fill, top-exit acting alone produced no FULL.
+- **Follow-up (user, 2026-10-22):** a read-only
+  [opposition follow-up](../../40-operations/s11-current-windows-field-qualification.md#spl4-opposition-follow-up)
+  on the saved bundles names the opposing source and completes the Accum
+  census.
 
 **Reported, not scored:**
 - **Production default, both arms:** numeric Oil inside the reviewed FULL
