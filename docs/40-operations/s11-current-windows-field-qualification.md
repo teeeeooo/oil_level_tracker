@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / NO CURRENT REQUEST`. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / CURRENT REQUEST: SPL#4 promotion evidence`. The [SPL#4 top-exit promotion evidence request](#spl4-top-exit-promotion-evidence) is REQUESTED 2026-10-22; the user forwards it. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -20,6 +20,159 @@ Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
+
+## SPL#4 top-exit promotion evidence
+
+**REQUESTED 2026-10-22 — the user forwards it and relays the result.** One
+request, three parts:
+- **A, evidence:** two runs on SPL#4 (`SPL#4_Cooling_onoff_#2.mp4`) 0–90 s,
+  reference IFO v2 against candidate IFO v2 + top-exit v3. They test the
+  [promotion acceptance](../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22)
+  under its SPL#4 entry conditions.
+- **C, read-only diagnosis:** a census of `INCOMPATIBLE_BRANCH` blank rows in
+  the saved ⑩ bundle. It has no pass criterion; it tells whether such blanks
+  come in runs of two or more inside the top band, the closure's known risk.
+- **E, report confirmation:** the combined-graph strip and source patterns
+  (E1/E2) on the candidate's report.
+
+**Source:** code head `933ff49`; later commits are documents only. The Windows
+agent checks five SHA-256 values before running. The six local negatives were
+rerun at this head before the request.
+
+**Pre-registered (from the entry conditions; judged by the agent, not on
+Windows):**
+- **BASE:**
+  - P1, the first FULL row in 22.0–27.0 s; P2, no candidate-only FULL row
+    before 22.0 s;
+  - P3, from the first FULL row to 61.0 s only FULL or D2b UNKNOWN rows and no
+    Oil coordinate; P4, the rows before it equal the reference;
+  - R1, the episode end in 61.0–65.0 s; R2, no candidate-only FULL row in
+    65.0–90.0 s;
+  - U1, rows from the episode end equal the reference, pending rows aside.
+- **Accum:** N1, no top-exit FULL row; N2, rows, events and report card equal.
+- **Near misses:** a transition at 20–22 / 27–29 s or 59–61 / 65–67 s is
+  UNDECIDED and goes to a Windows review of only 22–27 s or 61–65 s.
+- **E1/E2:** the strip lies under the combined lines with BASE above Accum,
+  each row matches its detail graph, and the patterns match the legend.
+- **Stop:** any identity mismatch, an overlay the user rejects, a wrong
+  resolver version or a run error. The agent stops and reports.
+
+**Not done:** tuning, Recipe/ROI/margin/threshold changes, extra reruns and
+human review beyond the overlay check. Top-exit stays default OFF; O2 OPEN /
+FIELD FAIL and review-006 pending are unchanged. The receipt goes in a new
+section of the
+[promotion evidence](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md).
+
+Prompt for the Windows agent (the user forwards it):
+
+```text
+S11 top-exit 승격 증거 요청 — SPL#4 두 실행(A) + ⑩ trace 읽기 전용 진단(C) + 리포트 띠 확인(E).
+튜닝·Recipe/ROI/margin/임계값 변경·추가 재실행·사람 검토는 하지 마.
+사람 확인은 0-3의 Recipe 확인 한 번뿐이고, 사용자가 한다.
+값만 원문 그대로 돌려주고 판정·수정 제안 없이 멈춰. 새 bundle은 Windows에 보존한다.
+
+0. 준비와 신원
+ 0-1. 최신 main 소스 ZIP(933ff49 이후)을 새 폴더에 풀고 기존 Windows Python 환경을 쓴다.
+      소스 폴더에서: $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+      실행 전 SHA-256 확인(하나라도 다르면 실행하지 말고 값만 알려줘):
+      - src/oil_tracker/adapters/vision/oil_top_exit_full.py
+        10dd3605a9ab0afb4ce4c0ae5a69477b1157318b0246ae972716d4202bb6f77d
+      - src/oil_tracker/adapters/reporting/graph_renderer.py
+        649affbe66800c7375d752708a0b940cee2502d8cd1a245d5c1c10e2f511e78d
+      - src/oil_tracker/application/services/initial_state_reconstruction.py
+        9fd04d25a10860fb5ba506311170209e71a9cfb09803f6166a1de5a4f93e1eed
+      - src/oil_tracker/application/services/report_presentation.py
+        6a1b0b512f8008bda71de4ae6bcb452e0c7a9295753b4edff06f446a10d6469f
+      - tests/diagnostics/s11_initial_full_comparison.py
+        b4ff712f21c1301627409acc4392030ea117d8390ee472baa57b3cd8cc0d81b3
+ 0-2. 영상은 SPL#4_Cooling_onoff_#2.mp4, Recipe는 이 영상용 기존 Recipe(Artifact 포함)를 쓴다.
+      Recipe 파일은 수정하지 않는다. 새 출력 폴더 경로는 영문·숫자·밑줄만 쓴다
+      (OpenCV 이미지 저장은 한글 경로에서 실패할 수 있다). 소스 폴더에서 실행:
+        python -m tests.diagnostics.s11_initial_full_comparison --roi-overlay <새 출력 폴더>\roi --video <영상 경로> --recipe <Recipe 경로> --times 0,55
+      roi-overlay.json에서 video(sha256, size_bytes, fps, frame_count, duration_sec, width, height),
+      recipe(sha256, name), glasses(name, id, ellipse, margin_ratio, exclusions, artifact_templates, band_end_y)를
+      그대로 적는다. size_bytes가 53165445가 아니면 멈추고 값만 알려줘.
+ 0-3. roi-overlay.png를 사용자에게 보여 주고 묻는다:
+      "두 Glass 모두 초록 타원이 잔 내부 전체(안쪽 테두리부터 바닥 위까지)인가?"
+      아니라고 하면 실행하지 말고 그 답만 알려줘.
+
+1. 두 실행 (같은 소스·영상·Recipe·세션, 차이는 top_exit_full 하나)
+   - 세션: 분석 0–90초, 2fps, FULL debug, compressor_start 없음.
+   - 초기 상태: 메모리의 Recipe에서 두 Glass의 initial_state를 EMPTY_NO_INTERFACE로 두고,
+     세션 initial_state_confirmations에도 두 Glass를 EMPTY_NO_INTERFACE(이 영상 경로, 시작 0초)로 넣는다.
+     ⑩에서 BASE FULL / Accum EMPTY를 넣은 방식과 같다. Recipe 파일은 그대로 둔다.
+   - ⑩과 같은 headless 방식(AnalysisPipeline + OutputBundleStore + JsonlDebugTraceWriterFactory):
+     기준: OpenCvPhaseDetector(initial_full_observation=True, top_exit_full=False), run_name "SPL4_A_ref"
+     후보: OpenCvPhaseDetector(initial_full_observation=True, top_exit_full=True), run_name "SPL4_A_top_exit_v3"
+     cost-first/RGB/Local XY는 OFF.
+   - trace의 sequence_resolver_version: 기준은 "+initial-full-observation-v2"만 있어야 하고,
+     후보는 "+top-exit-full-v3"도 있어야 한다. 아니면 멈추고 값만 알려줘.
+   - 두 bundle은 0-2의 새 출력 폴더 아래에 둔다.
+
+2. 머리줄: 두 run_id·run_name, 소스 폴더, 0-1의 SHA-256 5개, 두 sequence_resolver_version,
+   두 bundle 경로, 0-2 값, 0-3 사용자 답, Glass별 행 수(기대 181),
+   두 실행의 (glass_id, frame_index) 대응 결과(중복·누락·timestamp 불일치 수).
+
+표기:
+ - 행 = tracking_data.csv 한 줄. T = 후보 debug record의 sequence.state.sequence_material_phase_diagnostics.top_exit_full.
+ - FULL 행 = fill_state가 FULL_NO_INTERFACE 또는 FULL_WITH_FOAM.
+ - 다른 행 = 같은 (glass_id, frame_index)에서 fill_state, raw_oil_air_level_y, raw_foam_front_y,
+   oil_is_valid, foam_is_valid, flags 중 하나라도 다른 행.
+ - 목록은 frame/time으로 쓴다. 시간은 timestamp_sec.
+
+3. 표 P — BASE
+ a. 후보에서 flags에 OIL_TOP_EXIT_FULL이 있는 첫 행: frame/time/fill_state/T.reason (없으면 "없음")
+ b. 기준과 후보에서 같은 frame이 모두 FULL인 행 수와 목록
+ c. 후보에만 FULL인 행 중 22.0초 이전 행 수와 목록
+ d. a의 행부터 61.0초 이전까지: 행 수, T.reason별 행 수,
+    T.reason이 TOP_EXIT_FULL_CONFIRMED / TOP_EXIT_FULL_CONTINUING / TOP_EXIT_FULL_FRAME_UNAVAILABLE이 아닌 행 목록,
+    raw_oil_air_level_y가 비어 있지 않은 행 목록
+ e. a 이후 처음으로 T.episode_end가 있는 행: frame/time/T.episode_end/fill_state/raw_oil_air_level_y (없으면 "없음")
+ f. 후보에만 FULL인 행 중 65.0~90.0초 행 수와 목록
+ g. e 이후 처음으로 raw_oil_air_level_y가 있는 후보 행: frame/time/raw_oil_air_level_y
+ h. T.confirmation이 PENDING / CONFIRMED / CANCELLED인 후보 행 목록
+
+4. 표 N — Accum
+ a. 후보에서 OIL_TOP_EXIT_FULL 행 수와 목록
+ b. 기준·후보 각각의 FULL 행 수와 목록
+ c. 기준·후보의 다른 행 수와 목록(최대 10개)
+ d. events.csv의 Accum 행 중 두 실행이 다른 행 수와 목록(시간·event_type·note)
+ e. 리포트 Accum 카드의 이동 요약·판정·"판정 안내" 문장이 두 실행에서 같은지(예/아니오), 다르면 두 문장 원문
+
+5. 표 U — BASE 다른 행
+ a. 표 P a의 행 이전에서 다른 행 수와 목록(최대 10개)
+ b. 표 P e의 행부터 90초까지, T.confirmation이 PENDING인 행을 뺀 다른 행 수와 목록(최대 10개)
+    (e가 "없음"이면 "해당 없음")
+
+6. 표 Q — BASE, 20.0~28.0초와 59.0~67.0초(0.5초 간격) 각 한 줄:
+   frame | time | 기준 fill_state / raw_oil_air_level_y | 후보 fill_state / raw_oil_air_level_y |
+   T.reason | T.confirmation | T.predicates와 T.confirmation_predicates 중 false인 키 |
+   T.witness 수와 마지막 y | T.episode_end | T.motion_phase
+   키가 없으면 MISSING.
+
+7. 표 S — 참고값: 두 실행의 Glass별 retrospective status·interval·barriers,
+   review_index.json의 result_status와 effective_state_aware_coverage_ratio.
+
+8. 리포트 띠 확인(E1·E2) — 후보 bundle의 graphs 폴더
+ a. combined_levels.png: 선 그래프 아래 상태 줄이 있는지, 줄 이름(위→아래), 아래 범례 항목 목록
+ b. BASE 상세 그래프: 범례 항목 목록, "FULL 판정" 띠가 단색인지, "초기 상태 재구성"이 있으면 빗금인지
+ c. 상태 줄의 BASE·Accum 줄이 각 상세 그래프 띠와 위치·무늬가 같은지(예/아니오, 다르면 어디)
+
+9. C 진단 — 저장된 ⑩ bundle(…_top_exit_v3_20261021_170933) 읽기 전용.
+   파일을 수정하거나 새 결과 파일을 만들지 않는다.
+   debug/debug_index.json, debug/debug_trace.jsonl, recipe_snapshot.oilrecipe, tracking_data.csv만 읽는다.
+   Glass별(BASE, Accum):
+ a. Recipe 타원 cy, ry와 띠 끝 Y = cy − ry + 0.54 × ry
+ b. 빈 행 = raw_oil_air_level_y가 비어 있고 FULL 행이 아닌 행. 빈 행 수.
+ c. 빈 행 중 그 record의 sequence.candidates[]에 tracklet_failure_reason = INCOMPATIBLE_BRANCH인 항목이 하나라도 있는 행 수
+ d. c의 행이 0.5초 간격으로 이어지는 묶음 목록: 시작~끝 시간, 행 수, 묶음 안 그 후보들의 최소 y,
+    최소 y ≤ 띠 끝 Y인지(예/아니오). 최대 30개, 넘으면 개수만.
+ e. 행 수 2 이상이면서 d가 "예"인 묶음 수
+
+10. 머리줄과 표 P/N/U/Q/S, 8의 답, 9의 표를 원문 그대로 돌려준다. 값은 고치거나 반올림하지 않는다.
+    키가 없으면 MISSING, 값이 null이면 null. 결론·판정·수정 제안 없이 멈춘다.
+    top-exit는 기본 OFF로 남고, FIELD FAIL / O2 OPEN, review-006 pending은 바뀌지 않는다.
+```
 
 ## Report confirmation run
 

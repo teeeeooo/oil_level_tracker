@@ -1,12 +1,14 @@
 # Top-exit v3 promotion evidence — 2026-10-22
 
 **Status:**
-- **N class (local negatives):** PASS on all six controls. No control reached a
-  top-exit witness or a pending closure, so the closure predicates are still
+- **N class (local negatives):** PASS on all six controls, and again at the
+  SPL#4 request's code head `933ff49` with identical output. No control reached
+  a top-exit witness or a pending closure, so the closure predicates are still
   unexercised on real video.
 - **P and R classes:** no evidence yet. The Windows candidate SPL#4 (the
-  user's "sample4") has its truth, windows and entry conditions frozen; it has
-  not been run.
+  user's "sample4") has its truth, windows and entry conditions frozen. Its
+  [Windows request](../../40-operations/s11-current-windows-field-qualification.md#spl4-top-exit-promotion-evidence)
+  is REQUESTED 2026-10-22 at code head `933ff49`; the user forwards it.
 
 The criteria are the
 [pre-registered promotion acceptance](../../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22);
@@ -58,6 +60,17 @@ are unchanged. Current authority is the [Work Plan](../../00-project/work-plan.m
   `comparison.json` files are kept beside them.
 
 **Verdict: N1/N2 PASS on all six.**
+
+**Rerun at the frozen head (2026-10-22):** the N row requires the controls at
+the head of the evidence run, so run `s11-top-exit-negatives-20261022-003`
+reran all six at `933ff49`, the SPL#4 request's code head (user-authorized).
+- **Verdict:** N1/N2 PASS on all six, with the same counts as above.
+- **Identical to runs 001/002:** in every control and both arms, the rows,
+  events, reconstruction, report, phases, raw-input hashes and detector
+  versions are equal, as is each Recipe hash (`run_id` ignored).
+- **Kept:** `summary.json` (`d98a7039…3fa192`) and `rerun-equality.json`
+  (`476716e2…bf8ea6861`), which holds the per-control comparison-file hashes.
+  The six comparison files equal the earlier ones and were not kept.
 
 **What it does not show:**
 - **No witness or pending closure anywhere.** The closure predicates, including
@@ -145,12 +158,33 @@ states, Foam at the top, and timing. The user's answers, verbatim:
 - **Not yet known:** the recording's SHA-256 and decoded frame count, and the
   Recipe's hash and ellipses. The run records them first.
 
+**Request (2026-10-22):** one Windows request in the
+[procedure](../../40-operations/s11-current-windows-field-qualification.md#spl4-top-exit-promotion-evidence),
+authorized by the user.
+- **Code head:** `933ff49`, which adds the E1/E2 report bands and a ROI overlay
+  mode to the comparison runner. Detector code is unchanged since `cba4067`.
+  The agent checks five module SHA-256 values first.
+- **Overlay first:** `--roi-overlay` draws each Glass's ellipse, effective mask
+  and 27 % band end on frames at 0 s (empty) and 55 s (full, clear again). It also writes the video and
+  Recipe identities, and the user confirms the ellipses before any run.
+  - Regenerating the sample5/sample7 sheet with the shared drawing code
+    reproduces `roi-review.png`, `roi-inputs.json` and both Recipes byte for
+    byte.
+  - On local `sample5.mp4` the mode wrote the expected size, fps, frame count
+    and band end (Y474.78).
+- **Two runs:** reference IFO v2 and candidate IFO v2 + top-exit v3; 0–90 s,
+  2 fps, FULL debug, both Glasses confirmed EMPTY.
+- **Returned tables:** P, N and U map to the frozen checks; Q is the top-exit
+  trace at 20–28 s and 59–67 s; S holds reference values.
+- **Also in the request:** the C census on the saved ⑩ bundle and the E1/E2
+  check on the candidate's report.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F05`, `S11-F06`, `S11-F08`, `S11-F10`
 - First harmful stage: none observed. No control formed a top-exit witness or a pending closure, so the closure stage is NOT_EVALUATED on real video. The sample5 wrong-target Oil rows are a selection observation outside these criteria.
 - Existing feature coverage: reuses the initial-FULL/top-exit comparison runner. Its extension adds frozen empty-fill Recipes, an EMPTY initial state and an N1/N2 summary. Also reused: the IFO v2 and top-exit v3 options, production default detector settings and the four existing control Recipes. The EMPTY-initial path, where IFO is inactive, is exercised for the first time. Windows "sample4" is a user visual timeline only.
-- Execution scope: two local managed runs (`cba4067`, `60d6a9d`) over six controls at 2 fps with debug NONE, plus a frozen-ROI run before them. No Windows execution, private media, human review beyond the user's confirmations, tuning or post-result rule change. sample5's window end was corrected before any sample5 output existed. SPL#4 is recorded from the user's visual timeline and answers only; its windows were frozen before any detector run on it.
+- Execution scope: two local managed runs (`cba4067`, `60d6a9d`) over six controls at 2 fps with debug NONE, plus a frozen-ROI run before them. No Windows execution, private media, human review beyond the user's confirmations, tuning or post-result rule change. sample5's window end was corrected before any sample5 output existed. SPL#4 is recorded from the user's visual timeline and answers only; its windows were frozen before any detector run on it. The six controls were rerun at `933ff49` (run 003) with identical output. The SPL#4 request is written, not yet executed; its ROI overlay mode was checked on local sample5 only.
 - Logic-map impact: NONE — evidence only; detector code and owners are unchanged, and the runner is diagnostics.
 - Failure-registry impact: NONE — no new mechanism or failure; the unexercised closure is a named limit, not a result.
