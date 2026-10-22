@@ -155,7 +155,10 @@ before any detector output on this recording exists. The criteria table above
 is unchanged; this fixes how it applies here.
 - **Source:** `SPL#4_Cooling_onoff_#2.mp4`, the user's Windows "sample4"
   ([evidence](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#windows-spl4-user-alias-sample4--2026-10-22)).
-  - **User-reported:** 53,165,445 bytes, 4 min 20 s, 30 fps, 1920×1080.
+  - **User-reported:** 53,165,455 bytes, 4 min 20 s, 30 fps, 1920×1080. The
+    first relay read 53,165,445, a typo. The request's size check stopped
+    before any run, and the user confirmed 53,165,455 from the file
+    properties (2026-10-22).
   - **Unseen:** a separate recording from SPL#1–3 and from the Mac
     `sample4.mp4`; no v1–v3 design step or control used it.
   - **Identity check:** the run first records its SHA-256, decoded fps and

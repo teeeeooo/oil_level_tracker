@@ -138,6 +138,11 @@ states, Foam at the top, and timing. The user's answers, verbatim:
 5. 대략적인 구간으로 시도해보고 불충분하면 22–27 s와 61–65 s 구간만 Windows에서 사람 검토로 다듬자
 ```
 
+**Size correction (2026-10-22):** the size in answer 1 is a typo. The
+file is 53,165,455 bytes. The Windows request's identity check stopped on the
+mismatch before any detector run, and the user confirmed 53,165,455 from the
+file properties. The other answers are unchanged.
+
 **Frozen before any output on this recording** in the
 [SPL#4 entry conditions](../../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22):
 
@@ -178,6 +183,9 @@ authorized by the user.
   trace at 20–28 s and 59–67 s; S holds reference values.
 - **Also in the request:** the C census on the saved ⑩ bundle and the E1/E2
   check on the candidate's report.
+- **First attempt:** stopped at step 0-2's size check, as designed, before
+  any detector run. The expected size was corrected to 53,165,455 bytes, and
+  the agent resumes at step 0-3 with the overlay it already made.
 
 ## Detector Governance
 

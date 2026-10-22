@@ -57,6 +57,12 @@ Windows):**
 - **Stop:** any identity mismatch, an overlay the user rejects, a wrong
   resolver version or a run error. The agent stops and reports.
 
+**Identity correction (2026-10-22):** the first attempt stopped at the size
+check: the file is 53,165,455 bytes, but the request expected a mistyped
+53,165,445. The user confirmed 53,165,455 from the file properties. No
+detector run had started; the agent resumes at step 0-3 with the overlay it
+already made.
+
 **Not done:** tuning, Recipe/ROI/margin/threshold changes, extra reruns and
 human review beyond the overlay check. Top-exit stays default OFF; O2 OPEN /
 FIELD FAIL and review-006 pending are unchanged. The receipt goes in a new
@@ -91,7 +97,7 @@ S11 top-exit 승격 증거 요청 — SPL#4 두 실행(A) + ⑩ trace 읽기 전
         python -m tests.diagnostics.s11_initial_full_comparison --roi-overlay <새 출력 폴더>\roi --video <영상 경로> --recipe <Recipe 경로> --times 0,55
       roi-overlay.json에서 video(sha256, size_bytes, fps, frame_count, duration_sec, width, height),
       recipe(sha256, name), glasses(name, id, ellipse, margin_ratio, exclusions, artifact_templates, band_end_y)를
-      그대로 적는다. size_bytes가 53165445가 아니면 멈추고 값만 알려줘.
+      그대로 적는다. size_bytes가 53165455가 아니면 멈추고 값만 알려줘.
  0-3. roi-overlay.png를 사용자에게 보여 주고 묻는다:
       "두 Glass 모두 초록 타원이 잔 내부 전체(안쪽 테두리부터 바닥 위까지)인가?"
       아니라고 하면 실행하지 말고 그 답만 알려줘.
