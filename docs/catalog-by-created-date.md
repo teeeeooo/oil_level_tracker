@@ -1694,7 +1694,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 최초 Git 등록일 (KST) | 문서 | 역할 |
 |---|---|---|
 | 2026-10-22 | [LCR-1 review](50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md) | 초기 상태 재구성의 늦은 첫 포착 보호 후보 비교·사용자가 L2 선택, 구현 완료 |
-| 2026-10-22 | [LBT-2 draft](50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md) | LBT-2 프로토콜: E1 + Foam 보임 시 가득 참 확정 보류(F), 순비교 N, review-013 기준, sample5·7 대조군; 실행 전 동결 |
+| 2026-10-22 | [LBT-2 draft](50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md) | LBT-2 프로토콜과 결과: E1 + Foam 보임 시 가득 참 확정 보류(F), 순비교 N에서 결과 P(중단 규칙 없음), Windows S2는 review-012 후 |
 | 2026-10-22 | [review-013 sheet 1](50-diagnostics/s11/2026-10-22-review-013-sample4-sheet-1.png) | sample4 39.5–47.5초 원본 ROI 확대(검출 표시 없음, 원본 Y 눈금) |
 | 2026-10-22 | [review-013 sheet 2](50-diagnostics/s11/2026-10-22-review-013-sample4-sheet-2.png) | sample4 48.0–56.0초 원본 ROI 확대(검출 표시 없음, 원본 Y 눈금) |
 | 2026-10-22 | [review-013 zoom](50-diagnostics/s11/2026-10-22-review-013-sample4-zoom.png) | sample4 54.5–56.0초 5배 확대(Q2 수위 판독용) |

@@ -318,9 +318,18 @@ is COMPLETE (desk only).
         (state, flags, Oil Y, Foam Y) and the Accum Glass geometry
         (center_y, radius_y, margin_ratio, `temporal_max_jump_px`). The
         480–653 s question is decided after the receipt.
-    - **Step 5 (B), LBT-2 draft, started by the user:**
-      [LBT-2](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md),
-      desk only, not frozen.
+    - **Step 5 (B) done, LBT-2 outcome P:**
+      [LBT-2](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#results-and-decision)
+      (frozen `1447cd6`, local run). No stop rule fired under N.
+      - **Baseline:** no new A. E1's gains at 40–44 s stand, and F's single
+        action at 54.5 s removes the false cap, so 54.5–56 s publish the
+        review-013 surface (Y851–852).
+      - **Population:** 800 better against 8 worse in three withdrawal
+        conditions, none caused by F: 40 s lower structure; association into
+        the Foam after a withdrawn 54.0 s row. Foam: 12 right, 3 wrong.
+      - **Controls:** sample5/sample7 (EMPTY) and base_sample_1 unchanged;
+        sample2 2.0 s as in LBT-1.
+      - **Next:** Windows S2 joins the step-7 request, after review-012.
       - **Why the guard returns:** D2 = S kept the 27 % cap, so LBT-1's G
         (a fill confirmed at 54.5 s from an in-unit row under Foam) remains.
       - **Draft:** LBT-1's E1 and support consumer, plus F: no fill
@@ -352,9 +361,9 @@ queued.
 
 **Resume checkpoint — 2026-10-22 (latest):** start with the
 [Mac-only steps handoff](../60-evidence/s11/2026-10-22-mac-only-steps-handoff.md)
-(steps 1–4 and 6 (나) done; step 5, B:
-[LBT-2](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md) is frozen
-with the review-013 answers, and its local run is next). The earlier
+(steps 1–5 and 6 (나) done; step 5, B:
+[LBT-2](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#results-and-decision)
+is outcome P locally). The earlier
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md)
 remains background; its pending run is received.
 - **Top-exit v3:** ⑩ PASS; default OFF.
@@ -397,7 +406,8 @@ remains background; its pending run is received.
   PASS. FULL needs the first catch in the top band; EMPTY needs it in the
   bottom band and within one continuity step of the effective-mask bottom.
   No known real output changes.
-- **Next:** the frozen LBT-2 local run and its evaluation under N.
+- **Next:** step 6 (가), fast-fill FULL, or another step the user chooses.
+  LBT-2's Windows S2 joins the step-7 request after review-012.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
   Windows is unavailable for now. When it returns, the next report also
   confirms the band cells, E2 and the first-catch guard, and the step-7

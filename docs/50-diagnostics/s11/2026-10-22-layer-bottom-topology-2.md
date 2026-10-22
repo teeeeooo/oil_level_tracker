@@ -1,11 +1,12 @@
 # LBT-2 — layer-bottom topology with a Foam-visible fill guard
 
-**Status: FROZEN 2026-10-22 before any run.** The user chose every
-recommendation ([decision](#decision--2026-10-22)) and answered review-013
+**Status: COMPLETE — outcome P: no stop rule fired under the frozen N
+([result](#results-and-decision)).** The user chose every recommendation
+([decision](#decision--2026-10-22)) and answered review-013
 ([result](#review-013-result--2026-10-22)). The
 [protocol](#protocol-frozen-2026-10-22), the tool
-`tests/diagnostics/s11_layer_bottom_topology_2.py` and its tests are
-committed together. Step 5 (B) of the Mac-only order in the
+`tests/diagnostics/s11_layer_bottom_topology_2.py` and its tests were frozen
+together at `1447cd6` before the run. Step 5 (B) of the Mac-only order in the
 [Work Plan](../../00-project/work-plan.md), started by the user on 2026-10-22.
 This draft reads only LBT-1's kept records and the sample4 truth files. It makes
 no run, detector change or new output. It succeeds
@@ -263,12 +264,116 @@ No tuning, widening or time/Y/Glass exception follows the results.
 
 **Windows (S2):** step 7 only. Review-012 comes first, then a separate go.
 
+## Results and decision
+
+Tool `1447cd6`. Managed run `sample/output/s11-layer-bottom-topology-2-20261022-001`
+(closed; 13 files kept, the ordinary baseline CSVs reused from SOI).
+- `comparison.json` SHA-256 `1c8fa3e7ef85b86a22818ab5b717ad17604993212cb6c2c29845a46333bd6884`
+- `evaluation.json` SHA-256 `736542b6852546c8e2209ca3783084b23b0f38b3858e096f65affed975c01f7f`
+- `layers.json` SHA-256 `544c636594c10c0fededcf01a539ade9ba2a66ee163a5e92a8f54ce2e0658a26`
+
+**Contracts: all PASS.**
+- Before freezing: focused tests 39 and 13; ten suites 320, plainly and under
+  the wrapper, with zero activations.
+- In the run:
+  - the sample4 capture equals P5;
+  - the inert features change nothing;
+  - **with F off, the baseline equals LBT-1's kept baseline** (rows and events);
+  - the ordinary arm reproduces all 246 SOI records; 55,596 rows and 14,498
+    event links verify.
+
+**Verdict under N: no stop rule fired → outcome P.**
+
+| Rule | Result |
+|---|---|
+| The baseline gains an A | none |
+| Worse ≥ better over the 245 conditions | 8 worse against 800 better (2,618 the same) |
+| Wrong Foam changes ≥ right ones | 3 wrong against 12 right |
+
+**Baseline against the ordinary arm.**
+
+| Reference | Ordinary | LBT-2 | Unit |
+|---|---|---|---|
+| 40 s Y841 / opposed Y865.5 | Y865.5 (A) | Y831 (U) | better |
+| 42 s Y839 / opposed Y868 | Y868 (A) | Y835 (C) | better |
+| 44 s Y844 / opposed Y822 | Y822 (A) | Y842 (C) | better |
+| 54.5–56 s, review-013 surface | Y851–852 (C) | Y851–852 (C) | same |
+
+- **F acted once in the baseline:** at 54.5 s it withheld the confirmation from
+  the Y820 row under the Foam row Y808. No fill was confirmed anywhere, so
+  54.5–56 s stay open and publish the review-013 surface through tracklet
+  89:0017. Outcome G is gone; no G' was seen.
+- **Report extrema:** the wrong minimum 42 s Y868 disappears. The extrema
+  become max 51.5 s Y828 and min 2.0 s Y858 (an unchanged pre-Foam value), as
+  in LBT-1.
+- **Mixing:** only LBT-1's out-of-context rows of tracklet 1:0000 at 39.5–40 s,
+  where the Foam row lies below the unit. The SFR-1 mixing does not return (no
+  M).
+
+**Population.**
+- **E1's gains stand:** 685 opposed selections removed in 231 conditions, as in
+  LBT-1.
+- **F:** it acted in 234 of 246 conditions, each time at the same 54.5 s row
+  (Y820 under Y808).
+- **Worse units, all listed with owners.** None involves F; LBT-1 published the
+  same values in these conditions.
+
+  | Condition | Frames | LBT-2 | Ordinary arm | Owner |
+  |---|---|---|---|---|
+  | `all_oil-f001185` | 40 s | Y865.5 (A) | Y831 (U) | lower-structure tracklet 80:0014, outside the context |
+  | `all_oil-f001620` (all Oil at 54.0 s withdrawn) | 54.5, 55.0, 56.0 s | Y820, Y829, Y874 (A) | Y851 (C) | tracklet 89:0017 |
+  | `all_foam-f001620` (all Foam at 54.0 s withdrawn) | 54.0, 54.5, 55.0, 56.0 s | Y828, Y820, Y829, Y873 (A) | none, then Y851 (C) | tracklet 89:0017 |
+
+  In the two 54.0 s conditions, the established tracklet links to the nearer
+  row inside the Foam once its 54.0 s observation is missing
+  (`OIL-TRACKLET`, `S11-F04`).
+- **Foam (option (b) against Q1):**
+  - right: 12 Foam values added, at 44–46 s and 52.5–53 s, in five conditions;
+  - wrong: 3 removed, at 41.0 s (`all_foam-f001200`) and 44.5/46.0 s
+    (`all_foam-f001350`), where Foam publication follows Oil (`S11-F06`).
+
+  These are the same changes as LBT-1's.
+
+**Descriptive controls.**
+
+| Control | Initial state | Unit frames | E1 / support / F | Change |
+|---|---|---|---|---|
+| base_sample_1 0–14.4 s | UNKNOWN | 0 of 30 | 0 / 0 / 0 | none |
+| sample2 0–2 s | UNKNOWN | 2 of 5 | 13 / 2 / 0 | 2.0 s Y603 → no output, as in LBT-1 |
+| sample5 0–54.8 s | EMPTY | 10 of 111 | 0 / 0 / 0 | none |
+| sample7 0–44.378 s | EMPTY | 0 of 90 | 0 / 0 / 0 | none |
+
+**Post-hoc comparison, not part of the verdict.** LBT-1's kept population
+scored by the same frozen rules stops: 921 worse against 784 better. 912 of its
+worse units are the false cap's C → B at 54.5–56 s in 228 conditions. F removes
+exactly these.
+
+**Reading.**
+- **F does what it was designed for.** It removes the false fill cap under a
+  visible Foam layer without touching another transition. The baseline keeps
+  E1's gains at 40–44 s and returns to the review-013 surface at 54.5–56 s.
+- **Limits, named and not waived:**
+  1. 40 s: the lower structure wins after a withdrawn 39.5 s observation (one
+     condition, outside the context).
+  2. 54.0–56 s: association into the Foam after a withdrawn 54.0 s observation
+     (two conditions).
+  3. Foam removals at 41.0/44.5/46.0 s (two conditions, `S11-F06`).
+  4. sample2 2.0 s Y603 → no output (descriptive; the provisional truth calls
+     2.0 s full-like).
+  5. The open 52 s versus 54.5 s level question in the
+     [review-013 result](#review-013-result--2026-10-22).
+- **Next, as frozen:** P allows proposing Windows S2 in step 7. Review-012 (the
+  unread Accum frames 672–677.5 s) comes first, then a separate go. No tuning
+  or widening follows.
+
+S11 ACTIVE / O2 OPEN / FIELD FAIL is unchanged by this local result.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `FOAM-IDENTITY`, `SEQUENCE-COMPOSITION`
 - Failure-registry entries: `S11-F01`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F10`
 - First harmful stage: G — `OIL-PHASE-FILL`: the 27 % proximity rule confirms a fill from an in-unit row under a visible Foam row (54.5 s Y820 under Y808). The 40 s condition — `OIL-SELECTOR`/`OIL-TRACKLET`: with the level's 39.5 s row withdrawn, a lower-structure tracklet wins in a frame outside the context. Foam changes — `SEQUENCE-COMPOSITION`: Foam publication follows Oil publication (`S11-F06`).
 - Existing feature coverage: reuses LBT-1's witness, context, E1, support consumer, runner, controls and P0 bounds unchanged. F reuses the Foam material identity row, the 3 s seed-age limit and the lower separation (`foam_material_identity_tolerance + 2 px`) that already define `ORDERED_LOWER_INTERFACE`, and the existing fill confirmation profile. Top-exit v3 and the contested fill-owner gate stay OFF.
-- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files. Review-013 material: one managed run decoded 34 sample4 frames and wrote raw ROI crops with a source-Y ruler; the user's reply was read from the marked image. Freeze: the tool and focused tests are committed with the protocol; the focused tests and ten resolver/phase suites (plain and under the wrapper, zero activations) ran before freezing. No LBT-2 population run has been made at the freeze.
-- Logic-map impact: NONE — a draft protocol; no code or owner changes.
-- Failure-registry impact: NONE — the readings map to existing entries (`S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`); no new mechanism or failure.
+- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files. Review-013 material: one managed run decoded 34 sample4 frames and wrote raw ROI crops with a source-Y ruler; the user's reply was read from the marked image. Freeze: the tool and focused tests are committed with the protocol; the focused tests and ten resolver/phase suites (plain and under the wrapper, zero activations) ran before freezing. Run: one managed development run at `1447cd6` (sample4 baseline and 245 SOI conditions under the wrapper, the layer report, the N evaluation, and four descriptive controls through the ordinary analysis entry); no Windows run, top-exit or fill-owner gate.
+- Logic-map impact: NONE — a diagnostic wrapper under tests/diagnostics; no production code, owner or edge changes.
+- Failure-registry impact: NONE — a diagnostic wrapper with no runtime mechanism; its limits map to existing entries (`S11-F04` association after a withdrawn row, `S11-F06` Foam following Oil, `S11-F05` for the guard's false-Foam risk) and are recorded here.
