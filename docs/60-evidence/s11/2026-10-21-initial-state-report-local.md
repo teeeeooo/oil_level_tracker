@@ -250,6 +250,12 @@ field qualification; FIELD FAIL / O2 OPEN are unchanged.
   The second protection seen locally, a 33 px step above the jump limit, was not
   reached. A change to Accum Foam publication before that boundary could change
   this outcome.
+  - **Named unknown:** the barrier row's frame was not requested. The report's
+    first Accum observation is 669.5 s. If no earlier valid numeric row exists
+    (the movement summary skips direction-unconfirmed rows), the Foam row lies
+    before 669.5 s. That is earlier than the reviewed Accum Foam interval
+    (672–680 s), so the row would be a Foam publication the truth does not
+    support.
 - **Judgment scope:** BASE `PASS` is the configured `HOLD_ABOVE_ZERO` criterion
   applied to detector output. It is not reviewed-truth or field acceptance.
 - **Identity:** the import path is unreported, the overall status is derived,
