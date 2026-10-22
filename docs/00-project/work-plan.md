@@ -332,11 +332,13 @@ is COMPLETE (desk only).
       - **Decided (user, 2026-10-22):** every recommendation: F, the stop
         policy N (the P0 net procedure), a pre-run sample4 review-013, and
         sample5/sample7 as descriptive controls.
-      - **Review-013 prepared, awaits the user's reply:**
-        [question record](../50-diagnostics/s11/2026-10-22-review-013-sample4.json)
-        with raw sample4 crops of 39.5–56 s and a 54.5–56 s zoom (no detector
-        overlay). Q1: frames with a visible Foam layer. Q2: the Oil level at
-        54.5–56 s as approximate Y.
+      - **Review-013 answered:** Foam is visible in all 34 frames of
+        39.5–56 s, and the user marked the Oil surface at about Y843–860 at
+        54.5–56 s ([reply](../50-diagnostics/s11/2026-10-22-review-013-sample4-reply.json)).
+        That is the ordinary output's level; the LBW-3 unit (Y820–829) lies
+        in the Foam there.
+      - **Frozen before any run:** the protocol, tool and tests, with the
+        review answers as references and the stop rules N.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
@@ -350,9 +352,9 @@ queued.
 
 **Resume checkpoint — 2026-10-22 (latest):** start with the
 [Mac-only steps handoff](../60-evidence/s11/2026-10-22-mac-only-steps-handoff.md)
-(steps 1–4 and 6 (나) done; step 5, B: the user chose every
-[LBT-2](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md)
-recommendation, and review-013 awaits the user's reply). The earlier
+(steps 1–4 and 6 (나) done; step 5, B:
+[LBT-2](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md) is frozen
+with the review-013 answers, and its local run is next). The earlier
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md)
 remains background; its pending run is received.
 - **Top-exit v3:** ⑩ PASS; default OFF.
@@ -395,8 +397,7 @@ remains background; its pending run is received.
   PASS. FULL needs the first catch in the top band; EMPTY needs it in the
   bottom band and within one continuity step of the effective-mask bottom.
   No known real output changes.
-- **Next:** the user's review-013 reply; then the frozen LBT-2 protocol, tool
-  and tests, and the local run.
+- **Next:** the frozen LBT-2 local run and its evaluation under N.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
   Windows is unavailable for now. When it returns, the next report also
   confirms the band cells, E2 and the first-catch guard, and the step-7
