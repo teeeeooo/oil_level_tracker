@@ -128,14 +128,11 @@ def prepare_empty_fill(output: Path) -> None:
         )
         target = output / f"{sample}.oilrecipe"
         repository.save(target, recipe)
-        band_end = cy - ry + band * 2.0 * ry
         records[sample] = {
             "comparison_recipe_sha256": _sha(target),
             "geometry": recipe.to_dict()["glasses"][0]["geometry"],
-            "band_end_y": band_end,
+            "band_end_y": _band_end(glass, band),
         }
-        left, right = int(cx - rx) - 40, int(cx + rx) + 40
-        top, bottom = max(int(cy - ry) - 30, 0), min(int(cy + ry) + 30, height)
         panels = []
         for frame in control["frames"]:
             path = views / f"f{frame:06d}.png"
@@ -143,23 +140,9 @@ def prepare_empty_fill(output: Path) -> None:
             image = cv2.imread(str(path))
             if image is None:
                 raise ValueError(f"Missing source view: {path}")
-            canvas = image.copy()
-            cv2.ellipse(canvas, (round(cx), round(cy)), (round(rx), round(ry)), 0, 0, 360, (0, 255, 0), 2)
-            mask = build_mask_bundle(image, glass)
-            contours, _ = cv2.findContours(mask.effective_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-            cv2.drawContours(canvas, [c + np.array(mask.crop_origin) for c in contours], -1, (0, 215, 255), 1)
-            cv2.line(canvas, (left, round(band_end)), (right, round(band_end)), (0, 0, 255), 1)
-            crop = canvas[top:bottom, max(left, 0):right]
-            panel = cv2.resize(crop, None, fx=520 / crop.shape[0], fy=520 / crop.shape[0], interpolation=cv2.INTER_AREA)
-            panel = cv2.copyMakeBorder(panel, 30, 0, 0, 4, cv2.BORDER_CONSTANT, value=(24, 24, 24))
-            cv2.putText(panel, f"{sample} f{frame}", (6, 21), cv2.FONT_HERSHEY_SIMPLEX, .6, (255, 255, 255), 1)
-            panels.append(panel)
+            panels.append(_roi_panel(image, glass, band, f"{sample} f{frame}"))
         sheets.append(np.concatenate(panels, axis=1))
-    width = max(sheet.shape[1] for sheet in sheets)
-    padded = [cv2.copyMakeBorder(sheet, 0, 4, 0, width - sheet.shape[1], cv2.BORDER_CONSTANT, value=(24, 24, 24))
-              for sheet in sheets]
-    if not cv2.imwrite(str(output / "roi-review.png"), np.concatenate(padded, axis=0)):
-        raise OSError("Cannot save ROI review")
+    _write_sheet(output / "roi-review.png", sheets)
     manifest = {
         "status": "ROI_PREPARED_BEFORE_DETECTOR_COMPARISON",
         "source_views": source_hashes,
@@ -171,6 +154,80 @@ def prepare_empty_fill(output: Path) -> None:
         "truth": "USER_CONFIRMATION_REQUIRED: each glass starts EMPTY and never becomes full",
     }
     (output / "roi-inputs.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def roi_overlay(video: Path, recipe_path: Path, times: list[float], output: Path) -> None:
+    """Show a Recipe's ellipses and top-band ends on source frames before any detector run."""
+    from oil_tracker.adapters.vision.oil_observation_resolver import OilObservationResolverConfig
+    from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
+
+    output.mkdir(parents=True, exist_ok=False)
+    band = OilObservationResolverConfig().entrance_band_ratio
+    recipe = JsonRecipeRepository().load(recipe_path)
+    glasses = [glass for glass in recipe.glasses if glass.enabled]
+    panels: dict[str, list[np.ndarray]] = {glass.id: [] for glass in glasses}
+    frames = []
+    with OpenCvVideoReader(video) as reader:
+        metadata = reader.metadata
+        for requested in times:
+            image, index, actual = reader.read_at(requested)
+            frames.append({"requested_sec": requested, "frame_index": index, "timestamp_sec": actual})
+            for glass in glasses:
+                panels[glass.id].append(_roi_panel(image, glass, band, f"{glass.name} f{index} {actual:.2f}s"))
+    _write_sheet(output / "roi-overlay.png", [np.concatenate(panels[glass.id], axis=1) for glass in glasses])
+    manifest = {
+        "status": "ROI_OVERLAY_BEFORE_DETECTOR_RUN",
+        "video": {"path": str(video), "sha256": _sha(video), "size_bytes": video.stat().st_size,
+                  "fps": metadata.fps, "frame_count": metadata.frame_count,
+                  "duration_sec": metadata.duration_sec, "width": metadata.width, "height": metadata.height},
+        "recipe": {"path": str(recipe_path), "sha256": _sha(recipe_path), "name": recipe.name},
+        "frames": frames,
+        "glasses": [
+            {"id": glass.id, "name": glass.name, "ellipse": asdict(glass.geometry.ellipse),
+             "margin_ratio": glass.geometry.margin_ratio, "exclusions": len(glass.geometry.exclusions),
+             "artifact_templates": len(glass.geometry.artifact_templates),
+             "band_end_y": _band_end(glass, band)}
+            for glass in glasses
+        ],
+        "legend": {"green": "Recipe ellipse", "yellow": "effective mask",
+                   "red": f"end of the top {band:.0%} band"},
+        "check": "USER_CONFIRMATION_REQUIRED: each ellipse is the vessel interior (OTR-1 D1)",
+    }
+    (output / "roi-overlay.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(json.dumps(manifest, ensure_ascii=False), flush=True)
+
+
+def _band_end(glass: GlassInspectionConfig, band: float) -> float:
+    ellipse = glass.geometry.ellipse
+    return ellipse.center_y - ellipse.radius_y + band * 2.0 * ellipse.radius_y
+
+
+def _roi_panel(image: np.ndarray, glass: GlassInspectionConfig, band: float, title: str) -> np.ndarray:
+    """Ellipse (green), effective mask (yellow) and top-band end (red), cropped around the Glass."""
+    ellipse = glass.geometry.ellipse
+    cx, cy, rx, ry = ellipse.center_x, ellipse.center_y, ellipse.radius_x, ellipse.radius_y
+    band_end = _band_end(glass, band)
+    left, right = int(cx - rx) - 40, int(cx + rx) + 40
+    top, bottom = max(int(cy - ry) - 30, 0), min(int(cy + ry) + 30, image.shape[0])
+    canvas = image.copy()
+    cv2.ellipse(canvas, (round(cx), round(cy)), (round(rx), round(ry)), 0, 0, 360, (0, 255, 0), 2)
+    mask = build_mask_bundle(image, glass)
+    contours, _ = cv2.findContours(mask.effective_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(canvas, [c + np.array(mask.crop_origin) for c in contours], -1, (0, 215, 255), 1)
+    cv2.line(canvas, (left, round(band_end)), (right, round(band_end)), (0, 0, 255), 1)
+    crop = canvas[top:bottom, max(left, 0):right]
+    panel = cv2.resize(crop, None, fx=520 / crop.shape[0], fy=520 / crop.shape[0], interpolation=cv2.INTER_AREA)
+    panel = cv2.copyMakeBorder(panel, 30, 0, 0, 4, cv2.BORDER_CONSTANT, value=(24, 24, 24))
+    cv2.putText(panel, title, (6, 21), cv2.FONT_HERSHEY_SIMPLEX, .6, (255, 255, 255), 1)
+    return panel
+
+
+def _write_sheet(path: Path, sheets: list[np.ndarray]) -> None:
+    width = max(sheet.shape[1] for sheet in sheets)
+    padded = [cv2.copyMakeBorder(sheet, 0, 4, 0, width - sheet.shape[1], cv2.BORDER_CONSTANT, value=(24, 24, 24))
+              for sheet in sheets]
+    if not cv2.imwrite(str(path), np.concatenate(padded, axis=0)):
+        raise OSError(f"Cannot save {path.name}")
 
 
 def compare(
@@ -426,11 +483,16 @@ if __name__ == "__main__":
     modes.add_argument("--prepare-roi", type=Path)
     modes.add_argument("--prepare-empty-fill", type=Path,
                        help="Freeze the sample5/sample7 never-full Recipes and their review sheet")
+    modes.add_argument("--roi-overlay", type=Path,
+                       help="Write roi-overlay.png/json for --video and --recipe at --times, before any run")
     modes.add_argument("--compare", type=Path)
     modes.add_argument("--summarize-top-exit", type=Path,
                        help="Write summary.json for every */comparison.json top-exit control in this directory")
     modes.add_argument("--verify-rgb", type=Path)
     parser.add_argument("--roi-inputs", type=Path)
+    parser.add_argument("--video", type=Path)
+    parser.add_argument("--recipe", type=Path)
+    parser.add_argument("--times", default="0,40", help="Comma-separated seconds for --roi-overlay")
     parser.add_argument("--sample", choices=("base_sample_1", "sample2", "sample4", *EMPTY_FILL_CONTROLS))
     parser.add_argument("--original-recipe", action="store_true",
                         help="Use sample/<sample>.oilrecipe instead of the frozen sample4 interior Recipe")
@@ -448,6 +510,10 @@ if __name__ == "__main__":
         prepare(args.prepare_roi)
     elif args.prepare_empty_fill:
         prepare_empty_fill(args.prepare_empty_fill)
+    elif args.roi_overlay:
+        if args.video is None or args.recipe is None:
+            parser.error("--roi-overlay requires --video and --recipe")
+        roi_overlay(args.video, args.recipe, [float(value) for value in args.times.split(",")], args.roi_overlay)
     elif args.summarize_top_exit:
         summarize_top_exit(args.summarize_top_exit)
     elif args.verify_rgb:
