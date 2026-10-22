@@ -225,10 +225,18 @@ is COMPLETE (desk only).
     - The six local negatives reran at `933ff49`: N1/N2 PASS, output identical
       to the earlier runs.
     - The user chose the read-only
-      [opposition follow-up](../40-operations/s11-current-windows-field-qualification.md#spl4-opposition-follow-up)
-      (2026-10-22): which source made 22.5–27.0 s opposed, the failed
-      disappearance evaluations, the wrong-target Oil count in 25–63 s and the
-      full Accum census. REQUESTED; the user forwards it.
+      [opposition follow-up](../40-operations/s11-current-windows-field-qualification.md#spl4-opposition-follow-up);
+      [received](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-opposition-follow-up-receipt--2026-10-22):
+      - **Source:** `OIL-PHASE-FILL` `FILL_OWNER_AMBIGUOUS` between two low
+        admitted owners (Y742–785).
+      - **Upstream (inference):** the fast-rising level stayed new provisional
+        tracklets (`INSUFFICIENT_NET_PROGRESS`, for example Y463 at 22.5 s) and
+        was never admitted.
+      - **Top-exit:** it refused all three low witnesses, as designed.
+      - **Production default:** 14 wrong-target numeric Oil rows at
+        27.5–34.0 s (Y704–739) from the re-adopted low owner, A class.
+      - **⑩ Accum census:** four 3-row in-band blank runs, never after an
+        active witness; no option C repair is called for.
     - **Then, each awaiting the user:** a legend fix for zero-width bands; E3,
       B and D.
 
@@ -239,7 +247,7 @@ Facts it records:
   closures probably do not govern the Windows miss.
 - sample4 Y808 belongs to the October 15 interior comparison Recipe.
 
-One read-only Windows request is pending (SPL#4 opposition follow-up). No run, detector change or flag is queued.
+No run, detector change, flag or Windows request is queued.
 
 **Resume checkpoint — 2026-10-22 (latest):** start with the
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md).
@@ -261,12 +269,13 @@ Its pending run is now received.
   ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)).
 - **E1/E2 report bands:** implemented (`5e5c8bc`), local verification PASS; on
   Windows E1 confirmed, E2 not exercised.
-- **Pending:** the read-only
-  [SPL#4 opposition follow-up](../40-operations/s11-current-windows-field-qualification.md#spl4-opposition-follow-up).
-- **Next:** record its receipt in the promotion evidence and name the opposing
-  source by the readings fixed before the extraction; regroup the Accum census
-  at adjacent 2 fps samples. Then, each awaiting the user: a legend fix for
-  zero-width bands; E3, B and D.
+- **SPL#4 follow-up:** received. The opposing source is `OIL-PHASE-FILL`
+  `FILL_OWNER_AMBIGUOUS`; upstream, the fast-rising level was never admitted as
+  an owner (inference). The production default published 14 wrong-target
+  numeric rows at 27.5–34.0 s.
+- **Next (each awaiting the user):** a legend fix for zero-width bands; E3, B
+  and D. Fast-fill FULL (owner tracking or owner-free FULL evidence) and the
+  stale-owner wrong target are new candidate items for the user to schedule.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).

@@ -265,10 +265,10 @@ with its own freeze.
   UNKNOWN and the witness reset on every frame. The user's review puts the fast
   rise, Foam from 23 s and FULL at 24–25 s inside this span, so the level
   crossed the band unseen.
-- **Named unknown:** which source marked those frames opposed. It is either the
-  fill lifecycle's ambiguous frames (`OIL-PHASE-FILL`, for example
-  `FILL_CHAIN_AMBIGUOUS`) or a current identity contradiction. The receipt
-  carries neither `T.motion_reason` nor the candidates.
+- **Source, resolved by the
+  [follow-up](#spl4-opposition-follow-up-receipt--2026-10-22):** the fill
+  lifecycle (`OIL-PHASE-FILL`), reason `FILL_OWNER_AMBIGUOUS`, between two low
+  owners. The real level was never admitted as an owner (inference).
 - **The known limit is now a demonstrated gap:** on an EMPTY-start, fast
   Foam + Oil fill, top-exit acting alone produced no FULL.
 - **Follow-up (user, 2026-10-22):** a read-only
@@ -291,7 +291,7 @@ with its own freeze.
 | Glass | Band end | Blank rows | With an `INCOMPATIBLE_BRANCH` candidate | Runs of ≥ 2 inside the band |
 |---|---|---:|---:|---|
 | BASE | Y420.10 | 185 | 4 | 0 |
-| Accum | Y213.50 | 565 | 64 | at least 2 (agent's 0 is wrong; see below) |
+| Accum | Y213.50 | 565 | 64 | 4 (after regrouping all 64 rows in the follow-up) |
 
 - **BASE:** 608.98 s (Y404), 610.99 s (Y409), 617.99 s (Y387) and 663.00 s (Y393)
   are single rows, each inside the band. 663.0 s is the review-004 blank that
@@ -303,11 +303,11 @@ with its own freeze.
     532.5–534.0 s (4) stay below the band, with minimum Y307–332;
   - **679.5–680.5 s (3 rows, minimum Y208) and 681.5–682.5 s (3 rows, Y210)
     reach the band.**
-  - The other 34 rows (683–773 s) were not listed.
+  - The [follow-up](#spl4-opposition-follow-up-receipt--2026-10-22) listed all
+    64 rows (to 736.5 s) and completes this census.
 - **Meaning:** multi-frame blanks inside the band, the precondition of the
   two-frame-blank risk, do occur on real data (Accum, ⑩). Top-exit did not
-  close there in ⑩, because no qualifying witness preceded them. The Accum
-  census is incomplete.
+  close there in ⑩, because no qualifying witness preceded them.
 
 **E1/E2 on Windows (candidate report):**
 - **E1 confirmed:** the combined graph shows the strip with rows BASE then
@@ -319,12 +319,98 @@ with its own freeze.
   zero-width limit named in the E1/E2 verification, now seen as a misleading
   legend entry.
 
+## SPL#4 opposition follow-up receipt — 2026-10-22
+
+Read-only, relayed by OCR, from the
+[follow-up request](../../40-operations/s11-current-windows-field-qualification.md#spl4-opposition-follow-up).
+- **SPL#4 candidate bundle:** run `05985b7a-…`; 181 records per Glass (BASE
+  `9c74a762…`, Accum `cfef5bad…`).
+- **⑩ bundle:** run `84526e04-b989-437e-9790-668834771e50`; 601 records per
+  Glass.
+
+Both identities match the earlier receipts.
+
+**Which source opposed BASE 22.5–27.0 s: the fill lifecycle (`OIL-PHASE-FILL`),
+reason `FILL_OWNER_AMBIGUOUS`.**
+- **Every record in 22.5–27.0 s:** phase `filling`, reason
+  `FILL_OWNER_AMBIGUOUS`, ambiguity flag 1, an empty owner chain, no allowed
+  tracklet, and all four path stages unknown.
+- **What the reason means:** the lifecycle sets it when more than one dynamic
+  fill owner exists. It then empties the allowed set, so the frame publishes
+  UNKNOWN.
+- **Identity contradictions are not the source:** `non_nearest_ordered_lower`
+  appears on non-selected candidates in only 4 of the 10 frames (23.0, 23.5,
+  25.0, 26.5 s).
+- **Against the readings fixed beforehand:** this is not the anticipated
+  `FILL_CHAIN_AMBIGUOUS`. It is another `OIL-PHASE-FILL` branch, recorded as
+  it is.
+- **Around it:** 21.0–22.0 s and 27.5–28.0 s are `FILL_MOTION_OWNER`, each with
+  one owner.
+
+**The two owners and the other candidates (table E, 22.0–24.5 s):**
+- **Two owners, both low:**
+  - `oil-tracklet:000025:0018`: continuing, admitted, upward; Y781–785 at
+    22.5–23.0 s and Y756–766 at 23.5–24.0 s.
+  - `oil-tracklet:000042:0035`: provisional, admitted, upward; Y742–769.
+  - The chain handed off 0018 → 0035 at 22.0 s (selected Y756), and 0018
+    reappeared at 22.5 s.
+- **Higher candidates, never admitted:** Y463 (`…0037`) at 22.5 s; Y462, Y534
+  and Y651–660 (`…0038`–`…0040`) at 24.5 s. Each is a new provisional tracklet
+  with `INSUFFICIENT_NET_PROGRESS` and direction 0.
+- **A candidate fixed near the top:** Y323–325 (`…0034`) from 22.0 s, before the
+  glass was full; never admitted.
+- **Inference, not verified:** the user's review places the fast rise here, so
+  the higher candidates are the likelier level positions.
+  - A rise of about 500 px in 3–4 s is about 70 px per 2 fps sample.
+  - Each frame then starts a new tracklet that never accumulates progress.
+  - The BASE `temporal_max_jump_px` and a frame review would confirm it.
+
+**Refined first harmful stage:** admission at `OIL-TRACKLET` during the fast
+rise (inference). The level never became an admitted owner while two low
+owners kept fill ownership. `OIL-PHASE-FILL` then failed closed between them
+(UNKNOWN). Top-exit needs an owner in the band, so it had nothing to act on.
+
+**The three failed disappearance evaluations (table F) all refused low
+witnesses, as designed:**
+- **19.0 s:** two rows at Y793–795; too few observations, among other false
+  keys.
+- **21.5 s:** four rows at Y799–802; no anchor, no upward progress or
+  direction, not in the band.
+- **34.5 s:** five rows of owner 0018 at Y739→720; `independent_anchor`,
+  `recent_upward_direction` and `top_band_reached` false.
+
+**Wrong-target numeric Oil in the reviewed FULL interval (table G, production
+default):**
+- **Rows:** 14, all in 27.5–34.0 s, Y704–739, from the re-adopted owner 0018.
+- **States:** the fill state alternates FILLING, DRAINING and PARTIAL.
+- **Class:** against a full glass this is far beyond C1's ±27 px for 14
+  consecutive samples, so it is A-class false output.
+- **After it:** BASE is UNKNOWN from 34.5 to 63 s.
+
+**⑩ Accum census, complete (table H regrouped at adjacent 2 fps samples):**
+- **Runs:** the 64 rows form 25 runs.
+- **Inside the band (Y ≤ 213.50):** four 3-row runs, at 679.5–680.5,
+  681.5–682.5, 698.5–699.5 and 700.5–701.5 s, plus a single row at 697.5 s.
+- **No witness at any row:** each row is `CURRENT_EVIDENCE_RESET`,
+  `CURRENT_INTERFACE_OR_STATE_RESET` or `NO_TOP_EXIT_WITNESS` with an empty
+  witness, so no closure could start there.
+- **Meaning:** the two-frame-blank precondition occurred four times on real
+  Accum data, never after an active witness. The risk stays a named limit; this
+  evidence does not call for the option C repair.
+
+**What it decides:** nothing is tuned or changed.
+- **FULL on fast fills:** the obstacle is upstream of top-exit. The level must
+  be tracked as an owner, or FULL must come from evidence that needs no owner.
+- **A separate defect:** the stale-owner numeric Oil at 27.5–34.0 s is a
+  production-default false output on an unseen recording.
+- Both are for the user to schedule.
+
 ## Detector Governance
 
-- Logic-map nodes: `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`
-- Failure-registry entries: `S11-F05`, `S11-F06`, `S11-F08`, `S11-F10`
-- First harmful stage: local negatives, none observed (no witness or pending closure; the closure stage is NOT_EVALUATED on real video; the sample5 wrong-target Oil rows are a selection observation outside these criteria). SPL#4 BASE: before the top-exit closure. The witness ended near the bottom at 21.5 s, and every frame in 22.5–27.0 s was opposed while the level crossed the band (`OIL-PHASE-FILL` ambiguity or an identity contradiction; the receipt does not separate them), so no witness reached the band.
+- Logic-map nodes: `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`
+- Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F10`
+- First harmful stage: local negatives, none observed (no witness or pending closure; the closure stage is NOT_EVALUATED on real video; the sample5 wrong-target Oil rows are a selection observation outside these criteria). SPL#4 BASE: before the top-exit closure. The follow-up names `OIL-PHASE-FILL` `FILL_OWNER_AMBIGUOUS` in 22.5–27.0 s, between two low admitted owners. Upstream of it, the fast-rising level never became an admitted `OIL-TRACKLET` owner (inference: new provisional tracklets each frame with `INSUFFICIENT_NET_PROGRESS`). So no witness reached the band. The later re-adopted low owner published 14 wrong-target numeric rows (27.5–34.0 s) in both arms.
 - Existing feature coverage: reuses the initial-FULL/top-exit comparison runner. Its extension adds frozen empty-fill Recipes, an EMPTY initial state and an N1/N2 summary. Also reused: the IFO v2 and top-exit v3 options, production default detector settings and the four existing control Recipes. The EMPTY-initial path, where IFO is inactive, is exercised for the first time. Windows "sample4" is a user visual timeline only.
-- Execution scope: two local managed runs (`cba4067`, `60d6a9d`) over six controls at 2 fps with debug NONE, plus a frozen-ROI run before them. No Windows execution, private media, human review beyond the user's confirmations, tuning or post-result rule change. sample5's window end was corrected before any sample5 output existed. SPL#4 is recorded from the user's visual timeline and answers only; its windows were frozen before any detector run on it. The six controls were rerun at `933ff49` (run 003) with identical output. On Windows, one user-forwarded request at `933ff49`: two SPL#4 runs (0–90 s, 2 fps, FULL debug, compressor start 10.0 s by the user's approval), the user's overlay check, the read-only C census on the saved ⑩ bundle and an E1/E2 look; relayed by OCR and judged against the frozen entry conditions. No tuning or post-result rule change.
+- Execution scope: two local managed runs (`cba4067`, `60d6a9d`) over six controls at 2 fps with debug NONE, plus a frozen-ROI run before them. No Windows execution, private media, human review beyond the user's confirmations, tuning or post-result rule change. sample5's window end was corrected before any sample5 output existed. SPL#4 is recorded from the user's visual timeline and answers only; its windows were frozen before any detector run on it. The six controls were rerun at `933ff49` (run 003) with identical output. On Windows, one user-forwarded request at `933ff49`: two SPL#4 runs (0–90 s, 2 fps, FULL debug, compressor start 10.0 s by the user's approval), the user's overlay check, the read-only C census on the saved ⑩ bundle and an E1/E2 look; relayed by OCR and judged against the frozen entry conditions. A read-only follow-up then read the saved SPL#4 candidate and ⑩ bundles (no run). No tuning or post-result rule change.
 - Logic-map impact: NONE — evidence only; detector code and owners are unchanged, and the runner is diagnostics.
-- Failure-registry impact: NONE — no new mechanism or failure; the unexercised closure is a named limit, not a result.
+- Failure-registry impact: NONE — no new mechanism or failure. The unexercised closure is a named limit, not a result. The SPL#4 findings fit existing entries: the level is not admitted (F02/F04), fill ownership fails closed without an exit (F05/F08), and a stale owner publishes wrong-target Oil (F04).
