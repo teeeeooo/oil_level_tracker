@@ -1,0 +1,106 @@
+{
+ "schema": "s11-review-question-v1",
+ "review_id": "review-014",
+ "status": "PENDING_USER_REVIEW",
+ "base_head": "56e32d31800ae7af325c67f8d53575173c1f6258",
+ "protocol": "docs/50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md",
+ "purpose": "Strict Oil references for sample4 after decision S (2026-10-23): the Oil boundary where the dense Foam ends, at 52.0-56.0 s. 54.0-56.0 s have no strict reference; 52.0 s checks consistency with the user's Y833.",
+ "questions_verbatim": {
+  "Q1": "zoom 이미지의 9칸(52.0–56.0초, 0.5초 간격) 각각에서, 엄격 기준의 Oil 유면(촘촘한 Foam이 끝나는 곳; 그 아래 기포 섞인 구간부터 Oil)은 왼쪽 눈금(원본 Y) 기준 대략 어디인가요? 이미지에 직접 점을 찍어 주셔도 되고, 여러 칸이 같으면 묶어서 답하셔도 됩니다. 보이지 않으면 '안 보임'이라고 해 주세요."
+ },
+ "review_images": [
+  {
+   "path": "docs/50-diagnostics/s11/2026-10-23-review-014-sample4-zoom.png",
+   "sha256": "fd723e9ed0bbe97663ee03a24c451c72cbc4425be7c3a3f446207dc8c35c19b5",
+   "bytes": 322332,
+   "frames": "52.0-56.0 s zoom"
+  }
+ ],
+ "display": "Raw decoded pixels, nearest-neighbour upscaling x5 in a 3x3 sheet; a source-Y ruler in each margin (ticks 5 px, labels 10 px). Review-013's zoom rectangle. No detector value, Recipe ellipse, effective mask or band line is drawn.",
+ "source_video": {
+  "path": "sample/sample4.mp4",
+  "sha256": "ee971b3871d806ff194117eb64960cca3ad158e8ae3d1be4097ebc20fe472892"
+ },
+ "recipe": {
+  "path": "sample/sample4.oilrecipe",
+  "sha256": "53688394709e7f0b15f637e991a48840e5f46333f30e67b9d9d7a3feead5b849",
+  "glass_id": "ecb6e1ec-0259-5982-a35f-7cb1f7075af2",
+  "ellipse": {
+   "center_x": 595.0,
+   "center_y": 850.0,
+   "radius_x": 52.0,
+   "radius_y": 52.0
+  }
+ },
+ "zoom_source_xyxy": [
+  535,
+  790,
+  655,
+  910
+ ],
+ "frames": [
+  {
+   "frame_index": 1560,
+   "time_sec": 52.0,
+   "decoded_time_sec": 52.0,
+   "frame_sha256": "64ed78e938c100a16a22095ee2856234647693cd4f3b19709a6c579cdde101c9"
+  },
+  {
+   "frame_index": 1575,
+   "time_sec": 52.5,
+   "decoded_time_sec": 52.5,
+   "frame_sha256": "1228f32dfb61ae7f340d466f862ee440fc3b0f27e01bdf3767ef54a1fc510837"
+  },
+  {
+   "frame_index": 1590,
+   "time_sec": 53.0,
+   "decoded_time_sec": 53.0,
+   "frame_sha256": "3c036d294eec84bc38ff000f84166a220a257f414e069f02cdf563c508648803"
+  },
+  {
+   "frame_index": 1605,
+   "time_sec": 53.5,
+   "decoded_time_sec": 53.5,
+   "frame_sha256": "24919d41316bb8ec981b13675eb6ce86c8028c0b680c6d951355272def987b7c"
+  },
+  {
+   "frame_index": 1620,
+   "time_sec": 54.0,
+   "decoded_time_sec": 54.0,
+   "frame_sha256": "9ab8b2eb1c7a1eea5314c59ef735c0655e7926201aa104b0a1e471bb2004e86e"
+  },
+  {
+   "frame_index": 1635,
+   "time_sec": 54.5,
+   "decoded_time_sec": 54.5,
+   "frame_sha256": "3438fa33c68113a703a8a1026017e68f7a68270eeca9ef87396d5bd0bad9f2fc"
+  },
+  {
+   "frame_index": 1650,
+   "time_sec": 55.0,
+   "decoded_time_sec": 55.0,
+   "frame_sha256": "7c3c54d322101752bfad74dafd1f115b25593384fcb8d4fb93ec0a3ca849515c"
+  },
+  {
+   "frame_index": 1665,
+   "time_sec": 55.5,
+   "decoded_time_sec": 55.5,
+   "frame_sha256": "63da5520427de72ecd688615915410b0cf494e50f43decfea95957ed912afb5b"
+  },
+  {
+   "frame_index": 1680,
+   "time_sec": 56.0,
+   "decoded_time_sec": 56.0,
+   "frame_sha256": "685a8089b863ff2f43fea3ecd78c6fc0dc6d494481f61ab4e98b1f082e8a6325"
+  }
+ ],
+ "frame_selection": "Every 0.5 s analysis sample from 52.0 to 56.0 s (frames 1560-1680, step 15), decoded sequentially; each decode time matched frame/30 within 0.02 s.",
+ "blinding": "Prepared after LBT-2's result and decision S. The conversation named the user's own strict reading at 52 s (Y833) and the assistant's inference that the strict boundary may stay near Y833-838 at 54-56 s; the material draws no line, the question asks for an open reading, and values are compared only after the reply.",
+ "generator": {
+  "managed_run": "sample/output/s11-review014-sample4-20261023-001",
+  "script": "review014.py",
+  "script_sha256": "5986d420cdaabc1455b57b8f9dc3280d8fd93637796fcef393dbfb344fadcee3",
+  "derived_from": "sample/output/s11-review013-sample4-20261022-001/evidence/review013.py",
+  "command": "PYTHONPATH=src .venv/bin/python <work>/review014.py <work>"
+ }
+}
