@@ -310,8 +310,10 @@ The gate is implemented and its local check passed. No Windows request is
 queued.
 
 **Resume checkpoint — 2026-10-22 (latest):** start with the
-[top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md).
-Its pending run is now received.
+[Mac-only steps handoff](../60-evidence/s11/2026-10-22-mac-only-steps-handoff.md)
+(steps 1–3 and 6 (나) done; next is step 4, E3). The earlier
+[top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md)
+remains background; its pending run is received.
 - **Top-exit v3:** ⑩ PASS; default OFF.
   - Since 2026-10-22 it is the integrated-candidate FULL component, paired with
     IFO v2.
