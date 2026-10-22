@@ -68,6 +68,34 @@ For modern streams, focused tests must also prove the
   unresolved;
 - legacy R7 anchor streams keep their existing behavior.
 
+### First-catch position guard — 2026-10-22
+
+Frozen before implementation. For modern streams, focused tests must also prove
+the
+[first-catch position guard](../20-architecture/initial-state-retrospective-reconstruction-architecture.md#modern-stream-first-catch-position-guard--2026-10-22):
+- **FULL:** after a decisive fall, a first catch inside the top band is
+  accepted, including emergence at the effective-mask top. A first catch below
+  the band (20 px below its end, or mid-Glass) is unresolved.
+- **EMPTY:** after a decisive rise, a first catch inside the bottom band and
+  within one `temporal_max_jump_px` of the effective-mask bottom is accepted.
+  A catch higher up is unresolved: the ⑩ Accum shape without Foam and with a
+  30 px first step, and a standing layer about 56 px up.
+- **Small Glass:** where one step reaches above the bottom band, an EMPTY catch
+  above the band is still unresolved.
+- **The unresolved result:** it creates no interval, names the first catch's
+  position, and carries the first boundary plus the decisive pair as evidence.
+- **Conflict first:** a first decisive move against the prior stays a conflict
+  wherever the first catch lies.
+- **⑩ shapes:** BASE stays accepted; Accum stays unresolved.
+- **Provenance:** every interpretation decided by the modern rule records
+  `initial_state_retrospective_v3`. Legacy R7 streams keep their mid-Glass case
+  and provenance.
+- **Mutation check:** with the guard removed, the late-catch tests fail.
+
+**Control:** replaying the reconstruction on the 24 kept local row lists of the
+LCR-1 desk run changes no status, interval, reason, barrier or evidence. Only
+the provenance of continuing-run outcomes changes, to v3.
+
 ## Oil compatibility controls
 
 - Modern FULL/EMPTY reconstruction with unrelated R7 Foam flags equals the same

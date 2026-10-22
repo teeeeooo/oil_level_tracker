@@ -56,9 +56,11 @@ Eligibility requires later real accepted detector evidence, not prior-seeded lab
 - direction evidence requires at least **two real accepted anchor-grade boundary
   observations** for R7/R8; legacy streams use their existing canonical boundary
   authority;
-- the first anchor may already be mid-Glass; entrance topology is retained in
-  provenance but does not block inference when anchor motion is compatible with
-  the confirmed prior;
+- on legacy R7 anchor streams the first anchor may already be mid-Glass;
+  entrance topology is retained in provenance but does not block inference when
+  anchor motion is compatible with the confirmed prior. Modern streams follow
+  the [first-catch position guard](#modern-stream-first-catch-position-guard--2026-10-22)
+  instead;
 - prior-seeded or retrospectively interpreted state labels cannot serve as the sole confirmation of direction or topology;
 - canonical ambiguity may remain inside an otherwise eligible leading prefix only when it introduces no barrier or contradiction, but ambiguity contributes no positive confirmation;
 - insufficient positive evidence leaves the interval unresolved rather than converting the prior into truth.
@@ -86,7 +88,9 @@ is excluded from retrospective state projection.
 [local verification](../60-evidence/s11/2026-10-21-initial-state-report-local.md)**, with the user's decisions
 recorded in the [Work Plan](../00-project/work-plan.md). It replaces the
 two-observation direction test for modern (non-legacy-R7) streams. Legacy R7
-anchor handling is unchanged.
+anchor handling is unchanged. The
+[first-catch position guard](#modern-stream-first-catch-position-guard--2026-10-22)
+amends steps 4–6 from 2026-10-22.
 
 **Why.** The ⑩ Windows BASE bundle shows two blocks, recorded in the
 [report receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#report-and-judgment-receipt--2026-10-21):
@@ -118,7 +122,8 @@ anchor handling is unchanged.
 4. **Decision.**
    - **Toward the prior's direction** (FULL: Y increases, the level falls;
      EMPTY: Y decreases, the level rises): ACCEPTED over the leading interval
-     before the first accepted boundary.
+     before the first accepted boundary, if that boundary passes the
+     first-catch position guard; otherwise UNRESOLVED.
    - **Opposite:** CONFLICT, the existing meaning of incompatible trusted
      direction.
    - **No decisive move** before the run or the sequence ends: UNRESOLVED.
@@ -128,12 +133,14 @@ anchor handling is unchanged.
 5. **Unchanged:**
    - eligibility, the global contradiction scan and the all-missing hold;
    - NOT_APPLICABLE when the first sample already has a boundary;
-   - no entrance-topology gate: topology stays provenance only;
+   - no entrance-topology gate: topology stays provenance only (until
+     2026-10-22; the first-catch position guard replaces this);
    - projection, event and judgment consumption, and RECOVERY's observed-only
      input.
 6. **Provenance.** Interpretations decided by this rule record
-   `initial_state_retrospective_v2`. The evidence is the first boundary plus the
-   two decisive boundaries.
+   `initial_state_retrospective_v2`, and `initial_state_retrospective_v3` from
+   the first-catch position guard on. The evidence is the first boundary plus
+   the two decisive boundaries.
 
 **Expected on ⑩ from the receipt (not a pass criterion):**
 - **BASE: ACCEPTED.**
@@ -151,7 +158,87 @@ anchor handling is unchanged.
 
 **Limit.** The Accum protection comes from the Foam barrier and the continuity
 bound, not from the direction rule. A late first catch with neither would still
-be accepted.
+be accepted. The first-catch position guard below closes this for catches
+outside the prior's entry region.
+
+## Modern-stream first-catch position guard — 2026-10-22
+
+**Status: FROZEN 2026-10-22 before implementation.** The user chose L2 from
+[LCR-1](../50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md#recommendation-l2)
+on 2026-10-22. It amends the continuing-run rule above for modern streams only;
+legacy R7 anchor handling is unchanged.
+
+**Why.** The continuing-run rule accepts the prior over the whole leading
+interval once the first decisive move points toward it, wherever the level was
+first caught. So a level first caught after an unobserved transit still
+reconstructs the prior up to the catch.
+- **The error leans to PASS:** the prior is the compliant state of its hold
+  rule (FULL under `HOLD_ABOVE_ZERO`, EMPTY under `HOLD_BELOW_ZERO`). Such a
+  prefix inflates coverage and can hide a violation.
+- **⑩ Accum:** the first catch (Y515, relative 0.787) lies inside the bottom
+  band, 16 s after Oil began entering. Only a false entry Foam and a 33 px step
+  (1 px over the limit) prevented a wrong EMPTY prefix.
+
+**Rule.** When the first decisive move is toward the prior's direction, the
+first accepted boundary y₀ is checked before ACCEPTED is returned. Its relative
+position is the existing `boundary_relative_position` between the ellipse top
+and bottom.
+- **FULL:** relative ≤ 0.32 (`TOP_ENTRANCE_MAX_RELATIVE_POSITION`).
+- **EMPTY:** relative ≥ 0.68 (`BOTTOM_ENTRANCE_MIN_RELATIVE_POSITION`), and y₀
+  no more than `temporal_max_jump_px` above the effective-mask bottom,
+  `center_y + radius_y × (1 − margin_ratio)`.
+- **Otherwise: UNRESOLVED.** No interval is created. The reason names the first
+  catch's position, and the evidence is the first boundary plus the decisive
+  pair, as for CONFLICT.
+
+**Why the asymmetry:**
+- **FULL:** a full glass can show its level inside the top band. The user
+  accepted FULL about 0.18 H below the top on BASE
+  ([review-011](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)),
+  and D2 keeps FULL under the cap until a drain release. A catch there is the
+  prior's own level.
+- **EMPTY:** an empty glass shows no level. A level first seen more than one
+  continuity step above the observable bottom must have been visible earlier.
+- **No new threshold:** the step is the run's own continuity bound, the
+  `temporal_max_jump_px` that already ends a run. The band caps it on small
+  Glasses.
+
+**Unchanged:**
+- barriers, the run and the decisive move;
+- CONFLICT, which is decided before position;
+- NOT_APPLICABLE and the all-missing hold;
+- legacy R7 streams, including their mid-Glass case;
+- projection, event and judgment consumption, and RECOVERY's observed-only
+  input.
+
+**Provenance.** Every interpretation decided by the modern continuing-run rule
+records `initial_state_retrospective_v3`, whether or not the guard acted.
+Bundles written earlier keep v2.
+
+**Expected, from the LCR-1 desk run (not a pass criterion):**
+- **⑩ BASE:** ACCEPTED, unchanged (first catch Y363, relative 0.196).
+- **⑩ Accum:** UNRESOLVED, unchanged (Foam barrier; the 33 px step).
+- **The 24 kept local row lists:** status, interval, reason, barriers and
+  evidence unchanged; continuing-run outcomes change provenance to v3.
+- **Synthetic shapes:**
+  - become UNRESOLVED: the Accum shape without Foam and with a 30 px first
+    step, a standing EMPTY layer about 56 px up, a FULL catch 20 px below the
+    band end and a FULL catch mid-Glass;
+  - stay ACCEPTED: an EMPTY catch 10 px above the effective-mask bottom, and
+    FULL emerging at the effective-mask top.
+
+**Limits:**
+- **Continuity:** the guard assumes the level moves at most one
+  `temporal_max_jump_px` between samples. Where that is a large share of the
+  height, the band does the capping.
+- **Exclusions:** the guard does not read exclusion rectangles. An exclusion
+  over the glass bottom raises the real observable bottom, which only makes
+  the guard stricter (fails closed).
+- **Inside the band:** a FULL catch inside the band after a slow unobserved
+  fall is still accepted; the band is FULL precision under D2.
+- **Accum 480–653 s:** still published UNKNOWN, not EMPTY. The guard cannot
+  recover it; that needs onset evidence. The step-7 Windows request reads the
+  Accum rows 640–672 s and the Accum geometry first.
 
 ## Non-authorities
 
@@ -189,4 +276,4 @@ The implemented run-scoped confirmation lives only in `AnalysisSession.initial_s
 
 Bundles written with this responsibility use result/review semantics version **2**. `review_index.json` has `schema_version: 2` and `result_semantics_version: 2`, and `analysis_manifest.json` repeats the result semantics version plus a pointer to `retrospective_interpretation.json`. The separate retrospective artifact currently uses `schema_version: 1` and records the saved current-run confirmation provenance, per-Glass accepted/unresolved/conflict interpretation, evidence/interval provenance, and observed versus effective state-aware coverage. `session.json` carries the run confirmation snapshot; `tracking_data.csv` remains observed-only.
 
-The reader treats legacy review-index v1 as result semantics v1 observed-only, supports the v2 shape above, and rejects unsupported or internally mismatched versions explicitly. Full-sequence re-detection may recompute only when the saved session contains current-run confirmation; legacy bundles without that confirmation remain observed-only. The extracted top/bottom entrance constants retain the pre-existing S5-B `0.32` / `0.68` topology boundaries for provenance and legacy interpretation. They do not gate a direction-compatible R7/R8 inference and do not change detector thresholds or authority.
+The reader treats legacy review-index v1 as result semantics v1 observed-only, supports the v2 shape above, and rejects unsupported or internally mismatched versions explicitly. Full-sequence re-detection may recompute only when the saved session contains current-run confirmation; legacy bundles without that confirmation remain observed-only. The extracted top/bottom entrance constants retain the pre-existing S5-B `0.32` / `0.68` topology boundaries for provenance and legacy interpretation. They do not gate a direction-compatible R7/R8 inference and do not change detector thresholds or authority. Since 2026-10-22 they also bound the modern [first-catch position guard](#modern-stream-first-catch-position-guard--2026-10-22).

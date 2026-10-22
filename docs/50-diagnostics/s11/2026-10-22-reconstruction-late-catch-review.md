@@ -1,6 +1,7 @@
 # LCR-1 — E3: protecting the initial-state reconstruction from a late first catch
 
-**Status: DESK REVIEW COMPLETE 2026-10-22; the rule awaits the user's choice.**
+**Status: DESK REVIEW COMPLETE 2026-10-22; the user chose L2 and the step-7
+Accum readout ([decision](#decision--2026-10-22)).**
 Step 4 (E3) of the Mac-only order in the
 [Work Plan](../../00-project/work-plan.md), started by the user on 2026-10-22.
 Existing records plus one closed desk run over kept evidence. No rule, detector,
@@ -192,6 +193,22 @@ The R7 contract keeps its mid-Glass case.
      640–672 s (state, flags, Y, Foam Y) and the Accum ellipse (center_y,
      radius_y, margin). Decide after the receipt.
 
+## Decision — 2026-10-22
+
+The user answered both questions:
+1. **L2.** It is frozen as the
+   [first-catch position guard](../../20-architecture/initial-state-retrospective-reconstruction-architecture.md#modern-stream-first-catch-position-guard--2026-10-22)
+   with its
+   [acceptance](../../30-validation/initial-state-retrospective-reconstruction-validation.md#first-catch-position-guard--2026-10-22),
+   under provenance `initial_state_retrospective_v3`. The steps below follow.
+2. **Step-7 readout added.** The combined Windows request reads, without a
+   rerun:
+   - SPL#1 Accum rows 640–672 s: state, flags, Oil Y and Foam Y;
+   - the Accum Glass's center_y, radius_y and margin_ratio, plus its
+     `temporal_max_jump_px`, which the guard also uses.
+
+   The 480–653 s question (UNKNOWN, not EMPTY) is decided after the receipt.
+
 ## If L2 is chosen
 
 1. **Freeze** the rule in the
@@ -235,6 +252,6 @@ at `19b3aee`.
 - Failure-registry entries: `S11-F07`, `S11-F09`, `S11-F10`
 - First harmful stage: downstream of the detector. The initial-state reconstruction, consumed by `PUBLICATION-PROVENANCE` (coverage, judgment) and `RESULT-PRESENTATION` (bands), accepts the prior without regard to where the first catch was made. On ⑩ Accum only a false entry Foam (`S11-F07`) and a continuity break prevented a wrong EMPTY prefix.
 - Existing feature coverage: reuses the continuing-run rule at `139ba87` (unchanged), the confirmed-initial-state path, the kept comparisons of the six top-exit negative controls in three arms (IFO v2; + top-exit v3; + fill-owner gate) with their frozen Recipes, and the ⑩ BASE/Accum values in the existing tests. No local Recipe has exclusions, so exclusion effects on the observable bottom are not exercised.
-- Execution scope: one managed desk run. The production reconstruction was replayed on 24 kept row lists (identity 24/24), candidate predicates were evaluated on first catches and synthetic shapes, and a desk-only pytest plugin applied L2/L4 to nine test files and L2 to the full suite. No detector run, video decode, rule change or Windows request.
+- Execution scope: one managed desk run. The production reconstruction was replayed on 24 kept row lists (identity 24/24), candidate predicates were evaluated on first catches and synthetic shapes, and a desk-only pytest plugin applied L2/L4 to nine test files and L2 to the full suite. No detector run, video decode, rule change or Windows request. A later note (2026-10-22) records the user's decision; no run.
 - Logic-map impact: NONE — review only; code and owners are unchanged. If L2 is adopted, its implementation updates the `PUBLICATION-PROVENANCE` node detail.
 - Failure-registry impact: NONE — accepting a prefix past an unobserved transition is apparent coverage hiding missing evidence, already guarded by `S11-F09`/`S11-F10`; the Foam that blocked it is the known `S11-F07` class. No new mechanism failure.
