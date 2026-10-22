@@ -69,9 +69,10 @@ def _session(
     *,
     run_label: str,
     run_note: str,
+    recipe_path: Path | None = None,
 ) -> tuple[InspectionRecipe, AnalysisSession]:
     require_corpus_access((sample, video_path.stem))
-    recipe = JsonRecipeRepository().load(video_path.with_suffix(".oilrecipe"))
+    recipe = JsonRecipeRepository().load(recipe_path or video_path.with_suffix(".oilrecipe"))
     reader = OpenCvVideoReader(video_path)
     try:
         metadata = reader.metadata

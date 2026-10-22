@@ -5,6 +5,7 @@ Use a managed experiment's work directory. Original Recipes are never changed.
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 from dataclasses import asdict
 from copy import deepcopy
 import hashlib
@@ -12,17 +13,32 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import time
+from uuid import NAMESPACE_URL, uuid5
 
 import cv2
 import numpy as np
 
 from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
 from oil_tracker.adapters.vision.geometry_masks import build_mask_bundle
-from oil_tracker.domain.geometry import EllipseGeometry
+from oil_tracker.domain.geometry import EllipseGeometry, GlassGeometry
+from oil_tracker.domain.recipe import GlassInspectionConfig, InspectionRecipe
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_VIEWS = ROOT / "sample/output/s11-truth-audit-20261010-002/sample4"
 ROI_FRAMES = (0, 450, 900, 1470, 1680)
+INTAKE_VIEWS = ROOT / "sample/output/s11-public-video-intake-20261009-001"
+EMPTY_FILL_FROZEN_AT = "2026-10-22T00:00:00+00:00"
+# Never-full negatives for the top-exit promotion criteria. Each ellipse is the
+# vessel interior, from the inner rim to the top of the solid base, measured on
+# the empty first frame before any detector run; it is not fitted to the level.
+EMPTY_FILL_CONTROLS = {
+    "sample5": {"label": "water", "views": "public_water_fill_pexels_6381722",
+                "frames": (0, 822, 1643), "ellipse": (960.5, 593.0, 142.5, 257.0),
+                "window": (0.0, 54.855)},
+    "sample7": {"label": "milk", "views": "public_milk_fill_pexels_11158788",
+                "frames": (0, 532, 1063), "ellipse": (1130.0, 600.0, 287.0, 303.0),
+                "window": (0.0, 44.378)},
+}
 
 
 def _sha(path: Path) -> str:
@@ -78,6 +94,83 @@ def prepare(output: Path) -> None:
     (output / "roi-inputs.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
+def prepare_empty_fill(output: Path) -> None:
+    """Freeze the never-full Recipes and a review sheet before any detector run."""
+    from oil_tracker.adapters.vision.oil_observation_resolver import OilObservationResolverConfig
+
+    output.mkdir(parents=True, exist_ok=False)
+    band = OilObservationResolverConfig().entrance_band_ratio
+    repository = JsonRecipeRepository()
+    records, source_hashes, sheets = {}, {}, []
+    for sample, control in EMPTY_FILL_CONTROLS.items():
+        views = INTAKE_VIEWS / control["views"]
+        first = cv2.imread(str(views / "f000000.png"))
+        if first is None:
+            raise ValueError(f"Missing empty frame for {sample}")
+        height, width = first.shape[:2]
+        cx, cy, rx, ry = control["ellipse"]
+        note = (f"Never-full negative for the top-exit promotion criteria ({control['label']} fill). "
+                "Ellipse: vessel interior from the inner rim to the top of the solid base, "
+                "measured on the empty first frame before any detector run; not canonical truth.")
+        glass = GlassInspectionConfig(
+            id=str(uuid5(NAMESPACE_URL, f"oil-level-tracker/s11-empty-fill/{sample}/glass")),
+            name=f"{sample} glass",
+            geometry=GlassGeometry(ellipse=EllipseGeometry(cx, cy, rx, ry), zero_line_y=cy, margin_ratio=0.08),
+            description=note,
+        )
+        recipe = InspectionRecipe(
+            name=f"S11 empty-fill negative {sample}", reference_frame_width=width,
+            reference_frame_height=height, glasses=[glass], description=note,
+            recipe_id=str(uuid5(NAMESPACE_URL, f"oil-level-tracker/s11-empty-fill/{sample}")),
+            created_at=EMPTY_FILL_FROZEN_AT, updated_at=EMPTY_FILL_FROZEN_AT,
+        )
+        target = output / f"{sample}.oilrecipe"
+        repository.save(target, recipe)
+        band_end = cy - ry + band * 2.0 * ry
+        records[sample] = {
+            "comparison_recipe_sha256": _sha(target),
+            "geometry": recipe.to_dict()["glasses"][0]["geometry"],
+            "band_end_y": band_end,
+        }
+        left, right = int(cx - rx) - 40, int(cx + rx) + 40
+        top, bottom = max(int(cy - ry) - 30, 0), min(int(cy + ry) + 30, height)
+        panels = []
+        for frame in control["frames"]:
+            path = views / f"f{frame:06d}.png"
+            source_hashes[str(path.relative_to(ROOT))] = _sha(path)
+            image = cv2.imread(str(path))
+            if image is None:
+                raise ValueError(f"Missing source view: {path}")
+            canvas = image.copy()
+            cv2.ellipse(canvas, (round(cx), round(cy)), (round(rx), round(ry)), 0, 0, 360, (0, 255, 0), 2)
+            mask = build_mask_bundle(image, glass)
+            contours, _ = cv2.findContours(mask.effective_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            cv2.drawContours(canvas, [c + np.array(mask.crop_origin) for c in contours], -1, (0, 215, 255), 1)
+            cv2.line(canvas, (left, round(band_end)), (right, round(band_end)), (0, 0, 255), 1)
+            crop = canvas[top:bottom, max(left, 0):right]
+            panel = cv2.resize(crop, None, fx=520 / crop.shape[0], fy=520 / crop.shape[0], interpolation=cv2.INTER_AREA)
+            panel = cv2.copyMakeBorder(panel, 30, 0, 0, 4, cv2.BORDER_CONSTANT, value=(24, 24, 24))
+            cv2.putText(panel, f"{sample} f{frame}", (6, 21), cv2.FONT_HERSHEY_SIMPLEX, .6, (255, 255, 255), 1)
+            panels.append(panel)
+        sheets.append(np.concatenate(panels, axis=1))
+    width = max(sheet.shape[1] for sheet in sheets)
+    padded = [cv2.copyMakeBorder(sheet, 0, 4, 0, width - sheet.shape[1], cv2.BORDER_CONSTANT, value=(24, 24, 24))
+              for sheet in sheets]
+    if not cv2.imwrite(str(output / "roi-review.png"), np.concatenate(padded, axis=0)):
+        raise OSError("Cannot save ROI review")
+    manifest = {
+        "status": "ROI_PREPARED_BEFORE_DETECTOR_COMPARISON",
+        "source_views": source_hashes,
+        "recipes": records,
+        "selection_basis": ("Vessel interior from the inner rim to the top of the solid base, measured on the "
+                            "empty first frame; no detector output and not fitted to the settled level"),
+        "review_legend": {"green": "Recipe ellipse", "yellow": "effective mask (margin 0.08)",
+                          "red": f"end of the top {band:.0%} band"},
+        "truth": "USER_CONFIRMATION_REQUIRED: each glass starts EMPTY and never becomes full",
+    }
+    (output / "roi-inputs.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
 def compare(
     output: Path, roi_inputs: Path, sample: str, *, debug_full: bool = False,
     cost_first_comparison: bool = False,
@@ -101,13 +194,16 @@ def compare(
 
     if sum((cost_first_comparison, candidate_rgb_comparison, top_exit_comparison)) > 1:
         raise ValueError("Compare one mechanism at a time.")
-    if initial_state not in {"full", "unknown"}:
-        raise ValueError("Initial state must be full or unknown.")
+    if initial_state not in {"full", "unknown", "empty"}:
+        raise ValueError("Initial state must be full, unknown or empty.")
     output.mkdir(parents=True, exist_ok=False)
     video = ROOT / "sample" / f"{sample}.mp4"
     original = ROOT / "sample" / f"{sample}.oilrecipe"
-    recipe_path = (roi_inputs / "sample4.oilrecipe" if sample == "sample4" and not original_recipe
+    empty_fill = sample in EMPTY_FILL_CONTROLS
+    recipe_path = (roi_inputs / f"{sample}.oilrecipe" if empty_fill
+                   else roi_inputs / "sample4.oilrecipe" if sample == "sample4" and not original_recipe
                    else original)
+    window = EMPTY_FILL_CONTROLS[sample]["window"] if empty_fill else QUALIFICATION_WINDOWS[sample]
     frozen = json.loads((roi_inputs / "roi-inputs.json").read_text(encoding="utf-8"))
     if sample in frozen["recipes"]:
         hash_key = "original_recipe_sha256" if recipe_path == original else "comparison_recipe_sha256"
@@ -121,13 +217,15 @@ def compare(
                 else ("observation" if enabled else "baseline"))
         with TemporaryDirectory(prefix=f"{sample}-{mode}-", dir=output) as scratch:
             scratch_path = Path(scratch)
-            _, session = _session(sample, video, scratch_path, *QUALIFICATION_WINDOWS[sample],
-                                  run_label="Initial FULL comparison", run_note=mode)
+            _, session = _session(sample, video, scratch_path, *window,
+                                  run_label="Initial FULL comparison", run_note=mode,
+                                  recipe_path=recipe_path)
             if debug_full:
                 session.debug_trace_level = DebugTraceLevel.FULL
             recipe = JsonRecipeRepository().load(recipe_path)
-            initial = (InitialObservationState.FULL_NO_INTERFACE if initial_state == "full"
-                       else InitialObservationState.UNKNOWN_REVIEW)
+            initial = {"full": InitialObservationState.FULL_NO_INTERFACE,
+                       "empty": InitialObservationState.EMPTY_NO_INTERFACE,
+                       "unknown": InitialObservationState.UNKNOWN_REVIEW}[initial_state]
             for glass in recipe.glasses:
                 glass.initial_state = initial
                 session.initial_state_confirmations[glass.id] = InitialStateConfirmation(
@@ -179,6 +277,8 @@ def compare(
                            **({"top_exit": d["debug_metrics"]["sequence_material_phase_diagnostics"].get("top_exit_full")} if top_exit_comparison else {})}
                           for d in detector.completed],
                 "events": stable([asdict(e) for g in result.glass_results for e in g.events]),
+                "retrospective": stable([asdict(g.retrospective) if g.retrospective else None
+                                         for g in result.glass_results]),
                 "report": asdict(report),
                 "csv_and_selected_candidate_equality": "PASS",
             }
@@ -201,14 +301,66 @@ def compare(
     result = {"sample": sample, "comparison": ("top_exit" if top_exit_comparison
                                                else "candidate_rgb" if candidate_rgb_comparison
                                                else "cost_first" if cost_first_comparison else "initial_full"),
-              "initial_state": ("FULL mechanism stress condition; not physical truth" if initial_state == "full"
-                                else "UNKNOWN qualification state"),
+              "initial_state": {"full": "FULL mechanism stress condition; not physical truth",
+                                "empty": "EMPTY at the start; never-full negative (truth confirmed in the run plan)",
+                                "unknown": "UNKNOWN qualification state"}[initial_state],
               "recipe": str(recipe_path.relative_to(ROOT)) if recipe_path.is_relative_to(ROOT) else str(recipe_path),
               "debug_trace_level": "FULL" if debug_full else "NONE",
               "recipe_sha256": _sha(recipe_path), "runtime": capture_runtime_provenance(video),
               "raw_inputs_equal": raw_inputs[0] == raw_inputs[1],
               "raw_inputs_equal_without_rgb_annotations": True, "variants": variants}
     (output / "comparison.json").write_text(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False, default=str) + "\n", encoding="utf-8")
+
+
+def summarize_top_exit(work: Path) -> None:
+    """Score every top-exit control under ``work`` against N1/N2 of the promotion criteria."""
+    from tests.diagnostics.s11_local_xy_replay import stable
+
+    full_states = {"FULL_NO_INTERFACE", "FULL_WITH_FOAM"}
+    controls = {}
+    for path in sorted(work.glob("*/comparison.json")):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if data["comparison"] != "top_exit":
+            raise ValueError(f"Not a top-exit comparison: {path}")
+        off, on = data["variants"]["observation"], data["variants"]["top_exit"]
+        top_exit = [p.get("top_exit") or {} for p in on["phase"]]
+        record = {
+            "sample": data["sample"], "recipe": data["recipe"], "recipe_sha256": data["recipe_sha256"],
+            "initial_state": data["initial_state"], "rows": len(on["rows"]),
+            "numeric_oil": sum(r["raw_oil_air_level_y"] is not None for r in on["rows"]),
+            "numeric_foam": sum(r["raw_foam_front_y"] is not None for r in on["rows"]),
+            "full_rows_off": sum(r["fill_state"] in full_states for r in off["rows"]),
+            "full_rows_on": sum(r["fill_state"] in full_states for r in on["rows"]),
+            "top_exit_full_rows": sum("OIL_TOP_EXIT_FULL" in r["flags"] for r in on["rows"]),
+            "raw_inputs_equal": data["raw_inputs_equal"],
+            "rows_equal": off["rows"] == on["rows"],
+            "events_equal": off["events"] == on["events"],
+            "report_equal_without_run_id": stable(off["report"]) == stable(on["report"]),
+            "versions": [off["detector_version"], on["detector_version"]],
+            "top_exit_reasons": dict(Counter(t.get("reason") for t in top_exit)),
+            "confirmation_states": dict(Counter(t["confirmation"] for t in top_exit if t.get("confirmation"))),
+            "phase_reasons_on": dict(Counter(p["reason"] for p in on["phase"])),
+            "retrospective_on": [
+                None if r is None else {k: r.get(k) for k in ("status", "barriers", "start_time_sec",
+                                                             "end_time_sec", "provenance", "reason")}
+                for r in on.get("retrospective", [])
+            ],
+        }
+        record["pass"] = (record["top_exit_full_rows"] == 0 and record["raw_inputs_equal"]
+                          and record["rows_equal"] and record["events_equal"]
+                          and record["report_equal_without_run_id"])
+        controls[path.parent.name] = record
+    if not controls:
+        raise ValueError(f"No comparison.json under {work}")
+    failed = sorted(name for name, record in controls.items() if not record["pass"])
+    summary = {
+        "criteria": "N1 zero top-exit FULL rows; N2 raw inputs, rows, events and report equal between arms",
+        "verdict": (f"PASS: all {len(controls)} controls" if not failed else f"FAIL: {', '.join(failed)}"),
+        "controls": controls,
+    }
+    (work / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False, allow_nan=False) + "\n",
+                                       encoding="utf-8")
+    print(summary["verdict"])
 
 
 def verify_candidate_rgb(output: Path) -> None:
@@ -270,13 +422,17 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     modes = parser.add_mutually_exclusive_group(required=True)
     modes.add_argument("--prepare-roi", type=Path)
+    modes.add_argument("--prepare-empty-fill", type=Path,
+                       help="Freeze the sample5/sample7 never-full Recipes and their review sheet")
     modes.add_argument("--compare", type=Path)
+    modes.add_argument("--summarize-top-exit", type=Path,
+                       help="Write summary.json for every */comparison.json top-exit control in this directory")
     modes.add_argument("--verify-rgb", type=Path)
     parser.add_argument("--roi-inputs", type=Path)
-    parser.add_argument("--sample", choices=("base_sample_1", "sample2", "sample4"))
+    parser.add_argument("--sample", choices=("base_sample_1", "sample2", "sample4", *EMPTY_FILL_CONTROLS))
     parser.add_argument("--original-recipe", action="store_true",
                         help="Use sample/<sample>.oilrecipe instead of the frozen sample4 interior Recipe")
-    parser.add_argument("--initial-state", choices=("full", "unknown"), default="full")
+    parser.add_argument("--initial-state", choices=("full", "unknown", "empty"), default="full")
     parser.add_argument("--debug-full", action="store_true")
     candidates = parser.add_mutually_exclusive_group()
     candidates.add_argument("--cost-first-comparison", action="store_true",
@@ -288,6 +444,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.prepare_roi:
         prepare(args.prepare_roi)
+    elif args.prepare_empty_fill:
+        prepare_empty_fill(args.prepare_empty_fill)
+    elif args.summarize_top_exit:
+        summarize_top_exit(args.summarize_top_exit)
     elif args.verify_rgb:
         verify_candidate_rgb(args.verify_rgb)
     else:
