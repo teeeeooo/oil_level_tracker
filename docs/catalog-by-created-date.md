@@ -1702,12 +1702,13 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-22 | [review-013 reply](50-diagnostics/s11/2026-10-22-review-013-sample4-reply.json) | 사용자 응답 원문: Q1 전 프레임 Foam 보임, Q2 점 표시 수위(원본 Y 판독)와 다른 판정과의 대조 |
 | 2026-10-22 | [review-013 user marking](50-diagnostics/s11/2026-10-22-review-013-sample4-user-marking.png) | 사용자가 54.5–56초 유면에 점을 찍은 zoom 원본(무편집 보존) |
 
-## 2026-10-23 추가 등록 — 엄격 경계 결정·review-014
+## 2026-10-23 추가 등록 — 엄격 경계 결정·review-014·인수인계
 
 | 최초 Git 등록일 (KST) | 문서 | 역할 |
 |---|---|---|
 | 2026-10-23 | [review-014 zoom](50-diagnostics/s11/2026-10-23-review-014-sample4-zoom.png) | sample4 52.0–56.0초 5배 확대(엄격 기준 Oil 유면 판독용, 검출 표시 없음, 원본 Y 눈금) |
 | 2026-10-23 | [review-014 question record](50-diagnostics/s11/2026-10-23-review-014-sample4.json) | 엄격 기준 Oil 유면 질문 원문, 프레임 hash·crop·생성 기록 |
+| 2026-10-23 | [strict-boundary handoff](60-evidence/s11/2026-10-23-strict-boundary-handoff.md) | 4·5단계(E3 L2, LBT-2 결과 P)·Foam 층 안 Oil 경계 엄격 기준 결정·review-014 대기 시점 인수인계 |
 
 ## 2026-10-22 누락 보완 등록 — 166개
 

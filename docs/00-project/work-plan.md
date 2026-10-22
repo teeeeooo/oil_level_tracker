@@ -370,11 +370,14 @@ Facts it records:
 The gate is implemented and its local check passed. No Windows request is
 queued.
 
-**Resume checkpoint — 2026-10-22 (latest):** start with the
-[Mac-only steps handoff](../60-evidence/s11/2026-10-22-mac-only-steps-handoff.md)
+**Resume checkpoint — 2026-10-23 (latest):** start with the
+[strict-boundary handoff](../60-evidence/s11/2026-10-23-strict-boundary-handoff.md)
 (steps 1–5 and 6 (나) done; step 5, B:
 [LBT-2](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#results-and-decision)
-is outcome P locally). The earlier
+is outcome P locally; the Oil boundary inside Foam is strict; review-014
+waits for the user's reply). The
+[Mac-only steps handoff](../60-evidence/s11/2026-10-22-mac-only-steps-handoff.md)
+keeps the step-7 list. The earlier
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md)
 remains background; its pending run is received.
 - **Top-exit v3:** ⑩ PASS; default OFF.
