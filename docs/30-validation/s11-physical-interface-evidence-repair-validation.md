@@ -77,6 +77,79 @@ on the changed source.
   frame from the timeline. Keep 721 s wrong output as the next separate task,
   reporting changes rather than censoring it under the FULL assumption.
 
+## Top-exit v3 promotion acceptance — 2026-10-22
+
+**PRE-REGISTERED 2026-10-22, before any detector output for new evidence was
+produced or viewed.** The feasibility check before this section looked only at
+retained source frames of sample5–7 (no detector output). These criteria govern
+stage 2 of the
+[promotion preparation](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-22-top-exit-promotion-preparation):
+production default ON for the IFO v2 + top-exit v3 pair. Stage 1, the
+integrated-candidate designation, needs no new evidence. Criteria, bounds and
+windows do not change after outputs are seen (the
+[P0 comparison procedure](s11-interface-observability-witness-validation.md#local-residual-bounds-and-extremum-display--2026-10-20)).
+
+**Arms.** Both arms run on one frozen pushed head, with the same video, Recipe,
+session, sampling rate and debug level, and with cost-first, RGB and Local XY
+OFF.
+- **Candidate:** IFO v2 + top-exit v3.
+- **Reference:** IFO v2 alone, as ④. On a Glass without a confirmed initial
+  FULL, IFO v2 is inactive, so there the reference equals the production default.
+
+**Truth.** Each new window gets a human review before its detector output is
+read. Per Glass, the review records:
+- the initial state at the window start;
+- each transition into FULL, as a time or a window;
+- each drain that starts from FULL;
+- every interval that never becomes full.
+
+Detector output is not truth. SPL#1 480–780 s is the design case and does not
+count as an unseen positive.
+
+**Evidence classes.** Timing uses C4 (±2 s of the reviewed, possibly
+approximate, time). False states are classified by C5. Both bounds come from the
+[October 20 bounds](s11-interface-observability-witness-validation.md#local-residual-bounds-and-extremum-display--2026-10-20).
+
+| Class | Evidence | Pass criteria |
+|---|---|---|
+| **P — unseen positive** | A reviewed transition into FULL that was not used to design v1–v3. Candidates: SPL#1 after 780 s; SPL#2/3 only if the user opens them | P1: the first top-exit FULL row lies within ±2 s of the reviewed transition; a reviewed window widens by 2 s on each side. P2: no FULL row before that bound. P3: through the reviewed FULL interval every row is FULL or a D2b fail-closed UNKNOWN, with no numeric Oil row, and the episode does not end more than 2 s before the reviewed end. P4: rows before the confirmed closure equal the reference |
+| **R — release after FULL** | A reviewed drain that starts while a top-exit FULL episode is active | R1: the episode ends within ±2 s of the reviewed drain start. R2: no FULL row from 2 s after the drain start until the next reviewed FULL. The first numeric Oil after the release and its C3 gap are reported, not scored here |
+| **N — negative** | Every reviewed never-full interval: the four existing local controls rerun at the frozen head; sample5 (water) and sample7 (milk) under the entry conditions below; any never-full interval in the new windows, especially with the level, Foam or glare near the top | N1: zero top-exit FULL rows. N2: rows, events and report equal between the arms, ignoring `run_id` |
+| **U — unchanged elsewhere** | Every run above | U1: outside pending and FULL-episode frames, every row equals the reference |
+
+**Decision rule.**
+- **Minimum evidence:** at least one unseen positive, at least one release, and
+  every negative. More cases strengthen the decision but do not change the
+  criteria.
+- **Pass:** every criterion passes, and the net A/B/C/U comparison shows no new
+  A. A pass enables the user's default decision; it does not flip the default.
+- **Fail:** any failure blocks the default. Diagnose the first harmful stage;
+  no tuning or threshold change follows a result (F10). A rule change is a new
+  version with its own freeze.
+- **Known limit:** no positive yet covers a Glass without an initial FULL that
+  reaches FULL, where top-exit acts alone. Unless such a case is found, the
+  default decision must state this limit.
+
+**Local negative entry conditions (sample5, sample7).**
+- **Why these two:** they are the only local recordings with an initially empty
+  glass that fills.
+  - sample6 is excluded: the vessel's top is outside the frame, so the ROI
+    cannot hold the physical top (OTR-1 D1).
+  - The two public compressor recordings are excluded for camera motion, edited
+    slides and reframing.
+- **Recipe:**
+  - The ellipse is the vessel interior where liquid can move, from the inner
+    rim to the top of the solid base.
+  - It is chosen on an empty frame and frozen before any run. It is not fitted
+    to the settled level.
+  - Margin 0.08, production default detector settings, no exclusions.
+- **Truth:** before any run, the user confirms from shown frames that each glass
+  starts EMPTY and never becomes full.
+- **Run:** the whole video at 2 fps, debug NONE, with a confirmed initial EMPTY,
+  through the existing top-exit comparison entry in a managed run.
+- **Reported, not scored:** fill-cap events (the sample4 outcome G type) and the
+  initial-state reconstruction status. These inform G and E3.
+
 ## Cost-first comparison checks
 
 The option repeats the frozen first-sort intervention; it does not claim physical
@@ -288,6 +361,6 @@ focused tests before the broader candidate suite.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
 - First harmful stage: BASE association across a reviewed location mismatch and Accum boundary-owner exclusion are distinct targets; private physical-identity continuity remains unresolved. The local polarity-only association prototype failed protected truth and photometric positive controls.
 - Existing feature coverage: the new E3/E4 control reuses fixed current-frame candidate kinds, original raster/visibility and O1 native/center evidence without changing Recipe, masks, Artifact/static setup or experimental modes. The 187-unit population retains all accepted, opposed and unassessed records and the seven historical declared-kind mismatches.
-- Execution scope: linked native geometry availability and CRW-1 paired-raster input checks only; the latter has 123 focused tests and separate direct-loop arithmetic. No continuous contour qualification, completed sequence, private Windows replay or actual reader response is supplied by this change. Earlier RGB/initial-FULL/top-exit checks retain their scopes. Partial descriptive support does not establish a physical classifier or report acceptance.
+- Execution scope: linked native geometry availability and CRW-1 paired-raster input checks only; the latter has 123 focused tests and separate direct-loop arithmetic. No continuous contour qualification, completed sequence, private Windows replay or actual reader response is supplied by this change. Earlier RGB/initial-FULL/top-exit checks retain their scopes. Partial descriptive support does not establish a physical classifier or report acceptance. The 2026-10-22 top-exit promotion criteria are pre-registered before any new evidence; no run, review or Windows execution accompanies them.
 - Logic-map impact: NONE — this adds a validation precondition for a proposed witness, not a production route or a new consumer.
 - Failure-registry impact: NONE — existing identity/provenance/no-threshold-shortcut guards cover missing contour input; prior rejected comparisons and full physical-witness acceptance are unchanged.

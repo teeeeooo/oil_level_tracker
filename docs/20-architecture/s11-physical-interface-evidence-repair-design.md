@@ -317,7 +317,8 @@ or FULL ending inside 675–780 s.
 **Status: FROZEN 2026-10-21 before implementation (`e88d387`); IMPLEMENTED
 (default OFF); [local controls PASS](../60-evidence/s11/2026-10-21-top-exit-v3-local.md);
 [Windows ⑩ PASS against the pre-registered outcome](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)
-(BASE FULL from 674.0 s; not promoted).** After the
+(BASE FULL from 674.0 s; not promoted; see the
+[promotion preparation](#october-22-top-exit-promotion-preparation)).** After the
 [⑨ FAIL](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)
 the user chose option B: v2 plus a disappearance confirmed by the next frame.
 The rules, tests, controls and pass criteria below do not change after results.
@@ -434,6 +435,53 @@ The request also asks for these diagnostics:
 - 674.0 s: confirmed.
 
 They explain a failure; they are not extra pass criteria.
+
+## October 22 top-exit promotion preparation
+
+**Status: PREPARATION (user decision 2026-10-22).** v3's rules, tests and
+default OFF are unchanged. The [Work Plan](../00-project/work-plan.md) owns the
+promotion state; this section defines what a promotion would consist of.
+
+**Promotion unit:** the pair `initial_full_observation=True` +
+`top_exit_full=True` (`+initial-full-observation-v2+top-exit-full-v3`).
+- **Tested only as a pair:** top-exit has run only with IFO v2 ON (④, ⑨, ⑩ and
+  the local controls).
+- **IFO v2 is narrow:** it evaluates only on a Glass with a confirmed initial
+  FULL that is still in `INITIAL_FULL_BARRIER`. On any other Glass top-exit
+  acts alone.
+
+**Two stages:**
+1. **Integrated candidate (decided):** the pair is the FULL lifecycle component
+   of the WP09 integrated candidate configuration. No default or runtime
+   behavior changes.
+2. **Production default (pending):** only after the
+   [promotion acceptance](../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22)
+   passes and the user decides.
+
+**Why ⑩ is not enough for the default:**
+- **⑩ is the design case.** Every v3 rule was chosen on SPL#1 BASE 660–675 s:
+  - item 1 from review-011;
+  - item 2 from the 350→352 step;
+  - 3a from the 673.0 s receipt;
+  - 6a from the predicate check;
+  - item 7 from the ⑨ failure.
+
+  ⑩ kept its pre-registration, but it tests the case the rules were fitted to.
+  An unseen positive is required (overfitting risk).
+- **One confirmed path:** the only confirmed closure used the 6a anchor, the 3a
+  exit row and next-frame confirmation. A window-row anchor reached only a
+  cancelled pending (663.0 s).
+- **No real-video negative:** none of the four local controls reached a
+  disappearance evaluation.
+- **Untested risks:** a blank of two or more frames inside the band, and the
+  release after a top-exit FULL (`OIL-PHASE-DRAIN`, F08). Under D2b a false FULL
+  persists until a release.
+- **Wider effect:** since `139ba87`, FULL rows count toward judgment coverage
+  and show as `FULL 판정` bands. A default change alters official results for
+  every run with a fill.
+
+**Not part of this preparation:** any rule change or tuning, the 27 % cap
+(LBT-1 outcome G) and option C.
 
 ## Cost-first assignment comparison
 
@@ -821,7 +869,9 @@ as the serialized array index. Diagnostic detail must not change output.
   section was implemented at `1f68c46` and failed its one Windows run (⑨); its
   record is in the v2 evidence. The v3 section was frozen from that receipt and
   review-004 before any code change, then implemented with its local controls;
-  its record is in the v3 evidence.
+  its record is in the v3 evidence. The 2026-10-22 promotion preparation adds
+  a design section and pre-registered acceptance criteria only; no code, run or
+  Windows execution.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited.
-- Logic-map impact: NONE — this design update changes no detector owner; the v3 implementation evidence records the logic-map update for the top-exit row and paragraph. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands.
+- Logic-map impact: NONE — this design update changes no detector owner; the v3 implementation evidence records the logic-map update for the top-exit row and paragraph. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands. The 2026-10-22 promotion preparation changes no owner, order or default.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair.
