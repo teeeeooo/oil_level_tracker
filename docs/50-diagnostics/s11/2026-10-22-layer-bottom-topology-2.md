@@ -1,7 +1,8 @@
 # LBT-2 — layer-bottom topology with a Foam-visible fill guard
 
-**Status: DRAFT 2026-10-22 — not frozen; awaits the user's
-[decisions](#decisions-for-the-user).** Step 5 (B) of the Mac-only order in the
+**Status: DRAFT 2026-10-22 — the user chose every recommendation
+([decision](#decision--2026-10-22)); review-013 is pending, and the protocol
+is frozen after the reply.** Step 5 (B) of the Mac-only order in the
 [Work Plan](../../00-project/work-plan.md), started by the user on 2026-10-22.
 This draft reads only LBT-1's kept records and the sample4 truth files. It makes
 no run, detector change or new output. It succeeds
@@ -120,14 +121,20 @@ geometry: ellipse top Y798, height 104, so the 27 % band ends at Y826.
 
 **Pre-run human review, review-013 (sample4, local).** Review-012 stays reserved
 for the Windows Accum frames 672–677.5 s.
-- **Material:** ROI crops of sample4 39.5–56 s every 0.5 s, without detector
-  overlays, prepared before any LBT-2 output exists.
+- **Material ([question record](2026-10-22-review-013-sample4.json)):** raw
+  ROI crops of every 0.5 s analysis sample from 39.5 to 56 s
+  ([39.5–47.5 s](2026-10-22-review-013-sample4-sheet-1.png),
+  [48.0–56.0 s](2026-10-22-review-013-sample4-sheet-2.png)) and a
+  [54.5–56.0 s zoom](2026-10-22-review-013-sample4-zoom.png). Only a
+  source-Y ruler is drawn: no detector value, ellipse, mask or band line.
+  Prepared before any LBT-2 output exists.
 - **Q1, Foam:** at which frames is a Foam layer visible above the Oil? This is
   the reference option (b) judges Foam changes against.
-- **Q2, Oil at 54.5–56 s:** is the level near the unit (about Y820–830), near
-  the official truth (about Y851–858), or not visible? The guard will change
-  these unassessed frames, so P0 asks one targeted question; asking it before
-  the run keeps it blind.
+- **Q2, Oil at 54.5–56 s:** where is the level, as an approximate source Y on
+  the ruler, or is it not visible? The guard will change these unassessed
+  frames, so P0 asks one targeted question; asking it before the run keeps it
+  blind. The two candidate readings (the unit, about Y820–830; the official
+  truth, about Y851–858) are compared only after the reply.
 
 **Execution, as in LBT-1 plus two descriptive controls:**
 - **sample4 (development):** the P5 capture check, then the baseline and the
@@ -194,12 +201,25 @@ No tuning, widening or time/Y/Glass exception follows the results.
 After the answers, the protocol, tool and tests are frozen in one commit before
 any run.
 
+## Decision — 2026-10-22
+
+The user chose every recommendation:
+1. **F** is LBT-2's third change.
+2. **Stop policy N**, the P0 net procedure.
+3. **Review-013 before the run.** The material is prepared (managed run
+   `sample/output/s11-review013-sample4-20261022-001`); Q2 asks for an open
+   reading rather than a choice between the two candidates.
+4. **sample5 and sample7** join the descriptive controls.
+
+Next: the review-013 reply, then the frozen protocol, tool and tests, then the
+local run.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `FOAM-IDENTITY`, `SEQUENCE-COMPOSITION`
 - Failure-registry entries: `S11-F01`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F10`
 - First harmful stage: G — `OIL-PHASE-FILL`: the 27 % proximity rule confirms a fill from an in-unit row under a visible Foam row (54.5 s Y820 under Y808). The 40 s condition — `OIL-SELECTOR`/`OIL-TRACKLET`: with the level's 39.5 s row withdrawn, a lower-structure tracklet wins in a frame outside the context. Foam changes — `SEQUENCE-COMPOSITION`: Foam publication follows Oil publication (`S11-F06`).
 - Existing feature coverage: reuses LBT-1's witness, context, E1, support consumer, runner, controls and P0 bounds unchanged. F reuses the Foam material identity row, the 3 s seed-age limit and the lower separation (`foam_material_identity_tolerance + 2 px`) that already define `ORDERED_LOWER_INTERFACE`, and the existing fill confirmation profile. Top-exit v3 and the contested fill-owner gate stay OFF.
-- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files; no run, capture or new output. The proposed run is described but not approved.
+- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files. Review-013 material: one managed run decoded 34 sample4 frames and wrote raw ROI crops with a source-Y ruler; no detector run, capture or LBT-2 output. The LBT-2 run itself is not yet frozen.
 - Logic-map impact: NONE — a draft protocol; no code or owner changes.
 - Failure-registry impact: NONE — the readings map to existing entries (`S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`); no new mechanism or failure.

@@ -1689,12 +1689,16 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-17 | [HPA-1 summary](50-diagnostics/s11/2026-10-17-history-phase-amplification/summary.json) | 조건별 결과·검증·보존 manifest 연결 |
 | 2026-10-17 | [HPA-1 handoff](60-evidence/s11/2026-10-17-history-phase-handoff.md) | 재현·로컬 증거·후속 설계 경계 |
 
-## 2026-10-22 추가 등록 — E3 후보 검토 (LCR-1)·LBT-2 초안
+## 2026-10-22 추가 등록 — E3 후보 검토 (LCR-1)·LBT-2 초안·review-013
 
 | 최초 Git 등록일 (KST) | 문서 | 역할 |
 |---|---|---|
 | 2026-10-22 | [LCR-1 review](50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md) | 초기 상태 재구성의 늦은 첫 포착 보호 후보 비교·사용자가 L2 선택, 구현 완료 |
-| 2026-10-22 | [LBT-2 draft](50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md) | LBT-1 후속 초안: E1 + Foam 보임 시 가득 참 확정 보류(F); 판정 방식·review-013·대조군은 사용자 결정 대기 |
+| 2026-10-22 | [LBT-2 draft](50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md) | LBT-1 후속 초안: E1 + Foam 보임 시 가득 참 확정 보류(F); 추천안 모두 채택(순비교 N, sample5·7 대조군), review-013 응답 후 동결 |
+| 2026-10-22 | [review-013 sheet 1](50-diagnostics/s11/2026-10-22-review-013-sample4-sheet-1.png) | sample4 39.5–47.5초 원본 ROI 확대(검출 표시 없음, 원본 Y 눈금) |
+| 2026-10-22 | [review-013 sheet 2](50-diagnostics/s11/2026-10-22-review-013-sample4-sheet-2.png) | sample4 48.0–56.0초 원본 ROI 확대(검출 표시 없음, 원본 Y 눈금) |
+| 2026-10-22 | [review-013 zoom](50-diagnostics/s11/2026-10-22-review-013-sample4-zoom.png) | sample4 54.5–56.0초 5배 확대(Q2 수위 판독용) |
+| 2026-10-22 | [review-013 question record](50-diagnostics/s11/2026-10-22-review-013-sample4.json) | Q1 Foam 보이는 프레임·Q2 54.5–56초 수위 질문 원문, 프레임 hash·crop·생성 기록; 사용자 응답 대기 |
 
 ## 2026-10-22 누락 보완 등록 — 166개
 
