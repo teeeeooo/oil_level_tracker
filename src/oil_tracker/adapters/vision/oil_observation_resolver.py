@@ -165,6 +165,7 @@ class OilObservationResolverConfig:
     cost_first_assignment_enabled: bool = False
     candidate_rgb_enabled: bool = False
     top_exit_full_enabled: bool = False
+    fill_owner_contest_enabled: bool = False
 
     @property
     def end_to_end_commit_lag_frames(self) -> int:
@@ -1482,6 +1483,8 @@ class OilObservationResolver:
             self.version += "+candidate-rgb-v1"
         if self.config.top_exit_full_enabled:
             self.version += "+top-exit-full-v3"
+        if self.config.fill_owner_contest_enabled:
+            self.version += "+fill-owner-contest-v1"
         self.admission_evidence = OilAdmissionEvidenceOwner(self.config)
         self.tracklet_opposition = OilTrackletOppositionOwner(
             self.config
@@ -2205,6 +2208,7 @@ def _material_phase_policy(
             config.completed_fill_material_conflict_min
         ),
         initial_full_observation_enabled=config.initial_full_observation_enabled,
+        fill_owner_contest_enabled=config.fill_owner_contest_enabled,
     )
 
 

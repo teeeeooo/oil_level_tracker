@@ -61,6 +61,7 @@ def build_main_window(
     *, initial_full_observation: bool = False, cost_first_assignment: bool = False,
     candidate_rgb: bool = False,
     top_exit_full: bool = False,
+    fill_owner_contest: bool = False,
 ) -> MainWindow:
     configure_logging()
     comparison_options = {}
@@ -72,6 +73,8 @@ def build_main_window(
         comparison_options["candidate_rgb"] = True
     if top_exit_full:
         comparison_options["top_exit_full"] = True
+    if fill_owner_contest:
+        comparison_options["fill_owner_contest"] = True
     detector_factory = (
         partial(OpenCvPhaseDetector, **comparison_options)
         if comparison_options else OpenCvPhaseDetector
@@ -113,6 +116,8 @@ def build_main_window(
         window.setWindowTitle(window.windowTitle() + " — Oil RGB 비교")
     if top_exit_full:
         window.setWindowTitle(window.windowTitle() + " — 상단 이탈 FULL 비교")
+    if fill_owner_contest:
+        window.setWindowTitle(window.windowTitle() + " — 채움 주인 경쟁 비교")
     analysis_controller.setParent(window)
     window.destroyed.connect(lambda: analysis_controller.shutdown())
     window.settings_copy_coordinator = ObservationSettingsCopyCoordinator(window)

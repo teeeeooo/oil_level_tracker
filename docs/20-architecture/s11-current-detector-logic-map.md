@@ -37,6 +37,7 @@ owns the record, not a second feature inventory in each experiment.
 | Experimental Local XY | Explicit [`OilMeasurementScope`](../../src/oil_tracker/adapters/vision/oil_measurement_scope.py) constructor input → selected Oil measurement lanes | Default OFF; it is not the Recipe exclusion mask. State scope/digest if used; historical rejection does not authorize enabling or tuning it. |
 | Initial-FULL observation comparison | GUI `--initial-full-observation` → `build_main_window` detector factory → `OpenCvPhaseDetector` / resolver policy | Default OFF; bounded tracklet-admitted current observations may reach selection without a drain release (v2 includes continuation rows and already-confirmed provisional witnesses). Trial version/title and direction-uncertainty flags distinguish it from baseline. It does not enable Local XY or change Recipe initial state. |
 | Top-exit FULL comparison | GUI `--oil-top-exit-full` → the same detector factory/resolver → `OilPathLifecycleOwner` → [`close_top_exit_full`](../../src/oil_tracker/adapters/vision/oil_top_exit_full.py) | Default OFF (`+top-exit-full-v3`). After numeric selection, a bounded same-owner rise into the top entrance band plus usable unopposed disappearance, repeated on the next frame, may emit coordinate-free FULL from that confirming frame; the owner's publishable but unselected exit row may close the witness. FULL then holds until a drain release or EMPTY evidence. Raw image likelihood is unchanged; `OIL_TOP_EXIT_FULL` identifies temporal state evidence. Numeric nodes before closure are preserved; cost-first/RGB/Local XY are separate. |
+| Contested fill-owner comparison | GUI `--oil-fill-owner-contest` → the same detector factory/resolver → `OilMaterialPhasePolicy.fill_owner_contest_enabled` → [`OilMaterialPhaseLifecycleOwner`](../../src/oil_tracker/adapters/vision/oil_phase_lifecycle.py) | Default OFF (`+fill-owner-contest-v1`). Tracklets in the dynamic-owner set of a `FILL_OWNER_AMBIGUOUS` frame, and handoff successors on their chains, are contested until `FILLED_BARRIER` or `DRAINING`. A frame whose single fill allowance (motion owner, re-entry, current-anchor handoff or single owner under chain ambiguity) is contested publishes UNKNOWN (`FILL_OWNER_CONTESTED`); chains, established fill, barrier and release state are unchanged. Combinable with IFO v2/top-exit v3; cost-first/RGB/Local XY are refused. |
 | Cost-first assignment comparison | GUI `--oil-cost-first-assignment` → same detector factory → `OpenCvPhaseDetector` / `ObservationSequenceResolver` → Oil config and `DirectedTrackletPolicy` | Default OFF, independent of initial-FULL. Only the first assignment sort removes established-status precedence; existing reciprocal reservation ordering and all eligibility/ambiguity/confirmation rules remain. ON adds `+cost-first-assignment-v1`; intended Windows pair uses FULL+observation v2 in both runs. |
 | Candidate RGB comparison | GUI `--oil-candidate-rgb` → same detector factory → frame projector's frozen RGB annotations → `candidate_is_eligible` | Default OFF; additional completed-Oil eligibility only, using packaged fixed weights and native visible/glare-free side patches. Compatibility cannot promote authority or rescue rejection; UNKNOWN/UNAVAILABLE fail this condition. Raw proposals and direct Foam policy remain. ON adds `+candidate-rgb-v1`; cost-first remains OFF. |
 | Completed analysis and report | [`DetectionRunCoordinator`](../../src/oil_tracker/application/services/detection_run.py) → sequence composition → sample/event/judgment/export owners below | Raw helper, current-frame output, completed Oil/Foam, and report are different execution scopes. Recipe judgment/scale and report rendering do not establish physical accuracy. |
@@ -319,6 +320,19 @@ Actual predicates and the original motion reason are under `initial_full_observa
 in phase diagnostics. This is an exploratory publication mode, not accepted physical
 discrimination or implementation of the full raster-witness proposal.
 
+The optional [October 22 contested fill-owner gate](s11-physical-interface-evidence-repair-design.md#october-22-contested-fill-owner-gate)
+acts only in `_transition_open`. Every dynamic owner of a `FILL_OWNER_AMBIGUOUS`
+frame is marked, and after `_advance_fill_chains` a chain that lists a marked ID
+passes the mark to its current owner. When the frame would allow one fill owner
+and that owner, its chain or the current-anchor successor is marked,
+`_gate_contested_fill_owner` empties the allowed set and owner chain, records
+`FILL_OWNER_CONTESTED` and marks the frame ambiguous; a gated onset does not
+rewrite earlier frames. The established fill, chains, barrier and release
+evaluation proceed as without the gate, and fill-span completion and drain
+release are not gated. Marks clear when the phase becomes `FILLED_BARRIER` or
+`DRAINING`; `fill_owner_contest` in phase diagnostics lists them only when the
+option is ON. Chain-handoff ambiguity marks no owner.
+
 ### 4.4 Bounded selection and same-frame projection (`OIL-SELECTOR`, `OIL-PROJECTION`)
 
 `build_interface_layers` creates two layers per frame: phase-oil plus state/unknown nodes for lifecycle reasoning, and publishable Oil members plus state/unknown nodes for final selection. `BoundedOilInterfaceSelector.resolve` first filters each layer by the lifecycle’s allowed IDs, then scores a six-frame lookahead. Oil transitions require the same tracklet or an adjacent ID in the explicit owner chain. Competing physical owners inside `ambiguity_margin` produce an unknown node. `assert_publishable_path` asserts that every chosen Oil member passes phase admission, tracklet admission, trajectory support and candidate confidence (or the explicit continuing-anchor witness).
@@ -490,11 +504,15 @@ bounded expiry and one-attempt semantics.
   optional Local XY and completed publication to their existing source owners.
   The October 15 comparisons add independent default-OFF constructor/GUI options; local interior
   ROI is frozen separately from original Recipes, static preparation remains active,
-  and private Windows ROI remains operator-verified there.
+  and private Windows ROI remains operator-verified there. The October 22 contested
+  fill-owner gate is one more default-OFF option on the same factory path.
 - Execution scope: current source/caller review and focused lifecycle/resolver/GUI/event/report
   tests for initial-FULL, cost-first and RGB routes; frozen RGB inference parity
   and bounded local analysis replay are recorded
   in its comparison record. No Windows execution or physical acceptance is implied.
+  The contested fill-owner gate adds synthetic lifecycle tests, GUI/launch wiring
+  tests and the comparison-runner mode; its local controls are recorded in its
+  evidence.
 - Difference from prior failures: typed competing-identity contradiction is
   propagated before member selection, and only one independently reaffirmed
   same-owner initial-FULL lease may extend within a fixed total horizon. R22-2
@@ -507,11 +525,13 @@ bounded expiry and one-attempt semantics.
   an explicit GUI/resolver option; its known false-identity risk is not resolved.
   RGB adds only a compatibility requirement before Oil authority and preserves
   all raw proposals; it does not turn its scores into positive physical authority.
+  The contested fill-owner gate only removes a single-owner allowance after a
+  recorded owner ambiguity; it adds no allowance, coordinate or threshold.
 - Logic-map impact: UPDATED — this section records the R22 current owners and
   transition/evidence boundaries plus the R22-2 debug-only capture/measurement route
   and complete branch-specific phase failure reasons, cost-first setup/first-sort scope,
   RGB current-frame annotations and completed eligibility, plus A1 pure spatial
-  diagnostic reproduction with exact candidate binding, and D2 scoped reference/measurement-footprint comparison in the existing debug projector. The quick index and graph now expose existing setup and auxiliary inputs before detector experimentation.
+  diagnostic reproduction with exact candidate binding, and D2 scoped reference/measurement-footprint comparison in the existing debug projector. The quick index and graph now expose existing setup and auxiliary inputs before detector experimentation. The October 22 contested fill-owner gate adds its feature row and a 4.3 paragraph.
 - Failure-registry impact: NONE — historical mechanisms remain unchanged.
 
 ## O1 trace-only observation witness

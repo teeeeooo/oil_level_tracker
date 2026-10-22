@@ -485,7 +485,8 @@ promotion state; this section defines what a promotion would consist of.
 
 ## October 22 contested fill-owner gate
 
-**Status: FROZEN 2026-10-22 before implementation; no code.** This is the (나)
+**Status: FROZEN 2026-10-22 before implementation (`8386b45`); IMPLEMENTED
+2026-10-22 (opt-in, default OFF); local check pending.** This is the (나)
 half of step 6 in the Mac-only order of the
 [Work Plan](../00-project/work-plan.md). The user moved it ahead of E3 and B
 after [DSR-1](../50-diagnostics/s11/2026-10-22-d-scope-review.md#recommendation).
@@ -1018,6 +1019,9 @@ as the serialized array index. Diagnostic detail must not change output.
   `s11-fill-owner-contest-desk-20261022-001` over kept FOA-1 readouts: no
   detector run, video decode, code or Windows execution. The user's sample7
   judgment and product-geometry statement are recorded in the section.
+  The implementation adds synthetic lifecycle tests, wiring tests and a
+  comparison-runner mode; the frozen local controls run afterwards and
+  are recorded in their evidence.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state.
-- Logic-map impact: NONE — this design update changes no detector owner; the v3 implementation evidence records the logic-map update for the top-exit row and paragraph. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands. The 2026-10-22 promotion preparation changes no owner, order or default. The contested fill-owner gate is frozen but unimplemented; the map changes with its implementation.
+- Logic-map impact: UPDATED — the October 22 contested fill-owner gate implementation adds its feature row and a 4.3 paragraph to the map. Before it, this design changed no detector owner; the v3 implementation evidence records the logic-map update for the top-exit row and paragraph. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands. The 2026-10-22 promotion preparation changes no owner, order or default. The contested fill-owner gate was frozen at `8386b45` and then implemented.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair. The attrition path is an instance of F04 (stale continuation after an ambiguity), F05 (EMPTY-phase fill ownership) and F08 (owner re-adoption); no new entry.

@@ -28,7 +28,13 @@ def main() -> int:
         "--oil-top-exit-full", action="store_true",
         help="상승 계면의 상단 이탈 후 FULL 상태를 연결하는 비교 모드 (기본 OFF)",
     )
+    parser.add_argument(
+        "--oil-fill-owner-contest", action="store_true",
+        help="채움 주인이 모호했던 tracklet이 경쟁 탈락만으로 주인이 되지 않게 하는 비교 모드 (기본 OFF)",
+    )
     options, qt_args = parser.parse_known_args(sys.argv[1:])
+    if options.oil_fill_owner_contest and (options.oil_cost_first_assignment or options.oil_candidate_rgb):
+        parser.error("--oil-fill-owner-contest는 cost-first, RGB 비교와 함께 쓸 수 없습니다")
     app = QApplication.instance() or QApplication([sys.argv[0], *qt_args])
     app.setApplicationName("Rotary Oil Level Tracker")
     app.setOrganizationName("Oil Level Tracker")
@@ -42,6 +48,8 @@ def main() -> int:
         comparison_options["candidate_rgb"] = True
     if options.oil_top_exit_full:
         comparison_options["top_exit_full"] = True
+    if options.oil_fill_owner_contest:
+        comparison_options["fill_owner_contest"] = True
     window = build_main_window(**comparison_options)
     window.show()
     return app.exec()

@@ -289,6 +289,7 @@ def compare(
     cost_first_comparison: bool = False,
     candidate_rgb_comparison: bool = False,
     top_exit_comparison: bool = False,
+    fill_owner_contest_comparison: bool = False,
     original_recipe: bool = False,
     initial_state: str = "full",
     owner_readout: bool = False,
@@ -306,8 +307,12 @@ def compare(
     from tests.diagnostics.s11_replay_provenance import capture_runtime_provenance
     import csv
 
-    if sum((cost_first_comparison, candidate_rgb_comparison, top_exit_comparison)) > 1:
+    if sum((cost_first_comparison, candidate_rgb_comparison, top_exit_comparison,
+            fill_owner_contest_comparison)) > 1:
         raise ValueError("Compare one mechanism at a time.")
+    # The fill-owner gate is compared on top of the integrated candidate
+    # (IFO v2 + top-exit v3), so both of its arms carry top-exit.
+    top_exit_on = top_exit_comparison or fill_owner_contest_comparison
     if initial_state not in {"full", "unknown", "empty"}:
         raise ValueError("Initial state must be full, unknown or empty.")
     output.mkdir(parents=True, exist_ok=False)
@@ -325,7 +330,8 @@ def compare(
     variants = {}
     raw_inputs = []
     for enabled in (False, True):
-        mode = (("top_exit" if enabled else "observation") if top_exit_comparison
+        mode = (("fill_owner_contest" if enabled else "top_exit") if fill_owner_contest_comparison
+                else ("top_exit" if enabled else "observation") if top_exit_comparison
                 else ("candidate_rgb" if enabled else "observation") if candidate_rgb_comparison
                 else ("cost_first" if enabled else "observation") if cost_first_comparison
                 else ("observation" if enabled else "baseline"))
@@ -346,10 +352,12 @@ def compare(
                     initial, str(video), session.analysis_start_sec,
                 )
             detector = Recorder(
-                initial_full_observation=cost_first_comparison or candidate_rgb_comparison or top_exit_comparison or enabled,
+                initial_full_observation=(cost_first_comparison or candidate_rgb_comparison or top_exit_on
+                                          or enabled),
                 cost_first_assignment=cost_first_comparison and enabled,
                 candidate_rgb=candidate_rgb_comparison and enabled,
-                top_exit_full=top_exit_comparison and enabled,
+                top_exit_full=(top_exit_comparison and enabled) or fill_owner_contest_comparison,
+                fill_owner_contest=fill_owner_contest_comparison and enabled,
             )
             started = time.monotonic()
             result = AnalysisPipeline(
@@ -367,7 +375,10 @@ def compare(
             for sample_row, detection, csv_row in zip(rows, detector.completed, csv_rows, strict=True):
                 assert ("+cost-first-assignment-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (cost_first_comparison and enabled)
                 assert ("+candidate-rgb-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (candidate_rgb_comparison and enabled)
-                assert ("+top-exit-full-v3" in detection["debug_metrics"]["sequence_resolver_version"]) == (top_exit_comparison and enabled)
+                assert ("+top-exit-full-v3" in detection["debug_metrics"]["sequence_resolver_version"]) == (
+                    (top_exit_comparison and enabled) or fill_owner_contest_comparison)
+                assert ("+fill-owner-contest-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (
+                    fill_owner_contest_comparison and enabled)
                 y = sample_row["raw_oil_air_level_y"]
                 assert y == detection["raw_oil_air_level_y"]
                 assert (None if not csv_row["raw_oil_air_level_y"] else float(csv_row["raw_oil_air_level_y"])) == y
@@ -388,7 +399,9 @@ def compare(
                 "phase": [{"frame_index": d["frame_index"], "phase": d["debug_metrics"]["sequence_material_phase"],
                            "reason": d["debug_metrics"]["sequence_material_phase_reason"],
                            "observation": d["debug_metrics"]["sequence_material_phase_diagnostics"].get("initial_full_observation"),
-                           **({"top_exit": d["debug_metrics"]["sequence_material_phase_diagnostics"].get("top_exit_full")} if top_exit_comparison else {})}
+                           **({"top_exit": d["debug_metrics"]["sequence_material_phase_diagnostics"].get("top_exit_full")} if top_exit_on else {}),
+                           **({"fill_owner_contest": d["debug_metrics"]["sequence_material_phase_diagnostics"].get("fill_owner_contest")}
+                              if fill_owner_contest_comparison else {})}
                           for d in detector.completed],
                 "events": stable([asdict(e) for g in result.glass_results for e in g.events]),
                 "retrospective": stable([asdict(g.retrospective) if g.retrospective else None
@@ -414,7 +427,8 @@ def compare(
                 candidate["features"] = {k: v for k, v in candidate["features"].items()
                                          if not k.startswith("oil_candidate_rgb_")}
     assert raw_inputs[0] == compared_raw, "Comparison changed unannotated current-frame detector inputs"
-    result = {"sample": sample, "comparison": ("top_exit" if top_exit_comparison
+    result = {"sample": sample, "comparison": ("fill_owner_contest" if fill_owner_contest_comparison
+                                               else "top_exit" if top_exit_comparison
                                                else "candidate_rgb" if candidate_rgb_comparison
                                                else "cost_first" if cost_first_comparison else "initial_full"),
               "initial_state": {"full": "FULL mechanism stress condition; not physical truth",
@@ -565,6 +579,8 @@ if __name__ == "__main__":
                             help="Compare FULL+observation v2 with/without frozen candidate RGB eligibility")
     candidates.add_argument("--top-exit-comparison", action="store_true",
                             help="Compare FULL+observation v2 with/without top-exit FULL closure")
+    candidates.add_argument("--fill-owner-contest-comparison", action="store_true",
+                            help="Compare FULL+observation v2 + top-exit v3 with/without the contested fill-owner gate")
     args = parser.parse_args()
     if args.prepare_roi:
         prepare(args.prepare_roi)
@@ -586,5 +602,6 @@ if __name__ == "__main__":
                 cost_first_comparison=args.cost_first_comparison,
                 candidate_rgb_comparison=args.candidate_rgb_comparison,
                 top_exit_comparison=args.top_exit_comparison,
+                fill_owner_contest_comparison=args.fill_owner_contest_comparison,
                 original_recipe=args.original_recipe, initial_state=args.initial_state,
                 owner_readout=args.owner_readout)

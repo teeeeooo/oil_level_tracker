@@ -53,6 +53,7 @@ class OilMaterialPhasePolicy:
     drain_minimum_directional_agreement: float
     material_conflict_limit: float
     initial_full_observation_enabled: bool = False
+    fill_owner_contest_enabled: bool = False
 
     @property
     def initial_empty(self) -> bool:
@@ -257,6 +258,8 @@ class OilPhaseRuntimeState:
     fill_confirmation_profile: OilFillConfirmationProfile = (
         OilFillConfirmationProfile.NONE
     )
+    # Tracklets that shared a fill-owner ambiguity in this fill episode.
+    contested_fill_owners: set[str] = field(default_factory=set)
 
 
 @dataclass
@@ -304,6 +307,8 @@ class _OilFrameRecord:
     transient_owner_chain: tuple[str, ...] = ()
     barrier_state_override: str | None = None
     initial_full_observation: dict[str, object] | None = None
+    fill_owner_contest_gated: bool = False
+    fill_owner_contest: dict[str, object] | None = None
 
 
 @dataclass(frozen=True)
@@ -380,6 +385,16 @@ class OilMaterialPhaseLifecycleOwner:
                     or _selected_owner_chain(state.chains, record.allowed_tracklet_ids)
                 )
             self._capture_frame_runtime(record, state, frame)
+            if self.policy.fill_owner_contest_enabled:
+                record.fill_owner_contest = {
+                    "contested_tracklet_ids": sorted(state.contested_fill_owners),
+                    "gated": record.fill_owner_contest_gated,
+                }
+                if state.phase in {
+                    OilMaterialPhase.FILLED_BARRIER,
+                    OilMaterialPhase.DRAINING,
+                }:
+                    state.contested_fill_owners.clear()
             if self.policy.initial_full_observation_enabled:
                 self._observe_initial_full_interface(
                     record, state, rows_by_frame[frame], layers[frame]
@@ -506,6 +521,12 @@ class OilMaterialPhaseLifecycleOwner:
         state.chains, chain_ambiguity, chain_reason = self._advance_fill_chains(
             state.chains, rows, frame
         )
+        if self.policy.fill_owner_contest_enabled and state.contested_fill_owners:
+            state.contested_fill_owners.update(
+                owner
+                for owner, chain in state.chains.items()
+                if not state.contested_fill_owners.isdisjoint(chain.owners)
+            )
         if chain_ambiguity:
             ambiguous_frames.add(frame)
             record.reason = "FILL_CHAIN_AMBIGUOUS"
@@ -943,6 +964,12 @@ class OilMaterialPhaseLifecycleOwner:
                 if record.dynamic_fill_owner_snapshot
                 else None
             )
+            if len(
+                record.dynamic_fill_owner_snapshot
+            ) == 1 and self._contested_fill_owner(
+                state, record, next(iter(record.dynamic_fill_owner_snapshot))
+            ):
+                self._gate_contested_fill_owner(record, frame, ambiguous_frames)
         elif len(qualified) == 1:
             confirmed_chain, state.fill_confirmation_profile = qualified[0]
             state.delayed_episode_blocked = False
@@ -1006,7 +1033,8 @@ class OilMaterialPhaseLifecycleOwner:
                         state.established_fill_chain.owners, current_anchor
                     )
                     record.reason = "FILL_CURRENT_ANCHOR_HANDOFF"
-            if prior_phase is OilMaterialPhase.OPEN and (not fill_phase_reentered):
+            onset = prior_phase is OilMaterialPhase.OPEN and (not fill_phase_reentered)
+            if onset:
                 chain = state.chains[dynamic_owner]
                 predecessor, predecessor_ambiguous = self._fill_onset_predecessor(
                     chain, rows_by_frame, frame
@@ -1014,6 +1042,8 @@ class OilMaterialPhaseLifecycleOwner:
                 if predecessor is not None:
                     chain = _prepend_owner(chain, predecessor)
                     state.chains[dynamic_owner] = chain
+            contested = self._contested_fill_owner(state, record, dynamic_owner)
+            if onset and not contested:
                 self._apply_fill_onset_intent(
                     chain=chain,
                     predecessor=predecessor,
@@ -1024,11 +1054,55 @@ class OilMaterialPhaseLifecycleOwner:
                     records=records,
                 )
             state.established_fill_chain = state.chains[dynamic_owner]
+            if contested:
+                self._gate_contested_fill_owner(record, frame, ambiguous_frames)
         else:
             state.phase = OilMaterialPhase.FILLING
             record.allowed_tracklet_ids = frozenset()
             ambiguous_frames.add(frame)
             record.reason = "FILL_OWNER_AMBIGUOUS"
+            if self.policy.fill_owner_contest_enabled:
+                state.contested_fill_owners.update(record.dynamic_fill_owner_snapshot)
+
+    def _contested_fill_owner(
+        self,
+        state: OilPhaseRuntimeState,
+        record: _OilFrameRecord,
+        owner: str,
+    ) -> bool:
+        """Whether a would-be single fill owner shared an unresolved ambiguity.
+
+        Outlasting the other owners of a ``FILL_OWNER_AMBIGUOUS`` frame is not
+        evidence of being the fill surface, so the owner, its chain and any
+        current-anchor successor are checked against the episode's marks.
+        """
+        if not (
+            self.policy.fill_owner_contest_enabled
+            and state.contested_fill_owners
+            and record.allowed_tracklet_ids
+        ):
+            return False
+        chain = state.chains.get(owner)
+        involved = {
+            owner,
+            *record.allowed_tracklet_ids,
+            *record.transient_owner_chain,
+            *(() if chain is None else chain.owners),
+        }
+        return not state.contested_fill_owners.isdisjoint(involved)
+
+    def _gate_contested_fill_owner(
+        self,
+        record: _OilFrameRecord,
+        frame: int,
+        ambiguous_frames: set[int],
+    ) -> None:
+        """Publish UNKNOWN for the frame; lifecycle state is left as it was."""
+        record.allowed_tracklet_ids = frozenset()
+        record.owner_chain = ()
+        record.reason = "FILL_OWNER_CONTESTED"
+        record.fill_owner_contest_gated = True
+        ambiguous_frames.add(frame)
 
     def _transition_barrier(
         self,
@@ -1439,6 +1513,8 @@ class OilMaterialPhaseLifecycleOwner:
         return {
             **({"initial_full_observation": record.initial_full_observation}
                if record.initial_full_observation is not None else {}),
+            **({"fill_owner_contest": record.fill_owner_contest}
+               if record.fill_owner_contest is not None else {}),
             "schema_version": "r21-truth-preserving-detector-repair-v1",
             "legacy_schema_version": "r20-delayed-drain-reacquisition-v1",
             "initial_state": None
