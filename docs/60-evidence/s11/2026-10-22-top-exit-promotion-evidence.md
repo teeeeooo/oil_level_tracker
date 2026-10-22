@@ -5,10 +5,10 @@
   SPL#4 request's code head `933ff49` with identical output. No control reached
   a top-exit witness or a pending closure, so the closure predicates are still
   unexercised on real video.
-- **P and R classes:** no evidence yet. The Windows candidate SPL#4 (the
-  user's "sample4") has its truth, windows and entry conditions frozen. Its
-  [Windows request](../../40-operations/s11-current-windows-field-qualification.md#spl4-top-exit-promotion-evidence)
-  is REQUESTED 2026-10-22 at code head `933ff49`; the user forwards it.
+- **SPL#4 (Windows, [receipt](#spl4-receipt--2026-10-22)):** **P FAIL** — no
+  top-exit FULL row at all, and the candidate equals the reference in every
+  row. R is not evaluated (no episode); N (Accum) and U pass. Under the
+  pre-registered rule the production default stays OFF.
 
 The criteria are the
 [pre-registered promotion acceptance](../../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22);
@@ -187,12 +187,140 @@ authorized by the user.
   any detector run. The expected size was corrected to 53,165,455 bytes, and
   the agent resumes at step 0-3 with the overlay it already made.
 
+## SPL#4 receipt — 2026-10-22
+
+Relayed by the user from the Windows agent (OCR). Judged against the
+[SPL#4 entry conditions](../../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22)
+frozen before the run.
+
+**Identity:**
+- **Runs:** reference `71f604ca-57a6-4a72-8938-5064b126b179` (`SPL4_A_ref`);
+  candidate `05985b7a-acee-4091-a876-95e46cb1f6ac` (`SPL4_A_top_exit_v3`).
+- **Resolver versions:** reference
+  `r22-oil-ownership-evidence-replacement-v1+initial-full-observation-v2`;
+  candidate the same plus `+top-exit-full-v3`.
+- **Source:** the agent reported all five module hashes as matching. The relayed
+  `graph_renderer.py` value reads `…2502d0cd…` where the expected value has
+  `…2502d8cd…`; read as an OCR slip, since the agent reported a match.
+- **Video:** SHA-256 `9f494a6f…f918010a8`, 53,165,455 bytes, 30.0 fps,
+  7,800 frames, 260.0 s, 1920×1080.
+- **Recipe:** `sample4_test_artifact_R22.oilrecipe`, SHA-256
+  `8eb2c2fc…13217dc8f00`, unchanged.
+
+  | Glass | Ellipse (cx, cy, rx, ry) | Margin | Artifact templates | Band end |
+  |---|---|---|---|---|
+  | BASE | 606.74, 562.93, 63.71, 271.70 | 0.08 | 13 | Y437.95 |
+  | Accum | 1418.26, 415.62, 150.17, 154.72 | 0.08 | 9 | Y344.45 |
+
+  The user confirmed on the overlay that both ellipses cover the vessel
+  interior.
+- **Rows:** 181 per Glass in each run; pairing clean (no duplicate, missing or
+  timestamp mismatch); 362 debug records per run.
+
+**Deviations and receipt notes:**
+- **Compressor start:** the request said none, but the Recipe's RECOVERY
+  judgment requires one (`READY_COMPRESSOR`). The user approved 10.0 s for
+  both runs. It feeds only the judgment, the `COMPRESSOR_START` event and debug
+  capture marks, not detection. The request missed this.
+- **Deleted attempts:** two earlier attempt bundles (13:57:31, 13:59:01) were
+  deleted at the user's instruction. Their cause and content were not reported.
+- **A mislabelled total:** the "whole BASE" `T.reason` distribution sums to
+  362, the record count of both Glasses, so it is read as both Glasses.
+
+**Results:**
+
+| Glass | Check | Observed | Verdict |
+|---|---|---|---|
+| BASE | P1: first FULL in 22.0–27.0 s | no top-exit FULL row in 0–90 s | **FAIL** |
+| BASE | P2: no candidate-only FULL before 22.0 s | none | PASS |
+| BASE | P3: FULL or D2b UNKNOWN to 61.0 s, no Oil coordinate | no episode; the reviewed FULL interval has UNKNOWN and numeric Oil rows (27.5 s Y721, 28.0 s Y704) | **FAIL** |
+| BASE | P4: rows before closure equal | no closure; all 181 rows equal | PASS (vacuous) |
+| BASE | R1: episode end in 61.0–65.0 s | no episode | NOT EVALUATED |
+| BASE | R2: no candidate-only FULL in 65.0–90.0 s | none | PASS (vacuous) |
+| Accum | N1: no top-exit FULL row | 0 | PASS |
+| Accum | N2: rows, events, report card equal | 0 differing rows; 52 = 52 events; card equal | PASS |
+| Both | U1: rows equal outside pending/episode | 0 differing rows in either Glass | PASS |
+
+- **Near-miss rule:** not applicable; there was no transition to time.
+- **No pending ever:** neither Glass has a `T.confirmation` key. Three
+  disappearance evaluations ended `TOP_EXIT_NOT_PROVEN`.
+
+**Verdict: SPL#4 FAILS the P class; R is not evaluated; N and U pass.** The
+candidate equals the reference in every row: top-exit added nothing and changed
+nothing. The minimum evidence (one unseen positive, one release) is not met,
+and a failure blocks the default under the decision rule. Top-exit v3 stays
+default OFF. No tuning or rule change follows; a new rule would be a new version
+with its own freeze.
+
+**First harmful stage (BASE): before the top-exit closure.**
+- **The witness ended low:** the owner held Y801–802 through 21.0 s, near the
+  glass bottom (band end Y437.95). At 21.5 s it vanished there:
+  `TOP_EXIT_NOT_PROVEN`, with `independent_anchor`, `upward_progress`,
+  `recent_upward_direction` and `top_band_reached` false.
+- **A new owner, unqualified:** at 22.0 s a Y756 owner was selected,
+  `UNQUALIFIED_SELECTED_OWNER`.
+- **Every frame opposed during the rise:** 22.5–27.0 s are all
+  `CURRENT_EVIDENCE_RESET` with `ambiguity_clear` and `no_current_interface`
+  false. An interface existed, but each frame was opposed. The rows published
+  UNKNOWN and the witness reset on every frame. The user's review puts the fast
+  rise, Foam from 23 s and FULL at 24–25 s inside this span, so the level
+  crossed the band unseen.
+- **Named unknown:** which source marked those frames opposed. It is either the
+  fill lifecycle's ambiguous frames (`OIL-PHASE-FILL`, for example
+  `FILL_CHAIN_AMBIGUOUS`) or a current identity contradiction. The receipt
+  carries neither `T.motion_reason` nor the candidates.
+- **The known limit is now a demonstrated gap:** on an EMPTY-start, fast
+  Foam + Oil fill, top-exit acting alone produced no FULL.
+
+**Reported, not scored:**
+- **Production default, both arms:** numeric Oil inside the reviewed FULL
+  interval (27.5 s Y721, 28.0 s Y704), far beyond C1's ±5 % (±27 px) of a full
+  glass. The full count in 25–63 s is not in the receipt. BASE 59–67 s is
+  UNKNOWN throughout.
+- **Accum:** one `EMPTY_NO_INTERFACE` row at 24.5 s in both arms while fluid
+  is present. A one-sample false EMPTY is below C5's two-sample A threshold.
+- **Reconstruction:** both Glasses UNRESOLVED (`AUTHORITATIVE_FOAM`) in both
+  arms; effective coverage BASE 18.2 %, Accum 12.7 %; REVIEW_REQUIRED.
+
+**C census (saved ⑩ bundle, read-only):**
+
+| Glass | Band end | Blank rows | With an `INCOMPATIBLE_BRANCH` candidate | Runs of ≥ 2 inside the band |
+|---|---|---:|---:|---|
+| BASE | Y420.10 | 185 | 4 | 0 |
+| Accum | Y213.50 | 565 | 64 | at least 2 (agent's 0 is wrong; see below) |
+
+- **BASE:** 608.98 s (Y404), 610.99 s (Y409), 617.99 s (Y387) and 663.00 s (Y393)
+  are single rows, each inside the band. 663.0 s is the review-004 blank that
+  v3's next-frame confirmation cancelled in ⑩. v3 already covers this pattern.
+- **Accum grouping corrected:** the agent reported 64 single-row runs, but its
+  own timestamps are consecutive 2-fps samples. SPL#1's steps are 0.4588 or
+  0.5005 s, never exactly 0.5 s. Regrouping the 30 listed rows:
+  - 518.5–523.0 s (10 rows), 524.0–525.0 s (3), 529.5–530.5 s (3) and
+    532.5–534.0 s (4) stay below the band, with minimum Y307–332;
+  - **679.5–680.5 s (3 rows, minimum Y208) and 681.5–682.5 s (3 rows, Y210)
+    reach the band.**
+  - The other 34 rows (683–773 s) were not listed.
+- **Meaning:** multi-frame blanks inside the band, the precondition of the
+  two-frame-blank risk, do occur on real data (Accum, ⑩). Top-exit did not
+  close there in ⑩, because no qualifying witness preceded them. The Accum
+  census is incomplete.
+
+**E1/E2 on Windows (candidate report):**
+- **E1 confirmed:** the combined graph shows the strip with rows BASE then
+  Accum, and each row matches its detail graph.
+- **E2 not exercised:** no FULL, EMPTY or reconstruction band had width in this
+  run; only the grey UNKNOWN bands rendered.
+- **Legend defect:** the single-sample Accum EMPTY run (24.5 s) has zero width.
+  It is invisible, yet `EMPTY 판정` appears in the strip legend. This is the
+  zero-width limit named in the E1/E2 verification, now seen as a misleading
+  legend entry.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-PROJECTION`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F05`, `S11-F06`, `S11-F08`, `S11-F10`
-- First harmful stage: none observed. No control formed a top-exit witness or a pending closure, so the closure stage is NOT_EVALUATED on real video. The sample5 wrong-target Oil rows are a selection observation outside these criteria.
+- First harmful stage: local negatives, none observed (no witness or pending closure; the closure stage is NOT_EVALUATED on real video; the sample5 wrong-target Oil rows are a selection observation outside these criteria). SPL#4 BASE: before the top-exit closure. The witness ended near the bottom at 21.5 s, and every frame in 22.5–27.0 s was opposed while the level crossed the band (`OIL-PHASE-FILL` ambiguity or an identity contradiction; the receipt does not separate them), so no witness reached the band.
 - Existing feature coverage: reuses the initial-FULL/top-exit comparison runner. Its extension adds frozen empty-fill Recipes, an EMPTY initial state and an N1/N2 summary. Also reused: the IFO v2 and top-exit v3 options, production default detector settings and the four existing control Recipes. The EMPTY-initial path, where IFO is inactive, is exercised for the first time. Windows "sample4" is a user visual timeline only.
-- Execution scope: two local managed runs (`cba4067`, `60d6a9d`) over six controls at 2 fps with debug NONE, plus a frozen-ROI run before them. No Windows execution, private media, human review beyond the user's confirmations, tuning or post-result rule change. sample5's window end was corrected before any sample5 output existed. SPL#4 is recorded from the user's visual timeline and answers only; its windows were frozen before any detector run on it. The six controls were rerun at `933ff49` (run 003) with identical output. The SPL#4 request is written, not yet executed; its ROI overlay mode was checked on local sample5 only.
+- Execution scope: two local managed runs (`cba4067`, `60d6a9d`) over six controls at 2 fps with debug NONE, plus a frozen-ROI run before them. No Windows execution, private media, human review beyond the user's confirmations, tuning or post-result rule change. sample5's window end was corrected before any sample5 output existed. SPL#4 is recorded from the user's visual timeline and answers only; its windows were frozen before any detector run on it. The six controls were rerun at `933ff49` (run 003) with identical output. On Windows, one user-forwarded request at `933ff49`: two SPL#4 runs (0–90 s, 2 fps, FULL debug, compressor start 10.0 s by the user's approval), the user's overlay check, the read-only C census on the saved ⑩ bundle and an E1/E2 look; relayed by OCR and judged against the frozen entry conditions. No tuning or post-result rule change.
 - Logic-map impact: NONE — evidence only; detector code and owners are unchanged, and the runner is diagnostics.
 - Failure-registry impact: NONE — no new mechanism or failure; the unexercised closure is a named limit, not a result.

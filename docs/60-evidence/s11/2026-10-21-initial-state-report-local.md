@@ -9,8 +9,9 @@ authority is the [Work Plan](../../00-project/work-plan.md).
 
 **2026-10-22 addition:** the combined-graph state strip and source band
 patterns (E1/E2) are IMPLEMENTED / LOCAL VERIFICATION PASS
-([section](#combined-graph-strip-and-band-patterns-e1e2--2026-10-22)); their
-Windows confirmation rides on the SPL#4 evidence request.
+([section](#combined-graph-strip-and-band-patterns-e1e2--2026-10-22)). On
+Windows (SPL#4 run) E1 is confirmed and E2 was not exercised; a zero-width
+band still adds a legend entry.
 
 ## What was built
 
@@ -270,10 +271,16 @@ field qualification; FIELD FAIL / O2 OPEN are unchanged.
 
 ## Combined-graph strip and band patterns (E1/E2) — 2026-10-22
 
-**Status: IMPLEMENTED / LOCAL VERIFICATION PASS.** Frozen at `db83c59` in the
+**Status: IMPLEMENTED / LOCAL VERIFICATION PASS; on Windows E1 CONFIRMED, E2
+NOT EXERCISED.** Frozen at `db83c59` in the
 [report design](../../20-architecture/s11-report-context-presentation-design.md#combined-graph-state-strip-and-source-patterns--2026-10-22)
-before any code change. The Windows confirmation is part of the SPL#4 evidence
-request.
+before any code change.
+- **Windows (SPL#4 candidate report, 2026-10-22):** the strip rendered with
+  rows BASE then Accum, each matching its detail graph. Only grey UNKNOWN
+  bands had width, so no pattern could be compared
+  ([receipt](2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)).
+- **Defect seen there:** a single-sample run has zero width, yet its label
+  enters the legend (`EMPTY 판정`, Accum 24.5 s).
 
 **What changed (`graph_renderer.py` only):**
 - **E2, both graphs:** each FULL/EMPTY band keeps its state colour and draws
@@ -322,6 +329,6 @@ request.
 - Failure-registry entries: `S11-F05`, `S11-F09`, `S11-F10`
 - First harmful stage: none in the detector. The ⑩ report problems arose downstream of `PUBLICATION-PROVENANCE`: the retrospective owner treated the resolver's ordinary-UNKNOWN marker as a barrier and required a move between the first two boundaries; `RESULT-PRESENTATION` drew FULL bands at alpha 0.035 without labels and gave no judgment reason. Both were fixed at `139ba87`, and the Windows confirmation run passed.
 - Existing feature coverage: the existing confirmed initial state, retrospective projection, `HOLD_ABOVE_ZERO`/`HOLD_BELOW_ZERO` judgment consumption, Recipe `radius_y` tolerance and `temporal_max_jump_px`, and the existing hold band label are reused. Detector output, top-exit v3 and the event, CSV and bundle code are unchanged; RECOVERY still receives observed samples only. The Windows run reported ⑩'s session and detector options, and its tracking data equals ⑩'s; the accepted prefix reached `events.csv` through the existing retrospective event.
-- Execution scope: locally, unit tests with two mutation checks, the full unit suite and one scratch rendered check built from transferred ⑩ values. On Windows, one user-authorized run under ⑩'s conditions, returned as transferred OCR evidence and judged against the expectation written before it. No private media on the Mac, no human review, tuning or post-result rule change. E1/E2 (2026-10-22): renderer unit tests, the full suite and three scratch rendered checks from synthetic values; no detector run or Windows execution.
-- Logic-map impact: UPDATED — E1/E2 add source patterns and the combined-graph state strip to the `RESULT-PRESENTATION` row; owners and control flow are unchanged. The earlier row update (`139ba87`) matches what the Windows confirmation run showed.
+- Execution scope: locally, unit tests with two mutation checks, the full unit suite and one scratch rendered check built from transferred ⑩ values. On Windows, one user-authorized run under ⑩'s conditions, returned as transferred OCR evidence and judged against the expectation written before it. No private media on the Mac, no human review, tuning or post-result rule change. E1/E2 (2026-10-22): renderer unit tests, the full suite and three scratch rendered checks from synthetic values, then a look at the SPL#4 candidate report's graphs on Windows (relayed by OCR).
+- Logic-map impact: NONE — this update records the Windows E1/E2 status and changes no code, owner or control flow. The `RESULT-PRESENTATION` row was updated with the E1/E2 implementation (`5e5c8bc`), and the earlier update (`139ba87`) matches what the report confirmation run showed.
 - Failure-registry impact: NONE — no detector mechanism changed, and the receipt adds no failure. The rule narrows a downstream F05-shaped risk (a confirmed state hidden by soft UNKNOWN markers) without adding a threshold (F10); report wording still adds no measurement (F09).
