@@ -176,14 +176,19 @@ is COMPLETE (desk only).
       - ⑩ is the design case, so it does not count as an unseen positive.
       - Required: one unseen positive, one release after FULL, and every
         negative.
-    - **Evidence sources:**
-      - The user is locating SPL#1 scenes after 780 s: a refill to FULL, a
-        drain after FULL, and Foam or glare near the top.
-      - The local negatives are sample5 (water) and sample7 (milk), with frozen
-        Recipes.
+    - **[Evidence](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md):**
+      - **N class, local:** PASS on all six never-full controls: sample4 ×2,
+        base_sample_1, sample2, sample5 (water) and sample7 (milk). No control
+        reached a top-exit witness or a pending closure, so the closure is
+        still unexercised on real video.
+      - **P/R candidate:** the user's Windows "sample4", which is not the Mac
+        `sample4.mp4`. Its BASE fills from EMPTY to FULL at about 24–25 s and
+        releases at about 63 s. Five open questions (identity, Recipe, window,
+        Foam at the top, timing) come before any run.
+      - The user may still supply SPL#1 scenes after 780 s.
   - **Order (2026-10-22):**
-    - The user approved steps 1–2: the A-1 criteria (done), then the local
-      negatives.
+    - The user approved steps 1–2: the A-1 criteria, then the local negatives.
+      Both are done.
     - Proposed continuation, each step awaiting the user: E1/E2 report bands,
       then one Windows request (A evidence, a read-only C diagnosis, E1/E2
       confirmation), then E3, B and D.
@@ -195,8 +200,7 @@ Facts it records:
   closures probably do not govern the Windows miss.
 - sample4 Y808 belongs to the October 15 interior comparison Recipe.
 
-The only approved run is step 2's local negative-control run. No detector
-change, flag or Windows request is queued.
+No run, detector change, flag or Windows request is queued.
 
 **Resume checkpoint — 2026-10-22 (latest):** start with the
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md).
@@ -212,10 +216,13 @@ Its pending run is now received.
 - **Report confirmation run:** RECEIVED 2026-10-22 — PASS
   ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)).
   No Windows request is pending.
+- **Top-exit promotion evidence:** the local negatives PASS (6/6, closure
+  unexercised). Windows "sample4" is the P/R candidate
+  ([evidence](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md)).
 - **Next:**
-  - step 2, the local negatives (sample5/sample7 Recipes, the user's frame
-    confirmation, one managed run);
-  - meanwhile, the user is locating SPL#1 scenes after 780 s.
+  - the user answers the five questions on Windows "sample4";
+  - then E1/E2, then one Windows request (A evidence on that video, the read-only
+    C diagnosis, E1/E2 confirmation). Each step awaits the user.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).
