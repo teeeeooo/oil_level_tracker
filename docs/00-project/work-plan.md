@@ -298,6 +298,19 @@ is COMPLETE (desk only).
         - sample5 loses exactly the 17 predicted wrong rows;
         - sample7 loses the 20 correct rows, as pre-registered.
         The Windows comparison joins the step-7 request.
+    - **Step 4 (E3), candidates reviewed:**
+      [LCR-1](../50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md),
+      a desk review with one closed desk run.
+      - **Gap:** the continuing-run rule ignores where the first catch was
+        made. ⑩ Accum's first catch lies inside the bottom band (0.787) after
+        16 s of entry, so the entrance band alone does not protect it.
+      - **Recommended, L2:** FULL needs the first catch in the top band; EMPTY
+        needs it in the bottom band and within one `temporal_max_jump_px` of
+        the effective-mask bottom. No known real output changes, and the full
+        suite passes with L2 as a desk patch.
+      - **Awaits the user:** the rule (L2, L4, L1, L3 or L5), and whether the
+        step-7 request adds Accum 640–672 s rows and the Accum ellipse for the
+        480–653 s question.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
@@ -311,7 +324,8 @@ queued.
 
 **Resume checkpoint — 2026-10-22 (latest):** start with the
 [Mac-only steps handoff](../60-evidence/s11/2026-10-22-mac-only-steps-handoff.md)
-(steps 1–3 and 6 (나) done; next is step 4, E3). The earlier
+(steps 1–3 and 6 (나) done; step 4, E3, awaits the user's choice in
+[LCR-1](../50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md)). The earlier
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md)
 remains background; its pending run is received.
 - **Top-exit v3:** ⑩ PASS; default OFF.
@@ -350,9 +364,13 @@ remains background; its pending run is received.
   [local checks PASS](../60-evidence/s11/2026-10-22-fill-owner-contest-local.md).
   It removes 17 wrong sample5 rows and, as accepted by the user, 20 correct
   sample7 rows (oblique view).
-- **Next:** E3, then B, in the original order. Fast-fill FULL (owner tracking
-  or owner-free FULL evidence) stays in step 6. Windows is unavailable for now.
-  When it returns, the next report also confirms the band cells and E2, and
+- **E3 (LCR-1):** candidates reviewed; L2 is recommended. FULL needs the first
+  catch in the top band; EMPTY needs it in the bottom band and within one
+  continuity step of the effective-mask bottom. No known real output changes.
+- **Next:** the user's E3 choice; if L2, its freeze, synthetic tests and
+  implementation. Then B (LBT-2) in the original order. Fast-fill FULL (owner
+  tracking or owner-free FULL evidence) stays in step 6. Windows is
+  unavailable for now. When it returns, the next report also confirms the band cells and E2, and
   the step-7 request adds the gate's SPL#4/SPL#1 comparison.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the

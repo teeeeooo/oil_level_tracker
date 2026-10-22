@@ -1687,3 +1687,9 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-17 | [HPA-1 study](50-diagnostics/s11/2026-10-17-history-phase-amplification.md) | 세 번의 가설·검증, 기각/미채택 근거 |
 | 2026-10-17 | [HPA-1 summary](50-diagnostics/s11/2026-10-17-history-phase-amplification/summary.json) | 조건별 결과·검증·보존 manifest 연결 |
 | 2026-10-17 | [HPA-1 handoff](60-evidence/s11/2026-10-17-history-phase-handoff.md) | 재현·로컬 증거·후속 설계 경계 |
+
+## 2026-10-22 추가 등록 — E3 후보 검토 (LCR-1)
+
+| 최초 Git 등록일 (KST) | 문서 | 역할 |
+|---|---|---|
+| 2026-10-22 | [LCR-1 review](50-diagnostics/s11/2026-10-22-reconstruction-late-catch-review.md) | 초기 상태 재구성의 늦은 첫 포착 보호 후보 비교·L2 추천·사용자 결정 대기 |
