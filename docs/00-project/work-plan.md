@@ -254,6 +254,18 @@ is COMPLETE (desk only).
       unit tests, equality with the chosen option on 47 local CSVs and a
       production-CLI report that also draws the hold dots. Windows
       confirmation waits for the next report.
+    - **Step 2 done:**
+      [FOA-1](../50-diagnostics/s11/2026-10-22-fill-owner-ambiguity-local.md),
+      readings frozen at `6e8c412` before the readout.
+      - **Reproduced:** `FILL_OWNER_AMBIGUOUS` on both fills. On sample5, a
+        re-adopted low owner publishes wrong-target Oil, 144–214 px below a
+        clean settled surface.
+      - **Not reproduced:** SPL#4's unadmitted level and fast rise. The level is
+        admitted and rises at 5–25 px per sample.
+      - **Common factor:** tracklets that stopped following the level keep
+        dynamic fill ownership.
+      - **Use:** sample5 is a local case for the stale owner. Fast-fill FULL
+        keeps SPL#4 as its only case.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
@@ -290,11 +302,14 @@ Its pending run is now received.
   `FILL_OWNER_AMBIGUOUS`; upstream, the fast-rising level was never admitted as
   an owner (inference). The production default published 14 wrong-target
   numeric rows at 27.5–34.0 s.
+- **Local fills (FOA-1):** they reproduce the fill-owner ambiguity, and on
+  sample5 the stale-owner wrong target, but not the unadmitted fast rise.
+  Tracklets that stopped following the level keep fill ownership.
 - **Next (each awaiting the user):** Windows is unavailable for now, so the
-  Mac-only order above continues at step 2, the sample5/sample7 check against
-  the SPL#4 opposition. Fast-fill FULL (owner tracking or owner-free FULL
-  evidence) and the stale-owner wrong target sit in steps 3 and 6. When
-  Windows returns, the next report also confirms the band cells and E2.
+  Mac-only order above continues at step 3, the D scope review with the stale
+  owner (sample5 is now its local case). Fast-fill FULL (owner tracking or
+  owner-free FULL evidence) sits in step 6. When Windows returns, the next
+  report also confirms the band cells and E2.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).

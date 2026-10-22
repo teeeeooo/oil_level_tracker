@@ -404,6 +404,9 @@ default):**
 - **A separate defect:** the stale-owner numeric Oil at 27.5–34.0 s is a
   production-default false output on an unseen recording.
 - Both are for the user to schedule.
+- **Later (2026-10-22):** the local fills reproduce the fill-owner ambiguity
+  and, on sample5, the stale-owner wrong target, but not the unadmitted fast
+  rise ([FOA-1](../../50-diagnostics/s11/2026-10-22-fill-owner-ambiguity-local.md)).
 
 ## Detector Governance
 
