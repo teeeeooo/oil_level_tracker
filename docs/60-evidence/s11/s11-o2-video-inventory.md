@@ -15,6 +15,7 @@ own the currently enforced split and acceptance contracts.
 | SPL#1 | Existing Heating cold-start source, recording-A for current reviews | Six runs R20 through R22-3; reviews 001–003; nine canonical segments within 480–780 s | Included |
 | SPL#2 | Separate Cooling on/off recording, user confirms not a split/transform of SPL#1 | No run, review or repository reference found; full historical exposure unconfirmed | Deferred by user |
 | SPL#3 | Separate Cooling cold-start recording, user confirms not a split/transform of SPL#1 | No run, review or repository reference found; full historical exposure unconfirmed | Deferred by user |
+| SPL#4 | `SPL#4_Cooling_onoff_#2.mp4`, reported 2026-10-22: 53,165,445 bytes, 4 min 20 s, 30 fps, 1920x1080; the user says it is a different recording from SPL#1–3 | The user's visual timeline of 0–~85 s (2026-10-22); no run | Opened by the user for [top-exit promotion evidence](2026-10-22-top-exit-promotion-evidence.md#windows-spl4-user-alias-sample4--2026-10-22), 0–90 s only |
 
 Do not start processing SPL#2 or SPL#3, assign them to partitions, or call them
 certified untouched holdout. The user intends to consider them after sufficient
@@ -115,5 +116,7 @@ brief and the scoring/model choices that still need to be made explicitly.
 - Logic-map nodes: `TRACE-PUBLICATION`, `RESULT-PRESENTATION`.
 - Failure-registry entries: `S11-F09`.
 - First harmful stage: potential experiment provenance leakage if episodes of one recording are renamed into independent groups; no new production detector defect is inferred.
+- Existing feature coverage: inventory only; the 2026-10-22 SPL#4 row records the user's report and the top-exit promotion scope, and reuses no detector feature.
+- Execution scope: no run; private media, metadata and filesystem were not read here.
 - Logic-map impact: NONE — inventory and proposed experiment scope do not change runtime or existing partition validation.
 - Failure-registry impact: NONE — existing provenance/validation boundaries are retained; no classifier or field repair is accepted.

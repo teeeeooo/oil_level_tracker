@@ -150,6 +150,82 @@ approximate, time). False states are classified by C5. Both bounds come from the
 - **Reported, not scored:** fill-cap events (the sample4 outcome G type) and the
   initial-state reconstruction status. These inform G and E3.
 
+**Windows SPL#4 entry conditions (2026-10-22).** Written from the user's answers
+before any detector output on this recording exists. The criteria table above
+is unchanged; this fixes how it applies here.
+- **Source:** `SPL#4_Cooling_onoff_#2.mp4`, the user's Windows "sample4"
+  ([evidence](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#windows-spl4-user-alias-sample4--2026-10-22)).
+  - **User-reported:** 53,165,445 bytes, 4 min 20 s, 30 fps, 1920×1080.
+  - **Unseen:** a separate recording from SPL#1–3 and from the Mac
+    `sample4.mp4`; no v1–v3 design step or control used it.
+  - **Identity check:** the run first records its SHA-256, decoded fps and
+    frame count; a size mismatch stops it.
+- **Recipe:** the user's existing Windows Recipe for this recording, with its
+  Artifact, unchanged.
+  - Before the run, the user confirms on an overlay that each ellipse is the
+    vessel interior (OTR-1 D1); otherwise the run stops.
+  - The run records the Recipe SHA-256, both ellipses and the 27 % band ends.
+- **Run:** 0–90 s at 2 fps with FULL debug, both arms as above.
+  - Both Glasses are confirmed EMPTY at the start.
+  - No compressor start; the judgment is not scored.
+  - 90–260 s is neither run nor read, so it stays unseen for later evidence.
+- **Truth (the user's visual review, 2026-10-22; times approximate):**
+  - **BASE:** EMPTY at 0 s; Oil enters from about 11 s. FULL is reached at
+    24–25 s and holds, filled with Oil, until 63 s, where a drain from FULL
+    starts. The glass is not FULL after that through 90 s.
+  - **Accum:** EMPTY at 0 s; never Oil-FULL in 0–90 s.
+  - **Foam at the top is not FULL:** when Foam reaches the top while the Oil
+    level is below it (BASE from about 65 s, Accum from about 28 s), the expected
+    Oil output is not FULL.
+- **Frozen windows:**
+
+  | Glass | Check | Window |
+  |---|---|---|
+  | BASE | P1 | first FULL row in 22.0–27.0 s |
+  | BASE | P2 | no candidate-only FULL row before 22.0 s |
+  | BASE | P3 | from the first FULL row to 61.0 s |
+  | BASE | R1 | episode end in 61.0–65.0 s |
+  | BASE | R2 | no candidate-only FULL row in 65.0–90.0 s; no later reviewed FULL |
+  | Accum | N1, N2 | 0–90 s |
+  | Both | U1 | 0–90 s |
+
+- **How the criteria read here (frozen with the windows):**
+  - **FULL row:** `FULL_NO_INTERFACE` or `FULL_WITH_FOAM`. A FULL row identical
+    in both arms is production-default output; it is reported, not attributed
+    to the candidate. N1 counts top-exit FULL rows (`OIL_TOP_EXIT_FULL`).
+  - **First FULL row:** the first row with `OIL_TOP_EXIT_FULL`
+    (`TOP_EXIT_FULL_CONFIRMED`).
+  - **P3 rows:** each carries `TOP_EXIT_FULL_CONFIRMED` or
+    `TOP_EXIT_FULL_CONTINUING` (FULL), or `TOP_EXIT_FULL_FRAME_UNAVAILABLE` (the
+    D2b UNKNOWN). None has an Oil coordinate.
+  - **Episode end:** the row that carries the top-exit `episode_end`
+    (`DRAIN_RELEASE` or `EMPTY_EVIDENCE`; the type is reported).
+  - **Row equality (P4, N2, U1):** fill state, raw Oil and Foam Y, their
+    validity and flags, as in ⑩. N2 also compares the Accum events and its
+    report card.
+  - **U1 excludes** `PENDING` rows and the episode, from the first FULL row to
+    the row before the episode end.
+- **Timing refinement (the user's choice):** the approximate windows are scored
+  first.
+  - **Undecided:** the first FULL row lies within 2 s outside its window
+    (20.0–22.0 s or 27.0–29.0 s), or the episode end does (59.0–61.0 s or
+    65.0–67.0 s). That check is UNDECIDED, not failed.
+  - **Review:** a Windows human review then looks only at 22–27 s or 61–65 s, on
+    raw frames without overlays. It records the first frame at which the glass
+    is full of Oil, or at which the level is visibly below the top.
+  - **Scoring:** the check is scored once against that time ±2 s, and the
+    result is final. The windows that depend on it (P2's bound, P3's end, R2's
+    start) move with it.
+  - **Elsewhere:** further out, the check fails without review; inside its
+    window, it passes without review.
+  - **Limit:** that review would come after the output is seen.
+- **What it supplies:**
+  - **BASE:** one unseen positive and one release. On an EMPTY start IFO v2 is
+    inactive, so top-exit acts alone: the known limit's missing case.
+  - **Accum:** one negative with Foam at the top.
+- **Local negatives:** they ran at `cba4067`/`60d6a9d`. If the frozen head of
+  the SPL#4 run differs, the six controls rerun there before the decision.
+
 ## Cost-first comparison checks
 
 The option repeats the frozen first-sort intervention; it does not claim physical

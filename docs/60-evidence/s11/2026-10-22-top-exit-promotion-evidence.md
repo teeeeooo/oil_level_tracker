@@ -4,8 +4,9 @@
 - **N class (local negatives):** PASS on all six controls. No control reached a
   top-exit witness or a pending closure, so the closure predicates are still
   unexercised on real video.
-- **P and R classes:** no evidence yet. A Windows candidate (the user's
-  "sample4") is recorded below with open questions.
+- **P and R classes:** no evidence yet. The Windows candidate SPL#4 (the
+  user's "sample4") has its truth, windows and entry conditions frozen; it has
+  not been run.
 
 The criteria are the
 [pre-registered promotion acceptance](../../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22);
@@ -81,12 +82,11 @@ are unchanged. Current authority is the [Work Plan](../../00-project/work-plan.m
   - The FULL-stress controls (base_sample_1 CONFLICT, sample2 ACCEPTED) are
     stress conditions, not truth.
 
-## Windows "sample4" — user visual timeline (2026-10-22)
+## Windows SPL#4 (user alias "sample4") — 2026-10-22
 
-The user's alias for a Windows recording. It is **not** the Mac
-`sample/sample4.mp4`, which is 56 s long with one Glass. The user relayed
-approximate times and said a Windows review can follow if needed. Recorded
-verbatim:
+`SPL#4_Cooling_onoff_#2.mp4`, a Windows recording the user calls "sample4". It
+is **not** the Mac `sample/sample4.mp4`, which is 56 s long with one Glass. The
+user reviewed it by eye and relayed approximate times. Recorded verbatim:
 
 ```text
 BASE
@@ -108,31 +108,42 @@ Accum
 ~85s : Foam이 위아래로 출렁이면서 아래쪽으로 조금씩 내려옴 (지속적으로 유체 유입 되면서 빠른 속도로 출렁임)
 ```
 
-**What it could supply (agent mapping; not yet truth for the criteria):**
+The agent then asked five questions: identity, Recipe, window and initial
+states, Foam at the top, and timing. The user's answers, verbatim:
 
-| Glass | Interval | Candidate class | Note |
+```text
+1. 아예 다른 영상임
+파일명 : SPL#4_Cooling_onoff_#2.mp4
+용량 : 53,165,445 바이트 (디스크 할당 53,166,080 바이트)
+영상 길이 : 4분 20초
+프레임 : 30
+해상도 : 1920*1080
+
+2. Recipe 있음 (artifact 포함)
+3. 둘 모두 empty에서 시작
+4. Full 아님이 정답임, 25~63s은 oil로 가득찬 full
+5. 대략적인 구간으로 시도해보고 불충분하면 22–27 s와 61–65 s 구간만 Windows에서 사람 검토로 다듬자
+```
+
+**Frozen before any output on this recording** in the
+[SPL#4 entry conditions](../../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22):
+
+| Glass | Reviewed interval | Class | Frozen window |
 |---|---|---|---|
-| BASE | EMPTY at start, Oil from 11 s | Initial state | IFO v2 is inactive, so top-exit acts alone. This is the known limit's missing case |
-| BASE | FULL reached 24–25 s | **P** (unseen positive) | With C4 the transition window is 22–27 s. Foam rises with the Oil (from 23 s), so the Oil owner may be hidden before the exit |
-| BASE | FULL 25–63 s | P3 hold | Smoke-like agitation until about 50 s; D2b fail-closed UNKNOWN rows are allowed |
-| BASE | Release at 63 s | **R** (release after FULL) | With C4 the end window is 61–65 s; Foam appears above the falling level from 65 s |
-| BASE | About 65–85 s, Foam reaching the top while the Oil is below | N or U | Depends on question 4 below |
-| Accum | Foam to the top about 28 s, then sloshing | N or U | Depends on question 4 below; the Oil level may be invisible under the Foam |
+| BASE | EMPTY at 0 s, Oil from about 11 s | Initial state | IFO v2 is inactive, so top-exit acts alone |
+| BASE | FULL reached at 24–25 s | **P** | first FULL row in 22.0–27.0 s; none before 22.0 s |
+| BASE | FULL, filled with Oil, 25–63 s | P3 hold | FULL or D2b UNKNOWN, no Oil coordinate, from the first FULL row to 61.0 s |
+| BASE | Drain from FULL at 63 s | **R** | episode end in 61.0–65.0 s |
+| BASE | Not FULL after the drain, including Foam at the top from about 65 s | R2 | no candidate-only FULL row in 65.0–90.0 s |
+| Accum | EMPTY at 0 s, never Oil-FULL; Foam at the top from about 28 s | **N** | N1/N2 over 0–90 s |
 
-**Open questions before use:**
-1. **Identity:** which recording is it (file name, SPL alias such as SPL#2/3
-   or another, duration, fps)?
-2. **Recipe:** do BASE/Accum Recipes exist on Windows? If not, one must be
-   made by the vessel-interior rule and checked by the user before any run.
-3. **Window and initial states:** for example 0–90 s, with BASE and Accum
-   EMPTY at the start.
-4. **Foam at the top:** when Foam reaches the top while the Oil level is below
-   it (BASE about 65–85 s, Accum about 28 s), is the expected Oil output "not
-   FULL"? The agent recommends yes, consistent with the SPL#1 contract that a
-   Foam top must not become Oil.
-5. **Timing:** are the approximate times enough? C4 allows ±2 s around a
-   reviewed, possibly approximate, time; a Windows human review can refine the
-   22–27 s and 61–65 s windows first.
+- **Window:** 0–90 s, as proposed in question 3. The user confirmed the initial
+  states and did not object to the window. The timeline ends at about 85 s,
+  and 90–260 s stays unseen.
+- **Timing:** the approximate windows are scored first. A miss within 2 s
+  outside a window triggers a Windows review of only 22–27 s or 61–65 s.
+- **Not yet known:** the recording's SHA-256 and decoded frame count, and the
+  Recipe's hash and ellipses. The run records them first.
 
 ## Detector Governance
 
@@ -140,6 +151,6 @@ Accum
 - Failure-registry entries: `S11-F05`, `S11-F06`, `S11-F08`, `S11-F10`
 - First harmful stage: none observed. No control formed a top-exit witness or a pending closure, so the closure stage is NOT_EVALUATED on real video. The sample5 wrong-target Oil rows are a selection observation outside these criteria.
 - Existing feature coverage: reuses the initial-FULL/top-exit comparison runner. Its extension adds frozen empty-fill Recipes, an EMPTY initial state and an N1/N2 summary. Also reused: the IFO v2 and top-exit v3 options, production default detector settings and the four existing control Recipes. The EMPTY-initial path, where IFO is inactive, is exercised for the first time. Windows "sample4" is a user visual timeline only.
-- Execution scope: two local managed runs (`cba4067`, `60d6a9d`) over six controls at 2 fps with debug NONE, plus a frozen-ROI run before them. No Windows execution, private media, human review beyond the user's confirmations, tuning or post-result rule change. sample5's window end was corrected before any sample5 output existed.
+- Execution scope: two local managed runs (`cba4067`, `60d6a9d`) over six controls at 2 fps with debug NONE, plus a frozen-ROI run before them. No Windows execution, private media, human review beyond the user's confirmations, tuning or post-result rule change. sample5's window end was corrected before any sample5 output existed. SPL#4 is recorded from the user's visual timeline and answers only; its windows were frozen before any detector run on it.
 - Logic-map impact: NONE — evidence only; detector code and owners are unchanged, and the runner is diagnostics.
 - Failure-registry impact: NONE — no new mechanism or failure; the unexercised closure is a named limit, not a result.

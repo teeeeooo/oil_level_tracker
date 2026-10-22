@@ -181,17 +181,25 @@ is COMPLETE (desk only).
         base_sample_1, sample2, sample5 (water) and sample7 (milk). No control
         reached a top-exit witness or a pending closure, so the closure is
         still unexercised on real video.
-      - **P/R candidate:** the user's Windows "sample4", which is not the Mac
-        `sample4.mp4`. Its BASE fills from EMPTY to FULL at about 24–25 s and
-        releases at about 63 s. Five open questions (identity, Recipe, window,
-        Foam at the top, timing) come before any run.
+      - **P/R candidate:** SPL#4 (`SPL#4_Cooling_onoff_#2.mp4`), the user's
+        Windows "sample4", which is not the Mac `sample4.mp4`.
+        - Its BASE fills from EMPTY to FULL at about 24–25 s and drains from
+          FULL at about 63 s; Accum never becomes Oil-FULL.
+        - The user answered the five questions on 2026-10-22. Truth, the
+          0–90 s windows and the
+          [entry conditions](../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22)
+          are frozen before any run; Foam at the top with the Oil below is not
+          FULL.
+        - Approximate times are scored first; a near miss triggers a Windows
+          review of only 22–27 s or 61–65 s.
       - The user may still supply SPL#1 scenes after 780 s.
   - **Order (2026-10-22):**
     - The user approved steps 1–2: the A-1 criteria, then the local negatives.
       Both are done.
-    - Proposed continuation, each step awaiting the user: E1/E2 report bands,
-      then one Windows request (A evidence, a read-only C diagnosis, E1/E2
-      confirmation), then E3, B and D.
+    - Continuation: E1/E2 report bands, then one Windows request (A evidence
+      on SPL#4, a read-only C diagnosis, E1/E2 confirmation) with the local
+      negatives rerun at its head, then E3, B and D. The Windows request and the
+      rerun await the user's go.
 
 Facts it records:
 - Barrier frames with an empty allowed set publish UNKNOWN, never FULL.
@@ -217,12 +225,14 @@ Its pending run is now received.
   ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)).
   No Windows request is pending.
 - **Top-exit promotion evidence:** the local negatives PASS (6/6, closure
-  unexercised). Windows "sample4" is the P/R candidate
+  unexercised). SPL#4 (Windows "sample4") is the P/R candidate, with its truth
+  and windows frozen
   ([evidence](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md)).
 - **Next:**
-  - the user answers the five questions on Windows "sample4";
-  - then E1/E2, then one Windows request (A evidence on that video, the read-only
-    C diagnosis, E1/E2 confirmation). Each step awaits the user.
+  - E1/E2 report bands;
+  - then one Windows request (A evidence on SPL#4 0–90 s, the read-only C
+    diagnosis, E1/E2 confirmation) and the local negatives rerun at its head.
+    Both await the user's go.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).
