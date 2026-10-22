@@ -1986,7 +1986,15 @@ the bottom of the dense Foam.
   values count as strict, since no rough reading exists there. The official
   `sample4.oiltruth` Oil values (2026-08-01) and review-013 Q2 are rough. The
   2026-10-09 values Y833–838 remain "not the Foam front" but are no longer
-  wrong-Oil references. 54.0–56.0 s have no Oil reference until review-014.
+  wrong-Oil references.
+- **sample4 52.0–56.0 s, strict (review-014, 2026-10-23):** each frame's band is
+  the user's marks between x 575 and 615, widened by C1:
+  Y835.9–836.0 (52.0 s), Y832.8–834.3 (52.5), Y832.4–833.4 (53.0),
+  Y835.0–836.5 (53.5), Y831.1–831.6 (54.0), Y833.9–835.7 (54.5),
+  Y853.7–856.0 (55.0), Y854.0–857.7 (55.5), Y853.9–857.4 (56.0)
+  ([reply](../50-diagnostics/s11/2026-10-23-review-014-sample4-reply.json),
+  [result](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#review-014-result--2026-10-23)).
+  From 55.0 s the strict and rough readings coincide within 3–5 px.
 - **Windows:** review-012 reads the layered-Foam Oil boundary on this rule.
 - Closed experiments keep their recorded dispositions and are not re-scored
   automatically. This is not field acceptance.

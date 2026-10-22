@@ -1,0 +1,423 @@
+{
+ "schema": "s11-review-reply-v1",
+ "review_id": "review-014",
+ "base_head": "46284c9139791bc656551c660da4b06b68bedf04",
+ "authority": "Direct user reply in chat and the user-marked zoom image",
+ "status": "CLOSED",
+ "question_record": {
+  "path": "docs/50-diagnostics/s11/2026-10-23-review-014-sample4.json",
+  "sha256": "a5a7bc368390257b9e204e3572e34b7e1f5f183c7d905538d4b438ae10013b92",
+  "original_status": "PENDING_USER_REVIEW"
+ },
+ "reply_verbatim": {
+  "Q1": "경계 표시해서 첨부했고."
+ },
+ "clean_review_image": {
+  "path": "docs/50-diagnostics/s11/2026-10-23-review-014-sample4-zoom.png",
+  "sha256": "fd723e9ed0bbe97663ee03a24c451c72cbc4425be7c3a3f446207dc8c35c19b5"
+ },
+ "user_marked_image": {
+  "path": "docs/50-diagnostics/s11/2026-10-23-review-014-sample4-user-marking.png",
+  "sha256": "a1b7fb9721f5476c8a687ecad95c8ef61962c81ed237c4b5fc573eb955b4c64c",
+  "original_attachment_name": "c120b557-image.png",
+  "preservation": "Byte-for-byte copy of the attachment; the image is not edited"
+ },
+ "q1_reading": "Every one of the 9 frames (52.0-56.0 s) carries red marks; no frame is marked not visible.",
+ "q1_marks": {
+  "method": "Red mark pixels found by differencing the marked image against the clean zoom (same 2016x1942 geometry; unmarked pixels differ by a mean 0.03 of 765); each connected mark's centroid mapped to source coordinates: x = 535 + (column - 672 * panel_column - 58) / 5, y = 790 + (row - 34 - 636 * panel_row - 30) / 5 - 0.5.",
+  "scope": "Strict Oil boundary references (decision S, 2026-10-23), used as a band per frame: the marks' Y range between x 575 and 615 (the centre of the 104 px Glass), widened by the P0 C1 bound (5% of the 104 px diameter, 5.2 px). Marks near the Glass edge are kept but not used for the band.",
+  "frames": [
+   {
+    "frame_index": 1560,
+    "time_sec": 52.0,
+    "marks": 6,
+    "x_range": [
+     561.7,
+     622.3
+    ],
+    "y_range": [
+     834.8,
+     836.2
+    ],
+    "y_range_x575_615": [
+     835.9,
+     836.0
+    ],
+    "points_xy": [
+     [
+      561.7,
+      834.8
+     ],
+     [
+      573.9,
+      835.6
+     ],
+     [
+      586.7,
+      836.0
+     ],
+     [
+      598.5,
+      835.9
+     ],
+     [
+      610.1,
+      836.0
+     ],
+     [
+      622.3,
+      836.2
+     ]
+    ],
+    "output_check": {
+     "lbt2_trial_baseline_y": 833,
+     "trial_vs_band": "inside",
+     "ordinary_baseline_y": 833,
+     "ordinary_vs_band": "inside"
+    }
+   },
+   {
+    "frame_index": 1575,
+    "time_sec": 52.5,
+    "marks": 5,
+    "x_range": [
+     561.9,
+     616.8
+    ],
+    "y_range": [
+     831.9,
+     834.9
+    ],
+    "y_range_x575_615": [
+     832.8,
+     834.3
+    ],
+    "points_xy": [
+     [
+      561.9,
+      831.9
+     ],
+     [
+      576.8,
+      834.3
+     ],
+     [
+      588.4,
+      833.0
+     ],
+     [
+      602.2,
+      832.8
+     ],
+     [
+      616.8,
+      834.9
+     ]
+    ],
+    "output_check": {
+     "lbt2_trial_baseline_y": 829,
+     "trial_vs_band": "inside",
+     "ordinary_baseline_y": 829,
+     "ordinary_vs_band": "inside"
+    }
+   },
+   {
+    "frame_index": 1590,
+    "time_sec": 53.0,
+    "marks": 4,
+    "x_range": [
+     565.6,
+     625.1
+    ],
+    "y_range": [
+     829.5,
+     834.8
+    ],
+    "y_range_x575_615": [
+     832.4,
+     833.4
+    ],
+    "points_xy": [
+     [
+      565.6,
+      829.5
+     ],
+     [
+      587.4,
+      832.4
+     ],
+     [
+      604.4,
+      833.4
+     ],
+     [
+      625.1,
+      834.8
+     ]
+    ],
+    "output_check": {
+     "lbt2_trial_baseline_y": 829,
+     "trial_vs_band": "inside",
+     "ordinary_baseline_y": 829,
+     "ordinary_vs_band": "inside"
+    }
+   },
+   {
+    "frame_index": 1605,
+    "time_sec": 53.5,
+    "marks": 5,
+    "x_range": [
+     565.3,
+     618.4
+    ],
+    "y_range": [
+     832.7,
+     836.6
+    ],
+    "y_range_x575_615": [
+     835.0,
+     836.5
+    ],
+    "points_xy": [
+     [
+      565.3,
+      832.7
+     ],
+     [
+      576.9,
+      835.0
+     ],
+     [
+      590.8,
+      835.5
+     ],
+     [
+      605.8,
+      836.5
+     ],
+     [
+      618.4,
+      836.6
+     ]
+    ],
+    "output_check": {
+     "lbt2_trial_baseline_y": 833,
+     "trial_vs_band": "inside",
+     "ordinary_baseline_y": 833,
+     "ordinary_vs_band": "inside"
+    }
+   },
+   {
+    "frame_index": 1620,
+    "time_sec": 54.0,
+    "marks": 5,
+    "x_range": [
+     562.0,
+     620.8
+    ],
+    "y_range": [
+     831.1,
+     831.6
+    ],
+    "y_range_x575_615": [
+     831.1,
+     831.6
+    ],
+    "points_xy": [
+     [
+      562.0,
+      831.5
+     ],
+     [
+      576.6,
+      831.1
+     ],
+     [
+      593.0,
+      831.2
+     ],
+     [
+      609.2,
+      831.6
+     ],
+     [
+      620.8,
+      831.4
+     ]
+    ],
+    "output_check": {
+     "lbt2_trial_baseline_y": 844,
+     "trial_vs_band": "below",
+     "ordinary_baseline_y": null,
+     "ordinary_vs_band": null
+    }
+   },
+   {
+    "frame_index": 1635,
+    "time_sec": 54.5,
+    "marks": 4,
+    "x_range": [
+     563.3,
+     619.2
+    ],
+    "y_range": [
+     832.8,
+     837.5
+    ],
+    "y_range_x575_615": [
+     833.9,
+     835.7
+    ],
+    "points_xy": [
+     [
+      563.3,
+      832.8
+     ],
+     [
+      583.5,
+      833.9
+     ],
+     [
+      603.3,
+      835.7
+     ],
+     [
+      619.2,
+      837.5
+     ]
+    ],
+    "output_check": {
+     "lbt2_trial_baseline_y": 851,
+     "trial_vs_band": "below",
+     "ordinary_baseline_y": 851,
+     "ordinary_vs_band": "below"
+    }
+   },
+   {
+    "frame_index": 1650,
+    "time_sec": 55.0,
+    "marks": 4,
+    "x_range": [
+     577.6,
+     618.3
+    ],
+    "y_range": [
+     846.8,
+     856.0
+    ],
+    "y_range_x575_615": [
+     853.7,
+     856.0
+    ],
+    "points_xy": [
+     [
+      577.6,
+      855.4
+     ],
+     [
+      592.7,
+      856.0
+     ],
+     [
+      608.6,
+      853.7
+     ],
+     [
+      618.3,
+      846.8
+     ]
+    ],
+    "output_check": {
+     "lbt2_trial_baseline_y": 851,
+     "trial_vs_band": "inside",
+     "ordinary_baseline_y": 851,
+     "ordinary_vs_band": "inside"
+    }
+   },
+   {
+    "frame_index": 1665,
+    "time_sec": 55.5,
+    "marks": 4,
+    "x_range": [
+     575.2,
+     613.6
+    ],
+    "y_range": [
+     854.0,
+     857.7
+    ],
+    "y_range_x575_615": [
+     854.0,
+     857.7
+    ],
+    "points_xy": [
+     [
+      575.2,
+      857.7
+     ],
+     [
+      588.9,
+      855.7
+     ],
+     [
+      603.2,
+      855.6
+     ],
+     [
+      613.6,
+      854.0
+     ]
+    ],
+    "output_check": {
+     "lbt2_trial_baseline_y": 852,
+     "trial_vs_band": "inside",
+     "ordinary_baseline_y": 852,
+     "ordinary_vs_band": "inside"
+    }
+   },
+   {
+    "frame_index": 1680,
+    "time_sec": 56.0,
+    "marks": 3,
+    "x_range": [
+     576.3,
+     609.9
+    ],
+    "y_range": [
+     853.9,
+     857.4
+    ],
+    "y_range_x575_615": [
+     853.9,
+     857.4
+    ],
+    "points_xy": [
+     [
+      576.3,
+      853.9
+     ],
+     [
+      594.6,
+      856.7
+     ],
+     [
+      609.9,
+      857.4
+     ]
+    ],
+    "output_check": {
+     "lbt2_trial_baseline_y": 851,
+     "trial_vs_band": "inside",
+     "ordinary_baseline_y": 851,
+     "ordinary_vs_band": "inside"
+    }
+   }
+  ]
+ },
+ "consistency": [
+  "52.0 s reads Y834.8-836.2 (Y835.9-836.0 between x 575 and 615), 3 px below the user's strict Y833 for 52 s and inside the C1 bound, so the readings are used as asked.",
+  "52.0-54.5 s: every frame's centre band lies within Y829.5-837.5; the strict boundary holds near Y833 through 54.5 s.",
+  "55.0-56.0 s: the centre band lies at Y853.7-857.7, about 20 px lower than at 54.5 s. Review-013 marked Y852.5-860.2 (x 575-615) at these frames as the rough boundary, so at 55.0-56.0 s the strict and rough readings coincide within 3-5 px; at 54.5 s they differ by about 23 px (Y833.9-835.7 strict against Y857.3-859.1 rough).",
+  "The 2026-10-09 Y833 (54.0 s) Foam-texture label lies inside the strict 54.0 s band; its Y837 (55.5 s) and Y838 (56.0 s) lie above the strict bands at those frames."
+ ]
+}

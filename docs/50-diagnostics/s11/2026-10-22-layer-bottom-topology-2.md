@@ -484,11 +484,13 @@ and the [Windows reviewed truth](../../30-validation/windows-sample1-heating-col
 |---|---|
 | Kept | P0's accepted values at 38–52 s and their wrong values; LBQ-1 42.5 s Y805; CAF-1's 51.0–52.0 s Y861.5–862. The 38–44 s values count as strict, since no rough reading exists there. |
 | Rough, not Oil references | The official file's Oil values; review-013 Q2. The 2026-10-09 values Y833–838 stay "not the Foam front" but are no longer wrong Oil. |
-| Missing | 54.0–56.0 s, to be read by review-014. |
+| Missing | 54.0–56.0 s, to be read by review-014. Read 2026-10-23: see the [review-014 result](#review-014-result--2026-10-23). |
 
 **Known error under S:** both baseline arms publish the rough boundary at
 54.5–56 s (Y851–852, 18–19 px below Y833), so the output changes boundary at
 54 s. Its first harmful stage is not located. LBT-2's verdict is unchanged.
+Narrowed by the [review-014 result](#review-014-result--2026-10-23): the error
+is 54.0–54.5 s only.
 
 **Next:** [review-014](2026-10-23-review-014-sample4.json) reads the strict
 boundary at 52.0–56.0 s on one raw x5 [zoom](2026-10-23-review-014-sample4-zoom.png)
@@ -496,12 +498,65 @@ boundary at 52.0–56.0 s on one raw x5 [zoom](2026-10-23-review-014-sample4-zoo
 52.0 s checks consistency with the answer's Y833. Its reply sets the strict
 references at 54.0–56.0 s.
 
+## Review-014 result — 2026-10-23
+
+The user marked the strict boundary on every frame of the
+[zoom](2026-10-23-review-014-sample4-zoom.png) and replied, verbatim:
+"경계 표시해서 첨부했고." The
+[marked image](2026-10-23-review-014-sample4-user-marking.png) is kept byte for
+byte; the [reply record](2026-10-23-review-014-sample4-reply.json) holds the
+per-mark source coordinates. Each frame's reference band is the marks' Y range
+between x 575 and 615 (the Glass centre), widened by C1 (5.2 px).
+
+| Time | Strict marks, x 575–615 | Both baseline arms | Under S |
+|---|---|---|---|
+| 52.0 s | Y835.9–836.0 | Y833 | right |
+| 52.5 s | Y832.8–834.3 | Y829 | right |
+| 53.0 s | Y832.4–833.4 | Y829 | right |
+| 53.5 s | Y835.0–836.5 | Y833 | right |
+| 54.0 s | Y831.1–831.6 | LBT-2 Y844; ordinary none | LBT-2 about 13 px below |
+| 54.5 s | Y833.9–835.7 | Y851 | 15–17 px below |
+| 55.0 s | Y853.7–856.0 | Y851 | right |
+| 55.5 s | Y854.0–857.7 | Y852 | right |
+| 56.0 s | Y853.9–857.4 | Y851 | right |
+
+**52.0 s check:** Y835.9–836.0 lies 3 px from the user's Y833, inside C1, so
+the readings are used as asked.
+
+**What it shows:**
+- **The strict boundary moves at 55 s.** It holds near Y833 through 54.5 s,
+  then lies about 20 px lower from 55.0 s.
+- **The two boundaries meet from 55 s.** Review-013's rough marks at 55.0–56.0 s
+  (Y852.5–860.2 at the centre) lie within 3–5 px of the strict ones. At 54.5 s
+  they still differ by about 23 px.
+- **The known error narrows to 54.0–54.5 s.** The output drops to the lower
+  boundary one sample before the strict boundary moves: Y844 at 54.0 s (LBT-2
+  arm) and Y851 at 54.5 s (both arms). From 55.0 s the published Y851–852 is
+  right under S.
+- **The two 54.0 s withdrawal conditions under S:**
+  - 54.0 s Y828 is right;
+  - 54.5 s Y820 and 55.0 s Y829 are above the band, so wrong;
+  - 56.0 s Y873–874 is below it, so wrong.
+
+  So the
+  [two-boundary answer's](#user-answer-two-boundaries--2026-10-23) "54–56 s
+  flips under strict" holds for 54.0 s only. LBT-2's verdict and recount are
+  unchanged; nothing is re-scored.
+
+**References under S:** the strict sample4 Oil references now cover 52.0–56.0 s
+at the bands above, in the
+[P0 contract](../../30-validation/s11-interface-observability-witness-validation.md#oil-reference-boundary-inside-a-foam-layer--2026-10-23).
+
+**Open, for the user:** the 54.0–54.5 s early drop. Its first harmful stage is
+not located. LBT-2's F action at 54.5 s (Y820 under the Foam row Y808) and the
+54.0 s association limit sit in the same second.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `FOAM-IDENTITY`, `SEQUENCE-COMPOSITION`
 - Failure-registry entries: `S11-F01`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F10`
 - First harmful stage: G — `OIL-PHASE-FILL`: the 27 % proximity rule confirms a fill from an in-unit row under a visible Foam row (54.5 s Y820 under Y808). The 40 s condition — `OIL-SELECTOR`/`OIL-TRACKLET`: with the level's 39.5 s row withdrawn, a lower-structure tracklet wins in a frame outside the context. Foam changes — `SEQUENCE-COMPOSITION`: Foam publication follows Oil publication (`S11-F06`).
 - Existing feature coverage: reuses LBT-1's witness, context, E1, support consumer, runner, controls and P0 bounds unchanged. F reuses the Foam material identity row, the 3 s seed-age limit and the lower separation (`foam_material_identity_tolerance + 2 px`) that already define `ORDERED_LOWER_INTERFACE`, and the existing fill confirmation profile. Top-exit v3 and the contested fill-owner gate stay OFF.
-- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files. Review-013 material: one managed run decoded 34 sample4 frames and wrote raw ROI crops with a source-Y ruler; the user's reply was read from the marked image. Freeze: the tool and focused tests are committed with the protocol; the focused tests and ten resolver/phase suites (plain and under the wrapper, zero activations) ran before freezing. Run: one managed development run at `1447cd6` (sample4 baseline and 245 SOI conditions under the wrapper, the layer report, the N evaluation, and four descriptive controls through the ordinary analysis entry); no Windows run, top-exit or fill-owner gate. After the result (2026-10-23): a read-only recount of the kept population with the frozen evaluation functions, grouped by frame; no run and no output files. Review-014 material (2026-10-23): one managed run decoded 9 sample4 frames (52.0–56.0 s) and wrote a raw x5 zoom with a source-Y ruler.
+- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files. Review-013 material: one managed run decoded 34 sample4 frames and wrote raw ROI crops with a source-Y ruler; the user's reply was read from the marked image. Freeze: the tool and focused tests are committed with the protocol; the focused tests and ten resolver/phase suites (plain and under the wrapper, zero activations) ran before freezing. Run: one managed development run at `1447cd6` (sample4 baseline and 245 SOI conditions under the wrapper, the layer report, the N evaluation, and four descriptive controls through the ordinary analysis entry); no Windows run, top-exit or fill-owner gate. After the result (2026-10-23): a read-only recount of the kept population with the frozen evaluation functions, grouped by frame; no run and no output files. Review-014 material (2026-10-23): one managed run decoded 9 sample4 frames (52.0–56.0 s) and wrote a raw x5 zoom with a source-Y ruler. Review-014 reply (2026-10-23): the marks were read by differencing the marked image against the clean zoom, and compared with the kept LBT-2 trial baseline CSV and this record's ordinary-arm values; no run and no output files.
 - Logic-map impact: NONE — a diagnostic wrapper under tests/diagnostics; no production code, owner or edge changes.
 - Failure-registry impact: NONE — a diagnostic wrapper with no runtime mechanism; its limits map to existing entries (`S11-F04` association after a withdrawn row, `S11-F06` Foam following Oil, `S11-F05` for the guard's false-Foam risk) and are recorded here.

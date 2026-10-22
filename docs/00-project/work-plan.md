@@ -339,6 +339,15 @@ is COMPLETE (desk only).
         Oil starts below the dense Foam. Under S both arms' 54.5–56 s values
         (Y851–852) are wrong; review-014 reads the strict boundary at
         52.0–56.0 s, and review-012 asks for it on Windows.
+        **[Review-014 answered](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#review-014-result--2026-10-23)
+        (2026-10-23):**
+        - The strict boundary holds near Y833 through 54.5 s (52.0 s reads
+          Y836, inside C1), then lies about 20 px lower (Y854–858) from 55.0 s,
+          where it meets review-013's rough marks.
+        - The known error narrows to 54.0–54.5 s. The output drops one sample
+          early (LBT-2 Y844 at 54.0 s; both arms Y851 at 54.5 s); 55.0–56.0 s
+          are right under S.
+        - The strict references for 52.0–56.0 s are in the P0 contract.
       - **Next:** Windows S2 joins the step-7 request, after review-012.
       - **Why the guard returns:** D2 = S kept the 27 % cap, so LBT-1's G
         (a fill confirmed at 54.5 s from an in-unit row under Foam) remains.
@@ -374,8 +383,10 @@ queued.
 [strict-boundary handoff](../60-evidence/s11/2026-10-23-strict-boundary-handoff.md)
 (steps 1–5 and 6 (나) done; step 5, B:
 [LBT-2](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#results-and-decision)
-is outcome P locally; the Oil boundary inside Foam is strict; review-014
-waits for the user's reply). The
+is outcome P locally; the Oil boundary inside Foam is strict). Review-014 is
+answered (2026-10-23): the strict sample4 references now cover 52.0–56.0 s,
+and the known error narrows to 54.0–54.5 s. **Windows is available again
+(user, 2026-10-23).** The
 [Mac-only steps handoff](../60-evidence/s11/2026-10-22-mac-only-steps-handoff.md)
 keeps the step-7 list. The earlier
 [top-exit and report handoff](../60-evidence/s11/2026-10-21-top-exit-report-handoff.md)
@@ -420,15 +431,16 @@ remains background; its pending run is received.
   PASS. FULL needs the first catch in the top band; EMPTY needs it in the
   bottom band and within one continuity step of the effective-mask bottom.
   No known real output changes.
-- **Next:** the user's review-014 reply (the sample4 strict Oil boundary at
-  52.0–56.0 s; [decision S](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#decision--2026-10-23)).
-  Then step 6 (가), fast-fill FULL, the 54 s boundary switch, or another step
-  the user chooses. LBT-2's Windows S2 joins the step-7 request after
-  review-012.
+- **Review-014:** answered (2026-10-23); see the
+  [result](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#review-014-result--2026-10-23).
+- **Next (the user chooses):** the step-7 Windows request (Windows is
+  available again since 2026-10-23), the 54.0–54.5 s early drop, step 6 (가)
+  fast-fill FULL, or another step. LBT-2's Windows S2 joins the step-7 request
+  after review-012.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
-  Windows is unavailable for now. When it returns, the next report also
-  confirms the band cells, E2 and the first-catch guard, and the step-7
-  request adds the gate's SPL#4/SPL#1 comparison and the E3 Accum readout.
+  The next Windows report also confirms the band cells, E2 and the first-catch
+  guard, and the step-7 request adds the gate's SPL#4/SPL#1 comparison and the
+  E3 Accum readout.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).
