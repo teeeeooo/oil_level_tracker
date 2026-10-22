@@ -318,11 +318,14 @@ Its pending run is now received.
 - **Local fills (FOA-1):** they reproduce the fill-owner ambiguity, and on
   sample5 the stale-owner wrong target, but not the unadmitted fast rise.
   Tracklets that stopped following the level keep fill ownership.
-- **Next (each awaiting the user):** Windows is unavailable for now, so the
-  Mac-only order above continues at step 3, the D scope review with the stale
-  owner (sample5 is now its local case). Fast-fill FULL (owner tracking or
-  owner-free FULL evidence) sits in step 6. When Windows returns, the next
-  report also confirms the band cells and E2.
+- **D scope (DSR-1):** fill-owner validity (the stale owner) is the
+  recommended first D sub-scope. Post-Foam association and drain release need
+  Windows readouts, to join the step-7 request.
+- **Next (each awaiting the user):** Windows is unavailable for now. The user
+  chooses between freezing the fill-owner validity design next and keeping the
+  order (E3, then B, then step 6). Fast-fill FULL (owner tracking or owner-free
+  FULL evidence) sits in step 6. When Windows returns, the next report also
+  confirms the band cells and E2.
 
 **Earlier resume checkpoint — 2026-10-20 (FULL observable top):** start with the
 [FULL observable-top handoff](../60-evidence/s11/2026-10-20-full-observable-top-handoff.md).
