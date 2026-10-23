@@ -505,8 +505,23 @@ remains background; its pending run is received.
   - **LBT-2's Windows S2:** HELD until the user reports Windows is available
     again (the user is off work). Review-012 is its held-out reference;
     LBT-2 was frozen before review-012 was read.
-- **Resume here:** step 6 (가), fast-fill FULL, as a Mac desk review first.
-  No Windows request is queued.
+- **Step 6 (가) desk review done (2026-10-23):**
+  [FFF-1](../50-diagnostics/s11/2026-10-23-fast-fill-full-review.md).
+  - **Mechanism:** tracklet association caps a row's move at
+    `temporal_max_jump_px` × frame gap. That is 32 px per sample, or 64 px/s
+    at 2 fps. SPL#4's fast rise (about 70 px per sample, inferred) starts a
+    new tracklet on every row, so the level is never admitted.
+  - **Existing lever:** the session sampling rate. At 6 fps the rise is about
+    23 px per sample. No S11 run has used anything but 2 fps, and several
+    constants count frames.
+  - **Options:**
+    1. a higher sampling rate, no code change (recommended: a frozen local
+       cadence check first);
+    2. velocity-aware association (F03/F04 risk);
+    3. owner-free FULL evidence (F05/F10 risk);
+    4. accept UNKNOWN.
+- **Resume here:** the user chooses an FFF-1 option. No Windows request is
+  queued.
 - **Then:** LBT-2's Windows S2 once Windows is available.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
   The next Windows report also confirms the band cells, E2 and the first-catch
