@@ -1,7 +1,7 @@
 # FFF-1 — fast-fill FULL desk review (step 6 (가))
 
-**Status: DESK REVIEW COMPLETE 2026-10-23 (source and existing receipts only;
-no run); the user decides the next step.** This is step 6 (가) of the Mac-only
+**Status: DESK REVIEW COMPLETE 2026-10-23. The user chose option 2, with the
+local cause check first, which is FROZEN below before any run.** This is step 6 (가) of the Mac-only
 order in the [Work Plan](../../00-project/work-plan.md), started at the
 user's choice ("남은건 3번"). Windows is unavailable for now. No detector,
 flag, Recipe, session or truth change.
@@ -132,12 +132,88 @@ no detector code and tests the mechanism directly. Its result decides between
 option 1 (with a Windows SPL#4 run), option 2 and option 4. If the user
 chooses it, the check is frozen with its readings before any run.
 
+## Decision — 2026-10-23
+
+The user ruled out option 1 for products, because analysis is already slow
+and speed work is planned after the detector work:
+
+> 지금 시간도 오래걸려서 디텍터 개선 후에는 검출 속도 개선을 할 예정이라 1번은 안될거같고. 2번으로 로컬 원인 확인 해보자
+
+The user chose option 2 and asked for the local cause check first. The
+sampling rate is used below only as a diagnostic lever.
+
+## Local cause check (frozen 2026-10-23, before any run)
+
+**Question:** on a local fill, does a per-sample move above the tracklet
+association cap stop the level from being admitted, as inferred for SPL#4?
+
+**Tool:** `tests/diagnostics/s11_fast_fill_cadence.py`, with 4 unit tests. It
+is one managed run.
+
+**Inputs, the same as FOA-1's integrated arm:**
+- the frozen empty-fill Recipes (`s11-empty-fill-roi-20261022-001`);
+- an EMPTY initial state;
+- IFO v2 and top-exit v3;
+- the full window;
+- debug NONE.
+
+**Arms:**
+
+| Arm | Sampling | Tracklet association cap | Why |
+|---|---|---|---|
+| baseline | 2 fps | Recipe (32 px) | identity with FOA-1 |
+| fps0.5 | 0.5 fps | Recipe (32 px) | the natural route: sample5's rise of about 20 px per 2 fps sample becomes about 75 px per sample, about 2.3× the cap, near SPL#4's 2.2× |
+| cap9 | 2 fps | 9 px, `DirectedTrackletPolicy.maximum_jump_px` only | the same ratio without changing any frame-count constant; the row tolerance and every other policy keep the Recipe value |
+| fps1 | 1 fps | Recipe | descriptive (about 40 px per sample on sample5) |
+
+- **Videos:** sample5 runs all four arms. sample7 runs baseline, fps0.5 and
+  cap9. sample7 rises about 5 px per 2 fps sample, so at 0.5 fps it stays
+  under the cap (about 20 px). cap9 on sample7 is descriptive only, because
+  its froth jitter of about ±15 px already exceeds 9 px.
+- **Confounds, stated before the run:**
+  - fps0.5 also lengthens every frame-count constant fourfold in time.
+  - cap9 cannot tell the rise from jitter; both are per-sample motion.
+  - Only an agreement of both arms supports the mechanism.
+
+**Readings,** over the rising window with an agent surface estimate
+(FOA-1's `surface-estimates.json`). The windows are sample5 10.0–18.0 s and
+sample7 9.5–21.0 s.
+- **Near the level:** an Oil candidate within 32 px of the interpolated
+  estimate. This is FOA-1's unit, not the cap.
+- **L:** the share of frames with an admitted near-level candidate.
+- **N:** frames whose near-level candidates are all unadmitted and include
+  `INSUFFICIENT_NET_PROGRESS`.
+- **Also reported:** FOA-1's M3, the reasons, `FILL_OWNER_AMBIGUOUS`
+  frames, numeric rows and the published offsets.
+- **Baseline, from the kept FOA-1 readout (seen):**
+  - sample5: L 0.824 (14 of 17), M3 no;
+  - sample7: L 0.792 (19 of 24), M3 no.
+
+**Identity gate:** the baseline rows and owner readout must equal FOA-1's
+kept integrated arm. Otherwise the check is void.
+
+**Predictions:**
+- **H1, sample5 fps0.5:** L ≤ half of the baseline (0.412), and N is at
+  least half of the frames with only unadmitted near-level candidates.
+- **H2, sample5 cap9:** the same two conditions.
+- **C, sample7 fps0.5:** L ≥ half of the baseline (0.396).
+
+**Outcome:**
+- **CONFIRMED:** H1, H2 and C all hold.
+- **PARTIAL:** H2 holds, but H1 or C does not; the failing part is named.
+- **NOT CONFIRMED:** H2 fails.
+- **Either way:**
+  - No tuning, and no change of window, distance or cap after the results.
+  - A confirmation supports the SPL#4 inference only by analogy. A design
+    for option 2 still needs its own frozen protocol, local controls and a
+    Windows SPL#4 run.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F08`
 - First harmful stage: inferred `OIL-TRACKLET` association. The per-sample cap (`temporal_max_jump_px` × gap) refuses every pairing of a fast-rising level row with an existing tracklet, so the level never accumulates the 3 observations and 27.2 px progress admission needs; `OIL-PHASE-FILL` then fails closed between two low owners (`FILL_OWNER_AMBIGUOUS`). No frame review confirms the rise rate.
-- Existing feature coverage: reads the current tracklet association and confirmation code, the Recipe `temporal_max_jump_px` (32 px on SPL#4, step-7 table K), the session `sampling_fps` (2.0 in every S11 run on record; a user setting up to the video fps), top-exit v3 and the held fill-owner gate as recorded on SPL#4, and FOA-1's local rise rates. No option is enabled or run.
-- Execution scope: desk review of source and existing receipts; no run, no Windows request, no tuning.
+- Existing feature coverage: the cause check reuses FOA-1's empty-fill Recipes, EMPTY initial state, IFO v2 + top-exit v3 arm, owner readout and agent surface estimates, the session `sampling_fps` and a diagnostic-only wrapper on `_tracklet_policy`. The review reads the current tracklet association and confirmation code, the Recipe `temporal_max_jump_px` (32 px on SPL#4, step-7 table K), the session `sampling_fps` (2.0 in every S11 run on record; a user setting up to the video fps), top-exit v3 and the held fill-owner gate as recorded on SPL#4, and FOA-1's local rise rates. No option is enabled or run.
+- Execution scope: desk review of source and existing receipts; then, at the user's choice, one frozen local managed run (the cause check: sample5 and sample7 at 2/1/0.5 fps and a 2 fps arm with only the tracklet association cap narrowed, debug NONE). No Windows request, no detector change, no tuning.
 - Logic-map impact: NONE — a desk review; no owner or edge changes.
 - Failure-registry impact: NONE — the mechanism fits `S11-F02` (the level row exists but is never admitted) and the option risks are stated against `S11-F03`/`F04`/`F05`.
