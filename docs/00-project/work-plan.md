@@ -535,8 +535,14 @@ remains background; its pending run is received.
     - sample7 at 0.5 fps, which stays under the cap, keeps 0.500.
   - **Not reproduced:** SPL#4's two-low-owner ambiguity. sample5 opens no
     fill at all.
-- **Resume here:** the option-2 design (velocity-aware association), frozen
-  before any run.
+- **Option-2 design DRAFTED (2026-10-23):** the
+  [fast-rise association](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-23-fast-rise-association)
+  and its draft
+  [checks](../30-validation/s11-physical-interface-evidence-repair-validation.md#fast-rise-association-checks--2026-10-23).
+  - **Seed:** three witnessed upward rows in a constant-velocity line, beyond
+    the cap and within 3× it.
+  - **Continuation:** prediction-gated. The option is opt-in, default OFF.
+- **Resume here:** the user reviews the draft; it is frozen before any code.
   - Positive stand-ins: sample5 at 0.5 fps or cap9.
   - Controls: every local 2 fps baseline unchanged.
   - Later, a Windows SPL#4 run that joins the held S2 request.

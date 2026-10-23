@@ -626,6 +626,136 @@ ones.
 **Checks:** the [contested fill-owner gate checks](../30-validation/s11-physical-interface-evidence-repair-validation.md#contested-fill-owner-gate-checks--2026-10-22)
 fix the local controls, the predictions and the stop conditions before any run.
 
+## October 23 fast-rise association
+
+**Status: DRAFT 2026-10-23 — not frozen; the user reviews it before any code.**
+This is option 2 of [FFF-1](../50-diagnostics/s11/2026-10-23-fast-fill-full-review.md),
+chosen by the user, after the
+[local cause check](../50-diagnostics/s11/2026-10-23-fast-fill-full-review.md#local-cause-check-result--2026-10-23)
+confirmed the mechanism.
+
+### Problem
+
+`DirectedInterfaceTrackletBuilder._match_cost` refuses any pair with
+|Δy| > `maximum_jump_px` × gap. The cap is the Recipe `temporal_max_jump_px`,
+32 px per sample.
+- **Why fast rises fail:** a level that rises faster than the cap per sample
+  starts a new single-row tracklet on every frame. None of them gains the 3
+  observations and the net progress that admission needs, so the level never
+  becomes an owner. FULL then has no owner to close on.
+- **What the cap protects:** it is also what keeps nearby components apart
+  (`S11-F04`). A cap of 9 px breaks sample7 on froth jitter alone. At 1 fps,
+  sample5 shows a stale low owner publishing 20–105 px below the level.
+- **What a fix must do:** it cannot simply widen the cap. It must accept
+  beyond-cap motion only when that motion is a consistent fast rise of one
+  physical row.
+
+### Rule (draft)
+
+There are two parts, both inside `OIL-TRACKLET`, and both only for upward
+motion (source Y decreasing), the fill direction FFF-1 addresses.
+
+**1. Fast-rise seed.** It runs after the normal assignment of frame t, on
+leftovers only.
+- **Inputs:**
+  - an unassigned row hypothesis h(t);
+  - an active tracklet A whose only observation is a row h(t−2);
+  - an active tracklet B whose only observation is a row h(t−1).
+  - A and B must both be unassigned in frame t.
+- **The steps:** s1 = y(t−1) − y(t−2) and s2 = y(t) − y(t−1).
+- **A seed needs all of the following:**
+  - **Beyond the cap, upward:** both steps are upward and exceed
+    `maximum_jump_px`. Any motion the current cap admits is therefore
+    untouched.
+  - **Bounded:** each step is at most 3 × `maximum_jump_px`. This is the only
+    new constant. The SPL#4 inference is about 2.2× and sample5 at 0.5 fps
+    about 2.3×.
+  - **Constant velocity:** |s2 − s1| ≤ `row_hypothesis_tolerance_px`.
+  - **Independent same-frame witness on all three rows:** the existing
+    `_representation_bridge` independent-witness predicate. That is an
+    anchor-eligible member, a physical proposal, and registered motion support
+    and coverage at or above the confirmation minima (0.50).
+  - **Same representation:** the three rows share a representation class.
+  - **Unique:** no other (A, B, h) combination in frame t qualifies with
+    any of these three rows. Otherwise there is no seed (fail closed).
+- **Result:**
+  - A takes the rows of B and h(t), giving three observations, and gets the
+    fast-rise mark.
+  - B is dropped. It was a single-row provisional tracklet; no identity
+    existed beyond it.
+  - Admission then runs the existing confirmation unchanged: observations,
+    progress, direction and motion or anchors.
+
+**2. Fast-rise continuation.** It applies to a marked tracklet in later
+frames.
+- **What changes:** `_match_cost` skips the absolute |Δy| gate for an upward
+  step.
+- **What stays:**
+  - the velocity-prediction gate, |y − (last + v × gap)| ≤ `maximum_jump_px`;
+  - the representation check;
+  - lost frames;
+  - ambiguity termination.
+- **Bound and cost:** the step is still at most 3 × `maximum_jump_px` × gap.
+  The cost's position term is normalised by max(`maximum_jump_px`, |v|) ×
+  gap.
+- **End of the mark:** it clears once |v| ≤ `maximum_jump_px`, and the
+  tracklet then matches as today.
+  - A level that stops at the top, or disappears into FULL, fails the
+    prediction gate and the tracklet is lost.
+  - That loss is the disappearance top-exit already closes on.
+
+**Provenance:** every observation is an existing same-frame row hypothesis.
+Nothing is interpolated, carried or created from motion. The output only
+changes which tracklet a row belongs to.
+
+### Difference from prior failures
+
+- **`S11-F03`, motion promoted to identity.** Motion never produces a row or
+  a coordinate. It is one of four same-frame conditions on three physical rows,
+  together with an anchor-eligible member, a physical proposal and a shared
+  representation.
+- **`S11-F04`, geometry as identity.** This is the main residual risk.
+  - The link rests on three rows in a constant-velocity line, plus the
+    witnesses.
+  - It applies only beyond the current cap and only upward, and it refuses
+    any non-unique combination.
+  - The controls must show it never fires on the local 2 fps runs.
+- **"Globally reduced jump thresholds" (rejected earlier).** Nothing global
+  changes: rows within the cap follow exactly today's path.
+- **`S11-F05`/`F08`.** Fill phases, releases, top-exit and the initial EMPTY
+  lower-entry contract are untouched.
+  - A seeded level becomes a fill owner only under the existing rules.
+  - If its first row is not in the lower entrance band, it is not a fill
+    owner; this is a named limit.
+
+### Activation
+
+- **Flag:** opt-in GUI `--oil-fast-rise-association`, default OFF. It reaches
+  `DirectedTrackletPolicy` through the existing detector factory → resolver
+  config path.
+- **Version:** `+fast-rise-association-v1`.
+- **Combinations:** combinable with IFO v2 and top-exit v3. Refused with
+  cost-first, candidate RGB and Local XY. Independent of the held fill-owner
+  gate.
+- **Default:** production is unchanged until its checks and the user's
+  decision.
+
+### Known limits (draft)
+
+- **No real local fast fill.** sample5 at 0.5 fps and sample5 with the cap
+  narrowed to 9 px are stand-ins.
+- **SPL#4's recorded rows may not form a line.** The higher candidates are
+  Y463 at 22.5 s and Y462, Y534 and Y651–660 at 24.5 s. Rows at 23.0–24.0 s
+  were not listed, so whether a constant-velocity triplet exists is unknown.
+  A read-only SPL4_B_ref readout of every Oil candidate at 20.5–25.5 s, with
+  the witness fields, would answer it before any Windows run.
+- **The seed needs three frames.** At 2 fps, a level that crosses the Glass
+  in fewer than about 3 samples is still missed.
+- **Fast drains are out of scope.**
+
+**Checks:** the draft
+[fast-rise association checks](../30-validation/s11-physical-interface-evidence-repair-validation.md#fast-rise-association-checks--2026-10-23).
+
 ## Cost-first assignment comparison
 
 The first of the three authorized Windows candidates reuses the exact intervention
@@ -1004,10 +1134,10 @@ as the serialized array index. Diagnostic detail must not change output.
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`, `OIL-SELECTOR`, `OIL-PROJECTION`, `TRACE-PUBLICATION`.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F08`, `S11-F09`, `S11-F10`.
-- Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples; the cost-first Windows regression, qualified review-004/005 and frozen RGB model's rim failure/input contract. For the 2026-10-22 contested fill-owner draft: FOA-1's owner readout, DSR-1, the R18 fill-ownership ambiguity outcomes (`FILL_OWNER_AMBIGUOUS` keeps the contested chains; completion, chain and re-entry ambiguity drop them) and the R21 recent topward predicate.
-- Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto. For the fill-owner draft: motion-only owner validity (the desk reading shows the low owners rising in parallel with the level) and vertical order as identity (topmost or lowest owner), which F04 forbids and which would pick a Foam top or a bubble boundary.
-- Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds. The fill-owner gate keeps the initial EMPTY lower-entry contract, all chain, barrier and release state and fill-span completion; it only empties allowed sets.
-- Existing feature coverage: this clarification reuses the frozen A1/public original raster, visibility masks, O1 path/center bands and exact candidate provenance. Source review follows retained diagnostic paths through phase_candidate_assembler and phase_frame_detection to oil_interface_diagnostics, then contrasts the scalar authority consumer. Existing Recipe, Artifact/static/motion and all comparison options are unchanged; earlier top-exit/RGB/IFO scopes remain in their result owners. The 2026-10-22 fill-owner draft reads the FOA-1 baseline readouts (IFO v2, top-exit OFF; both arms identical there) with the frozen empty-fill Recipes. Its planned check reuses the top-exit negative controls and the comparison runner, with IFO v2 + top-exit v3 as the reference arm.
+- Prior mechanisms reviewed: R22 cross-representation texture veto and material-member temporary handoff; R16/R21 bounded association and confirmation; R18 initial-state and partial-fill gates; R19/R22 release lease bounds; R10/R11 smooth false-identity paths and F06's textured true/false material counterexamples; the cost-first Windows regression, qualified review-004/005 and frozen RGB model's rim failure/input contract. For the 2026-10-22 contested fill-owner draft: FOA-1's owner readout, DSR-1, the R18 fill-ownership ambiguity outcomes (`FILL_OWNER_AMBIGUOUS` keeps the contested chains; completion, chain and re-entry ambiguity drop them) and the R21 recent topward predicate. For the 2026-10-23 fast-rise draft: FFF-1's mechanism reading and local cause check (association cap, `INSUFFICIENT_NET_PROGRESS`), the existing `_representation_bridge` independent witness, and the velocity-prediction gate.
+- Prior mechanisms rejected: scalar texture neutralization, generator-count identity, globally reduced jump thresholds, stationary drain release, continuation-only takeover, stale owner or coordinate copy, unrestricted OPEN recovery, lease extension as an identity repair, private video/Glass/coordinate conditions, and the locally regressing R23 native-polarity-only association veto. For the fill-owner draft: motion-only owner validity (the desk reading shows the low owners rising in parallel with the level) and vertical order as identity (topmost or lowest owner), which F04 forbids and which would pick a Foam top or a bubble boundary. For the fast-rise draft: a higher sampling rate (user: too slow for products) and a widened or time-scaled cap (it would merge nearby components; sample7 shows jitter alone matters).
+- Preserved contracts: one generic detector, bounded current-candidate provenance, initial EMPTY entrance, independent Oil/Foam, fail-closed ambiguity, no carried/interpolated observations, verified physical IDs before motion and unchanged drain direction/progress/entrance/expiry bounds. The fill-owner gate keeps the initial EMPTY lower-entry contract, all chain, barrier and release state and fill-span completion; it only empties allowed sets. The fast-rise draft changes only which tracklet a beyond-cap upward row joins; rows within the cap, fill phases, releases and top-exit are untouched.
+- Existing feature coverage: this clarification reuses the frozen A1/public original raster, visibility masks, O1 path/center bands and exact candidate provenance. Source review follows retained diagnostic paths through phase_candidate_assembler and phase_frame_detection to oil_interface_diagnostics, then contrasts the scalar authority consumer. Existing Recipe, Artifact/static/motion and all comparison options are unchanged; earlier top-exit/RGB/IFO scopes remain in their result owners. The 2026-10-22 fill-owner draft reads the FOA-1 baseline readouts (IFO v2, top-exit OFF; both arms identical there) with the frozen empty-fill Recipes. Its planned check reuses the top-exit negative controls and the comparison runner, with IFO v2 + top-exit v3 as the reference arm. The fast-rise draft builds on FFF-1's cause-check run (sample5/sample7 at 2/1/0.5 fps and a cap-only arm, debug NONE) and plans the same six top-exit negative controls plus the sample5 stand-ins.
 - Execution scope: the linked frozen 7ee6d90 diagnostic had no two-native comparison inputs; CRW-1 at 7845f89 adds diagnostic-only matched current-raster sector observations over the same 187 units and 85 relations. Its direct-loop arithmetic and 123 focused tests verify measurement contracts, not continuous contours or physical roles. This update selects no production extractor/consumer, fits no model and changes no sequence, report or private Windows execution. The 2026-10-20 top-exit move is behavior-preserving: the existing top-exit unit tests, resolver decomposition guards, production-surface test and R16 characterization goldens pass. No detector run or Windows execution was exercised. The 2026-10-21 top-exit v2
   section was implemented at `1f68c46` and failed its one Windows run (⑨); its
   record is in the v2 evidence. The v3 section was frozen from that receipt and
@@ -1025,7 +1155,8 @@ as the serialized array index. Diagnostic detail must not change output.
   judgment and product-geometry statement are recorded in the section.
   The implementation adds synthetic lifecycle tests, wiring tests and a
   comparison-runner mode; the frozen local controls run afterwards and
-  are recorded in their evidence.
-- Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state.
+  are recorded in their evidence. The 2026-10-23 fast-rise section is a
+  draft only: no code, run or Windows execution.
+- Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state. The fast-rise draft adds one bounded association route for beyond-cap upward rows (seed of three witnessed rows in a constant-velocity line, then prediction-gated continuation); it is not a widened cap, adds no coordinate and leaves within-cap association unchanged.
 - Logic-map impact: NONE — this update records the gate's local result; its feature row and 4.3 paragraph were committed to the map with the implementation (`2cb0b52`). Before it, this design changed no detector owner; the v3 implementation evidence records the logic-map update for the top-exit row and paragraph. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands. The 2026-10-22 promotion preparation changes no owner, order or default. The contested fill-owner gate was frozen at `8386b45` and then implemented.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair. The attrition path is an instance of F04 (stale continuation after an ambiguity), F05 (EMPTY-phase fill ownership) and F08 (owner re-adoption); no new entry.

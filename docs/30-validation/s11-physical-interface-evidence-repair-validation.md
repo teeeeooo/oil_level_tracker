@@ -286,6 +286,60 @@ consequence of the removed rows. Every such change is reported.
   Every changed row is listed with its phase reason and owner.
 - **Promotion** is a separate decision.
 
+## Fast-rise association checks — 2026-10-23
+
+**Status: DRAFT 2026-10-23, with the design; frozen together with it before
+any code.** These checks accompany the
+[fast-rise association](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-23-fast-rise-association)
+draft.
+
+**Unit (synthetic tracklet sequences):**
+- **Seeds and admits:** three witnessed rows rising 70 px per frame with a
+  32 px cap seed one tracklet and admit it. The continuation then follows
+  further 70 px steps.
+- **No seed** in each of these cases:
+  - a step within the cap;
+  - a downward step;
+  - a step above 3× the cap;
+  - a velocity change above the row tolerance;
+  - a row without the independent witness;
+  - mixed representations;
+  - two qualifying combinations.
+- **Ending:** the mark clears when the velocity falls to the cap or below,
+  and a stopped row is lost.
+- **Option OFF:** the builder output is identical, and the existing tracklet,
+  resolver and characterization suites pass unchanged.
+
+**Wiring:**
+- The flag reaches `DirectedTrackletPolicy` through the real GUI
+  detector-factory path.
+- The versions carry `+fast-rise-association-v1`.
+- Cost-first, candidate RGB and Local XY are refused.
+
+**Local controls at 2 fps:** the six top-exit negative controls (run 003),
+each with IFO v2 + top-exit v3, with and without the option.
+
+| Check | Input | Prediction (pass condition) |
+|---|---|---|
+| F1 no change | the six controls at 2 fps | rows, phases, events and report equal between the arms; no seed fires |
+| F2 stand-in, cadence | sample5 at 0.5 fps (FFF-1 arm `fps0.5`) | the admitted-level share L returns to at least 0.6 of the 2 fps baseline (≥ 0.494); no added numeric row more than 32 px from the surface estimate |
+| F3 stand-in, cap | sample5 at 2 fps with the cap narrowed to 9 px (FFF-1 arm `cap9`) | the same conditions as F2 |
+| F4 under the cap | sample7 at 0.5 fps | identical to its FFF-1 arm (the steps stay under the cap) |
+
+**Stop conditions:** any F1 difference, or an added numeric row more than
+32 px from the estimate in F2/F3, fails the check. Nothing is retuned.
+
+**Windows (later, joins the held LBT-2 S2 request):**
+- **Read-only first:** list every Oil candidate in SPL4_B_ref at
+  20.5–25.5 s, with the witness fields, to check whether a qualifying triplet
+  exists.
+- **Then SPL#4 0–90 s,** reference against candidate, both with IFO v2 and
+  top-exit v3.
+  - Expected: the level is admitted during 21–25 s, and top-exit closes FULL
+    inside 22.0–27.0 s (the frozen P window).
+  - Every differing row is listed and read against the user's timeline.
+- **Promotion** is a separate decision.
+
 ## Cost-first comparison checks
 
 The option repeats the frozen first-sort intervention; it does not claim physical
