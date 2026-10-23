@@ -292,6 +292,8 @@ consequence of the removed rows. Every such change is reported.
 checks accompany the
 [fast-rise association](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-23-fast-rise-association).
 They do not change after results.
+**Local result:** [F1/F4 PASS, F2/F3 FAIL](../60-evidence/s11/2026-10-23-fast-rise-local.md)
+(run at `4f0665b`; no seed fired on the stand-ins).
 
 **Unit (synthetic tracklet sequences):**
 - **Seeds and admits:** three witnessed rows rising 70 px per frame with a

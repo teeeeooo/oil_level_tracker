@@ -544,7 +544,20 @@ remains background; its pending run is received.
   - **Continuation:** prediction-gated. The option is opt-in, default OFF.
 - **Frozen (user, 2026-10-23):** the design and checks as drafted. Upward
   only (fast drains are usually slower). Local implementation first.
-- **Resume here:** implement behind the option, then run F1–F4.
+- **Implemented and checked (2026-10-23):**
+  [fast-rise local evidence](../60-evidence/s11/2026-10-23-fast-rise-local.md).
+  The implementation (`4f0665b`) is opt-in and default OFF.
+  - **F1 PASS:** the six controls are identical with no seed.
+  - **F4 PASS.**
+  - **F2/F3 FAIL:** no seed fired on the sample5 stand-ins. Their rows are
+    almost never anchor-eligible: at 0.5 fps, 1 of 88 rows and 0 witnessed.
+    They rarely form a constant-velocity line (turbulent water).
+  - Nothing is retuned; the option is not adopted.
+- **Resume here (the user chooses):**
+  1. keep it inert and wait for the Windows SPL#4 read-only readout (witness
+     fields, 20.5–25.5 s), which joins the held S2 request;
+  2. a successor protocol with a different witness;
+  3. close option 2 and accept UNKNOWN on fast fills.
   - Positive stand-ins: sample5 at 0.5 fps or cap9.
   - Controls: every local 2 fps baseline unchanged.
   - Later, a Windows SPL#4 run that joins the held S2 request.
