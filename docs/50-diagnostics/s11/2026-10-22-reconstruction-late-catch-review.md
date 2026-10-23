@@ -208,6 +208,11 @@ The user answered both questions:
      `temporal_max_jump_px`, which the guard also uses.
 
    The 480–653 s question (UNKNOWN, not EMPTY) is decided after the receipt.
+   **Receipt (2026-10-23):** the Accum rows hold no observation until 669.5 s.
+   The first catch, Y515 (0.787), lies about 124 px above the geometry bottom,
+   beyond one 32 px step. So L2 refuses EMPTY, and the span stays UNKNOWN
+   without new onset evidence
+   ([step-7 receipt](../../60-evidence/s11/2026-10-23-step7-windows-receipt.md#what-the-readouts-answer)).
 
 ## If L2 is chosen
 

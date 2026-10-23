@@ -473,29 +473,39 @@ remains background; its pending run is received.
   [FLB-2 request](../40-operations/s11-current-windows-field-qualification.md#flb-2-held-out-request)
   runs it on the step-7 reference bundles; the Mac then scores review-012
   (R1–R4).
-- **Step 7 partially received (2026-10-23):**
+- **Step 7 received (2026-10-23, two replies):**
   [receipt](../60-evidence/s11/2026-10-23-step7-windows-receipt.md).
-  - **Received:** the four runs (versions as expected); the SPL#1 gate
-    comparison, where the gate never acted and no row differs; the D
-    summaries; and review-012.
+  - **Identity PASS:** each reference equals SPL4_A / ⑩ in every row.
+  - **Gate PASS against its prediction:** SPL#4 BASE loses exactly the 14
+    wrong-target rows. Accum loses one false EMPTY sample at 24.5 s. SPL#1 is
+    unchanged. The gate stays default OFF until the user decides.
+  - **Report checks PASS:** the band cells, E2 and the first-catch guard are
+    confirmed on Windows.
+  - **Readouts:**
+    - Accum 480–653 s stays UNKNOWN. The first catch, Y515, is about 124 px
+      above the bottom, beyond one 32 px step, so L2 refuses EMPTY.
+    - SPL#4's 32 px limit fits the unadmitted fast rise (inference).
   - **Review-012:** in every panel the user marked the Foam region's bottom
     (Y488.5–501.5 through 676.0 s, then rising to Y432.5). The ordinary
     output's 8 numeric rows lie 55.5–187 px above it.
-  - **Missing:** the identity, the SPL#4 gate comparison and the report
-    checks. The gate is not judged.
-- **FLB-2 closed without design (2026-10-23):**
+- **FLB-2 closed, no design (2026-10-23):**
   [held-out result](../50-diagnostics/s11/2026-10-23-foam-layer-bottom-follow-2.md#held-out-result--2026-10-23).
-  - **R2 fails:** on the 12 review-012 frames FLB-2 equals the ordinary output
-    (A8/B4 in both arms).
+  - **NOT TESTED (R3):** no layer witness was accepted before 680.5 s, so
+    every review-012 frame stays ordinary.
+  - **R2 fails:** FLB-2 equals the ordinary output there (A8/B4 in both
+    arms).
   - **R4 fails:** 26 numeric rows added inside SPL#4 BASE's reviewed FULL
     interval, and one SPL#1 Accum drain row removed.
   - **Witness:** the `detached_layer` witness also fires where the reviewed
     truth has no Foam.
   - Nothing is tuned.
-- **Resume here:** the user forwards the
-  [step-7 follow-up request](../40-operations/s11-current-windows-field-qualification.md#step-7-follow-up-request)
-  (read-only). Record its receipt, then judge the gate against the step-7
-  pre-registered readings.
+- **Resume here (the user chooses):**
+  - whether to promote the fill-owner gate;
+  - LBT-2's Windows S2, now that review-012 is answered;
+  - step 6 (가), fast-fill FULL;
+  - the SBD-1 options.
+
+  No Windows request is queued.
 - **Then (the user chooses):** step 6 (가) fast-fill FULL or another step. LBT-2's Windows S2 can now follow,
   since review-012 is answered.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.

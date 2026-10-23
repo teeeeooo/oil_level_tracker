@@ -364,6 +364,8 @@ reason `FILL_OWNER_AMBIGUOUS`.**
   - A rise of about 500 px in 3–4 s is about 70 px per 2 fps sample.
   - Each frame then starts a new tracklet that never accumulates progress.
   - The BASE `temporal_max_jump_px` and a frame review would confirm it.
+    Step 7 (2026-10-23) read it as 32 px, which a rise of about 70 px per
+    sample exceeds; the frame review is still open.
 
 **Refined first harmful stage:** admission at `OIL-TRACKLET` during the fast
 rise (inference). The level never became an admitted owner while two low

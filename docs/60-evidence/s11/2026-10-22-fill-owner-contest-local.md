@@ -2,7 +2,12 @@
 
 **Status:** IMPLEMENTED (opt-in, default OFF) / **LOCAL CHECKS PASS** against the
 [frozen checks](../../30-validation/s11-physical-interface-evidence-repair-validation.md#contested-fill-owner-gate-checks--2026-10-22)
-/ Windows comparison pending (step 7).
+/ **Windows comparison PASS against its pre-registered prediction** (step 7,
+[receipt](2026-10-23-step7-windows-receipt.md#spl4-gate-comparison)).
+- **SPL#4:** BASE loses exactly the 14 wrong-target rows (27.5–34.0 s,
+  `FILL_OWNER_CONTESTED`). Accum loses one false EMPTY sample (24.5 s). No
+  numeric row is added or moved.
+- **SPL#1:** no row differs; the gate never acted.
 - **Local balance:** 17 wrong sample5 rows removed; 20 correct sample7 rows
   removed. The sample7 loss was pre-registered and accepted by the user.
 - **Unchanged:** the gate is not promoted. O2 OPEN / FIELD FAIL is unchanged.

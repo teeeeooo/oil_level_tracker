@@ -488,7 +488,9 @@ promotion state; this section defines what a promotion would consist of.
 **Status: FROZEN 2026-10-22 before implementation (`8386b45`); IMPLEMENTED
 2026-10-22 (`2cb0b52`, opt-in, default OFF);
 [local checks PASS](../60-evidence/s11/2026-10-22-fill-owner-contest-local.md).**
-Windows comparison pending. This is the (나)
+[Windows comparison PASS](../60-evidence/s11/2026-10-23-step7-windows-receipt.md#spl4-gate-comparison)
+(2026-10-23): SPL#4 BASE loses exactly its 14 wrong-target rows and Accum one
+false EMPTY sample; SPL#1 is unchanged. Promotion is the user's decision. This is the (나)
 half of step 6 in the Mac-only order of the
 [Work Plan](../00-project/work-plan.md). The user moved it ahead of E3 and B
 after [DSR-1](../50-diagnostics/s11/2026-10-22-d-scope-review.md#recommendation).
@@ -546,7 +548,7 @@ detector run).
     |---|---|---|
     | sample5 | 17 of the 21 wrong rows: 20.0 s, 36.0 s, 40.5–44.0 s and 46.0–50.5 s (via 0064's handoff successor 0106) | Agent-checked against the surface estimates |
     | sample7 | all 20 rows of 0016, 22.0–31.5 s | Correct (user): the front arc of the same surface |
-    | SPL#4 | the re-adopted low owner 0018 (14 rows) fits this path | Not confirmed; Windows must check |
+    | SPL#4 | the re-adopted low owner 0018 (14 rows) fits this path | Confirmed on Windows (2026-10-23): gated as contested with 0035 |
 
   - **Fresh low start.** After a fill is established, a new chain from the
     lower entrance band becomes the owner although it lies far below the

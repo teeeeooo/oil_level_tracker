@@ -13,8 +13,10 @@ patterns (E1/E2) are IMPLEMENTED / LOCAL VERIFICATION PASS
 Windows (SPL#4 run) E1 is confirmed and E2 was not exercised; a zero-width
 band added a legend entry. That defect is fixed by
 [per-sample band cells](#per-sample-band-cells--2026-10-22), IMPLEMENTED /
-LOCAL VERIFICATION PASS, including the dot pattern on a local CLI report;
-Windows confirmation is pending.
+LOCAL VERIFICATION PASS, including the dot pattern on a local CLI report.
+**Windows (step 7, 2026-10-23):** band cells, E2 and the first-catch guard
+confirmed on the SPL1_B_ref report
+([receipt](2026-10-23-step7-windows-receipt.md#report-checks-spl1_b_ref)).
 
 **2026-10-22 addition:** the
 [first-catch position guard](#first-catch-position-guard-l2--2026-10-22)
@@ -281,8 +283,10 @@ field qualification; FIELD FAIL / O2 OPEN are unchanged.
 
 ## Combined-graph strip and band patterns (E1/E2) — 2026-10-22
 
-**Status: IMPLEMENTED / LOCAL VERIFICATION PASS; on Windows E1 CONFIRMED, E2
-NOT EXERCISED.** Frozen at `db83c59` in the
+**Status: IMPLEMENTED / LOCAL VERIFICATION PASS; on Windows E1 CONFIRMED;
+E2 CONFIRMED in step 7 (2026-10-23): the reconstruction band is hatched and
+the detector FULL band solid
+([receipt](2026-10-23-step7-windows-receipt.md#report-checks-spl1_b_ref)).** Frozen at `db83c59` in the
 [report design](../../20-architecture/s11-report-context-presentation-design.md#combined-graph-state-strip-and-source-patterns--2026-10-22)
 before any code change.
 - **Windows (SPL#4 candidate report, 2026-10-22):** the strip rendered with
@@ -336,8 +340,9 @@ before any code change.
 
 ## Per-sample band cells — 2026-10-22
 
-**Status: IMPLEMENTED / LOCAL VERIFICATION PASS; Windows confirmation
-pending.** Frozen at `0b5d234` in the
+**Status: IMPLEMENTED / LOCAL VERIFICATION PASS; Windows CONFIRMED in step 7
+(2026-10-23): no legend entry without a visible band
+([receipt](2026-10-23-step7-windows-receipt.md#report-checks-spl1_b_ref)).** Frozen at `0b5d234` in the
 [report design](../../20-architecture/s11-report-context-presentation-design.md#per-sample-band-cells--2026-10-22)
 before any code change. The user chose option A after a scratch rendered
 comparison with option B, which drops zero-width runs.
@@ -468,5 +473,5 @@ The rule and its acceptance were frozen at `875c0f2` before any code change
 - First harmful stage: none in the detector. The ⑩ report problems arose downstream of `PUBLICATION-PROVENANCE`: the retrospective owner treated the resolver's ordinary-UNKNOWN marker as a barrier and required a move between the first two boundaries; `RESULT-PRESENTATION` drew FULL bands at alpha 0.035 without labels and gave no judgment reason. Both were fixed at `139ba87`, and the Windows confirmation run passed. The zero-width band seen on Windows (2026-10-22) came from the `RESULT-PRESENTATION` run extent (first to last sample); per-sample cells fix it. The late-catch gap (LCR-1) is in the same downstream owner: the continuing-run rule accepted the prior wherever the first catch lay, and on ⑩ Accum only a false entry Foam (`S11-F07`) and a 33 px step blocked it. The first-catch position guard closes it (2026-10-22).
 - Existing feature coverage: the existing confirmed initial state, retrospective projection, `HOLD_ABOVE_ZERO`/`HOLD_BELOW_ZERO` judgment consumption, Recipe `radius_y` tolerance and `temporal_max_jump_px`, and the existing hold band label are reused. Detector output, top-exit v3 and the event, CSV and bundle code are unchanged; RECOVERY still receives observed samples only. The Windows run reported ⑩'s session and detector options, and its tracking data equals ⑩'s; the accepted prefix reached `events.csv` through the existing retrospective event. The first-catch guard reuses the 0.32/0.68 entrance constants, `temporal_max_jump_px` and the Recipe ellipse and `margin_ratio`; it does not read exclusions, and no local Recipe has any.
 - Execution scope: locally, unit tests with two mutation checks, the full unit suite and one scratch rendered check built from transferred ⑩ values. On Windows, one user-authorized run under ⑩'s conditions, returned as transferred OCR evidence and judged against the expectation written before it. No private media on the Mac, no human review, tuning or post-result rule change. E1/E2 (2026-10-22): renderer unit tests, the full suite and three scratch rendered checks from synthetic values, then a look at the SPL#4 candidate report's graphs on Windows (relayed by OCR). Band cells (2026-10-22): renderer unit tests with mutation checks, the full suite, a scratch equality check on 47 local `tracking.csv` files and one managed production-CLI run on two local videos; no Windows run. First-catch guard (2026-10-22): reconstruction unit tests with three mutation checks, the full suite, and a scratch stdout-only replay of the LCR-1 desk run's 24 kept local row lists (the frozen control); no detector run, video decode or Windows run.
-- Logic-map impact: UPDATED — the `PUBLICATION-PROVENANCE` row now records the first-catch position guard on the accepted initial-state reconstruction. The `RESULT-PRESENTATION` row records the band cells with their implementation, as the report design's History Review states; the earlier updates (`139ba87`, `5e5c8bc`) match what the runs showed.
+- Logic-map impact: NONE — this update records the step-7 Windows confirmation (2026-10-23) of the band cells, E2 and the first-catch guard, and changes no code, owner or control flow. The `PUBLICATION-PROVENANCE` row was updated with the first-catch guard (`55726fd`) and the `RESULT-PRESENTATION` row with the band cells (`b49ed07`); the earlier updates (`139ba87`, `5e5c8bc`) match what the runs showed.
 - Failure-registry impact: NONE — no detector mechanism changed, and the receipt adds no failure. The rule narrows a downstream F05-shaped risk (a confirmed state hidden by soft UNKNOWN markers) without adding a threshold (F10); report wording still adds no measurement (F09). The first-catch guard narrows an F09/F10-shaped risk (coverage from a prior projected past an unobserved transit) with existing constants only; the false entry Foam is the known F07 class.
