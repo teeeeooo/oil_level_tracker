@@ -1,7 +1,8 @@
 # FLB-2 — bounded Foam-layer-bottom follow, held out on Windows Accum (desk emulation)
 
-**Status: FROZEN 2026-10-23, before the held-out data is read.** Frozen in the
-commit that adds this file. The user holds the step-7 Windows results,
+**Status: CLOSED WITHOUT DESIGN 2026-10-23 — R2 and R4 failed
+([result](#held-out-result--2026-10-23)).** Frozen 2026-10-23 at `aa44e2a`,
+before the held-out data was read. The user holds the step-7 Windows results,
 including review-012 (table V) and the SPL#1 Accum tables F/H, and chose to
 share them only after this freeze ("고정 먼저하자", 2026-10-23). Successor to
 [FLB-1](2026-10-23-foam-layer-bottom-follow.md), which closed without design.
@@ -154,6 +155,96 @@ JsonlDebugTraceWriterFactory).
   after the data is read, and no detector change. A pass is not adoption; a
   design would cross `FOAM-IDENTITY` and `OIL-AUTHORITY` (`S11-F06`) and needs
   its own frozen protocol and Windows qualification.
+
+## Held-out result — 2026-10-23
+
+Windows ran the [FLB-2 request](../../40-operations/s11-current-windows-field-qualification.md#flb-2-held-out-request)
+on the step-7 reference bundles, read-only, from the same source ZIP as
+step 7; relayed by OCR. Review-012 is in the
+[step-7 receipt](../../60-evidence/s11/2026-10-23-step7-windows-receipt.md#review-012-table-v).
+- **Identity:** both SHA-256 values matched (`ca6f91d8…`, `e65fd5f5…`).
+- **Runs:** four, no `STOP` and no error. The output JSON SHA-256 values start:
+  SPL#1 Accum `229a3ac1`, BASE `a044893c`; SPL#4 Accum `e4f99c99`, BASE
+  `8065ad17`.
+- **Not relayed:**
+  - the header lines (run ID, T, J, C1);
+  - the state, reason and bottom columns of the window rows;
+  - the ordinary column of the SPL#4 BASE changed rows.
+
+| Run | Frames | Layer witness | Active | Changed |
+|---|---:|---:|---:|---:|
+| SPL#1 Accum | 601 | 358 | 463 | 30 |
+| SPL#1 BASE | 601 | 0 | 0 | 0 |
+| SPL#4 Accum | 181 | 1 | 7 | 1 |
+| SPL#4 BASE | 181 | 48 | 70 | 38 |
+
+The agent's own state distribution (571 `NONE` frames on SPL#1 Accum)
+contradicts the tool's count of 463 active frames (active = not `NONE`). It
+is not used.
+
+**Held-out frames, review-012:**
+- **FLB-2 equals the ordinary output on all 12 scored frames.** The first
+  changed row is 681.51 s.
+- **Every reference is a Foam-region bottom.** C1 was not relayed, but it is
+  at most 30 px. The smallest gap between a numeric output and its mark is
+  55.5 px, so the classes hold for any C1 below that. Checked with the frozen
+  `held_out` at C1 5, 30 and 55 px (stdout only).
+
+| Arm | C | A | B |
+|---|---:|---:|---:|
+| Ordinary | 0 | 8 | 4 |
+| FLB-2 | 0 | 8 | 4 |
+
+**Controls:**
+- **SPL#1 BASE:** no changed row.
+- **SPL#4 BASE:** 38 rows, all `FOLLOW_LAYER_BOTTOM`, publishing Y704–718 at
+  bottoms Y708–713.
+  - **26 rows at 42.5–61.5 s are false outputs.** They lie in the reviewed
+    FULL interval (25–63 s). There the production default is UNKNOWN from
+    34.5 to 63 s ([follow-up receipt](../../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-opposition-follow-up-receipt--2026-10-22)),
+    so each is a numeric row added inside a FULL span.
+  - They sit at the height of the 14 wrong-target rows (Y704–739).
+  - **12 rows at 63.0–74.0 s** come after the drain starts. No position is
+    reviewed there; listed.
+- **SPL#4 Accum:** one row at 20.0 s, none → Y438, during the Foam inflow. No
+  position is reviewed there; listed.
+- **SPL#1 Accum:** 30 rows at 681.51–716.51 s, all `FOLLOW`. They fall in
+  `WS1-ACCUM-POST-FOAM` and `WS1-ACCUM-DRAIN`, both visible Oil-air with
+  Foam absent.
+  - **711.00 s, a loss:** the ordinary Y247 is removed (`FOLLOW_NO_ROW`)
+    inside the drain segment.
+  - **22 added rows,** Y179–265: 681.51–711.50, 713.00 and 713.50 s. Their
+    values are unreviewed; listed.
+  - **7 replaced rows:** 712.50 and 714.00–716.51 s, ordinary Y271–289 →
+    Y241–254. Unreviewed; listed.
+
+**Readings:**
+- **R1, pass:** vacuous; no clear-class frame, and no scored frame changed.
+- **R2, fail:** A+B is 12 in both arms.
+- **R3, unreported:** the window rows came without state. A FOLLOW frame can
+  publish the ordinary value, or nothing on a blank. If no scored frame is
+  FOLLOW, the held-out case is also NOT TESTED; the outcome is the same.
+- **R4, fail:**
+  - the 26 SPL#4 BASE rows inside FULL;
+  - the SPL#1 Accum loss at 711.0 s.
+
+**FLB-2 closes without a design,** as frozen. Nothing is tuned.
+
+**What it shows:**
+- **The held-out frames did not move.** At 672.0–677.5 s FLB-2 published
+  exactly the ordinary output, 55.5–187 px above the user's Foam-region
+  bottom.
+- **The `detached_layer` witness is not specific to a Foam layer.**
+  - It drives FOLLOW through SPL#1 Accum 684–716 s, where the reviewed truth
+    has no Foam.
+  - In a full SPL#4 BASE it fires at the bottom (Y708–713) and republishes
+    the stale owner's height.
+  - FLB-1's broader witness failed the same way on sample5 and sample7.
+- **The bounded hand-off and the entry guard did their part** on the local
+  controls. The failure is the witness itself.
+- **No successor is proposed.** A Foam-bottom follow would first need a
+  witness that is absent without Foam, and the existing phenotype is not.
+  Any further step is the user's choice.
 
 ## Detector Governance
 

@@ -473,10 +473,31 @@ remains background; its pending run is received.
   [FLB-2 request](../40-operations/s11-current-windows-field-qualification.md#flb-2-held-out-request)
   runs it on the step-7 reference bundles; the Mac then scores review-012
   (R1–R4).
-- **Resume here:** receive the step-7 results, then the FLB-2 Windows output.
-  Record both receipts, identifying runs by run ID, version and counts.
-- **Then (the user chooses):** step 6 (가) fast-fill FULL or another step. LBT-2's Windows S2 joins the step-7 request
-  after review-012.
+- **Step 7 partially received (2026-10-23):**
+  [receipt](../60-evidence/s11/2026-10-23-step7-windows-receipt.md).
+  - **Received:** the four runs (versions as expected); the SPL#1 gate
+    comparison, where the gate never acted and no row differs; the D
+    summaries; and review-012.
+  - **Review-012:** in every panel the user marked the Foam region's bottom
+    (Y488.5–501.5 through 676.0 s, then rising to Y432.5). The ordinary
+    output's 8 numeric rows lie 55.5–187 px above it.
+  - **Missing:** the identity, the SPL#4 gate comparison and the report
+    checks. The gate is not judged.
+- **FLB-2 closed without design (2026-10-23):**
+  [held-out result](../50-diagnostics/s11/2026-10-23-foam-layer-bottom-follow-2.md#held-out-result--2026-10-23).
+  - **R2 fails:** on the 12 review-012 frames FLB-2 equals the ordinary output
+    (A8/B4 in both arms).
+  - **R4 fails:** 26 numeric rows added inside SPL#4 BASE's reviewed FULL
+    interval, and one SPL#1 Accum drain row removed.
+  - **Witness:** the `detached_layer` witness also fires where the reviewed
+    truth has no Foam.
+  - Nothing is tuned.
+- **Resume here:** the user forwards the
+  [step-7 follow-up request](../40-operations/s11-current-windows-field-qualification.md#step-7-follow-up-request)
+  (read-only). Record its receipt, then judge the gate against the step-7
+  pre-registered readings.
+- **Then (the user chooses):** step 6 (가) fast-fill FULL or another step. LBT-2's Windows S2 can now follow,
+  since review-012 is answered.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
   The next Windows report also confirms the band cells, E2 and the first-catch
   guard, and the step-7 request adds the gate's SPL#4/SPL#1 comparison and the

@@ -1714,6 +1714,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-23 | [SBD-1 strict-boundary early drop](50-diagnostics/s11/2026-10-23-strict-boundary-early-drop.md) | sample4 54.0–54.5초 조기 하강 원인 읽기 전용 재생: Foam 전선 오류·하부 tracklet 재연결·엄격 행 미추적, 선택지 |
 | 2026-10-23 | [FLB-1 Foam layer bottom follow](50-diagnostics/s11/2026-10-23-foam-layer-bottom-follow.md) | Foam 층 바닥을 따라가다 명시적으로 인계하는 Oil 규칙의 읽기 전용 모의 실행: 고정 규칙·채점·대조군 |
 | 2026-10-23 | [FLB-2 bounded Foam layer bottom follow](50-diagnostics/s11/2026-10-23-foam-layer-bottom-follow-2.md) | 층 전용 Foam 신호·3초 제한 인계로 바꾼 후속 모의 실행: 고정 규칙, 본 설계 수치, bundle 읽기 확인, Windows Accum review-012 held-out 채점·판정 기준 |
+| 2026-10-23 | [step-7 Windows receipt](60-evidence/s11/2026-10-23-step7-windows-receipt.md) | step-7 Windows 결과 부분 수신: 실행 4개·SPL#1 gate 비교(차이 0)·D 요약·review-012(Foam 영역 최하단 표시, 출력이 55.5–187px 위), 누락 항목(신원·SPL#4 gate 비교·리포트 확인) |
 
 ## 2026-10-22 누락 보완 등록 — 166개
 
