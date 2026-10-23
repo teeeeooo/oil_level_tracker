@@ -239,7 +239,7 @@ User, verbatim: "677.51s 제외하고 전부 foam의 최하단, 677.51s은 foam�
   - On Windows it removes 14 wrong-target rows and one false EMPTY sample.
   - SPL#1 is unchanged.
   - Its local cost, 20 correct sample7 rows (oblique view), stands.
-  - Promotion is the user's decision. The default stays OFF.
+  - Promotion HELD (user, 2026-10-23): "승격 보류 -> 얻는거 잃는게 비슷한 수준으로 보임". The gate stays opt-in, default OFF.
 - **Report:** the band cells, E2 and the first-catch guard are confirmed on
   Windows.
 - **Review-012:** answered. It sets the `WS1-ACCUM-FOAM-LAYERED` references.

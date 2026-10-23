@@ -490,7 +490,7 @@ promotion state; this section defines what a promotion would consist of.
 [local checks PASS](../60-evidence/s11/2026-10-22-fill-owner-contest-local.md).**
 [Windows comparison PASS](../60-evidence/s11/2026-10-23-step7-windows-receipt.md#spl4-gate-comparison)
 (2026-10-23): SPL#4 BASE loses exactly its 14 wrong-target rows and Accum one
-false EMPTY sample; SPL#1 is unchanged. Promotion is the user's decision. This is the (나)
+false EMPTY sample; SPL#1 is unchanged. Promotion HELD (user, 2026-10-23): "승격 보류 -> 얻는거 잃는게 비슷한 수준으로 보임". The gate stays opt-in, default OFF. This is the (나)
 half of step 6 in the Mac-only order of the
 [Work Plan](../00-project/work-plan.md). The user moved it ahead of E3 and B
 after [DSR-1](../50-diagnostics/s11/2026-10-22-d-scope-review.md#recommendation).

@@ -8,6 +8,8 @@
   `FILL_OWNER_CONTESTED`). Accum loses one false EMPTY sample (24.5 s). No
   numeric row is added or moved.
 - **SPL#1:** no row differs; the gate never acted.
+- **Promotion HELD (user, 2026-10-23): "승격 보류 -> 얻는거 잃는게 비슷한 수준으로 보임". The gate stays opt-in, default OFF.** The gains (sample5's 17 and SPL#4's 14 wrong rows) and the
+  losses (sample7's 20 correct rows) are of the same order.
 - **Local balance:** 17 wrong sample5 rows removed; 20 correct sample7 rows
   removed. The sample7 loss was pre-registered and accepted by the user.
 - **Unchanged:** the gate is not promoted. O2 OPEN / FIELD FAIL is unchanged.

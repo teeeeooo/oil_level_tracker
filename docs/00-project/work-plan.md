@@ -478,7 +478,7 @@ remains background; its pending run is received.
   - **Identity PASS:** each reference equals SPL4_A / ⑩ in every row.
   - **Gate PASS against its prediction:** SPL#4 BASE loses exactly the 14
     wrong-target rows. Accum loses one false EMPTY sample at 24.5 s. SPL#1 is
-    unchanged. The gate stays default OFF until the user decides.
+    unchanged. Promotion HELD (user, 2026-10-23): "승격 보류 -> 얻는거 잃는게 비슷한 수준으로 보임". The gate stays opt-in, default OFF.
   - **Report checks PASS:** the band cells, E2 and the first-catch guard are
     confirmed on Windows.
   - **Readouts:**
@@ -500,7 +500,6 @@ remains background; its pending run is received.
     truth has no Foam.
   - Nothing is tuned.
 - **Resume here (the user chooses):**
-  - whether to promote the fill-owner gate;
   - LBT-2's Windows S2, now that review-012 is answered;
   - step 6 (가), fast-fill FULL;
   - the SBD-1 options.
