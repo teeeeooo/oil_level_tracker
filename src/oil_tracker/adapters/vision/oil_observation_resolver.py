@@ -166,6 +166,7 @@ class OilObservationResolverConfig:
     candidate_rgb_enabled: bool = False
     top_exit_full_enabled: bool = False
     fill_owner_contest_enabled: bool = False
+    fast_rise_association_enabled: bool = False
 
     @property
     def end_to_end_commit_lag_frames(self) -> int:
@@ -976,8 +977,9 @@ class OilPathLifecycleOwner:
 class OilResolutionProjectionOwner:
     """Project resolved nodes back to same-frame public candidates and metrics."""
 
-    def __init__(self, version: str) -> None:
+    def __init__(self, version: str, *, fast_rise_association: bool = False) -> None:
         self.version = version
+        self.fast_rise_association = fast_rise_association
 
     def project(
         self,
@@ -1375,6 +1377,11 @@ class OilResolutionProjectionOwner:
                     tracklets.maximum_hypotheses_per_frame
                 ),
                 "sequence_state_image_evidence": float(node.state_evidence),
+                **(
+                    {"sequence_fast_rise_seed_frames": list(tracklets.fast_rise_seed_frames)}
+                    if self.fast_rise_association
+                    else {}
+                ),
             }
         )
         if node.kind == "oil":
@@ -1485,12 +1492,17 @@ class OilObservationResolver:
             self.version += "+top-exit-full-v3"
         if self.config.fill_owner_contest_enabled:
             self.version += "+fill-owner-contest-v1"
+        if self.config.fast_rise_association_enabled:
+            self.version += "+fast-rise-association-v1"
         self.admission_evidence = OilAdmissionEvidenceOwner(self.config)
         self.tracklet_opposition = OilTrackletOppositionOwner(
             self.config
         )
         self.path_lifecycle = OilPathLifecycleOwner(self.config)
-        self.projection = OilResolutionProjectionOwner(self.version)
+        self.projection = OilResolutionProjectionOwner(
+            self.version,
+            fast_rise_association=self.config.fast_rise_association_enabled,
+        )
 
     def resolve(
         self,
@@ -2152,6 +2164,7 @@ def _tracklet_policy(
         ),
         ambiguity_margin=config.tracklet_ambiguity_margin,
         cost_first_assignment_enabled=config.cost_first_assignment_enabled,
+        fast_rise_association_enabled=config.fast_rise_association_enabled,
     )
 
 

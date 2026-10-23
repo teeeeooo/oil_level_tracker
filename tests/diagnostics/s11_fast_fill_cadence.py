@@ -102,7 +102,7 @@ def association_cap(cap: float | None):
         resolver._tracklet_policy = original
 
 
-def run_arm(sample: str, arm: str, work: Path) -> dict:
+def run_arm(sample: str, arm: str, work: Path, *, fast_rise: bool = False) -> dict:
     from oil_tracker.adapters.storage.json_recipe_repository import JsonRecipeRepository
     from oil_tracker.adapters.vision.opencv_video_reader import OpenCvVideoReader
     from oil_tracker.application.services.analysis_pipeline import AnalysisPipeline
@@ -128,16 +128,18 @@ def run_arm(sample: str, arm: str, work: Path) -> dict:
             session.initial_state_confirmations[glass.id] = InitialStateConfirmation(
                 InitialObservationState.EMPTY_NO_INTERFACE, str(video), session.analysis_start_sec)
         # FOA-1's top_exit arm: the integrated candidate (IFO v2 + top-exit v3).
-        detector = Recorder(initial_full_observation=True, top_exit_full=True)
+        detector = Recorder(initial_full_observation=True, top_exit_full=True, fast_rise_association=fast_rise)
         started = time.monotonic()
         with association_cap(cap):
             result = AnalysisPipeline(OpenCvVideoReader, detector, RecipeValidationService(), None).run(recipe, session)
         assert not result.errors, result.errors
         rows = stable([asdict(s) for g in result.glass_results for s in g.samples])
-    return dict(sample=sample, arm=arm, sampling_fps=fps, association_cap_px=cap,
+    return dict(sample=sample, arm=arm, fast_rise_association=fast_rise, sampling_fps=fps, association_cap_px=cap,
                 analysis_seconds=round(time.monotonic() - started, 1),
                 detector_version=detector.version, rows=rows,
-                owner_readout=[_owner_readout(d) for d in detector.completed])
+                owner_readout=[_owner_readout(d) for d in detector.completed],
+                fast_rise_seed_frames=sorted({frame for d in detector.completed
+                                              for frame in d["debug_metrics"].get("sequence_fast_rise_seed_frames") or ()}))
 
 
 def foa_baseline(sample: str) -> dict:
@@ -150,20 +152,22 @@ def main(argv=None) -> None:
     parser.add_argument("--work", type=Path, required=True)
     parser.add_argument("--sample", choices=tuple(RISING_WINDOWS), required=True)
     parser.add_argument("--arm", choices=tuple(ARMS), required=True)
+    parser.add_argument("--fast-rise", action="store_true", help="the frozen fast-rise association checks F2-F4")
     args = parser.parse_args(argv)
     args.work.mkdir(parents=True, exist_ok=True)
-    out = run_arm(args.sample, args.arm, args.work)
-    if args.arm == "baseline":
+    out = run_arm(args.sample, args.arm, args.work, fast_rise=args.fast_rise)
+    if args.arm == "baseline" and not args.fast_rise:
         kept = foa_baseline(args.sample)
         out["identity_rows_equal_foa"] = out["rows"] == kept["rows"]
         out["identity_readout_equal_foa"] = out["owner_readout"] == kept.get("owner_readout")
     estimates = json.loads((FOA_RUN / "surface-estimates.json").read_text(encoding="utf-8"))[args.sample]["estimates"]
     times = [row["timestamp_sec"] for row in out["rows"]]
     out["readings"] = readings(out["owner_readout"], times, estimates, RISING_WINDOWS[args.sample])
-    target = args.work / f"fff-{args.sample}-{args.arm}.json.gz"
+    target = args.work / f"fff-{args.sample}-{args.arm}{'-fastrise' if args.fast_rise else ''}.json.gz"
     payload = json.dumps(out, ensure_ascii=False, allow_nan=False, default=str).encode("utf-8")
     target.write_bytes(gzip.compress(payload, mtime=0))  # mtime 0: the hash depends on the content only
-    summary = {k: out[k] for k in ("sample", "arm", "sampling_fps", "association_cap_px", "analysis_seconds")}
+    summary = {k: out[k] for k in ("sample", "arm", "fast_rise_association", "sampling_fps", "association_cap_px",
+                                   "analysis_seconds", "fast_rise_seed_frames")}
     summary |= {k: out[k] for k in ("identity_rows_equal_foa", "identity_readout_equal_foa") if k in out}
     summary |= dict(rows=len(out["rows"]), numeric_oil=sum(r["raw_oil_air_level_y"] is not None for r in out["rows"]),
                     readings={k: v for k, v in out["readings"].items() if k != "published_offsets_px"},

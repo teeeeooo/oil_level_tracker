@@ -50,6 +50,7 @@ class OpenCvPhaseDetector:
         candidate_rgb: bool = False,
         top_exit_full: bool = False,
         fill_owner_contest: bool = False,
+        fast_rise_association: bool = False,
     ) -> None:
         if cost_first_assignment and candidate_rgb:
             raise ValueError("Compare cost-first and candidate RGB separately.")
@@ -57,6 +58,8 @@ class OpenCvPhaseDetector:
             raise ValueError("Compare top-exit FULL separately from cost-first, RGB and Local XY.")
         if fill_owner_contest and (cost_first_assignment or candidate_rgb or oil_measurement_scopes):
             raise ValueError("Compare the fill-owner contest separately from cost-first, RGB and Local XY.")
+        if fast_rise_association and (cost_first_assignment or candidate_rgb or oil_measurement_scopes):
+            raise ValueError("Compare the fast-rise association separately from cost-first, RGB and Local XY.")
         scopes = tuple(oil_measurement_scopes)
         if len(scopes) > MAX_SCOPES or any(not isinstance(s, OilMeasurementScope) for s in scopes):
             raise ValueError("Invalid or excessive Oil measurement scopes.")
@@ -76,6 +79,8 @@ class OpenCvPhaseDetector:
             self.version += "+top-exit-full-v3"
         if fill_owner_contest:
             self.version += "+fill-owner-contest-v1"
+        if fast_rise_association:
+            self.version += "+fast-rise-association-v1"
         self._trackers: dict[str, TemporalTracker] = {}
         self._static_maps: dict[str, np.ndarray] = {}
         self._static_foam_maps: dict[str, np.ndarray] = {}
@@ -89,6 +94,7 @@ class OpenCvPhaseDetector:
             candidate_rgb=candidate_rgb,
             top_exit_full=top_exit_full,
             fill_owner_contest=fill_owner_contest,
+            fast_rise_association=fast_rise_association,
         )
         self._frame_evidence_owner = CurrentFrameEvidenceOwner(
             evaluate_oil=self._evaluate_oil_pipeline,

@@ -70,6 +70,7 @@ class ObservationSequenceResolver:
         candidate_rgb: bool = False,
         top_exit_full: bool = False,
         fill_owner_contest: bool = False,
+        fast_rise_association: bool = False,
     ) -> None:
         self._oil = OilObservationResolver(OilObservationResolverConfig(
             initial_full_observation_enabled=initial_full_observation,
@@ -77,6 +78,7 @@ class ObservationSequenceResolver:
             candidate_rgb_enabled=candidate_rgb,
             top_exit_full_enabled=top_exit_full,
             fill_owner_contest_enabled=fill_owner_contest,
+            fast_rise_association_enabled=fast_rise_association,
         ))
         if initial_full_observation:
             self.version += "+initial-full-observation-v2"
@@ -88,6 +90,8 @@ class ObservationSequenceResolver:
             self.version += "+top-exit-full-v3"
         if fill_owner_contest:
             self.version += "+fill-owner-contest-v1"
+        if fast_rise_association:
+            self.version += "+fast-rise-association-v1"
         self._foam = FoamEpisodeResolver()
 
     def resolve(

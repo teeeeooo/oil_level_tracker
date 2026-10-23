@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass, field, replace
 import math
 from statistics import median
@@ -10,6 +11,11 @@ from .oil_sequence_types import (
     TrackletConfirmationProfile,
     TrackletLifecycle,
 )
+
+
+# Fast-rise association (opt-in): a beyond-cap upward step is bounded by this
+# multiple of the per-sample cap (FFF-1; SPL#4 needs about 2.2x).
+FAST_RISE_MAX_CAP_MULTIPLE = 3.0
 
 
 @dataclass(frozen=True)
@@ -31,6 +37,7 @@ class DirectedTrackletPolicy:
     continuation_min_motion_coverage: float
     ambiguity_margin: float = 0.08
     cost_first_assignment_enabled: bool = False
+    fast_rise_association_enabled: bool = False
 
     def __post_init__(self) -> None:
         if not math.isfinite(self.geometry_top_y):
@@ -100,6 +107,7 @@ class DirectedTrackletResult:
     maximum_hypotheses_per_frame: int
     lost_event_count: int
     terminated_tracklet_count: int
+    fast_rise_seed_frames: tuple[int, ...] = ()
 
     @property
     def confirmed_tracklet_count(self) -> int:
@@ -158,6 +166,7 @@ class _TrackState:
     confirmed: bool = False
     terminated: bool = False
     termination_reason: str = ""
+    fast_rise: bool = False
     # Each bounded end offset is evaluated once after the track observations
     # for that offset are known.  The cache keeps confirmation/recent witness
     # consumers from replaying the same window during finalization,
@@ -217,6 +226,7 @@ class DirectedInterfaceTrackletBuilder:
         maximum_eligible_refs = 0
         maximum_hypotheses = 0
         next_tracklet = 0
+        fast_rise_seed_frames: list[int] = []
 
         for frame_offset, refs in enumerate(refs_by_frame):
             hypotheses = self._row_hypotheses(frame_offset, refs)
@@ -290,6 +300,11 @@ class DirectedInterfaceTrackletBuilder:
                     | hypothesis.representation_classes
                 )
                 self._refresh_confirmation(track)
+                if (
+                    track.fast_rise
+                    and abs(_track_velocity(track)) <= self.policy.maximum_jump_px
+                ):
+                    track.fast_rise = False
                 assigned_tracks.add(track.identity)
                 assigned_hypotheses.add(hypothesis.identity)
 
@@ -297,6 +312,30 @@ class DirectedInterfaceTrackletBuilder:
                 if track.terminated or track.identity in assigned_tracks:
                     continue
                 track.lost_event_count += 1
+
+            if self.policy.fast_rise_association_enabled:
+                for seed, dropped, hypothesis in self._fast_rise_seeds(
+                    frame_offset,
+                    active,
+                    hypotheses,
+                    assigned_tracks,
+                    assigned_hypotheses | conflicted_hypotheses,
+                ):
+                    for row in (dropped.last.hypothesis, hypothesis):
+                        seed.observations.append(_TrackObservation(row))
+                        seed.representation_classes = (
+                            seed.representation_classes
+                            | row.representation_classes
+                        )
+                        self._refresh_confirmation(seed)
+                    # Both lost events belonged to rows the seed now holds.
+                    seed.lost_event_count = 0
+                    seed.fast_rise = True
+                    tracks.remove(dropped)
+                    active.remove(dropped)
+                    assigned_tracks.add(seed.identity)
+                    assigned_hypotheses.add(hypothesis.identity)
+                    fast_rise_seed_frames.append(frame_offset)
 
             for hypothesis in hypotheses:
                 if hypothesis.identity in assigned_hypotheses:
@@ -462,6 +501,7 @@ class DirectedInterfaceTrackletBuilder:
             maximum_hypotheses_per_frame=maximum_hypotheses,
             lost_event_count=sum(item.lost_event_count for item in tracks),
             terminated_tracklet_count=len(tracks),
+            fast_rise_seed_frames=tuple(fast_rise_seed_frames),
         )
 
     def _row_hypotheses(
@@ -565,7 +605,16 @@ class DirectedInterfaceTrackletBuilder:
             return None
         maximum = self.policy.maximum_jump_px * gap
         position_delta = hypothesis.y - last.y
-        if abs(position_delta) > maximum:
+        # A fast-rise tracklet continues upward beyond the cap within its bound;
+        # the velocity-prediction gate below still applies.
+        fast_rise = bool(
+            self.policy.fast_rise_association_enabled
+            and track.fast_rise
+            and position_delta < 0.0
+        )
+        if abs(position_delta) > (
+            maximum * FAST_RISE_MAX_CAP_MULTIPLE if fast_rise else maximum
+        ):
             return None
         velocity = _track_velocity(track)
         expected = last.y + velocity * gap
@@ -585,8 +634,13 @@ class DirectedInterfaceTrackletBuilder:
             )
         ):
             return None
-        prediction_error = absolute_prediction_error / maximum
-        position_error = abs(position_delta) / maximum
+        normaliser = (
+            max(self.policy.maximum_jump_px, abs(velocity)) * gap
+            if fast_rise
+            else maximum
+        )
+        prediction_error = absolute_prediction_error / normaliser
+        position_error = abs(position_delta) / normaliser
         reversal = 0.0
         if (
             abs(velocity) >= self.policy.row_hypothesis_tolerance_px / 2.0
@@ -628,14 +682,7 @@ class DirectedInterfaceTrackletBuilder:
             1.0,
             self.policy.row_hypothesis_tolerance_px / 3.0,
         )
-        independent_witness = bool(
-            hypothesis.anchor_signal
-            and hypothesis.has_physical_proposal
-            and hypothesis.motion_support
-            >= self.policy.confirmation_min_motion_support
-            and hypothesis.motion_coverage
-            >= self.policy.confirmation_min_motion_coverage
-        )
+        independent_witness = self._independent_witness(hypothesis)
         shared_provenance = bool(
             track.last.hypothesis.source_families
             & hypothesis.source_families
@@ -652,6 +699,80 @@ class DirectedInterfaceTrackletBuilder:
             and independent_witness
             and shared_provenance
         )
+
+    def _independent_witness(self, hypothesis: _RowHypothesis) -> bool:
+        """Same-frame anchor, physical proposal and registered motion on one row."""
+
+        return bool(
+            hypothesis.anchor_signal
+            and hypothesis.has_physical_proposal
+            and hypothesis.motion_support
+            >= self.policy.confirmation_min_motion_support
+            and hypothesis.motion_coverage
+            >= self.policy.confirmation_min_motion_coverage
+        )
+
+    def _fast_rise_seeds(
+        self,
+        frame_offset: int,
+        active: list[_TrackState],
+        hypotheses: tuple[_RowHypothesis, ...],
+        assigned_tracks: set[str],
+        unavailable_hypotheses: set[str],
+    ) -> list[tuple[_TrackState, _TrackState, _RowHypothesis]]:
+        """Unique witnessed upward triplets beyond the cap, in a constant-velocity line.
+
+        Only single-row tracklets from the two previous frames and this frame's
+        leftover rows take part, so any motion the cap admits is untouched.
+        """
+
+        def single_row(offset: int) -> list[_TrackState]:
+            return [
+                track
+                for track in active
+                if not track.terminated
+                and track.identity not in assigned_tracks
+                and len(track.observations) == 1
+                and not track.observations[0].incompatible
+                and track.last.hypothesis.frame_offset == offset
+                and self._independent_witness(track.last.hypothesis)
+            ]
+
+        cap = self.policy.maximum_jump_px
+        bound = cap * FAST_RISE_MAX_CAP_MULTIPLE
+        leftovers = [
+            hypothesis
+            for hypothesis in hypotheses
+            if hypothesis.identity not in unavailable_hypotheses
+            and self._independent_witness(hypothesis)
+        ]
+        candidates = []
+        for first in single_row(frame_offset - 2):
+            for second in single_row(frame_offset - 1):
+                for third in leftovers:
+                    rows = (first.last.hypothesis, second.last.hypothesis, third)
+                    steps = (rows[1].y - rows[0].y, rows[2].y - rows[1].y)
+                    if not all(-bound <= step < -cap for step in steps):
+                        continue
+                    if abs(steps[1] - steps[0]) > self.policy.row_hypothesis_tolerance_px:
+                        continue
+                    if not (
+                        rows[0].representation_classes
+                        & rows[1].representation_classes
+                        & rows[2].representation_classes
+                    ):
+                        continue
+                    candidates.append((first, second, third))
+        uses = Counter(
+            key
+            for first, second, third in candidates
+            for key in (first.identity, second.identity, third.identity)
+        )
+        return [
+            (first, second, third)
+            for first, second, third in candidates
+            if uses[first.identity] == uses[second.identity] == uses[third.identity] == 1
+        ]
 
     def _ambiguities(
         self,

@@ -628,7 +628,8 @@ fix the local controls, the predictions and the stop conditions before any run.
 
 ## October 23 fast-rise association
 
-**Status: FROZEN 2026-10-23 before implementation.** The user approved the
+**Status: FROZEN 2026-10-23 before implementation; IMPLEMENTED 2026-10-23 (opt-in,
+default OFF); local checks pending.** The user approved the
 draft and its checks ("1. 동의함 대체로 빠른 배출은 저정도 속도보다는 느림 /
 2. 로컬 구현 먼저 동의함"). Fast drains are usually slower than this, so
 upward only stands. Local implementation comes first; the Windows readout and
@@ -1164,5 +1165,5 @@ as the serialized array index. Diagnostic detail must not change output.
   frozen before any code; its implementation and local checks are recorded
   in their evidence.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state. The fast-rise draft adds one bounded association route for beyond-cap upward rows (seed of three witnessed rows in a constant-velocity line, then prediction-gated continuation); it is not a widened cap, adds no coordinate and leaves within-cap association unchanged.
-- Logic-map impact: NONE — this update records the gate's local result; its feature row and 4.3 paragraph were committed to the map with the implementation (`2cb0b52`). Before it, this design changed no detector owner; the v3 implementation evidence records the logic-map update for the top-exit row and paragraph. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands. The 2026-10-22 promotion preparation changes no owner, order or default. The contested fill-owner gate was frozen at `8386b45` and then implemented.
+- Logic-map impact: UPDATED — the fast-rise association implementation adds its feature row and a 4.2 paragraph to the logic map in the same change. Earlier: the gate's feature row and 4.3 paragraph were committed with its implementation (`2cb0b52`); the v3 implementation evidence records the top-exit row and paragraph.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair. The attrition path is an instance of F04 (stale continuation after an ambiguity), F05 (EMPTY-phase fill ownership) and F08 (owner re-adoption); no new entry.

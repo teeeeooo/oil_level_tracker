@@ -38,6 +38,7 @@ owns the record, not a second feature inventory in each experiment.
 | Initial-FULL observation comparison | GUI `--initial-full-observation` → `build_main_window` detector factory → `OpenCvPhaseDetector` / resolver policy | Default OFF; bounded tracklet-admitted current observations may reach selection without a drain release (v2 includes continuation rows and already-confirmed provisional witnesses). Trial version/title and direction-uncertainty flags distinguish it from baseline. It does not enable Local XY or change Recipe initial state. |
 | Top-exit FULL comparison | GUI `--oil-top-exit-full` → the same detector factory/resolver → `OilPathLifecycleOwner` → [`close_top_exit_full`](../../src/oil_tracker/adapters/vision/oil_top_exit_full.py) | Default OFF (`+top-exit-full-v3`). After numeric selection, a bounded same-owner rise into the top entrance band plus usable unopposed disappearance, repeated on the next frame, may emit coordinate-free FULL from that confirming frame; the owner's publishable but unselected exit row may close the witness. FULL then holds until a drain release or EMPTY evidence. Raw image likelihood is unchanged; `OIL_TOP_EXIT_FULL` identifies temporal state evidence. Numeric nodes before closure are preserved; cost-first/RGB/Local XY are separate. |
 | Contested fill-owner comparison | GUI `--oil-fill-owner-contest` → the same detector factory/resolver → `OilMaterialPhasePolicy.fill_owner_contest_enabled` → [`OilMaterialPhaseLifecycleOwner`](../../src/oil_tracker/adapters/vision/oil_phase_lifecycle.py) | Default OFF (`+fill-owner-contest-v1`). Tracklets in the dynamic-owner set of a `FILL_OWNER_AMBIGUOUS` frame, and handoff successors on their chains, are contested until `FILLED_BARRIER` or `DRAINING`. A frame whose single fill allowance (motion owner, re-entry, current-anchor handoff or single owner under chain ambiguity) is contested publishes UNKNOWN (`FILL_OWNER_CONTESTED`); chains, established fill, barrier and release state are unchanged. Combinable with IFO v2/top-exit v3; cost-first/RGB/Local XY are refused. |
+| Fast-rise association comparison | GUI `--oil-fast-rise-association` → the same detector factory/resolver → `DirectedTrackletPolicy.fast_rise_association_enabled` → [`DirectedInterfaceTrackletBuilder`](../../src/oil_tracker/adapters/vision/oil_interface_tracklets.py) | Default OFF (`+fast-rise-association-v1`). After normal assignment, three leftover rows from consecutive frames (two single-row tracklets and one row) seed one tracklet when both steps are upward, beyond `maximum_jump_px` and within 3× it, in a constant-velocity line (row tolerance), share a representation class, each carries the independent same-frame witness, and the triplet is unique; the marked tracklet then continues upward beyond the cap under the velocity-prediction gate until its velocity falls to the cap. Within-cap association is unchanged; seed frames appear in `sequence_fast_rise_seed_frames` only when ON. Combinable with IFO v2/top-exit v3; cost-first/RGB/Local XY are refused. |
 | Cost-first assignment comparison | GUI `--oil-cost-first-assignment` → same detector factory → `OpenCvPhaseDetector` / `ObservationSequenceResolver` → Oil config and `DirectedTrackletPolicy` | Default OFF, independent of initial-FULL. Only the first assignment sort removes established-status precedence; existing reciprocal reservation ordering and all eligibility/ambiguity/confirmation rules remain. ON adds `+cost-first-assignment-v1`; intended Windows pair uses FULL+observation v2 in both runs. |
 | Candidate RGB comparison | GUI `--oil-candidate-rgb` → same detector factory → frame projector's frozen RGB annotations → `candidate_is_eligible` | Default OFF; additional completed-Oil eligibility only, using packaged fixed weights and native visible/glare-free side patches. Compatibility cannot promote authority or rescue rejection; UNKNOWN/UNAVAILABLE fail this condition. Raw proposals and direct Foam policy remain. ON adds `+candidate-rgb-v1`; cost-first remains OFF. |
 | Completed analysis and report | [`DetectionRunCoordinator`](../../src/oil_tracker/application/services/detection_run.py) → sequence composition → sample/event/judgment/export owners below | Raw helper, current-frame output, completed Oil/Foam, and report are different execution scopes. Recipe judgment/scale and report rendering do not establish physical accuracy. |
@@ -272,6 +273,20 @@ reservations exist. Cost, pair eligibility, conflict detection and confirmation
 are unchanged. This repeats the bounded historical probe, not a new identity rule;
 downstream ownership and final outputs can change and need separate comparison.
 
+The optional [October 23 fast-rise association](s11-physical-interface-evidence-repair-design.md#october-23-fast-rise-association)
+adds one route for rows the per-sample cap refuses. After normal assignment and
+lost counting, `_fast_rise_seeds` looks only at leftovers: a single-row tracklet
+from frame t−2, a single-row tracklet from t−1 and a row of frame t. Both steps
+must be upward, beyond `maximum_jump_px` and at most 3× it, differ by no more
+than the row tolerance, share a representation class and carry the
+`_independent_witness` predicate (anchor-eligible member, physical proposal,
+registered motion support and coverage at the confirmation minima), and the
+triplet must be unique. The t−2 tracklet takes both rows and the fast-rise mark;
+the t−1 single-row tracklet is dropped. In `_match_cost` a marked tracklet's
+upward step skips the absolute cap within 3× it, while the velocity-prediction
+gate, representation check, loss bound and ambiguity termination remain; the mark
+clears once the velocity falls to the cap. Confirmation is unchanged.
+
 ### 4.3 Material phase ownership (`OIL-PHASE-INITIAL`, `OIL-PHASE-FILL`, `OIL-PHASE-DRAIN`)
 
 `OilPathLifecycleOwner.resolve` makes phase layers from refs, then runs `OilMaterialPhaseLifecycleOwner` over physical rows. The lifecycle returns a phase, reason, owner chain and allowed physical-ID set for every frame; `None` means unconstrained ordinary selection, singleton means one owner, and empty means the selector must fail closed.
@@ -505,13 +520,16 @@ bounded expiry and one-attempt semantics.
   The October 15 comparisons add independent default-OFF constructor/GUI options; local interior
   ROI is frozen separately from original Recipes, static preparation remains active,
   and private Windows ROI remains operator-verified there. The October 22 contested
-  fill-owner gate is one more default-OFF option on the same factory path.
+  fill-owner gate and the October 23 fast-rise association are further default-OFF
+  options on the same factory path.
 - Execution scope: current source/caller review and focused lifecycle/resolver/GUI/event/report
   tests for initial-FULL, cost-first and RGB routes; frozen RGB inference parity
   and bounded local analysis replay are recorded
   in its comparison record. No Windows execution or physical acceptance is implied.
   The contested fill-owner gate adds synthetic lifecycle tests, GUI/launch wiring
   tests and the comparison-runner mode; its local controls are recorded in its
+  evidence. The fast-rise association adds synthetic tracklet tests, the same
+  wiring tests and runner modes; its frozen local checks are recorded in its
   evidence.
 - Difference from prior failures: typed competing-identity contradiction is
   propagated before member selection, and only one independently reaffirmed
@@ -527,11 +545,14 @@ bounded expiry and one-attempt semantics.
   all raw proposals; it does not turn its scores into positive physical authority.
   The contested fill-owner gate only removes a single-owner allowance after a
   recorded owner ambiguity; it adds no allowance, coordinate or threshold.
+  The fast-rise association adds one bounded beyond-cap upward route with one new
+  constant (3× the cap); within-cap association and every phase owner are
+  unchanged, and no coordinate is created.
 - Logic-map impact: UPDATED — this section records the R22 current owners and
   transition/evidence boundaries plus the R22-2 debug-only capture/measurement route
   and complete branch-specific phase failure reasons, cost-first setup/first-sort scope,
   RGB current-frame annotations and completed eligibility, plus A1 pure spatial
-  diagnostic reproduction with exact candidate binding, and D2 scoped reference/measurement-footprint comparison in the existing debug projector. The quick index and graph now expose existing setup and auxiliary inputs before detector experimentation. The October 22 contested fill-owner gate adds its feature row and a 4.3 paragraph.
+  diagnostic reproduction with exact candidate binding, and D2 scoped reference/measurement-footprint comparison in the existing debug projector. The quick index and graph now expose existing setup and auxiliary inputs before detector experimentation. The October 22 contested fill-owner gate adds its feature row and a 4.3 paragraph. The October 23 fast-rise association adds its feature row and a 4.2 paragraph.
 - Failure-registry impact: NONE — historical mechanisms remain unchanged.
 
 ## O1 trace-only observation witness
