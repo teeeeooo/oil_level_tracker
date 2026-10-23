@@ -106,7 +106,28 @@ fps (30 on SPL#4).
      the held gate would remove. The report shows the span as "직접 유면 확인
      어려움" and never FULL.
 
-**Recommendation:** option 1's local cadence check first. It is cheap, adds
+**Cost of option 1 (user, 2026-10-23: 2 fps already takes long; 6 fps
+would take far longer and the bundle could blow up):**
+- **Time:** step-7 SPL#1 480–780 s took about 42–44 min per run at 2 fps
+  with FULL debug. At 6 fps that is at least about 2 h 10 min, if the time
+  stays linear in the number of frames. Completed-sequence resolution may
+  grow faster than that.
+- **Size:** the SPL#1 FULL debug trace was about 1.8–1.9 GB for 1,202
+  records, and the bundle about 2 GB. At 6 fps it would be about 5–6 GB.
+  Without FULL debug the size problem largely goes away, but the time does
+  not.
+- **Meaning:** as a product fix, option 1 roughly triples every analysis.
+  That is a product cost, not a detector detail, so it needs the user's
+  limit first. As a diagnostic, a short local check (local videos, no FULL
+  debug) only confirms the mechanism.
+
+**Recommendation (revised after the cost note):** option 1 is not a product
+fix unless about 3× analysis time is acceptable. If it is not, the choice is
+between option 2 (a designed association change, evidence on SPL#4 only) and
+option 4 (accept UNKNOWN). The short local cadence check is still a cheap
+way to confirm the mechanism before choosing option 2.
+
+**Original recommendation:** option 1's local cadence check first. It is cheap, adds
 no detector code and tests the mechanism directly. Its result decides between
 option 1 (with a Windows SPL#4 run), option 2 and option 4. If the user
 chooses it, the check is frozen with its readings before any run.

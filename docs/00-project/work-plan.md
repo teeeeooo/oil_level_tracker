@@ -515,8 +515,10 @@ remains background; its pending run is received.
     23 px per sample. No S11 run has used anything but 2 fps, and several
     constants count frames.
   - **Options:**
-    1. a higher sampling rate, no code change (recommended: a frozen local
-       cadence check first);
+    1. a higher sampling rate, no code change. It costs about 3× the
+       analysis time; the SPL#1 FULL-debug bundle would grow from about 2 GB
+       to about 5–6 GB. It is not a product fix unless that is acceptable
+       (user concern, 2026-10-23);
     2. velocity-aware association (F03/F04 risk);
     3. owner-free FULL evidence (F05/F10 risk);
     4. accept UNKNOWN.
