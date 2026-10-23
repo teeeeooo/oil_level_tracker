@@ -1717,6 +1717,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-23 | [step-7 Windows receipt](60-evidence/s11/2026-10-23-step7-windows-receipt.md) | step-7 Windows 결과(보충 포함): 신원 일치, fill-owner gate SPL#4 예측 PASS(오답 14행 제거·Accum 거짓 EMPTY 1개), SPL#1 변화 없음, 리포트 확인 PASS, D 읽기값, review-012(Foam 영역 최하단 표시, 출력이 55.5–187px 위) |
 | 2026-10-23 | [FFF-1 fast-fill FULL review](50-diagnostics/s11/2026-10-23-fast-fill-full-review.md) | 빠른 충전에서 FULL이 안 나오는 원인 검토: tracklet 연결 상한(표본당 temporal_max_jump_px)·표본 간격 설정, 선택지 4개 |
 | 2026-10-23 | [fast-rise association local](60-evidence/s11/2026-10-23-fast-rise-local.md) | 빠른 상승 연결(옵션, 기본 OFF) 구현과 로컬 확인: 대조군 변화 없음(F1/F4 통과), 대용 사례에서 시작 조건 미발동(F2/F3 실패)과 원인 |
+| 2026-10-23 | [step-7 and fast-fill handoff](60-evidence/s11/2026-10-23-step7-fast-fill-handoff.md) | 세션 종료 인수인계: step-7 수신·FLB-2/SBD-1 종료·gate 승격 보류·S2 보류·FFF-1과 빠른 상승 연결 결과, Windows 복귀 시 묶음 요청 순서 |
 
 ## 2026-10-22 누락 보완 등록 — 166개
 

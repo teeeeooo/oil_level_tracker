@@ -382,7 +382,12 @@ Facts it records:
 The gate is implemented and its local check passed. No Windows request is
 queued.
 
-**Resume checkpoint — 2026-10-23 (latest):** start with the
+**Resume checkpoint — 2026-10-23 (latest, end of session):** start with the
+[step-7 and fast-fill handoff](../60-evidence/s11/2026-10-23-step7-fast-fill-handoff.md).
+Windows is unavailable until the user says otherwise; no Windows request is
+queued. The checkpoint below is the earlier one.
+
+**Earlier resume checkpoint — 2026-10-23:** start with the
 [strict-boundary handoff](../60-evidence/s11/2026-10-23-strict-boundary-handoff.md)
 (steps 1–5 and 6 (나) done; step 5, B:
 [LBT-2](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#results-and-decision)
@@ -553,11 +558,14 @@ remains background; its pending run is received.
     almost never anchor-eligible: at 0.5 fps, 1 of 88 rows and 0 witnessed.
     They rarely form a constant-velocity line (turbulent water).
   - Nothing is retuned; the option is not adopted.
-- **Resume here (the user chooses):**
-  1. keep it inert and wait for the Windows SPL#4 read-only readout (witness
-     fields, 20.5–25.5 s), which joins the held S2 request;
-  2. a successor protocol with a different witness;
-  3. close option 2 and accept UNKNOWN on fast fills.
+- **Decided (user, 2026-10-23): option 1.** The option stays inert, default
+  OFF, until the Windows SPL#4 read-only readout (witness fields, 20.5–25.5 s).
+- **Resume here:** the
+  [step-7 and fast-fill handoff](../60-evidence/s11/2026-10-23-step7-fast-fill-handoff.md).
+  When Windows returns, write one combined request:
+  1. the SPL#4 fast-rise readout, then the SPL#4 run only if a witnessed
+     triplet exists;
+  2. LBT-2 S2, its protocol frozen first.
   - Positive stand-ins: sample5 at 0.5 fps or cap9.
   - Controls: every local 2 fps baseline unchanged.
   - Later, a Windows SPL#4 run that joins the held S2 request.
