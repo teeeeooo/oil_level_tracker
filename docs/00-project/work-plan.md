@@ -440,8 +440,15 @@ remains background; its pending run is received.
   [combined Windows request](../40-operations/s11-current-windows-field-qualification.md#step-7-combined-request)
   (gate comparison on SPL#4 and SPL#1, report checks, read-only readouts and
   review-012 with the new `tests/diagnostics/s11_review_zoom.py`) waits for the
-  user's go. Meanwhile the Mac examines the 54.0–54.5 s early drop
-  (user, 2026-10-23).
+  user's go. Meanwhile the Mac examined the 54.0–54.5 s early drop
+  (user, 2026-10-23): [SBD-1](../50-diagnostics/s11/2026-10-23-strict-boundary-early-drop.md),
+  a read-only replay. No single stage moves the output: at 54.0 s the Foam
+  front candidate sits on the Foam bottom and demotes the level rows
+  (`S11-F06`), and a lower-structure tracklet re-associates onto the rough
+  boundary (`S11-F04`); at 54.5 s the strict row is untracked (`S11-F02`).
+  Neither 54.0 s event alone changes the output, and keeping the level
+  tracklet does not track the strict boundary. Recommended: record and close
+  as an ambiguous transition; the user decides.
 - **Then (the user chooses):** step 6 (가) fast-fill FULL or another step. LBT-2's Windows S2 joins the step-7 request
   after review-012.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.

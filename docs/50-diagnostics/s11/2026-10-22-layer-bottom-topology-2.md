@@ -562,7 +562,9 @@ at the bands above, in the
 So "the strict boundary moves at 55 s" above is a change of what is visible,
 not a measured 20 px step: the dense boundary breaks up over 54–55 s.
 
-**Open, for the user:** the 54.0–54.5 s early drop. Its first harmful stage is
+**Open, for the user:** the 54.0–54.5 s early drop. Examined in
+[SBD-1](2026-10-23-strict-boundary-early-drop.md) (2026-10-23): no single
+stage; the user decides. Its first harmful stage is
 not located. LBT-2's F action at 54.5 s (Y820 under the Foam row Y808) and the
 54.0 s association limit sit in the same second.
 
