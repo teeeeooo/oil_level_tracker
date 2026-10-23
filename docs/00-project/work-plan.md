@@ -459,7 +459,22 @@ remains background; its pending run is received.
     rows, sample7 20 user-correct rows).
 
   A successor would need a bounded hand-off and a layer-specific witness,
-  with review-012 as the held-out case. The user decides.
+  with review-012 as the held-out case.
+- **FLB-2 frozen (user: "고정 먼저하자", 2026-10-23):**
+  [FLB-2](../50-diagnostics/s11/2026-10-23-foam-layer-bottom-follow-2.md)
+  keeps FLB-1's FOLLOW state and changes three parts:
+  - the witness is a `detached_layer` Foam front only;
+  - the hand-off expires 3.0 s after the last witness;
+  - an entry guard requires the bottom near the recent output.
+
+  On the seen cases, sample4 goes C10/A4/B1 → C14/B1/U1 and the four controls
+  are unchanged. The bundle reader equals the live capture. It is frozen
+  before the step-7 results are shared. The read-only
+  [FLB-2 request](../40-operations/s11-current-windows-field-qualification.md#flb-2-held-out-request)
+  runs it on the step-7 reference bundles; the Mac then scores review-012
+  (R1–R4).
+- **Resume here:** receive the step-7 results, then the FLB-2 Windows output.
+  Record both receipts, identifying runs by run ID, version and counts.
 - **Then (the user chooses):** step 6 (가) fast-fill FULL or another step. LBT-2's Windows S2 joins the step-7 request
   after review-012.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.

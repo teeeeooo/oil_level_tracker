@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / DRAFT REQUEST`. The [step-7 combined request](#step-7-combined-request) is DRAFTED (2026-10-23) and waits for the user's go. The read-only [SPL#4 opposition follow-up](#spl4-opposition-follow-up) is COMPLETE ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-opposition-follow-up-receipt--2026-10-22)): the opposing source is `OIL-PHASE-FILL` `FILL_OWNER_AMBIGUOUS` between two low owners, and the ⑩ Accum census is complete. The [SPL#4 top-exit promotion evidence request](#spl4-top-exit-promotion-evidence) is COMPLETE / **P FAIL** ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)): no top-exit FULL row, candidate identical to the reference; R not evaluated; N and U pass; top-exit stays default OFF. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / DRAFT REQUEST`. The [FLB-2 held-out request](#flb-2-held-out-request) is DRAFTED (2026-10-23): it only reads the step-7 reference bundles. The [step-7 combined request](#step-7-combined-request) has RUN on Windows (2026-10-23); the user holds its results until FLB-2 is frozen, so the Mac has not received them yet. The read-only [SPL#4 opposition follow-up](#spl4-opposition-follow-up) is COMPLETE ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-opposition-follow-up-receipt--2026-10-22)): the opposing source is `OIL-PHASE-FILL` `FILL_OWNER_AMBIGUOUS` between two low owners, and the ⑩ Accum census is complete. The [SPL#4 top-exit promotion evidence request](#spl4-top-exit-promotion-evidence) is COMPLETE / **P FAIL** ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)): no top-exit FULL row, candidate identical to the reference; R not evaluated; N and U pass; top-exit stays default OFF. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -21,9 +21,58 @@ be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
 
+## FLB-2 held-out request
+
+**DRAFT 2026-10-23 — the user forwards it.** Read-only: it runs the frozen
+[FLB-2](../50-diagnostics/s11/2026-10-23-foam-layer-bottom-follow-2.md) desk
+emulation on the step-7 reference bundles (`SPL1_B_ref`, `SPL4_B_ref`). It does
+not run the detector, write into a bundle or change any setting.
+
+- **Judged on the Mac** with the frozen scoring and readings R1–R4, together
+  with step-7 review-012 table V.
+- **Stop:** a SHA-256 mismatch, a missing FULL debug trace (the tool prints
+  `STOP`) or an error. The agent reports and does not retry.
+
+Prompt for the Windows agent (the user forwards it):
+
+```text
+S11 FLB-2 요청 — step-7에서 만든 기준 bundle을 읽기만 하는 모의 실행. 검출기 실행·새 분석·재실행은 없다.
+튜닝·Recipe/세션 변경·bundle 수정은 하지 마. 값만 원문 그대로 돌려주고 판정·수정 제안 없이 멈춰.
+출력 폴더 경로는 영문·숫자·밑줄만 쓴다.
+
+0. 준비
+ 0-1. 최신 main 소스 ZIP을 새 폴더에 풀고 기존 Windows Python 환경을 쓴다.
+      소스 폴더에서: $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+      실행 전 SHA-256 확인(하나라도 다르면 실행하지 말고 값만 알려줘):
+      - tests/diagnostics/s11_foam_layer_bottom_follow.py
+        ca6f91d846674815973fb6d09571caab2df8e20ea73d7e464c3f8ba3234a0749
+      - src/oil_tracker/adapters/vision/foam_material_identity.py
+        e65fd5f574e1910b86815e663ac59f1edaad7c706d17fd3073fb24e6475570d9
+ 0-2. step-7의 SPL1_B_ref, SPL4_B_ref bundle 폴더를 그대로 쓴다(복사·수정 금지).
+      각 bundle에 debug\debug_trace.jsonl과 recipe_snapshot.oilrecipe가 있는지 확인한다.
+ 0-3. 새 출력 폴더 <out>를 만들고 그 안에 spl1_accum, spl1_base, spl4_accum, spl4_base 폴더를 만든다.
+
+1. 실행 4개 — 소스 폴더에서. Glass 이름이 Accum/BASE가 아니면 Recipe의 이름을 그대로 쓴다.
+   python -m tests.diagnostics.s11_foam_layer_bottom_follow --work <out>\spl1_accum --bundle <SPL1_B_ref 폴더> --glass-name Accum --start 668 --end 682
+   python -m tests.diagnostics.s11_foam_layer_bottom_follow --work <out>\spl1_base --bundle <SPL1_B_ref 폴더> --glass-name BASE --start 668 --end 682
+   python -m tests.diagnostics.s11_foam_layer_bottom_follow --work <out>\spl4_accum --bundle <SPL4_B_ref 폴더> --glass-name Accum --start 25 --end 36
+   python -m tests.diagnostics.s11_foam_layer_bottom_follow --work <out>\spl4_base --bundle <SPL4_B_ref 폴더> --glass-name BASE --start 25 --end 36
+   "STOP"이나 오류가 나오면 그 실행의 출력을 그대로 적고 다음 실행으로 넘어간다. 다시 시도하지 않는다.
+
+2. 돌려줄 것
+ - 머리줄: 소스 폴더, 0-1의 SHA-256 두 개, 두 bundle 경로.
+ - 실행마다 stdout 전체를 원문 그대로: 첫 줄(run_id … C1), 둘째 줄(frames … changed),
+   "-- changed rows --" 목록, "-- all rows … --" 목록, 마지막 "json … sha256" 줄.
+   changed rows가 60행을 넘으면 앞 60행과 전체 수만 적는다.
+ - 값은 고치거나 반올림하지 않는다. 생성된 json은 Windows에 보존한다.
+
+3. 결론·판정 없이 멈춘다. top-exit와 fill-owner gate는 기본 OFF로 남고,
+   FIELD FAIL / O2 OPEN, review-006 pending은 바뀌지 않는다.
+```
+
 ## Step-7 combined request
 
-**DRAFT 2026-10-23 — waiting for the user's go.** Windows is available again
+**RUN 2026-10-23; results not yet received on the Mac** (the user holds them until the FLB-2 freeze). Windows is available again
 (user, 2026-10-23). This is step 7 of the Mac-only order in the
 [Work Plan](../00-project/work-plan.md): one request that collects the Windows
 items queued since 2026-10-22. It is a comparison and readout request, not
