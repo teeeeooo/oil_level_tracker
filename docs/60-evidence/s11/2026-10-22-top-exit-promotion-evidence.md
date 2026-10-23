@@ -291,7 +291,7 @@ with its own freeze.
 | Glass | Band end | Blank rows | With an `INCOMPATIBLE_BRANCH` candidate | Runs of ≥ 2 inside the band |
 |---|---|---:|---:|---|
 | BASE | Y420.10 | 185 | 4 | 0 |
-| Accum | Y213.50 | 565 | 64 | 4 (after regrouping all 64 rows in the follow-up) |
+| Accum | Y213.50 | 565 | 64 | 2 (after regrouping all 64 rows in the follow-up; corrected 2026-10-23 from 4) |
 
 - **BASE:** 608.98 s (Y404), 610.99 s (Y409), 617.99 s (Y387) and 663.00 s (Y393)
   are single rows, each inside the band. 663.0 s is the review-004 blank that
@@ -389,8 +389,13 @@ default):**
 
 **⑩ Accum census, complete (table H regrouped at adjacent 2 fps samples):**
 - **Runs:** the 64 rows form 25 runs.
-- **Inside the band (Y ≤ 213.50):** four 3-row runs, at 679.5–680.5,
-  681.5–682.5, 698.5–699.5 and 700.5–701.5 s, plus a single row at 697.5 s.
+- **Inside the band (Y ≤ 213.50):** two 3-row runs, at 698.5–699.5 and
+  700.5–701.5 s, and single rows at 680.0, 682.5 and 697.5 s (nine rows).
+  - **Corrected 2026-10-23 from the listed rows:** this line first said "four
+    3-row runs", counting 679.5–680.5 and 681.5–682.5 s. Those runs only reach
+    the band: one row each (Y208, Y210), the others at Y214–229.
+  - The user re-sent the same follow-up tables on 2026-10-23 (same run IDs and
+    record counts); the values agree with this receipt.
 - **No witness at any row:** each row is `CURRENT_EVIDENCE_RESET`,
   `CURRENT_INTERFACE_OR_STATE_RESET` or `NO_TOP_EXIT_WITNESS` with an empty
   witness, so no closure could start there.
