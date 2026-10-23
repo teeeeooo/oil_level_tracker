@@ -126,7 +126,7 @@ kept). Unit tests: 5 rule and scoring tests passed before the freeze.
 1. No clear sample4 reference turns from C to A or B: **pass**.
 2. 54.0–54.5 s become C and 55.0–56.0 s stay C: **pass**.
 3. Every control change is absent or explained by a visible Foam layer in that
-   frame: **fail.** 41 of 44 control changes are hand-off rows in frames with
+   frame: **fail.** 40 of 44 control changes are hand-off rows in frames with
    no Foam witness.
 
 **FLB-1 closes without a design,** as frozen. Nothing is tuned.
