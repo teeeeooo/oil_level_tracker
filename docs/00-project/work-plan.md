@@ -449,6 +449,17 @@ remains background; its pending run is received.
   Neither 54.0 s event alone changes the output, and keeping the level
   tracklet does not track the strict boundary. Recommended: record and close
   as an ambiguous transition; the user decides.
+- **One track through the breakup (user, 2026-10-23):**
+  [FLB-1](../50-diagnostics/s11/2026-10-23-foam-layer-bottom-follow.md), a
+  frozen desk emulation (follow the Oil row at the eligible Foam component
+  bottom, then hand off below it). **CLOSED WITHOUT DESIGN:**
+  - sample4 passes: C10/A4/B1 → C15/U2, fixing 40/42/44 s and 54.0–54.5 s;
+  - the controls fail reading 3: the hand-off memory never expires and
+    removes rising-fill rows without a Foam witness (sample5 21 known-wrong
+    rows, sample7 20 user-correct rows).
+
+  A successor would need a bounded hand-off and a layer-specific witness,
+  with review-012 as the held-out case. The user decides.
 - **Then (the user chooses):** step 6 (가) fast-fill FULL or another step. LBT-2's Windows S2 joins the step-7 request
   after review-012.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
