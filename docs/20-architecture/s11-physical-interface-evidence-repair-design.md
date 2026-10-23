@@ -628,7 +628,11 @@ fix the local controls, the predictions and the stop conditions before any run.
 
 ## October 23 fast-rise association
 
-**Status: DRAFT 2026-10-23 — not frozen; the user reviews it before any code.**
+**Status: FROZEN 2026-10-23 before implementation.** The user approved the
+draft and its checks ("1. 동의함 대체로 빠른 배출은 저정도 속도보다는 느림 /
+2. 로컬 구현 먼저 동의함"). Fast drains are usually slower than this, so
+upward only stands. Local implementation comes first; the Windows readout and
+the SPL#4 run come later.
 This is option 2 of [FFF-1](../50-diagnostics/s11/2026-10-23-fast-fill-full-review.md),
 chosen by the user, after the
 [local cause check](../50-diagnostics/s11/2026-10-23-fast-fill-full-review.md#local-cause-check-result--2026-10-23)
@@ -650,7 +654,7 @@ confirmed the mechanism.
   beyond-cap motion only when that motion is a consistent fast rise of one
   physical row.
 
-### Rule (draft)
+### Rule
 
 There are two parts, both inside `OIL-TRACKLET`, and both only for upward
 motion (source Y decreasing), the fill direction FFF-1 addresses.
@@ -740,7 +744,7 @@ changes which tracklet a row belongs to.
 - **Default:** production is unchanged until its checks and the user's
   decision.
 
-### Known limits (draft)
+### Known limits
 
 - **No real local fast fill.** sample5 at 0.5 fps and sample5 with the cap
   narrowed to 9 px are stand-ins.
@@ -751,9 +755,10 @@ changes which tracklet a row belongs to.
   the witness fields, would answer it before any Windows run.
 - **The seed needs three frames.** At 2 fps, a level that crosses the Glass
   in fewer than about 3 samples is still missed.
-- **Fast drains are out of scope.**
+- **Fast drains are out of scope.** The user says they are usually slower than
+  this.
 
-**Checks:** the draft
+**Checks:** the
 [fast-rise association checks](../30-validation/s11-physical-interface-evidence-repair-validation.md#fast-rise-association-checks--2026-10-23).
 
 ## Cost-first assignment comparison
@@ -1155,8 +1160,9 @@ as the serialized array index. Diagnostic detail must not change output.
   judgment and product-geometry statement are recorded in the section.
   The implementation adds synthetic lifecycle tests, wiring tests and a
   comparison-runner mode; the frozen local controls run afterwards and
-  are recorded in their evidence. The 2026-10-23 fast-rise section is a
-  draft only: no code, run or Windows execution.
+  are recorded in their evidence. The 2026-10-23 fast-rise section was
+  frozen before any code; its implementation and local checks are recorded
+  in their evidence.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state. The fast-rise draft adds one bounded association route for beyond-cap upward rows (seed of three witnessed rows in a constant-velocity line, then prediction-gated continuation); it is not a widened cap, adds no coordinate and leaves within-cap association unchanged.
 - Logic-map impact: NONE — this update records the gate's local result; its feature row and 4.3 paragraph were committed to the map with the implementation (`2cb0b52`). Before it, this design changed no detector owner; the v3 implementation evidence records the logic-map update for the top-exit row and paragraph. The map already names `oil_top_exit_full.close_top_exit_full` as the closure called from `OilPathLifecycleOwner` (updated with the 2026-10-20 move; order, inputs and default-OFF behavior unchanged), and the earlier source review of the diagnostic path and scalar authority routes still stands. The 2026-10-22 promotion preparation changes no owner, order or default. The contested fill-owner gate was frozen at `8386b45` and then implemented.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair. The attrition path is an instance of F04 (stale continuation after an ambiguity), F05 (EMPTY-phase fill ownership) and F08 (owner re-adoption); no new entry.

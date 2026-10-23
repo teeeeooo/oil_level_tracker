@@ -288,10 +288,10 @@ consequence of the removed rows. Every such change is reported.
 
 ## Fast-rise association checks — 2026-10-23
 
-**Status: DRAFT 2026-10-23, with the design; frozen together with it before
-any code.** These checks accompany the
-[fast-rise association](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-23-fast-rise-association)
-draft.
+**Status: FROZEN 2026-10-23 with the design, before any code or run.** These
+checks accompany the
+[fast-rise association](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-23-fast-rise-association).
+They do not change after results.
 
 **Unit (synthetic tracklet sequences):**
 - **Seeds and admits:** three witnessed rows rising 70 px per frame with a

@@ -542,7 +542,9 @@ remains background; its pending run is received.
   - **Seed:** three witnessed upward rows in a constant-velocity line, beyond
     the cap and within 3× it.
   - **Continuation:** prediction-gated. The option is opt-in, default OFF.
-- **Resume here:** the user reviews the draft; it is frozen before any code.
+- **Frozen (user, 2026-10-23):** the design and checks as drafted. Upward
+  only (fast drains are usually slower). Local implementation first.
+- **Resume here:** implement behind the option, then run F1–F4.
   - Positive stand-ins: sample5 at 0.5 fps or cap9.
   - Controls: every local 2 fps baseline unchanged.
   - Later, a Windows SPL#4 run that joins the held S2 request.
