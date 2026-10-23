@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / NO CURRENT REQUEST`. The read-only [SPL#4 opposition follow-up](#spl4-opposition-follow-up) is COMPLETE ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-opposition-follow-up-receipt--2026-10-22)): the opposing source is `OIL-PHASE-FILL` `FILL_OWNER_AMBIGUOUS` between two low owners, and the ⑩ Accum census is complete. The [SPL#4 top-exit promotion evidence request](#spl4-top-exit-promotion-evidence) is COMPLETE / **P FAIL** ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)): no top-exit FULL row, candidate identical to the reference; R not evaluated; N and U pass; top-exit stays default OFF. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / DRAFT REQUEST`. The [step-7 combined request](#step-7-combined-request) is DRAFTED (2026-10-23) and waits for the user's go. The read-only [SPL#4 opposition follow-up](#spl4-opposition-follow-up) is COMPLETE ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-opposition-follow-up-receipt--2026-10-22)): the opposing source is `OIL-PHASE-FILL` `FILL_OWNER_AMBIGUOUS` between two low owners, and the ⑩ Accum census is complete. The [SPL#4 top-exit promotion evidence request](#spl4-top-exit-promotion-evidence) is COMPLETE / **P FAIL** ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)): no top-exit FULL row, candidate identical to the reference; R not evaluated; N and U pass; top-exit stays default OFF. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -20,6 +20,176 @@ Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
+
+## Step-7 combined request
+
+**DRAFT 2026-10-23 — waiting for the user's go.** Windows is available again
+(user, 2026-10-23). This is step 7 of the Mac-only order in the
+[Work Plan](../00-project/work-plan.md): one request that collects the Windows
+items queued since 2026-10-22. It is a comparison and readout request, not
+field qualification.
+
+**What it answers:**
+- **G, the gate on real field video:** the
+  [contested fill-owner gate](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-22-contested-fill-owner-gate)
+  (`--oil-fill-owner-contest`, default OFF) against its reference, on SPL#4
+  0–90 s and SPL#1 480–780 s. Four runs.
+- **R, report checks:** per-sample band cells, E2 and the first-catch guard
+  (L2) on the SPL#1 reference report.
+- **D, read-only readouts** from the SPL#1 reference bundle: the Accum geometry
+  and 640–672 s rows (LCR-1), fill ownership at Accum 653–682 s (DSR-1 option 1),
+  the contested hypotheses at 680–700 s (option 2), the drain release
+  evaluations at 700–780 s (option 3), and SPL#4's `temporal_max_jump_px`
+  (the fast-fill admission inference).
+- **V, review-012:** the user marks the strict Oil boundary on Accum
+  672.0–677.5 s (the `WS1-ACCUM-FOAM-LAYERED` segment) on a raw zoom made with
+  `tests/diagnostics/s11_review_zoom.py`, the generalised review-014 generator.
+  Its `read-marks` mode turns the marks into source coordinates on Windows, so
+  only text comes back.
+
+**Not in this request:** LBT-2's S2 (a separate go after review-012); a human
+check of the 22 Accum drain rows and a SPL#4 fast-rise frame review (after the
+readouts); SPL#1 after 780 s (the user may supply scenes).
+
+**Pre-registered (judged on the Mac, not on Windows):**
+- **Identity:** each reference equals its earlier bundle in every tracking row
+  (SPL#4: `SPL4_A_top_exit_v3`; SPL#1: ⑩). Since those runs, `src` changed only
+  in report code, the default-OFF gate and the reconstruction guard.
+- **G, SPL#4 BASE:** the 14 wrong-target numeric rows at 27.5–34.0 s
+  (Y704–739) become rows without numeric Oil, each with phase reason
+  `FILL_OWNER_CONTESTED`. Any other differing row is listed and read
+  separately.
+- **G, SPL#4 Accum and SPL#1:** no prediction; every differing row is listed.
+  The Mac reads them against the reviewed truth: a removed numeric row inside a
+  visible-interface segment is a loss; one inside a FULL, EMPTY or wrong-target
+  span is a removed false output.
+- **R:** BASE retrospective ACCEPTED, 479.98–548.01 s, provenance
+  `initial_state_retrospective_v3`; Accum UNRESOLVED; no legend entry without
+  a visible band.
+- **D, V:** no criterion; they inform the user's next choices.
+- **Stop:** a hash or identity mismatch, a wrong resolver version, a run error
+  or a rescaled marked image. The agent stops and reports.
+
+**Source:** latest `main`; the request lists six SHA-256 values. No Recipe,
+ROI, margin, threshold or session change; top-exit and the gate stay default
+OFF; FIELD FAIL / O2 OPEN and review-006 pending are unchanged.
+
+Prompt for the Windows agent (the user forwards it):
+
+```text
+S11 step-7 묶음 요청 — (G) fill-owner gate 비교 실행 4개 + (R) 리포트 확인 + (D) 읽기 전용 추출 + (V) review-012 사람 표시.
+튜닝·Recipe/ROI/margin/임계값 변경·추가 재실행은 하지 마. 사람 확인은 V의 표시 한 번뿐이고 사용자가 한다.
+값만 원문 그대로 돌려주고 판정·수정 제안 없이 멈춰. 새 bundle은 Windows에 보존한다.
+출력 폴더 경로는 영문·숫자·밑줄만 쓴다(OpenCV 이미지 저장은 한글 경로에서 실패할 수 있다).
+인접 행 = 다음 2fps 표본(간격 0.75초 미만). "0.5초 간격"으로 묶지 마.
+
+0. 준비와 신원
+ 0-1. 최신 main 소스 ZIP을 새 폴더에 풀고 기존 Windows Python 환경을 쓴다.
+      소스 폴더에서: $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+      실행 전 SHA-256 확인(하나라도 다르면 실행하지 말고 값만 알려줘):
+      - src/oil_tracker/adapters/vision/oil_phase_lifecycle.py
+        69ea87d223139f882bb1426923112876c15691494e169361fa6ba2a7d369e2bf
+      - src/oil_tracker/adapters/vision/opencv_phase_detector.py
+        ef774ff0824caa495eea7dc9cfecd5453b0cd887b1a5e20c48f078c6fa7e2eaa
+      - src/oil_tracker/adapters/vision/oil_top_exit_full.py
+        10dd3605a9ab0afb4ce4c0ae5a69477b1157318b0246ae972716d4202bb6f77d
+      - src/oil_tracker/application/services/initial_state_reconstruction.py
+        eceac0e8b594f3d9aa761b0ad4bbf9ca6b0e75a71b50a8a4542ace10420fd82f
+      - src/oil_tracker/adapters/reporting/graph_renderer.py
+        dd85223ed6eba3ac8446980ddd6a5019de8d707bd016b0465ea32bf978ed17cb
+      - tests/diagnostics/s11_review_zoom.py
+        34378c1dbbe229ba3b6961d870adc8bf984fb4763627bd4783ba6e41610a7363
+ 0-2. 영상·Recipe는 지난번과 같다. Recipe 파일은 수정하지 않는다.
+      - SPL#4: SPL#4_Cooling_onoff_#2.mp4(53165455 bytes), sample4_test_artifact_R22.oilrecipe
+        — 지난 SPL4_A 실행과 같은 파일.
+      - SPL#1: ⑩(…_top_exit_v3_20261021_170933)과 같은 영상·Recipe(ROI/margin/exclusion/Artifact·영점/스케일).
+        ⑩ bundle의 session/recipe_snapshot과 SHA-256이 같은지 확인한다.
+
+G. 비교 실행 4개 (같은 소스, 차이는 fill_owner_contest 하나)
+   headless 방식은 지난번과 같다(AnalysisPipeline + OutputBundleStore + JsonlDebugTraceWriterFactory).
+   cost-first/RGB/Local XY는 OFF.
+ G-1. SPL#4 — 지난 SPL4_A와 같은 세션: 0–90초, 2fps, FULL debug, compressor_start 10.0초,
+      두 Glass initial_state EMPTY_NO_INTERFACE(메모리의 Recipe와 세션 initial_state_confirmations, Recipe 파일은 그대로).
+      기준: OpenCvPhaseDetector(initial_full_observation=True, top_exit_full=True), run_name "SPL4_B_ref"
+      후보: OpenCvPhaseDetector(initial_full_observation=True, top_exit_full=True, fill_owner_contest=True), run_name "SPL4_B_gate"
+ G-2. SPL#1 — ⑩과 같은 세션: 480–780초, 2fps, FULL debug, compressor_start 485초,
+      BASE FULL / Accum EMPTY 초기 확정값.
+      기준: OpenCvPhaseDetector(initial_full_observation=True, top_exit_full=True), run_name "SPL1_B_ref"
+      후보: 기준 + fill_owner_contest=True, run_name "SPL1_B_gate"
+ G-3. trace의 sequence_resolver_version: 기준 둘은 "+initial-full-observation-v2"와 "+top-exit-full-v3"가 있고
+      "+fill-owner-contest-v1"이 없어야 한다. 후보 둘은 셋 다 있어야 한다. 아니면 멈추고 값만 알려줘.
+
+표기:
+ - 행 = tracking_data.csv 한 줄. 시간은 timestamp_sec. 목록은 frame/time으로 쓴다.
+ - S = debug record의 sequence.state, P = S.sequence_material_phase_diagnostics,
+   K = P.fill_owner_contest (후보에만 있음), C = sequence.candidates[]. 키가 없으면 MISSING, null이면 null.
+ - 다른 행 = 같은 (glass_id, frame_index)에서 fill_state, raw_oil_air_level_y, raw_foam_front_y,
+   oil_is_valid, foam_is_valid, flags 중 하나라도 다른 행.
+
+1. 머리줄: 네 run_id·run_name, 소스 폴더, 0-1의 SHA-256 6개, 네 sequence_resolver_version, 네 bundle 경로,
+   영상 SHA-256·size·fps·frame_count, Recipe SHA-256, Glass별 행 수(SPL#4 기대 181, SPL#1 기대 601),
+   두 쌍의 (glass_id, frame_index) 대응 결과(중복·누락·timestamp 불일치 수).
+
+2. 표 I — 신원: SPL4_B_ref ↔ 지난 SPL4_A_top_exit_v3, SPL1_B_ref ↔ ⑩. Glass별 다른 행 수와 목록(최대 10개).
+
+3. 표 G — 영상별·Glass별(SPL#4 BASE/Accum, SPL#1 BASE/Accum):
+ a. 기준 ↔ 후보 다른 행 수
+ b. 후보에서 K.gated가 true인 행 수, 그 첫 행과 마지막 행의 frame/time
+ c. 다른 행 목록(Glass별 최대 40개, 넘으면 개수만), 각 한 줄:
+    frame | time | 기준 fill_state / raw_oil_air_level_y | 후보 fill_state / raw_oil_air_level_y |
+    후보 S.sequence_material_phase_reason | K.gated | K.contested_tracklet_ids | 후보 P.allowed_tracklet_ids
+ d. 후보 S.sequence_material_phase_reason별 행 수(FILL_OWNER_AMBIGUOUS, FILL_OWNER_CONTESTED만)
+
+R. 리포트 확인 — SPL1_B_ref bundle
+ 4. Glass별: retrospective status, interval, reason, provenance(값 그대로),
+    리포트 카드의 판정과 "판정 안내" 문장 원문, review_index.json의 result_status와
+    effective_state_aware_coverage_ratio.
+ 5. graphs 폴더: combined_levels.png 아래 범례 항목 목록, BASE·Accum 상세 그래프의 범례 항목 목록,
+    범례에 있는데 그래프에 보이는 띠가 없는 항목(없으면 "없음"), 상태 줄과 상세 그래프 띠의 위치·무늬가 같은지(예/아니오).
+
+D. 읽기 전용 추출 — SPL1_B_ref bundle (SPL#4는 D-5만). 파일을 수정하거나 새 결과 파일을 만들지 않는다.
+ 6. 표 A — Accum 기하: Recipe 타원 cx, cy, rx, ry, margin_ratio, P.policy.maximum_jump_px(첫 record),
+    BASE도 같은 값을 한 줄.
+ 7. 표 B — Accum 640.0~672.0초 행 전부, 각 한 줄:
+    time | frame | fill_state | raw_oil_air_level_y | raw_foam_front_y | flags
+ 8. 표 F — Accum 653.0~682.0초 행 전부, 각 한 줄:
+    time | frame | fill_state | raw_oil_air_level_y | S.sequence_material_phase / S.sequence_material_phase_reason |
+    P.dynamic_fill_owner_ids | P.allowed_tracklet_ids | P.established_fill_owner : P.established_fill_last_y |
+    선택 후보(C 중 selected가 true인 항목의 canonical_y:tracklet_id, 없으면 "없음")
+ 9. 표 H — Accum 680.0~700.0초 행 전부. 각 행에서 C 중 kind = oil_air이고 tracklet_id가 비어 있지 않은 항목을
+    canonical_y 오름차순 최대 4개, 각 한 줄:
+    time | frame | canonical_y | tracklet_id | tracklet_lifecycle | tracklet_admitted | tracklet_incompatible |
+    tracklet_failure_reason | selected | reject_stage
+    (트랙 종료 이유 termination_reason은 trace에 없다. 찾지 말고 "trace에 없음"으로 둔다.)
+10. 표 J — Accum 700.0~780.0초:
+ a. raw_oil_air_level_y가 비어 있지 않은 행 수와 목록(time | frame | raw_oil_air_level_y)
+ b. P.release_evaluated가 true인 행, 각 한 줄:
+    time | frame | S.sequence_material_phase | P.release_stage | P.release_selected_tracklet_id | P.release_ambiguous |
+    P.release_evaluations의 각 항목 tracklet_id:row_y:first_failed_predicate (최대 4개)
+    50행이 넘으면 앞 50행과 전체 수만.
+11. 표 K — SPL4_B_ref BASE: P.policy.maximum_jump_px(첫 record)와 Recipe의 temporal_max_jump_px 값.
+
+V. review-012 — SPL#1 Accum 672.0~677.5초, 사람 표시
+12. SPL1_B_ref의 tracking_data.csv에서 Accum의 timestamp_sec가 672.0 이상 677.75 미만인 행의 frame_index를 순서대로 모은다
+    (기대 12개 안팎). 소스 폴더에서:
+      python -m tests.diagnostics.s11_review_zoom prepare --video <SPL#1 영상> --recipe <⑩ Recipe> --glass-name Accum
+        --frames <쉼표로 이은 frame_index> --review-id review-012 --out <새 출력 폴더>\review012
+    (Glass 이름이 Accum이 아니면 Recipe의 이름을 그대로 쓴다.) review-zoom.png와 review-zoom.json이 생긴다.
+13. review-zoom.png를 사용자에게 열어 주고 이렇게 묻는다(문장 그대로):
+    "각 칸에서 엄격 기준의 Oil 경계(촘촘한 Foam이 끝나는 곳, 그 아래 기포 섞인 구간부터 Oil)를 빨간색으로 표시해 주세요.
+     촘촘한 경계가 무너져 특정하기 어려우면 대략 표시하고 '대략'이라고, 촘촘한 경계가 안 보이면 Foam 영역의 최하단을 표시하고
+     '최하단'이라고, Oil 경계가 안 보이면 '안 보임'이라고 칸별로 알려 주세요. 이미지 크기는 바꾸지 말고 같은 크기로 저장해 주세요."
+    사용자가 저장한 파일로:
+      python -m tests.diagnostics.s11_review_zoom read-marks --manifest <...>\review012\review-zoom.json --marked <표시한 파일>
+    "STOP"이 나오면(크기가 다름) 사용자에게 원래 크기로 다시 저장해 달라고 하고 한 번만 다시 읽는다.
+14. 표 V — 칸별 한 줄: frame | decoded_time_sec | 표시 수 | y_range | marks(x:y, 최대 8개) | 사용자 말(대략/최하단/안 보임 등, 원문)
+    머리줄에 review-zoom.json의 zoom_source_xyxy, scale, image.sha256, read-marks의 marked_image.sha256과
+    changed_not_red_px를 적는다. 이미지 원본은 Windows에 보존한다.
+
+15. 머리줄과 표 I/G, 4~5의 답, 표 A/B/F/H/J/K/V를 원문 그대로 돌려준다. 값은 고치거나 반올림하지 않는다.
+    결론·판정·수정 제안 없이 멈춘다. top-exit와 fill-owner gate는 기본 OFF로 남고,
+    FIELD FAIL / O2 OPEN, review-006 pending은 바뀌지 않는다.
+```
 
 ## SPL#4 opposition follow-up
 

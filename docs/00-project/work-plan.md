@@ -436,9 +436,13 @@ remains background; its pending run is received.
   No known real output changes.
 - **Review-014:** answered (2026-10-23); see the
   [result](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#review-014-result--2026-10-23).
-- **Next (the user chooses):** the step-7 Windows request (Windows is
-  available again since 2026-10-23), the 54.0–54.5 s early drop, step 6 (가)
-  fast-fill FULL, or another step. LBT-2's Windows S2 joins the step-7 request
+- **Step 7 drafted (2026-10-23):** the
+  [combined Windows request](../40-operations/s11-current-windows-field-qualification.md#step-7-combined-request)
+  (gate comparison on SPL#4 and SPL#1, report checks, read-only readouts and
+  review-012 with the new `tests/diagnostics/s11_review_zoom.py`) waits for the
+  user's go. Meanwhile the Mac examines the 54.0–54.5 s early drop
+  (user, 2026-10-23).
+- **Then (the user chooses):** step 6 (가) fast-fill FULL or another step. LBT-2's Windows S2 joins the step-7 request
   after review-012.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
   The next Windows report also confirms the band cells, E2 and the first-catch
