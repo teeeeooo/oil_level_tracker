@@ -1,7 +1,10 @@
 # SBD-1 — sample4 early drop at 54.0–54.5 s under the strict Oil boundary
 
-**Status: DESK REVIEW COMPLETE 2026-10-23 (read-only replay, stdout only);
-the user decides the next step.** Asked by the user on 2026-10-23 while the
+**Status: CLOSED 2026-10-23 — option 1, record and close (user: "동의").**
+Desk review (read-only replay, stdout only). 54.0–54.5 s is recorded as an
+ambiguous transition, and the three events are named limits. No detector work
+follows. Option 3 was tried separately as FLB-1 and FLB-2; both closed
+without design. Asked by the user on 2026-10-23 while the
 [step-7 Windows request](../../40-operations/s11-current-windows-field-qualification.md#step-7-combined-request)
 runs. No detector, flag, Recipe or truth change.
 

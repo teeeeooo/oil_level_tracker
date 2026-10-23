@@ -499,14 +499,15 @@ remains background; its pending run is received.
   - **Witness:** the `detached_layer` witness also fires where the reviewed
     truth has no Foam.
   - Nothing is tuned.
-- **Resume here (the user chooses):**
-  - LBT-2's Windows S2, now that review-012 is answered;
-  - step 6 (가), fast-fill FULL;
-  - the SBD-1 options.
-
+- **Decided (user, 2026-10-23):**
+  - **SBD-1:** closed with option 1, record and close. 54.0–54.5 s is an
+    ambiguous transition with named limits.
+  - **LBT-2's Windows S2:** HELD until the user reports Windows is available
+    again (the user is off work). Review-012 is its held-out reference;
+    LBT-2 was frozen before review-012 was read.
+- **Resume here:** step 6 (가), fast-fill FULL, as a Mac desk review first.
   No Windows request is queued.
-- **Then (the user chooses):** step 6 (가) fast-fill FULL or another step. LBT-2's Windows S2 can now follow,
-  since review-012 is answered.
+- **Then:** LBT-2's Windows S2 once Windows is available.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
   The next Windows report also confirms the band cells, E2 and the first-catch
   guard, and the step-7 request adds the gate's SPL#4/SPL#1 comparison and the
