@@ -2858,6 +2858,9 @@ on sample4 52.0–56.0 s. It holds near Y833 through 54.5 s and lies about
 20 px lower from 55.0 s, where it meets the rough reading. The P0 contract
 adds these per-frame bands as Oil references. The known error narrows to the
 output's early drop at 54.0–54.5 s; 55.0–56.0 s are right under the rule.
+The user then qualified them: clear through 53.5 s, approximate at
+54.0–54.5 s where the dense boundary breaks up, and the Foam region's bottom
+from 55.0 s.
 This adds references only: no detector operation, threshold or runtime branch,
 no stored truth file change, and no re-scoring of closed results.
 Logic-map/failure-registry impact is NONE because executing detector owners

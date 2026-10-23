@@ -529,7 +529,8 @@ the readings are used as asked.
 - **The two boundaries meet from 55 s.** Review-013's rough marks at 55.0–56.0 s
   (Y852.5–860.2 at the centre) lie within 3–5 px of the strict ones. At 54.5 s
   they still differ by about 23 px.
-- **The known error narrows to 54.0–54.5 s.** The output drops to the lower
+- **The known error narrows to 54.0–54.5 s** (an uncertain reference; see the
+  follow-up below). The output drops to the lower
   boundary one sample before the strict boundary moves: Y844 at 54.0 s (LBT-2
   arm) and Y851 at 54.5 s (both arms). From 55.0 s the published Y851–852 is
   right under S.
@@ -546,6 +547,20 @@ the readings are used as asked.
 **References under S:** the strict sample4 Oil references now cover 52.0–56.0 s
 at the bands above, in the
 [P0 contract](../../30-validation/s11-interface-observability-witness-validation.md#oil-reference-boundary-inside-a-foam-layer--2026-10-23).
+
+**Follow-up answer (user, 2026-10-23), verbatim:**
+
+> 사실 보기 나름인거같음. 53.5s 까지는 촘촘한 경계가 확실하게 구분되는데, 54s부터는 촘촘한 경계가 무너지기 시작해서 정확하게 어디라고 특정하기 어려움. 다만 55s에서는 확연하게 그 경계가 보이지 않아서 foam 영역의 최하단을 표시함.
+
+**Reference confidence, by this answer:**
+- **52.0–53.5 s, clear:** the dense-Foam bottom is distinct.
+- **54.0–54.5 s, uncertain:** the dense boundary starts to break up. The marks
+  are approximate, so the early drop there is not a decisive error.
+- **55.0–56.0 s, no dense boundary:** the marks are the bottom of the Foam
+  region.
+
+So "the strict boundary moves at 55 s" above is a change of what is visible,
+not a measured 20 px step: the dense boundary breaks up over 54–55 s.
 
 **Open, for the user:** the 54.0–54.5 s early drop. Its first harmful stage is
 not located. LBT-2's F action at 54.5 s (Y820 under the Foam row Y808) and the

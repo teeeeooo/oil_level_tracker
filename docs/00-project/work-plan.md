@@ -347,6 +347,9 @@ is COMPLETE (desk only).
         - The known error narrows to 54.0–54.5 s. The output drops one sample
           early (LBT-2 Y844 at 54.0 s; both arms Y851 at 54.5 s); 55.0–56.0 s
           are right under S.
+        - Follow-up (user): the dense boundary is clear through 53.5 s, breaks
+          up from 54 s (the 54.0–54.5 s marks are approximate) and is not
+          visible from 55 s (the marks are the Foam region's bottom).
         - The strict references for 52.0–56.0 s are in the P0 contract.
       - **Next:** Windows S2 joins the step-7 request, after review-012.
       - **Why the guard returns:** D2 = S kept the 27 % cap, so LBT-1's G

@@ -419,5 +419,14 @@
   "52.0-54.5 s: every frame's centre band lies within Y829.5-837.5; the strict boundary holds near Y833 through 54.5 s.",
   "55.0-56.0 s: the centre band lies at Y853.7-857.7, about 20 px lower than at 54.5 s. Review-013 marked Y852.5-860.2 (x 575-615) at these frames as the rough boundary, so at 55.0-56.0 s the strict and rough readings coincide within 3-5 px; at 54.5 s they differ by about 23 px (Y833.9-835.7 strict against Y857.3-859.1 rough).",
   "The 2026-10-09 Y833 (54.0 s) Foam-texture label lies inside the strict 54.0 s band; its Y837 (55.5 s) and Y838 (56.0 s) lie above the strict bands at those frames."
- ]
+ ],
+ "follow_up_verbatim": {
+  "asked": "55 s에 촘촘한 Foam의 바닥이 실제로 약 20 px 내려간 장면이 맞나요?",
+  "reply": "사실 보기 나름인거같음. 53.5s 까지는 촘촘한 경계가 확실하게 구분되는데, 54s부터는 촘촘한 경계가 무너지기 시작해서 정확하게 어디라고 특정하기 어려움. 다만 55s에서는 확연하게 그 경계가 보이지 않아서 foam 영역의 최하단을 표시함."
+ },
+ "reference_confidence": {
+  "52.0-53.5 s": "CLEAR: the dense-Foam bottom is distinct; the marks are strict references.",
+  "54.0-54.5 s": "UNCERTAIN: the dense boundary starts to break up; the marks are the user's best placement but the position cannot be pinned. They are kept as approximate strict references, not as a decisive error test.",
+  "55.0-56.0 s": "NO DENSE BOUNDARY: no dense boundary is visible; the marks are the bottom of the Foam region. Under the strict rule this is where Oil starts."
+ }
 }

@@ -1995,6 +1995,9 @@ the bottom of the dense Foam.
   ([reply](../50-diagnostics/s11/2026-10-23-review-014-sample4-reply.json),
   [result](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#review-014-result--2026-10-23)).
   From 55.0 s the strict and rough readings coincide within 3–5 px.
+  Confidence (user): clear through 53.5 s; approximate at 54.0–54.5 s, where
+  the dense boundary breaks up; from 55.0 s no dense boundary is visible and
+  the marks are the bottom of the Foam region.
 - **Windows:** review-012 reads the layered-Foam Oil boundary on this rule.
 - Closed experiments keep their recorded dispositions and are not re-scored
   automatically. This is not field acceptance.
