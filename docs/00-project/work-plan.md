@@ -522,8 +522,26 @@ remains background; its pending run is received.
     2. velocity-aware association (F03/F04 risk);
     3. owner-free FULL evidence (F05/F10 risk);
     4. accept UNKNOWN.
-- **Resume here:** the user chooses an FFF-1 option. No Windows request is
-  queued.
+- **FFF-1 decision and cause check (2026-10-23):**
+  - **Option 1 is out for products:** analysis is already slow, and speed
+    work follows the detector work.
+  - **The user chose option 2,** with a local cause check first.
+  - **The [cause check](../50-diagnostics/s11/2026-10-23-fast-fill-full-review.md#local-cause-check-result--2026-10-23)
+    is CONFIRMED** (frozen `116aa72`).
+    - sample5 at 0.5 fps: the admitted-level share falls from 0.824 to 0.400.
+    - sample5 at 2 fps with only the association cap narrowed to 9 px: it
+      falls to 0.059.
+    - In both, the near-level rows fail with `INSUFFICIENT_NET_PROGRESS`.
+    - sample7 at 0.5 fps, which stays under the cap, keeps 0.500.
+  - **Not reproduced:** SPL#4's two-low-owner ambiguity. sample5 opens no
+    fill at all.
+- **Resume here:** the option-2 design (velocity-aware association), frozen
+  before any run.
+  - Positive stand-ins: sample5 at 0.5 fps or cap9.
+  - Controls: every local 2 fps baseline unchanged.
+  - Later, a Windows SPL#4 run that joins the held S2 request.
+
+  The user decides whether to start it. No Windows request is queued.
 - **Then:** LBT-2's Windows S2 once Windows is available.
   Fast-fill FULL (owner tracking or owner-free FULL evidence) stays in step 6.
   The next Windows report also confirms the band cells, E2 and the first-catch
