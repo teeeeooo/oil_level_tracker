@@ -148,6 +148,42 @@ def test_trace_bundle_copies_staging_and_adds_backward_compatible_optional_point
     assert result.debug_trace_completion is None
 
 
+def _tree(root: Path) -> dict[str, bytes]:
+    return {path.relative_to(root).as_posix(): path.read_bytes() for path in sorted(root.rglob("*")) if path.is_file()}
+
+
+@pytest.mark.parametrize("rename_fails", [False, True])
+def test_trace_bundle_publishes_the_staging_bytes_by_rename_or_copy(tmp_path, monkeypatch, rename_fails):
+    import oil_tracker.adapters.storage.output_bundle_store as bundle_store
+
+    result, recipe, session = _inputs(tmp_path, DebugTraceLevel.BASIC)
+    completion = _staging(tmp_path)
+    expected = _tree(Path(completion.staging_directory))
+    result.debug_trace_completion = completion
+    if rename_fails:
+        def cross_volume(*_args):
+            raise OSError(18, "Invalid cross-device link")
+
+        monkeypatch.setattr(bundle_store.os, "rename", cross_volume)
+    output = _store().write_bundle(result, recipe, session, tmp_path)
+    assert _tree(output / "debug") == expected
+    assert not Path(completion.staging_directory).exists()
+
+
+def test_trace_bundle_rejects_a_symbolic_link_in_the_staging(tmp_path):
+    result, recipe, session = _inputs(tmp_path, DebugTraceLevel.BASIC)
+    completion = _staging(tmp_path)
+    staging = Path(completion.staging_directory)
+    try:
+        (staging / "frames" / "link.png").symlink_to(staging / "frames" / "g" / "r" / "overlay.png")
+    except (OSError, NotImplementedError):
+        pytest.skip("symbolic links are unavailable")
+    result.debug_trace_completion = completion
+    with pytest.raises(OSError, match="symbolic links"):
+        _store().write_bundle(result, recipe, session, tmp_path)
+    assert not list(tmp_path.glob(".*.tmp-*"))
+
+
 def test_bundle_failure_removes_temporary_bundle_and_debug_staging(tmp_path):
     result, recipe, session = _inputs(tmp_path, DebugTraceLevel.BASIC)
     completion = _staging(tmp_path)

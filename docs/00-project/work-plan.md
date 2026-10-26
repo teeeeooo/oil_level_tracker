@@ -436,7 +436,10 @@ queued.
   - (다): an ordered background PNG worker.
   - Each speed step keeps the output byte-identical and is checked before
     the next.
-- **Next:** (가) on the Mac while step 10 runs on Windows.
+- **(가) done:** the staging is renamed into the bundle and falls back to the
+  copy. The bundle bytes are identical on sample4. The Windows saving is not
+  yet measured.
+- **Next:** (나) Glass parallel on the Mac while step 10 runs on Windows.
 
 **Earlier resume checkpoint — 2026-10-26:** **Windows is available (user,
 2026-10-26).** The

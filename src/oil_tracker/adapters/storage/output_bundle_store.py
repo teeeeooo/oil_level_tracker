@@ -129,7 +129,7 @@ class OutputBundleStore:
             _emit_snapshot(progress, 4, snapshot_steps, "retrospective interpretation 저장 완료")
             _check_cancelled(cancellation, AnalysisStage.CSV_AND_SNAPSHOTS)
             if completion is not None:
-                _copy_debug_staging(
+                _move_debug_staging(
                     Path(completion.staging_directory),
                     temporary / "debug",
                     cancellation=cancellation,
@@ -265,6 +265,27 @@ class OutputBundleStore:
                 cleanup_debug_staging(completion)
                 result.debug_trace_completion = None
             raise
+
+
+def _move_debug_staging(staging: Path, destination: Path, *, cancellation=None) -> None:
+    """Rename the finalized staging into the empty bundle ``debug`` directory.
+
+    The staging is discarded after publication either way, so a rename on the
+    same volume publishes the same files without rewriting them. Another
+    volume, or any other rename failure, falls back to the file copy.
+    """
+
+    if not staging.is_dir() or staging.is_symlink():
+        raise OSError(f"Debug trace staging directory is missing: {staging}")
+    _check_cancelled(cancellation, AnalysisStage.CSV_AND_SNAPSHOTS)
+    if any(source.is_symlink() for source in staging.rglob("*")):
+        raise OSError("Debug trace staging must not contain symbolic links.")
+    try:
+        destination.rmdir()
+        os.rename(staging, destination)
+    except OSError:
+        destination.mkdir(parents=True, exist_ok=True)
+        _copy_debug_staging(staging, destination, cancellation=cancellation)
 
 
 def _copy_debug_staging(staging: Path, destination: Path, *, cancellation=None) -> None:
