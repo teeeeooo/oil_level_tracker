@@ -1,7 +1,8 @@
 # LBT-2 — layer-bottom topology with a Foam-visible fill guard
 
 **Status: COMPLETE — outcome P: no stop rule fired under the frozen N
-([result](#results-and-decision)).** The user chose every recommendation
+([result](#results-and-decision)). Windows S2 is frozen (2026-10-26) and waits
+for its run ([protocol](#windows-s2-protocol-frozen-2026-10-26)).** The user chose every recommendation
 ([decision](#decision--2026-10-22)) and answered review-013
 ([result](#review-013-result--2026-10-22)). After the result the user answered
 the 52 s/54.5 s question: the two readings use different Foam/Oil boundaries
@@ -568,12 +569,97 @@ stage; the user decides. Its first harmful stage is
 not located. LBT-2's F action at 54.5 s (Y820 under the Foam row Y808) and the
 54.0 s association limit sit in the same second.
 
+## Windows S2 protocol (frozen 2026-10-26)
+
+**Status: FROZEN before any S2 output is seen; the run waits in the
+[step-8 request](../../40-operations/s11-current-windows-field-qualification.md#step-8-combined-request).**
+The user said Windows is available (2026-10-26) and approved freezing S2 and
+sending it with the SPL#4 fast-rise readout ("그렇게 진행하자"). The rule is
+LBT-2 exactly as frozen at `1447cd6`. The wrappers are unchanged since then.
+Review-012 was read after that freeze, so its 12 frames stay held out from the
+rule. Only this scoring uses them.
+
+**Input and arms.**
+- **Session:** the step-7 `SPL1_B_ref` bundle's own session and Recipe
+  snapshot: SPL#1 480–780 s, 2 fps, BASE FULL / Accum EMPTY confirmed, FULL
+  debug. These are the ⑩ settings (IFO v2 + top-exit v3); `SPL1_B_ref` equals
+  ⑩ in every row.
+- **Arms:** a reference rerun and the LBT-2 arm, both from the same source.
+  The LBT-2 arm adds LBT-1's E1 and support consumer and F, with live LBW-3
+  units. Nothing else changes; the fill-owner gate and the fast-rise
+  association stay OFF.
+- **Tool:** `tests/diagnostics/s11_layer_bottom_topology_2_field.py`.
+  - `run` repeats the saved session and writes a bundle.
+  - `compare` lists every differing row and counts per reviewed segment.
+- **Local check, PASS** (managed run
+  `sample/output/s11-lbt2-field-check-20261026-001`, sample4, FULL debug):
+  - the reference arm reproduces its source bundle with 0 changed rows;
+  - the LBT-2 arm reproduces this record's baseline values on the production
+    bundle path: 40 s Y865.5 → Y831, 42 s Y868 → Y835, 44 s Y822 → Y842, and
+    Y844/Y851 at 54.0/54.5 s;
+  - F acts once, at 54.5 s (Y820 under Y808), as in the frozen run.
+
+**References.**
+- **Held out:** review-012 table V
+  ([step-7 receipt](../../60-evidence/s11/2026-10-23-step7-windows-receipt.md#review-012-table-v)),
+  Accum 672.0–677.5 s. All 12 marks are the Foam-region bottom.
+  - The band is the mark ± C1, with C1 = 29.16 px (5 % of the Accum
+    diameter), as in FLB-2.
+  - Classes: C inside the band, A a number outside it, B no number.
+  - The ordinary output scores C0 A8 B4.
+- **Controls:** the other eight segments of the
+  [reviewed truth](../../30-validation/windows_sample1_heating_coldstart.reviewed-truth.json).
+
+**Readings, fixed before the S2 output is read.**
+- **S1, same source:** the reference rerun equals `SPL1_B_ref` in every row.
+  If it does not, the differences are listed and LBT-2 is still read against
+  the rerun.
+- **S2, no harm on the controls.** A changed row fails S2 when:
+  - it removes numeric Oil inside a visible-interface segment (BASE-DRAIN;
+    BASE-RAPID-REFILL before 672.0 s, since FULL output is accepted from
+    about 672 s; ACCUM-ENTRY-SPLASH, ACCUM-POST-FOAM, ACCUM-DRAIN);
+  - it adds numeric Oil inside BASE-FULL-PREFIX, BASE-FULL-SUFFIX or
+    ACCUM-EMPTY;
+  - it adds a Foam value in any segment other than ACCUM-FOAM-LAYERED.
+
+  Moved Oil values in visible-interface segments have no positional
+  reference. They are listed for the user and neither pass nor fail.
+- **S3, 678.5/679 s unchanged:** the two Accum rows are equal in both arms.
+- **S4, benefit:** LBT-2 has fewer A+B than the ordinary output (12) on the
+  held-out frames.
+- **S5, tested:** at least one held-out frame has a non-empty LBT-2 unit
+  (the precondition for E1 and the support consumer).
+- **Foam inside ACCUM-FOAM-LAYERED,** by option (b): an added value is right
+  and a removed one wrong. Both are listed.
+
+**Outcomes.**
+- **All of S1–S5 hold:** LBT-2 may be proposed as a frozen detector design.
+  That is a separate user decision, not adoption.
+- **S5 fails:** NOT TESTED. Record it and close S2.
+- **Any other failure:** close S2 without a design and list the limits.
+- **Either way:** no tuning, widening or time, Y or Glass exception. FIELD
+  FAIL / O2 OPEN stays.
+
+**Expected, recorded before the run (inference, not a prediction class):**
+- **BASE: no change.** E1 and F act only under a Foam material row seeded
+  within 3 s, and the BASE truth has no Foam. A BASE change would be the
+  accepted false-Foam risk (`S11-F07` → `S11-F05`).
+- **Accum 672–677.5 s:** units are likely. LBW-3 accepted 3/3 held-out
+  layered frames there.
+  - ATG-1 showed the boundary candidates failing only
+    `ordered_lower_cross_representation` (support 0.00). That is the gate
+    the support consumer exempts.
+  - So a downward move is plausible. Whether it reaches the Foam-region
+    bottom (Y488.5–501.5) is unknown.
+- **678.5/679 s:** the units are empty there (LBT-1), so no change.
+- **680–683 s:** E1 may still act while the Foam seed is under 3 s old.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `FOAM-IDENTITY`, `SEQUENCE-COMPOSITION`
 - Failure-registry entries: `S11-F01`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F10`
 - First harmful stage: G — `OIL-PHASE-FILL`: the 27 % proximity rule confirms a fill from an in-unit row under a visible Foam row (54.5 s Y820 under Y808). The 40 s condition — `OIL-SELECTOR`/`OIL-TRACKLET`: with the level's 39.5 s row withdrawn, a lower-structure tracklet wins in a frame outside the context. Foam changes — `SEQUENCE-COMPOSITION`: Foam publication follows Oil publication (`S11-F06`).
 - Existing feature coverage: reuses LBT-1's witness, context, E1, support consumer, runner, controls and P0 bounds unchanged. F reuses the Foam material identity row, the 3 s seed-age limit and the lower separation (`foam_material_identity_tolerance + 2 px`) that already define `ORDERED_LOWER_INTERFACE`, and the existing fill confirmation profile. Top-exit v3 and the contested fill-owner gate stay OFF.
-- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files. Review-013 material: one managed run decoded 34 sample4 frames and wrote raw ROI crops with a source-Y ruler; the user's reply was read from the marked image. Freeze: the tool and focused tests are committed with the protocol; the focused tests and ten resolver/phase suites (plain and under the wrapper, zero activations) ran before freezing. Run: one managed development run at `1447cd6` (sample4 baseline and 245 SOI conditions under the wrapper, the layer report, the N evaluation, and four descriptive controls through the ordinary analysis entry); no Windows run, top-exit or fill-owner gate. After the result (2026-10-23): a read-only recount of the kept population with the frozen evaluation functions, grouped by frame; no run and no output files. Review-014 material (2026-10-23): one managed run decoded 9 sample4 frames (52.0–56.0 s) and wrote a raw x5 zoom with a source-Y ruler. Review-014 reply (2026-10-23): the marks were read by differencing the marked image against the clean zoom, and compared with the kept LBT-2 trial baseline CSV and this record's ordinary-arm values; no run and no output files.
+- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files. Review-013 material: one managed run decoded 34 sample4 frames and wrote raw ROI crops with a source-Y ruler; the user's reply was read from the marked image. Freeze: the tool and focused tests are committed with the protocol; the focused tests and ten resolver/phase suites (plain and under the wrapper, zero activations) ran before freezing. Run: one managed development run at `1447cd6` (sample4 baseline and 245 SOI conditions under the wrapper, the layer report, the N evaluation, and four descriptive controls through the ordinary analysis entry); no Windows run, top-exit or fill-owner gate. After the result (2026-10-23): a read-only recount of the kept population with the frozen evaluation functions, grouped by frame; no run and no output files. Review-014 material (2026-10-23): one managed run decoded 9 sample4 frames (52.0–56.0 s) and wrote a raw x5 zoom with a source-Y ruler. Review-014 reply (2026-10-23): the marks were read by differencing the marked image against the clean zoom, and compared with the kept LBT-2 trial baseline CSV and this record's ordinary-arm values; no run and no output files. S2 freeze (2026-10-26): the field runner `s11_layer_bottom_topology_2_field.py` and its unit tests, and one closed local managed run (`s11-lbt2-field-check-20261026-001`: a sample4 source bundle, both arms through the production bundle path, two comparisons); the Windows S2 run waits in the step-8 request.
 - Logic-map impact: NONE — a diagnostic wrapper under tests/diagnostics; no production code, owner or edge changes.
 - Failure-registry impact: NONE — a diagnostic wrapper with no runtime mechanism; its limits map to existing entries (`S11-F04` association after a withdrawn row, `S11-F06` Foam following Oil, `S11-F05` for the guard's false-Foam risk) and are recorded here.

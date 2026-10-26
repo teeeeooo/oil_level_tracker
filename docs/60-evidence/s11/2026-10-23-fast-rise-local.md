@@ -77,12 +77,49 @@ stdout only, kept as `seed-stages.txt`.
      seen);
   3. close option 2 and accept UNKNOWN on fast fills (FFF-1 option 4).
 
+## Windows readout tool — 2026-10-26
+
+Added before the SPL#4 readout. The frozen checks are unchanged.
+
+`tests/diagnostics/s11_fast_rise_readout.py --bundle` serves their first
+Windows step, the read-only SPL#4 readout.
+- **What it reads:** it rebuilds each frame's row hypotheses from the FULL
+  debug trace. These are the builder-eligible Oil candidates (post-track tier
+  ≥ CONTINUATION) in their `row_hypothesis_id` groups, joined to their
+  detector features on source and Y.
+- **What it applies:** the seed's row conditions, with the production
+  tracklet policy and the `_independent_witness` minima:
+  - both steps upward, beyond the cap and within 3× it;
+  - constant velocity;
+  - a shared representation;
+  - the witness on all three rows.
+- **What it cannot test:** the seed's tracklet conditions (single-row,
+  unassigned A and B; uniqueness), which only a run can. A qualifying
+  triplet is therefore necessary for a seed, not sufficient.
+- **Local check, PASS** (managed run
+  `sample/output/s11-fast-rise-readout-check-20261026-001`): on a sample5 2 fps
+  FULL-debug bundle (IFO v2 + top-exit v3), the reader rebuilt all 722 live
+  builder rows with zero differences, the witness included.
+  - 46 rows were witnessed, and 0 triplets qualified.
+  - The tool's own unit tests are in `tests/unit/test_s11_fast_rise_readout.py`.
+- **The rule for the next step, fixed before the readout** (user:
+  "그렇게 진행하자", 2026-10-26):
+  - one or more qualifying triplets on SPL#4 BASE: the Mac proposes the
+    SPL#4 run to the user;
+  - none: no SPL#4 run. The user chooses between a successor witness
+    protocol and closing option 2 (accept UNKNOWN on fast fills).
+  - The stage counts name the blocker (witness or geometry), as on the
+    stand-ins.
+- **Request:** the
+  [step-8 combined request](../../40-operations/s11-current-windows-field-qualification.md#step-8-combined-request),
+  together with LBT-2 S2.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`
 - First harmful stage: unchanged from FFF-1. The association cap at `OIL-TRACKLET` stops level admission, confirmed locally. The fast-rise route does not reach it on the stand-ins because their rows lack the anchor-eligible witness and rarely form a constant-velocity line.
 - Existing feature coverage: the six top-exit negative controls with their frozen Recipes, ROI inputs and initial states (IFO v2 + top-exit v3 as the reference arm), the FFF-1 cause-check arms and surface estimates, the comparison runner and cadence tool with their new fast-rise modes, and the existing `_independent_witness` predicate. No Recipe or session change.
-- Execution scope: one closed local managed run at `4f0665b` (six controls at 2 fps and three stand-ins, debug NONE), the frozen F1–F4 check script and a post-result stdout stage count; no Windows run, no tuning.
+- Execution scope: one closed local managed run at `4f0665b` (six controls at 2 fps and three stand-ins, debug NONE), the frozen F1–F4 check script and a post-result stdout stage count; no Windows run, no tuning. Readout tool (2026-10-26): `s11_fast_rise_readout.py` with unit tests and one closed local managed run (`s11-fast-rise-readout-check-20261026-001`, sample5 2 fps FULL debug, reader against the live builder); the Windows readout waits in the step-8 request.
 - Logic-map impact: NONE — this record adds results; the feature row and 4.2 paragraph were committed with the implementation (`4f0665b`).
 - Failure-registry impact: NONE — the option changes nothing on the local runs; the stand-in finding is an availability limit of the witness, not a new failure mechanism.
