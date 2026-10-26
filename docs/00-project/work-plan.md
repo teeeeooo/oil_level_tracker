@@ -382,7 +382,30 @@ Facts it records:
 The gate is implemented and its local check passed. No Windows request is
 queued.
 
-**Session handoff — 2026-10-26 (latest):** start with the
+**Resume checkpoint — 2026-10-27 (latest), fill-owner gate revisit step 1:**
+[FOR-1](../50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) is
+COMPLETE. The user approved the order (2026-10-27: "응 이 순서로 진행하자",
+then "응 그렇게 진행하자"). No Windows request is queued.
+- **Question 1, from source (inference):** at 22.0 s the fill chain hands off
+  0018 → 0035. At 22.5 s 0018 reappears and starts a new chain that is
+  dynamic at once, because the EMPTY fill test reads fixed confirmation
+  fields and accepts any observation in the window. So two low, slowly moving
+  owners make `FILL_OWNER_AMBIGUOUS`. Neither is the level.
+- **Local check, NO-SEP** (run `s11-fill-owner-recency-20261027-001`,
+  readings frozen at `48d2c9c`, identity PASS): on sample5, low owner rows
+  pass the existing recent-motion test at 72.7 %, level rows at 80.0 %.
+  Recent motion is not the owner-validity cue: low owners rise with the
+  level.
+- **For the design (inference, not decided):** the separating cue is
+  relational, a higher rising interface above the owners. On SPL#4 that
+  interface is unadmitted (FFF-1), so questions 2 and 3 meet there. Its known
+  cost is sample7's front-arc rows (user-judged correct).
+- **Optional, not queued:** a read-only Windows readout of 0018/0035's fixed
+  and recent fields in `SPL4_B_ref`.
+- **Unchanged:** no production default changed. FIELD FAIL / O2 OPEN.
+- **Next:** the user chooses how the revisit continues with questions 2 and 3.
+
+**Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
 updated at session close. Steps 10 and 11 are answered and both follow-ups
 are decided. No Windows request is queued. Next: the fill-owner gate revisit,

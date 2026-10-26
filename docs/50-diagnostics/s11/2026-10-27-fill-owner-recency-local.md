@@ -1,10 +1,16 @@
 # FOR-1 — why SPL#4 is `FILL_OWNER_AMBIGUOUS`, and does recent motion separate fill owners?
 
-**Status: READINGS FROZEN 2026-10-27, before the run.** Step 1 of the
-fill-owner gate revisit in the [Work Plan](../../00-project/work-plan.md),
-approved by the user on 2026-10-27 ("응 이 순서로 진행하자", then
-"응 그렇게 진행하자"). Diagnostics only: no detector, flag, threshold or
-Recipe change.
+**Status: COMPLETE 2026-10-27.** The readings were frozen at `48d2c9c`
+before the run and are unchanged below; the [results](#results) follow them.
+Step 1 of the fill-owner gate revisit in the
+[Work Plan](../../00-project/work-plan.md), approved by the user on
+2026-10-27 ("응 이 순서로 진행하자", then "응 그렇게 진행하자"). Diagnostics
+only: no detector, flag, threshold or Recipe change.
+
+**Result in short:** **NO-SEP.** On sample5, low owner rows pass the
+recent-motion test about as often as level owner rows (72.7 % against
+80.0 %). An owner's own recent motion does not tell a stale low owner from
+the level owner, so the revisit design needs another cue.
 
 ## Question
 
@@ -115,12 +121,72 @@ Per video:
   the design needs another cue.
 - **MIXED:** anything else, described as found.
 
+## Results
+
+**Run:** closed managed run `sample/output/s11-fill-owner-recency-20261027-001`
+at `48d2c9c`, about 75 s on the Mac.
+- **Identity gate: PASS.** On both videos the rows and FOA-1's readout fields
+  equal the kept FOA-1 `top_exit` variant.
+- **Kept:** `for1-summary.json` (`e3a4ebb4…`) and the two gzipped results
+  with every R1 owner row.
+
+| Reading | sample5 (water) | sample7 (milk) |
+|---|---|---|
+| Ambiguous frames | 48 | 24 |
+| R1 owner-frame pairs | 125, of which 44 have no row in the frame | 48, of which 14 have no row |
+| R2 level rows, pass `P` | 12 of 15 (80.0 %) | 13 of 18 (72.2 %) |
+| R2 low rows, pass `P` | 48 of 66 (72.7 %) | 13 of 16 (81.2 %) |
+| R3 frames by owners passing `P` (0 / 1 / 2+) | 13 / 16 / 19 | 5 / 12 / 7 |
+| R4 wrong-target rows passing `P` | 12 of 21 (57.1 %) | – |
+| R5 user-correct 0016 rows passing `P` | – | 16 of 19 (84.2 %) |
+
+**Outcome: NO-SEP.** sample5's low and level pass rates differ by 7 points,
+inside the frozen 25-point margin.
+
+**Reading R5:** the span holds 19 rows of 0016, not FOA-1's 20 gated rows.
+The first sample falls at 21.98 s, before the frozen span start (22.0 s).
+
+**Reported, not scored:**
+- **Fixed against recent direction:** every owner row has a fixed upward
+  direction (sample5 81 of 81, sample7 34 of 34). The recent direction is
+  also upward in 72 of 81 and 34 of 34. The low owners do move upward. This
+  fits the FOA-1 desk correction that most low owners rise in parallel with
+  the level.
+- **Owners with no row:** a retained chain stays a dynamic owner for up to
+  `maximum_lost_frames` without a row. In sample5, 19 of 48 ambiguous frames
+  have at most one owner with a row in the frame (6 with none). In sample7
+  it is 11 of 24. Dropping row-less owners would release a single owner in
+  those frames. On sample5 that owner is mostly low, so the survivor problem
+  the contested gate addresses would return (inference).
+
+## What it means
+
+- **Question 1 is answered from source** (above). The SPL#4 trace readout of
+  0018 and 0035 stays optional. Its fixed and recent fields would confirm the
+  reading, but it is not queued.
+- **Recent motion is not the owner-validity cue.** Low owners on the local
+  fills rise with the level. A test on the owner's own motion, fixed or
+  recent, cannot remove them without also removing level owners.
+- **What remains (inference, for the design step, not decided):** what
+  separates a stale owner is relational. A higher rising interface exists
+  above it. On sample5 that interface is often an admitted level tracklet
+  (FOA-1: 31 of 48 frames). On SPL#4 it is only provisional, unadmitted rows
+  (FFF-1). So questions 2 (admission) and 3 (the fast rise's phase owner)
+  meet at the same place: the level above the owners must be admitted and
+  preferred.
+- **Known cost of a relational cue:** on sample7 the low owner 0016 is the
+  front arc of the same surface (user). Preferring the higher interface would
+  remove its correct rows, as the contested gate did. The user accepted that
+  cost for the gate because product videos are mostly head-on.
+- **Not decided here:** nothing is changed or tuned. The design follows only
+  after the user's choice.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-TRACKLET`, `OIL-PHASE-FILL`
 - Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F05`, `S11-F08`
 - First harmful stage: SPL#4 2 fps 22.5–27.0 s is `OIL-PHASE-FILL` `FILL_OWNER_AMBIGUOUS` between two low owners, inferred from source and the relayed rows: a reappearing tracklet starts a new fill chain that is dynamic at once from its fixed confirmation fields. Upstream, the rising level is never an admitted `OIL-TRACKLET` owner (FFF-1).
 - Existing feature coverage: reuses FOA-1's comparison inputs, frozen empty-fill Recipes, EMPTY initial state, the IFO v2 + top-exit v3 arm, the owner readout and the recent-window tracklet fields the resolver already writes. The recent-motion predicate is the lifecycle's existing refill-witness test, used here only as a reading.
-- Execution scope: one local managed run on sample5 and sample7 at 2 fps with debug NONE, with an identity gate against the kept FOA-1 run. Agent surface estimates only; no Windows run, user review, tuning, flag or threshold change.
+- Execution scope: one closed local managed run (`s11-fill-owner-recency-20261027-001`, at `48d2c9c`) on sample5 and sample7 at 2 fps with debug NONE, identity gate PASS against the kept FOA-1 run; outcome NO-SEP. Agent surface estimates only; no Windows run, user review, tuning, flag or threshold change.
 - Logic-map impact: NONE — diagnostics only; detector code and owners are unchanged.
 - Failure-registry impact: NONE — the reading fits existing entries (`S11-F04` stale continuation, `S11-F05` EMPTY-phase ownership lock); `S11-F02` stays open.
