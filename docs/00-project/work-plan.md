@@ -388,8 +388,11 @@ queued.
   - Two BASE constant-velocity triplets fail only the witness. Each joins
     three near-stationary rows.
   - By the rule there is no SPL#4 run.
-  - **Open user choice:** a successor witness protocol, or closing option 2
-    (accept UNKNOWN on fast fills).
+  - **User (2026-10-26): option 2 is not closed.** Accepting UNKNOWN on
+    fast fills is rejected: fast fills are common in practice. No successor
+    witness is chosen. Local densification is proposed, gated on a frozen
+    SPL#4 6 fps diagnostic
+    ([decision](../50-diagnostics/s11/2026-10-23-fast-fill-full-review.md#user-decision--2026-10-26)).
 - **L, LBT-2 S2:** closed without a design.
   - S1, S4 and S5 hold. The held-out score goes C0 A8 B4 → C8 A0 B4.
   - S2 fails: Oil is removed in ENTRY-SPLASH (4 rows) and in all of
@@ -397,8 +400,23 @@ queued.
   - S3 fails: 678.5/679 s change.
   - No tuning follows.
 - **Unchanged:** no production default changed. FIELD FAIL / O2 OPEN.
-- **Next:** the user's choice for option 2. Any LBT-2 successor is a
-  separate user decision.
+- **Speed (RTP-1):**
+  - The debug trace is about 60 % of a BASIC/FULL run on the Mac.
+  - The finalize rewrite only copies resolver decisions into the trace; it
+    is not the retrospective correction.
+  - B-1 is implemented with byte-identical traces: sample4 BASIC goes from
+    29.1 s to 22.5 s
+    ([RTP-1](../50-diagnostics/s11/2026-10-26-run-time-profile.md)).
+- **Agreed order (user, "응 순서에 동의함. 진행하자"):**
+  1. record the decisions — done;
+  2. B-1 trace cost — done;
+  3. freeze the SPL#4 cadence diagnostic;
+  4. one step-9 Windows request with the diagnostic and a timing breakdown;
+  5. by the results: a densification design or a new cause, then B-2/B-3;
+  6. revisit the gate and top-exit promotions;
+  7. the LBT-2 successor and the open limits, one at a time;
+  8. WP09 → WP10.
+- **Next:** step 3.
 
 **Earlier resume checkpoint — 2026-10-26:** **Windows is available (user,
 2026-10-26).** The

@@ -1719,6 +1719,8 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-23 | [fast-rise association local](60-evidence/s11/2026-10-23-fast-rise-local.md) | 빠른 상승 연결(옵션, 기본 OFF) 구현과 로컬 확인: 대조군 변화 없음(F1/F4 통과), 대용 사례에서 시작 조건 미발동(F2/F3 실패)과 원인 |
 | 2026-10-23 | [step-7 and fast-fill handoff](60-evidence/s11/2026-10-23-step7-fast-fill-handoff.md) | 세션 종료 인수인계: step-7 수신·FLB-2/SBD-1 종료·gate 승격 보류·S2 보류·FFF-1과 빠른 상승 연결 결과, Windows 복귀 시 묶음 요청 순서 |
 | 2026-10-26 | [step-8 Windows receipt](60-evidence/s11/2026-10-26-step8-windows-receipt.md) | step-8 Windows 결과: SPL#4 빠른 상승 조건 만족 3행 0개(witness 미충족, SPL#4 실행 안 함), LBT-2 S2 설계 없이 종료(S2·S3 실패, held-out C8 A0 B4) |
+| 2026-10-26 | [RTP-1 run-time profile](50-diagnostics/s11/2026-10-26-run-time-profile.md) | 분석 실행 시간 측정: debug trace가 BASIC/FULL 실행의 약 60 %, finalize 재기록은 사후 보정과 무관, B-1 trace 비용 절감(출력 바이트 동일, sample4 29.1→22.5 s), 남은 후보와 Windows 측정 필요 |
+| 2026-10-26 | [debug-trace write cost design](20-architecture/s11-debug-trace-write-cost-design.md) | debug trace 기록 비용 절감의 계약(출력 바이트 동일, 실행에 되먹임 없음, 같은 실패 동작)과 B-1 구현·보류 후보 |
 
 ## 2026-10-22 누락 보완 등록 — 166개
 

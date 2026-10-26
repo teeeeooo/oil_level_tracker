@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import math
 from dataclasses import replace
+from enum import Enum
 from pathlib import Path
 import shutil
 from types import SimpleNamespace
@@ -10,7 +12,11 @@ import numpy as np
 import pytest
 
 from oil_tracker.adapters.storage.debug_trace_repository import DebugTraceError, DebugTraceRepository
-from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriter
+from oil_tracker.adapters.storage.jsonl_debug_trace_writer import (
+    JsonlDebugTraceWriter,
+    _json_safe,
+    _record_id,
+)
 from oil_tracker.domain.debug_trace import DebugCaptureDecision, DebugCaptureReason
 from oil_tracker.domain.detection import BoundaryCandidate, PhaseDetection
 from oil_tracker.domain.enums import BoundaryKind, FillState
@@ -315,6 +321,73 @@ def test_sequence_annotation_preserves_raw_record_and_adds_final_authority(tmp_p
         "status": "false",
     }
     assert index["records"][0]["fill_state"] == FillState.DRAINING_VISIBLE.value
+
+
+def test_sequence_annotation_equals_decoding_and_reencoding_the_record(tmp_path):
+    glass = _glass("g1")
+    writer = JsonlDebugTraceWriter("run-한글", DebugTraceLevel.BASIC, staging_parent=tmp_path)
+    annotated = _detection(glass.id, frame=10, time=1.25)
+    plain = _detection(glass.id, frame=11, time=1.75)
+    writer.write(glass, annotated, _artifacts(), _decision())
+    writer.write(glass, plain, _artifacts(), _decision())
+    raw_lines = writer.trace_path.read_bytes().splitlines()
+    writer.annotate_sequence(glass, [annotated])
+    snapshot = writer._sequence_annotations[_record_id(glass.id, 10, 1.25)]
+    completion = writer.finalize()
+    staging = Path(completion.staging_directory)
+    lines = (staging / "debug_trace.jsonl").read_bytes().splitlines()
+    index = json.loads((staging / "debug_index.json").read_text(encoding="utf-8"))
+
+    expected = json.dumps(
+        {**json.loads(raw_lines[0]), "sequence": snapshot},
+        ensure_ascii=False,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode("utf-8")
+    assert lines[0] == expected
+    assert lines[1] == raw_lines[1]
+    trace = (staging / "debug_trace.jsonl").read_bytes()
+    for line, summary in zip(lines, index["records"], strict=True):
+        assert trace[summary["byte_offset"]:][: summary["byte_length"]] == line
+
+
+def test_json_safe_fast_paths_match_the_general_conversion():
+    class Level(Enum):
+        LOW = 1
+
+    def general(value):
+        if isinstance(value, np.generic):
+            return general(value.item())
+        if isinstance(value, np.ndarray):
+            return [general(item) for item in value.tolist()]
+        if isinstance(value, dict):
+            return {str(key): general(item) for key, item in value.items()}
+        if isinstance(value, (list, tuple, set)):
+            return [general(item) for item in value]
+        if isinstance(value, float):
+            return value if math.isfinite(value) else None
+        if isinstance(value, (str, int, bool)) or value is None:
+            return value
+        enum_value = getattr(value, "value", None)
+        if isinstance(enum_value, (str, int, float, bool)):
+            return general(enum_value)
+        return str(value)
+
+    value = {
+        "float": 1.5,
+        "nan": float("nan"),
+        "inf": float("-inf"),
+        3: (True, False, None, "텍스트", 7),
+        "numpy": [np.float32(0.25), np.float64(float("nan")), np.int64(4), np.bool_(True)],
+        "array": np.array([[1.0, float("inf")], [2.0, 3.0]]),
+        "enum": FillState.PARTIAL_VISIBLE,
+        "int_enum": Level.LOW,
+        "set": {2},
+        "path": Path("a/b"),
+    }
+    result = _json_safe(value)
+    assert result == general(value)
+    assert json.dumps(result, allow_nan=False) == json.dumps(general(value), allow_nan=False)
 
 
 def test_abort_removes_staging_directory(tmp_path):

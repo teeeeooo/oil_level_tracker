@@ -312,18 +312,12 @@ class JsonlDebugTraceWriter:
                     line = source.readline()
                     if not line:
                         raise OSError("Debug trace ended before its index summaries.")
-                    record = json.loads(line)
+                    encoded = line.rstrip(b"\n")
                     annotation = self._sequence_annotations.get(summary["record_id"])
                     if annotation is not None:
-                        record["sequence"] = annotation
                         summary["fill_state"] = annotation["fill_state"]
                         summary["confidence"] = annotation["confidence"]["overall"]
-                    encoded = json.dumps(
-                        _json_safe(record),
-                        ensure_ascii=False,
-                        separators=(",", ":"),
-                        allow_nan=False,
-                    ).encode("utf-8")
+                        encoded = _with_sequence_member(encoded, annotation)
                     summary["byte_offset"] = target.tell()
                     summary["byte_length"] = len(encoded)
                     target.write(encoded)
@@ -612,7 +606,37 @@ def _foam_reject_stage(detection, candidate) -> str:
     return "FOAM_EPISODE_NOT_SELECTED"
 
 
+def _with_sequence_member(encoded: bytes, annotation: dict[str, Any]) -> bytes:
+    """Append ``sequence`` as the last member of one compact JSON record.
+
+    The record was written by ``write`` as compact, already JSON-safe JSON
+    without a ``sequence`` member, so this equals decoding it, setting the
+    member and encoding it again, without re-reading the whole record.
+    """
+
+    if not encoded.endswith(b"}") or encoded == b"{}":
+        raise OSError("Debug trace record is not a non-empty JSON object.")
+    member = json.dumps(
+        _json_safe(annotation),
+        ensure_ascii=False,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode("utf-8")
+    return encoded[:-1] + b',"sequence":' + member + b"}"
+
+
 def _json_safe(value: Any):
+    # Exact-type fast paths for the plain values that dominate trace records;
+    # subclasses (bool, enums, NumPy scalars) take the general path below.
+    kind = type(value)
+    if kind is float:
+        return value if math.isfinite(value) else None
+    if kind is str or kind is int or value is None:
+        return value
+    if kind is dict:
+        return {str(key): _json_safe(item) for key, item in value.items()}
+    if kind is list or kind is tuple:
+        return [_json_safe(item) for item in value]
     if isinstance(value, np.generic):
         return _json_safe(value.item())
     if isinstance(value, np.ndarray):

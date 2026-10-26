@@ -9,7 +9,9 @@
 - **SPL#4 readout (2026-10-26):** 0 qualifying triplets on BASE and Accum, so
   no SPL#4 run. The two BASE constant-velocity triplets fail only the
   witness ([receipt](2026-10-26-step8-windows-receipt.md#f--spl4-fast-rise-readout)).
-  The user chooses between a successor witness protocol and closing option 2.
+  The user then rejected closing option 2 (accepting UNKNOWN). No
+  successor witness was chosen; local densification is proposed instead
+  ([decision](../../50-diagnostics/s11/2026-10-23-fast-fill-full-review.md#user-decision--2026-10-26)).
 - **Authority:** the [Work Plan](../../00-project/work-plan.md).
 
 ## What was built

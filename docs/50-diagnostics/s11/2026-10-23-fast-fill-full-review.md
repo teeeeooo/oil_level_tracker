@@ -2,8 +2,10 @@
 
 **Status: DESK REVIEW COMPLETE 2026-10-23. The user chose option 2. The
 local cause check (frozen `116aa72`) is CONFIRMED
-([result](#local-cause-check-result--2026-10-23)). The option-2 design is
-next; the user decides.** This is step 6 (가) of the Mac-only
+([result](#local-cause-check-result--2026-10-23)). After the SPL#4 readout
+found no seed, the user rejected option 4 (accept UNKNOWN) on 2026-10-26.
+The next step is a frozen SPL#4 cadence diagnostic for local densification
+([decision](#user-decision--2026-10-26)).** This is step 6 (가) of the Mac-only
 order in the [Work Plan](../../00-project/work-plan.md), started at the
 user's choice ("남은건 3번"). Windows is unavailable for now. No detector,
 flag, Recipe, session or truth change.
@@ -275,12 +277,64 @@ narrowed at 2 fps. Nothing is tuned.
   - **A Windows run:** SPL#4 0–90 s, compared with SPL4_B_ref. It joins the
     held LBT-2 S2 request.
 
+## User decision — 2026-10-26
+
+**Context:** the
+[SPL#4 readout](../../60-evidence/s11/2026-10-26-step8-windows-receipt.md#f--spl4-fast-rise-readout)
+found no qualifying seed for option 2. The two geometric triplets each join
+three near-stationary rows, so a weaker witness would admit the `S11-F04`
+transfer. By the readout rule, the user chose between a successor witness
+and option 4.
+
+**Option 4 is rejected.** The user:
+
+> 빠른 충전도 실무에서 충분히 자주 나오는 케이스라 이걸 unknown으로 닫아버리면 지금 이 프로젝트를 하는 의미가 많이 상실되지. 샘플링 속도를 올리는건 좋은 생각이지만, 이번보다 더 빠르게 차오르는 케이스라면? 그럼 그땐 거기에 맞춰서 샘플링 속도를 더 올려야할거고 그러다보면 끝이 없어질 것 같아
+
+**Proposed direction: local densification.** This is a proposal, not
+frozen.
+- **What it does:** keep the session rate. Where the completed sequence shows
+  a fast-change signature, decode the source frames between the two samples
+  and observe them with the same detector.
+  - A signature is a lost level, or new beyond-cap tracklets with
+    `INSUFFICIENT_NET_PROGRESS`. SPL#4 BASE shows both at 20.5–22.5 s.
+- **The rate is chosen per gap, not by the user.** The step shrinks until the
+  per-step move stays inside the association cap.
+- **The rate is bounded.** The ceiling is the video's own fps. At 30 fps the
+  32 px cap allows 960 px/s, about 7× the inferred SPL#4 rise. That would fill
+  the 543 px BASE geometry in about 0.6 s. A faster event has no
+  frame-to-frame information to recover at all.
+- **Difference from option 2:** it adds real observations instead of
+  inferring identity across a gap, so it does not cross `S11-F04`. A false
+  trigger costs time, not output.
+- **Costs to design for:**
+  - The schedule is uniform today (`timestamp_schedule`). Re-detection
+    reruns a range on the same schedule.
+  - The frame-count constants (6-frame confirmation, 2 lost frames,
+    top-exit's next-frame repetition, 3 anchors) need time semantics, or rules
+    for a densified span.
+  - The review and report code assume a spacing of `1/sampling_fps`.
+- **Gate before any design:**
+  - SPL#4 has never been run above 2 fps.
+  - A frozen Windows diagnostic of SPL#4 0–90 s at 6 fps against
+    `SPL4_B_ref` comes first. It shows whether denser observation admits the
+    level and closes FULL at all.
+  - Its readings are fixed on the Mac before the run.
+
+**Unchanged:**
+- The fast-rise association stays implemented, default OFF and not adopted.
+  No successor witness is chosen.
+- The user agreed the order on 2026-10-26 ("응 순서에 동의함. 진행하자"):
+  1. record the decisions;
+  2. reduce the debug-trace cost (output unchanged);
+  3. freeze the cadence diagnostic;
+  4. send one Windows request with the diagnostic and a timing measurement.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`, `S11-F08`
 - First harmful stage: `OIL-TRACKLET` association, confirmed locally by the cause check (both arms) and inferred on SPL#4. The per-sample cap (`temporal_max_jump_px` × gap) refuses every pairing of a fast-rising level row with an existing tracklet, so the level never accumulates the 3 observations and 27.2 px progress admission needs; `OIL-PHASE-FILL` then fails closed between two low owners (`FILL_OWNER_AMBIGUOUS`). No frame review confirms the rise rate.
 - Existing feature coverage: the cause check reuses FOA-1's empty-fill Recipes, EMPTY initial state, IFO v2 + top-exit v3 arm, owner readout and agent surface estimates, the session `sampling_fps` and a diagnostic-only wrapper on `_tracklet_policy`. The review reads the current tracklet association and confirmation code, the Recipe `temporal_max_jump_px` (32 px on SPL#4, step-7 table K), the session `sampling_fps` (2.0 in every S11 run on record; a user setting up to the video fps), top-exit v3 and the held fill-owner gate as recorded on SPL#4, and FOA-1's local rise rates. No option is enabled or run.
-- Execution scope: desk review of source and existing receipts; then, at the user's choice, one frozen local managed run (the cause check: sample5 and sample7 at 2/1/0.5 fps and a 2 fps arm with only the tracklet association cap narrowed, debug NONE). No Windows request, no detector change, no tuning.
+- Execution scope: desk review of source and existing receipts; then, at the user's choice, one frozen local managed run (the cause check: sample5 and sample7 at 2/1/0.5 fps and a 2 fps arm with only the tracklet association cap narrowed, debug NONE). No Windows request, no detector change, no tuning. 2026-10-26: the user's decision and a densification proposal only; no run.
 - Logic-map impact: NONE — a desk review; no owner or edge changes.
 - Failure-registry impact: NONE — the mechanism fits `S11-F02` (the level row exists but is never admitted) and the option risks are stated against `S11-F03`/`F04`/`F05`.
