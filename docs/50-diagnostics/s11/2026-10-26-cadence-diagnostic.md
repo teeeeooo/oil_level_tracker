@@ -128,6 +128,13 @@ For every outcome:
 
 ## Stage follow-up (frozen 2026-10-26, before its output)
 
+**RUN 2026-10-26 (step 10): S-A by the letter, dropped at phase
+(`OIL-PHASE-FILL`), with a named limit** ([receipt](../../60-evidence/s11/2026-10-26-step10-11-windows-receipt.md#step-10--stage-readout)).
+- **Chains:** two tracklets meet the chain rule, `0057` (Y379 → Y323) and
+  `0039` (Y785 → Y753). Neither is shown to be the rising level.
+- **Phase:** at 6 fps it blocks 48 of 49 rows with an empty allowed set, and
+  confirms a partial-fill drain during the fill.
+
 The user chose a read-only follow-up on the C-1 bundle (1-(a), 2026-10-26:
 "1-(a)로 진행하고"). It answers the limit named in the
 [receipt](../../60-evidence/s11/2026-10-26-step9-windows-receipt.md#cad-1-cadence-c-c):

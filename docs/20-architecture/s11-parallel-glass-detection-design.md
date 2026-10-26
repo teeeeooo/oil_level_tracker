@@ -85,7 +85,12 @@ would therefore not overlap. Each Glass gets its own process instead.
   `multiprocessing.freeze_support()`. The bootstrap passes a lambda reader
   factory, which keeps the app sequential today. Both belong to the
   default-ON decision.
-- **The Windows timing.** It waits for a Windows run.
+- **The Windows timing: measured 2026-10-26** (step 11,
+  [receipt](../60-evidence/s11/2026-10-26-step10-11-windows-receipt.md#step-11--speed-timing-and-identity)).
+  - Rows and trace bytes are identical.
+  - SPL#4 FULL: 160.1 → 110.3 s. The parent waited 65.7 s, so the run is
+    worker-bound.
+  - NONE: 90.9 → 79.5 s.
 
 ## History Review
 

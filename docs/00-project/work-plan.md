@@ -384,8 +384,26 @@ queued.
 
 **Session handoff — 2026-10-26 (latest):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md).
-Step 10 (stage readout) and step 11 (speed timing) are READY and unanswered.
 The checkpoint below holds the detail.
+
+**Resume checkpoint — 2026-10-26, steps 10 and 11 received:** the
+[receipt](../60-evidence/s11/2026-10-26-step10-11-windows-receipt.md) is in.
+No Windows request is queued.
+- **Step 10:** S-A by the letter, with a named limit.
+  - Two tracklets meet the chain rule; neither is shown to be the rising
+    level.
+  - At 6 fps `OIL-PHASE-FILL` blocks 48 of 49 BASE rows in 20–28 s, and
+    confirms a partial-fill drain during the fill.
+  - At 2 fps the span 22.5–27.0 s is `FILL_OWNER_AMBIGUOUS`.
+  - **Densification alone is not a path to FULL.** The fast-fill direction
+    is the user's decision.
+- **Step 11:** identity PASS (rows; trace bytes for FULL).
+  - FULL: 224.9 → 160.1 s sequential, 110.3 s with (나).
+  - NONE: 90.9 → 79.5 s with (나).
+  - **Enabling (나) in the product is the user's decision.** It needs
+    `freeze_support()` and a picklable reader factory.
+- **Then** the agreed order resumes: the fill-owner gate and the top-exit
+  promotions; LBT-2 and the open limits; WP09 → WP10.
 
 **Resume checkpoint — 2026-10-26, step-8 received:** the
 [step-8 receipt](../60-evidence/s11/2026-10-26-step8-windows-receipt.md) is in.
