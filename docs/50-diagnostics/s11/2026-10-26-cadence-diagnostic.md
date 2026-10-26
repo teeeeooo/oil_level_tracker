@@ -1,7 +1,9 @@
 # CAD-1 — SPL#4 cadence diagnostic (6 fps) and Windows timing
 
-**Status: FROZEN 2026-10-26, before any 6 fps output on SPL#4 exists. The run
-waits in the
+**Status: FROZEN 2026-10-26, before any 6 fps output on SPL#4 existed. RUN
+2026-10-26: outcome C by the rule, with a named limit; no FULL at 6 fps
+([receipt](../../60-evidence/s11/2026-10-26-step9-windows-receipt.md#cad-1-cadence-c-c)).
+It ran under the
 [step-9 request](../../40-operations/s11-current-windows-field-qualification.md#step-9-combined-request).**
 - **Why:** this is step 3 of the order the user agreed ("응 순서에 동의함.
   진행하자").

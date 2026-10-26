@@ -414,12 +414,19 @@ queued.
      [CAD-1](../50-diagnostics/s11/2026-10-26-cadence-diagnostic.md), with a
      local runner check that passed;
   4. one step-9 Windows request with the diagnostic and a timing breakdown —
-     [READY](../40-operations/s11-current-windows-field-qualification.md#step-9-combined-request);
+     done, [receipt](../60-evidence/s11/2026-10-26-step9-windows-receipt.md):
+     - T-1 identity PASS, trace bytes included;
+     - 6 fps gives no FULL; by the rule that is outcome C, but the admitted-Y
+       measure does not identify the rising level;
+     - no BASE owner is selected through the rise;
+     - 6 fps changes ownership across the run;
+     - on Windows the trace cost is PNG, the staging copy and the debug
+       images;
   5. by the results: a densification design or a new cause, then B-2/B-3;
   6. revisit the gate and top-exit promotions;
   7. the LBT-2 successor and the open limits, one at a time;
   8. WP09 → WP10.
-- **Next:** the user forwards the step-9 request; the Mac reads the reply against CAD-1 C1–C5 and outcomes A–D.
+- **Next:** the user's choices: the fast-fill direction after CAD-1, and the next speed step.
 
 **Earlier resume checkpoint — 2026-10-26:** **Windows is available (user,
 2026-10-26).** The

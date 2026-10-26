@@ -1,7 +1,10 @@
 # RTP-1 — analysis run-time profile and debug-trace cost
 
 **Status: MAC PROFILE COMPLETE; B-1 (trace cost, output byte-identical)
-IMPLEMENTED. The Windows timing breakdown waits for the next request.** The
+IMPLEMENTED and byte-identical on Windows. The Windows timing breakdown is
+RECEIVED ([step-9 receipt](../../60-evidence/s11/2026-10-26-step9-windows-receipt.md#windows-timing-threadripper-7945wx)):
+PNG encoding, the staging copy and the debug-image build lead the trace cost;
+detection is the floor.** The
 user asked whether detection speed can improve ("90초짜리 영상 한번 돌리는데도
 시간이 꽤 걸리고있거든?", 2026-10-26) and agreed the order: record the
 decisions, reduce the trace cost with unchanged output, then freeze the
