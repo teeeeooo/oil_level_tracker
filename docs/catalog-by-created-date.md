@@ -1724,6 +1724,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-26 | [CAD-1 cadence diagnostic](50-diagnostics/s11/2026-10-26-cadence-diagnostic.md) | SPL#4를 6 fps로 다시 돌려 빠른 상승 승인·FULL 종료를 보는 고정 진단: 실행 3개(2 fps FULL/NONE, 6 fps FULL)·판정 C1–C5·결과 A–D, Windows 시간 측정, 로컬 확인 |
 | 2026-10-26 | [step-9 Windows receipt](60-evidence/s11/2026-10-26-step9-windows-receipt.md) | step-9 Windows 결과: T-1 신원 PASS(trace 바이트 포함), 6 fps에서 FULL 없음(규칙상 C, 근거 지표 한계 명시)·상승 구간 소유자 미선택·전 구간 소유 변화, Windows 단계별 시간(PNG·staging 복사·debug 이미지) |
 | 2026-10-26 | [parallel-Glass frame loop design](20-architecture/s11-parallel-glass-detection-design.md) | Glass마다 작업 프로세스로 검출하고 부모가 순차 순서대로 소비하는 옵션(기본 OFF): 출력 바이트 동일 계약, 독립성 확인, 확인 결과, 패키징 앱 미적용 |
+| 2026-10-26 | [steps 8–11 and speed handoff](60-evidence/s11/2026-10-26-step8-11-speed-handoff.md) | 세션 종료 인수인계: step-8 수신(빠른 상승 seed 없음, LBT-2 S2 종료), 빠른 충전 UNKNOWN 수용 기각, CAD-1 6 fps 결과, 속도 작업 B-1·가·나·다, step-10·11 대기와 판정 기준 |
 
 ## 2026-10-22 누락 보완 등록 — 166개
 

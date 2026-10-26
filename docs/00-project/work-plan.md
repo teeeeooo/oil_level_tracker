@@ -382,7 +382,12 @@ Facts it records:
 The gate is implemented and its local check passed. No Windows request is
 queued.
 
-**Resume checkpoint — 2026-10-26, step-8 received (latest):** the
+**Session handoff — 2026-10-26 (latest):** start with the
+[steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md).
+Step 10 (stage readout) and step 11 (speed timing) are READY and unanswered.
+The checkpoint below holds the detail.
+
+**Resume checkpoint — 2026-10-26, step-8 received:** the
 [step-8 receipt](../60-evidence/s11/2026-10-26-step8-windows-receipt.md) is in.
 - **F, the SPL#4 readout:** 0 qualifying triplets on BASE and Accum.
   - Two BASE constant-velocity triplets fail only the witness. Each joins
