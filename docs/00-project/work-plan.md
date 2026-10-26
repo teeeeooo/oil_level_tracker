@@ -385,7 +385,7 @@ queued.
 **Resume checkpoint — 2026-10-27 (latest), fill-owner gate revisit step 1:**
 [FOR-1](../50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) is
 COMPLETE. The user approved the order (2026-10-27: "응 이 순서로 진행하자",
-then "응 그렇게 진행하자"). No Windows request is queued.
+then "응 그렇게 진행하자").
 - **Question 1, from source (inference):** at 22.0 s the fill chain hands off
   0018 → 0035. At 22.5 s 0018 reappears and starts a new chain that is
   dynamic at once, because the EMPTY fill test reads fixed confirmation
@@ -400,10 +400,16 @@ then "응 그렇게 진행하자"). No Windows request is queued.
   relational, a higher rising interface above the owners. On SPL#4 that
   interface is unadmitted (FFF-1), so questions 2 and 3 meet there. Its known
   cost is sample7's front-arc rows (user-judged correct).
-- **Optional, not queued:** a read-only Windows readout of 0018/0035's fixed
-  and recent fields in `SPL4_B_ref`.
+- **User (2026-10-27): "(B) 확인 먼저 하고 (A)로 넘어가는걸로 하자".** The
+  read-only
+  [step-12 fill-owner trace readout](../40-operations/s11-current-windows-field-qualification.md#step-12-fill-owner-trace-readout-request)
+  is READY and waits for the user to forward it. It reads 0018/0035's fixed
+  and recent fields in `SPL4_B_ref`, judged by FOR-1's frozen W1–W3. The tool's
+  local check passed (run `s11-fill-owner-trace-check-20261027-001`).
 - **Unchanged:** no production default changed. FIELD FAIL / O2 OPEN.
-- **Next:** the user chooses how the revisit continues with questions 2 and 3.
+- **Next:** read the step-12 reply against W1–W3, then (A): the questions-2/3
+  desk review (admitting and preferring the rising interface above the
+  owners), from existing records, before any design is frozen.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),

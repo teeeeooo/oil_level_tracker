@@ -181,6 +181,41 @@ The first sample falls at 21.98 s, before the frozen span start (22.0 s).
 - **Not decided here:** nothing is changed or tuned. The design follows only
   after the user's choice.
 
+## Windows trace readout — readings frozen 2026-10-27, before its output
+
+**User (2026-10-27): "(B) 확인 먼저 하고 (A)로 넘어가는걸로 하자".** The
+question-1 reading is checked on the saved `SPL4_B_ref` FULL trace before the
+questions-2/3 desk review.
+
+**Tool:** `tests/diagnostics/s11_fill_owner_trace_readout.py`, read-only.
+Per row it prints the phase, reason, owner chain, established owner, dynamic
+owners and allowed set. Per (frame, tracklet) of a dynamic owner or of 0018 and
+0035, it prints the candidate Ys, the confirmation profile and frames, the
+fixed and recent direction, net progress and agreement, and `P`.
+
+**Local check, PASS** (managed run
+`sample/output/s11-fill-owner-trace-check-20261027-001`): on a sample5
+FULL-debug bundle under FOR-1's conditions (Glass renamed BASE), 9.5–19.5 s,
+21 rows are all traced. Rows, phase reasons and dynamic owners equal FOR-1,
+and all 37 FOR-1 owner rows match on Y, recent fields and `P`.
+
+**Readings** (SPL#4 BASE, 20.0–28.0 s):
+- **W1, handoff and reappearance:**
+  - in the 22.0 s row, 0018 is in the owner chain and not a dynamic owner,
+    and 0035 is a dynamic owner;
+  - in the 22.5 s row, both 0018 and 0035 are dynamic owners, and both have an
+    owner row.
+- **W2, fixed fields:** every 0018 and 0035 owner row in 22.5–27.0 s has fixed
+  direction −1 and a confirmation end frame before the 22.0 s row's frame.
+- **W3, recent fields:** each owner row's recent fields and `P`, reported
+  only.
+
+**Verdict:**
+- **CONFIRMED:** W1 and W2 hold.
+- **NOT CONFIRMED:** otherwise, naming the first part that fails. If 0018's
+  confirmation ends at or after the 22.0 s frame, its chain is dynamic from a
+  fresh confirmation, not from fixed fields, and the reading is revised.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-TRACKLET`, `OIL-PHASE-FILL`
