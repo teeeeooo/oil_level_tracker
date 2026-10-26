@@ -426,7 +426,17 @@ queued.
   6. revisit the gate and top-exit promotions;
   7. the LBT-2 successor and the open limits, one at a time;
   8. WP09 → WP10.
-- **Next:** the user's choices: the fast-fill direction after CAD-1, and the next speed step.
+- **User (2026-10-26): 1-(a) and the speed steps in the order (가), (나),
+  (다).**
+  - 1-(a): the read-only
+    [step-10 stage readout](../40-operations/s11-current-windows-field-qualification.md#step-10-stage-readout-request)
+    is READY.
+  - (가): move the debug staging into the bundle instead of copying it.
+  - (나): process Glasses in parallel.
+  - (다): an ordered background PNG worker.
+  - Each speed step keeps the output byte-identical and is checked before
+    the next.
+- **Next:** (가) on the Mac while step 10 runs on Windows.
 
 **Earlier resume checkpoint — 2026-10-26:** **Windows is available (user,
 2026-10-26).** The

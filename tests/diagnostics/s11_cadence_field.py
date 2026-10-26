@@ -4,7 +4,7 @@
 top-exit v3. Only the sampling rate and the debug level named on the command line change. It writes a new bundle
 and prints where the run time went. `identity` compares two bundles row by row and, when both have one, their
 debug traces with the run ID normalized. `cadence` reads a trial bundle against the frozen SPL#4 windows and the
-2 fps reference. See docs/50-diagnostics/s11/2026-10-26-cadence-diagnostic.md.
+2 fps reference. `stages` is read-only: per row, the phase, its reason, the allowed tracklet set and each path stage. See docs/50-diagnostics/s11/2026-10-26-cadence-diagnostic.md.
 """
 from __future__ import annotations
 
@@ -280,6 +280,51 @@ def window_table(bundle, glass='BASE'):
                 admitted_min_y=admitted_min_y, rows=table)
 
 
+STAGE_KEYS = ('best_path', 'continuation_bound', 'spike_suppressed', 'completed_fill')
+
+
+def stages(bundle, glass='BASE', window=WINDOW_TABLE_SEC):
+    """Read-only: per row in the window, the phase, its reason, the allowed set and each path stage's node."""
+    frames = {int(row['frame_index']): row for row in _rows(bundle, glass)
+              if window[0] <= float(row['timestamp_sec']) <= window[1]}
+    states = {}
+    trace = bundle / 'debug' / 'debug_trace.jsonl'
+    if not trace.is_file():
+        _stop(f'no debug trace in {bundle}')
+    with trace.open(encoding='utf-8') as handle:
+        for line in handle:
+            record = json.loads(line)
+            if record.get('glass_name') == glass and record.get('frame_index') in frames:
+                states[record['frame_index']] = (record.get('sequence') or {}).get('state') or {}
+    table = []
+    for frame, row in sorted(frames.items()):
+        state = states.get(frame, {})
+        diagnostic = state.get('sequence_material_phase_diagnostics') or {}
+        allowed = diagnostic.get('allowed_tracklet_ids')
+        table.append(dict(
+            time=float(row['timestamp_sec']), frame=frame, fill=row['fill_state'], oil=_y(row['raw_oil_air_level_y']),
+            traced=frame in states, phase=state.get('sequence_material_phase'),
+            phase_reason=state.get('sequence_material_phase_reason'),
+            owner_chain=state.get('sequence_material_phase_owner_chain'),
+            allowed_mode=diagnostic.get('allowed_mode'),
+            allowed=None if allowed is None else sorted(allowed),
+            stages={key: [state.get(f'sequence_stage_{key}_kind'), state.get(f'sequence_stage_{key}_y')]
+                    for key in STAGE_KEYS}))
+    return dict(bundle=str(bundle), glass=glass, window=list(window), rows=table)
+
+
+def print_stages(result):
+    print(f"stages {result['glass']} {result['window'][0]}-{result['window'][1]} s | bundle {result['bundle']}")
+    print('-- time | frame | fill | oil | phase | phase reason | owner chain | allowed mode | allowed | '
+          + ' | '.join(STAGE_KEYS) + ' --')
+    for row in result['rows']:
+        stage_text = ' | '.join(f'{kind}/{y}' for kind, y in row['stages'].values())
+        allowed = '-' if row['allowed'] is None else ','.join(row['allowed']) or '(none)'
+        print(f"{row['time']} | {row['frame']} | {row['fill']} | {row['oil']} | {row['phase']} | {row['phase_reason']} | "
+              f"{row['owner_chain'] or '-'} | {row['allowed_mode']} | {allowed} | {stage_text}"
+              + ('' if row['traced'] else ' | untraced'))
+
+
 def shared_grid(reference, trial):
     """Rows at the reference's frames: per Glass and phase, rows, numeric Oil in both arms and changed rows."""
     ref_rows, trial_rows = tracking(reference), tracking(trial)
@@ -357,10 +402,20 @@ def main(argv=None):
         compare_parser.add_argument('--reference', type=Path, required=True)
         compare_parser.add_argument('--trial', type=Path, required=True)
         compare_parser.add_argument('--out', type=Path, required=True)
+    stages_parser = sub.add_parser('stages', help='read-only: phase, allowed set and path stages per row')
+    stages_parser.add_argument('--bundle', type=Path, required=True)
+    stages_parser.add_argument('--glass-name', default='BASE')
+    stages_parser.add_argument('--start', type=float, default=WINDOW_TABLE_SEC[0])
+    stages_parser.add_argument('--end', type=float, default=WINDOW_TABLE_SEC[1])
+    stages_parser.add_argument('--out', type=Path, required=True)
     args = parser.parse_args(argv)
     if args.command == 'run':
         run(args.reference_bundle, args.out, fps=args.sampling_fps, debug=args.debug, video=args.video,
             run_name=args.run_name)
+    elif args.command == 'stages':
+        result = stages(args.bundle, args.glass_name, (args.start, args.end))
+        print_stages(result)
+        _write(result, args.out, f'cadence-stages-{args.glass_name}.json')
     elif args.command == 'identity':
         result = identity(args.reference, args.trial)
         print_identity(result)

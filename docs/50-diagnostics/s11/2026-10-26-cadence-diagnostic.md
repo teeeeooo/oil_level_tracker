@@ -126,12 +126,50 @@ For every outcome:
   `independent_anchor` false. SPL#4's rows are rarely anchor-eligible: 7 of
   40 in the readout.
 
+## Stage follow-up (frozen 2026-10-26, before its output)
+
+The user chose a read-only follow-up on the C-1 bundle (1-(a), 2026-10-26:
+"1-(a)로 진행하고"). It answers the limit named in the
+[receipt](../../60-evidence/s11/2026-10-26-step9-windows-receipt.md#cad-1-cadence-c-c):
+was a rising tracklet admitted at 6 fps, and if so, where did the path drop
+it?
+
+**Readouts:** both are read-only and run no detector. The step-10 request
+carries them.
+- **Q-1:** `s11_fast_rise_readout` on C-1, BASE 20.5–25.5 s, the same window
+  as the step-8 readout. It lists every builder row with its tracklet,
+  lifecycle, admission, failure and selection.
+- **Q-2:** `s11_cadence_field stages` on C-1, BASE 20.0–28.0 s. Per row it
+  prints:
+  - the material phase and its reason;
+  - the owner chain;
+  - the allowed mode and set;
+  - the node kind and Y after each path stage: best path, continuation
+    bound, spike suppression and completed fill.
+- **Q-3:** the same `stages` readout on `SPL4_B_ref` at 2 fps, as the
+  contrast.
+
+**Reading, fixed before the output:**
+- **Rising chain:** one tracklet whose admitted rows fall at least 27.2 px
+  (the BASE admission progress, 5 % of 543.4 px) over consecutive frames in
+  20.5–25.5 s.
+- **S-A, the chain exists:** the first Q-2 stage whose node is not that
+  chain's row names where the path drops it.
+  - The allowed set excludes the chain: phase (`OIL-PHASE-FILL`).
+  - The best path already chooses unknown or another row: the bounded path
+    (`OIL-SELECTOR`).
+  - A later stage changes it: that stage.
+- **S-B, no chain:** admission still fails at 6 fps, and the Y323 admitted
+  row was not the level.
+- **Either way:** no tuning. The result goes back to the user for the
+  fast-fill decision.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `TRACE-PUBLICATION`
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`
 - First harmful stage: unchanged from FFF-1 — `OIL-TRACKLET` association (confirmed locally, inferred on SPL#4); this diagnostic tests whether denser observation removes it.
 - Existing feature coverage: the step-7 `SPL4_B_ref` session and Recipe snapshot unchanged (IFO v2 + top-exit v3, gate OFF, compressor start 10.0 s), the existing session `sampling_fps` and debug level, the production bundle path, the existing `OIL_TOP_EXIT_FULL` flag and top-exit diagnostics, and the frozen SPL#4 windows; no detector option is added.
-- Execution scope: the field runner `s11_cadence_field.py` with unit tests and one closed local managed run (sample4); the three Windows runs and two comparisons wait in the step-9 request.
+- Execution scope: the field runner `s11_cadence_field.py` with unit tests and one closed local managed run (sample4); three Windows runs and three comparisons under the step-9 request. Stage follow-up: a read-only `stages` subcommand, checked on a scratch sample4 6 fps bundle, and two read-only readouts of C-1 and one of `SPL4_B_ref` in the step-10 request.
 - Logic-map impact: NONE — a diagnostic runner under tests/diagnostics; no production owner or edge changes.
 - Failure-registry impact: NONE — a diagnostic with no runtime mechanism; its outcomes map to existing entries (`S11-F02` admission, `S11-F04` identity risk avoided by real observations).

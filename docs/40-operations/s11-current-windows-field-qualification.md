@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / DRAFT REQUEST`. The [step-9 combined request](#step-9-combined-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step9-windows-receipt.md)): T-1 identity PASS including trace bytes; CAD-1 C1 fails (no FULL at 6 fps; outcome C with a named limit); Windows timing recorded. The [step-8 combined request](#step-8-combined-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step8-windows-receipt.md)). F: 0 qualifying SPL#4 triplets, so no SPL#4 run. L: LBT-2 S2 closes without a design (S2 and S3 fail; S4 C8 A0 B4). The read-only [step-7 follow-up request](#step-7-follow-up-request) is COMPLETE (2026-10-23). The [FLB-2 held-out request](#flb-2-held-out-request) is COMPLETE ([result](../50-diagnostics/s11/2026-10-23-foam-layer-bottom-follow-2.md#held-out-result--2026-10-23)): FLB-2 closes with no design: the held-out case is NOT TESTED (R3), and R2 and R4 fail. The [step-7 combined request](#step-7-combined-request) is COMPLETE ([receipt](../60-evidence/s11/2026-10-23-step7-windows-receipt.md)). Identity PASS. The gate's SPL#4 prediction PASS: exactly the 14 wrong-target BASE rows go UNKNOWN, plus one false Accum EMPTY sample, and SPL#1 is unchanged. Report checks PASS (band cells, E2, first-catch guard). Review-012 is answered. Gate promotion is HELD (user, 2026-10-23); it stays default OFF. The read-only [SPL#4 opposition follow-up](#spl4-opposition-follow-up) is COMPLETE ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-opposition-follow-up-receipt--2026-10-22)): the opposing source is `OIL-PHASE-FILL` `FILL_OWNER_AMBIGUOUS` between two low owners, and the ⑩ Accum census is complete. The [SPL#4 top-exit promotion evidence request](#spl4-top-exit-promotion-evidence) is COMPLETE / **P FAIL** ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)): no top-exit FULL row, candidate identical to the reference; R not evaluated; N and U pass; top-exit stays default OFF. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / DRAFT REQUEST`. The read-only [step-10 stage readout request](#step-10-stage-readout-request) is READY (2026-10-26), waiting for the user to forward it. The [step-9 combined request](#step-9-combined-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step9-windows-receipt.md)): T-1 identity PASS including trace bytes; CAD-1 C1 fails (no FULL at 6 fps; outcome C with a named limit); Windows timing recorded. The [step-8 combined request](#step-8-combined-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step8-windows-receipt.md)). F: 0 qualifying SPL#4 triplets, so no SPL#4 run. L: LBT-2 S2 closes without a design (S2 and S3 fail; S4 C8 A0 B4). The read-only [step-7 follow-up request](#step-7-follow-up-request) is COMPLETE (2026-10-23). The [FLB-2 held-out request](#flb-2-held-out-request) is COMPLETE ([result](../50-diagnostics/s11/2026-10-23-foam-layer-bottom-follow-2.md#held-out-result--2026-10-23)): FLB-2 closes with no design: the held-out case is NOT TESTED (R3), and R2 and R4 fail. The [step-7 combined request](#step-7-combined-request) is COMPLETE ([receipt](../60-evidence/s11/2026-10-23-step7-windows-receipt.md)). Identity PASS. The gate's SPL#4 prediction PASS: exactly the 14 wrong-target BASE rows go UNKNOWN, plus one false Accum EMPTY sample, and SPL#1 is unchanged. Report checks PASS (band cells, E2, first-catch guard). Review-012 is answered. Gate promotion is HELD (user, 2026-10-23); it stays default OFF. The read-only [SPL#4 opposition follow-up](#spl4-opposition-follow-up) is COMPLETE ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-opposition-follow-up-receipt--2026-10-22)): the opposing source is `OIL-PHASE-FILL` `FILL_OWNER_AMBIGUOUS` between two low owners, and the ⑩ Accum census is complete. The [SPL#4 top-exit promotion evidence request](#spl4-top-exit-promotion-evidence) is COMPLETE / **P FAIL** ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)): no top-exit FULL row, candidate identical to the reference; R not evaluated; N and U pass; top-exit stays default OFF. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -20,6 +20,65 @@ Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
+
+## Step-10 stage readout request
+
+**READY 2026-10-26, waiting for the user to forward it.** The user chose a
+read-only follow-up on the step-9 C-1 bundle ("1-(a)로 진행하고"). It runs no
+detector and writes only readout files.
+
+**What it answers:** the
+[stage follow-up](../50-diagnostics/s11/2026-10-26-cadence-diagnostic.md#stage-follow-up-frozen-2026-10-26-before-its-output).
+Was a rising BASE tracklet admitted at 6 fps, and if so, at which path stage
+was it dropped?
+
+**Readouts:**
+- **Q-1:** `s11_fast_rise_readout` on C-1, BASE 20.5–25.5 s.
+- **Q-2:** `s11_cadence_field stages` on C-1, BASE 20.0–28.0 s.
+- **Q-3:** `s11_cadence_field stages` on `SPL4_B_ref`, BASE 20.0–28.0 s.
+
+**Pre-registered (judged on the Mac):** the rising-chain reading and S-A/S-B
+of the stage follow-up.
+
+**Stop:** a SHA-256 mismatch, a missing bundle file, a `STOP` line or an
+error. The agent reports it and does not retry.
+
+Prompt for the Windows agent (the user forwards it):
+
+```text
+S11 step-10 읽기 전용 요청 — step-9의 C-1(6fps) bundle과 SPL4_B_ref에서 단계별 값을 뽑는다. 검출기 실행 없음.
+튜닝·Recipe/세션 변경·재실행은 하지 마. 사람 확인은 없다.
+값은 도구 stdout을 원문 그대로 돌려줘. 요약·재구성·개수 세기·판정·수정 제안 없이 멈춰.
+출력 폴더 경로는 영문·숫자·밑줄만 쓴다.
+
+0. 준비와 신원
+ 0-1. 최신 main 소스 ZIP을 새 폴더에 풀고 기존 Windows Python 환경을 쓴다.
+      소스 폴더에서: $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+      실행 전 SHA-256 확인(하나라도 다르면 실행하지 말고 값만 알려줘):
+      - tests/diagnostics/s11_cadence_field.py
+        2b0925610b201eedc7b4a1f5d61837f6047f105335029aa8c642cdc404a34b7c
+      - tests/diagnostics/s11_fast_rise_readout.py
+        96a5cab616d3db67d626f719ca48f0e7c2bbeb0a33bceffde88f8deb797cdbbc
+      - tests/diagnostics/s11_layer_bottom_topology_2_field.py
+        0830bef44a0a7d00e1ff5f700a9ad06de2913839117379bfd21d55f3aa8cf433
+ 0-2. 쓰는 bundle(복사·수정 금지):
+      - C-1: step-9의 oil_level_analysis_SPL4_C1_6fps_full_20261026_150634
+      - SPL4_B_ref: step-7의 oil_level_analysis_SPL4_B_ref_20261023_150316
+      각 bundle에 tracking_data.csv, recipe_snapshot.oilrecipe, debug\debug_trace.jsonl이 있는지 확인한다.
+ 0-3. 새 출력 폴더 <out>를 만든다(예: C:\step10_out).
+
+Q. 읽기 3개 — 소스 폴더에서:
+ Q-1. python -m tests.diagnostics.s11_fast_rise_readout --work <out>\q1 --bundle <C-1 폴더> --glass-name BASE --start 20.5 --end 25.5
+ Q-2. python -m tests.diagnostics.s11_cadence_field stages --bundle <C-1 폴더> --glass-name BASE --start 20.0 --end 28.0 --out <out>\q2
+ Q-3. python -m tests.diagnostics.s11_cadence_field stages --bundle <SPL4_B_ref 폴더> --glass-name BASE --start 20.0 --end 28.0 --out <out>\q3
+
+1. 돌려줄 것 — 모두 stdout 원문 그대로. 값은 고치거나 반올림하지 않는다.
+ - 머리줄: 소스 폴더, 0-1의 SHA-256 3개, 두 bundle 경로.
+ - Q-1 전체: 첫 세 줄, "-- rows" 목록 전부, "-- constant-velocity triplets" 목록 전부, 마지막 "json … sha256" 줄.
+ - Q-2, Q-3 전체: "stages …" 줄, 머리줄, 행 목록 전부, 마지막 "json … sha256" 줄.
+
+2. 결론·판정 없이 멈춘다. FIELD FAIL / O2 OPEN, review-006 pending은 바뀌지 않는다.
+```
 
 ## Step-9 combined request
 
