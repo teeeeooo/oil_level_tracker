@@ -148,6 +148,11 @@ show that the tracklet is the rising level. Neither chain is shown to be.
   meet phase-level owner handling during a fast fill, at either rate.
 - **The fast-fill direction goes back to the user.** No design is frozen
   here.
+- **User decision (2026-10-26): "빠른 충전은 너의 의견에 동의".**
+  - Densification as a standalone fix is not pursued.
+  - Fast-rise phase-owner handling joins the fill-owner gate revisit, the
+    next step of the agreed order. It is reviewed at 2 fps and covers the
+    admission failure (FFF-1) as well.
 
 ## Step 11 — speed timing and identity
 
@@ -214,6 +219,11 @@ show that the tracklet is the rising level. Neither chain is shown to be.
 
 - **(가), (나) and (다) keep the output byte-identical on Windows,** in the
   rows and in the trace.
+- **The production output scope (user, 2026-10-26).** The packaged product
+  will not include FULL debug or the ordinary debug trace. Those exist for
+  detector debugging during development. The product's goal is a working
+  detector plus the minimum output the report needs. The product case is
+  therefore the NONE run: −13 % with (나).
 - **Whether to enable (나) in the product is the user's decision.**
   - Gains: −31 % with FULL and −13 % with NONE, on two Glasses.
   - Enabling it needs `multiprocessing.freeze_support()` in the packaged

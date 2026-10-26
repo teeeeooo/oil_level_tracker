@@ -395,13 +395,18 @@ No Windows request is queued.
   - At 6 fps `OIL-PHASE-FILL` blocks 48 of 49 BASE rows in 20–28 s, and
     confirms a partial-fill drain during the fill.
   - At 2 fps the span 22.5–27.0 s is `FILL_OWNER_AMBIGUOUS`.
-  - **Densification alone is not a path to FULL.** The fast-fill direction
-    is the user's decision.
+  - **Densification alone is not a path to FULL.**
+  - **User (2026-10-26): "빠른 충전은 너의 의견에 동의".** Densification is
+    not pursued. Fast-rise phase-owner handling joins the fill-owner gate
+    revisit, reviewed at 2 fps and covering the FFF-1 admission failure.
 - **Step 11:** identity PASS (rows; trace bytes for FULL).
   - FULL: 224.9 → 160.1 s sequential, 110.3 s with (나).
   - NONE: 90.9 → 79.5 s with (나).
   - **Enabling (나) in the product is the user's decision.** It needs
     `freeze_support()` and a picklable reader factory.
+  - **User (2026-10-26):** the packaged product carries no FULL or ordinary
+    debug trace, only the detector and the minimum output for the report.
+    So the product case for (나) is the NONE run (−13 %).
 - **Then** the agreed order resumes: the fill-owner gate and the top-exit
   promotions; LBT-2 and the open limits; WP09 → WP10.
 
