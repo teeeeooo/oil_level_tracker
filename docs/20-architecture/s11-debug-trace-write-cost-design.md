@@ -68,15 +68,49 @@ FULL run, for about 0.6 GB
   - the bundle bytes are equal by rename and by the copy fallback;
   - a symbolic link in the staging is still rejected.
 
+## Background PNG encoding (implemented 2026-10-26, speed step (다))
+
+The analysis factory (`JsonlDebugTraceWriterFactory`, `background_images=True`)
+gives the writer four encoding threads. OpenCV releases the GIL while it
+encodes.
+
+**How `write` works:**
+- **Kept synchronous:** every check (closed, capture, missing artifacts,
+  duplicate key), the record directory and the record body.
+- **Queued:** each image is submitted on a private copy of its array. The
+  record joins an ordered queue.
+- **Written in order:** a record is written once its own images are done. A
+  failed encode becomes the same `image_encode_failed` warning in the same key
+  order.
+- **Bounded:** at most 8 records wait. Beyond that, `write` blocks on the
+  oldest.
+- **`annotate_sequence` and `finalize`** first write every waiting record.
+  `abort` cancels them.
+- **Where it applies:** a writer built directly keeps the synchronous
+  default. The re-detection workspace is one example.
+
+**What differs:** a file-write error now surfaces from a later `write`,
+`annotate_sequence` or `finalize`, not from the `write` that queued the
+record. The run still stops, and the bundle is not published.
+
+**Byte identity:**
+- **Single Glass:** sample4 with a fixed run ID gives the same trace tree as
+  B-1, BASIC `f54be313…` and FULL `8549ce82…`.
+- **Two Glasses in parallel:** sample4 gives the same trace as before.
+- **Unit test:** 12 FULL records with missing images and failed encodes give
+  identical staging trees with and without background encoding.
+
+**Mac timing:**
+- **Single Glass, sequential:** 22.5 s → 19.2 s.
+- **Two Glasses, parallel:** unchanged at 19.9 s. The parent now waits on
+  the workers 12.1 s instead of 3.8 s, so the workers are the critical path.
+
 ## Not adopted, and open candidates
 
 - **Concurrent encoding of one record's images:** reverted. One full-frame
   `overlay` dominates, so it saved about 1 %.
-- **One ordered background worker for PNG encoding and file writing (B-1b):**
-  - It would keep byte identity only if the work stays in submission order.
-  - Encode errors would have to reach the record before it is written.
-  - Readers of the trace before finalize would have to wait for the worker.
-  - It waits for the Windows timing breakdown.
+- **One ordered background worker (B-1b):** superseded by the background
+  PNG encoding above.
 
 ## History Review
 

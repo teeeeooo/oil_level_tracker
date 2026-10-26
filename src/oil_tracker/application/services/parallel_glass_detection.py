@@ -13,6 +13,7 @@ from collections.abc import Callable, Sequence
 import multiprocessing
 import pickle
 import queue as queue_module
+import time
 from typing import Any
 
 from oil_tracker.application.services.detection_processing import learn_static_artifacts
@@ -107,6 +108,9 @@ class GlassWorkers:
         self._processes = {}
         self._current: dict[str, tuple] = {}
         self._current_index = -1
+        # Time the parent spends blocked on the workers: near zero means the
+        # parent's own work (trace writing) is the critical path.
+        self.wait_sec = 0.0
         detector_factory, video_reader_factory = factories
         for glass in self.glasses:
             results = context.Queue(maxsize=QUEUE_SLOTS)
@@ -125,12 +129,15 @@ class GlassWorkers:
         while True:
             if check_cancelled is not None:
                 check_cancelled()
+            started = time.perf_counter()
             try:
                 message = results.get(timeout=POLL_SEC)
             except queue_module.Empty:
+                self.wait_sec += time.perf_counter() - started
                 if not self._processes[glass_id].is_alive():
                     raise GlassWorkerError(f"Detection worker for Glass {glass_id} ended unexpectedly.") from None
                 continue
+            self.wait_sec += time.perf_counter() - started
             if message[0] == "worker_error":
                 raise message[1]
             return message

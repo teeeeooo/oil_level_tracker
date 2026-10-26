@@ -123,7 +123,9 @@ def run(reference_bundle, out, *, fps=None, debug=None, video=None, run_name=Non
     print(f'run | run_id {run_id} | run_name {session.run_name} | version {detector.version}')
     print(f'bundle {bundle}')
     if parallel_glasses:
-        print(f'parallel glasses requested | used {pipeline.last_run_parallel}')
+        wait = pipeline.last_worker_wait_sec
+        print(f'parallel glasses requested | used {pipeline.last_run_parallel} | parent waited on workers '
+              f'{None if wait is None else round(wait, 2)} s')
     print(f'window {session.analysis_start_sec}-{session.analysis_end_sec} s | fps {session.sampling_fps} | '
           f'debug {session.debug_trace_level.value} | rows ' + ', '.join(f'{names[g]} {n}' for g, n in rows.items()))
     timing = dict(wall_sec=round(wall, 2), glass_frames=glass_frames,
@@ -139,6 +141,7 @@ def run(reference_bundle, out, *, fps=None, debug=None, video=None, run_name=Non
     path.write_text(json.dumps(dict(run_id=run_id, bundle=str(bundle), fps=session.sampling_fps,
                                     debug=session.debug_trace_level.value, version=detector.version,
                                     parallel_glasses=pipeline.last_run_parallel,
+                                    worker_wait_sec=pipeline.last_worker_wait_sec,
                                     **timing), indent=1) + '\n', encoding='utf-8')
     return bundle
 

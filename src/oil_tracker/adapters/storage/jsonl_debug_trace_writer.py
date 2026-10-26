@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from collections import Counter
+from collections import Counter, deque
+from concurrent.futures import Future, ThreadPoolExecutor
 import hashlib
 import json
 import math
@@ -63,19 +64,34 @@ _FULL_IMAGE_KEYS = (
 
 
 class JsonlDebugTraceWriterFactory:
-    def __init__(self, staging_parent: str | Path | None = None) -> None:
+    def __init__(self, staging_parent: str | Path | None = None, *, background_images: bool = True) -> None:
         self.staging_parent = Path(staging_parent) if staging_parent is not None else None
+        self.background_images = background_images
 
     def create(self, run_id: str, recipe, session):
         return JsonlDebugTraceWriter(
             run_id,
             session.debug_trace_level,
             staging_parent=self.staging_parent,
+            background_images=self.background_images,
         )
 
 
+# Background PNG encoding: OpenCV releases the GIL while encoding, so a few
+# threads overlap the images of several records with the caller's own work.
+# At most this many records wait for their images before ``write`` blocks.
+_IMAGE_WORKERS = 4
+_PENDING_RECORDS = 8
+
+
 class JsonlDebugTraceWriter:
-    """Streams one independent JSON object and its images per selected detection."""
+    """Streams one independent JSON object and its images per selected detection.
+
+    With ``background_images`` the PNG files are encoded on worker threads and
+    each record is written once its own images are done, strictly in ``write``
+    order, so the trace bytes are the same as without it. A write error then
+    surfaces from a later ``write``, ``annotate_sequence`` or ``finalize``.
+    """
 
     def __init__(
         self,
@@ -83,6 +99,7 @@ class JsonlDebugTraceWriter:
         trace_level: DebugTraceLevel,
         *,
         staging_parent: str | Path | None = None,
+        background_images: bool = False,
     ) -> None:
         if trace_level is DebugTraceLevel.NONE:
             raise ValueError("A debug writer must not be created for trace level 'none'.")
@@ -98,12 +115,18 @@ class JsonlDebugTraceWriter:
         self._summaries: list[dict[str, Any]] = []
         self._keys: set[tuple[str, int, int]] = set()
         self._sequence_annotations: dict[str, dict[str, Any]] = {}
+        self._pool = (
+            ThreadPoolExecutor(max_workers=_IMAGE_WORKERS, thread_name_prefix="debug-trace-png")
+            if background_images
+            else None
+        )
+        self._pending: deque[dict[str, Any]] = deque()
         self._closed = False
         self._finalized = False
 
     @property
     def record_count(self) -> int:
-        return len(self._summaries)
+        return len(self._summaries) + len(self._pending)
 
     def write(
         self,
@@ -127,28 +150,16 @@ class JsonlDebugTraceWriter:
         record_id = _record_id(glass.id, detection.frame_index, detection.time_sec)
         glass_directory = self.frames_directory / _safe_component(glass.id) / record_id
         glass_directory.mkdir(parents=True, exist_ok=False)
-        warnings: list[str] = []
-        images: dict[str, str] = {}
-        availability: list[str] = []
         requested_keys = _FULL_IMAGE_KEYS if self.trace_level is DebugTraceLevel.FULL else _BASIC_IMAGE_KEYS
+        images = []
         for image_key in requested_keys:
             image = artifacts.images.get(image_key)
             if image is None:
-                warnings.append(f"missing_optional_image:{image_key}")
+                images.append((image_key, None, None, None))
                 continue
             relative = Path("frames") / _safe_component(glass.id) / record_id / f"{_safe_component(image_key)}.png"
             destination = self.staging_directory / relative
-            try:
-                if image_key == "foam_component_labels":
-                    _write_png(destination, image, preserve_uint16=True)
-                else:
-                    _write_png(destination, image)
-            except Exception as exc:
-                destination.unlink(missing_ok=True)
-                warnings.append(f"image_encode_failed:{image_key}:{type(exc).__name__}")
-                continue
-            images[image_key] = relative.as_posix()
-            availability.append(image_key)
+            images.append((image_key, relative, destination, self._encode(destination, image, image_key)))
 
         candidates = []
         for rank, (candidate_index, candidate) in enumerate(
@@ -176,6 +187,64 @@ class JsonlDebugTraceWriter:
         state = dict(getattr(artifacts, "state", {}) or {})
         state.update(dict(detection.debug_metrics or {}))
         reasons = tuple(dict.fromkeys(reason.value for reason in decision.reasons))
+        self._pending.append(
+            {
+                "record_id": record_id,
+                "glass": glass,
+                "detection": detection,
+                "reasons": reasons,
+                "state": state,
+                "candidates": candidates,
+                "images": images,
+            }
+        )
+        self._drain(_PENDING_RECORDS if self._pool is not None else 0)
+        return record_id
+
+    def _encode(self, destination: Path, image, image_key: str) -> Future:
+        preserve_uint16 = image_key == "foam_component_labels"
+        if self._pool is not None:
+            # A private copy: the caller may reuse the array before the worker runs.
+            return self._pool.submit(_write_png, destination, np.array(image, copy=True),
+                                     preserve_uint16=preserve_uint16)
+        done: Future = Future()
+        try:
+            _write_png(destination, image, preserve_uint16=preserve_uint16)
+        except Exception as exc:
+            done.set_exception(exc)
+        else:
+            done.set_result(None)
+        return done
+
+    def _drain(self, keep: int) -> None:
+        """Write finished records in order; block on the oldest while more than ``keep`` wait."""
+
+        while self._pending:
+            head = self._pending[0]
+            if len(self._pending) <= keep and not all(
+                future is None or future.done() for *_rest, future in head["images"]
+            ):
+                return
+            self._pending.popleft()
+            self._write_record(head)
+
+    def _write_record(self, entry: dict[str, Any]) -> None:
+        record_id, glass, detection = entry["record_id"], entry["glass"], entry["detection"]
+        reasons = entry["reasons"]
+        warnings: list[str] = []
+        images: dict[str, str] = {}
+        availability: list[str] = []
+        for image_key, relative, destination, future in entry["images"]:
+            if future is None:
+                warnings.append(f"missing_optional_image:{image_key}")
+                continue
+            failure = future.exception()
+            if failure is not None:
+                destination.unlink(missing_ok=True)
+                warnings.append(f"image_encode_failed:{image_key}:{type(failure).__name__}")
+                continue
+            images[image_key] = relative.as_posix()
+            availability.append(image_key)
         record = _json_safe(
             {
                 "schema_version": DEBUG_TRACE_SCHEMA_VERSION,
@@ -200,8 +269,8 @@ class JsonlDebugTraceWriter:
                     "raw_foam_y": detection.raw_foam_front_y,
                     "smoothed_foam_y": detection.smoothed_foam_front_y,
                 },
-                "state": state,
-                "candidates": candidates,
+                "state": entry["state"],
+                "candidates": entry["candidates"],
                 "images": images,
                 "warnings": warnings,
             }
@@ -232,7 +301,6 @@ class JsonlDebugTraceWriter:
                 "byte_length": len(encoded),
             }
         )
-        return record_id
 
     def annotate_sequence(self, glass, detections) -> None:
         """Attach final sequence decisions without re-running detection.
@@ -244,6 +312,7 @@ class JsonlDebugTraceWriter:
 
         if self._closed:
             raise RuntimeError("Debug trace writer is closed.")
+        self._drain(0)
         captured_ids = {summary["record_id"] for summary in self._summaries}
         for detection in detections:
             record_id = _record_id(
@@ -264,6 +333,9 @@ class JsonlDebugTraceWriter:
             )
         if self._closed:
             raise RuntimeError("Debug trace writer was aborted.")
+        self._drain(0)
+        if self._pool is not None:
+            self._pool.shutdown(wait=True)
         self._handle.flush()
         os.fsync(self._handle.fileno())
         self._handle.close()
@@ -330,6 +402,9 @@ class JsonlDebugTraceWriter:
             raise
 
     def abort(self) -> None:
+        if self._pool is not None:
+            self._pool.shutdown(wait=True, cancel_futures=True)
+        self._pending.clear()
         if not self._closed:
             try:
                 self._handle.close()

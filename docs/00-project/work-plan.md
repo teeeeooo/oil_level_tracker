@@ -445,8 +445,12 @@ queued.
   - a two-Glass sample4 FULL run goes from 54.4 s to 31.9 s on the Mac
     ([design](../20-architecture/s11-parallel-glass-detection-design.md)).
   - Turning it on in the packaged app is a separate decision.
-- **Next:** (다) the ordered background PNG worker; then one Windows timing
-  request for (가) and (나), after step 10.
+- **(다) done:**
+  - background PNG encoding in the analysis factory, byte-identical;
+  - single-Glass sample4 FULL goes from 22.5 s to 19.2 s on the Mac;
+  - the two-Glass parallel run is now bound by its workers.
+- **Next:** the step-10 reply, then the step-11 Windows timing request for
+  (가)–(다).
 
 **Earlier resume checkpoint — 2026-10-26:** **Windows is available (user,
 2026-10-26).** The

@@ -104,6 +104,7 @@ class DetectionRunCoordinator:
         self.detector = detector
         self.completed_window_resolver = completed_window_resolver
         self.last_run_parallel = False
+        self.last_worker_wait_sec: float | None = None
 
     def run(
         self,
@@ -271,6 +272,7 @@ class DetectionRunCoordinator:
         finally:
             decoded_cache.clear()
             if workers is not None:
+                self.last_worker_wait_sec = workers.wait_sec
                 workers.close()
             try:
                 reader.close()

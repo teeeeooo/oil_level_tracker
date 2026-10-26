@@ -64,6 +64,7 @@ class AnalysisPipeline:
         self.video_reader_factory = video_reader_factory
         self.parallel_glasses = parallel_glasses
         self.last_run_parallel = False
+        self.last_worker_wait_sec = None
         self.detector = detector
         self.validator = validator
         self.debug_trace_sink_factory = debug_trace_sink_factory
@@ -228,6 +229,7 @@ class AnalysisPipeline:
                 on_progress=detection_progress,
             )
             self.last_run_parallel = coordinator.last_run_parallel
+            self.last_worker_wait_sec = coordinator.last_worker_wait_sec
 
             for glass in enabled:
                 resolved = tuple(

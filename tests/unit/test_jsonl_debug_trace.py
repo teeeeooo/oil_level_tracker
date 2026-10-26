@@ -472,3 +472,50 @@ def test_repository_rejects_unsupported_schema_and_path_traversal(tmp_path):
     bundle.review_index["debug_index"] = "../outside.json"
     with pytest.raises(DebugTraceError, match="상대경로|밖"):
         DebugTraceRepository(bundle)
+
+
+def _staged_tree(staging: Path) -> dict[str, bytes]:
+    return {
+        path.relative_to(staging).as_posix(): path.read_bytes()
+        for path in sorted(staging.rglob("*"))
+        if path.is_file()
+    }
+
+
+def test_background_images_write_the_same_bytes_in_the_same_order(tmp_path):
+    glass = _glass("g1")
+    trees = []
+    for background in (False, True):
+        (tmp_path / str(background)).mkdir()
+        writer = JsonlDebugTraceWriter(
+            "run-한글",
+            DebugTraceLevel.FULL,
+            staging_parent=tmp_path / str(background),
+            background_images=background,
+        )
+        detections = [_detection(glass.id, frame=frame, time=frame / 4) for frame in range(12)]
+        for frame, detection in enumerate(detections):
+            artifacts = _artifacts(missing=frame % 3 == 0)
+            if frame % 4 == 1:
+                # A uint8 label raster fails its encode, which the record keeps as a warning.
+                artifacts.images["foam_component_labels"] = np.zeros((12, 16), dtype=np.uint8)
+            writer.write(glass, detection, artifacts, _decision())
+        assert writer.record_count == 12
+        writer.annotate_sequence(glass, detections[:5])
+        trees.append(_staged_tree(Path(writer.finalize().staging_directory)))
+    assert trees[0] == trees[1]
+    lines = trees[0]["debug_trace.jsonl"].splitlines()
+    warnings = [json.loads(line)["warnings"] for line in lines]
+    assert "missing_optional_image:foam_mask" in warnings[0]
+    assert any(item.startswith("image_encode_failed:foam_component_labels:") for item in warnings[1])
+    assert sum("sequence" in json.loads(line) for line in lines) == 5
+
+
+def test_background_abort_discards_pending_records(tmp_path):
+    glass = _glass("g1")
+    writer = JsonlDebugTraceWriter("run", DebugTraceLevel.FULL, staging_parent=tmp_path, background_images=True)
+    for frame in range(3):
+        writer.write(glass, _detection(glass.id, frame=frame, time=frame / 4), _artifacts(), _decision())
+    staging = writer.staging_directory
+    writer.abort()
+    assert not staging.exists()

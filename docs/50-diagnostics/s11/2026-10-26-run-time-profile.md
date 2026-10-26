@@ -9,7 +9,9 @@ IMPLEMENTED byte-identical ([design](../../20-architecture/s11-debug-trace-write
 Speed step (나), the parallel-Glass frame loop, is IMPLEMENTED as an opt-in,
 default OFF ([design](../../20-architecture/s11-parallel-glass-detection-design.md)):
 byte-identical, and a two-Glass sample4 FULL run goes from 54.4 s to 31.9 s
-on the Mac.** The
+on the Mac. Speed step (다), background PNG encoding, is IMPLEMENTED
+byte-identical ([design](../../20-architecture/s11-debug-trace-write-cost-design.md#background-png-encoding-implemented-2026-10-26-speed-step-다)):
+a single-Glass sample4 FULL run goes from 22.5 s to 19.2 s.** The
 user asked whether detection speed can improve ("90초짜리 영상 한번 돌리는데도
 시간이 꽤 걸리고있거든?", 2026-10-26) and agreed the order: record the
 decisions, reduce the trace cost with unchanged output, then freeze the
