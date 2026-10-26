@@ -410,13 +410,16 @@ queued.
 - **Agreed order (user, "응 순서에 동의함. 진행하자"):**
   1. record the decisions — done;
   2. B-1 trace cost — done;
-  3. freeze the SPL#4 cadence diagnostic;
-  4. one step-9 Windows request with the diagnostic and a timing breakdown;
+  3. freeze the SPL#4 cadence diagnostic — done,
+     [CAD-1](../50-diagnostics/s11/2026-10-26-cadence-diagnostic.md), with a
+     local runner check that passed;
+  4. one step-9 Windows request with the diagnostic and a timing breakdown —
+     [READY](../40-operations/s11-current-windows-field-qualification.md#step-9-combined-request);
   5. by the results: a densification design or a new cause, then B-2/B-3;
   6. revisit the gate and top-exit promotions;
   7. the LBT-2 successor and the open limits, one at a time;
   8. WP09 → WP10.
-- **Next:** step 3.
+- **Next:** the user forwards the step-9 request; the Mac reads the reply against CAD-1 C1–C5 and outcomes A–D.
 
 **Earlier resume checkpoint — 2026-10-26:** **Windows is available (user,
 2026-10-26).** The
