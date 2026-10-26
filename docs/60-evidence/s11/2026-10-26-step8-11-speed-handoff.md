@@ -4,16 +4,11 @@
 
 S11 is ACTIVE; O2 is OPEN; the Windows field result remains FIELD FAIL. The
 [Work Plan](../../00-project/work-plan.md) is the only owner of current state
-and authorization. Everything below is committed and pushed to `main`. The
-latest commit is `80646aa`.
+and authorization. Everything below is committed and pushed to `main`.
 
-**Windows is available (user, 2026-10-26).** Two Windows requests are READY
-and not yet answered. The Mac judges each reply against rules frozen before
-the run.
-1. [Step 10](../../40-operations/s11-current-windows-field-qualification.md#step-10-stage-readout-request):
-   a read-only stage readout of the 6 fps bundle.
-2. [Step 11](../../40-operations/s11-current-windows-field-qualification.md#step-11-speed-timing-request):
-   speed timing and identity, run after step 10.
+**Updated at session close (2026-10-26).** Steps 10 and 11 are answered
+([receipt](2026-10-26-step10-11-windows-receipt.md)), and the user decided both follow-ups. **No Windows
+request is queued.**
 
 **No production detector default changed.** FIELD FAIL / O2 OPEN and
 review-006 pending are unchanged.
@@ -41,6 +36,11 @@ The parallel-Glass loop (나) is opt-in and default OFF.
 | B-1, trace cost | Implemented. The finalize appends the `sequence` member, and `_json_safe` has fast paths. Byte-identical on the Mac and on Windows (step-9 T-1: 362/362 trace lines). sample4 BASIC 29.1 → 22.5 s | [Write-cost design](../../20-architecture/s11-debug-trace-write-cost-design.md) |
 | (가) staging rename | Implemented. The staging is renamed into the bundle and falls back to the copy on another volume. Byte-identical (2,601 files). Mac 7.1 → 6.2 s; the Windows saving is unmeasured | same |
 | (나) parallel Glasses | Implemented as an **opt-in, default OFF**. One spawned worker per Glass; the parent consumes the results in the sequential order. Byte-identical. Two-Glass sample4 FULL 54.4 → 31.9 s (Mac). Not enabled in the packaged app: it needs `freeze_support()`, and the bootstrap's lambda reader factory keeps the app sequential | [Parallel-Glass design](../../20-architecture/s11-parallel-glass-detection-design.md) |
+| Step 10 (Windows) | S-A by the letter, with a named limit. Two tracklets meet the chain rule (`0057` Y379 → Y323, `0039` Y785 → Y753); neither is shown to be the rising level. At 6 fps `OIL-PHASE-FILL` blocks 48 of 49 BASE rows in 20–28 s (empty allowed set) and confirms a partial-fill drain during the fill. At 2 fps 22.5–27.0 s is `FILL_OWNER_AMBIGUOUS`. Densification alone is not a path to FULL | [Steps 10–11 receipt](2026-10-26-step10-11-windows-receipt.md#step-10--stage-readout) |
+| Fast fill, direction | **User agreed** ("빠른 충전은 너의 의견에 동의"): densification is not pursued. Fast-rise phase-owner handling joins the fill-owner gate revisit, reviewed at 2 fps and covering the FFF-1 admission failure | same |
+| Step 11 (Windows) | Identity PASS: 362/362 rows on all three runs, and trace bytes for S-1 and P-1; `used True`. FULL 224.9 → 160.1 s sequential, 110.3 s parallel (the parent waited 65.7 s). NONE 90.9 → 79.5 s parallel. New timer limit: the PNG total adds up four threads | [Steps 10–11 receipt](2026-10-26-step10-11-windows-receipt.md#step-11--speed-timing-and-identity) |
+| Production output scope | **User:** the packaged product carries no FULL or ordinary debug trace, only the detector and the minimum output for the report. Product speed is judged on the NONE run | same |
+| (나) disposition | **User agreed** ("동의함"): a development aid, default OFF, not enabled in the product (NONE gain only 13 %). Revisit at production packaging after measuring the small NONE gain (per-worker time, OpenCV thread count) | [Parallel-Glass design](../../20-architecture/s11-parallel-glass-detection-design.md) |
 | (다) background PNG | Implemented in the analysis factory. Four threads; records are written in order, with at most 8 waiting. Byte-identical. Single-Glass FULL 22.5 → 19.2 s; the two-Glass parallel run is now bound by its workers (the parent waited 12.1 s of 19.9 s) | [Write-cost design](../../20-architecture/s11-debug-trace-write-cost-design.md#background-png-encoding-implemented-2026-10-26-speed-step-다) |
 
 **User statements recorded this session (verbatim where they decide):**
@@ -64,38 +64,31 @@ The parallel-Glass loop (나) is opt-in and default OFF.
   7. LBT-2 and the open limits;
   8. WP09 → WP10.
 - After step 9: "1-(a)로 진행하고. 2는 가,나,다 순으로 하나씩 해보자".
+- After step 10: "1. 빠른 충전은 너의 의견에 동의".
+- The production scope: "프로덕션에는 full debug를 넣지 않을거야. full debug
+  또는 일반 debug trace는 프로젝트 develope 단계에서 detector 디버깅용으로
+  만들어둔거야. … detector가 기능하고, 리포트를 작성하기 위한 최소한의
+  산출물이 생성되는게 목표야".
+- (나): "동의함. 기록하고 체크포인트 잡고 handoff 준비하자".
 
 ## Next (the user decides each step)
 
-1. **The step-10 reply.** Read it against the
-   [stage follow-up](../../50-diagnostics/s11/2026-10-26-cadence-diagnostic.md#stage-follow-up-frozen-2026-10-26-before-its-output).
-   - **Rising chain:** one tracklet whose admitted rows fall at least 27.2 px
-     over consecutive frames in 20.5–25.5 s.
-   - **S-A, a chain exists:** the first Q-2 path stage that no longer holds
-     the chain's row names where it is dropped.
-     - The allowed set excludes it: phase.
-     - The best path chooses unknown or another row: the bounded path.
-     - A later stage changes it: that stage.
-   - **S-B, no chain:** admission still fails at 6 fps.
-   - Compare with the 2 fps Q-3 readout. Then the user decides the fast-fill
-     direction. Densification would also need time-based frame-count
-     constants.
-2. **The step-11 reply.**
-   - All three runs (S-1 FULL sequential, P-1 FULL parallel, P-2 NONE
-     parallel) must reproduce `SPL4_B_ref`: rows for all three, trace bytes
-     for S-1 and P-1.
-   - P-1 and P-2 must print `used True`.
-   - Timing is reported against T-1 224.9 s and T-2 90.9 s, with the parent
-     wait.
-   - Then the user decides whether to enable (나) in the product. That needs
-     `freeze_support()` and a picklable reader factory in `bootstrap.py`.
-3. **Then the agreed order resumes:**
-   - revisit the fill-owner gate (HELD) and IFO v2 + top-exit v3 default ON
-     (OFF), both tied to SPL#4;
-   - the LBT-2 successor (optional) and the open limits, one at a time;
-   - WP09 → WP10.
+1. **The fill-owner gate revisit** (the next step of the agreed order). It
+   now carries the fast-fill work.
+   - Start from the held gate ([local checks](2026-10-22-fill-owner-contest-local.md),
+     the step-7 SPL#4 prediction) and the steps 10–11 receipt.
+   - Questions it must answer at 2 fps:
+     - why SPL#4 22.5–27.0 s is `FILL_OWNER_AMBIGUOUS` between stationary
+       owners;
+     - how the rising level gets admitted (FFF-1, the association cap);
+     - which phase owner the fast rise should have.
+   - Freeze any design before a run; no tuning.
+2. **The IFO v2 + top-exit v3 default-ON question**, tied to SPL#4.
+3. **The LBT-2 successor (optional) and the open limits,** one at a time.
+4. **WP09 → WP10.** Production packaging is where (나), the bundle's
+   no-trace cost and detector speed (B-4) are revisited.
 
-**Notes for reading replies:**
+**Notes for reading Windows replies:**
 - **OCR slips:** Windows replies come by OCR, and hash characters slip
   (`0`/`8`, `a`/`e`, `d`/`0`, `8f`/`bf`). Every step ran under
   "stop on mismatch", so the slips are read as OCR errors. Identify runs by
@@ -103,14 +96,22 @@ The parallel-Glass loop (나) is opt-in and default OFF.
 - **The step-10 hash for `s11_cadence_field.py`:** the request now lists
   `986bd037…`. A ZIP taken at `c9c22ba` has `2b092561…`, which is also valid.
   The `stages` function is the same in both.
-- **Timer limit in parallel mode:** the runner's stage timers measure the
-  parent, so detect, debug-only and static read 0 there.
+- **Timer limits:**
+  - In parallel mode the runner's stage timers measure the parent, so
+    detect, debug-only and static read 0 there.
+  - With background PNG the PNG total adds up four threads. It is not wall
+    time.
 
 **Open, not scheduled:**
 - the LBT-2 drain-removal mechanism (the operations JSON stays on Windows);
 - the debug-image build cost in detect (about 45 s on Windows). Reducing it
   would change what is captured;
 - detector-internal vectorization (B-4);
+- the bundle's 22–24 s without a trace, about 10 s of it report frame
+  decoding (production side);
+- why (나) gains only 13 % with NONE (per-worker time, OpenCV thread count);
+- why the 6 fps phase is already open, not filling, at 20 s (frame-count
+  constants suspected, not tested);
 - review-006 pending. The next free review ID is review-015.
 
 **Tools added this session (diagnostics only):**
@@ -123,9 +124,9 @@ The parallel-Glass loop (나) is opt-in and default OFF.
 ## Detector Governance
 
 - Logic-map nodes: `OIL-TRACKLET`, `OIL-SELECTOR`, `OIL-PHASE-FILL`, `SEQUENCE-COMPOSITION`, `TRACE-PUBLICATION`
-- Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F05`, `S11-F10`
-- First harmful stage: per the linked records. Fast fill: SPL#4 at 2 fps stops at `OIL-TRACKLET` association (inferred); at 6 fps no owner is selected through the rise (stage under the step-10 readout).
+- Failure-registry entries: `S11-F02`, `S11-F04`, `S11-F05`, `S11-F08`, `S11-F10`
+- First harmful stage: per the linked records. Fast fill: SPL#4 at 2 fps stops at `OIL-TRACKLET` association (inferred); at 6 fps `OIL-PHASE-FILL` blocks the rise (step 10: empty allowed set, a false drain); at 2 fps 22.5–27.0 s is `FILL_OWNER_AMBIGUOUS`.
 - Existing feature coverage: per the linked records; no detector option is added this session except the default-OFF parallel-Glass loop, which changes scheduling only.
-- Execution scope: a handoff summary of committed records; no new run.
+- Execution scope: a handoff summary of committed records, including the steps 10–11 receipt; no new run.
 - Logic-map impact: NONE — a handoff; the speed changes keep every node's inputs, outputs and order.
 - Failure-registry impact: NONE — no new mechanism or failure.

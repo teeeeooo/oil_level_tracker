@@ -224,7 +224,12 @@ show that the tracklet is the rising level. Neither chain is shown to be.
   detector debugging during development. The product's goal is a working
   detector plus the minimum output the report needs. The product case is
   therefore the NONE run: −13 % with (나).
-- **Whether to enable (나) in the product is the user's decision.**
+- **User decision (2026-10-26): (나) stays a development aid**, default OFF
+  and not enabled in the product ("동의함"). It is revisited at production
+  packaging, after measuring why the NONE gain is small (per-worker time,
+  OpenCV thread count). The bundle's 22–24 s without a trace, about 10 s of
+  it report frame decoding, is the other production-side item.
+- **What the decision weighed:** whether to enable (나) in the product.
   - Gains: −31 % with FULL and −13 % with NONE, on two Glasses.
   - Enabling it needs `multiprocessing.freeze_support()` in the packaged
     entry and a picklable reader factory in `bootstrap.py`. It then needs a

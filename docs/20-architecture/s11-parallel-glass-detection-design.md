@@ -1,7 +1,13 @@
 # S11 parallel-Glass frame loop (opt-in)
 
-**Status: IMPLEMENTED 2026-10-26 as an opt-in, default OFF.** Speed step (나)
-of the order the user chose ("2는 가,나,다 순으로 하나씩 해보자"). The
+**Status: IMPLEMENTED 2026-10-26 as an opt-in, default OFF. Disposition
+(user, 2026-10-26): kept as a development aid, default OFF and not enabled in
+the product.** The packaged product carries no debug trace, so its case is the
+NONE run, where the Windows gain is only 13 %. The FULL development runs gain
+31 %. Revisit at production packaging, after measuring why the NONE gain is
+small (per-worker time, OpenCV thread count).
+
+It was speed step (나) of the order the user chose ("2는 가,나,다 순으로 하나씩 해보자"). The
 measurements behind it are in
 [RTP-1](../50-diagnostics/s11/2026-10-26-run-time-profile.md) and the
 [step-9 timing](../60-evidence/s11/2026-10-26-step9-windows-receipt.md#windows-timing-threadripper-7945wx):

@@ -383,8 +383,10 @@ The gate is implemented and its local check passed. No Windows request is
 queued.
 
 **Session handoff — 2026-10-26 (latest):** start with the
-[steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md).
-The checkpoint below holds the detail.
+[steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
+updated at session close. Steps 10 and 11 are answered and both follow-ups
+are decided. No Windows request is queued. Next: the fill-owner gate revisit,
+now carrying the fast-fill work. The checkpoint below holds the detail.
 
 **Resume checkpoint — 2026-10-26, steps 10 and 11 received:** the
 [receipt](../60-evidence/s11/2026-10-26-step10-11-windows-receipt.md) is in.
@@ -407,8 +409,12 @@ No Windows request is queued.
   - **User (2026-10-26):** the packaged product carries no FULL or ordinary
     debug trace, only the detector and the minimum output for the report.
     So the product case for (나) is the NONE run (−13 %).
-- **Then** the agreed order resumes: the fill-owner gate and the top-exit
-  promotions; LBT-2 and the open limits; WP09 → WP10.
+  - **User (2026-10-26), "동의함":** (나) stays a development aid, default
+    OFF, not enabled in the product. Revisit at production packaging.
+- **Next (session closed 2026-10-26):** the agreed order resumes with the
+  fill-owner gate revisit. It now includes fast-rise phase-owner handling at
+  2 fps and the FFF-1 admission failure. Then the top-exit promotions;
+  LBT-2 and the open limits; WP09 → WP10.
 
 **Resume checkpoint — 2026-10-26, step-8 received:** the
 [step-8 receipt](../60-evidence/s11/2026-10-26-step8-windows-receipt.md) is in.
