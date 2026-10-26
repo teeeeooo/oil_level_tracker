@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+import functools
 from typing import Any
 
 import numpy as np
@@ -52,6 +53,15 @@ class OpenCvPhaseDetector:
         fill_owner_contest: bool = False,
         fast_rise_association: bool = False,
     ) -> None:
+        self._construction = dict(
+            oil_measurement_scopes=tuple(oil_measurement_scopes),
+            initial_full_observation=initial_full_observation,
+            cost_first_assignment=cost_first_assignment,
+            candidate_rgb=candidate_rgb,
+            top_exit_full=top_exit_full,
+            fill_owner_contest=fill_owner_contest,
+            fast_rise_association=fast_rise_association,
+        )
         if cost_first_assignment and candidate_rgb:
             raise ValueError("Compare cost-first and candidate RGB separately.")
         if top_exit_full and (cost_first_assignment or candidate_rgb or oil_measurement_scopes):
@@ -108,6 +118,11 @@ class OpenCvPhaseDetector:
             candidate_rgb=OilCandidateRgb() if candidate_rgb else None,
         )
         self._debug_projector = PhaseDebugProjector(self._static_foam_maps)
+
+    def worker_factory(self):
+        """A picklable factory for an identically configured detector in a worker process."""
+
+        return functools.partial(type(self), **self._construction)
 
     @property
     def foam_temporal_state_count(self) -> int:

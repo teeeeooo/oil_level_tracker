@@ -5,7 +5,11 @@ IMPLEMENTED and byte-identical on Windows. The Windows timing breakdown is
 RECEIVED ([step-9 receipt](../../60-evidence/s11/2026-10-26-step9-windows-receipt.md#windows-timing-threadripper-7945wx)):
 PNG encoding, the staging copy and the debug-image build lead the trace cost;
 detection is the floor. Speed step (가), staging rename instead of copy, is
-IMPLEMENTED byte-identical ([design](../../20-architecture/s11-debug-trace-write-cost-design.md#staging-publication-implemented-2026-10-26-speed-step-가)).** The
+IMPLEMENTED byte-identical ([design](../../20-architecture/s11-debug-trace-write-cost-design.md#staging-publication-implemented-2026-10-26-speed-step-가)).
+Speed step (나), the parallel-Glass frame loop, is IMPLEMENTED as an opt-in,
+default OFF ([design](../../20-architecture/s11-parallel-glass-detection-design.md)):
+byte-identical, and a two-Glass sample4 FULL run goes from 54.4 s to 31.9 s
+on the Mac.** The
 user asked whether detection speed can improve ("90초짜리 영상 한번 돌리는데도
 시간이 꽤 걸리고있거든?", 2026-10-26) and agreed the order: record the
 decisions, reduce the trace cost with unchanged output, then freeze the

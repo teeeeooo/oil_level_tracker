@@ -58,8 +58,12 @@ class AnalysisPipeline:
         debug_trace_sink_factory=None,
         capture_policy: DebugCapturePolicy | None = None,
         outcome_assembler: StateAwareOutcomeAssembler | None = None,
+        *,
+        parallel_glasses: bool = False,
     ) -> None:
         self.video_reader_factory = video_reader_factory
+        self.parallel_glasses = parallel_glasses
+        self.last_run_parallel = False
         self.detector = detector
         self.validator = validator
         self.debug_trace_sink_factory = debug_trace_sink_factory
@@ -200,11 +204,12 @@ class AnalysisPipeline:
                     else None
                 )
 
-            detection_run = DetectionRunCoordinator(
+            coordinator = DetectionRunCoordinator(
                 self.video_reader_factory,
                 self.detector,
                 self.detector,
-            ).run(
+            )
+            detection_run = coordinator.run(
                 source_video_path=session.input_video_path,
                 glasses=enabled,
                 targets=tuple(DetectionTarget(value) for value in schedules),
@@ -213,6 +218,7 @@ class AnalysisPipeline:
                     resolution_mode=SequenceResolutionMode.COMPLETED_WINDOW,
                     debug=debug_enabled,
                     reuse_static_decodes=False,
+                    parallel_glasses=self.parallel_glasses,
                 ),
                 confirmed_initial_states=confirmed_initial_states,
                 check_cancelled=lambda: _check_cancelled(cancellation),
@@ -221,6 +227,7 @@ class AnalysisPipeline:
                 on_sequence=annotate_sequence,
                 on_progress=detection_progress,
             )
+            self.last_run_parallel = coordinator.last_run_parallel
 
             for glass in enabled:
                 resolved = tuple(

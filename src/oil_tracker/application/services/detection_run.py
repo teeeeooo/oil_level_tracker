@@ -10,6 +10,7 @@ from oil_tracker.application.ports.phase_detector import (
     PreparedFrameDetector,
 )
 from oil_tracker.application.services.detection_processing import learn_static_artifacts
+from oil_tracker.application.services.parallel_glass_detection import GlassWorkers, worker_factories
 from oil_tracker.domain.detection import PhaseDetection
 from oil_tracker.domain.enums import InitialObservationState
 from oil_tracker.domain.recipe import GlassInspectionConfig
@@ -33,6 +34,9 @@ class DetectionRunPolicy:
     reuse_static_decodes: bool = False
     maximum_consecutive_failures: int = 0
     suppress_reader_close_errors: bool = False
+    # Opt-in: one worker process per Glass for the frame loop. It applies only
+    # with two or more Glasses and a detector and reader that a worker can build.
+    parallel_glasses: bool = False
 
     @property
     def fail_fast(self) -> bool:
@@ -99,6 +103,7 @@ class DetectionRunCoordinator:
         self.video_reader_factory = video_reader_factory
         self.detector = detector
         self.completed_window_resolver = completed_window_resolver
+        self.last_run_parallel = False
 
     def run(
         self,
@@ -128,8 +133,15 @@ class DetectionRunCoordinator:
             glass.id: [] for glass in selected_glasses
         }
         self.detector.reset()
+        factories = (
+            worker_factories(self.detector, self.video_reader_factory)
+            if policy.parallel_glasses and len(selected_glasses) > 1 and not policy.reuse_static_decodes
+            else None
+        )
+        self.last_run_parallel = factories is not None
         reader = self.video_reader_factory(source_video_path)
         decoded_cache: dict[float, tuple[Any, int, float]] = {}
+        workers: GlassWorkers | None = None
         try:
             self._check(check_cancelled)
             if validate_reader is not None:
@@ -137,15 +149,26 @@ class DetectionRunCoordinator:
             self._check(check_cancelled)
             if on_static_start is not None:
                 on_static_start()
-            learn_static_artifacts(
-                reader,
-                self.detector,
-                selected_glasses,
-                static_schedule,
-                decoded_frame_cache=(
-                    decoded_cache if policy.reuse_static_decodes else None
-                ),
-            )
+            if factories is None:
+                learn_static_artifacts(
+                    reader,
+                    self.detector,
+                    selected_glasses,
+                    static_schedule,
+                    decoded_frame_cache=(
+                        decoded_cache if policy.reuse_static_decodes else None
+                    ),
+                )
+            else:
+                workers = GlassWorkers(
+                    factories,
+                    source_video_path,
+                    selected_glasses,
+                    tuple(target.timestamp_sec for target in selected_targets),
+                    static_schedule,
+                    policy.debug,
+                )
+                workers.wait_static_ready(check_cancelled)
             self._check(check_cancelled)
             if on_static_ready is not None:
                 on_static_ready()
@@ -153,12 +176,15 @@ class DetectionRunCoordinator:
             total = len(selected_targets) * len(selected_glasses)
             completed = 0
             consecutive_failures = 0
-            for target in selected_targets:
+            for target_index, target in enumerate(selected_targets):
                 self._check(check_cancelled)
                 try:
-                    decoded = decoded_cache.pop(target.timestamp_sec, None)
-                    if decoded is None:
-                        decoded = reader.read_at(target.timestamp_sec)
+                    if workers is not None:
+                        decoded = workers.decode(target_index, check_cancelled)
+                    else:
+                        decoded = decoded_cache.pop(target.timestamp_sec, None)
+                        if decoded is None:
+                            decoded = reader.read_at(target.timestamp_sec)
                     frame, frame_index, actual_timestamp = decoded
                 except Exception as exc:
                     consecutive_failures += 1
@@ -184,13 +210,21 @@ class DetectionRunCoordinator:
                 for glass in selected_glasses:
                     self._check(check_cancelled)
                     try:
-                        detection, artifacts = self.detector.detect(
-                            frame,
-                            glass,
-                            frame_index,
-                            actual_timestamp,
-                            debug=policy.debug,
-                        )
+                        if workers is not None:
+                            detection, artifacts = workers.detect(
+                                target_index,
+                                glass,
+                                frame_index,
+                                actual_timestamp,
+                            )
+                        else:
+                            detection, artifacts = self.detector.detect(
+                                frame,
+                                glass,
+                                frame_index,
+                                actual_timestamp,
+                                debug=policy.debug,
+                            )
                     except Exception as exc:
                         consecutive_failures += 1
                         observation = DetectionObservation(
@@ -236,6 +270,8 @@ class DetectionRunCoordinator:
                         on_progress(observation, completed, total)
         finally:
             decoded_cache.clear()
+            if workers is not None:
+                workers.close()
             try:
                 reader.close()
             except Exception as exc:

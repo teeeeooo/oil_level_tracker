@@ -439,7 +439,14 @@ queued.
 - **(가) done:** the staging is renamed into the bundle and falls back to the
   copy. The bundle bytes are identical on sample4. The Windows saving is not
   yet measured.
-- **Next:** (나) Glass parallel on the Mac while step 10 runs on Windows.
+- **(나) done as an opt-in, default OFF:**
+  - one worker process per Glass, consumed in the sequential order;
+  - byte-identical rows and traces;
+  - a two-Glass sample4 FULL run goes from 54.4 s to 31.9 s on the Mac
+    ([design](../20-architecture/s11-parallel-glass-detection-design.md)).
+  - Turning it on in the packaged app is a separate decision.
+- **Next:** (다) the ordered background PNG worker; then one Windows timing
+  request for (가) and (나), after step 10.
 
 **Earlier resume checkpoint — 2026-10-26:** **Windows is available (user,
 2026-10-26).** The

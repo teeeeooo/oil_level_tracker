@@ -83,7 +83,7 @@ def timers():
             setattr(owner, name, original)
 
 
-def run(reference_bundle, out, *, fps=None, debug=None, video=None, run_name=None):
+def run(reference_bundle, out, *, fps=None, debug=None, video=None, run_name=None, parallel_glasses=False):
     from oil_tracker.adapters.storage.jsonl_debug_trace_writer import JsonlDebugTraceWriterFactory
     from oil_tracker.adapters.storage.output_bundle_store import OutputBundleStore
     from oil_tracker.adapters.vision.opencv_phase_detector import OpenCvPhaseDetector
@@ -107,7 +107,8 @@ def run(reference_bundle, out, *, fps=None, debug=None, video=None, run_name=Non
     if not all(suffix in detector.version for suffix in VERSION_SUFFIXES):
         _stop(f'unexpected detector version {detector.version}')
     factory = None if session.debug_trace_level is DebugTraceLevel.NONE else JsonlDebugTraceWriterFactory(out)
-    pipeline = AnalysisPipeline(OpenCvVideoReader, detector, RecipeValidationService(), factory)
+    pipeline = AnalysisPipeline(OpenCvVideoReader, detector, RecipeValidationService(), factory,
+                                parallel_glasses=parallel_glasses)
     with timers() as totals:
         started = time.perf_counter()
         result = pipeline.run(recipe, session)
@@ -121,6 +122,8 @@ def run(reference_bundle, out, *, fps=None, debug=None, video=None, run_name=Non
     run_id = result.run_id
     print(f'run | run_id {run_id} | run_name {session.run_name} | version {detector.version}')
     print(f'bundle {bundle}')
+    if parallel_glasses:
+        print(f'parallel glasses requested | used {pipeline.last_run_parallel}')
     print(f'window {session.analysis_start_sec}-{session.analysis_end_sec} s | fps {session.sampling_fps} | '
           f'debug {session.debug_trace_level.value} | rows ' + ', '.join(f'{names[g]} {n}' for g, n in rows.items()))
     timing = dict(wall_sec=round(wall, 2), glass_frames=glass_frames,
@@ -135,6 +138,7 @@ def run(reference_bundle, out, *, fps=None, debug=None, video=None, run_name=Non
     path = out / f'cadence-timing-{run_id}.json'
     path.write_text(json.dumps(dict(run_id=run_id, bundle=str(bundle), fps=session.sampling_fps,
                                     debug=session.debug_trace_level.value, version=detector.version,
+                                    parallel_glasses=pipeline.last_run_parallel,
                                     **timing), indent=1) + '\n', encoding='utf-8')
     return bundle
 
@@ -397,6 +401,7 @@ def main(argv=None):
     run_parser.add_argument('--debug', choices=DEBUG_LEVELS)
     run_parser.add_argument('--video', type=Path, help='the video, if it moved since the saved session')
     run_parser.add_argument('--run-name')
+    run_parser.add_argument('--parallel-glasses', action='store_true', help='one worker process per Glass (opt-in)')
     for name in ('identity', 'cadence'):
         compare_parser = sub.add_parser(name)
         compare_parser.add_argument('--reference', type=Path, required=True)
@@ -411,7 +416,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if args.command == 'run':
         run(args.reference_bundle, args.out, fps=args.sampling_fps, debug=args.debug, video=args.video,
-            run_name=args.run_name)
+            run_name=args.run_name, parallel_glasses=args.parallel_glasses)
     elif args.command == 'stages':
         result = stages(args.bundle, args.glass_name, (args.start, args.end))
         print_stages(result)
