@@ -6,6 +6,10 @@
 - **F2 and F3 fail:** the seed never fired on the stand-ins.
 - **Unchanged:** nothing is retuned. The option stays default OFF and is not
   adopted. O2 OPEN / FIELD FAIL is unchanged.
+- **SPL#4 readout (2026-10-26):** 0 qualifying triplets on BASE and Accum, so
+  no SPL#4 run. The two BASE constant-velocity triplets fail only the
+  witness ([receipt](2026-10-26-step8-windows-receipt.md#f--spl4-fast-rise-readout)).
+  The user chooses between a successor witness protocol and closing option 2.
 - **Authority:** the [Work Plan](../../00-project/work-plan.md).
 
 ## What was built
@@ -120,6 +124,6 @@ Windows step, the read-only SPL#4 readout.
 - Failure-registry entries: `S11-F02`, `S11-F03`, `S11-F04`, `S11-F05`
 - First harmful stage: unchanged from FFF-1. The association cap at `OIL-TRACKLET` stops level admission, confirmed locally. The fast-rise route does not reach it on the stand-ins because their rows lack the anchor-eligible witness and rarely form a constant-velocity line.
 - Existing feature coverage: the six top-exit negative controls with their frozen Recipes, ROI inputs and initial states (IFO v2 + top-exit v3 as the reference arm), the FFF-1 cause-check arms and surface estimates, the comparison runner and cadence tool with their new fast-rise modes, and the existing `_independent_witness` predicate. No Recipe or session change.
-- Execution scope: one closed local managed run at `4f0665b` (six controls at 2 fps and three stand-ins, debug NONE), the frozen F1–F4 check script and a post-result stdout stage count; no Windows run, no tuning. Readout tool (2026-10-26): `s11_fast_rise_readout.py` with unit tests and one closed local managed run (`s11-fast-rise-readout-check-20261026-001`, sample5 2 fps FULL debug, reader against the live builder); the Windows readout waits in the step-8 request.
+- Execution scope: one closed local managed run at `4f0665b` (six controls at 2 fps and three stand-ins, debug NONE), the frozen F1–F4 check script and a post-result stdout stage count; no Windows run, no tuning. Readout tool (2026-10-26): `s11_fast_rise_readout.py` with unit tests and one closed local managed run (`s11-fast-rise-readout-check-20261026-001`, sample5 2 fps FULL debug, reader against the live builder); Windows readout (2026-10-26): two read-only readouts of `SPL4_B_ref` under the step-8 request, relayed by OCR ([receipt](2026-10-26-step8-windows-receipt.md)).
 - Logic-map impact: NONE — this record adds results; the feature row and 4.2 paragraph were committed with the implementation (`4f0665b`).
 - Failure-registry impact: NONE — the option changes nothing on the local runs; the stand-in finding is an availability limit of the witness, not a new failure mechanism.

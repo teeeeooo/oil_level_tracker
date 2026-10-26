@@ -1,8 +1,9 @@
 # LBT-2 — layer-bottom topology with a Foam-visible fill guard
 
 **Status: COMPLETE — outcome P: no stop rule fired under the frozen N
-([result](#results-and-decision)). Windows S2 is frozen (2026-10-26) and waits
-for its run ([protocol](#windows-s2-protocol-frozen-2026-10-26)).** The user chose every recommendation
+([result](#results-and-decision)). Windows S2 (frozen 2026-10-26) CLOSED
+WITHOUT A DESIGN: S2 and S3 fail, S1, S4 and S5 hold
+([result](#windows-s2-result--2026-10-26)).** The user chose every recommendation
 ([decision](#decision--2026-10-22)) and answered review-013
 ([result](#review-013-result--2026-10-22)). After the result the user answered
 the 52 s/54.5 s question: the two readings use different Foam/Oil boundaries
@@ -571,8 +572,9 @@ not located. LBT-2's F action at 54.5 s (Y820 under the Foam row Y808) and the
 
 ## Windows S2 protocol (frozen 2026-10-26)
 
-**Status: FROZEN before any S2 output is seen; the run waits in the
-[step-8 request](../../40-operations/s11-current-windows-field-qualification.md#step-8-combined-request).**
+**Status: FROZEN before any S2 output was seen; run under the
+[step-8 request](../../40-operations/s11-current-windows-field-qualification.md#step-8-combined-request)
+([result](#windows-s2-result--2026-10-26)).**
 The user said Windows is available (2026-10-26) and approved freezing S2 and
 sending it with the SPL#4 fast-rise readout ("그렇게 진행하자"). The rule is
 LBT-2 exactly as frozen at `1447cd6`. The wrappers are unchanged since then.
@@ -654,12 +656,32 @@ rule. Only this scoring uses them.
 - **678.5/679 s:** the units are empty there (LBT-1), so no change.
 - **680–683 s:** E1 may still act while the Foam seed is under 3 s old.
 
+## Windows S2 result — 2026-10-26
+
+**CLOSED WITHOUT A DESIGN** (outcome "any other failure"). The full receipt is
+the [step-8 receipt](../../60-evidence/s11/2026-10-26-step8-windows-receipt.md#l--lbt-2-s2).
+- **S1 holds:** the reference rerun equals `SPL1_B_ref` (0 changed rows).
+- **S2 fails:** 26 numeric Oil rows are removed in visible-interface
+  segments. That is ENTRY-SPLASH 4 (669.5–671.5 s) and all 22 of
+  ACCUM-DRAIN (711.0–724.0 s), outside any unit. No Oil or Foam is added
+  where S2 forbids it.
+- **S3 fails:** 678.5 s Y238 → Y415 and 679.0 s — → Y414.
+- **S4 holds:** C0 A8 B4 → C8 A0 B4. Every numeric held-out value is within
+  8.5 px of the marked Foam-region bottom.
+- **S5 holds:** units are non-empty on 11 of 12 held-out frames.
+- **Expected vs received:**
+  - BASE did not change, as expected.
+  - F never fired.
+  - The drain removals were not expected. Their mechanism is unknown.
+- **What follows:** no tuning. The S4 finding is recorded for a possible
+  successor, which would be a separate user decision.
+
 ## Detector Governance
 
 - Logic-map nodes: `FRAME-EVIDENCE`, `OIL-CANDIDATE`, `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`, `OIL-SELECTOR`, `FOAM-IDENTITY`, `SEQUENCE-COMPOSITION`
 - Failure-registry entries: `S11-F01`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F07`, `S11-F10`
 - First harmful stage: G — `OIL-PHASE-FILL`: the 27 % proximity rule confirms a fill from an in-unit row under a visible Foam row (54.5 s Y820 under Y808). The 40 s condition — `OIL-SELECTOR`/`OIL-TRACKLET`: with the level's 39.5 s row withdrawn, a lower-structure tracklet wins in a frame outside the context. Foam changes — `SEQUENCE-COMPOSITION`: Foam publication follows Oil publication (`S11-F06`).
 - Existing feature coverage: reuses LBT-1's witness, context, E1, support consumer, runner, controls and P0 bounds unchanged. F reuses the Foam material identity row, the 3 s seed-age limit and the lower separation (`foam_material_identity_tolerance + 2 px`) that already define `ORDERED_LOWER_INTERFACE`, and the existing fill confirmation profile. Top-exit v3 and the contested fill-owner gate stay OFF.
-- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files. Review-013 material: one managed run decoded 34 sample4 frames and wrote raw ROI crops with a source-Y ruler; the user's reply was read from the marked image. Freeze: the tool and focused tests are committed with the protocol; the focused tests and ten resolver/phase suites (plain and under the wrapper, zero activations) ran before freezing. Run: one managed development run at `1447cd6` (sample4 baseline and 245 SOI conditions under the wrapper, the layer report, the N evaluation, and four descriptive controls through the ordinary analysis entry); no Windows run, top-exit or fill-owner gate. After the result (2026-10-23): a read-only recount of the kept population with the frozen evaluation functions, grouped by frame; no run and no output files. Review-014 material (2026-10-23): one managed run decoded 9 sample4 frames (52.0–56.0 s) and wrote a raw x5 zoom with a source-Y ruler. Review-014 reply (2026-10-23): the marks were read by differencing the marked image against the clean zoom, and compared with the kept LBT-2 trial baseline CSV and this record's ordinary-arm values; no run and no output files. S2 freeze (2026-10-26): the field runner `s11_layer_bottom_topology_2_field.py` and its unit tests, and one closed local managed run (`s11-lbt2-field-check-20261026-001`: a sample4 source bundle, both arms through the production bundle path, two comparisons); the Windows S2 run waits in the step-8 request.
+- Execution scope: desk review of LBT-1's kept `comparison.json`, `layers.json` and per-condition rows, and of the sample4 truth files. Review-013 material: one managed run decoded 34 sample4 frames and wrote raw ROI crops with a source-Y ruler; the user's reply was read from the marked image. Freeze: the tool and focused tests are committed with the protocol; the focused tests and ten resolver/phase suites (plain and under the wrapper, zero activations) ran before freezing. Run: one managed development run at `1447cd6` (sample4 baseline and 245 SOI conditions under the wrapper, the layer report, the N evaluation, and four descriptive controls through the ordinary analysis entry); no Windows run, top-exit or fill-owner gate. After the result (2026-10-23): a read-only recount of the kept population with the frozen evaluation functions, grouped by frame; no run and no output files. Review-014 material (2026-10-23): one managed run decoded 9 sample4 frames (52.0–56.0 s) and wrote a raw x5 zoom with a source-Y ruler. Review-014 reply (2026-10-23): the marks were read by differencing the marked image against the clean zoom, and compared with the kept LBT-2 trial baseline CSV and this record's ordinary-arm values; no run and no output files. S2 freeze (2026-10-26): the field runner `s11_layer_bottom_topology_2_field.py` and its unit tests, and one closed local managed run (`s11-lbt2-field-check-20261026-001`: a sample4 source bundle, both arms through the production bundle path, two comparisons); Windows S2 (2026-10-26): two Windows runs and two comparisons under the step-8 request, relayed by OCR and scored on the Mac against the frozen readings and review-012 table V.
 - Logic-map impact: NONE — a diagnostic wrapper under tests/diagnostics; no production code, owner or edge changes.
 - Failure-registry impact: NONE — a diagnostic wrapper with no runtime mechanism; its limits map to existing entries (`S11-F04` association after a withdrawn row, `S11-F06` Foam following Oil, `S11-F05` for the guard's false-Foam risk) and are recorded here.

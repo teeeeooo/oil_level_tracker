@@ -382,7 +382,25 @@ Facts it records:
 The gate is implemented and its local check passed. No Windows request is
 queued.
 
-**Resume checkpoint — 2026-10-26 (latest):** **Windows is available (user,
+**Resume checkpoint — 2026-10-26, step-8 received (latest):** the
+[step-8 receipt](../60-evidence/s11/2026-10-26-step8-windows-receipt.md) is in.
+- **F, the SPL#4 readout:** 0 qualifying triplets on BASE and Accum.
+  - Two BASE constant-velocity triplets fail only the witness. Each joins
+    three near-stationary rows.
+  - By the rule there is no SPL#4 run.
+  - **Open user choice:** a successor witness protocol, or closing option 2
+    (accept UNKNOWN on fast fills).
+- **L, LBT-2 S2:** closed without a design.
+  - S1, S4 and S5 hold. The held-out score goes C0 A8 B4 → C8 A0 B4.
+  - S2 fails: Oil is removed in ENTRY-SPLASH (4 rows) and in all of
+    ACCUM-DRAIN (22 rows).
+  - S3 fails: 678.5/679 s change.
+  - No tuning follows.
+- **Unchanged:** no production default changed. FIELD FAIL / O2 OPEN.
+- **Next:** the user's choice for option 2. Any LBT-2 successor is a
+  separate user decision.
+
+**Earlier resume checkpoint — 2026-10-26:** **Windows is available (user,
 2026-10-26).** The
 [step-8 combined request](../40-operations/s11-current-windows-field-qualification.md#step-8-combined-request)
 is READY and waits for the user to forward it. The user approved its shape:
