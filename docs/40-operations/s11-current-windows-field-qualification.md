@@ -143,7 +143,8 @@ S11 step-10 읽기 전용 요청 — step-9의 C-1(6fps) bundle과 SPL4_B_ref에
       소스 폴더에서: $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
       실행 전 SHA-256 확인(하나라도 다르면 실행하지 말고 값만 알려줘):
       - tests/diagnostics/s11_cadence_field.py
-        2b0925610b201eedc7b4a1f5d61837f6047f105335029aa8c642cdc404a34b7c
+        986bd0374f760d6637847be034930bf681b439593b52f34332a0bd575d28e8db
+        (ZIP을 c9c22ba 시점에 받았다면 2b0925610b201eedc7b4a1f5d61837f6047f105335029aa8c642cdc404a34b7c도 맞다. stages 기능은 같다.)
       - tests/diagnostics/s11_fast_rise_readout.py
         96a5cab616d3db67d626f719ca48f0e7c2bbeb0a33bceffde88f8deb797cdbbc
       - tests/diagnostics/s11_layer_bottom_topology_2_field.py
