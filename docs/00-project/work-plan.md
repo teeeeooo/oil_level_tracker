@@ -382,10 +382,31 @@ Facts it records:
 The gate is implemented and its local check passed. No Windows request is
 queued.
 
-**Resume checkpoint — 2026-10-23 (latest, end of session):** start with the
+**Resume checkpoint — 2026-10-26 (latest):** **Windows is available (user,
+2026-10-26).** The
+[step-8 combined request](../40-operations/s11-current-windows-field-qualification.md#step-8-combined-request)
+is READY and waits for the user to forward it. The user approved its shape:
+the SPL#4 fast-rise readout and LBT-2 S2 go together, and the SPL#4 run is
+decided after the readout ("그렇게 진행하자").
+- **F, the readout:** read-only on `SPL4_B_ref` at 20.5–25.5 s.
+  - The tool is `tests/diagnostics/s11_fast_rise_readout.py`. Its local
+    reader check passes: 722/722 builder rows rebuilt, witness included.
+  - [Rule](../60-evidence/s11/2026-10-23-fast-rise-local.md#windows-readout-tool--2026-10-26):
+    one or more qualifying BASE triplets → propose the SPL#4 run; none → the
+    user chooses a successor witness protocol or closing option 2.
+- **L, LBT-2 S2:** the
+  [protocol](../50-diagnostics/s11/2026-10-22-layer-bottom-topology-2.md#windows-s2-protocol-frozen-2026-10-26)
+  is frozen with readings S1–S5, scored on review-012 table V.
+  - The runner is `tests/diagnostics/s11_layer_bottom_topology_2_field.py`.
+  - Its local check passes: the reference arm reproduces its source bundle,
+    and the LBT-2 arm reproduces the frozen sample4 values.
+- **Unchanged:** no production default changed. FIELD FAIL / O2 OPEN.
+- **Next:** read the returned stdout against these rules.
+
+**Earlier resume checkpoint — 2026-10-23 (end of session):** start with the
 [step-7 and fast-fill handoff](../60-evidence/s11/2026-10-23-step7-fast-fill-handoff.md).
-Windows is unavailable until the user says otherwise; no Windows request is
-queued. The checkpoint below is the earlier one.
+Windows was unavailable then; no Windows request was queued. The checkpoint
+below is the one before it.
 
 **Earlier resume checkpoint — 2026-10-23:** start with the
 [strict-boundary handoff](../60-evidence/s11/2026-10-23-strict-boundary-handoff.md)
