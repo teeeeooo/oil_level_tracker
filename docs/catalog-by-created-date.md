@@ -1729,6 +1729,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-27 | [FOR-1 fill-owner recency](50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) | SPL#4 2 fps `FILL_OWNER_AMBIGUOUS`의 원인 소스 판독(다시 나타난 낮은 tracklet이 고정된 확인 값으로 곧바로 소유자가 됨)과, 최근 움직임 값이 수위 소유자와 낮은 소유자를 가르는지 sample5·sample7 로컬 확인(판정 실행 전 동결) |
 | 2026-10-27 | [Step-12 Windows receipt](60-evidence/s11/2026-10-27-step12-windows-receipt.md) | SPL#4 BASE 20–28 s 저장 trace의 fill owner 값 읽기(검출기 실행 없음). FOR-1 동결 판정: NOT CONFIRMED(W1 성립, W2는 0035에서 실패 — 22.0–24.5 s의 새 확인). 0018은 14.5 s에 끝난 확인의 고정 값으로 소유자가 됨 |
 | 2026-10-27 | [FOR-2 fast-rise owner desk review](50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md) | 빠른 충전에서 owner 위로 올라가는 수위의 admission과 phase owner(2·3번 질문) desk 검토, 그리고 SPL#4 BASE 20–27 s 수면 사람 표시 review-015의 판정 기준(결과 전 동결) |
+| 2026-10-27 | [Fill-owner revisit handoff](60-evidence/s11/2026-10-27-fill-owner-revisit-handoff.md) | fill-owner gate 재검토 세션 인계: step 12–15, review-015/016, SPL#4 정답 수정, 2 fps 빠른 상승의 세 장벽, E4→E2→E1→E3 순서와 승인된 E4 구현 위치 |
 
 ## 2026-10-22 누락 보완 등록 — 166개
 

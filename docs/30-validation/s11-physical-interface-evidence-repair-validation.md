@@ -305,8 +305,8 @@ consequence of the removed rows. Every such change is reported.
 
 ## Co-located fill-owner checks — 2026-10-27
 
-**Status: DRAFT 2026-10-27 with the design, before any code or run; waiting
-for the user's approval.** These checks accompany the
+**Status: FROZEN 2026-10-27 with the design, before any code or run; approved
+by the user ("일단 구현은 이대로 진행해보자").** These checks accompany the
 [co-located fill owners (E4)](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-co-located-fill-owners-e4).
 They do not change after results.
 

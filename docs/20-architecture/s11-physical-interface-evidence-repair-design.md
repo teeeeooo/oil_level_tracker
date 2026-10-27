@@ -634,7 +634,7 @@ fix the local controls, the predictions and the stop conditions before any run.
 
 ## October 27 co-located fill owners (E4)
 
-**Status: DRAFT 2026-10-27, waiting for the user's approval; no code.** The
+**Status: APPROVED 2026-10-27 as drafted (user: "일단 구현은 이대로 진행해보자"); frozen before code; not yet implemented.** The
 first step of the order the user chose after the
 [partition desk review](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#partition-demotion-desk-review--2026-10-27):
 "결국 E3까지 가긴해야되는데 하나씩 짚어보자는거네. 추천 순서대로 진행하자"

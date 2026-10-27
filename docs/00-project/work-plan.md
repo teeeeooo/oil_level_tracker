@@ -382,7 +382,16 @@ Facts it records:
 The gate is implemented and its local check passed. No Windows request is
 queued.
 
-**Resume checkpoint — 2026-10-27 (latest), fill-owner gate revisit step 1:**
+**Session handoff — 2026-10-27 (latest):** start with the
+[fill-owner revisit handoff](../60-evidence/s11/2026-10-27-fill-owner-revisit-handoff.md).
+- Steps 12–15 and reviews 015–016 are answered, and the SPL#4 truth is
+  corrected.
+- The order is E4 → E2 → E1 → E3. E4 is approved and frozen, not yet
+  implemented.
+- Next: implement E4 and run its local checks. The checkpoint below holds the
+  detail.
+
+**Resume checkpoint — 2026-10-27, fill-owner gate revisit:**
 [FOR-1](../50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) is
 COMPLETE. The user approved the order (2026-10-27: "응 이 순서로 진행하자",
 then "응 그렇게 진행하자").
@@ -534,10 +543,13 @@ then "응 그렇게 진행하자").
     - sample5: 3 frames (9.5, 10.0, 11.0 s); 11.0 s may publish a low row.
     - sample7: none.
     - SPL#4: 23.0 and 23.5 s.
-- **Next:** the user approves or changes the E4 draft; then implement and run
-  the local checks.
+- **User (2026-10-27): "일단 구현은 이대로 진행해보자"** — E4 is approved as
+  drafted and frozen.
+- **Next:** implement E4 and run its local checks. The
+  [fill-owner revisit handoff](../60-evidence/s11/2026-10-27-fill-owner-revisit-handoff.md)
+  lists the files, the wiring and the prediction.
 
-**Session handoff — 2026-10-26:** start with the
+**Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
 updated at session close. Steps 10 and 11 are answered and both follow-ups
 are decided. No Windows request is queued. Next: the fill-owner gate revisit,
