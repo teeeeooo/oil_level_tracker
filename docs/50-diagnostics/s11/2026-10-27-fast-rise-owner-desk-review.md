@@ -236,9 +236,22 @@ in the closed managed run `sample/output/s11-review-016-photos-20261027-001`.
 - So on reviewed truth the first barrier of the fast rise is `OIL-AUTHORITY`
   (the post-track tier), ahead of the FFF-1 association cap. The cap applies
   only at 24.5–25.0 s, where `0040` did form and gained no net progress.
-- **Inference, not tested:** `TRACK_OPPOSITION` suggests the existing tracks,
-  the low owners among them, oppose the new higher rows. That would tie the
-  demotion to the same stale owners.
+- **Correction (from source, 2026-10-27):** an inference written here at
+  first said the existing tracks, the low owners among them, oppose the new
+  higher rows. That is wrong. `TRACK_OPPOSITION` is the recurring-row check
+  (`OilTrackletOppositionOwner._apply_track_opposition`), which works by
+  height, not by track:
+  - It runs over the whole resolved sequence. Candidates fall into Y buckets
+    of 2.4 × the tolerance (tolerance = max(3, 1.8 % of H), about 9.8 px on
+    SPL#4).
+  - A bucket is penalized when its best row recurs: in at least 6 frames,
+    18 % of the frames, a 6-frame run, stable in Y, with an artifact or
+    optics signature.
+  - Every candidate in that bucket, in any frame, receives the penalty. A
+    candidate is demoted to `CANDIDATE_ONLY` when the penalty is ≥ 0.60 and
+    it has a candidate-local contradiction (`recurrence_hard_contradiction`).
+  - So a fast level that crosses a height where some other row recurs can be
+    demoted by that height's history.
 
 ### V, review-016 (27.0–30.0 s)
 
@@ -254,6 +267,56 @@ in the closed managed run `sample/output/s11-review-016-photos-20261027-001`.
   Foam bubbles.
 - The production output at 27.5–28.0 s (0018, Y721 and Y704) is therefore
   wrong-target numeric Oil inside reviewed FULL, as recorded at step 7.
+
+## Step 14 — readings frozen 2026-10-27, before its output
+
+**User (2026-10-27): "응 그렇게 진행하자"**, for a read-only readout of why the
+level rows are demoted.
+
+**Tool:** `tests/diagnostics/s11_level_authority_readout.py` on `SPL4_B_ref`.
+For each candidate within 32 px of the marks, it prints:
+- the initial authority, its reason and failed gates;
+- the phase identity and its failed gates;
+- the post-track authority, `track_opposition` and its effective value;
+- the reject stage;
+- the candidate-local inputs of the recurrence demotion (material-texture
+  conflict, artifact likelihood, static prior, optics, registered motion);
+- for each candidate with opposition, how often an Oil candidate recurs at
+  that height over the whole Glass trace: frames present, the longest run,
+  and its time span.
+
+The recurrence count approximates the resolver's bucket check, which uses
+shifted grids and the best row per frame. The local check passed (run
+`s11-level-authority-check-20261027-001`).
+
+**Marks:** review-015 at 24.5–27.0 s (6 rows). 24.5 and 25.0 s are the
+contrast frames, where the level was eligible as `0040`. 25.5–27.0 s are the
+demoted frames.
+
+**Route of each level candidate** (|d| ≤ 32 px):
+- **ELIGIBLE:** the post-track tier is `CONTINUATION_ELIGIBLE` or
+  `ANCHOR_ELIGIBLE`.
+- **RECURRENCE:** the initial tier is eligible, but the post-track tier is
+  `CANDIDATE_ONLY`.
+- **INITIAL:** the initial tier is `CANDIDATE_ONLY`; the failed gates name
+  why.
+- **NONE:** no tier at all (hard-invalid or pruned).
+
+A frame takes its best route, in the order ELIGIBLE > RECURRENCE > INITIAL >
+NONE.
+
+**Readings:**
+- **A1:** the route of each demoted frame (25.5, 26.0, 26.5, 27.0 s).
+- **A2:** for RECURRENCE candidates, the recurrence count and run span. The
+  recurrence is **outside the rise** if the longest run has at least 6 frames
+  and its span does not lie inside 24.0–27.5 s.
+- **A3:** for INITIAL candidates, the failed gates, by count.
+
+**Outcome:**
+- **RECURRENCE-LED:** at least 3 of the 4 demoted frames route RECURRENCE.
+- **INITIAL-LED:** at least 3 route INITIAL or NONE.
+- **MIXED:** otherwise.
+- The contrast frames are reported only.
 
 ## Desk review — 2026-10-27, from existing records
 

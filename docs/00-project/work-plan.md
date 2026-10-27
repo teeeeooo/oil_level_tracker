@@ -472,11 +472,16 @@ then "응 그렇게 진행하자").
     `OIL-AUTHORITY`, ahead of the association cap.
   - **Review-016:** Oil FULL from 27.5 s, cloudy with residual bubbles
     through 30.0 s. The truth correction records the onset.
-- **Next (the user decides):** a direction for the two parts:
-  - the 22.5–24.0 s duplicate owners;
-  - the fast rise's authority demotion. A read-only readout of the demoted
-    level rows' failed gates and their track opposition would come before
-    any design.
+- **User (2026-10-27): "응 그렇게 진행하자".**
+  - **Correction (from source):** `TRACK_OPPOSITION` is the height-bucket
+    recurring-row check, not opposition by the owners.
+  - The read-only
+    [step-14 level authority readout](../40-operations/s11-current-windows-field-qualification.md#step-14-level-authority-readout)
+    is READY and waits for the user to forward it. It is judged by A1–A3 in
+    FOR-2. The tool's local check passed (run
+    `s11-level-authority-check-20261027-001`).
+- **Next:** judge step 14. The user then chooses a direction for the two
+  parts: the 22.5–24.0 s duplicate owners, and the fast rise's demotion.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
