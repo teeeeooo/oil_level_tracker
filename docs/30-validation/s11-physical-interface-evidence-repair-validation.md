@@ -306,7 +306,10 @@ consequence of the removed rows. Every such change is reported.
 ## Co-located fill-owner checks — 2026-10-27
 
 **Status: FROZEN 2026-10-27 with the design, before any code or run; approved
-by the user ("일단 구현은 이대로 진행해보자").** These checks accompany the
+by the user ("일단 구현은 이대로 진행해보자").** **Local result:**
+[FAIL on a stop condition](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md)
+(run at `9ee11a4`): K1 PASS; K2 frames exactly as predicted; K3 within
+32 px; sample5 events change outside the K2 frames. These checks accompany the
 [co-located fill owners (E4)](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-co-located-fill-owners-e4).
 They do not change after results.
 

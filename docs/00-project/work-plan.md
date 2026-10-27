@@ -386,9 +386,10 @@ queued.
 [fill-owner revisit handoff](../60-evidence/s11/2026-10-27-fill-owner-revisit-handoff.md).
 - Steps 12–15 and reviews 015–016 are answered, and the SPL#4 truth is
   corrected.
-- The order is E4 → E2 → E1 → E3. E4 is approved and frozen, not yet
-  implemented.
-- Next: implement E4 and run its local checks. The checkpoint below holds the
+- The order is E4 → E2 → E1 → E3. E4 is implemented (`9ee11a4`, opt-in,
+  default OFF). Its local checks FAIL on a frozen stop condition, recorded in
+  the [E4 local evidence](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md).
+- Next: the user decides E4's next step. The checkpoint below holds the
   detail.
 
 **Resume checkpoint — 2026-10-27, fill-owner gate revisit:**
@@ -545,9 +546,19 @@ then "응 그렇게 진행하자").
     - SPL#4: 23.0 and 23.5 s.
 - **User (2026-10-27): "일단 구현은 이대로 진행해보자"** — E4 is approved as
   drafted and frozen.
-- **Next:** implement E4 and run its local checks. The
-  [fill-owner revisit handoff](../60-evidence/s11/2026-10-27-fill-owner-revisit-handoff.md)
-  lists the files, the wiring and the prediction.
+- **E4 implemented** at `9ee11a4` (opt-in, default OFF). Local run
+  `s11-fill-owner-colocation-local-20261027-001`
+  ([evidence](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md)):
+  - **As predicted:** K1 PASS on all five controls. On sample5, exactly 9.5,
+    10.0 and 11.0 s are co-located; rows are added at 9.5 s (Y798) and 10.0 s
+    (Y792), within 32 px of the estimate (K3).
+  - **Stop condition fired: FAIL.** sample5 events change outside the K2
+    frames. The initial-state retrospective now accepts (EMPTY 0.0–8.0 s,
+    boundary from the bottom at 8.5 s); the low-confidence interval starts at
+    10.5 s; coverage goes from 20.7 % to 22.5 %. All of these follow from the
+    two added rows. Nothing is retuned.
+- **Next:** the user decides whether E4 goes on to the Windows SPL#4
+  comparison, stops, or is re-frozen. E2 → E1 → E3 follow in every case.
 
 **Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
