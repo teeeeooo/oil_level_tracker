@@ -169,12 +169,58 @@ decides whether E2 is frozen.
   far above a reviewed Foam-region bottom, with 3 unreviewed possible costs.
   Its known costs are sample7's 9 correct rows and up to 4 unreviewed rows.
 
+## Review-017 — readings frozen 2026-10-27, before its output
+
+**Why:** the user asked (2026-10-27): "review017 진행하고 확인해서 E2가
+구현 할 의미가 있는지 한번 확인해보자". Four E2 hits have no reviewed truth.
+The user marks the Oil boundary on raw zooms of those frames.
+- **H1–H3:** SPL#1 Accum 669.5, 670.5 and 671.5 s. The owner 0147 publishes
+  Y515, Y482 and Y461; the admitted 0143 lies at Y406–418.
+- **H4:** SPL#4 Accum 66.0 s. The owner 0103 publishes Y505; the admitted
+  0078 lies at Y444–447.
+
+**Material:**
+- **SPL#1 Accum:** the rows at 669.0–672.0 s, 7 panels (frames 16040–16112).
+  - 672.0 s is the anchor: review-012 marked it at Y493.5.
+  - The same question as review-012 is used, so the two reviews mean the same
+    boundary.
+- **SPL#4 Accum:** 65.0–67.0 s, 5 panels (frames 1950–2010).
+
+**Band:** the mark ± C1. C1 is 5 % of the Glass diameter (2 × `radius_y` of
+the prepare output's ellipse): 29.16 px on SPL#1 Accum, as in review-012.
+
+**Class of each hit frame:**
+
+| Class | When | Meaning for E2 |
+|---|---|---|
+| COST | the published Y lies in the band | E2 would remove a correct row |
+| GAIN | the published Y lies outside the band, or the user says the Glass is full (`가득`) | E2 would remove a wrong row |
+| UNREAD | the user says no boundary is visible (`안 보임`) | neither |
+
+Each hit frame also records whether the admitted row above lies in the band.
+
+**Anchor:** the 672.0 s mark against review-012's Y493.5. The difference is
+reported; it is not a condition.
+
+**Tally, read by the user (no automatic verdict):**
+- **User truth:**
+  - gains: 4 (SPL#1 Accum 674.0–677.0 s, review-012) + review-017 GAIN;
+  - costs: 9 (sample7, the user's 0016 judgment) + review-017 COST.
+- **Agent truth:** sample5's 20 removed rows, which are wrong against the
+  FOA-1 agent surface estimates. Reported separately.
+- **For comparison:** the contested gate's tally was 17 agent-truth gains
+  against 20 user-truth costs. Its promotion is HELD ("승격 보류 -> 얻는거 잃는게
+  비슷한 수준으로 보임", 2026-10-23).
+
+**Not in this review:** SPL#4 BASE, which E2 does not change, and any change
+to the draft rule or its 32 px step.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-PHASE-FILL`, `OIL-TRACKLET`, `OIL-SELECTOR`
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F05`, `S11-F07`, `S11-F08`
 - First harmful stage: `OIL-PHASE-FILL` publishes a single low owner while an admitted interface lies above it (sample5's 20 rows, SPL#1 Accum 674.0–677.0 s; sample7's 9 correct rows show the `S11-F07` limit). On SPL#4 BASE 27.5–34.0 s the same stage publishes the stale owner with nothing admitted above it, so this cue does not reach it.
 - Existing feature coverage: the production detector path with IFO v2 and top-exit v3, with and without E4; the original sample4/base_sample_1/sample2 Recipes, the frozen October 15 interior Recipe and the frozen October 22 empty-fill Recipes; initial states as in run 003; static preparation active; cost-first, RGB, Local XY and the contested gate OFF.
-- Execution scope: one closed managed local run (six controls, owner readouts, debug NONE) and a new read-only readout tool with unit tests; then one Windows readout of three saved bundles (five runs of the tool, no detector run), relayed as text and kept in `s11-e2-windows-relay-20261027-001`. No detector code change or tuning.
+- Execution scope: one closed managed local run (six controls, owner readouts, debug NONE) and a new read-only readout tool with unit tests; then one Windows readout of three saved bundles (five runs of the tool, no detector run), relayed as text and kept in `s11-e2-windows-relay-20261027-001`. Review-017 (a human frame review on Windows, user-forwarded) has its readings frozen here before its output. No detector code change or tuning.
 - Logic-map impact: NONE — diagnostics only.
 - Failure-registry impact: NONE — no new mechanism; the oblique-arc cost is `S11-F07`.

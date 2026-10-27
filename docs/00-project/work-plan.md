@@ -397,8 +397,10 @@ queued.
   an admitted-interface cue. Its
   [Windows readout](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#windows-readout--2026-10-27)
   finds nothing admitted above 0018 on SPL#4, so E2 would leave the 14 rows.
-  No Windows request is queued. Next: the user decides between freezing E2
-  and parking it for E1. The checkpoint below holds the detail.
+  The user chose review-017 of the four unreviewed hits before deciding.
+  Next: relay the queued
+  [review-017](../40-operations/s11-current-windows-field-qualification.md#review-017-e2-hit-frame-review).
+  The checkpoint below holds the detail.
 
 **Resume checkpoint — 2026-10-27, fill-owner gate revisit:**
 [FOR-1](../50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) is
@@ -599,8 +601,17 @@ then "응 그렇게 진행하자").
     correct.
   - SPL#4 Accum: 1 hit (66.0 s, unreviewed). SPL#1 BASE: not exercised.
   - The predictions are filled into the draft checks; nothing is frozen.
-- **Next: the user decides** whether to freeze E2 or park it and go to E1.
-  Then E1 → E3.
+- **User (2026-10-27): "review017 진행하고 확인해서 E2가 구현 할 의미가 있는지 한번 확인해보자".**
+  - [Review-017 readings](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#review-017--readings-frozen-2026-10-27-before-its-output)
+    are frozen before its output.
+  - Each unreviewed hit becomes COST, GAIN or UNREAD against the mark ± C1.
+  - The user reads the tally. User truth so far: 4 gains (SPL#1 Accum
+    674.0–677.0 s) against 9 costs (sample7). sample5's 20 agent-truth gains
+    are counted separately.
+- **Next:** relay the queued
+  [review-017](../40-operations/s11-current-windows-field-qualification.md#review-017-e2-hit-frame-review),
+  then the user decides whether to freeze E2 or park it and go to E1. Then
+  E1 → E3.
 
 **Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
