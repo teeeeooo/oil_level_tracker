@@ -360,6 +360,63 @@ as step 7's reference, with and without E4.
   Y761.5).
 - Every other BASE and Accum row is equal.
 
+## Undercut fill-owner checks — 2026-10-27
+
+**Status: DRAFT 2026-10-27, not frozen.** These checks accompany the
+[undercut fill owner (E2)](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-undercut-fill-owner-e2).
+The SPL#4 and SPL#1 predictions are filled in from the
+[Windows owner-above readout](../40-operations/s11-current-windows-field-qualification.md#e2-owner-above-readout-request)
+before freezing. Once frozen, nothing here changes after results.
+
+**Unit (synthetic lifecycle layers):**
+- An admitted non-owner observation more than one step above every owner
+  observation gives `FILL_OWNER_UNDERCUT`, an empty allowed set and an
+  ambiguous frame.
+- None of these undercuts the owner:
+  - an observation exactly one step above;
+  - an unadmitted tracklet;
+  - an untracked row;
+  - a member of the owner chain;
+  - a frame where the owner has no observation.
+- Chains, the established fill, contest marks and the next frame's decision
+  are identical with the option OFF and ON. Only the frame's allowed set,
+  owner chain, reason and ambiguity differ.
+- An undercut onset frame does not rewrite earlier frames.
+- With the contested gate ON, a gated frame stays `FILL_OWNER_CONTESTED`.
+- With E4 ON, a co-located frame can be undercut.
+- With the option OFF, the lifecycle output is identical and the existing
+  suites pass unchanged.
+
+**Wiring:** the flag reaches the lifecycle through the real GUI
+detector-factory paths. The versions carry `+fill-owner-undercut-v1`.
+Cost-first, candidate RGB and Local XY combinations are refused.
+
+**Local controls.** The six fill-owner controls at 2 fps with debug NONE.
+- **Arms:** the reference is IFO v2 + top-exit v3; the candidate adds E2.
+- **Identity anchor:** the reference arm equals the reference arm of the
+  closed OAR-1 run `s11-e2-owner-above-readout-20261027-001` (rows, events,
+  report, version). Otherwise the run is void.
+
+| Check | Controls | Prediction (pass condition) |
+|---|---|---|
+| U1 identity | base_sample_1-full, sample2-full, sample4-interior-full, sample4-original-unknown | No frame becomes `FILL_OWNER_UNDERCUT`. Rows, phases, events and report are equal (version aside) |
+| U2 prediction | sample5-empty | Exactly these 20 frames become `FILL_OWNER_UNDERCUT` and lose numeric Oil: 20.0, 24.5, 25.5, 36.0, 40.5, 41.5, 42.0, 42.5, 43.5, 44.0, 46.0, 46.5, 47.0, 48.0, 48.5, 49.0, 49.5, 50.0, 50.5, 54.0 s |
+| U3 prediction | sample7-empty | Exactly these 9 frames become `FILL_OWNER_UNDERCUT` and lose numeric Oil: 26.5, 27.0, 27.5, 28.0, 28.5, 29.0, 30.5, 31.0, 31.5 s. They are user-judged correct rows; the cost is reported, not tuned |
+
+**Stop conditions.** Any of these fails the check, with no promotion and no
+retuning:
+- a numeric Oil row added, removed or moved outside the predicted frames;
+- any Foam coordinate or FULL/EMPTY state change.
+
+**Read, not judged:** events, the initial-state retrospective and the report
+are listed for each control and read against the truth. Removing rows can
+change them, as sample5's added rows changed them under E4. Their changes are
+for the user's judgment, not an automatic stop.
+
+**Windows (after freezing and the user's go):** SPL#4 0–90 s at 2 fps with
+FULL debug, as in the E4 comparison, with and without E2, plus the SPL#1
+`SPL1_B_ref` session. The predictions come from the readout.
+
 ## Fast-rise association checks — 2026-10-23
 
 **Status: FROZEN 2026-10-23 with the design, before any code or run.** These

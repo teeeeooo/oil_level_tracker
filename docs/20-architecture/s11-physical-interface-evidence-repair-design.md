@@ -711,6 +711,120 @@ so frames that any owner would have answered correctly publish UNKNOWN.
   gate. Refused with cost-first, candidate RGB and Local XY.
 - **Checks:** [frozen with this draft](../30-validation/s11-physical-interface-evidence-repair-validation.md#co-located-fill-owner-checks--2026-10-27).
 
+## October 27 undercut fill owner (E2)
+
+**Status: DRAFT 2026-10-27, not frozen; no code.** The second step of the
+user's order (E4 → E2 → E1 → E3), started on the user's "시작하자" after the
+[E4 Windows PASS](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md#windows-spl4-comparison--2026-10-27).
+The local predictions come from the read-only
+[OAR-1 readout](../50-diagnostics/s11/2026-10-27-owner-above-readout.md). The
+SPL#4 and SPL#1 predictions wait for its
+[Windows readout](../40-operations/s11-current-windows-field-qualification.md#e2-owner-above-readout-request).
+The draft is frozen, with its checks, only after that readout and the user's
+approval.
+
+**Problem.** A single fill owner publishes a low boundary while the level is
+higher.
+- **SPL#4 BASE:** the stale owner 0018 publishes 14 rows at 27.5–34.0 s
+  (Y704–739) inside the reviewed FULL interval (from 27.5 s).
+- **sample5:** 21 of 23 published rows are below the agent surface estimate.
+  - 17 come from a survivor of `FILL_OWNER_AMBIGUOUS` (win by attrition).
+  - 4 come from a fresh low start.
+- **The contested gate** removes the attrition rows by marking outlasting. Its
+  promotion is HELD because it also removes sample7's 20 correct rows.
+- **The desk review's E2** names a reason instead: an interface above the
+  owner.
+- **OAR-1 corrects the cue.** "Candidates above the owner" is no cue: unadmitted
+  rows sit above the owner in almost every frame on every video, for example
+  structure near Y370–390 on sample5 and sample7. An *admitted* tracklet above
+  the owner is the cue.
+
+### Rule
+
+1. **When.** The frame decision allows fill owners under
+   `FILL_MOTION_OWNER`, `FILL_PHASE_REENTRY`, `FILL_CURRENT_ANCHOR_HANDOFF`,
+   the single owner of `FILL_CHAIN_AMBIGUOUS`, or `FILL_OWNER_COLOCATED` (E4).
+2. **Undercut.** The owner is undercut when both hold:
+   - the allowed owners have at least one Oil observation in the frame;
+   - another Oil observation in the same frame meets all of these:
+     - its tracklet is admitted;
+     - its tracklet is neither in the allowed set nor in the frame's owner
+       chain;
+     - it lies more than `maximum_jump_px` above every observation of the
+       allowed owners. That is the Recipe's `temporal_max_jump_px`, 32 px on
+       every control and on SPL#4.
+3. **Decision.** For an undercut frame:
+   - the allowed set and the frame's owner chain become empty;
+   - the reason becomes `FILL_OWNER_UNDERCUT`;
+   - the frame counts as ambiguous;
+   - the fill-onset intent does not rewrite earlier frames for that owner, as
+     under the contested gate.
+4. **No state change.** Chains, the established fill, the contest marks, the
+   ownerless barrier and every release, re-entry, recovery and completion
+   evaluation evolve exactly as without the option. The rule is frame-local
+   and keeps no memory. `FILL_SPAN_CONFIRMED`, `FILLED_BARRIER` and draining
+   are not read.
+5. **Order.** When the contested gate is also ON, a gated frame stays
+   `FILL_OWNER_CONTESTED`. E2 reads only frames the gate leaves publishing.
+
+**Why:**
+- **Admitted means vouched for.** An admitted tracklet is an interface the
+  tracklet layer has confirmed by motion.
+- **Two surfaces in one frame.** One admitted interface more than one
+  association step above the owner is, by the tracklet layer's own tolerance,
+  a different surface from the owner's. The lifecycle then holds two surfaces
+  and has no evidence that the lower one is the fill level.
+- **This is the existing rule, applied.** Section 3 already says a still-valid
+  competing owner gives UNKNOWN (`S11-F04`).
+- **No position-based choice.** The rule does not publish the higher row.
+  Choosing by vertical order is identity from position, which `S11-F03` and
+  `S11-F04` forbid. It only stops the lower one.
+- **It differs from the gate** in what it reads. The gate reads history (the
+  owner once shared an ambiguity). E2 reads the current frame (an interface is
+  above now). So E2 can also catch a fresh low start, and it stops as soon as
+  nothing admitted is above.
+
+**Local prediction** ([OAR-1](../50-diagnostics/s11/2026-10-27-owner-above-readout.md),
+read-only, both the IFO v2 + top-exit v3 arm and the +E4 arm):
+
+| Control | Single-owner published rows | Undercut |
+|---|---:|---|
+| sample5 | 23 (25 with E4) | 20, the same in both arms. 17 of 17 attrition rows and 3 of 4 fresh-low rows; 54.5 s (no admitted row above) stays. No agent-correct row, and neither E4 row |
+| sample7 | 21 | 9 of 0016's user-judged correct rows (26.5–29.0, 30.5–31.5 s). The admitted back arc 0019 lies 60–89 px above |
+| sample4-original-unknown | 13 | 0 |
+| base_sample_1, sample2, sample4-interior (FULL starts) | 0 | 0, not exercised |
+
+- **Net:** the gate removed 17 wrong and 20 correct rows locally; E2 would
+  remove 20 wrong and 9 correct.
+- **Narrow margins:** two sample5 hits are only 2–3 px beyond the step
+  (20.0 s: 34 px; 54.0 s: 35 px).
+
+**Costs and risks:**
+- **Oblique views (`S11-F07`).** E2 cannot tell a back arc from a second
+  surface, as the gate cannot. sample7 loses 9 correct rows once 0019 is
+  admitted.
+- **Admitted structure above a true level** would stop correct rows. Locally
+  this never occurs, but the three FULL-start controls do not exercise the fill
+  phase at all. SPL#1's readout is the long negative.
+- **Oil under Foam.** An admitted Oil-kind tracklet on a Foam layer above a
+  true Oil level would stop correct rows. This matters for E3 later; SPL#4's
+  readout lists it.
+- **SPL#4 is unknown.** If no admitted tracklet lies above 0018 at
+  27.5–34.0 s, E2 does nothing for the user's case. The glass is FULL there,
+  so the level may give no admitted row. The Windows readout decides whether
+  E2 is worth freezing.
+
+**What it does not do:** it adds no numeric Oil, picks no level, changes no
+tracklet, authority or association, and does not reach FULL.
+
+**Activation (planned):** opt-in, default OFF, wired like the contested gate.
+- **Flag:** GUI `--oil-fill-owner-undercut`, version suffix
+  `+fill-owner-undercut-v1`.
+- **Combinations:** with IFO v2, top-exit v3, the contested gate and E4.
+  Refused with cost-first, candidate RGB and Local XY.
+- **Checks:** [drafted](../30-validation/s11-physical-interface-evidence-repair-validation.md#undercut-fill-owner-checks--2026-10-27),
+  frozen with this section.
+
 ## October 23 fast-rise association
 
 **Status: FROZEN 2026-10-23 before implementation; IMPLEMENTED 2026-10-23 (`4f0665b`,
@@ -1262,6 +1376,11 @@ as the serialized array index. Diagnostic detail must not change output.
   are not edited; no run or code change. The Windows SPL#4 comparison (two
   runs, relayed as text, closed run `s11-e4-windows-relay-20261027-001`) is
   judged on the Mac against the frozen Windows condition; no code change.
+  The 2026-10-27 undercut fill-owner (E2) section is a draft, not frozen:
+  its local predictions read the closed read-only run
+  `s11-e2-owner-above-readout-20261027-001` (six controls, owner readouts,
+  debug NONE) through the new read-only `s11_owner_above_readout` tool; no
+  detector code changes and no Windows execution yet.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state. The fast-rise draft adds one bounded association route for beyond-cap upward rows (seed of three witnessed rows in a constant-velocity line, then prediction-gated continuation); it is not a widened cap, adds no coordinate and leaves within-cap association unchanged.
-- Logic-map impact: NONE — this update records the E4 local and Windows results; its feature row and 4.3 paragraph were committed to the map with the implementation (`9ee11a4`). Earlier: the fast-rise local result changed nothing; its feature row and 4.2 paragraph were committed to the map with the implementation (`4f0665b`). Earlier: the gate's feature row and 4.3 paragraph were committed with its implementation (`2cb0b52`); the v3 implementation evidence records the top-exit row and paragraph.
+- Logic-map impact: NONE — this update records the E4 local and Windows results and drafts E2 without code; its feature row and 4.3 paragraph were committed to the map with the implementation (`9ee11a4`). Earlier: the fast-rise local result changed nothing; its feature row and 4.2 paragraph were committed to the map with the implementation (`4f0665b`). Earlier: the gate's feature row and 4.3 paragraph were committed with its implementation (`2cb0b52`); the v3 implementation evidence records the top-exit row and paragraph.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair. The attrition path is an instance of F04 (stale continuation after an ambiguity), F05 (EMPTY-phase fill ownership) and F08 (owner re-adoption); no new entry.

@@ -392,7 +392,11 @@ queued.
 - The user accepted the out-of-frame changes and chose the Windows SPL#4
   comparison. It PASSES its frozen condition (2026-10-27,
   [receipt](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md#windows-spl4-comparison--2026-10-27)).
-  No Windows request is queued. Next: the E2 draft. The checkpoint below
+- E2 (undercut fill owner) is DRAFTED, not frozen. The local readout
+  [OAR-1](../50-diagnostics/s11/2026-10-27-owner-above-readout.md) supports
+  an admitted-interface cue. Next: relay the queued
+  [E2 owner-above readout](../40-operations/s11-current-windows-field-qualification.md#e2-owner-above-readout-request)
+  for SPL#4 and SPL#1, then the user decides on freezing. The checkpoint below
   holds the detail.
 
 **Resume checkpoint — 2026-10-27, fill-owner gate revisit:**
@@ -571,8 +575,27 @@ then "응 그렇게 진행하자").
     24.0 s; the 22.5 s UNKNOWN row is alone and below the 0.5 s event
     minimum. Coverage 18.2 → 19.3 %. Retrospective unchanged.
   - E4 stays opt-in and default OFF. No FULL; the other barriers remain.
-- **Next:** draft E2 (fail closed on a stale low owner), frozen with its
-  checks before code. Then E1 → E3.
+- **User (2026-10-27): "시작하자"** — start the E2 draft.
+  - **OAR-1** ([local readout](../50-diagnostics/s11/2026-10-27-owner-above-readout.md),
+    closed run `s11-e2-owner-above-readout-20261027-001`, read-only):
+    - Candidates of any tier above the owner are no cue; they are everywhere.
+    - An admitted non-owner tracklet more than 32 px above every owner row
+      catches 20 of sample5's 21 wrong rows and none of its correct ones.
+    - It costs 9 of sample7's user-judged correct rows; the oblique back arc
+      is the `S11-F07` limit. The contested gate cost 20.
+    - sample4-original-unknown: 0 of 13. The FULL starts do not exercise it.
+  - **[E2 draft](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-undercut-fill-owner-e2)**
+    and its [checks](../30-validation/s11-physical-interface-evidence-repair-validation.md#undercut-fill-owner-checks--2026-10-27):
+    when an admitted interface is more than one step above the single fill
+    owner, the frame publishes no owner (`FILL_OWNER_UNDERCUT`). Opt-in,
+    default OFF. NOT frozen; no code.
+- **Next:** the user relays the
+  [E2 owner-above readout](../40-operations/s11-current-windows-field-qualification.md#e2-owner-above-readout-request).
+  - It shows whether anything admitted lies above 0018 at 27.5–34.0 s and
+    what E2 would stop on SPL#1.
+  - The draft's SPL#4 and SPL#1 predictions are filled in from it, and then
+    the user decides on freezing.
+  - Then E1 → E3.
 
 **Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
