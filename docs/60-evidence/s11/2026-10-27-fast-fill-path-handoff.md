@@ -13,6 +13,9 @@ and authorization. Everything below is committed and pushed to `main`.
   [FER-1](../../50-diagnostics/s11/2026-10-27-full-evidence-readout.md) is
   COMPLETE and reads **E-ABSENT**. The image `full` node never forms on any
   reviewed recording, so F1 as drafted has no evidence.
+- **Then the peer-side desk check:**
+  [PSD-1](../../50-diagnostics/s11/2026-10-27-peer-side-desk-check.md)
+  reads NO SEPARATION, so E3 is blocked at barrier 1.
 - **No Windows request is queued.**
 - **Managed runs:** 145, all clean.
 - **Next free review ID:** review-018.

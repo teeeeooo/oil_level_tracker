@@ -1,6 +1,9 @@
 # PSD-1 — does a peer-side condition free SPL#4's demoted level? (barrier 1 desk check)
 
-**Status: READINGS FROZEN 2026-10-27, before the local rows are read.** This
+**Status: COMPLETE 2026-10-27. Reading: NO SEPARATION.** The readings were
+frozen at `7fb25a2`, before the local rows were read
+([result](#result--2026-10-27)). Every candidate condition also frees rows that
+R7 protects. So barrier 1 has no peer-side handle in the traced fields. This
 is the peer-side desk check of barrier 1, the first piece of E3. It runs on
 the user's "1번 먼저 진행하자" (2026-10-27), after
 [FER-1](2026-10-27-full-evidence-readout.md) read E-ABSENT for path F. It is
@@ -93,6 +96,50 @@ the relay.
   peers, so their exposure is **not readable** here.
 
 No condition is tuned after reading.
+
+## Result — 2026-10-27
+
+The script was a scratch script, not kept. It applies C1–C3 to the kept FPC-1
+JSON and to the relayed rows above.
+
+| Data | Rows with a listed peer | C1 exempt (in P) | C2 exempt (in P) | C3 exempt (in P) |
+|---|---:|---|---|---|
+| SPL#4 BASE 25.5–27.0 s, level rows | 14 | 11 | 14 | 14 |
+| sample4-original-unknown | 633 | 19 (9) | 472 (371) | 23 (9) |
+| sample4-interior-full | 137 | 0 | 136 (88) | 0 |
+| base_sample_1-full | 25 | 0 | 8 | 0 |
+| sample2-full | 67 | 51 | 65 | 51 |
+| sample5-empty | 239 | 121 | 230 | 121 |
+| sample7-empty | 940 | 614 (145) | 862 (145) | 614 (145) |
+
+**Every condition exempts rows of P,** so the frozen reading is NO
+SEPARATION.
+- **sample4-original, C1 and C3:** the 9 P rows are Y805–815 at 2.5, 3.0, 7.5
+  and 9.5 s. Their only peer is Y882–884, 67–79 px below. These times are
+  inside R7's protected lower-rim span.
+- **sample7, C1 and C3:** the fixed structure row Y380–388 is exempt in 145
+  rows. Even from 35 s on, 51 rows in 17 frames are exempt. Its peer lies
+  about 250 px below (for example Y632–639).
+- **C2** exempts most demoted rows on every control.
+
+**SPL#1 Accum mark-near rows (information):**
+- Only C2 exempts any of them: 672.5 s Y458, 32 px above the mark (2 rows).
+- At 673.5–677.5 s the listed peers include rows above (Y125–129) or close
+  rows (Y438–485), so no condition holds there.
+
+**Reading:**
+- **The geometry SPL#4 shows is common.** A row above, with its only
+  partition peers far below, is also what a fixed structure row above a
+  lower interface looks like (sample7 Y384), and what sample4's rejected
+  rows look like (Y805–815 over Y883). Position alone cannot tell a rising
+  level from them.
+- **What does differ on SPL#4 is time.** The level moves 59–84 px per sample
+  while its peer, the stale edge, stays still. Motion is not a field the rule
+  sees in one frame. Reading it would need the row's own track, and at 2 fps
+  that track is exactly what barrier 2 (the 32 px association cap) breaks
+  (inference).
+- **So E3 is blocked at its first barrier on the traced fields.** By the
+  frozen consequence, the route left is path F with new FULL evidence.
 
 ## Detector Governance
 

@@ -403,8 +403,14 @@ queued.
     (absence ≤ 0.545) or at gate 2 (FULL ≈ 0.14). F1 as drafted has no
     evidence.
   - No Windows request is queued.
-- **Next (the user decides):** either path F with new FULL evidence (a new
-  image feature), or the peer-side desk check of barrier 1 (E3).
+  - **The user chose the peer-side desk check first** ("1번 먼저
+    진행하자").
+    [PSD-1](../50-diagnostics/s11/2026-10-27-peer-side-desk-check.md) reads
+    **NO SEPARATION**. Every frozen peer-position condition also frees R7's
+    protected rows (sample4 Y805–815, sample7 Y384). E3 is blocked at
+    barrier 1 on the traced fields.
+- **Next (the user decides):** path F with new FULL evidence (a new image
+  feature, as a desk review first), or naming the limit.
 
 **Session handoff — 2026-10-27 (superseded by the session-close handoff):**
 start with the
