@@ -394,10 +394,11 @@ queued.
   [receipt](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md#windows-spl4-comparison--2026-10-27)).
 - E2 (undercut fill owner) is DRAFTED, not frozen. The local readout
   [OAR-1](../50-diagnostics/s11/2026-10-27-owner-above-readout.md) supports
-  an admitted-interface cue. Next: relay the queued
-  [E2 owner-above readout](../40-operations/s11-current-windows-field-qualification.md#e2-owner-above-readout-request)
-  for SPL#4 and SPL#1, then the user decides on freezing. The checkpoint below
-  holds the detail.
+  an admitted-interface cue. Its
+  [Windows readout](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#windows-readout--2026-10-27)
+  finds nothing admitted above 0018 on SPL#4, so E2 would leave the 14 rows.
+  No Windows request is queued. Next: the user decides between freezing E2
+  and parking it for E1. The checkpoint below holds the detail.
 
 **Resume checkpoint — 2026-10-27, fill-owner gate revisit:**
 [FOR-1](../50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) is
@@ -589,13 +590,17 @@ then "응 그렇게 진행하자").
     when an admitted interface is more than one step above the single fill
     owner, the frame publishes no owner (`FILL_OWNER_UNDERCUT`). Opt-in,
     default OFF. NOT frozen; no code.
-- **Next:** the user relays the
-  [E2 owner-above readout](../40-operations/s11-current-windows-field-qualification.md#e2-owner-above-readout-request).
-  - It shows whether anything admitted lies above 0018 at 27.5–34.0 s and
-    what E2 would stop on SPL#1.
-  - The draft's SPL#4 and SPL#1 predictions are filled in from it, and then
-    the user decides on freezing.
-  - Then E1 → E3.
+- **E2 Windows readout received** ([result](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#windows-readout--2026-10-27),
+  closed run `s11-e2-windows-relay-20261027-001`, saved bundles only):
+  - **SPL#4 BASE: 0 hits.** In 27.0–34.5 s every admitted candidate is
+    0018's own, so E2 would leave the 14 wrong-target rows.
+  - **SPL#1 Accum: 7 hits.** At 674.0–677.0 s, 4 remove rows 142–187 px
+    above the review-012 marks. At 669.5–671.5 s, 3 are unreviewed and may be
+    correct.
+  - SPL#4 Accum: 1 hit (66.0 s, unreviewed). SPL#1 BASE: not exercised.
+  - The predictions are filled into the draft checks; nothing is frozen.
+- **Next: the user decides** whether to freeze E2 or park it and go to E1.
+  Then E1 → E3.
 
 **Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),

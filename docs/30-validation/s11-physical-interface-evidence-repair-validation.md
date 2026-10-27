@@ -362,11 +362,12 @@ as step 7's reference, with and without E4.
 
 ## Undercut fill-owner checks — 2026-10-27
 
-**Status: DRAFT 2026-10-27, not frozen.** These checks accompany the
+**Status: DRAFT 2026-10-27, not frozen; freezing waits for the user's
+decision.** These checks accompany the
 [undercut fill owner (E2)](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-undercut-fill-owner-e2).
-The SPL#4 and SPL#1 predictions are filled in from the
-[Windows owner-above readout](../40-operations/s11-current-windows-field-qualification.md#e2-owner-above-readout-request)
-before freezing. Once frozen, nothing here changes after results.
+The Windows predictions below come from the
+[owner-above readout](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#windows-readout--2026-10-27).
+Once frozen, nothing here changes after results.
 
 **Unit (synthetic lifecycle layers):**
 - An admitted non-owner observation more than one step above every owner
@@ -415,7 +416,13 @@ for the user's judgment, not an automatic stop.
 
 **Windows (after freezing and the user's go):** SPL#4 0–90 s at 2 fps with
 FULL debug, as in the E4 comparison, with and without E2, plus the SPL#1
-`SPL1_B_ref` session. The predictions come from the readout.
+`SPL1_B_ref` session. Predictions, from the readout:
+- **SPL#4 BASE:** no row changes. The 14 wrong-target rows stay.
+- **SPL#4 Accum:** exactly 66.0 s becomes `FILL_OWNER_UNDERCUT` and loses
+  numeric Oil.
+- **SPL#1 BASE:** no row changes.
+- **SPL#1 Accum:** exactly 669.5, 670.5, 671.5, 674.0, 675.0, 675.5 and
+  677.0 s become `FILL_OWNER_UNDERCUT` and lose numeric Oil.
 
 ## Fast-rise association checks — 2026-10-23
 

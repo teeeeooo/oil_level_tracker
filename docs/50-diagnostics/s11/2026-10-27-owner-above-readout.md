@@ -1,6 +1,6 @@
 # OAR-1 — is an admitted interface above the fill owner a cue for the stale low owner?
 
-**Status: LOCAL COMPLETE 2026-10-27; Windows readout QUEUED.** This is design
+**Status: COMPLETE 2026-10-27** (local, then the [Windows readout](#windows-readout--2026-10-27)). This is design
 input for the
 [E2 draft](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-undercut-fill-owner-e2),
 started on the user's "시작하자" (2026-10-27). It is read-only: no detector,
@@ -15,8 +15,10 @@ flag, threshold or Recipe change.
     ones;
   - sample7: it catches 9 user-judged correct rows (the oblique back arc);
   - the other controls: nothing.
-- **SPL#4 and SPL#1 are unknown** until the
-  [Windows readout](../../40-operations/s11-current-windows-field-qualification.md#e2-owner-above-readout-request).
+- **Windows: the cue never fires on SPL#4's 14 wrong-target BASE rows.**
+  In 27.0–34.5 s no admitted tracklet other than 0018 has any candidate.
+  On SPL#1 Accum it fires 7 times; 4 of those remove rows 142–187 px above
+  the review-012 marks.
 
 ## Question
 
@@ -105,12 +107,74 @@ runs the same tool on the saved step-7 and E4 bundles:
 Its result fills the draft's SPL#4 and SPL#1 predictions, and the user then
 decides whether E2 is frozen.
 
+## Windows readout — 2026-10-27
+
+**Received:** the relayed stdout, kept outside Git in the closed managed run
+`sample/output/s11-e2-windows-relay-20261027-001`.
+- **Identity:** the tool hash matches. The relayed `s11_cadence_field.py`
+  hash carries OCR slips (`8`/`0`); the agent ran, which the request allowed
+  only on a match.
+- **Runs (saved bundles, no detector run):**
+  - `SPL4_B_ref` `005e0d58…`;
+  - `SPL4_C_coloc` `8b107768…`;
+  - `SPL1_B_ref` `b8b8403b…`, relayed with OCR as `b0b8403b`.
+- **Step:** 32 px in every run.
+
+| Run | Single-owner published rows | Hits |
+|---|---:|---|
+| SPL#4 BASE (`SPL4_B_ref`) | 31 | **0** |
+| SPL#4 Accum (`SPL4_B_ref`) | 18 | 1: 66.0 s, owner 0103 Y505 under admitted 0078 Y444–447 (58–61 px) |
+| SPL#4 BASE (`SPL4_C_coloc`, E4) | 33 | 0 |
+| SPL#1 BASE (`SPL1_B_ref`) | 0 | 0, not exercised |
+| SPL#1 Accum (`SPL1_B_ref`) | 14 | 7: 669.5, 670.5, 671.5 s (owner 0147 Y515/482/461 under 0143 Y406–418); 674.0, 675.0, 675.5, 677.0 s (owner 0181 Y351/317/315/269 under 0186 Y230–313, 33–56 px) |
+
+**Context listings:**
+- **SPL#4 BASE 27.0–34.5 s:** every admitted Oil candidate in every row
+  belongs to 0018 itself. Its rows lie at Y704–739. Nothing admitted is above
+  it, near or far.
+- **SPL#4 BASE 22.5–24.0 s (E4 arm):** only 0018 and 0035 are admitted. The
+  two co-located frames are not undercut.
+
+**Against the truth:**
+- **SPL#4 BASE 27.5–34.0 s** is FULL (review-016). E2 leaves all 14
+  wrong-target rows in place: the level gives no admitted tracklet in a full,
+  stirred glass.
+- **SPL#1 Accum 674.0–677.0 s**, compared with the review-012 marks
+  (Foam-region bottom):
+
+  | Time s | Published Y | Mark Y | Above the mark |
+  |---|---:|---:|---:|
+  | 674.0 | 351 | 493.0 | 142 px |
+  | 675.0 | 317 | 499.5 | 182.5 px |
+  | 675.5 | 315 | 499.5 | 184.5 px |
+  | 677.0 | 269 | 456.0 | 187 px |
+
+  These 4 hits remove wrong rows. The admitted rows above them are higher
+  still, so they are not the level either.
+- **SPL#1 Accum 669.5–671.5 s** is before review-012's first mark (672.0 s,
+  Y493.5). The published Y515, Y482 and Y461 lie 22 px below to 32 px above
+  that later mark (inference across time, not reviewed). So these 3 hits may
+  remove correct rows.
+- **SPL#4 Accum 66.0 s** is not reviewed. The user's timeline has Foam
+  sloshing in Accum from 28 s.
+
+**Reading:**
+- **On the user's case, E2 has nothing to act on.** The 14 rows are the same
+  stale owner with nothing admitted above it. Only history separates them,
+  which is the contested gate's cue (HELD).
+- **In a FULL interval, a FULL decision would also end them.** Once
+  `FILLED_BARRIER` holds, the single-owner fill path no longer publishes, and
+  that is E3's route (inference from the lifecycle's phase order).
+- **Elsewhere the cue works as on sample5.** On SPL#1 Accum it removes rows
+  far above a reviewed Foam-region bottom, with 3 unreviewed possible costs.
+  Its known costs are sample7's 9 correct rows and up to 4 unreviewed rows.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-PHASE-FILL`, `OIL-TRACKLET`, `OIL-SELECTOR`
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F05`, `S11-F07`, `S11-F08`
-- First harmful stage: `OIL-PHASE-FILL` publishes a single low owner while an admitted interface lies above it (sample5's 20 rows; sample7's 9 correct rows show the `S11-F07` limit). SPL#4 is not read yet.
+- First harmful stage: `OIL-PHASE-FILL` publishes a single low owner while an admitted interface lies above it (sample5's 20 rows, SPL#1 Accum 674.0–677.0 s; sample7's 9 correct rows show the `S11-F07` limit). On SPL#4 BASE 27.5–34.0 s the same stage publishes the stale owner with nothing admitted above it, so this cue does not reach it.
 - Existing feature coverage: the production detector path with IFO v2 and top-exit v3, with and without E4; the original sample4/base_sample_1/sample2 Recipes, the frozen October 15 interior Recipe and the frozen October 22 empty-fill Recipes; initial states as in run 003; static preparation active; cost-first, RGB, Local XY and the contested gate OFF.
-- Execution scope: one closed managed local run (six controls, owner readouts, debug NONE) and a new read-only readout tool with unit tests; no detector code change, tuning or Windows execution.
+- Execution scope: one closed managed local run (six controls, owner readouts, debug NONE) and a new read-only readout tool with unit tests; then one Windows readout of three saved bundles (five runs of the tool, no detector run), relayed as text and kept in `s11-e2-windows-relay-20261027-001`. No detector code change or tuning.
 - Logic-map impact: NONE — diagnostics only.
 - Failure-registry impact: NONE — no new mechanism; the oblique-arc cost is `S11-F07`.
