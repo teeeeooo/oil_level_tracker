@@ -435,9 +435,25 @@ then "응 그렇게 진행하자").
     them apart.
   - Directions under P1, not decided: D1 ownerless fast rise (fail closed),
     D2 chain-level sweep, D3 owner-free FULL.
-- **Next:** read review-015 against K1–K4. Then freeze, after the marks, a
-  read-only candidate-coverage readout near the marks; the user chooses a
-  direction.
+- **Review-015 answered**
+  ([result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#review-015-result--2026-10-27)).
+  Photos are kept untracked in the managed run
+  `s11-review-015-photos-20261027-001`.
+  - **Outcome OWNER-LEVEL** at 22.5–24.0 s: both owners are on the level, so
+    the ambiguity there costs 4 correct frames.
+  - **24.5–27.0 s:** the level is above both owners, so failing closed is
+    correct there.
+  - **The fast rise is 24.0–27.0 s,** 347.5 px; 5 of its 6 steps exceed the
+    32 px cap. The only higher candidate at 22.5 s (Y463) is 318.5 px above
+    the level.
+  - **The timeline's "FULL at 24–25 s" was the Foam.** The Oil enters the
+    top band at 26.5 s and is not at the top by 27.0 s. Correcting the SPL#4
+    truth is the user's call.
+- **Next (the user decides):**
+  - whether to correct the SPL#4 BASE truth;
+  - a read-only candidate-coverage readout near the marks at 24.0–27.0 s;
+  - a review of 27.0 s onward, up to the Oil FULL;
+  - then a direction for the two parts.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),

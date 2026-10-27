@@ -1,6 +1,6 @@
 # FOR-2 — the rising level above the fill owners: admission and phase owner
 
-**Status: IN PROGRESS 2026-10-27 (desk review written; waits for review-015).** Step 2 of the fill-owner gate revisit in
+**Status: IN PROGRESS 2026-10-27. Review-015 is answered: OWNER-LEVEL at 22.5–24.0 s, the level above both owners at 24.5–27.0 s ([result](#review-015-result--2026-10-27)).** Step 2 of the fill-owner gate revisit in
 the [Work Plan](../../00-project/work-plan.md): the questions-2/3 desk review
 (A). The user chose (2026-10-27, "그렇게하자") to send review-015 to Windows
 first and run this desk review from existing records while it is out. No
@@ -71,6 +71,88 @@ separately. "Near" means within 32 px (FOA-1's distance unit).
   SPL#4.
 - **OWNER-LEVEL:** otherwise. The premise fails for the named frames: the
   design may not prefer a higher interface over that owner there.
+
+## Review-015 result — 2026-10-27
+
+**Received:** the Windows agent's relayed table (OCR) and four phone photos
+of the marked sheet (21.5–27.0 s; 20.0–21.0 s were not photographed). The
+photos and the relayed marks are kept outside Git, in the closed managed run
+`sample/output/s11-review-015-photos-20261027-001`. The marked PNG stays on
+Windows (`…\reviews\review-015\`).
+
+**Identity:**
+- video SHA-256 `9f494a6f…`, 53,165,455 bytes;
+- Glass `9c74a762…` BASE, ellipse radius_y 271.70 (H 543.4, as in step 12);
+- zoom [535, 283, 679, 843] at ×2, clean sheet `95782f00…`, marked sheet
+  `8d138dd7…`, `changed_not_red_px` 0;
+- one mark per panel.
+- The tool hash came back with `b`/`8` and `0`/`8` OCR slips; the agent
+  reported a match and ran.
+
+**Marks (source Y; the user's words abridged):**
+
+| Time s | 20.0 | 20.5 | 21.0 | 21.5 | 22.0 | 22.5 | 23.0 | 23.5 | 24.0 | 24.5 | 25.0 | 25.5 | 26.0 | 26.5 | 27.0 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Mark Y | 794.5 | 790.0 | 790.0 | 792.0 | 790.5 | 781.5 | 768.0 | 761.5 | 730.0 | 657.5 | 634.3 | 550.0 | 490.5 | 426.0 | 382.5 |
+| Step px | – | 4.5 | 0.0 | −2.0 | 1.5 | 9.0 | 13.5 | 6.5 | 31.5 | 72.5 | 23.2 | 84.3 | 59.5 | 64.5 | 43.5 |
+
+- **20.0–22.0 s:** the Oil surface is low ("차오르기 시작" at 22.0 s).
+- **22.5–24.0 s:** it rises slowly, then faster.
+- **From 24.5 s:** Foam forms. The mark is the strict Foam–Oil boundary,
+  drawn as a diagonal at 24.5–25.5 s. From the photos, that diagonal spans
+  up to about ±27 px around the centroid (about ±7 px at 24.5 s).
+- **25.5 s:** the Foam top reaches the Glass top ("foam은 Full / Oil은
+  차오르는중").
+- **26.0–27.0 s:** the Oil pushes the Foam bottom up.
+
+**Readings:**
+- **K1, owner position** (14 owner rows in 22.0–27.0 s):
+  - **level, 7 rows:** every 0018 and 0035 row in 22.5–24.0 s. The nearest
+    candidate lies 1.0–28.5 px from the mark.
+  - **low, 6 rows:** every row in 24.5–27.0 s, 59.5–321.5 px below the mark.
+  - **above, 1 row:** 0035 at 22.0 s, Y756, which was published. It lies
+    34.5 px above the mark.
+- **K2, the premise:** fails at 22.5, 23.0, 23.5 and 24.0 s. It holds at
+  24.5–27.0 s (6 of 10). No panel was "가득".
+- **K3, higher candidates:**
+  - At 24.5 s, Y651–660 is the level (−6.5 / +2.5 px).
+  - At 22.5 s, Y463 is 318.5 px above the level, so it is not the level.
+  - Y462 and Y534 (24.5 s) are not the level.
+  - Y323–325 is never near the level; the closest is 57.5 px, at 27.0 s.
+- **K4, timeline:** no "가득" panel. The Foam reaches the top at 25.5 s.
+  The Oil enters the top band (Y ≤ 437.9) at 26.5 s and is still rising at
+  27.0 s (Y382.5).
+
+**Outcome: OWNER-LEVEL**, named frames 22.5, 23.0, 23.5 and 24.0 s. There the
+design may not prefer a higher interface over the owners. In 24.5–27.0 s the
+level is above both owners, as P1 put it.
+
+**What this changes (inference unless stated):**
+- **Question 1, the ambiguity has two parts:**
+  - **22.5–24.0 s:** two owners on one surface. 0018 and 0035 are both
+    within 32 px of the mark, so publishing either would have been correct.
+    `FILL_OWNER_AMBIGUOUS` costs 4 frames of correct output there.
+  - **24.5–27.0 s:** the fast rise leaves both owners behind at Y704–723.
+    Failing closed is correct there, and the 14 wrong-target rows at
+    27.5–34.0 s are the low owner 0018 outlasting it.
+- **Questions 2 and 3, the fast rise is shorter and later than FFF-1
+  inferred:**
+  - Rise: 24.0 → 27.0 s, 347.5 px in 3 s. Five of the six steps exceed the
+    32 px cap (43.5–84.3 px).
+  - Up to 24.0 s every step is within the cap (≤ 31.5 px), and the owners
+    tracked the level.
+  - FFF-1 assumed a rise of about 70 px per sample from 21.5 s.
+- **A counterexample for any "prefer the higher interface" rule:** at
+  22.5 s the only higher candidate on record, Y463, is 318.5 px above the
+  level. A single higher row is no evidence. D1 and D2 would need a rising
+  sequence that reaches the level, not one row.
+- **The SPL#4 timeline's "FULL reached at 24–25 s" was the Foam (user
+  statement at 25.5 s).**
+  - The Oil is not at the top by 27.0 s.
+  - The frozen top-exit entry condition used that timeline. Its P window
+    asked for the first FULL row in 22.0–27.0 s. The earlier P FAIL was
+    judged against it and is not re-judged here.
+  - Whether to correct the SPL#4 truth is the user's call.
 
 ## Desk review — 2026-10-27, from existing records
 
@@ -149,6 +231,9 @@ conflict goes back to the user.
 **If UNREADABLE:** the choice goes to the user on the timeline alone.
 
 ### What the review-015 reply needs next (any outcome)
+
+*Written before the reply; the result above narrows it to 24.0–27.0 s and to
+the frames after 27.0 s that review-015 did not cover.*
 
 - **Candidate coverage at the marks.** For D2, each mark needs a candidate row
   near it in that frame. The relayed records list the higher rows only at
