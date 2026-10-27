@@ -180,6 +180,22 @@ is unchanged; this fixes how it applies here.
   - **Foam at the top is not FULL:** when Foam reaches the top while the Oil
     level is below it (BASE from about 65 s, Accum from about 28 s), the expected
     Oil output is not FULL.
+- **BASE truth correction (user, 2026-10-27: "review 기준으로 변경").** The
+  frame review
+  [review-015](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#review-015-result--2026-10-27)
+  replaces the timeline above for BASE 20–27 s.
+  - The Oil is low until 22.0 s and rises from 22.5 s, fast from 24.0 s.
+  - The Foam reaches the top at 25.5 s. The "FULL at 24–25 s" above was this
+    Foam, not Oil FULL.
+  - The Oil is FULL at about 27 s (user). It is cloudy with residual bubbles
+    and clears gradually; its transparency recovers at about 42 s (user). The
+    FULL interval runs to the drain at 63 s.
+  - Review-016 (step 13) pins the FULL onset frame.
+  - **Not re-judged:** the frozen windows below were set from the old
+    timeline and stay as the record of that run. The SPL#4 P FAIL does not
+    depend on the onset, because no top-exit FULL row was published at any
+    time. A later SPL#4 positive uses the corrected truth and its own frozen
+    windows.
 - **Frozen windows:**
 
   | Glass | Check | Window |

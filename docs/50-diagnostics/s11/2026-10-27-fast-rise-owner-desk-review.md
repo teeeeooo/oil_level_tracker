@@ -154,6 +154,44 @@ level is above both owners, as P1 put it.
     judged against it and is not re-judged here.
   - Whether to correct the SPL#4 truth is the user's call.
 
+## Step 13 — readings frozen 2026-10-27, before its output
+
+**User (2026-10-27):** "1. review 기준으로 변경 2. review 16도 진행 약 27s에서
+oil full 되고 뿌연 상태(잔여 기포)가 점점 투명해지면서 약 42s oil 투명도 회복됨
+3. 확인하자". The SPL#4 BASE truth is corrected in the
+[validation owner](../../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22).
+One Windows request carries the two items below.
+
+**R, level coverage readout** (read-only, `SPL4_B_ref`, tool
+`tests/diagnostics/s11_level_coverage_readout.py`). Marks are the review-015
+marks at 24.0–27.0 s (7 rows); near ≤ 48 px is printed.
+- **Covered frame:** a near group lies within 32 px of the mark. At 24.5–25.5 s
+  the boundary is a diagonal up to about ±27 px around the mark; this is a
+  named limit.
+- **C1, coverage:** the number of covered frames, out of 7.
+- **C2, eligibility:** covered frames whose covered groups include a post-track
+  tier of `CONTINUATION_ELIGIBLE` or `ANCHOR_ELIGIBLE` (builder-eligible).
+- **C3, continuity:** the longest run of consecutive covered frames in which
+  one tracklet ID appears among the covered groups of each frame.
+- **C4, admission:** covered frames with an admitted covered group. Reported
+  with the tracklet failure reasons.
+- **Outcome**, the first that applies:
+  - **GENERATION:** C1 < 4. The level is mostly not an Oil candidate.
+    Candidate generation comes before admission.
+  - **ELIGIBILITY:** C2 < 4. The level is a candidate but below the builder
+    tier.
+  - **ASSOCIATION:** C3 < 3. Eligible level rows exist but no tracklet follows
+    them; this is the FFF-1 cap, confirmed on reviewed truth.
+  - **DOWNSTREAM:** C3 ≥ 3. A tracklet follows the level; the barrier is
+    admission or phase, named by C4 and the fields.
+
+**V, review-016** (the user marks SPL#4 BASE 27.0–30.0 s, 7 panels, source
+frames 810–900, with the review-015 sheet settings).
+- **M1, FULL onset:** the first panel the user calls "가득". If none, the
+  onset is after 30.0 s.
+- **M2, before the onset:** marks continue review-015's rise; reported.
+- **M3, cloudiness:** the user's words on residual bubbles; reported.
+
 ## Desk review — 2026-10-27, from existing records
 
 ### Where a fast rise is lost: two capped layers (source)

@@ -449,11 +449,20 @@ then "응 그렇게 진행하자").
   - **The timeline's "FULL at 24–25 s" was the Foam.** The Oil enters the
     top band at 26.5 s and is not at the top by 27.0 s. Correcting the SPL#4
     truth is the user's call.
-- **Next (the user decides):**
-  - whether to correct the SPL#4 BASE truth;
-  - a read-only candidate-coverage readout near the marks at 24.0–27.0 s;
-  - a review of 27.0 s onward, up to the Oil FULL;
-  - then a direction for the two parts.
+- **User (2026-10-27):** "1. review 기준으로 변경 2. review 16도 진행 …
+  약 27s에서 oil full … 약 42s oil 투명도 회복됨 3. 확인하자".
+  - **SPL#4 BASE truth corrected** in the
+    [validation owner](../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22):
+    Oil FULL at about 27 s, cloudy until about 42 s, drain at 63 s. The old
+    frozen windows are not re-judged.
+  - **[Step 13](../40-operations/s11-current-windows-field-qualification.md#step-13-coverage-readout-and-review-016)
+    is READY** and waits for the user to forward it:
+    - R, the level coverage readout at the review-015 marks;
+    - V, review-016 at 27.0–30.0 s.
+  - Its readings (C1–C4, M1–M3) are frozen in FOR-2. The new tool's local
+    check passed (run `s11-level-coverage-check-20261027-001`).
+- **Next:** judge step 13. The user then chooses a direction for the two
+  parts.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
