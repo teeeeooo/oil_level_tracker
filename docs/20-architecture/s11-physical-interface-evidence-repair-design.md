@@ -632,6 +632,85 @@ ones.
 **Checks:** the [contested fill-owner gate checks](../30-validation/s11-physical-interface-evidence-repair-validation.md#contested-fill-owner-gate-checks--2026-10-22)
 fix the local controls, the predictions and the stop conditions before any run.
 
+## October 27 co-located fill owners (E4)
+
+**Status: DRAFT 2026-10-27, waiting for the user's approval; no code.** The
+first step of the order the user chose after the
+[partition desk review](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#partition-demotion-desk-review--2026-10-27):
+"결국 E3까지 가긴해야되는데 하나씩 짚어보자는거네. 추천 순서대로 진행하자"
+(E4 → E2 → E1 → E3).
+
+**Problem (review-015).** On SPL#4 BASE at 22.5–24.0 s, the two dynamic fill
+owners 0018 and 0035 are both on the reviewed level. Every owner row is within
+1.0–28.5 px of the mark. `FILL_OWNER_AMBIGUOUS` still empties the allowed set,
+so frames that any owner would have answered correctly publish UNKNOWN.
+
+### Rule
+
+1. **Co-located owners.** In a frame where the lifecycle would report
+   `FILL_OWNER_AMBIGUOUS` (more than one dynamic fill owner, no chain
+   ambiguity), the owners are co-located when both hold:
+   - every dynamic owner has at least one observed row in the frame;
+   - all those rows lie within one association step of each other:
+     max(row Y) − min(row Y) ≤ `maximum_jump_px`. That is the Recipe's
+     `temporal_max_jump_px`, 32 px on SPL#4.
+2. **Decision.** For co-located owners:
+   - the allowed set is the dynamic-owner set and the phase stays FILLING;
+   - the reason is `FILL_OWNER_COLOCATED`;
+   - the frame is not counted as ambiguous;
+   - the selector chooses among the owners' rows as it chooses among any
+     allowed set.
+3. **No state change.** Chains, the established fill, the onset intent, the
+   ownerless barrier and every release, re-entry and recovery evaluation evolve
+   exactly as they do under `FILL_OWNER_AMBIGUOUS`. Only the frame's allowed
+   set, reason and ambiguity flag differ.
+4. **Contest marks.** A co-located frame is not an ambiguity, so it adds no
+   mark for the contested fill-owner gate when that option is ON.
+
+**Why:**
+- The ambiguity rule exists because the lifecycle cannot tell which of two
+  owners is the fill surface.
+- When both owners are observed in the same frame within one association
+  step, any choice is within the tolerance the tracklet layer already uses for
+  one surface.
+- A missing row is not co-location. On SPL#4 at 24.0 s, 0035 has no row; at
+  24.5–27.0 s only one owner has a row while the level is far above. Those
+  frames stay ambiguous.
+
+**What it does not do:**
+- It does not merge chains or choose a fill owner for later frames.
+- It does not find the level above two low owners.
+- It does not change any tracklet, authority or association.
+- **sample7's arc pair is not affected.** Its owners are 50–85 px apart,
+  beyond one step.
+- **Its risk is two low owners within one step of each other.** Releasing
+  them would publish a low row. The local check reads every released frame
+  against the surface estimates.
+
+**Desk prediction from kept readouts** (FOR-1 runs, no detector run):
+- **sample5:** 3 of 48 ambiguous frames are co-located: 9.5, 10.0 and 11.0 s.
+  - Owner rows span 22–28 px.
+  - At 9.5 and 10.0 s they lie around the agent surface estimate.
+  - At 11.0 s they lie 24.5–52.5 px below it, so the outcome depends on the
+    selector's choice.
+- **sample7:** 0 of 24.
+- **SPL#4** (step-12 rows):
+  - 23.0 and 23.5 s are co-located; their owner candidates span 24 px and
+    lie within 32 px of the review-015 marks.
+  - 22.5 s is not co-located (span ≥ 37.5 px); 24.0 s is not (0035 has no
+    row).
+  - 24.5–27.0 s are not (one owner row each).
+
+**Activation:** opt-in, default OFF, wired like the contested gate.
+- **Path:** GUI `--oil-fill-owner-colocation` → the existing detector factory →
+  `OpenCvPhaseDetector` → `ObservationSequenceResolver` →
+  `OilObservationResolverConfig` → `OilMaterialPhasePolicy` →
+  `OilMaterialPhaseLifecycleOwner`.
+- **Version suffix:** `+fill-owner-colocation-v1`.
+- **Combinations:** combinable with IFO v2, top-exit v3 and the contested
+  gate. Refused with cost-first, candidate RGB and Local XY.
+- **Checks:** [frozen with this draft](../30-validation/s11-physical-interface-evidence-repair-validation.md#co-located-fill-owner-checks--2026-10-27).
+
 ## October 23 fast-rise association
 
 **Status: FROZEN 2026-10-23 before implementation; IMPLEMENTED 2026-10-23 (`4f0665b`,
@@ -1172,7 +1251,9 @@ as the serialized array index. Diagnostic detail must not change output.
   frozen before any code; its implementation and local checks are recorded
   in their evidence. The 2026-10-27 note records the user's SPL#4 BASE truth
   correction from review-015 and review-016 (human frame reviews, no run); no design,
-  criterion or code changes.
+  criterion or code changes. The 2026-10-27 co-located fill-owner (E4) section
+  is a draft frozen with its checks before any code; its prediction reads the
+  kept FOR-1 readouts and the relayed step-12 rows only.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state. The fast-rise draft adds one bounded association route for beyond-cap upward rows (seed of three witnessed rows in a constant-velocity line, then prediction-gated continuation); it is not a widened cap, adds no coordinate and leaves within-cap association unchanged.
 - Logic-map impact: NONE — this update records the fast-rise local result; its feature row and 4.2 paragraph were committed to the map with the implementation (`4f0665b`). Earlier: the gate's feature row and 4.3 paragraph were committed with its implementation (`2cb0b52`); the v3 implementation evidence records the top-exit row and paragraph.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair. The attrition path is an instance of F04 (stale continuation after an ambiguity), F05 (EMPTY-phase fill ownership) and F08 (owner re-adoption); no new entry.

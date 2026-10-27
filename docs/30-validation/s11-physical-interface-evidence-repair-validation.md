@@ -303,6 +303,55 @@ consequence of the removed rows. Every such change is reported.
   Every changed row is listed with its phase reason and owner.
 - **Promotion** is a separate decision.
 
+## Co-located fill-owner checks — 2026-10-27
+
+**Status: DRAFT 2026-10-27 with the design, before any code or run; waiting
+for the user's approval.** These checks accompany the
+[co-located fill owners (E4)](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-co-located-fill-owners-e4).
+They do not change after results.
+
+**Unit (synthetic lifecycle layers):**
+- Two dynamic owners with rows within one step give `FILL_OWNER_COLOCATED`,
+  with both owners allowed.
+- Rows more than one step apart stay `FILL_OWNER_AMBIGUOUS`.
+- An owner without a row in the frame keeps the frame `FILL_OWNER_AMBIGUOUS`.
+- Chains, the established fill and the next frame's decision are the same as
+  under `FILL_OWNER_AMBIGUOUS`.
+- With the contested gate ON, a co-located frame adds no contest mark.
+- With the option OFF the lifecycle output is identical, and the existing
+  suites pass unchanged.
+
+**Wiring:**
+- The flag reaches the lifecycle through the real GUI detector-factory paths.
+- The versions carry `+fill-owner-colocation-v1`.
+- Cost-first, candidate RGB and Local XY combinations are refused.
+
+**Local controls.** The same six controls as the contested gate, at 2 fps with
+debug NONE.
+- **Arms:** the reference is IFO v2 + top-exit v3; the candidate adds E4.
+- **Identity anchor:** the reference arm equals the kept top-exit arm (rows,
+  events, report; `run_id` aside). For sample5 and sample7, its
+  `FILL_OWNER_AMBIGUOUS` frames must equal the FOR-1 readouts. Otherwise the
+  run is void.
+
+| Check | Controls | Prediction (pass condition) |
+|---|---|---|
+| K1 identity | base_sample_1-full, sample2-full, sample4-interior-full, sample4-original-unknown, sample7-empty | No frame becomes `FILL_OWNER_COLOCATED`. Rows, phases, events and report are equal between the arms (version aside) |
+| K2 prediction | sample5-empty | Exactly 9.5, 10.0 and 11.0 s become `FILL_OWNER_COLOCATED`. No other row differs |
+| K3 placement | sample5-empty | Each numeric row published in a K2 frame lies within 32 px of the FOA-1 agent surface estimate at that time. These estimates are agent readings, not user truth, so a failure here is reported as a risk for the user, not tuned |
+
+**Stop conditions.** Any of these fails the check, with no promotion and no
+retuning:
+- a numeric Oil row added, removed or moved outside the K2 frames;
+- any Foam, FULL/EMPTY or event change outside the K2 frames.
+
+**Windows (later, with the user's go):** SPL#4 0–90 s at 2 fps with FULL debug,
+as step 7's reference, with and without E4.
+- **Pass:** exactly 23.0 and 23.5 s become `FILL_OWNER_COLOCATED`. Each
+  publishes a numeric row within 32 px of the review-015 mark (Y768.0,
+  Y761.5).
+- Every other BASE and Accum row is equal.
+
 ## Fast-rise association checks — 2026-10-23
 
 **Status: FROZEN 2026-10-23 with the design, before any code or run.** These

@@ -521,8 +521,21 @@ then "응 그렇게 진행하자").
     - E2: fail closed on a stale low owner;
     - E3: a combined fast-fill design, the only route to FULL;
     - E4: merge duplicate owners at 22.5–24.0 s.
-- **Next:** the user chooses among E1–E4 (or an order). A chosen direction is
-  frozen with its controls before any code.
+- **User (2026-10-27): "결국 E3까지 가긴해야되는데 하나씩 짚어보자는거네.
+  추천 순서대로 진행하자"** — the order is E4 → E2 → E1 → E3.
+  - [E4 design](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-co-located-fill-owners-e4)
+    and its
+    [checks](../30-validation/s11-physical-interface-evidence-repair-validation.md#co-located-fill-owner-checks--2026-10-27)
+    are DRAFTED; no code yet.
+  - **Rule:** when every dynamic owner has a row and all rows are within one
+    association step, both owners are allowed (`FILL_OWNER_COLOCATED`). The
+    option is opt-in, default OFF.
+  - **Prediction from kept data:**
+    - sample5: 3 frames (9.5, 10.0, 11.0 s); 11.0 s may publish a low row.
+    - sample7: none.
+    - SPL#4: 23.0 and 23.5 s.
+- **Next:** the user approves or changes the E4 draft; then implement and run
+  the local checks.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
