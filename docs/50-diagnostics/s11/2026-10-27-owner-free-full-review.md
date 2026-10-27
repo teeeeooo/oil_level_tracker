@@ -1,6 +1,6 @@
 # OFF-1 — owner-free FULL on fast fills: review draft
 
-**Status: REVIEW DRAFT 2026-10-27; no design, no code, nothing frozen.** The
+**Status: REVIEW DRAFT 2026-10-27; F1 AS DRAFTED HAS NO EVIDENCE.** [FER-1](2026-10-27-full-evidence-readout.md) reads E-ABSENT: no `full` node on SPL#4 BASE 27.5–63 s, nor anywhere in the reviewed data. Path F would need new FULL evidence; the user decides. No design, no code. The
 user chose this order (2026-10-27): "그럼 이렇게하자 … 1번 진행하고 handoff
 작성하자". It follows the agent's judgment, given the same day after reading
 the SPL#4 review photos:

@@ -398,11 +398,13 @@ queued.
     ([FER-1](../50-diagnostics/s11/2026-10-27-full-evidence-readout.md)).
     - **Local:** no `full` node in 532 rows of the six controls, FULL starts
       included.
-  - **Queued:** the read-only
-    [FER-1 Windows request](../40-operations/s11-current-windows-field-qualification.md#fer-1-full-evidence-readout-request).
-- **Next:** read the relay against R1–R4. If the reading is E-ABSENT, path F
-  needs new FULL evidence. Report that to the user, with the peer-side desk
-  check as the alternative.
+  - **Windows: E-ABSENT.** SPL#4 BASE 27.5–63 s has no `full` node, and
+    neither do any of the 1,564 Windows rows. SPL#4 stops at gate 1
+    (absence ≤ 0.545) or at gate 2 (FULL ≈ 0.14). F1 as drafted has no
+    evidence.
+  - No Windows request is queued.
+- **Next (the user decides):** either path F with new FULL evidence (a new
+  image feature), or the peer-side desk check of barrier 1 (E3).
 
 **Session handoff — 2026-10-27 (superseded by the session-close handoff):**
 start with the

@@ -9,10 +9,11 @@ and authorization. Everything below is committed and pushed to `main`.
 - **No production detector default changed.** E4, the contested gate,
   top-exit v3, IFO v2 and fast-rise association are opt-in and default OFF.
   FIELD FAIL / O2 OPEN and review-006 pending are unchanged.
-- **Windows request queued (after compaction):** the read-only
-  [FER-1 request](../../40-operations/s11-current-windows-field-qualification.md#fer-1-full-evidence-readout-request).
-  Its readings were frozen at `b2280da`, and the local half is done
-  ([FER-1](../../50-diagnostics/s11/2026-10-27-full-evidence-readout.md)).
+- **After compaction:**
+  [FER-1](../../50-diagnostics/s11/2026-10-27-full-evidence-readout.md) is
+  COMPLETE and reads **E-ABSENT**. The image `full` node never forms on any
+  reviewed recording, so F1 as drafted has no evidence.
+- **No Windows request is queued.**
 - **Managed runs:** 145, all clean.
 - **Next free review ID:** review-018.
 - **The previous handoff,** the

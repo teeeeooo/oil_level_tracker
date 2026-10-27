@@ -1,9 +1,14 @@
 # FER-1 — where does the image FULL evidence stop? (path F readout)
 
-**Status: READINGS FROZEN 2026-10-27 at `b2280da`, before any output.** The
-[local run](#local-result--2026-10-27) is done. The
-[Windows request](../../40-operations/s11-current-windows-field-qualification.md#fer-1-full-evidence-readout-request)
-for R1–R4 is queued.
+**Status: COMPLETE 2026-10-27. R1 = E-ABSENT.** The readings were frozen at
+`b2280da`, before any output. Then came the
+[local run](#local-result--2026-10-27) and the
+[Windows readout](#windows-readout--2026-10-27).
+- **SPL#4 BASE 27.5–63.0 s has no `full` node in any of its 72 rows.**
+- **There is no `full` node anywhere:** none in the 1,564 Windows rows (both
+  recordings, both Glasses) and none in the 532 local rows.
+- **By the frozen consequence,** F1 as drafted has no existing evidence on the
+  user's case. Path F would need new FULL evidence.
 This is the read-only readout that
 [OFF-1](2026-10-27-owner-free-full-review.md#what-must-be-read-before-any-design-proposed-readout-not-frozen)
 proposes, run on the user's "시작하자" (2026-10-27). It changes no detector,
@@ -141,12 +146,84 @@ trace carries every field the tool reads.
   - This does not decide R1, which is SPL#4 BASE on Windows. It does make
     E-ABSENT the expected reading (inference).
 
+## Windows readout — 2026-10-27
+
+**Received:** the relayed stdout, kept outside Git in the closed managed run
+`sample/output/s11-fer1-windows-relay-20261027-001`.
+- **Identity:** the tool SHA-256 matches `f205eb2e…`. The relayed hashes
+  carry OCR slips (`0`/`d`, `0`/`8`).
+- **Runs:** `005e0d58…` (SPL#4) and `b0b8403b…` (SPL#1; the E1 relay read
+  `b8b8403b`, an OCR slip).
+- **Rechecked:** the X-1 counts match the 72 listed rows.
+- **One relay gap:** the 36.0 s row lost its values in the relay. By the
+  counts it is `gate1:absence_low`.
+
+| Run | Rows | `full` node | Gate 1 closed (absence low / boundary / pending) | Gate 2 (`full_below`) | Published FULL |
+|---|---:|---:|---|---:|---|
+| X-1 SPL#4 BASE 27.5–63.0 s | 72 | 0 | 31 / 28 / 9 | 4 | none |
+| X-2 SPL#4 BASE 20–70 s | 101 | 0 | 35 / 43 / 19 | 4 | none |
+| X-3 SPL#4 Accum 20–90 s | 141 | 0 | 92 / 24 / 20 | 5 | none |
+| X-4 SPL#1 Accum 650–700 s | 100 | 0 | 90 / 4 / 6 | 0 | none |
+| X-5 SPL#1 BASE 650–700 s | 100 | 0 | 84 / 5 / 11 | 0 | top-exit 53 |
+| X-6 SPL#4 BASE, all | 181 | 0 | 48 / 89 / 40 | 4 | none |
+| X-7 SPL#4 Accum, all | 181 | 0 | 129 / 26 / 21 | 5 | none |
+| X-8 SPL#1 BASE, all | 601 | 0 | 494 / 58 / 49 | 0 | top-exit 204 |
+| X-9 SPL#1 Accum, all | 601 | 0 | 569 / 17 / 15 | 0 | none |
+
+The "published full" line also counts non-FULL rows as `None` (47 and 397).
+That is a printing quirk; it is not a FULL source.
+
+**R1: E-ABSENT.** No sustained run, and no `full` node at all, in SPL#4 BASE
+27.5–63.0 s.
+
+**R2: no exposure.** No sustained run on SPL#4 Accum 20–90 s or SPL#1 Accum
+650–700 s. Locally, none on sample5 or sample7.
+
+**R3, gate-1 cause on SPL#4 BASE 27.5–63.0 s:**
+- **Absence low (31 rows):** on the ambiguous rows absence is 0.32–0.545,
+  never 0.58. Absence still beats the boundary in all but one (62.0 s,
+  −0.006), so the 0.10 margin is not the cause. The absolute absence is.
+- **Boundary accepted (28 rows).** The outcome Ys, as traced:
+  - Y570–572 in 18 rows (41.0–63.0 s);
+  - Y704 in 6 rows (46.0–50.5 s), inside the stale-edge band Y693–721;
+  - Y727 and Y729 once each (46.5, 51.5 s);
+  - Y454 and Y456 (28.0, 28.5 s).
+- **Reacquisition pending:** 9 rows.
+- **Gate 2 (4 rows: 31.0, 32.5, 33.0 and 33.5 s):** gate 1 opens with absence
+  0.58–0.593, but FULL reads only 0.106–0.141 and EMPTY 0.142–0.166. The
+  no-interface evidence does not call this Glass full or empty.
+
+**R4: no `full`-node rows, so nothing to read.** For context, the lifecycle:
+- 27.5–35.5 s: `filling` / `FILL_MOTION_OWNER`, owner-bounded;
+- from 36.0 s: `open` / `INITIAL_EMPTY_ENTRY_PENDING` with `hard_gate`.
+
+**Also seen (information):**
+- **SPL#4 BASE has eligible Foam fronts from 42.5 s** (Y521–552, nearly every
+  row to 63.0 s). In the truth this is FULL, cloudy with residual bubbles
+  until about 42 s.
+- **The Foam guard would block F1 on those frames,** even if a `full` node
+  existed.
+
+**Reading:**
+- **The image FULL evidence never forms on any reviewed recording.** That
+  holds for Windows and local, for full and not full. Every published FULL in
+  these data comes from top-exit (SPL#1 BASE).
+- **On SPL#4 BASE the gap is not small.**
+  - Absence stays at most 0.545 while the Glass is full.
+  - Where absence does win, the FULL share is about 0.14, not 0.58.
+- **So lifting gate 3 (F1) changes nothing,** and lowering a threshold would
+  not be a bounded change either.
+- **Path F therefore means a new FULL evidence,** a new image feature. It
+  would have to recognise a uniformly turbid full Glass with a fixed lower
+  edge and Foam-like fronts. That is the `S11-F10` and `S11-F05` exposure
+  that OFF-1 named (inference).
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-PHASE-FILL`, `OIL-SELECTOR`, `OIL-PROJECTION`, `OIL-PHASE-INITIAL`
 - Failure-registry entries: `S11-F05`, `S11-F06`, `S11-F07`, `S11-F10`
-- First harmful stage: on SPL#4 BASE 27.5–63 s no FULL is published. Which of gate 1 (frame outcome), gate 2 (FULL likelihood) or gate 3 (`_constrain_layer`) stops the `full` node is the question; not read.
+- First harmful stage: on SPL#4 BASE 27.5–63 s no FULL is published; gate 1 stops it (frame absence ≤ 0.545 on ambiguous rows, a boundary accepted on 28 rows), and on the 4 rows where gate 1 opens, gate 2 stops it (FULL 0.106–0.141). Gate 3 never acts.
 - Existing feature coverage: the production detector path with IFO v2 and top-exit v3 (the step-7 reference bundles and the local reference arm); the original sample4/base_sample_1/sample2 Recipes, the frozen October 15 interior Recipe and the frozen October 22 empty-fill Recipes; static preparation active; cost-first, RGB, Local XY, the contested gate, E4 and fast-rise OFF in the arm read.
-- Execution scope: a new read-only readout tool with unit tests; one closed managed local run (`s11-fer1-full-evidence-20261027-001`, six controls, debug NONE); a scratch FULL-debug bundle check of the tool (not kept); one Windows readout of saved bundles queued, to be relayed as text; no detector code change or tuning.
+- Execution scope: a new read-only readout tool with unit tests; one closed managed local run (`s11-fer1-full-evidence-20261027-001`, six controls, debug NONE); a scratch FULL-debug bundle check of the tool (not kept); one Windows readout of saved bundles relayed as text (kept in `s11-fer1-windows-relay-20261027-001`); no detector code change or tuning.
 - Logic-map impact: NONE — diagnostics only.
 - Failure-registry impact: NONE — a readout of existing gates.
