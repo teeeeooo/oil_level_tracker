@@ -3,7 +3,8 @@
 **Status: IN PROGRESS 2026-10-27.**
 - **Review-015:** OWNER-LEVEL at 22.5–24.0 s; the level is above both owners at 24.5–27.0 s ([result](#review-015-result--2026-10-27)).
 - **Step 13:** coverage **ELIGIBILITY**: the level is a candidate in every frame but below the builder tier from 25.5 s. Review-016 places the Oil FULL onset at 27.5 s ([result](#step-13-result--2026-10-27)).
-- **Step 14:** **RECURRENCE-LED** by the frozen rule. Every demotion reads exactly 0.80, which points to the same-frame superior-partition rule rather than height recurrence (inference; [result](#step-14-result--2026-10-27)). Step 2 of the fill-owner gate revisit in
+- **Step 14:** **RECURRENCE-LED** by the frozen rule. Every demotion reads exactly 0.80, which points to the same-frame superior-partition rule rather than height recurrence (inference; [result](#step-14-result--2026-10-27)).
+- **Step 15:** **LOWER-OWNER-PEER**. In all 4 demoted frames a partition peer lies in the owners' band (Y693–721), on 0018 in three of them ([result](#step-15-result--2026-10-27)). Step 2 of the fill-owner gate revisit in
 the [Work Plan](../../00-project/work-plan.md): the questions-2/3 desk review
 (A). The user chose (2026-10-27, "그렇게하자") to send review-015 to Windows
 first and run this desk review from existing records while it is out. No
@@ -423,6 +424,68 @@ same-frame partition peers.
   in the owners' band or on 0018 or 0035. The lower boundary the owners track
   is the likely peer that demotes the level.
 - **OTHER-PEER:** otherwise. The peer Ys are named.
+
+## Step 15 result — 2026-10-27
+
+**Received:** the relayed stdout, kept outside Git in the closed managed run
+`sample/output/s11-step15-relay-20261027-001`.
+- Run `005e0d58…`; joins: 0 missing, 0 ambiguous.
+- The peer tool's hash carries OCR slips (`b`/`8`, `8`/`0`); the agent
+  reported a match.
+
+| Time s | Demoted level rows | Separated structural peers (Y, tracklet) |
+|---|---|---|
+| 24.5 (contrast) | Y631, 632, 657 | Y717 `0035`; Y745 untracked |
+| 25.0 (contrast) | Y606 | Y624 `0040` (the level); Y681; Y701; Y708 `0035` |
+| 25.5 | Y521–529 | Y693; Y703; **Y719 `0018`** (ANCHOR) |
+| 26.0 | Y478–493 | **Y715 `0018`** (ANCHOR) |
+| 26.5 | Y419.5–420 | **Y721 `0018`**; Y745 |
+| 27.0 | Y373–381 | Y705 (untracked, `CANDIDATE_ONLY`) |
+
+Every peer has terminal-partition support 0.76–1.00 and topology 0.0.
+
+**Readings:**
+- **P1, peer presence:** 4 of 4. Each demoted frame has a structural peer at
+  least 8 px from every demoted row; the nearest such peer is 164–324 px
+  below the level rows.
+- **P2, peer location:** 4 of 4. A peer lies in the owners' band in every
+  demoted frame: Y693–719 at 25.5 s, Y715 at 26.0 s, Y721 at 26.5 s and Y705
+  at 27.0 s. At 25.5, 26.0 and 26.5 s it is 0018 itself.
+- **P3, contrast:**
+  - At 24.5 s the separated peers are 0035 (Y717) and Y745.
+  - At 25.0 s they include the level's own `0040` (Y624, which stays
+    eligible), Y681, Y701 and 0035 (Y708).
+  - The level row Y606 is demoted there as well.
+
+**Outcome: LOWER-OWNER-PEER.**
+
+**What it means (inference, with the limits named):**
+- **One cause links the two halves of the episode.** A lower boundary
+  160–320 px below the reviewed level has full terminal-partition support.
+  It is the boundary the stale owner 0018 tracks (Y704–723). It satisfies the
+  structure of the same-frame superior-partition rule.
+- **The rule needs a local contradiction on the demoted row.** The rising
+  level rows have one, a material-texture conflict of 0.62–0.83. Review-015
+  shows the level under Foam from 24.5 s.
+- **So the same boundary does two things:**
+  - it keeps the low owner alive;
+  - it is the likely peer that demotes the level, so the level is never
+    admitted.
+  - After the ambiguity, that owner then publishes the 14 wrong-target rows.
+- **This is a known family, `S11-F06`.** A real Oil boundary under textured
+  Foam scores a texture conflict ≥ 0.60 and is treated as contradicted:
+  - AAT-1 found it in `_cross_representation_support`.
+  - TPA-1's terminal-pair exemption there was closed without promotion:
+    "do not retry the terminal-pair exemption alone".
+  - Here the same conflict feeds `recurrence_hard_contradiction` in the
+    partition demotion.
+- **Limits:**
+  - The rule's local-quality comparison is not traced, so the peer is a
+    structural match, not a confirmed firing.
+  - Several peers can match in a frame; at 27.0 s the only one is an
+    untracked `CANDIDATE_ONLY` row.
+  - What the lower boundary is physically has not been reviewed. Review-015
+    places it inside the Oil, below the level.
 
 ## Desk review — 2026-10-27, from existing records
 

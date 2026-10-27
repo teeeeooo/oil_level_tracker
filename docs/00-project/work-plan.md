@@ -497,7 +497,19 @@ then "응 그렇게 진행하자").
   - The tool's local check passed (run `s11-level-peer-check-20261027-001`).
     On sample5, all 269 candidates with opposition exactly 0.80 have a
     same-frame structural partition peer.
-- **Next:** judge step 15. The user then chooses a direction.
+- **Step 15 received**
+  ([result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#step-15-result--2026-10-27)):
+  **LOWER-OWNER-PEER.** In all 4 demoted frames a structural partition peer
+  lies in the owners' band, Y693–721; at 25.5–26.5 s it is 0018 itself.
+  - **Reading (inference):** the lower boundary the stale owner tracks also
+    demotes the rising level, through the same-frame partition rule. The
+    level rows' texture conflict (0.62–0.83, under Foam) supplies the rule's
+    local contradiction.
+  - This is the `S11-F06` family (AAT-1, TPA-1). The rule's quality
+    comparison is not traced.
+- **Next (the user decides):** a desk review of the partition demotion
+  against `S11-F06` and the AAT-1/TPA-1 history, before any design. The
+  22.5–24.0 s duplicate-owner part stays open.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
