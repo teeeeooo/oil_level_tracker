@@ -415,9 +415,17 @@ then "응 그렇게 진행하자").
     22.0–24.5 s (net 39 px upward), not stale fields.
   - The ambiguity is an old chain against a fresh rising one. Both rise in
     the window (0018 about 70–80 px); they are not stationary.
-- **Next:** (A) the questions-2/3 desk review (admitting and preferring the
-  rising interface above the owners), from existing records, before any
-  design is frozen.
+- **User (2026-10-27): "그렇게하자".** No reviewed frame places the level in
+  20–27 s (the timeline has only FULL at 24–25 s), so a human review goes
+  first.
+  - [Review-015](../40-operations/s11-current-windows-field-qualification.md#review-015-spl4-fast-rise-level-review)
+    is READY and waits for the user to forward it: the user marks the Oil
+    surface on a raw zoom of SPL#4 BASE 20.0–27.0 s.
+  - It is judged by K1–K4, frozen in
+    [FOR-2](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md).
+  - Meanwhile the (A) questions-2/3 desk review runs in FOR-2 from existing
+    records. No design is frozen before review-015 is read.
+- **Next:** read review-015 against K1–K4; finish the FOR-2 desk review.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
