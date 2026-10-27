@@ -64,7 +64,10 @@ fills at 2 fps (SPL#4 BASE: Oil FULL 27.5–63 s).
    - three open questions: K, the stale low owner's rows, and the report
      label.
 2. **If the user agrees,** build a read-only FULL evidence readout and freeze
-   it before its output. It reads per frame the `full` and `empty`
+   it before its output. It reads gate 1 first: whether the raw frame
+   outcome is no-interface, since the `full` node exists only then
+   ([OFF-1 correction](../../50-diagnostics/s11/2026-10-27-owner-free-full-review.md#correction-after-compaction-an-earlier-gate-source-desk-check-2026-10-27)).
+   Then it reads per frame the `full` and `empty`
    likelihoods (presence first; an older trace lacked them), the phase and
    reason, the `full` node and its fate in `_constrain_layer`, Foam fronts
    and admitted rows.

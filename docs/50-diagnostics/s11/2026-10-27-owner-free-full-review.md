@@ -63,6 +63,43 @@ From the
 - **IFO v2** already accepts FULL without an interface at the start of a run
   (initial observation). Path F would do the same in mid-run, after a fill.
 
+### Correction after compaction: an earlier gate (source desk check, 2026-10-27)
+
+The section above names the lifecycle as the block. Source shows that the
+`full` node is gated once more, before the lifecycle:
+- **The likelihood reaches the sequence only from a no-interface frame
+  outcome.** `oil_runtime_metrics` writes
+  `oil_no_interface_full_likelihood` from a `NoInterfaceOutcome`, and 0.0
+  for any other outcome
+  ([`oil_pipeline_diagnostics.py:59`](../../../src/oil_tracker/adapters/vision/oil_pipeline_diagnostics.py)).
+  `_raw_state_evidence` reads that value
+  ([`oil_interface_selector.py:525`](../../../src/oil_tracker/adapters/vision/oil_interface_selector.py)).
+- **A frame becomes no-interface only if absence beats every boundary.**
+  `_positive_no_interface_is_authoritative` needs an absence likelihood of at
+  least 0.58, and at least 0.10 above the best boundary hypothesis
+  ([`oil_shadow_observations.py:556`](../../../src/oil_tracker/adapters/vision/oil_shadow_observations.py)).
+- **So the gates run in this order:**
+  1. the frame outcome is no-interface;
+  2. its FULL share reaches 0.58;
+  3. the lifecycle allows it (the empty allowed set).
+
+  F1 as drafted lifts only gate 3.
+- **Records already show gate 1 closed on real FULL frames:**
+  - The [October 15 reading](2026-10-15-initial-full-comparison.md) found
+    FULL likelihood 0 on three initial-FULL losses. The raw outcomes were
+    ambiguous or an accepted boundary.
+  - On SPL#1 BASE 670–678 s, all 17 traced rows read 0.0 with reason
+    `not_available` ([OTR-1](2026-10-21-full-observable-top-review.md)).
+  - On SPL#1 BASE 675–780 s every published FULL row came from the top-exit
+    route, none from the image node
+    ([top-exit v3](../../60-evidence/s11/2026-10-21-top-exit-v3-local.md)).
+- **On SPL#4 BASE this is not read.** The static edge at Y700–720 and the
+  residual bubbles are plausible competing boundaries (inference).
+- **If gate 1 is closed there,** F1 has no existing evidence to use. Path F
+  would then need a new FULL evidence that tolerates a fixed low edge. That
+  is a new image feature and a larger `S11-F10` exposure, which the
+  candidate below excludes.
+
 ## Candidate rule shape (not a design)
 
 **F1, ownerless FULL closure after an observed fill.** In a fill episode
@@ -103,6 +140,9 @@ samples, if the `full` node is present there.
 A read-only "FULL evidence readout" over saved FULL-debug traces and local
 runs. Per frame:
 - `fill_state`;
+- gate 1 first: the raw `oil_decision_status` and `oil_decision_reason`,
+  `oil_no_interface_score` against `oil_boundary_score` (the 0.58 and 0.10
+  test), and `oil_no_interface_reason`;
 - `oil_no_interface_full_likelihood` and the empty likelihood, if traced;
   the R17 field notes found the full likelihood absent from an older trace,
   so presence is the first check;
@@ -123,6 +163,8 @@ runs. Per frame:
 | sample2, base_sample_1, sample4-interior (local) | — | FULL starts, IFO positives |
 
 **Answers sought:**
+- Is the raw outcome no-interface on SPL#4 BASE from 27.5 s? If not, which
+  boundary hypothesis beats absence, and at what Y?
 - Is the `full` node present on SPL#4 BASE from 27.5 s, and absent on SPL#4
   Accum?
 - What blocks it today on SPL#4 BASE: the empty allowed set, or a phase
@@ -142,7 +184,7 @@ runs. Per frame:
 
 - Logic-map nodes: `OIL-PHASE-FILL`, `OIL-SELECTOR`, `OIL-PROJECTION`, `OIL-PHASE-INITIAL`
 - Failure-registry entries: `S11-F05`, `S11-F06`, `S11-F07`, `S11-F10`, `S11-F03`, `S11-F04`
-- First harmful stage: on SPL#4 BASE 27.5–63 s, `OIL-PHASE-FILL` holds a fill episode with no owner at the top, so a `full` state node (if present, not read) is reduced to UNKNOWN by the empty allowed set (`_constrain_layer`); 27.5–34.0 s the stale owner publishes instead.
+- First harmful stage: on SPL#4 BASE 27.5–63 s, `OIL-PHASE-FILL` holds a fill episode with no owner at the top, so a `full` state node (if present, not read) is reduced to UNKNOWN by the empty allowed set (`_constrain_layer`); 27.5–34.0 s the stale owner publishes instead. Earlier still, a `full` node exists only if the raw frame outcome is no-interface (absence ≥ 0.58 and ≥ 0.10 over the best boundary); not read on SPL#4.
 - Existing feature coverage: reviews the existing per-frame no-interface FULL evidence, `_state_and_unknown_nodes` / `_constrain_layer`, top-exit v3 (opt-in), IFO v2 and the fill-owner records; no option is exercised and no Recipe changes.
 - Execution scope: a desk review of existing records, source and the kept review photos; no run, code or Windows execution.
 - Logic-map impact: NONE — a review draft.
