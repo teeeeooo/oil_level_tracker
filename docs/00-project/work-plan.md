@@ -480,8 +480,17 @@ then "응 그렇게 진행하자").
     is READY and waits for the user to forward it. It is judged by A1–A3 in
     FOR-2. The tool's local check passed (run
     `s11-level-authority-check-20261027-001`).
-- **Next:** judge step 14. The user then chooses a direction for the two
-  parts: the 22.5–24.0 s duplicate owners, and the fast rise's demotion.
+- **Step 14 received**
+  ([result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#step-14-result--2026-10-27)):
+  **RECURRENCE-LED.** At 25.5–27.0 s the level rows are initially eligible
+  and are demoted after tracking.
+  - Every demotion reads exactly 0.80, the value of the same-frame
+    superior-partition rule. The height-bucket penalty is continuous.
+  - So the likelier cause is a same-frame lower partition peer (inference).
+    The drain's later visit to the same heights (67.5–82 s) may be
+    incidental.
+- **Next (the user decides):** a read-only peer readout (which same-frame
+  candidates meet the partition conditions), or a direction now.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),

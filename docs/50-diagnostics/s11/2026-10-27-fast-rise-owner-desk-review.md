@@ -2,7 +2,8 @@
 
 **Status: IN PROGRESS 2026-10-27.**
 - **Review-015:** OWNER-LEVEL at 22.5–24.0 s; the level is above both owners at 24.5–27.0 s ([result](#review-015-result--2026-10-27)).
-- **Step 13:** coverage **ELIGIBILITY**: the level is a candidate in every frame but below the builder tier from 25.5 s. Review-016 places the Oil FULL onset at 27.5 s ([result](#step-13-result--2026-10-27)). Step 2 of the fill-owner gate revisit in
+- **Step 13:** coverage **ELIGIBILITY**: the level is a candidate in every frame but below the builder tier from 25.5 s. Review-016 places the Oil FULL onset at 27.5 s ([result](#step-13-result--2026-10-27)).
+- **Step 14:** **RECURRENCE-LED** by the frozen rule. Every demotion reads exactly 0.80, which points to the same-frame superior-partition rule rather than height recurrence (inference; [result](#step-14-result--2026-10-27)). Step 2 of the fill-owner gate revisit in
 the [Work Plan](../../00-project/work-plan.md): the questions-2/3 desk review
 (A). The user chose (2026-10-27, "그렇게하자") to send review-015 to Windows
 first and run this desk review from existing records while it is out. No
@@ -317,6 +318,66 @@ NONE.
 - **INITIAL-LED:** at least 3 route INITIAL or NONE.
 - **MIXED:** otherwise.
 - The contrast frames are reported only.
+
+## Step 14 result — 2026-10-27
+
+**Received:** the relayed stdout (kept outside Git in the closed managed run
+`sample/output/s11-step14-relay-20261027-001`).
+- Run `005e0d58…`, 181 trace frames, recurring tolerance 9.781 px.
+- Joins: 0 missing, 0 ambiguous.
+- Source hashes: the agent reported a match; the relayed values carry `0`/`8`
+  OCR slips.
+
+| Time s | Candidates ≤ 32 px | ELIGIBLE | RECURRENCE (eligible → `CANDIDATE_ONLY`) | INITIAL | NONE | Frame route |
+|---|---:|---:|---:|---:|---:|---|
+| 24.5 (contrast) | 7 | 4 (Y651–660) | 3 (Y657, Y631–632) | 0 | 0 | ELIGIBLE |
+| 25.0 (contrast) | 4 | 3 (Y613–625) | 1 (Y606) | 0 | 0 | ELIGIBLE |
+| 25.5 | 6 | 0 | 3 (Y521–528) | 2 (Y529) | 1 | RECURRENCE |
+| 26.0 | 8 | 0 | 6 (Y478–492) | 2 (Y485, Y493) | 0 | RECURRENCE |
+| 26.5 | 5 | 0 | 1 (Y420) | 4 | 0 | RECURRENCE |
+| 27.0 | 4 | 0 | 4 (Y373–381) | 0 | 0 | RECURRENCE |
+
+**Readings:**
+- **A1:** all 4 demoted frames route RECURRENCE.
+- **A2:** the RECURRENCE candidates' recurrence spans all lie outside the
+  rise, at 67.5–82.0 s, which is the drain after 63 s passing the same
+  heights.
+  - Their longest runs reach 6 frames only at 25.5 s (Y521, 6) and 26.0 s
+    (7 each).
+  - At 26.5 s (4) and 27.0 s (3–4) they are shorter than 6 in this
+    approximation.
+- **A3:** the INITIAL candidates fail on two kinds of gates:
+  - `oil_hypothesis` rows fail `material_support`, `boundary`,
+    `boundary_advantage`, `localized_boundary` and
+    `material_texture_conflict<0.60`;
+  - `material_path` rows fail `material_path_no_corridor`.
+
+**Outcome: RECURRENCE-LED.** In every demoted frame the level had an eligible
+initial tier and lost it after tracking (post-track `CANDIDATE_ONLY`).
+
+**After the result (source reading, inference; no rule is changed):**
+- **The 0.80 value.** Every post-track demotion, in all six frames, has
+  `track_opposition` exactly 0.80.
+  - The height-bucket penalty is continuous: sample5's level rows read
+    0.166–0.184 in the local check.
+  - The same-frame superior-partition rule in `_apply_track_opposition` sets
+    `max(opposition, 0.80)`. It demotes a candidate with a local
+    contradiction when another candidate of the same frame is a material
+    path with terminal-partition support ≥ 0.60 and layer topology < 0.5,
+    lies at least 8 px away and has comparable local quality.
+  - Every demoted level row here has material-texture conflict ≥ 0.60
+    (0.62–0.83), so the local-contradiction condition holds.
+- **So the likelier mechanism** is a same-frame peer, not the drain's height
+  history. The A2 drain coincidence would then be incidental.
+- **What the frozen route cannot separate.** It names post-track demotion,
+  not which post-track rule fired.
+- **Which peer.** A peer with terminal-partition support is a lower material
+  boundary. During the rise, the lower boundary at Y700–725 that the owners
+  track is the natural candidate, but this is not read.
+- **The next readout would tell.** It would list, for each demoted level
+  row, the same-frame peers that meet the partition conditions (material
+  path, `material_terminal_partition_support`, `sequence_material_layer_topology`,
+  |Δy| ≥ 8), with their Y and tracklet.
 
 ## Desk review — 2026-10-27, from existing records
 
