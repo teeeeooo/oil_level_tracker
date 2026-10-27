@@ -507,9 +507,22 @@ then "응 그렇게 진행하자").
     local contradiction.
   - This is the `S11-F06` family (AAT-1, TPA-1). The rule's quality
     comparison is not traced.
-- **Next (the user decides):** a desk review of the partition demotion
-  against `S11-F06` and the AAT-1/TPA-1 history, before any design. The
-  22.5–24.0 s duplicate-owner part stays open.
+- **User: "응 그렇게하자" → partition desk review written**
+  ([FOR-2](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#partition-demotion-desk-review--2026-10-27)).
+  - **Origin:** R7 added the rule (`1380cf0`), against sample4's internal
+    partitions. R14 (`d50f2fa`) made it need a local contradiction, which
+    counts the texture conflict of Oil under Foam that R14 itself exempts
+    elsewhere.
+  - **At 2 fps the fast rise meets three barriers in series:** authority,
+    the association cap (steps 43–84 px) and the fill chain. Lifting one
+    alone does not reach FULL.
+  - **Directions, not decided:**
+    - E1: a Foam-aware partition contradiction;
+    - E2: fail closed on a stale low owner;
+    - E3: a combined fast-fill design, the only route to FULL;
+    - E4: merge duplicate owners at 22.5–24.0 s.
+- **Next:** the user chooses among E1–E4 (or an order). A chosen direction is
+  frozen with its controls before any code.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),

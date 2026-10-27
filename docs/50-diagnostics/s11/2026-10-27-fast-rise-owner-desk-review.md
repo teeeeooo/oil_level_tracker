@@ -4,7 +4,8 @@
 - **Review-015:** OWNER-LEVEL at 22.5–24.0 s; the level is above both owners at 24.5–27.0 s ([result](#review-015-result--2026-10-27)).
 - **Step 13:** coverage **ELIGIBILITY**: the level is a candidate in every frame but below the builder tier from 25.5 s. Review-016 places the Oil FULL onset at 27.5 s ([result](#step-13-result--2026-10-27)).
 - **Step 14:** **RECURRENCE-LED** by the frozen rule. Every demotion reads exactly 0.80, which points to the same-frame superior-partition rule rather than height recurrence (inference; [result](#step-14-result--2026-10-27)).
-- **Step 15:** **LOWER-OWNER-PEER**. In all 4 demoted frames a partition peer lies in the owners' band (Y693–721), on 0018 in three of them ([result](#step-15-result--2026-10-27)). Step 2 of the fill-owner gate revisit in
+- **Step 15:** **LOWER-OWNER-PEER**. In all 4 demoted frames a partition peer lies in the owners' band (Y693–721), on 0018 in three of them ([result](#step-15-result--2026-10-27)).
+- **Partition desk review:** the fast rise at 2 fps meets three barriers in series: authority, association and fill chain. Lifting one alone does not reach FULL ([review](#partition-demotion-desk-review--2026-10-27)). Step 2 of the fill-owner gate revisit in
 the [Work Plan](../../00-project/work-plan.md): the questions-2/3 desk review
 (A). The user chose (2026-10-27, "그렇게하자") to send review-015 to Windows
 first and run this desk review from existing records while it is out. No
@@ -486,6 +487,90 @@ Every peer has terminal-partition support 0.76–1.00 and topology 0.0.
     untracked `CANDIDATE_ONLY` row.
   - What the lower boundary is physically has not been reviewed. Review-015
     places it inside the Oil, below the level.
+
+## Partition demotion desk review — 2026-10-27
+
+**User (2026-10-27): "응 그렇게하자".** This review reads where the partition
+demotion came from and what it protects, from history and source. Nothing is
+run or changed.
+
+### Origin and purpose (history)
+
+1. **R7 (`1380cf0`, 2026-08-11)** added same-frame competing-partition
+   handling. The R7 evidence lists it with fixed-track opposition.
+   - **What it protected:** sample4's visually rejected lower-rim and
+     internal-partition rows (2.5–35.5 s) stay non-numeric.
+   - **The rule:** when another candidate of the same frame is a terminal
+     partition (`material_terminal_partition_support` ≥ 0.60, layer topology
+     < 0.5), at least 8 px away and of comparable local quality, the
+     candidate becomes `CANDIDATE_ONLY` with opposition 0.80. Its purpose is
+     to keep one boundary of a layered material and demote the competing one.
+2. **R14 (`d50f2fa`, 2026-08-20)** made every recurrence and partition
+   demotion conditional on a candidate-local contradiction
+   (`recurrence_hard_contradiction`):
+   - phase `OPPOSED_MATERIAL`;
+   - material-texture conflict ≥ 0.60;
+   - artifact signature ≥ 0.44;
+   - optics ≥ 0.46.
+
+   R14's rationale: "persistence is not physical contradiction", which
+   protects a real level that stays still.
+3. **R14's own Foam exception.** The same architecture says real Oil under
+   recent Foam has high texture conflict, because the Foam mask overlaps the
+   Oil row. It exempts the nearest lower interface of a recent Foam seed in
+   the identity rule (`ORDERED_LOWER_INTERFACE`).
+   - The contradiction test above has no such exemption; it counts the
+     texture conflict for any row.
+   - The exemption itself is hard to reach: AAT-1 found that the
+     cross-representation support it needs is zeroed by the same texture
+     conflict (`S11-F06`), and TPA-1's terminal-pair fix for that was closed
+     without promotion.
+
+### How it acts on SPL#4 (steps 13–15, inference where marked)
+
+- **The demoted level rows** are `continuation_only`, not ordered-lower.
+  - Their failed gates include `material_texture_conflict<0.60` and
+    `calibrated_independent_representation`.
+  - So the Foam texture both withholds the ordered-lower identity (the
+    AAT-1 path) and supplies the contradiction for the partition demotion.
+- **The winning peer** is the clean lower boundary at Y693–721, the one 0018
+  tracks.
+  - The level's own material-path rows are terminal partitions too
+    (0.85–1.0), so the quality comparison decides.
+  - Quality is lowered by Foam-material identity opposition and artifact
+    terms (`_candidate_quality` and its additions), but it is not traced
+    (inference).
+- **A row with an ordered-lower anchor survived.** At 25.0 s the
+  `raster_material_path` row (Y613, `ANCHOR_ELIGIBLE`, opposition 0.113) was
+  not demoted, although its texture conflict was 0.67. The anchor bonus in
+  local quality fits that (inference).
+
+### Barriers in series at 2 fps (from steps 13–15 and FFF-1)
+
+| # | Barrier | SPL#4 evidence | Owner |
+|---|---|---|---|
+| 1 | Authority: the partition demotion under Foam texture | 25.5–27.0 s: all level rows `CANDIDATE_ONLY` at 0.80 | `OIL-AUTHORITY` (track opposition) |
+| 2 | Association cap, 32 px per sample | The level steps 84.3, 59.5, 64.5 and 43.5 px at 25.5–27.0 s, all beyond the cap. `0040` at 24.5–25.0 s gained no net progress | `OIL-TRACKLET` |
+| 3 | Fill-chain handoff, same cap; FULL needs a ≥ 3-row chain into the top band | Not reached | `OIL-PHASE-FILL` |
+
+**Lifting barrier 1 alone would not admit the level (inference).** Rows made
+eligible at 25.5–27.0 s would still start a new tracklet each sample.
+- The fast-rise association (FFF-1 option 2, default OFF) needs a witnessed
+  triplet.
+- Step 8 found the witness was the blocker on SPL#4.
+
+### Directions for the user (none decided)
+
+| Direction | What changes | Expected effect on SPL#4 | Main risk |
+|---|---|---|---|
+| E1, Foam-aware partition contradiction | Texture conflict does not count as the demotion's contradiction for a row below recent Foam (R14's own exception, applied to the demotion) | Removes barrier 1 only; no FULL alone | `S11-F06`; TPA-1 precedent: an exemption alone did not recover the level |
+| E2, fail closed on a stale low owner | When candidates (any tier) persist above the dynamic owner and the owner is a lower partition, the fill phase publishes no owner | Removes the 14 wrong-target rows; no FULL | sample7's front-arc rows; candidate presence used as a negative cue only (no identity) |
+| E3, combined fast-fill design | Barriers 1–3 together (E1, a velocity-aware association with a new witness, chain handoff) | The only route to FULL at 2 fps | Largest: `S11-F03`, `F04`, `F06`; needs its own frozen controls |
+| E4, the 22.5–24.0 s duplicate owners | Two dynamic owners within one association step of each other count as one surface | Recovers 4 correct frames | `S11-F04` (merging near rows); needs bounds |
+
+**Order suggested by risk, not decided.** E4 and E2 are local and negative, so
+they reduce wrong or lost output without new identity. E1 is a prerequisite of
+E3. E3 is the step the user's goal (FULL on fast fills) ultimately needs.
 
 ## Desk review — 2026-10-27, from existing records
 
