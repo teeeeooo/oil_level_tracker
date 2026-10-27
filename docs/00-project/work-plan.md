@@ -404,10 +404,11 @@ queued.
   ordered-lower condition fails on SPL#4 25.5–27.0 s, and a Foam-front
   scope would free SPL#1 Accum's Foam-layer rows. The local
   [FPC-1 readout](../50-diagnostics/s11/2026-10-27-partition-contradiction-readout.md)
-  finds both scopes broad. Its first Windows relay was void (a tool defect,
-  fixed and verified locally). Next: relay the re-queued
-  [E1 partition readout](../40-operations/s11-current-windows-field-qualification.md#e1-partition-readout-request).
-  The checkpoint below holds the detail.
+  finds both scopes broad. Its
+  [Windows readout](../50-diagnostics/s11/2026-10-27-partition-contradiction-readout.md#windows-readout--2026-10-27-rerun)
+  (after a void first relay) shows neither scope frees SPL#4's level at
+  25.5–27.0 s: the detector sees no Foam there. No Windows request is queued.
+  Next: the user decides on E1. The checkpoint below holds the detail.
 
 **Resume checkpoint — 2026-10-27, fill-owner gate revisit:**
 [FOR-1](../50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) is
@@ -656,10 +657,20 @@ then "응 그렇게 진행하자").
     pre-sequence detector candidates.
   - The tool now joins the sequence snapshot. Its bundle path equals its local
     path on a local FULL-debug bundle.
-- **Next:** relay the re-queued
-  [E1 partition readout](../40-operations/s11-current-windows-field-qualification.md#e1-partition-readout-request):
-  SPL#4 BASE 20–35 s and SPL#1 Accum 660–690 s near the marks, plus totals.
-  Then the user decides on E1's scope or drops it. Then E3.
+- **Windows rerun received**
+  ([result](../50-diagnostics/s11/2026-10-27-partition-contradiction-readout.md#windows-readout--2026-10-27-rerun),
+  closed run `s11-e1-windows-relay-20261027-001`):
+  - **SPL#4 BASE 25.5–27.0 s: neither scope frees the level.** The rows are
+    texture-only but not ordered-lower, and no eligible Foam front exists from
+    24.0 s. Scope A frees only 24.5–25.0 s, where the level was already
+    eligible.
+  - **SPL#1 Accum:** both scopes free reviewed level rows under Foam at 673.5,
+    674.0 and 676.0 s (within 8 px). They also free 10–13 Foam-layer rows in
+    those frames and 2,644 (A) or 1,874 (B) rows over the recording.
+  - **Remaining handle (inference):** the peer side of the partition rule.
+    The peer is the stale owner's lower boundary, 165–330 px below the level.
+- **Next: the user decides** whether to drop E1 as drafted, explore the
+  peer side, or stop. Then E3.
 
 **Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
