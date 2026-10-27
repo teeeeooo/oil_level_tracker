@@ -85,13 +85,52 @@ def test_bundle_source_reads_the_window_from_the_trace(tmp_path):
         writer = csv.DictWriter(handle, fieldnames=["glass_id", "frame_index", "timestamp_sec"])
         writer.writeheader()
         writer.writerows([{"glass_id": glass["id"], "frame_index": f, "timestamp_sec": f / 30} for f in (0, 15, 30)])
-    records = [{"glass_name": glass["name"], "frame_index": f, "run_id": "r", "candidates": [_oil(500.0)]}
+    records = [{"glass_name": glass["name"], "frame_index": f, "run_id": "r", **_traced({**_oil(500.0), "source": "s"})}
                for f in (0, 15, 30)]
     (bundle / "debug" / "debug_trace.jsonl").write_text(
         "".join(json.dumps(r) + "\n" for r in records), encoding="utf-8")
-    frames, run_ids = fpc.from_bundle(bundle, glass["name"], (0.4, 1.0))
-    assert ([f["frame"] for f in frames], run_ids) == ([15, 30], ["r"])
+    frames, run_ids, joins = fpc.from_bundle(bundle, glass["name"], (0.4, 1.0))
+    assert ([f["frame"] for f in frames], run_ids, joins) == ([15, 30], ["r"], {"missing": 0, "ambiguous": 0})
     assert frames[0]["time"] == 0.5 and frames[0]["demoted"][0]["texture_only"]
+
+
+SEQUENCE_KEYS = {"sequence_initial_authority_tier", "sequence_post_track_authority_tier", "sequence_track_opposition",
+                 "sequence_phase_identity", "sequence_ordered_lower", "sequence_tracklet_id"}
+
+
+def _traced(candidate: dict) -> dict:
+    """A trace record's two views: detector candidates without sequence fields, and the sequence snapshot."""
+    features = candidate["features"]
+    raw = {**candidate, "features": {k: v for k, v in features.items() if k not in SEQUENCE_KEYS}}
+    snapshot = {"kind": candidate["kind"], "source": candidate.get("source"), "canonical_y": candidate["canonical_y"],
+                "initial_authority": fpc.TIERS.get(features.get("sequence_initial_authority_tier")),
+                "post_track_authority": fpc.TIERS.get(features.get("sequence_post_track_authority_tier")),
+                "track_opposition": features.get("sequence_track_opposition"),
+                "phase_identity": features.get("sequence_phase_identity"),
+                "ordered_lower": features.get("sequence_ordered_lower"),
+                "tracklet_id": features.get("sequence_tracklet_id")}
+    return {"candidates": [raw], "sequence": {"candidates": [snapshot]}}
+
+
+def test_trace_records_take_tiers_from_the_snapshot_and_evidence_from_the_detector_candidate():
+    candidate = {**_oil(500.0, ordered_lower=1.0, sequence_tracklet_id="t"), "source": "s"}
+    record = _traced(candidate)
+    # The detector candidates alone carry no resolved tier: read on their own, nothing is demoted (the first relay).
+    assert fpc.frame_rows(0.0, 0, record["candidates"])["demoted"] == []
+    merged, missing, ambiguous = fpc.merge_record(record)
+    assert (missing, ambiguous) == (0, 0)
+    (row,) = fpc.frame_rows(0.0, 0, merged)["demoted"]
+    direct = fpc.frame_rows(0.0, 0, [candidate])["demoted"][0]
+    assert row == direct and (row["tracklet"], row["scope_a"], row["texture"]) == ("t", True, 0.7)
+
+
+def test_unjoined_or_ambiguous_snapshot_candidates_are_counted_and_left_out():
+    record = _traced({**_oil(500.0), "source": "s"})
+    record["sequence"]["candidates"].append({**record["sequence"]["candidates"][0], "canonical_y": 600.0})
+    record["candidates"].append(dict(record["candidates"][0]))
+    record["sequence"]["candidates"].append({**record["sequence"]["candidates"][0]})
+    merged, missing, ambiguous = fpc.merge_record(record)
+    assert (len(merged), missing, ambiguous) == (0, 1, 2)
 
 
 def test_printing_lists_frames_and_the_rows_near_each_mark(capsys):

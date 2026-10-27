@@ -8,8 +8,9 @@ marks it TEXTURE-ONLY when texture conflict is the only one present. For those i
   A: R14's ordered-lower flag (`sequence_ordered_lower`; the Foam seed age is not traced);
   B: an eligible Foam-front candidate of the same frame above the row (`sequence_foam_eligible` >= 0.5).
 It also lists the same-frame structural partition peers (material path, terminal support >= 0.60, layer topology < 0.5,
-at least 8 px away; the rule's local-quality comparison is not traced). It reads a saved FULL-debug bundle, or runs a
-local control through the comparison runner and reads its completed detections. It changes no detector behaviour.
+at least 8 px away; the rule's local-quality comparison is not traced). It reads a saved FULL-debug bundle (the sequence
+snapshot joined to the frame's detector candidates, which are written before sequence resolution), or runs a local
+control through the comparison runner and reads its completed detections. It changes no detector behaviour.
 """
 from __future__ import annotations
 
@@ -116,7 +117,51 @@ def summary(frames: list[dict]) -> dict:
             "frames_with_scope_b": sum(any(r["scope_b"] for r in f["demoted"]) for f in frames)}
 
 
-def from_bundle(bundle: Path, glass: str, window: tuple[float, float]) -> tuple[list[dict], list[str]]:
+TIER_NUMBERS = {name: number for number, name in TIERS.items()}
+SNAPSHOT_FEATURES = {  # sequence snapshot key -> the completed candidate's feature
+    "initial_authority": "sequence_initial_authority_tier", "post_track_authority": "sequence_post_track_authority_tier",
+    "track_opposition": "sequence_track_opposition", "phase_identity": "sequence_phase_identity",
+    "ordered_lower": "sequence_ordered_lower", "tracklet_id": "sequence_tracklet_id",
+    "sequence_foam_eligible": "sequence_foam_eligible",
+}
+
+
+def merge_record(record: dict) -> tuple[list[dict], int, int]:
+    """Completed candidates from one trace record.
+
+    The record's top-level candidates are the frame's detector candidates, written before sequence resolution; the
+    sequence snapshot holds the resolved tiers, opposition and identity. Each snapshot candidate is joined to its
+    detector candidate on (kind, source, canonical Y) for the raw features and penalties. Returns the merged candidates
+    and the counts of missing and ambiguous joins (those snapshot candidates are left out).
+    """
+    raw: dict[tuple, list[dict]] = {}
+    for candidate in record.get("candidates") or ():
+        if candidate.get("canonical_y") is not None:
+            raw.setdefault((candidate.get("kind"), candidate.get("source"), float(candidate["canonical_y"])),
+                           []).append(candidate)
+    merged, missing, ambiguous = [], 0, 0
+    for snap in (record.get("sequence") or {}).get("candidates") or ():
+        if snap.get("canonical_y") is None:
+            continue
+        matches = raw.get((snap.get("kind"), snap.get("source"), float(snap["canonical_y"])), [])
+        if len(matches) != 1:
+            missing += not matches
+            ambiguous += len(matches) > 1
+            continue
+        features = dict(matches[0].get("features") or {})
+        for key, feature in SNAPSHOT_FEATURES.items():
+            value = snap.get(key)
+            if key in ("initial_authority", "post_track_authority"):
+                value = TIER_NUMBERS.get(value)
+            if value is None:
+                features.pop(feature, None)
+            else:
+                features[feature] = value
+        merged.append({**matches[0], "features": features})
+    return merged, missing, ambiguous
+
+
+def from_bundle(bundle: Path, glass: str, window: tuple[float, float]) -> tuple[list[dict], list[str], dict]:
     from tests.diagnostics.s11_cadence_field import _rows
     from tests.diagnostics.s11_layer_bottom_topology_2_field import _stop
 
@@ -125,16 +170,21 @@ def from_bundle(bundle: Path, glass: str, window: tuple[float, float]) -> tuple[
     trace = bundle / "debug" / "debug_trace.jsonl"
     if not trace.is_file():
         _stop(f"no debug trace in {bundle}")
-    frames, run_ids = [], set()
+    frames, run_ids, joins = [], set(), {"missing": 0, "ambiguous": 0}
     with trace.open(encoding="utf-8") as handle:
         for line in handle:
             record = json.loads(line)
             if record.get("glass_name") == glass and record.get("frame_index") in times:
+                if "sequence" not in record:
+                    _stop(f"record {record.get('record_id')} has no sequence snapshot")
                 frame = record["frame_index"]
-                frames.append(frame_rows(times[frame], frame, record.get("candidates") or []))
+                candidates, missing, ambiguous = merge_record(record)
+                joins["missing"] += missing
+                joins["ambiguous"] += ambiguous
+                frames.append(frame_rows(times[frame], frame, candidates))
                 run_ids.add(str(record.get("run_id")))
     frames.sort(key=lambda item: item["frame"])
-    return frames, sorted(run_ids)
+    return frames, sorted(run_ids), joins
 
 
 @contextmanager
@@ -256,8 +306,9 @@ def main(argv=None) -> None:
     local.add_argument("--near", type=float, default=32.0)
     args = parser.parse_args(argv)
     if args.mode == "bundle":
-        frames, run_ids = from_bundle(args.bundle, args.glass_name, (args.start, args.end))
-        label = f"{args.glass_name} {args.start}-{args.end} s | bundle {args.bundle} | run_id {','.join(run_ids)}"
+        frames, run_ids, joins = from_bundle(args.bundle, args.glass_name, (args.start, args.end))
+        label = (f"{args.glass_name} {args.start}-{args.end} s | bundle {args.bundle} | run_id {','.join(run_ids)} | "
+                 f"joins missing {joins['missing']} ambiguous {joins['ambiguous']}")
         result = {"source": label, "summary": summary(frames), "frames": frames}
         print_result(label, result, marks=parse_marks(args.marks), near=args.near, frame_lines=not args.no_frames)
         _write(args.out, f"partition_contradiction_readout_{args.glass_name}.json", result)

@@ -404,7 +404,8 @@ queued.
   ordered-lower condition fails on SPL#4 25.5–27.0 s, and a Foam-front
   scope would free SPL#1 Accum's Foam-layer rows. The local
   [FPC-1 readout](../50-diagnostics/s11/2026-10-27-partition-contradiction-readout.md)
-  finds both scopes broad. Next: relay the queued
+  finds both scopes broad. Its first Windows relay was void (a tool defect,
+  fixed and verified locally). Next: relay the re-queued
   [E1 partition readout](../40-operations/s11-current-windows-field-qualification.md#e1-partition-readout-request).
   The checkpoint below holds the detail.
 
@@ -649,7 +650,13 @@ then "응 그렇게 진행하자").
     above) 167. They include sample7's fixed Y384 row and sample4-interior
     Y847–859 at three of R7's protected times.
   - Freed is not published; the counts are exposure.
-- **Next:** relay the queued
+- **First Windows relay VOID**
+  ([record](../50-diagnostics/s11/2026-10-27-partition-contradiction-readout.md#first-windows-relay--void)):
+  - Every run printed `demoted 0`, because the tool read the trace's
+    pre-sequence detector candidates.
+  - The tool now joins the sequence snapshot. Its bundle path equals its local
+    path on a local FULL-debug bundle.
+- **Next:** relay the re-queued
   [E1 partition readout](../40-operations/s11-current-windows-field-qualification.md#e1-partition-readout-request):
   SPL#4 BASE 20–35 s and SPL#1 Accum 660–690 s near the marks, plus totals.
   Then the user decides on E1's scope or drops it. Then E3.

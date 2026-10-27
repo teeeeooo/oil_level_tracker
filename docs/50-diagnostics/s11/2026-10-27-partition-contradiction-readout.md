@@ -1,6 +1,6 @@
 # FPC-1 — what would a Foam-aware partition contradiction (E1) free?
 
-**Status: LOCAL COMPLETE 2026-10-27; Windows readout QUEUED.** This is design
+**Status: LOCAL COMPLETE 2026-10-27; the first Windows relay is VOID (tool defect, [below](#first-windows-relay--void)); the rerun is QUEUED.** This is design
 input for the
 [E1 draft](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-foam-aware-partition-contradiction-e1),
 run on the user's "응 진행하자" (2026-10-27). It is read-only: no detector,
@@ -30,7 +30,8 @@ flag, threshold or Recipe change.
   [`tests/diagnostics/s11_partition_contradiction_readout.py`](../../../tests/diagnostics/s11_partition_contradiction_readout.py),
   with unit tests in `tests/unit/test_s11_partition_contradiction_readout.py`.
   - **Hash:** SHA-256 `8a3c7ae1…` for the local run; `b658568b…` after it
-    compacts its printout, with the row logic unchanged.
+    compacts its printout; `a7315bf8…` after the bundle-path fix below. The
+    local path, and so the local results, are unchanged.
   - **Sources:** the local run reads the completed detections; on Windows it
     reads a saved FULL-debug trace.
 - **Demoted row:** an Oil candidate whose initial tier is eligible and whose
@@ -100,12 +101,40 @@ runs the same tool on the saved bundles:
   demoted row near the review-015, review-012 and review-017 marks;
 - **SPL#4 and SPL#1, both Glasses, all frames:** totals only.
 
+## First Windows relay — VOID
+
+**Received 2026-10-27, kept in the closed managed run
+`sample/output/s11-e1-windows-void-relay-20261027-001`.** All six runs, on
+both recordings and both Glasses, printed `demoted 0`.
+- **Why that is not a result:** step 14 read the same `SPL4_B_ref` trace and
+  found post-track `CANDIDATE_ONLY` level rows at 25.5–27.0 s.
+- **The defect:** a trace record's top-level `candidates` are the frame's
+  detector candidates, written before sequence resolution. They carry no
+  resolved tier or opposition; those live in the record's `sequence`
+  snapshot. The tool's bundle path read the top-level list. Its local path
+  reads completed detections and was unaffected.
+- **The fix:** the bundle path joins each snapshot candidate to its detector
+  candidate on (kind, source, canonical Y).
+  - From the snapshot: the tiers, opposition, identity, ordered-lower flag,
+    tracklet and Foam eligibility.
+  - From the detector candidate: the raw features and penalties.
+  - Join misses are printed.
+- **Verified:**
+  - On a local FULL-debug bundle of sample2 (scratch, not kept), the bundle
+    path equals the local path in every row: 67 demoted, scope A 10, scope B
+    12, 0 join misses.
+  - A unit test pins that the detector candidates alone yield no demotion.
+- **Not traced in the snapshot:** the Foam-material identity, which now reads
+  0 on the bundle path.
+
+The rerun uses tool SHA-256 `a7315bf8…`.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-AUTHORITY`, `OIL-TRACKLET`, `OIL-PHASE-FILL`
 - Failure-registry entries: `S11-F06`, `S11-F03`, `S11-F04`
 - First harmful stage: `OIL-AUTHORITY` post-track demotion of SPL#4's level at 25.5–27.0 s (steps 13–15); locally, every post-track demotion is texture-only, so the E1 exemption would reach far beyond the level.
 - Existing feature coverage: the production detector path with IFO v2 and top-exit v3; the original sample4/base_sample_1/sample2 Recipes, the frozen October 15 interior Recipe and the frozen October 22 empty-fill Recipes; initial states as in run 003; static preparation active; cost-first, RGB, Local XY, the contested gate, E4 and fast-rise OFF in the arm read.
-- Execution scope: one closed managed local run (six controls, debug NONE) and a new read-only readout tool with unit tests; no detector code change, tuning or Windows execution yet.
+- Execution scope: one closed managed local run (six controls, debug NONE) and a new read-only readout tool with unit tests; one Windows readout relayed as text, void by a tool defect (kept in `s11-e1-windows-void-relay-20261027-001`), the fix verified on a scratch local FULL-debug bundle; no detector code change or tuning.
 - Logic-map impact: NONE — diagnostics only.
 - Failure-registry impact: NONE — the breadth is an `S11-F06` exposure count, not a new mechanism.
