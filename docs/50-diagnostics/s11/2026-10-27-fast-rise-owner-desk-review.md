@@ -379,6 +379,51 @@ initial tier and lost it after tracking (post-track `CANDIDATE_ONLY`).
   path, `material_terminal_partition_support`, `sequence_material_layer_topology`,
   |Δy| ≥ 8), with their Y and tracklet.
 
+## Step 15 — readings frozen 2026-10-27, before its output
+
+**User (2026-10-27): "1번으로 진행하자"**, for a read-only readout of the
+same-frame partition peers.
+
+**Tool:** `tests/diagnostics/s11_level_peer_readout.py` on `SPL4_B_ref`.
+- For each mark it lists the **demoted level rows**: within 32 px of the
+  mark, post-track `CANDIDATE_ONLY`, and opposition ≥ 0.60.
+- It also lists every same-frame Oil candidate that meets the **structural
+  conditions** of the superior-partition demotion:
+  - a material path;
+  - `material_terminal_partition_support` ≥ 0.60;
+  - `sequence_material_layer_topology` < 0.5.
+- For each such peer it prints the Y, tracklet, post-track tier, and its
+  separation from the demoted rows (the rule requires ≥ 8 px).
+- **Not evaluated:** the rule's local-quality comparison, which is not
+  traced.
+
+**Local check, PASS** (run `s11-level-peer-check-20261027-001`):
+- **Peer listing:** it equals an independent re-derivation on a sample5
+  FULL-debug bundle. That covers 7 marked rows without peers, and 5 frames
+  holding 0.80 candidates, with 16 demoted rows and 6 peers.
+- **Census over the whole sample5 trace:** all 269 candidates with
+  opposition exactly 0.80 have a same-frame structural peer at least 8 px
+  away. This is local support for reading 0.80 as the partition rule.
+
+**Marks:** review-015 at 24.5–27.0 s. 24.5 and 25.0 s are contrast frames;
+25.5–27.0 s are the demoted frames.
+
+**Readings:**
+- **P1, peer presence:** the demoted frames, out of 4, with at least one
+  structural peer separated by 8 px or more from every demoted level row.
+- **P2, peer location:** for those frames, whether a peer lies in the
+  owners' band (Y 690–740, where 0018 and 0035 were at 25.5–27.0 s) or on
+  tracklet 0018 or 0035; otherwise its Y.
+- **P3, contrast:** the peers at 24.5 and 25.0 s; reported only.
+
+**Outcome:**
+- **NO-PEER:** P1 < 3. The partition rule's structure does not explain the
+  0.80 there.
+- **LOWER-OWNER-PEER:** P1 ≥ 3, and in at least 3 demoted frames a peer lies
+  in the owners' band or on 0018 or 0035. The lower boundary the owners track
+  is the likely peer that demotes the level.
+- **OTHER-PEER:** otherwise. The peer Ys are named.
+
 ## Desk review — 2026-10-27, from existing records
 
 ### Where a fast rise is lost: two capped layers (source)

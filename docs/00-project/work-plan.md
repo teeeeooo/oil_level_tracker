@@ -489,8 +489,15 @@ then "응 그렇게 진행하자").
   - So the likelier cause is a same-frame lower partition peer (inference).
     The drain's later visit to the same heights (67.5–82 s) may be
     incidental.
-- **Next (the user decides):** a read-only peer readout (which same-frame
-  candidates meet the partition conditions), or a direction now.
+- **User (2026-10-27): "1번으로 진행하자".**
+  - The read-only
+    [step-15 level peer readout](../40-operations/s11-current-windows-field-qualification.md#step-15-level-peer-readout)
+    is READY and waits for the user to forward it. It is judged by P1–P3 in
+    FOR-2.
+  - The tool's local check passed (run `s11-level-peer-check-20261027-001`).
+    On sample5, all 269 candidates with opposition exactly 0.80 have a
+    same-frame structural partition peer.
+- **Next:** judge step 15. The user then chooses a direction.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
