@@ -390,9 +390,19 @@ queued.
 - **The user chose (2026-10-27)** to draft the owner-free FULL path first:
   [OFF-1](../50-diagnostics/s11/2026-10-27-owner-free-full-review.md),
   REVIEW DRAFT. The peer-side desk check is the E3 fallback.
-- No Windows request is queued.
-- **Next:** the user reviews OFF-1. If agreed, a read-only FULL evidence
-  readout is built and frozen before its output.
+- **After compaction (2026-10-27):**
+  - **OFF-1 correction:** a `full` node needs a no-interface frame outcome
+    before the lifecycle gate.
+  - **FER-1:** the user agreed ("시작하자"), and the readings were frozen at
+    `b2280da`
+    ([FER-1](../50-diagnostics/s11/2026-10-27-full-evidence-readout.md)).
+    - **Local:** no `full` node in 532 rows of the six controls, FULL starts
+      included.
+  - **Queued:** the read-only
+    [FER-1 Windows request](../40-operations/s11-current-windows-field-qualification.md#fer-1-full-evidence-readout-request).
+- **Next:** read the relay against R1–R4. If the reading is E-ABSENT, path F
+  needs new FULL evidence. Report that to the user, with the peer-side desk
+  check as the alternative.
 
 **Session handoff — 2026-10-27 (superseded by the session-close handoff):**
 start with the

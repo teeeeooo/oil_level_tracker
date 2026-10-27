@@ -1,6 +1,9 @@
 # FER-1 — where does the image FULL evidence stop? (path F readout)
 
-**Status: READINGS FROZEN 2026-10-27, before any output.** Nothing has run.
+**Status: READINGS FROZEN 2026-10-27 at `b2280da`, before any output.** The
+[local run](#local-result--2026-10-27) is done. The
+[Windows request](../../40-operations/s11-current-windows-field-qualification.md#fer-1-full-evidence-readout-request)
+for R1–R4 is queued.
 This is the read-only readout that
 [OFF-1](2026-10-27-owner-free-full-review.md#what-must-be-read-before-any-design-proposed-readout-not-frozen)
 proposes, run on the user's "시작하자" (2026-10-27). It changes no detector,
@@ -103,12 +106,47 @@ window: how many are `hard_gate`, and the resolved kind of the rest.
 
 No reading is tuned after output, and no threshold here changes.
 
+## Local result — 2026-10-27
+
+**Run:** closed managed run `s11-fer1-full-evidence-20261027-001` at
+`b2280da`.
+- **Tool:** SHA-256 `f205eb2e…`.
+- **Arms:** reference arm only, debug NONE, the six controls with FPC-1's
+  commands.
+
+**Tool check (scratch, not kept):** on a FULL-debug run of base_sample_1, the
+bundle path equals the local path in all 30 rows (0 field differences). The
+trace carries every field the tool reads.
+
+| Control | Rows | Raw outcome | `full` node | Gate 1 open | Absence on ambiguous rows (min / median / max) |
+|---|---:|---|---:|---:|---|
+| sample4-original-unknown | 113 | ambiguous 81, boundary 32 | 0 | 0 | 0.134 / 0.212 / 0.265 |
+| sample4-interior-full | 113 | ambiguous 46, boundary 65, pending 2 | 0 | 0 | 0.160 / 0.260 / 0.330 |
+| base_sample_1-full | 30 | ambiguous 27, boundary 2, pending 1 | 0 | 0 | 0.318 / 0.327 / 0.539 |
+| sample2-full | 5 | ambiguous 5 | 0 | 0 | 0.274 / 0.293 / 0.347 |
+| sample5-empty | 111 | ambiguous 94, boundary 15, pending 2 | 0 | 0 | 0.183 / 0.231 / 0.529 |
+| sample7-empty | 90 | ambiguous 71, boundary 11, no-interface 5, pending 3 | 0 | 5 | 0.350 / 0.440 / 0.580 |
+
+- **No `full` node in any of the 532 rows.** No control publishes FULL in
+  the reference arm.
+- **Gate 1 opens only on sample7's EMPTY start.** Five rows at 1.0–5.5 s
+  read absence 0.58–0.60, EMPTY 0.68–0.70 and FULL 0.0.
+- **On the FULL starts the absence likelihood stays far below 0.58:** sample2
+  at most 0.35, base_sample_1 0.54, sample4-interior 0.33. So gate 1 closes
+  there because absence is low (`absence_low`), not on the 0.10 margin.
+- **Reading (agent):**
+  - Locally, the image FULL evidence never forms on a full Glass.
+  - R2's local half has no exposure: sample5 and sample7 have no sustained
+    run.
+  - This does not decide R1, which is SPL#4 BASE on Windows. It does make
+    E-ABSENT the expected reading (inference).
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-PHASE-FILL`, `OIL-SELECTOR`, `OIL-PROJECTION`, `OIL-PHASE-INITIAL`
 - Failure-registry entries: `S11-F05`, `S11-F06`, `S11-F07`, `S11-F10`
 - First harmful stage: on SPL#4 BASE 27.5–63 s no FULL is published. Which of gate 1 (frame outcome), gate 2 (FULL likelihood) or gate 3 (`_constrain_layer`) stops the `full` node is the question; not read.
 - Existing feature coverage: the production detector path with IFO v2 and top-exit v3 (the step-7 reference bundles and the local reference arm); the original sample4/base_sample_1/sample2 Recipes, the frozen October 15 interior Recipe and the frozen October 22 empty-fill Recipes; static preparation active; cost-first, RGB, Local XY, the contested gate, E4 and fast-rise OFF in the arm read.
-- Execution scope: a new read-only readout tool with unit tests; planned: one closed managed local run (six controls, debug NONE), a scratch FULL-debug bundle check of the tool, and one Windows readout of saved bundles relayed as text; no detector code change or tuning.
+- Execution scope: a new read-only readout tool with unit tests; one closed managed local run (`s11-fer1-full-evidence-20261027-001`, six controls, debug NONE); a scratch FULL-debug bundle check of the tool (not kept); one Windows readout of saved bundles queued, to be relayed as text; no detector code change or tuning.
 - Logic-map impact: NONE — diagnostics only.
 - Failure-registry impact: NONE — a readout of existing gates.
