@@ -425,7 +425,19 @@ then "응 그렇게 진행하자").
     [FOR-2](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md).
   - Meanwhile the (A) questions-2/3 desk review runs in FOR-2 from existing
     records. No design is frozen before review-015 is read.
-- **Next:** read review-015 against K1–K4; finish the FOR-2 desk review.
+- **FOR-2 desk review written:**
+  - A fast rise is capped twice: at `OIL-TRACKLET` association, and again at
+    the `OIL-PHASE-FILL` chain handoff (same 32 px per sample, at most 4
+    samples). So admission alone does not reach FULL (inference from
+    source).
+  - Two pictures fit the records: P1, the level is above the owners; P2, an
+    owner is the level, which conflicts with the timeline. Review-015 tells
+    them apart.
+  - Directions under P1, not decided: D1 ownerless fast rise (fail closed),
+    D2 chain-level sweep, D3 owner-free FULL.
+- **Next:** read review-015 against K1–K4. Then freeze, after the marks, a
+  read-only candidate-coverage readout near the marks; the user chooses a
+  direction.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
