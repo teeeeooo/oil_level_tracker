@@ -36,11 +36,17 @@ def main() -> int:
         "--oil-fast-rise-association", action="store_true",
         help="cap을 넘는 일정 속도 상승 행을 하나의 tracklet으로 잇는 비교 모드 (기본 OFF)",
     )
+    parser.add_argument(
+        "--oil-fill-owner-colocation", action="store_true",
+        help="같은 프레임에서 한 연결 단계 안에 함께 관측된 채움 주인들을 모호로 닫지 않는 비교 모드 (기본 OFF)",
+    )
     options, qt_args = parser.parse_known_args(sys.argv[1:])
     if options.oil_fill_owner_contest and (options.oil_cost_first_assignment or options.oil_candidate_rgb):
         parser.error("--oil-fill-owner-contest는 cost-first, RGB 비교와 함께 쓸 수 없습니다")
     if options.oil_fast_rise_association and (options.oil_cost_first_assignment or options.oil_candidate_rgb):
         parser.error("--oil-fast-rise-association은 cost-first, RGB 비교와 함께 쓸 수 없습니다")
+    if options.oil_fill_owner_colocation and (options.oil_cost_first_assignment or options.oil_candidate_rgb):
+        parser.error("--oil-fill-owner-colocation은 cost-first, RGB 비교와 함께 쓸 수 없습니다")
     app = QApplication.instance() or QApplication([sys.argv[0], *qt_args])
     app.setApplicationName("Rotary Oil Level Tracker")
     app.setOrganizationName("Oil Level Tracker")
@@ -58,6 +64,8 @@ def main() -> int:
         comparison_options["fill_owner_contest"] = True
     if options.oil_fast_rise_association:
         comparison_options["fast_rise_association"] = True
+    if options.oil_fill_owner_colocation:
+        comparison_options["fill_owner_colocation"] = True
     window = build_main_window(**comparison_options)
     window.show()
     return app.exec()

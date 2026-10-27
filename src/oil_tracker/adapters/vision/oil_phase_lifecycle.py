@@ -54,6 +54,7 @@ class OilMaterialPhasePolicy:
     material_conflict_limit: float
     initial_full_observation_enabled: bool = False
     fill_owner_contest_enabled: bool = False
+    fill_owner_colocation_enabled: bool = False
 
     @property
     def initial_empty(self) -> bool:
@@ -1056,6 +1057,10 @@ class OilMaterialPhaseLifecycleOwner:
             state.established_fill_chain = state.chains[dynamic_owner]
             if contested:
                 self._gate_contested_fill_owner(record, frame, ambiguous_frames)
+        elif self._fill_owners_colocated(record.dynamic_fill_owner_snapshot, rows):
+            state.phase = OilMaterialPhase.FILLING
+            record.allowed_tracklet_ids = record.dynamic_fill_owner_snapshot
+            record.reason = "FILL_OWNER_COLOCATED"
         else:
             state.phase = OilMaterialPhase.FILLING
             record.allowed_tracklet_ids = frozenset()
@@ -1063,6 +1068,23 @@ class OilMaterialPhaseLifecycleOwner:
             record.reason = "FILL_OWNER_AMBIGUOUS"
             if self.policy.fill_owner_contest_enabled:
                 state.contested_fill_owners.update(record.dynamic_fill_owner_snapshot)
+
+    def _fill_owners_colocated(
+        self,
+        owners: frozenset[str],
+        rows: tuple[_ObservedRow, ...],
+    ) -> bool:
+        """Whether every dynamic fill owner is observed within one association step.
+
+        Any of the owners' rows is then within the tolerance the tracklet layer
+        uses for one surface, so the frame need not fail closed.  An owner
+        without a row in the frame is not co-located.
+        """
+        if not self.policy.fill_owner_colocation_enabled:
+            return False
+        ys = [row.y for row in rows if row.tracklet_id in owners]
+        observed = {row.tracklet_id for row in rows if row.tracklet_id in owners}
+        return observed == owners and max(ys) - min(ys) <= self.policy.maximum_jump_px
 
     def _contested_fill_owner(
         self,

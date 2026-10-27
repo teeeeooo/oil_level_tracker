@@ -634,7 +634,7 @@ fix the local controls, the predictions and the stop conditions before any run.
 
 ## October 27 co-located fill owners (E4)
 
-**Status: APPROVED 2026-10-27 as drafted (user: "일단 구현은 이대로 진행해보자"); frozen before code; not yet implemented.** The
+**Status: APPROVED 2026-10-27 as drafted (user: "일단 구현은 이대로 진행해보자"); frozen before code; IMPLEMENTED 2026-10-27 (opt-in, default OFF); local checks recorded in their evidence.** The
 first step of the order the user chose after the
 [partition desk review](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#partition-demotion-desk-review--2026-10-27):
 "결국 E3까지 가긴해야되는데 하나씩 짚어보자는거네. 추천 순서대로 진행하자"
@@ -1253,7 +1253,9 @@ as the serialized array index. Diagnostic detail must not change output.
   correction from review-015 and review-016 (human frame reviews, no run); no design,
   criterion or code changes. The 2026-10-27 co-located fill-owner (E4) section
   is a draft frozen with its checks before any code; its prediction reads the
-  kept FOR-1 readouts and the relayed step-12 rows only.
+  kept FOR-1 readouts and the relayed step-12 rows only. Its implementation
+  adds synthetic lifecycle tests, wiring tests and a comparison-runner mode;
+  the frozen local controls run afterwards and are recorded in their evidence.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state. The fast-rise draft adds one bounded association route for beyond-cap upward rows (seed of three witnessed rows in a constant-velocity line, then prediction-gated continuation); it is not a widened cap, adds no coordinate and leaves within-cap association unchanged.
-- Logic-map impact: NONE — this update records the fast-rise local result; its feature row and 4.2 paragraph were committed to the map with the implementation (`4f0665b`). Earlier: the gate's feature row and 4.3 paragraph were committed with its implementation (`2cb0b52`); the v3 implementation evidence records the top-exit row and paragraph.
+- Logic-map impact: UPDATED — the E4 implementation adds the co-located fill-owner feature row and a 4.3 paragraph. Earlier: the fast-rise local result changed nothing; its feature row and 4.2 paragraph were committed to the map with the implementation (`4f0665b`). Earlier: the gate's feature row and 4.3 paragraph were committed with its implementation (`2cb0b52`); the v3 implementation evidence records the top-exit row and paragraph.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair. The attrition path is an instance of F04 (stale continuation after an ambiguity), F05 (EMPTY-phase fill ownership) and F08 (owner re-adoption); no new entry.

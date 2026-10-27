@@ -167,6 +167,7 @@ class OilObservationResolverConfig:
     top_exit_full_enabled: bool = False
     fill_owner_contest_enabled: bool = False
     fast_rise_association_enabled: bool = False
+    fill_owner_colocation_enabled: bool = False
 
     @property
     def end_to_end_commit_lag_frames(self) -> int:
@@ -1494,10 +1495,10 @@ class OilObservationResolver:
             self.version += "+fill-owner-contest-v1"
         if self.config.fast_rise_association_enabled:
             self.version += "+fast-rise-association-v1"
+        if self.config.fill_owner_colocation_enabled:
+            self.version += "+fill-owner-colocation-v1"
         self.admission_evidence = OilAdmissionEvidenceOwner(self.config)
-        self.tracklet_opposition = OilTrackletOppositionOwner(
-            self.config
-        )
+        self.tracklet_opposition = OilTrackletOppositionOwner(self.config)
         self.path_lifecycle = OilPathLifecycleOwner(self.config)
         self.projection = OilResolutionProjectionOwner(
             self.version,
@@ -2222,6 +2223,7 @@ def _material_phase_policy(
         ),
         initial_full_observation_enabled=config.initial_full_observation_enabled,
         fill_owner_contest_enabled=config.fill_owner_contest_enabled,
+        fill_owner_colocation_enabled=config.fill_owner_colocation_enabled,
     )
 
 

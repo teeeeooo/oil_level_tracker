@@ -63,6 +63,7 @@ def build_main_window(
     top_exit_full: bool = False,
     fill_owner_contest: bool = False,
     fast_rise_association: bool = False,
+    fill_owner_colocation: bool = False,
 ) -> MainWindow:
     configure_logging()
     comparison_options = {}
@@ -78,6 +79,8 @@ def build_main_window(
         comparison_options["fill_owner_contest"] = True
     if fast_rise_association:
         comparison_options["fast_rise_association"] = True
+    if fill_owner_colocation:
+        comparison_options["fill_owner_colocation"] = True
     detector_factory = (
         partial(OpenCvPhaseDetector, **comparison_options)
         if comparison_options else OpenCvPhaseDetector
@@ -123,6 +126,8 @@ def build_main_window(
         window.setWindowTitle(window.windowTitle() + " — 채움 주인 경쟁 비교")
     if fast_rise_association:
         window.setWindowTitle(window.windowTitle() + " — 빠른 상승 연결 비교")
+    if fill_owner_colocation:
+        window.setWindowTitle(window.windowTitle() + " — 채움 주인 동일 위치 비교")
     analysis_controller.setParent(window)
     window.destroyed.connect(lambda: analysis_controller.shutdown())
     window.settings_copy_coordinator = ObservationSettingsCopyCoordinator(window)

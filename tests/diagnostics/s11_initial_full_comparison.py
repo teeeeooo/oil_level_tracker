@@ -291,6 +291,7 @@ def compare(
     top_exit_comparison: bool = False,
     fill_owner_contest_comparison: bool = False,
     fast_rise_comparison: bool = False,
+    fill_owner_colocation_comparison: bool = False,
     original_recipe: bool = False,
     initial_state: str = "full",
     owner_readout: bool = False,
@@ -309,13 +310,13 @@ def compare(
     import csv
 
     if sum((cost_first_comparison, candidate_rgb_comparison, top_exit_comparison,
-            fill_owner_contest_comparison, fast_rise_comparison)) > 1:
+            fill_owner_contest_comparison, fast_rise_comparison, fill_owner_colocation_comparison)) > 1:
         raise ValueError("Compare one mechanism at a time.")
     # The fill-owner gate is compared on top of the integrated candidate
     # (IFO v2 + top-exit v3), so both of its arms carry top-exit.
-    # The fast-rise association is compared the same way.
-    top_exit_on = top_exit_comparison or fill_owner_contest_comparison or fast_rise_comparison
-    integrated = fill_owner_contest_comparison or fast_rise_comparison
+    # The fast-rise association and the co-located fill owners are compared the same way.
+    integrated = fill_owner_contest_comparison or fast_rise_comparison or fill_owner_colocation_comparison
+    top_exit_on = top_exit_comparison or integrated
     if initial_state not in {"full", "unknown", "empty"}:
         raise ValueError("Initial state must be full, unknown or empty.")
     output.mkdir(parents=True, exist_ok=False)
@@ -335,6 +336,7 @@ def compare(
     for enabled in (False, True):
         mode = (("fill_owner_contest" if enabled else "top_exit") if fill_owner_contest_comparison
                 else ("fast_rise" if enabled else "top_exit") if fast_rise_comparison
+                else ("fill_owner_colocation" if enabled else "top_exit") if fill_owner_colocation_comparison
                 else ("top_exit" if enabled else "observation") if top_exit_comparison
                 else ("candidate_rgb" if enabled else "observation") if candidate_rgb_comparison
                 else ("cost_first" if enabled else "observation") if cost_first_comparison
@@ -363,6 +365,7 @@ def compare(
                 top_exit_full=(top_exit_comparison and enabled) or integrated,
                 fill_owner_contest=fill_owner_contest_comparison and enabled,
                 fast_rise_association=fast_rise_comparison and enabled,
+                fill_owner_colocation=fill_owner_colocation_comparison and enabled,
             )
             started = time.monotonic()
             result = AnalysisPipeline(
@@ -386,6 +389,8 @@ def compare(
                     fill_owner_contest_comparison and enabled)
                 assert ("+fast-rise-association-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (
                     fast_rise_comparison and enabled)
+                assert ("+fill-owner-colocation-v1" in detection["debug_metrics"]["sequence_resolver_version"]) == (
+                    fill_owner_colocation_comparison and enabled)
                 y = sample_row["raw_oil_air_level_y"]
                 assert y == detection["raw_oil_air_level_y"]
                 assert (None if not csv_row["raw_oil_air_level_y"] else float(csv_row["raw_oil_air_level_y"])) == y
@@ -438,6 +443,7 @@ def compare(
     assert raw_inputs[0] == compared_raw, "Comparison changed unannotated current-frame detector inputs"
     result = {"sample": sample, "comparison": ("fill_owner_contest" if fill_owner_contest_comparison
                                                else "fast_rise" if fast_rise_comparison
+                                               else "fill_owner_colocation" if fill_owner_colocation_comparison
                                                else "top_exit" if top_exit_comparison
                                                else "candidate_rgb" if candidate_rgb_comparison
                                                else "cost_first" if cost_first_comparison else "initial_full"),
@@ -593,6 +599,8 @@ if __name__ == "__main__":
                             help="Compare FULL+observation v2 + top-exit v3 with/without the contested fill-owner gate")
     candidates.add_argument("--fast-rise-comparison", action="store_true",
                             help="Compare FULL+observation v2 + top-exit v3 with/without the fast-rise association")
+    candidates.add_argument("--fill-owner-colocation-comparison", action="store_true",
+                            help="Compare FULL+observation v2 + top-exit v3 with/without co-located fill owners")
     args = parser.parse_args()
     if args.prepare_roi:
         prepare(args.prepare_roi)
@@ -616,5 +624,6 @@ if __name__ == "__main__":
                 top_exit_comparison=args.top_exit_comparison,
                 fill_owner_contest_comparison=args.fill_owner_contest_comparison,
                 fast_rise_comparison=args.fast_rise_comparison,
+                fill_owner_colocation_comparison=args.fill_owner_colocation_comparison,
                 original_recipe=args.original_recipe, initial_state=args.initial_state,
                 owner_readout=args.owner_readout)
