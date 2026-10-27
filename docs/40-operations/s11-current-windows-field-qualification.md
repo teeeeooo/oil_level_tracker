@@ -1,6 +1,6 @@
 # S11 Current Windows Field Qualification
 
-**Status:** `ACTIVE PROCEDURE / DRAFT REQUEST`. The [step-15 level peer readout](#step-15-level-peer-readout) is COMPLETE (2026-10-27, [result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#step-15-result--2026-10-27)): LOWER-OWNER-PEER; the stale owner's lower boundary (Y693–721, 0018 in three frames) is the likely partition peer that demotes the level. The [step-14 level authority readout](#step-14-level-authority-readout) is COMPLETE (2026-10-27, [result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#step-14-result--2026-10-27)): RECURRENCE-LED; every demotion reads exactly 0.80, which points to the same-frame superior-partition rule (inference). The [step-13 coverage readout and review-016 request](#step-13-coverage-readout-and-review-016) is COMPLETE (2026-10-27, [result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#step-13-result--2026-10-27)): coverage ELIGIBILITY (the level is a candidate in 7 of 7 rows, builder-eligible in 2); Oil FULL onset 27.5 s. The [review-015 SPL#4 fast-rise level review](#review-015-spl4-fast-rise-level-review) is COMPLETE (2026-10-27, [result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#review-015-result--2026-10-27)): OWNER-LEVEL at 22.5–24.0 s (both owners on the level); the level is above both owners at 24.5–27.0 s; the Oil is not at the top by 27.0 s. The read-only [step-12 fill-owner trace readout request](#step-12-fill-owner-trace-readout-request) is COMPLETE (2026-10-27, [receipt](../60-evidence/s11/2026-10-27-step12-windows-receipt.md)): NOT CONFIRMED by FOR-1's frozen rule (W1 holds; W2 fails on 0035, a fresh confirmation 22.0–24.5 s); the 0018 half of the question-1 reading holds. The [step-11 speed timing request](#step-11-speed-timing-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step10-11-windows-receipt.md#step-11--speed-timing-and-identity)): identity PASS on all three runs (rows; trace bytes for S-1 and P-1); FULL 224.9 → 160.1 s sequential and 110.3 s parallel; NONE 90.9 → 79.5 s parallel. The read-only [step-10 stage readout request](#step-10-stage-readout-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step10-11-windows-receipt.md#step-10--stage-readout)): S-A by the letter, dropped at phase (`OIL-PHASE-FILL`), with a named limit. The [step-9 combined request](#step-9-combined-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step9-windows-receipt.md)): T-1 identity PASS including trace bytes; CAD-1 C1 fails (no FULL at 6 fps; outcome C with a named limit); Windows timing recorded. The [step-8 combined request](#step-8-combined-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step8-windows-receipt.md)). F: 0 qualifying SPL#4 triplets, so no SPL#4 run. L: LBT-2 S2 closes without a design (S2 and S3 fail; S4 C8 A0 B4). The read-only [step-7 follow-up request](#step-7-follow-up-request) is COMPLETE (2026-10-23). The [FLB-2 held-out request](#flb-2-held-out-request) is COMPLETE ([result](../50-diagnostics/s11/2026-10-23-foam-layer-bottom-follow-2.md#held-out-result--2026-10-23)): FLB-2 closes with no design: the held-out case is NOT TESTED (R3), and R2 and R4 fail. The [step-7 combined request](#step-7-combined-request) is COMPLETE ([receipt](../60-evidence/s11/2026-10-23-step7-windows-receipt.md)). Identity PASS. The gate's SPL#4 prediction PASS: exactly the 14 wrong-target BASE rows go UNKNOWN, plus one false Accum EMPTY sample, and SPL#1 is unchanged. Report checks PASS (band cells, E2, first-catch guard). Review-012 is answered. Gate promotion is HELD (user, 2026-10-23); it stays default OFF. The read-only [SPL#4 opposition follow-up](#spl4-opposition-follow-up) is COMPLETE ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-opposition-follow-up-receipt--2026-10-22)): the opposing source is `OIL-PHASE-FILL` `FILL_OWNER_AMBIGUOUS` between two low owners, and the ⑩ Accum census is complete. The [SPL#4 top-exit promotion evidence request](#spl4-top-exit-promotion-evidence) is COMPLETE / **P FAIL** ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)): no top-exit FULL row, candidate identical to the reference; R not evaluated; N and U pass; top-exit stays default OFF. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
+**Status:** `ACTIVE PROCEDURE / DRAFT REQUEST`. The [E4 SPL#4 comparison request](#e4-spl4-comparison-request) is QUEUED (2026-10-27): SPL#4 0–90 s with and without the co-located fill owners; pass is exactly 23.0 and 23.5 s co-located within 32 px of the review-015 marks, with every other row equal. The [step-15 level peer readout](#step-15-level-peer-readout) is COMPLETE (2026-10-27, [result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#step-15-result--2026-10-27)): LOWER-OWNER-PEER; the stale owner's lower boundary (Y693–721, 0018 in three frames) is the likely partition peer that demotes the level. The [step-14 level authority readout](#step-14-level-authority-readout) is COMPLETE (2026-10-27, [result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#step-14-result--2026-10-27)): RECURRENCE-LED; every demotion reads exactly 0.80, which points to the same-frame superior-partition rule (inference). The [step-13 coverage readout and review-016 request](#step-13-coverage-readout-and-review-016) is COMPLETE (2026-10-27, [result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#step-13-result--2026-10-27)): coverage ELIGIBILITY (the level is a candidate in 7 of 7 rows, builder-eligible in 2); Oil FULL onset 27.5 s. The [review-015 SPL#4 fast-rise level review](#review-015-spl4-fast-rise-level-review) is COMPLETE (2026-10-27, [result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#review-015-result--2026-10-27)): OWNER-LEVEL at 22.5–24.0 s (both owners on the level); the level is above both owners at 24.5–27.0 s; the Oil is not at the top by 27.0 s. The read-only [step-12 fill-owner trace readout request](#step-12-fill-owner-trace-readout-request) is COMPLETE (2026-10-27, [receipt](../60-evidence/s11/2026-10-27-step12-windows-receipt.md)): NOT CONFIRMED by FOR-1's frozen rule (W1 holds; W2 fails on 0035, a fresh confirmation 22.0–24.5 s); the 0018 half of the question-1 reading holds. The [step-11 speed timing request](#step-11-speed-timing-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step10-11-windows-receipt.md#step-11--speed-timing-and-identity)): identity PASS on all three runs (rows; trace bytes for S-1 and P-1); FULL 224.9 → 160.1 s sequential and 110.3 s parallel; NONE 90.9 → 79.5 s parallel. The read-only [step-10 stage readout request](#step-10-stage-readout-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step10-11-windows-receipt.md#step-10--stage-readout)): S-A by the letter, dropped at phase (`OIL-PHASE-FILL`), with a named limit. The [step-9 combined request](#step-9-combined-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step9-windows-receipt.md)): T-1 identity PASS including trace bytes; CAD-1 C1 fails (no FULL at 6 fps; outcome C with a named limit); Windows timing recorded. The [step-8 combined request](#step-8-combined-request) is COMPLETE (2026-10-26, [receipt](../60-evidence/s11/2026-10-26-step8-windows-receipt.md)). F: 0 qualifying SPL#4 triplets, so no SPL#4 run. L: LBT-2 S2 closes without a design (S2 and S3 fail; S4 C8 A0 B4). The read-only [step-7 follow-up request](#step-7-follow-up-request) is COMPLETE (2026-10-23). The [FLB-2 held-out request](#flb-2-held-out-request) is COMPLETE ([result](../50-diagnostics/s11/2026-10-23-foam-layer-bottom-follow-2.md#held-out-result--2026-10-23)): FLB-2 closes with no design: the held-out case is NOT TESTED (R3), and R2 and R4 fail. The [step-7 combined request](#step-7-combined-request) is COMPLETE ([receipt](../60-evidence/s11/2026-10-23-step7-windows-receipt.md)). Identity PASS. The gate's SPL#4 prediction PASS: exactly the 14 wrong-target BASE rows go UNKNOWN, plus one false Accum EMPTY sample, and SPL#1 is unchanged. Report checks PASS (band cells, E2, first-catch guard). Review-012 is answered. Gate promotion is HELD (user, 2026-10-23); it stays default OFF. The read-only [SPL#4 opposition follow-up](#spl4-opposition-follow-up) is COMPLETE ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-opposition-follow-up-receipt--2026-10-22)): the opposing source is `OIL-PHASE-FILL` `FILL_OWNER_AMBIGUOUS` between two low owners, and the ⑩ Accum census is complete. The [SPL#4 top-exit promotion evidence request](#spl4-top-exit-promotion-evidence) is COMPLETE / **P FAIL** ([receipt](../60-evidence/s11/2026-10-22-top-exit-promotion-evidence.md#spl4-receipt--2026-10-22)): no top-exit FULL row, candidate identical to the reference; R not evaluated; N and U pass; top-exit stays default OFF. The [report confirmation run](#report-confirmation-run) is COMPLETE / **PASS against its written expectation** ([receipt](../60-evidence/s11/2026-10-21-initial-state-report-local.md#windows-report-confirmation--2026-10-22)): BASE reconstruction ACCEPTED and judged PASS on its level, Accum UNRESOLVED, tracking data identical to ⑩. The [⑩ top-exit v3 comparison](#top-exit-v3-comparison) is COMPLETE / **PASS against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v3-local.md#windows-top-exit-v3-comparison--2026-10-21)): BASE FULL from 674.0 s, no Accum FULL, pre-closure rows unchanged. Top-exit v3 stays default OFF. The [⑨ top-exit v2 comparison](#top-exit-v2-comparison) is COMPLETE / **FAIL against its pre-registered outcome** ([receipt](../60-evidence/s11/2026-10-21-top-exit-v2-local.md#windows-top-exit-v2-comparison--2026-10-21)): BASE FULL started at 663.0 s. Top-exit stays default OFF and NOT ADOPTED. The top-exit predicate check is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#predicate-check-receipt--2026-10-21)). The 673 s selection-cause extraction is COMPLETE ([receipt](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#673-s-selection-cause-receipt--2026-10-21)). Review-011 is COMPLETE ([result](../50-diagnostics/s11/2026-10-21-full-observable-top-review.md#review-011-result--2026-10-21)). Review-010 is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-approach-review.md#review-010-result)). The [LBW-3 held-out check](#lbw-3-held-out-witness-check) is COMPLETE ([result](../50-diagnostics/s11/2026-10-20-layer-bottom-witness-3.md#windows-held-out-result)). The Accum texture-gate extraction and review-009 are COMPLETE ([ATG-1](../50-diagnostics/s11/2026-10-20-accum-texture-gate.md#decision)). Bounded 721 s saved-evidence intake is COMPLETE. The false-anchor route is identified; no behavioral repair is qualified. Top-exit preflight is COMPLETE / CONDITION FAILED; ⑧ was NOT RUN and is not requested. The three prior candidates and accounting remain CLOSED.
 
 **October 15 truth correction:** the user corrected BASE to drain at 550–652 s,
 refill at 652–674 s and reach FULL within 674–675 s. The exact transition frame
@@ -20,6 +20,111 @@ Earlier completed inspection steps below are retained for reference and must not
 be repeated merely because the reviewed timing changed.
 
 This document is the executable target-Windows field procedure for whichever S11 detector candidate the current Work Plan names. It intentionally does not hard-code R7–R12 or any future revision number. A candidate becomes the subject of this procedure only when `docs/00-project/work-plan.md` and the user's granted scope make Windows qualification current.
+
+## E4 SPL#4 comparison request
+
+**QUEUED 2026-10-27.** The Windows check frozen with the
+[co-located fill owners (E4)](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-co-located-fill-owners-e4).
+The [local checks](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md)
+matched the frame prediction but stopped on sample5 event changes outside the
+predicted frames. The user accepted those changes and chose to go on
+(2026-10-27): "1번으로 진행하자. 범위 밖 변경이지만 오히려 신뢰도가 올라가는
+변경으로 생각됨". This is a comparison, not field qualification.
+
+**Runs:** SPL#4 0–90 s, the step-7 `SPL4_B_ref` session (2 fps, FULL debug,
+compressor start 10.0 s, both Glasses EMPTY), two runs on the same source.
+- `SPL4_C_ref`: IFO v2 + top-exit v3.
+- `SPL4_C_coloc`: the same plus E4 (`fill_owner_colocation=True`).
+
+**Pre-registered (judged on the Mac):**
+- **Identity:** `SPL4_C_ref` equals step-7 `SPL4_B_ref` in every tracking row.
+  Since step 7, `src` changed only in default-OFF options (fast-rise, E4) and
+  in output-identical speed work (step 11 confirmed it).
+- **Pass (frozen with the design):**
+  - BASE: exactly 23.0 and 23.5 s become `FILL_OWNER_COLOCATED`;
+  - each publishes a numeric row within 32 px of the review-015 mark (Y768.0,
+    Y761.5);
+  - every other BASE and Accum row is equal.
+- **Events and retrospective:** not in the frozen condition. They are listed
+  and read on the Mac against the reviewed truth (review-015/016: BASE Oil FULL
+  from 27.5 s). Sample5 showed that added rows can change them.
+- **Stop:** a hash or identity mismatch, a wrong resolver version or a run
+  error. The agent stops and reports.
+
+**Source:** latest `main` (E4 at `9ee11a4`); the request lists four SHA-256
+values. No Recipe, ROI, margin, threshold or session change. E4, top-exit and
+the gate stay default OFF; FIELD FAIL / O2 OPEN and review-006 pending are
+unchanged.
+
+Prompt for the Windows agent (the user forwards it):
+
+```text
+S11 E4 비교 요청 — SPL#4 0–90초, 기준 1개 + 후보(E4) 1개 실행. 읽기·비교만 하고 판정은 Mac에서 한다.
+튜닝·Recipe/ROI/margin/임계값 변경·추가 재실행은 하지 마. 사람 확인은 없다.
+값만 원문 그대로 돌려주고 판정·수정 제안 없이 멈춰. 새 bundle은 Windows에 보존한다.
+출력 폴더 경로는 영문·숫자·밑줄만 쓴다.
+
+0. 준비와 신원
+ 0-1. 최신 main 소스 ZIP을 새 폴더에 풀고 기존 Windows Python 환경을 쓴다.
+      소스 폴더에서: $env:PYTHONPATH = (Join-Path (Get-Location).Path "src")
+      실행 전 SHA-256 확인(하나라도 다르면 실행하지 말고 값만 알려줘):
+      - src/oil_tracker/adapters/vision/oil_phase_lifecycle.py
+        39e214fe4ae038615a149d1c8106d44b830cd20ceefc376f54294b8c67b7ecfa
+      - src/oil_tracker/adapters/vision/opencv_phase_detector.py
+        64a0bb5ebd90bf1b569495fdc4707ea3965cbe7fbe193bdeeeeaeb77eba002cd
+      - src/oil_tracker/adapters/vision/observation_sequence_resolver.py
+        f4fc2fbc4f2c1b9366d193fd3cd0ff68b52c6f5283377478092e1d8959983461
+      - src/oil_tracker/adapters/vision/oil_observation_resolver.py
+        7e3b430d540a4363efc6d632693c5d629a7ccd2ccb8e45f9fa37528d72e382a3
+ 0-2. 영상·Recipe·세션은 step-7의 SPL4_B_ref(oil_level_analysis_SPL4_B_ref_20261023_150316)와 같다.
+      - 영상: SPL#4_Cooling_onoff_#2.mp4(53165455 bytes), Recipe: sample4_test_artifact_R22.oilrecipe(수정하지 않는다)
+      - 0–90초, 2fps, FULL debug, compressor_start 10.0초,
+        두 Glass initial_state EMPTY_NO_INTERFACE(메모리의 Recipe와 세션 initial_state_confirmations, Recipe 파일은 그대로)
+      - headless 방식도 step-7과 같다(AnalysisPipeline + OutputBundleStore + JsonlDebugTraceWriterFactory).
+        cost-first/RGB/Local XY/fill_owner_contest/fast_rise_association은 OFF, Glass 병렬 옵션은 쓰지 않는다.
+
+G. 비교 실행 2개 (같은 소스, 차이는 fill_owner_colocation 하나)
+ G-1. 기준: OpenCvPhaseDetector(initial_full_observation=True, top_exit_full=True), run_name "SPL4_C_ref"
+ G-2. 후보: OpenCvPhaseDetector(initial_full_observation=True, top_exit_full=True, fill_owner_colocation=True),
+      run_name "SPL4_C_coloc"
+ G-3. trace의 sequence_resolver_version: 둘 다 "+initial-full-observation-v2"와 "+top-exit-full-v3"가 있어야 하고,
+      "+fill-owner-colocation-v1"은 후보에만 있어야 한다. 아니면 멈추고 값만 알려줘.
+
+표기:
+ - 행 = tracking_data.csv 한 줄. 시간은 timestamp_sec. 목록은 frame/time으로 쓴다.
+ - S = debug record의 sequence.state, P = S.sequence_material_phase_diagnostics, C = sequence.candidates[].
+   키가 없으면 MISSING, null이면 null.
+ - 다른 행 = 같은 (glass_id, frame_index)에서 fill_state, raw_oil_air_level_y, raw_foam_front_y,
+   oil_is_valid, foam_is_valid, flags 중 하나라도 다른 행.
+ - 선택 후보 = C 중 selected가 true인 항목의 canonical_y:tracklet_id, 없으면 "없음".
+
+1. 머리줄: 두 run_id·run_name, 소스 폴더, 0-1의 SHA-256 4개, 두 sequence_resolver_version, 두 bundle 경로,
+   영상 SHA-256·size·fps·frame_count, Recipe SHA-256, Glass별 행 수(기대 181),
+   (glass_id, frame_index) 대응 결과(중복·누락·timestamp 불일치 수).
+
+2. 표 I — 신원: SPL4_C_ref ↔ step-7 SPL4_B_ref. Glass별 다른 행 수와 목록(최대 10개).
+
+3. 표 G — Glass별(BASE/Accum):
+ a. 기준 ↔ 후보 다른 행 수
+ b. 후보에서 S.sequence_material_phase_reason이 FILL_OWNER_COLOCATED인 행 수와 그 행들의 frame/time 전부
+ c. 기준·후보 각각 S.sequence_material_phase_reason별 행 수(FILL_OWNER_AMBIGUOUS, FILL_OWNER_COLOCATED만)
+ d. 다른 행 목록(Glass별 최대 40개, 넘으면 개수만), 각 한 줄:
+    frame | time | 기준 fill_state / raw_oil_air_level_y | 후보 fill_state / raw_oil_air_level_y |
+    기준 S.sequence_material_phase_reason | 후보 S.sequence_material_phase_reason |
+    후보 P.dynamic_fill_owner_ids | 후보 P.allowed_tracklet_ids | 후보 선택 후보
+ e. 후보의 FILL_OWNER_COLOCATED 행마다, C 중 kind = oil_air이고 tracklet_id가 P.dynamic_fill_owner_ids에 있는 항목 전부,
+    각 한 줄: time | frame | canonical_y | tracklet_id | selected
+
+4. 표 E — 이벤트와 재해석(두 bundle 비교):
+ a. retrospective_interpretation.json의 Glass별 status, start_time_sec, end_time_sec, reason(원문) — 기준과 후보
+ b. events.csv에서 기준에만 있는 줄과 후보에만 있는 줄(capture 경로 열은 비교에서 빼고, 줄은 원문 그대로).
+    Glass별 최대 20줄, 넘으면 개수만.
+ c. review_index.json의 Glass별 result_status와 effective_state_aware_coverage_ratio — 기준과 후보
+
+5. 머리줄과 표 I, G, E를 원문 그대로 돌려준다. 값은 고치거나 반올림하지 않는다.
+   결론·판정·수정 제안 없이 멈춘다. E4·top-exit·fill-owner gate는 기본 OFF로 남고,
+   FIELD FAIL / O2 OPEN, review-006 pending은 바뀌지 않는다.
+```
 
 ## Step-15 level peer readout
 

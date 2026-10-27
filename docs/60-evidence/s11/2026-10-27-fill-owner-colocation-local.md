@@ -11,7 +11,9 @@ FAIL on a frozen stop condition** against the
   follows from the two added rows (see below). The frozen rule makes this a
   FAIL, and nothing is retuned.
 - **Unchanged:** E4 stays opt-in and default OFF. O2 OPEN / FIELD FAIL is
-  unchanged. The user decides the next step.
+  unchanged.
+- **User decision (2026-10-27):** accept the out-of-frame changes and go on to
+  the Windows SPL#4 comparison ("1번으로 진행하자. 범위 밖 변경이지만 오히려 신뢰도가 올라가는 변경으로 생각됨").
 - **Authority:** the [Work Plan](../../00-project/work-plan.md).
 
 ## What was built
@@ -111,11 +113,17 @@ It was implemented at `9ee11a4`.
   sample5's are possible there too.
 - **Accuracy:** nothing beyond the user's judgments. This is not a promotion.
 
-## Next (user decision)
+## User decision — 2026-10-27
 
-The frozen rule ends this check as FAIL. The user decides whether E4 goes on
-to the Windows SPL#4 comparison, stops, or is re-frozen. In every case E2 →
-E1 → E3 follow, each frozen before code.
+**User: "1번으로 진행하자. 범위 밖 변경이지만 오히려 신뢰도가 올라가는 변경으로 생각됨".**
+- The user accepts sample5's changes outside the K2 frames as a gain in
+  reliability.
+- E4 goes on to the Windows SPL#4 comparison.
+- The local verdict stays FAIL as recorded; the frozen criteria are not
+  edited.
+
+**Next:** the [E4 SPL#4 comparison request](../../40-operations/s11-current-windows-field-qualification.md#e4-spl4-comparison-request)
+is queued. E2 → E1 → E3 follow, each frozen before code.
 
 ## Detector Governance
 

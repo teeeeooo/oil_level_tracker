@@ -389,8 +389,9 @@ queued.
 - The order is E4 → E2 → E1 → E3. E4 is implemented (`9ee11a4`, opt-in,
   default OFF). Its local checks FAIL on a frozen stop condition, recorded in
   the [E4 local evidence](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md).
-- Next: the user decides E4's next step. The checkpoint below holds the
-  detail.
+- The user accepted the out-of-frame changes and chose the Windows SPL#4
+  comparison. Next: relay the queued E4 request and read its reply. The
+  checkpoint below holds the detail.
 
 **Resume checkpoint — 2026-10-27, fill-owner gate revisit:**
 [FOR-1](../50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) is
@@ -557,8 +558,11 @@ then "응 그렇게 진행하자").
     boundary from the bottom at 8.5 s); the low-confidence interval starts at
     10.5 s; coverage goes from 20.7 % to 22.5 %. All of these follow from the
     two added rows. Nothing is retuned.
-- **Next:** the user decides whether E4 goes on to the Windows SPL#4
-  comparison, stops, or is re-frozen. E2 → E1 → E3 follow in every case.
+- **User (2026-10-27): "1번으로 진행하자. 범위 밖 변경이지만 오히려 신뢰도가 올라가는 변경으로 생각됨"** — the sample5 changes are accepted, and the
+  local verdict stays FAIL as recorded.
+- **Next:** the [E4 SPL#4 comparison request](../40-operations/s11-current-windows-field-qualification.md#e4-spl4-comparison-request)
+  is queued. Pass: exactly 23.0 and 23.5 s co-located, within 32 px of
+  Y768.0 and Y761.5, every other row equal. Then E2 → E1 → E3.
 
 **Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
