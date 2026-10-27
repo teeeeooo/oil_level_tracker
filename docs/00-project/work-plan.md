@@ -382,7 +382,20 @@ Facts it records:
 The gate is implemented and its local check passed. No Windows request is
 queued.
 
-**Session handoff — 2026-10-27 (latest):** start with the
+**Session handoff — 2026-10-27, session close (latest):** start with the
+[fast-fill path handoff](../60-evidence/s11/2026-10-27-fast-fill-path-handoff.md).
+- **E4:** Windows PASS, default OFF.
+- **E2:** parked. **E1:** not viable as drafted; the detector sees no Foam on
+  SPL#4 25.5–27.0 s.
+- **The user chose (2026-10-27)** to draft the owner-free FULL path first:
+  [OFF-1](../50-diagnostics/s11/2026-10-27-owner-free-full-review.md),
+  REVIEW DRAFT. The peer-side desk check is the E3 fallback.
+- No Windows request is queued.
+- **Next:** the user reviews OFF-1. If agreed, a read-only FULL evidence
+  readout is built and frozen before its output.
+
+**Session handoff — 2026-10-27 (superseded by the session-close handoff):**
+start with the
 [fill-owner revisit handoff](../60-evidence/s11/2026-10-27-fill-owner-revisit-handoff.md).
 - Steps 12–15 and reviews 015–016 are answered, and the SPL#4 truth is
   corrected.
@@ -669,8 +682,23 @@ then "응 그렇게 진행하자").
     those frames and 2,644 (A) or 1,874 (B) rows over the recording.
   - **Remaining handle (inference):** the peer side of the partition rule.
     The peer is the stale owner's lower boundary, 165–330 px below the level.
-- **Next: the user decides** whether to drop E1 as drafted, explore the
-  peer side, or stop. Then E3.
+- **The agent's judgment on the SPL#4 review photos** (asked by the user):
+  - The level and the stale lower edge differ clearly by time. The level
+    rises fast; the edge stays still through FULL.
+  - The frame-local rules invert that.
+  - The FULL state from 27.5 s is the clearest visual fact.
+- **User (2026-10-27): "그럼 이렇게하자 대화 세션 compact 한번 할때가 됐거든. 1번 진행하고 handoff 작성하자. 그리고 compaction 후 handoff 확인하고 이어가는걸로"**
+  — draft the owner-free FULL path first, then the handoff.
+  - [OFF-1](../50-diagnostics/s11/2026-10-27-owner-free-full-review.md),
+    REVIEW DRAFT.
+  - **Candidate F1:** ownerless FULL after an observed fill, from K samples
+    of the existing `full` state node, with no interface and no Foam.
+  - **Today:** `_constrain_layer` reduces an empty allowed set to UNKNOWN,
+    dropping that node.
+  - **Main risk:** a Glass full of Foam (SPL#4 Accum).
+- **Next:** the user reviews OFF-1. If agreed, a read-only FULL evidence
+  readout is built and frozen before its output. The peer-side desk check
+  of barrier 1 is the E3 fallback.
 
 **Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
