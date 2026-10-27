@@ -402,9 +402,11 @@ queued.
   finds the three SPL#1 hits correct. The user-truth tally is 4 gains against
   12 costs. The user parked E2. E1 is DRAFTED with its scope open: R14's
   ordered-lower condition fails on SPL#4 25.5–27.0 s, and a Foam-front
-  scope would free SPL#1 Accum's Foam-layer rows. No Windows request is
-  queued. Next: the user decides on the proposed read-only E1 readout. The
-  checkpoint below holds the detail.
+  scope would free SPL#1 Accum's Foam-layer rows. The local
+  [FPC-1 readout](../50-diagnostics/s11/2026-10-27-partition-contradiction-readout.md)
+  finds both scopes broad. Next: relay the queued
+  [E1 partition readout](../40-operations/s11-current-windows-field-qualification.md#e1-partition-readout-request).
+  The checkpoint below holds the detail.
 
 **Resume checkpoint — 2026-10-27, fill-owner gate revisit:**
 [FOR-1](../50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) is
@@ -638,10 +640,19 @@ then "응 그렇게 진행하자").
     rows (ATG-1), which are known wrong.
   - **E1 alone changes authority only.** The 32 px cap still blocks the
     level, so no SPL#4 row is expected to change.
-- **Next: the user decides** on the proposed read-only E1 readout. It covers
-  SPL#4 BASE 20–35 s and SPL#1 Accum 660–690 s on Windows, plus sample4
-  locally, and reads which scope frees the level and not the Foam-layer rows.
-  Then E1 is frozen, then E3.
+- **User (2026-10-27): "응 진행하자"** — run the read-only E1 readout.
+  - **FPC-1 local**
+    ([readout](../50-diagnostics/s11/2026-10-27-partition-contradiction-readout.md),
+    closed run `s11-e1-partition-readout-20261027-001`): every post-track
+    demotion on the six controls is texture-only (2,057 rows).
+  - **Scope A** (ordered-lower) would free 479 rows and **scope B** (Foam front
+    above) 167. They include sample7's fixed Y384 row and sample4-interior
+    Y847–859 at three of R7's protected times.
+  - Freed is not published; the counts are exposure.
+- **Next:** relay the queued
+  [E1 partition readout](../40-operations/s11-current-windows-field-qualification.md#e1-partition-readout-request):
+  SPL#4 BASE 20–35 s and SPL#1 Accum 660–690 s near the marks, plus totals.
+  Then the user decides on E1's scope or drops it. Then E3.
 
 **Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),

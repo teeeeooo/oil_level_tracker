@@ -829,7 +829,13 @@ tracklet, authority or association, and does not reach FULL.
 
 ## October 27 Foam-aware partition contradiction (E1)
 
-**Status: DRAFT 2026-10-27, not frozen; no code; scope open.** The third step
+**Status: DRAFT 2026-10-27, not frozen; no code; scope open.** The local
+[FPC-1 readout](../50-diagnostics/s11/2026-10-27-partition-contradiction-readout.md)
+finds every post-track demotion on the six controls texture-only (2,057 rows).
+Scope A would free 479 rows and scope B 167, including fixed structure and
+rows at R7-protected times. Its
+[Windows readout](../40-operations/s11-current-windows-field-qualification.md#e1-partition-readout-request)
+is queued. The third step
 of the order, started on the user's "응 E2 보류하고 E1 설계 초안으로 넘어가자".
 It is barrier 1 of the
 [barriers in series](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#barriers-in-series-at-2-fps-from-steps-1315-and-fff-1),
@@ -1474,8 +1480,10 @@ as the serialized array index. Diagnostic detail must not change output.
   frame review, closed run `s11-review017-relay-20261027-001`); no detector
   code changes. The user parked E2. The 2026-10-27 Foam-aware partition
   contradiction (E1) section is a draft with its scope open: it reads the
-  kept step-14 relay and the R7/R14/ATG-1/TPA-1 records and source only; no
-  run, code or Windows execution.
+  kept step-14 relay and the R7/R14/ATG-1/TPA-1 records and source; its
+  local FPC-1 readout is the closed run `s11-e1-partition-readout-20261027-001`
+  through the new read-only `s11_partition_contradiction_readout` tool; no
+  detector code or Windows execution.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state. The fast-rise draft adds one bounded association route for beyond-cap upward rows (seed of three witnessed rows in a constant-velocity line, then prediction-gated continuation); it is not a widened cap, adds no coordinate and leaves within-cap association unchanged.
 - Logic-map impact: NONE — this update records the E4 local and Windows results, drafts and parks E2 and drafts E1, all without code; its feature row and 4.3 paragraph were committed to the map with the implementation (`9ee11a4`). Earlier: the fast-rise local result changed nothing; its feature row and 4.2 paragraph were committed to the map with the implementation (`4f0665b`). Earlier: the gate's feature row and 4.3 paragraph were committed with its implementation (`2cb0b52`); the v3 implementation evidence records the top-exit row and paragraph.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair. The attrition path is an instance of F04 (stale continuation after an ambiguity), F05 (EMPTY-phase fill ownership) and F08 (owner re-adoption); no new entry.
