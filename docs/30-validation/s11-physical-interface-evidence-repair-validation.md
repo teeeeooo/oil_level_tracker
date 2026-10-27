@@ -363,7 +363,8 @@ as step 7's reference, with and without E4.
 ## Undercut fill-owner checks — 2026-10-27
 
 **Status: DRAFT 2026-10-27, not frozen; freezing waits for the user's
-decision.** These checks accompany the
+decision after [review-017](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#review-017-result--2026-10-27)
+(user-truth tally 4 gains, 12 costs).** These checks accompany the
 [undercut fill owner (E2)](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-undercut-fill-owner-e2).
 The Windows predictions below come from the
 [owner-above readout](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#windows-readout--2026-10-27).

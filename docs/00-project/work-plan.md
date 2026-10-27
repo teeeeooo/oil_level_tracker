@@ -398,9 +398,10 @@ queued.
   [Windows readout](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#windows-readout--2026-10-27)
   finds nothing admitted above 0018 on SPL#4, so E2 would leave the 14 rows.
   The user chose review-017 of the four unreviewed hits before deciding.
-  Next: relay the queued
-  [review-017](../40-operations/s11-current-windows-field-qualification.md#review-017-e2-hit-frame-review).
-  The checkpoint below holds the detail.
+  [Review-017](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#review-017-result--2026-10-27)
+  finds the three SPL#1 hits correct. The user-truth tally is 4 gains against
+  12 costs. No Windows request is queued. Next: the user decides whether to
+  freeze or park E2. The checkpoint below holds the detail.
 
 **Resume checkpoint — 2026-10-27, fill-owner gate revisit:**
 [FOR-1](../50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) is
@@ -608,10 +609,20 @@ then "응 그렇게 진행하자").
   - The user reads the tally. User truth so far: 4 gains (SPL#1 Accum
     674.0–677.0 s) against 9 costs (sample7). sample5's 20 agent-truth gains
     are counted separately.
-- **Next:** relay the queued
-  [review-017](../40-operations/s11-current-windows-field-qualification.md#review-017-e2-hit-frame-review),
-  then the user decides whether to freeze E2 or park it and go to E1. Then
-  E1 → E3.
+- **Review-017 received**
+  ([result](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#review-017-result--2026-10-27),
+  closed run `s11-review017-relay-20261027-001`, with the user's screen
+  photos):
+  - **SPL#1 Accum 669.5, 670.5, 671.5 s: COST ×3.** The marks are Y506/492/471,
+    and the published rows lie within 10 px of them. The admitted rows above
+    are 65–89 px higher. The 672.0 s anchor agrees with review-012 within
+    1 px.
+  - **SPL#4 Accum 65.0–67.0 s:** no Oil boundary, all Foam. 66.0 s is UNREAD
+    by the letter; read as a gain it would make 5.
+  - **User-truth tally: 4 gains, 12 costs.** sample5's 20 agent-truth gains
+    are separate. The costs are true levels with an admitted row above them.
+- **Next: the user decides** whether to freeze E2 or park it and go to E1.
+  Then E1 → E3.
 
 **Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),

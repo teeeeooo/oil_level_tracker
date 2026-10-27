@@ -721,8 +721,10 @@ The local predictions come from the read-only
 **Its [Windows readout](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#windows-readout--2026-10-27)
 (2026-10-27) finds nothing admitted above 0018 at SPL#4 BASE 27.0–34.5 s, so E2
 would leave the 14 wrong-target rows.** On SPL#1 Accum it would stop 7 rows,
-4 of them 142–187 px above the review-012 marks. Freezing waits for the
-user's decision.
+4 of them 142–187 px above the review-012 marks.
+**[Review-017](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#review-017-result--2026-10-27)
+finds the other 3 SPL#1 hits correct.** By user truth E2 removes 4 wrong rows
+against 12 correct ones. Freezing waits for the user's decision.
 
 **Problem.** A single fill owner publishes a low boundary while the level is
 higher.
@@ -1381,7 +1383,9 @@ as the serialized array index. Diagnostic detail must not change output.
   `s11-e2-owner-above-readout-20261027-001` (six controls, owner readouts,
   debug NONE) through the new read-only `s11_owner_above_readout` tool, and its
   Windows readout of three saved bundles (no detector run, relayed as text,
-  closed run `s11-e2-windows-relay-20261027-001`); no detector code changes.
+  closed run `s11-e2-windows-relay-20261027-001`), and review-017 (a human
+  frame review, closed run `s11-review017-relay-20261027-001`); no detector
+  code changes.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state. The fast-rise draft adds one bounded association route for beyond-cap upward rows (seed of three witnessed rows in a constant-velocity line, then prediction-gated continuation); it is not a widened cap, adds no coordinate and leaves within-cap association unchanged.
 - Logic-map impact: NONE — this update records the E4 local and Windows results and drafts E2 without code; its feature row and 4.3 paragraph were committed to the map with the implementation (`9ee11a4`). Earlier: the fast-rise local result changed nothing; its feature row and 4.2 paragraph were committed to the map with the implementation (`4f0665b`). Earlier: the gate's feature row and 4.3 paragraph were committed with its implementation (`2cb0b52`); the v3 implementation evidence records the top-exit row and paragraph.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair. The attrition path is an instance of F04 (stale continuation after an ambiguity), F05 (EMPTY-phase fill ownership) and F08 (owner re-adoption); no new entry.

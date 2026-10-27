@@ -1730,7 +1730,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-27 | [Step-12 Windows receipt](60-evidence/s11/2026-10-27-step12-windows-receipt.md) | SPL#4 BASE 20–28 s 저장 trace의 fill owner 값 읽기(검출기 실행 없음). FOR-1 동결 판정: NOT CONFIRMED(W1 성립, W2는 0035에서 실패 — 22.0–24.5 s의 새 확인). 0018은 14.5 s에 끝난 확인의 고정 값으로 소유자가 됨 |
 | 2026-10-27 | [FOR-2 fast-rise owner desk review](50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md) | 빠른 충전에서 owner 위로 올라가는 수위의 admission과 phase owner(2·3번 질문) desk 검토, 그리고 SPL#4 BASE 20–27 s 수면 사람 표시 review-015의 판정 기준(결과 전 동결) |
 | 2026-10-27 | [Fill-owner revisit handoff](60-evidence/s11/2026-10-27-fill-owner-revisit-handoff.md) | fill-owner gate 재검토 세션 인계: step 12–15, review-015/016, SPL#4 정답 수정, 2 fps 빠른 상승의 세 장벽, E4→E2→E1→E3 순서와 승인된 E4 구현 위치 |
-| 2026-10-27 | [OAR-1 owner-above readout](50-diagnostics/s11/2026-10-27-owner-above-readout.md) | E2 설계 입력(읽기 전용): owner 위 후보 중 admitted tracklet이 32 px 넘게 위에 있으면 sample5 잘못된 행 21개 중 20개를 잡고 sample7 맞는 행 9개를 잃음. Windows readout: SPL#4 BASE 0건(0018 위에 admitted 없음, 14행 그대로), SPL#1 Accum 7건 |
+| 2026-10-27 | [OAR-1 owner-above readout](50-diagnostics/s11/2026-10-27-owner-above-readout.md) | E2 설계 입력(읽기 전용): owner 위 후보 중 admitted tracklet이 32 px 넘게 위에 있으면 sample5 잘못된 행 21개 중 20개를 잡고 sample7 맞는 행 9개를 잃음. Windows readout: SPL#4 BASE 0건(0018 위에 admitted 없음, 14행 그대로), SPL#1 Accum 7건. review-017: SPL#1 Accum 3건은 맞는 행(사용자 정답 기준 이득 4 대 손실 12) |
 | 2026-10-27 | [E4 co-located fill owners local](60-evidence/s11/2026-10-27-fill-owner-colocation-local.md) | E4 구현(옵트인, 기본 OFF)과 로컬 검증: 프레임 예측·K1·K3는 맞았으나 sample5 이벤트 변화로 동결된 중단 조건에 걸려 FAIL |
 
 ## 2026-10-22 누락 보완 등록 — 166개

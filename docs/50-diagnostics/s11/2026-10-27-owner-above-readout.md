@@ -1,6 +1,6 @@
 # OAR-1 — is an admitted interface above the fill owner a cue for the stale low owner?
 
-**Status: COMPLETE 2026-10-27** (local, then the [Windows readout](#windows-readout--2026-10-27)). This is design
+**Status: COMPLETE 2026-10-27** (local, then the [Windows readout](#windows-readout--2026-10-27), then [review-017](#review-017-result--2026-10-27)). This is design
 input for the
 [E2 draft](../../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-undercut-fill-owner-e2),
 started on the user's "시작하자" (2026-10-27). It is read-only: no detector,
@@ -19,6 +19,10 @@ flag, threshold or Recipe change.
   In 27.0–34.5 s no admitted tracklet other than 0018 has any candidate.
   On SPL#1 Accum it fires 7 times; 4 of those remove rows 142–187 px above
   the review-012 marks.
+- **Review-017: the other three SPL#1 hits are correct rows (COST).** The
+  owner lies within 10 px of the user's marks; the admitted rows above are
+  65–89 px above the level. SPL#4 Accum 66.0 s shows no Oil boundary (all
+  Foam). By user truth E2 would remove 4 wrong rows against 12 correct ones.
 
 ## Question
 
@@ -215,12 +219,72 @@ reported; it is not a condition.
 **Not in this review:** SPL#4 BASE, which E2 does not change, and any change
 to the draft rule or its 32 px step.
 
+## Review-017 result — 2026-10-27
+
+**Received:** tables R1 and R4, relayed, and the user's four screen photos of
+the panels. They are kept outside Git in the closed managed run
+`sample/output/s11-review017-relay-20261027-001`.
+- **R1:** the marked-image SHA-256 starts `422219d1`, and
+  `changed_not_red_px` is 0.
+- **R4:** the user answered in words and left the panels unmarked: "spl4는
+  모두 foam이어서 빨간선 표시 안함". The zoom header and prepare excerpts stay
+  on Windows.
+
+**SPL#1 Accum (R1):**
+
+| Time s | Mark Y | User's words | Published Y (owner 0147) | Published − mark | Admitted above (0143) | 0143 − mark | Class |
+|---|---:|---|---:|---:|---:|---:|---|
+| 669.0 | 501.0 | Oil 경계면을 빛반사로 구분 | — (not a hit) | | | | |
+| 669.5 | 506.0 | Oil 경계면을 빛반사로 구분 | 515 | +9 | 417 | −89 | **COST** |
+| 670.0 | 513.0 | Oil 경계면을 빛반사로 구분 | — (not a hit) | | | | |
+| 670.5 | 492.0 | 유체 추가 유입되면서 경계면 흔들리기 시작 | 482 | −10 | 418 | −74 | **COST** |
+| 671.0 | 476.0 | 유체 추가 유입되면서 경계면 흔들림 | — (not a hit) | | | | |
+| 671.5 | 471.0 | 유체 추가 유입되면서 경계면 흔들림 | 461 | −10 | 406 | −65 | **COST** |
+| 672.0 (anchor) | 492.5 | foam 형성 시작 | | | | | review-012 Y493.5: 1.0 px apart |
+
+- **Band:** C1 = 29.16 px. Each published row lies within 10 px of the mark.
+- **The admitted rows above** lie 65–89 px above the mark, outside the band.
+- **Anchor:** the 672.0 s mark agrees with review-012 within 1 px, so both
+  reviews mark the same boundary.
+
+**SPL#4 Accum (R4):** at 65.0–67.0 s the user saw no Oil boundary in any panel:
+"Oil 경계 없음, 이미지에 보이는 모두가 foam임".
+- **By the letter:** 66.0 s is **UNREAD**. The frozen GAIN wording was
+  `가득`, and the user said there is no Oil boundary.
+- **Reading (not frozen):** the published Oil Y505 has no Oil boundary to
+  follow, so its removal would be a gain.
+
+**Tally (user truth):**
+
+| | Rows |
+|---|---|
+| Gains (wrong rows removed) | 4: SPL#1 Accum 674.0–677.0 s (review-012). 5 if SPL#4 Accum 66.0 s is read as a gain |
+| Costs (correct rows removed) | 12: sample7 9 (0016) and SPL#1 Accum 3 (review-017) |
+| Unread | 1: SPL#4 Accum 66.0 s |
+| Separate, agent truth | sample5: 20 gains |
+
+**Reading:**
+- **By user truth E2 removes about three correct rows for every wrong one.**
+  For comparison, the contested gate's tally was 17 agent-truth gains against
+  20 user-truth costs, and its promotion is HELD.
+- **The costs share one pattern.** The owner is the true level, and the
+  admitted tracklet above it is something else:
+  - sample7: the back arc of an obliquely viewed surface;
+  - SPL#1 Accum 669.5–671.5 s: a row 65–89 px above an Oil surface that the
+    user saw by its light reflection, as inflow begins to shake it.
+
+  So "an admitted interface above the owner" is not evidence of a stale owner
+  in fills with structure or Foam above the level.
+- **The current output was right here.** On SPL#1 Accum 669.5–671.5 s the
+  existing published rows are within 10 px of the user's marks. This is new
+  reviewed truth for that span.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-PHASE-FILL`, `OIL-TRACKLET`, `OIL-SELECTOR`
 - Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F05`, `S11-F07`, `S11-F08`
 - First harmful stage: `OIL-PHASE-FILL` publishes a single low owner while an admitted interface lies above it (sample5's 20 rows, SPL#1 Accum 674.0–677.0 s; sample7's 9 correct rows show the `S11-F07` limit). On SPL#4 BASE 27.5–34.0 s the same stage publishes the stale owner with nothing admitted above it, so this cue does not reach it.
 - Existing feature coverage: the production detector path with IFO v2 and top-exit v3, with and without E4; the original sample4/base_sample_1/sample2 Recipes, the frozen October 15 interior Recipe and the frozen October 22 empty-fill Recipes; initial states as in run 003; static preparation active; cost-first, RGB, Local XY and the contested gate OFF.
-- Execution scope: one closed managed local run (six controls, owner readouts, debug NONE) and a new read-only readout tool with unit tests; then one Windows readout of three saved bundles (five runs of the tool, no detector run), relayed as text and kept in `s11-e2-windows-relay-20261027-001`. Review-017 (a human frame review on Windows, user-forwarded) has its readings frozen here before its output. No detector code change or tuning.
+- Execution scope: one closed managed local run (six controls, owner readouts, debug NONE) and a new read-only readout tool with unit tests; then one Windows readout of three saved bundles (five runs of the tool, no detector run), relayed as text and kept in `s11-e2-windows-relay-20261027-001`. Review-017 (a human frame review on Windows, user-forwarded) had its readings frozen here before its output; its tables and the user's screen photos are kept in `s11-review017-relay-20261027-001`. No detector code change or tuning.
 - Logic-map impact: NONE — diagnostics only.
-- Failure-registry impact: NONE — no new mechanism; the oblique-arc cost is `S11-F07`.
+- Failure-registry impact: NONE — no new mechanism. The oblique-arc cost is `S11-F07`; review-017's costs are a correct level with an admitted row above it, an instance of the vertical-order-as-identity risk already in `S11-F03`/`S11-F04`.
