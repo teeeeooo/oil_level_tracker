@@ -442,8 +442,8 @@ They explain a failure; they are not extra pass criteria.
 default OFF are unchanged.
 
 **SPL#4 BASE truth corrected (user, 2026-10-27).** Review-015 shows the
-timeline's "FULL at 24–25 s" was Foam at the top. The Oil is FULL at about
-27 s. The correction is recorded in the
+timeline's "FULL at 24–25 s" was Foam at the top. Review-016 places the
+Oil FULL onset at 27.5 s. The correction is recorded in the
 [acceptance owner](../30-validation/s11-physical-interface-evidence-repair-validation.md#top-exit-v3-promotion-acceptance--2026-10-22);
 it changes no design or criterion. The [Work Plan](../00-project/work-plan.md) owns the
 promotion state; this section defines what a promotion would consist of.
@@ -1171,7 +1171,7 @@ as the serialized array index. Diagnostic detail must not change output.
   are recorded in their evidence. The 2026-10-23 fast-rise section was
   frozen before any code; its implementation and local checks are recorded
   in their evidence. The 2026-10-27 note records the user's SPL#4 BASE truth
-  correction from review-015 (a human frame review, no run); no design,
+  correction from review-015 and review-016 (human frame reviews, no run); no design,
   criterion or code changes.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state. The fast-rise draft adds one bounded association route for beyond-cap upward rows (seed of three witnessed rows in a constant-velocity line, then prediction-gated continuation); it is not a widened cap, adds no coordinate and leaves within-cap association unchanged.
 - Logic-map impact: NONE — this update records the fast-rise local result; its feature row and 4.2 paragraph were committed to the map with the implementation (`4f0665b`). Earlier: the gate's feature row and 4.3 paragraph were committed with its implementation (`2cb0b52`); the v3 implementation evidence records the top-exit row and paragraph.

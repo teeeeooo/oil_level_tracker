@@ -1,6 +1,8 @@
 # FOR-2 — the rising level above the fill owners: admission and phase owner
 
-**Status: IN PROGRESS 2026-10-27. Review-015 is answered: OWNER-LEVEL at 22.5–24.0 s, the level above both owners at 24.5–27.0 s ([result](#review-015-result--2026-10-27)).** Step 2 of the fill-owner gate revisit in
+**Status: IN PROGRESS 2026-10-27.**
+- **Review-015:** OWNER-LEVEL at 22.5–24.0 s; the level is above both owners at 24.5–27.0 s ([result](#review-015-result--2026-10-27)).
+- **Step 13:** coverage **ELIGIBILITY**: the level is a candidate in every frame but below the builder tier from 25.5 s. Review-016 places the Oil FULL onset at 27.5 s ([result](#step-13-result--2026-10-27)). Step 2 of the fill-owner gate revisit in
 the [Work Plan](../../00-project/work-plan.md): the questions-2/3 desk review
 (A). The user chose (2026-10-27, "그렇게하자") to send review-015 to Windows
 first and run this desk review from existing records while it is out. No
@@ -191,6 +193,67 @@ frames 810–900, with the review-015 sheet settings).
   onset is after 30.0 s.
 - **M2, before the onset:** marks continue review-015's rise; reported.
 - **M3, cloudiness:** the user's words on residual bubbles; reported.
+
+## Step 13 result — 2026-10-27
+
+**Received:** the Windows agent's relayed outputs (OCR) and three phone photos
+of the review-016 sheet. Photos and the relayed outputs are kept outside Git,
+in the closed managed run `sample/output/s11-review-016-photos-20261027-001`.
+- **Identity:** run `005e0d58…` (`SPL4_B_ref`), the same video, Recipe and
+  Glass as review-015.
+- **Source hashes:** the agent reported a match for all four; the relayed
+  values carry `0`/`8` OCR slips.
+
+### R, level coverage readout (24.0–27.0 s, review-015 marks)
+
+| Time s | Mark | Oil cands | Nearest px | Covered groups (≤ 32 px) | Builder-eligible covered group |
+|---|---:|---:|---:|---|---|
+| 24.0 | 730.0 | 24 | 1.0 | untracked Y731–732 (CANDIDATE_ONLY / HARD_INVALID); 0018 Y756 (+26) | 0018 only, the low owner |
+| 24.5 | 657.5 | 25 | 0.5 | untracked Y657 (CANDIDATE_ONLY, `TRACK_OPPOSITION`); `0049:0040` Y651–660 | `0040` (CONTINUATION, `INSUFFICIENT_NET_PROGRESS`) |
+| 25.0 | 634.3 | 28 | 9.3 | `0040` Y613–625; untracked Y606 (−28.3) | `0040` (ANCHOR / CONTINUATION, `INSUFFICIENT_NET_PROGRESS`) |
+| 25.5 | 550.0 | 26 | 13.0 | untracked Y521–537 | none (CANDIDATE_ONLY / HARD_INVALID; `insufficient_authority`, `TRACK_OPPOSITION`) |
+| 26.0 | 490.5 | 23 | 1.5 | untracked Y478–493 | none (same reasons) |
+| 26.5 | 426.0 | 26 | 6.0 | untracked Y419.5–435 | none (CANDIDATE_ONLY; `material_path_no_corridor`, `TRACK_OPPOSITION`) |
+| 27.0 | 382.5 | 24 | 1.5 | untracked Y373–381 | none (CANDIDATE_ONLY / HARD_INVALID, `TRACK_OPPOSITION`) |
+
+**Readings:**
+- **C1, coverage: 7 of 7.** A candidate lies within 13 px of the mark in
+  every frame.
+- **C2, eligibility: 3 of 7** (24.0, 24.5, 25.0 s). At 24.0 s the only
+  eligible covered group is the low owner 0018, 26 px below the mark. So the
+  level itself is builder-eligible only at 24.5 and 25.0 s, as `0040`.
+- **C3, continuity: 2** (`0040` at 24.5–25.0 s).
+- **C4, admission:** one covered frame, 24.0 s, which is the owner 0018. No
+  level row is admitted:
+  - `0040` fails with `INSUFFICIENT_NET_PROGRESS`, net 0.0.
+  - The untracked rows fail with `INSUFFICIENT_AUTHORITY`.
+
+**Outcome: ELIGIBILITY** (C1 ≥ 4; C2 < 4).
+- The level is seen, so candidate generation is not the barrier.
+- From 25.5 s the level rows never reach the builder tier. The recorded
+  reasons are `insufficient_authority`, `TRACK_OPPOSITION` and
+  `material_path_no_corridor`.
+- So on reviewed truth the first barrier of the fast rise is `OIL-AUTHORITY`
+  (the post-track tier), ahead of the FFF-1 association cap. The cap applies
+  only at 24.5–25.0 s, where `0040` did form and gained no net progress.
+- **Inference, not tested:** `TRACK_OPPOSITION` suggests the existing tracks,
+  the low owners among them, oppose the new higher rows. That would tie the
+  demotion to the same stale owners.
+
+### V, review-016 (27.0–30.0 s)
+
+| Time s | 27.0 | 27.5 | 28.0–30.0 |
+|---|---|---|---|
+| Mark | Y380.0 | — | — |
+| User | "foam이 glass 최상단 (foam full, oil은 아직 full 아님)" | "Oil full (경계 없음)" | "Oil full 유지, glass는 foam 잔여 기포로 뿌연상태" |
+
+- **M1, FULL onset: 27.5 s.**
+- **M2:** at 27.0 s the mark (Y380.0) agrees with review-015's mark (Y382.5)
+  within 2.5 px.
+- **M3:** from 28.0 s through 30.0 s, every panel is cloudy from residual
+  Foam bubbles.
+- The production output at 27.5–28.0 s (0018, Y721 and Y704) is therefore
+  wrong-target numeric Oil inside reviewed FULL, as recorded at step 7.
 
 ## Desk review — 2026-10-27, from existing records
 

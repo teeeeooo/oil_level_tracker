@@ -190,7 +190,8 @@ is unchanged; this fixes how it applies here.
   - The Oil is FULL at about 27 s (user). It is cloudy with residual bubbles
     and clears gradually; its transparency recovers at about 42 s (user). The
     FULL interval runs to the drain at 63 s.
-  - Review-016 (step 13) pins the FULL onset frame.
+  - Review-016 places the FULL onset at **27.5 s**: 27.0 s is not yet FULL.
+    Residual-bubble cloudiness is reviewed through 30.0 s.
   - **Not re-judged:** the frozen windows below were set from the old
     timeline and stay as the record of that run. The SPL#4 P FAIL does not
     depend on the onset, because no top-exit FULL row was published at any

@@ -461,8 +461,22 @@ then "응 그렇게 진행하자").
     - V, review-016 at 27.0–30.0 s.
   - Its readings (C1–C4, M1–M3) are frozen in FOR-2. The new tool's local
     check passed (run `s11-level-coverage-check-20261027-001`).
-- **Next:** judge step 13. The user then chooses a direction for the two
-  parts.
+- **Step 13 received**
+  ([result](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#step-13-result--2026-10-27);
+  photos in the managed run `s11-review-016-photos-20261027-001`).
+  - **Coverage: ELIGIBILITY.** The level is an Oil candidate within 13 px in
+    7 of 7 rows (24.0–27.0 s). It is builder-eligible only at 24.5–25.0 s,
+    as `0040`, which gained no net progress.
+  - **From 25.5 s it is demoted:** `insufficient_authority`,
+    `TRACK_OPPOSITION`, `material_path_no_corridor`. So the first barrier is
+    `OIL-AUTHORITY`, ahead of the association cap.
+  - **Review-016:** Oil FULL from 27.5 s, cloudy with residual bubbles
+    through 30.0 s. The truth correction records the onset.
+- **Next (the user decides):** a direction for the two parts:
+  - the 22.5–24.0 s duplicate owners;
+  - the fast rise's authority demotion. A read-only readout of the demoted
+    level rows' failed gates and their track opposition would come before
+    any design.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
