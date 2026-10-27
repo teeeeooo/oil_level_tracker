@@ -161,8 +161,10 @@ The first sample falls at 21.98 s, before the frozen span start (22.0 s).
 
 ## What it means
 
-- **Question 1 is answered from source** (above). The SPL#4 trace readout of
-  0018 and 0035 stays optional. Its fixed and recent fields would confirm the
+- **Question 1 is answered from source** (above); the step-12 readout later
+  revised its 0035 half ([below](#windows-trace-readout--readings-frozen-2026-10-27-before-its-output)).
+  At the time of this result the SPL#4 trace readout of 0018 and 0035 was
+  optional. Its fixed and recent fields would confirm the
   reading, but it is not queued.
 - **Recent motion is not the owner-validity cue.** Low owners on the local
   fills rise with the level. A test on the owner's own motion, fixed or
@@ -215,6 +217,16 @@ and all 37 FOR-1 owner rows match on Y, recent fields and `P`.
 - **NOT CONFIRMED:** otherwise, naming the first part that fails. If 0018's
   confirmation ends at or after the 22.0 s frame, its chain is dynamic from a
   fresh confirmation, not from fixed fields, and the reading is revised.
+
+**Result (2026-10-27, [step-12 receipt](../../60-evidence/s11/2026-10-27-step12-windows-receipt.md)):
+NOT CONFIRMED; W1 holds, W2 fails first on 0035.** Judged in sequence
+offsets, where the 22.0 s row is 44 (W2 did not name the unit).
+- **0018 holds:** all its rows carry fixed fields from confirmation 25–29
+  (ended 14.5 s), so the 0018 revision clause is not triggered.
+- **0035 is revised:** a fresh `anchor_trajectory` confirmation 44–49
+  (22.0–24.5 s, net 39 px upward), not stale fields.
+- **So the ambiguity is** an old 0018 chain against a freshly confirmed
+  rising 0035. Both rise in the window; they are not stationary.
 
 ## Detector Governance
 

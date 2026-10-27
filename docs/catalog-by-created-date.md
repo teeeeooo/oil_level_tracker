@@ -1727,6 +1727,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-26 | [steps 8–11 and speed handoff](60-evidence/s11/2026-10-26-step8-11-speed-handoff.md) | 세션 종료 인수인계: step-8 수신(빠른 상승 seed 없음, LBT-2 S2 종료), 빠른 충전 UNKNOWN 수용 기각, CAD-1 6 fps 결과, 속도 작업 B-1·가·나·다, step-10·11 결과와 사용자 결정(빠른 충전은 fill-owner gate 재검토로, 병렬은 개발용·기본 OFF), 다음 단계 |
 | 2026-10-26 | [steps 10–11 Windows receipt](60-evidence/s11/2026-10-26-step10-11-windows-receipt.md) | step-10·11 Windows 결과: 6 fps에서 상승 구간이 phase(`OIL-PHASE-FILL`)에서 막힘(허용 집합 비어 있음·충전 중 배출 판정, 사슬 2개는 유면으로 확인 안 됨), 2 fps는 `FILL_OWNER_AMBIGUOUS`; 속도 측정 신원 PASS, FULL 224.9→160.1 s(병렬 110.3 s), NONE 90.9→79.5 s |
 | 2026-10-27 | [FOR-1 fill-owner recency](50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) | SPL#4 2 fps `FILL_OWNER_AMBIGUOUS`의 원인 소스 판독(다시 나타난 낮은 tracklet이 고정된 확인 값으로 곧바로 소유자가 됨)과, 최근 움직임 값이 수위 소유자와 낮은 소유자를 가르는지 sample5·sample7 로컬 확인(판정 실행 전 동결) |
+| 2026-10-27 | [Step-12 Windows receipt](60-evidence/s11/2026-10-27-step12-windows-receipt.md) | SPL#4 BASE 20–28 s 저장 trace의 fill owner 값 읽기(검출기 실행 없음). FOR-1 동결 판정: NOT CONFIRMED(W1 성립, W2는 0035에서 실패 — 22.0–24.5 s의 새 확인). 0018은 14.5 s에 끝난 확인의 고정 값으로 소유자가 됨 |
 
 ## 2026-10-22 누락 보완 등록 — 166개
 

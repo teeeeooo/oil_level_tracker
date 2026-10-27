@@ -403,13 +403,21 @@ then "응 그렇게 진행하자").
 - **User (2026-10-27): "(B) 확인 먼저 하고 (A)로 넘어가는걸로 하자".** The
   read-only
   [step-12 fill-owner trace readout](../40-operations/s11-current-windows-field-qualification.md#step-12-fill-owner-trace-readout-request)
-  is READY and waits for the user to forward it. It reads 0018/0035's fixed
+  reads 0018/0035's fixed
   and recent fields in `SPL4_B_ref`, judged by FOR-1's frozen W1–W3. The tool's
   local check passed (run `s11-fill-owner-trace-check-20261027-001`).
 - **Unchanged:** no production default changed. FIELD FAIL / O2 OPEN.
-- **Next:** read the step-12 reply against W1–W3, then (A): the questions-2/3
-  desk review (admitting and preferring the rising interface above the
-  owners), from existing records, before any design is frozen.
+- **Step-12 received** ([receipt](../60-evidence/s11/2026-10-27-step12-windows-receipt.md)):
+  NOT CONFIRMED by the frozen rule. W1 holds; W2 fails first on 0035.
+  - 0018 holds: dynamic from fixed fields of a confirmation that ended at
+    14.5 s.
+  - 0035 is revised: a fresh `anchor_trajectory` confirmation over
+    22.0–24.5 s (net 39 px upward), not stale fields.
+  - The ambiguity is an old chain against a fresh rising one. Both rise in
+    the window (0018 about 70–80 px); they are not stationary.
+- **Next:** (A) the questions-2/3 desk review (admitting and preferring the
+  rising interface above the owners), from existing records, before any
+  design is frozen.
 
 **Session handoff — 2026-10-26:** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),
