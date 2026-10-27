@@ -1,5 +1,7 @@
 # S11 fast-fill path handoff — 2026-10-27 (session close)
 
+**Superseded by the [graph-editing direction handoff](2026-10-27-graph-editing-direction-handoff.md)** (final session close).
+
 ## Current disposition
 
 S11 is ACTIVE; O2 is OPEN; the Windows field result remains FIELD FAIL. The

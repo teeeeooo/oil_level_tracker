@@ -382,7 +382,27 @@ Facts it records:
 The gate is implemented and its local check passed. No Windows request is
 queued.
 
-**Session handoff — 2026-10-27, session close (latest):** start with the
+**Session handoff — 2026-10-27, final session close (latest):** start with
+the
+[graph-editing direction handoff](../60-evidence/s11/2026-10-27-graph-editing-direction-handoff.md).
+- **FER-1:** E-ABSENT. **PSD-1:** NO SEPARATION. Every frame-local handle
+  for SPL#4's 2 fps fast fill is closed. The agent recommended stopping new
+  detector mechanism work.
+- **The user proposed a new direction (open):**
+  - an auto-drawn graph above the source-context image;
+  - free editing tools (points, lines, draggable curves, extra lines, memos);
+  - the user judges the Recipe criteria (`JudgmentRule`) and submits the
+    report.
+- **Decided:**
+  - the judgment criteria are the existing `JudgmentRule`;
+  - the report does not show edit history.
+- **Open:** the first-version scope.
+- **Next session:** start by interviewing the user on the new version's
+  purpose and scope. No product direction, acceptance or default has changed
+  yet. No Windows request is queued.
+
+**Session handoff — 2026-10-27, session close (superseded by the final
+session close):** the
 [fast-fill path handoff](../60-evidence/s11/2026-10-27-fast-fill-path-handoff.md).
 - **E4:** Windows PASS, default OFF.
 - **E2:** parked. **E1:** not viable as drafted; the detector sees no Foam on
