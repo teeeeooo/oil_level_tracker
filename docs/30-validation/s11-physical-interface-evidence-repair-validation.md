@@ -311,6 +311,9 @@ by the user ("일단 구현은 이대로 진행해보자").** **Local result:**
 (run at `9ee11a4`): K1 PASS; K2 frames exactly as predicted; K3 within
 32 px; sample5 events change outside the K2 frames. **User (2026-10-27):**
 "1번으로 진행하자. 범위 밖 변경이지만 오히려 신뢰도가 올라가는 변경으로 생각됨"; the Windows comparison below goes ahead and these checks are not edited.
+**Windows result (2026-10-27):** [PASS](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md#windows-spl4-comparison--2026-10-27):
+exactly 23.0 and 23.5 s co-located (Y781.0, Y757.0; +13.0 and −4.5 px); every
+other BASE and Accum row equal.
 These checks accompany the
 [co-located fill owners (E4)](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-co-located-fill-owners-e4).
 They do not change after results.

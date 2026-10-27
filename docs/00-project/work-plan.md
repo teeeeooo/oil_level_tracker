@@ -390,8 +390,10 @@ queued.
   default OFF). Its local checks FAIL on a frozen stop condition, recorded in
   the [E4 local evidence](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md).
 - The user accepted the out-of-frame changes and chose the Windows SPL#4
-  comparison. Next: relay the queued E4 request and read its reply. The
-  checkpoint below holds the detail.
+  comparison. It PASSES its frozen condition (2026-10-27,
+  [receipt](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md#windows-spl4-comparison--2026-10-27)).
+  No Windows request is queued. Next: the E2 draft. The checkpoint below
+  holds the detail.
 
 **Resume checkpoint — 2026-10-27, fill-owner gate revisit:**
 [FOR-1](../50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) is
@@ -560,9 +562,17 @@ then "응 그렇게 진행하자").
     two added rows. Nothing is retuned.
 - **User (2026-10-27): "1번으로 진행하자. 범위 밖 변경이지만 오히려 신뢰도가 올라가는 변경으로 생각됨"** — the sample5 changes are accepted, and the
   local verdict stays FAIL as recorded.
-- **Next:** the [E4 SPL#4 comparison request](../40-operations/s11-current-windows-field-qualification.md#e4-spl4-comparison-request)
-  is queued. Pass: exactly 23.0 and 23.5 s co-located, within 32 px of
-  Y768.0 and Y761.5, every other row equal. Then E2 → E1 → E3.
+- **E4 Windows SPL#4 comparison: PASS** against the frozen condition
+  ([receipt](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md#windows-spl4-comparison--2026-10-27)).
+  - Identity PASS: the reference equals step-7 `SPL4_B_ref` in every row.
+  - Exactly 23.0 and 23.5 s are co-located and publish Y781.0 and Y757.0
+    (+13.0 and −4.5 px from the marks). Every other row is equal.
+  - Events (not judged): BASE review and low-confidence events now start at
+    24.0 s; the 22.5 s UNKNOWN row is alone and below the 0.5 s event
+    minimum. Coverage 18.2 → 19.3 %. Retrospective unchanged.
+  - E4 stays opt-in and default OFF. No FULL; the other barriers remain.
+- **Next:** draft E2 (fail closed on a stale low owner), frozen with its
+  checks before code. Then E1 → E3.
 
 **Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),

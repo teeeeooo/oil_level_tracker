@@ -14,6 +14,11 @@ FAIL on a frozen stop condition** against the
   unchanged.
 - **User decision (2026-10-27):** accept the out-of-frame changes and go on to
   the Windows SPL#4 comparison ("1번으로 진행하자. 범위 밖 변경이지만 오히려 신뢰도가 올라가는 변경으로 생각됨").
+- **Windows SPL#4 comparison (2026-10-27): PASS** against the frozen
+  condition ([receipt](#windows-spl4-comparison--2026-10-27)). Exactly 23.0 and
+  23.5 s are co-located and publish Y781.0 and Y757.0, +13.0 and −4.5 px from
+  the review-015 marks. Every other row is equal. E4 stays opt-in and default
+  OFF.
 - **Authority:** the [Work Plan](../../00-project/work-plan.md).
 
 ## What was built
@@ -108,9 +113,9 @@ It was implemented at `9ee11a4`.
 
 ## What this does not show
 
-- **Windows effect:** the SPL#4 prediction (23.0 and 23.5 s co-located) is
-  untested. The Windows pass condition compares rows; event effects like
-  sample5's are possible there too.
+- **Windows effect (local record):** the SPL#4 prediction was untested here;
+  the [Windows comparison](#windows-spl4-comparison--2026-10-27) below now
+  answers it.
 - **Accuracy:** nothing beyond the user's judgments. This is not a promotion.
 
 ## User decision — 2026-10-27
@@ -125,12 +130,79 @@ It was implemented at `9ee11a4`.
 **Next:** the [E4 SPL#4 comparison request](../../40-operations/s11-current-windows-field-qualification.md#e4-spl4-comparison-request)
 is queued. E2 → E1 → E3 follow, each frozen before code.
 
+## Windows SPL#4 comparison — 2026-10-27
+
+**Received:** the relayed tables, kept outside Git in the closed managed run
+`sample/output/s11-e4-windows-relay-20261027-001`. The bundles stay on
+Windows.
+- **Runs:** `SPL4_C_ref` `bfc8ed72…` (IFO v2 + top-exit v3) and
+  `SPL4_C_coloc` `8b107768…` (+ E4). SPL#4 0–90 s, 2 fps, FULL debug, the
+  step-7 session, run with step 7's headless runner pattern.
+- **Identity:** the four source hashes match. The relayed
+  sequence-resolver hash carries OCR slips (`b`/`8`, `8`/`0`, `8`/`B`), and
+  the agent reported a match. The resolver versions are as required, with
+  `+fill-owner-colocation-v1` only on the candidate. Video `9f494a6f…`,
+  53,165,455 bytes, 30 fps, 7,800 frames; Recipe `8eb2c2fc…`, unmodified.
+  181 rows per Glass on both runs; 0 duplicate, missing or timestamp
+  mismatches.
+- **Also in the reply:** the step-15 readout, re-returned without a rerun. Its
+  JSON hash `c39edfd6…` equals the
+  [recorded step-15 result](../../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#step-15-result--2026-10-27),
+  so nothing new.
+
+| Check (frozen with the design) | Result |
+|---|---|
+| Identity: `SPL4_C_ref` = step-7 `SPL4_B_ref` | **PASS.** 0 differing rows on BASE and Accum |
+| Exactly 23.0 and 23.5 s become `FILL_OWNER_COLOCATED` (BASE) | **PASS.** f690/23.0 and f705/23.5 only; BASE `FILL_OWNER_AMBIGUOUS` 10 → 8. Accum has none (35 ambiguous in both) |
+| Each publishes a numeric row within 32 px of the review-015 mark | **PASS.** 23.0 s: UNKNOWN → FILLING Y781.0 (mark 768.0, +13.0 px). 23.5 s: UNKNOWN → FILLING Y757.0 (mark 761.5, −4.5 px) |
+| Every other BASE and Accum row is equal | **PASS.** BASE differs in those two rows only; Accum differs in none |
+
+**Verdict: PASS.**
+
+**Owner rows in the co-located frames** (allowed set = both owners
+`0018` and `0035`):
+
+| Time s | `0018` rows (Y) | `0035` rows (Y) | Selected | Mark |
+|---|---|---|---|---|
+| 23.0 | 781 | 758, 769, 757 | 781 (`0018`) | 768.0 |
+| 23.5 | 766, 757, 765 | 742 | 757 (`0018`) | 761.5 |
+
+At 23.0 s the selector chose `0018`'s Y781 although `0035` had a row at Y769,
+1 px from the mark. Both are within the frozen 32 px; the choice is the
+existing selector's, unchanged by E4.
+
+**Events and retrospective** (not in the frozen condition; read against
+review-015/016, BASE Oil FULL from 27.5 s):
+- **Retrospective:** UNRESOLVED on both Glasses in both runs, same reason. No
+  change, unlike sample5.
+- **BASE events** (Accum unchanged):
+
+  | Event | Reference | E4 |
+  |---|---|---|
+  | `REVIEW_REQUIRED` (UNKNOWN run) | 22.5–27.0 s | 24.0–27.0 s |
+  | `LOW_CONFIDENCE_START` | 23.0–27.0 s | 24.0–27.0 s |
+  | Coverage review at 90.0 s | 18.2 % | 19.3 % |
+
+- **Why (from `domain/events.py`):** a `REVIEW_REQUIRED` event covers a run of
+  UNKNOWN rows lasting at least 0.5 s. The two new rows split the 22.5–27.0 s
+  run. The 22.5 s row stays UNKNOWN, but alone it lasts 0 s, so no event
+  covers it now. The low-confidence run (below 0.35) started at 23.0 s and now
+  starts at 24.0 s. Coverage rises by 2 of 181 rows.
+- **Against the truth:** the two rows follow the reviewed rise (marks 768.0
+  and 761.5). 22.5 s (mark 781.5) and 24.0–27.0 s remain unpublished, so FULL
+  from 27.5 s is still out of reach, as the barriers in series predicted. The
+  one loss is that the 22.5 s UNKNOWN row is no longer inside a review event.
+
+**What it does not show:** a field PASS, a promotion or any FULL. E4 stays
+opt-in and default OFF; FIELD FAIL / O2 OPEN and review-006 pending are
+unchanged. E2 → E1 → E3 follow, each frozen before code.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-PHASE-FILL`, `OIL-PHASE-INITIAL`, `OIL-SELECTOR`, `PUBLICATION-PROVENANCE`
 - Failure-registry entries: `S11-F04`, `S11-F05`, `S11-F07`, `S11-F08`
 - First harmful stage: none found locally. sample5's K2 rows are within 32 px of the agent estimate, and its out-of-frame changes are the downstream `OIL-PHASE-INITIAL` retrospective and publication aggregates of those rows, which hit a frozen stop condition.
 - Existing feature coverage: the production detector path with IFO v2 and top-exit v3 in both arms (the WP09 integrated candidate); the original sample4/base_sample_1/sample2 Recipes, the frozen October 15 interior Recipe and the frozen October 22 empty-fill Recipes; initial states as in run 003; static preparation active; cost-first, RGB, Local XY and the contested gate OFF.
-- Execution scope: unit tests with mutation checks, the full suite, and one closed managed local run (six controls, 2 fps, debug NONE) at `9ee11a4`, scored against the frozen predictions. No Windows execution, tuning or post-result rule change.
+- Execution scope: unit tests with mutation checks, the full suite, and one closed managed local run (six controls, 2 fps, debug NONE) at `9ee11a4`, scored against the frozen predictions. Then one Windows comparison (SPL#4 0–90 s, two runs, FULL debug), relayed as text and kept in `s11-e4-windows-relay-20261027-001`, judged on the Mac against the frozen Windows condition. No tuning or post-result rule change.
 - Logic-map impact: NONE — this record adds no code; the feature row and 4.3 paragraph were committed with the implementation (`9ee11a4`).
 - Failure-registry impact: NONE — co-location changes only an allowance after a recorded owner ambiguity; no new mechanism.
