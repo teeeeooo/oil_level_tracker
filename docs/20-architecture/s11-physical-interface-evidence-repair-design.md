@@ -713,7 +713,7 @@ so frames that any owner would have answered correctly publish UNKNOWN.
 
 ## October 27 undercut fill owner (E2)
 
-**Status: DRAFT 2026-10-27, not frozen; no code.** The second step of the
+**Status: PARKED 2026-10-27 as a draft (user: "응 E2 보류하고 E1 설계 초안으로 넘어가자"); not frozen, no code.** The second step of the
 user's order (E4 → E2 → E1 → E3), started on the user's "시작하자" after the
 [E4 Windows PASS](../60-evidence/s11/2026-10-27-fill-owner-colocation-local.md#windows-spl4-comparison--2026-10-27).
 The local predictions come from the read-only
@@ -724,7 +724,7 @@ would leave the 14 wrong-target rows.** On SPL#1 Accum it would stop 7 rows,
 4 of them 142–187 px above the review-012 marks.
 **[Review-017](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#review-017-result--2026-10-27)
 finds the other 3 SPL#1 hits correct.** By user truth E2 removes 4 wrong rows
-against 12 correct ones. Freezing waits for the user's decision.
+against 12 correct ones. The user parked E2 and moved to E1.
 
 **Problem.** A single fill owner publishes a low boundary while the level is
 higher.
@@ -826,6 +826,93 @@ tracklet, authority or association, and does not reach FULL.
   Refused with cost-first, candidate RGB and Local XY.
 - **Checks:** [drafted](../30-validation/s11-physical-interface-evidence-repair-validation.md#undercut-fill-owner-checks--2026-10-27),
   frozen with this section.
+
+## October 27 Foam-aware partition contradiction (E1)
+
+**Status: DRAFT 2026-10-27, not frozen; no code; scope open.** The third step
+of the order, started on the user's "응 E2 보류하고 E1 설계 초안으로 넘어가자".
+It is barrier 1 of the
+[barriers in series](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#barriers-in-series-at-2-fps-from-steps-1315-and-fff-1),
+and a prerequisite of E3.
+
+**Problem (steps 13–15, SPL#4 BASE 25.5–27.0 s).** The rising level is a
+candidate in every frame. Many of its rows start `CONTINUATION_ELIGIBLE`, then
+post-tracking demotes them to `CANDIDATE_ONLY` with `track_opposition` 0.80.
+- **The mechanism** is the same-frame superior-partition rule in
+  `_apply_track_opposition` (R7). Its likely peer is the lower boundary at
+  Y693–721 that the stale owner 0018 tracks.
+- **The rule needs a candidate-local contradiction**
+  (`recurrence_hard_contradiction`, R14). Per the
+  [step-14 relay](../50-diagnostics/s11/2026-10-27-fast-rise-owner-desk-review.md#step-14-result--2026-10-27),
+  the only one present on these rows is material-texture conflict, at
+  0.62–0.80:
+  - phase identity `continuation_only`, not `OPPOSED_MATERIAL`;
+  - optics 0.00–0.42, below 0.46;
+  - artifact likelihood 0.00–0.26. The rule reads artifact *signature*,
+    which is not traced.
+- **Review-015** shows the level under Foam from 24.5 s. R14 itself says Oil
+  under recent Foam has a high texture conflict because the Foam mask overlaps
+  the Oil row (`S11-F06`).
+
+**Direction (desk review E1):** material-texture conflict does not count as
+the demotion's contradiction for a row below recent Foam. This is R14's own
+Foam exception, applied to the demotion. Every other contradiction still
+counts: `OPPOSED_MATERIAL`, artifact signature ≥ 0.44 and optics ≥ 0.46.
+
+### Why the scope is open
+
+**New reading from the kept step-14 relay:** R14's "below recent Foam"
+condition does not hold on the frames E1 is for.
+- **R14's condition** is `ordered_lower`: the row lies at least the lower
+  separation below the Foam-material identity row, the Foam identity is below
+  0.20, and the Foam seed is at most 3.0 s old.
+- **At 24.5–25.0 s** the level rows are ordered-lower. They fail only
+  `ordered_lower_cross_representation`, and Y613 holds
+  `ordered_lower_interface`.
+- **At 25.5–27.0 s** every level row fails in the non-ordered-lower branch
+  (`material_texture_conflict<0.60`, `calibrated_independent_representation`),
+  so `ordered_lower` is false. Why it drops is not read. It could be:
+  - no Foam-material row;
+  - the level rising past that row;
+  - Foam identity ≥ 0.20.
+
+| Scope | Frees on SPL#4 25.5–27.0 s | Known risk |
+|---|---|---|
+| A. R14's ordered-lower condition | nothing (inference from the failed gates); only 24.5–25.0 s rows, where the level was already eligible | none new; `S11-F06` unchanged |
+| B. Below a same-frame eligible Foam front | the level rows, if the Foam front lies above them (review-015: under Foam) | SPL#1 Accum 673–679 s: ATG-1 found texture-excluded rows between the Foam front and the reviewed boundary, and the published rows there are 142–187 px above the review-012 marks. B would free that family |
+
+Neither is ready. A misses the case, and B frees known wrong rows. A third
+scope needs the reason `ordered_lower` drops at 25.5 s.
+
+**What E1 changes, and what it does not:**
+- **Authority only.** Freed rows would be `CONTINUATION_ELIGIBLE`. On SPL#4
+  the level still steps 59–84 px per sample, beyond the 32 px association cap
+  (barrier 2), so no output row is expected to change there (inference).
+- **So E1 alone is judged by trace authority tiers, not rows.** Its row risk
+  lies where freed rows sit within the cap: SPL#1 Accum Foam-layer rows, and
+  sample4's lower-rim and internal-partition rows, which R7 was added to keep
+  non-numeric.
+- **Not reopened:** TPA-1's terminal-pair exemption in
+  `_cross_representation_support` ("do not retry the terminal-pair exemption
+  alone"). E1 touches the demotion's contradiction test, not the identity
+  support.
+
+### Next: a read-only readout before any rule (proposed)
+
+The readout would list every post-track demotion whose only traced local
+contradiction is texture conflict. For each such candidate:
+- frame, Y, source, opposition and peer;
+- `ordered_lower`, the Foam-material identity and row where traced;
+- the same frame's Foam-front candidates (Y, eligibility, selected).
+
+Where:
+- SPL#4 BASE 20–35 s and SPL#1 Accum 660–690 s, from the saved FULL-debug
+  bundles on Windows;
+- sample4 locally, as R7's protected case.
+
+It would show which scope frees the level and not the Foam-layer rows, and
+what drops `ordered_lower` at 25.5 s. Then the rule and its checks are
+drafted and frozen.
 
 ## October 23 fast-rise association
 
@@ -1385,7 +1472,10 @@ as the serialized array index. Diagnostic detail must not change output.
   Windows readout of three saved bundles (no detector run, relayed as text,
   closed run `s11-e2-windows-relay-20261027-001`), and review-017 (a human
   frame review, closed run `s11-review017-relay-20261027-001`); no detector
-  code changes.
+  code changes. The user parked E2. The 2026-10-27 Foam-aware partition
+  contradiction (E1) section is a draft with its scope open: it reads the
+  kept step-14 relay and the R7/R14/ATG-1/TPA-1 records and source only; no
+  run, code or Windows execution.
 - Difference from prior failures: distinguish measured input availability from physical-role discrimination before choosing a consumer. Neither the rejected legacy seed-anchor shortcut nor a new both-native gate can erase accepted weak support and count as a repair. New raster contours would require their own lineage and qualification; source Y/peak hull substitution, mask tuning and missing-evidence bypass remain prohibited. The fill-owner gate removes a win by attrition after a recorded ambiguity; it adds no allowance, coordinate, lease or threshold and changes no lifecycle state. The fast-rise draft adds one bounded association route for beyond-cap upward rows (seed of three witnessed rows in a constant-velocity line, then prediction-gated continuation); it is not a widened cap, adds no coordinate and leaves within-cap association unchanged.
-- Logic-map impact: NONE — this update records the E4 local and Windows results and drafts E2 without code; its feature row and 4.3 paragraph were committed to the map with the implementation (`9ee11a4`). Earlier: the fast-rise local result changed nothing; its feature row and 4.2 paragraph were committed to the map with the implementation (`4f0665b`). Earlier: the gate's feature row and 4.3 paragraph were committed with its implementation (`2cb0b52`); the v3 implementation evidence records the top-exit row and paragraph.
+- Logic-map impact: NONE — this update records the E4 local and Windows results, drafts and parks E2 and drafts E1, all without code; its feature row and 4.3 paragraph were committed to the map with the implementation (`9ee11a4`). Earlier: the fast-rise local result changed nothing; its feature row and 4.2 paragraph were committed to the map with the implementation (`4f0665b`). Earlier: the gate's feature row and 4.3 paragraph were committed with its implementation (`2cb0b52`); the v3 implementation evidence records the top-exit row and paragraph.
 - Failure-registry impact: NONE — F03/F04/F09/F10 already cover physical-identity, provenance and evidence-shortcut risks. The new result is an availability boundary, not a newly adopted failure mechanism or field repair. The attrition path is an instance of F04 (stale continuation after an ambiguity), F05 (EMPTY-phase fill ownership) and F08 (owner re-adoption); no new entry.

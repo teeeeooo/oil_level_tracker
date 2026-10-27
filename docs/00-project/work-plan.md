@@ -400,8 +400,11 @@ queued.
   The user chose review-017 of the four unreviewed hits before deciding.
   [Review-017](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#review-017-result--2026-10-27)
   finds the three SPL#1 hits correct. The user-truth tally is 4 gains against
-  12 costs. No Windows request is queued. Next: the user decides whether to
-  freeze or park E2. The checkpoint below holds the detail.
+  12 costs. The user parked E2. E1 is DRAFTED with its scope open: R14's
+  ordered-lower condition fails on SPL#4 25.5–27.0 s, and a Foam-front
+  scope would free SPL#1 Accum's Foam-layer rows. No Windows request is
+  queued. Next: the user decides on the proposed read-only E1 readout. The
+  checkpoint below holds the detail.
 
 **Resume checkpoint — 2026-10-27, fill-owner gate revisit:**
 [FOR-1](../50-diagnostics/s11/2026-10-27-fill-owner-recency-local.md) is
@@ -621,8 +624,24 @@ then "응 그렇게 진행하자").
     by the letter; read as a gain it would make 5.
   - **User-truth tally: 4 gains, 12 costs.** sample5's 20 agent-truth gains
     are separate. The costs are true levels with an admitted row above them.
-- **Next: the user decides** whether to freeze E2 or park it and go to E1.
-  Then E1 → E3.
+- **User (2026-10-27): "응 E2 보류하고 E1 설계 초안으로 넘어가자"** — E2 is
+  parked as a draft (no code, not frozen).
+- **[E1 draft](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-foam-aware-partition-contradiction-e1)**
+  (Foam-aware partition contradiction), not frozen, no code:
+  - **Target:** the post-track demotion of SPL#4's level rows at 25.5–27.0 s
+    (opposition 0.80, same-frame superior partition). Their only traced
+    local contradiction is texture conflict 0.62–0.80.
+  - **Scope open.** R14's ordered-lower condition holds at 24.5–25.0 s but
+    not at 25.5–27.0 s (the failed gates show it), so R14's exception as-is
+    frees nothing there.
+  - **A "below a Foam front" scope** would also free SPL#1 Accum's Foam-layer
+    rows (ATG-1), which are known wrong.
+  - **E1 alone changes authority only.** The 32 px cap still blocks the
+    level, so no SPL#4 row is expected to change.
+- **Next: the user decides** on the proposed read-only E1 readout. It covers
+  SPL#4 BASE 20–35 s and SPL#1 Accum 660–690 s on Windows, plus sample4
+  locally, and reads which scope frees the level and not the Foam-layer rows.
+  Then E1 is frozen, then E3.
 
 **Session handoff — 2026-10-26 (superseded):** start with the
 [steps 8–11 and speed handoff](../60-evidence/s11/2026-10-26-step8-11-speed-handoff.md),

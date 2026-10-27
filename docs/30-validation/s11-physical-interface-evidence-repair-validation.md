@@ -362,8 +362,8 @@ as step 7's reference, with and without E4.
 
 ## Undercut fill-owner checks — 2026-10-27
 
-**Status: DRAFT 2026-10-27, not frozen; freezing waits for the user's
-decision after [review-017](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#review-017-result--2026-10-27)
+**Status: PARKED 2026-10-27 with the E2 draft (user: "응 E2 보류하고 E1 설계 초안으로 넘어가자"); not frozen.
+Read after [review-017](../50-diagnostics/s11/2026-10-27-owner-above-readout.md#review-017-result--2026-10-27)
 (user-truth tally 4 gains, 12 costs).** These checks accompany the
 [undercut fill owner (E2)](../20-architecture/s11-physical-interface-evidence-repair-design.md#october-27-undercut-fill-owner-e2).
 The Windows predictions below come from the

@@ -279,6 +279,11 @@ the panels. They are kept outside Git in the closed managed run
   existing published rows are within 10 px of the user's marks. This is new
   reviewed truth for that span.
 
+## User decision — 2026-10-27
+
+**User: "응 E2 보류하고 E1 설계 초안으로 넘어가자".** E2 stays a parked draft, with no code and no freeze. The
+order continues with E1, then E3.
+
 ## Detector Governance
 
 - Logic-map nodes: `OIL-PHASE-FILL`, `OIL-TRACKLET`, `OIL-SELECTOR`
