@@ -382,7 +382,35 @@ Facts it records:
 The gate is implemented and its local check passed. No Windows request is
 queued.
 
-**Session handoff — 2026-10-27, final session close (latest):** start with
+**Session handoff — 2026-10-28 (latest):** start with the
+[v2 direction interview handoff](../60-evidence/s11/2026-10-28-v2-direction-interview-handoff.md).
+- **The user decided the v2 direction in an interview.** None of it is
+  executed yet:
+  - editing is the default flow of every inspection;
+  - the draft is extracted from the context image;
+  - the lines are Oil, Foam and reference, plus FULL/EMPTY/unknown
+    segments;
+  - the judgment is computed automatically, and the user may override it
+    with a reason;
+  - the detector is off in the new flow;
+  - S11 is frozen as unmet and a new milestone is opened when v2 starts;
+  - v2 lives in the same repository: a v1 tag and archive branch, then a
+    clean `main`, with no v1 compatibility.
+- **v2 implementation has NOT started** (user: "아직 v2 구현 시작은
+  아니야").
+  - S11 stays ACTIVE, O2 OPEN and FIELD FAIL until v2 starts.
+  - The roadmap is unchanged.
+- **Web UI spike:** on branch `spike/webui` (`fb3e076`, `fb627cb`).
+  - Mac/Chromium check: 23/23 PASS.
+  - **Queued Windows request:** W1–W9, SPL#4 BASE and SPL#1 BASE, plus a
+    packaged build.
+- **Next session:**
+  1. take in the spike's Windows result block;
+  2. continue the v2 interview with the user;
+  3. only then start v2.
+
+**Session handoff — 2026-10-27, final session close (superseded by the
+2026-10-28 handoff):** start with
 the
 [graph-editing direction handoff](../60-evidence/s11/2026-10-27-graph-editing-direction-handoff.md).
 - **FER-1:** E-ABSENT. **PSD-1:** NO SEPARATION. Every frame-local handle
