@@ -1738,6 +1738,7 @@ author 시각은 Asia/Seoul 기준 2026-10-13 15:56:20이며, 최초 Git 추가�
 | 2026-10-27 | [FPC-1 partition contradiction readout](50-diagnostics/s11/2026-10-27-partition-contradiction-readout.md) | E1 설계 입력(읽기 전용): 로컬 대조군 6개의 tracking 후 강등 2,057행이 모두 texture conflict만으로 강등됨. ordered-lower 범위는 479행, Foam front 아래 범위는 167행을 풀어 구조 행과 R7 보호 시점 행까지 포함. Windows(재실행): SPL#4 25.5–27.0 s 수면은 두 범위 모두 못 풂(Foam 미검출), SPL#1 Accum은 1,874–2,644행을 풂 |
 | 2026-10-27 | [OAR-1 owner-above readout](50-diagnostics/s11/2026-10-27-owner-above-readout.md) | E2 설계 입력(읽기 전용): owner 위 후보 중 admitted tracklet이 32 px 넘게 위에 있으면 sample5 잘못된 행 21개 중 20개를 잡고 sample7 맞는 행 9개를 잃음. Windows readout: SPL#4 BASE 0건(0018 위에 admitted 없음, 14행 그대로), SPL#1 Accum 7건. review-017: SPL#1 Accum 3건은 맞는 행(사용자 정답 기준 이득 4 대 손실 12) |
 | 2026-10-27 | [E4 co-located fill owners local](60-evidence/s11/2026-10-27-fill-owner-colocation-local.md) | E4 구현(옵트인, 기본 OFF)과 로컬 검증: 프레임 예측·K1·K3는 맞았으나 sample5 이벤트 변화로 동결된 중단 조건에 걸려 FAIL |
+| 2026-10-28 | [v2 direction interview handoff](60-evidence/s11/2026-10-28-v2-direction-interview-handoff.md) | v2 방향 인터뷰 결정 기록(편집 중심 기본 흐름, 맥락 이미지 초안, Oil·Foam·참고선과 구간, 자동 판정+사유 있는 덮어쓰기, detector 끔, S11 동결·새 마일스톤, 같은 repo 정리, v1 비호환, 웹 UI 후보). 결정은 아직 미실행이고 v2 구현은 시작 전. `spike/webui` 웹 UI spike의 Mac 결과와 대기 중인 Windows 요청, spike 후 인터뷰 주제 |
 
 ## 2026-10-22 누락 보완 등록 — 166개
 
