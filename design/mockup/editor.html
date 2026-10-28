@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v2 편집 화면 목업</title>
+<!--
+  Static layout mock-up for user confirmation (work-plan step 1b).
+  Synthetic data only; not product code. Tokens follow DESIGN.md §2–§6.
+-->
+<style>
+:root {
+  --bg-1:#FFFFFF; --bg-2:#FAFAFA; --bg-3:#F5F5F5; --bg-4:#F0F0F0; --bg-5:#EBEBEB;
+  --fg-1:#242424; --fg-2:#424242; --fg-3:#616161; --fg-disabled:#BDBDBD;
+  --stroke-1:#D1D1D1; --stroke-2:#E0E0E0; --stroke-3:#F0F0F0;
+  --brand:#0F6CBD; --brand-hover:#115EA3; --brand-pressed:#0C3B5E; --brand-tint:#EBF3FC;
+  --oil:#1F77D0; --foam:#E8710A; --reference:#616161; --line-halo:rgba(255,255,255,0.9);
+  --full-band:rgba(31,119,208,0.10); --empty-band:rgba(97,97,97,0.10);
+  --cannot-judge:#8A8A8A; --compressor:#8764B8; --playhead:#242424; --memo:#C19C00;
+  --pass:#0E700E; --pass-bg:#F1FAF1; --fail:#C50F1F; --fail-bg:#FDF3F4;
+  --review:#BC4B09; --review-bg:#FFF9F5; --pending:#616161; --pending-bg:#F5F5F5;
+  --font:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+  --mono:"Cascadia Mono",Consolas,ui-monospace,monospace;
+}
+* { box-sizing:border-box; }
+html, body { margin:0; height:100%; }
+body { background:var(--bg-2); color:var(--fg-1); font:400 14px/20px var(--font); }
+.app { display:grid; grid-template-rows:48px 1fr; height:100vh; min-width:1280px; min-height:800px; }
+
+/* toolbar */
+.toolbar { display:flex; align-items:center; gap:8px; padding:0 12px; background:var(--bg-3); border-bottom:1px solid var(--stroke-1); }
+.title { display:flex; flex-direction:column; min-width:0; width:230px; }
+.title b { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.title span { font-size:12px; line-height:16px; color:var(--fg-3); }
+.sep { width:1px; height:24px; background:var(--stroke-1); margin:0 4px; }
+.tool { display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 10px; border:0; border-radius:4px; background:transparent; color:var(--fg-2); font:inherit; cursor:pointer; }
+.tool:hover { background:var(--bg-4); }
+.tool[aria-pressed="true"] { background:var(--brand-tint); color:var(--brand); }
+.tool svg { width:20px; height:20px; }
+.kbd { font-size:12px; color:var(--fg-3); }
+.tool[aria-pressed="true"] .kbd { color:var(--brand); }
+.spacer { flex:1; }
+.picker { display:flex; align-items:center; gap:8px; height:32px; padding:0 10px; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; background:var(--bg-1); min-width:250px; }
+.picker .name { font-weight:600; }
+.picker .more { margin-left:auto; color:var(--fg-3); font-size:12px; }
+.btn { height:32px; padding:0 12px; border-radius:4px; font:inherit; cursor:pointer; border:1px solid var(--stroke-1); background:var(--bg-1); color:var(--fg-1); }
+.btn:hover { background:var(--bg-4); }
+.btn.primary { background:var(--brand); border-color:var(--brand); color:#fff; }
+.btn.primary:hover { background:var(--brand-hover); }
+.btn[disabled] { background:var(--bg-4); border-color:var(--bg-4); color:var(--fg-disabled); cursor:not-allowed; }
+.icon-btn { width:32px; padding:0; display:inline-flex; align-items:center; justify-content:center; border-color:transparent; background:transparent; }
+.icon-btn svg { width:20px; height:20px; color:var(--fg-2); }
+
+.badge { display:inline-flex; align-items:center; height:20px; padding:0 6px; border-radius:4px; font-size:12px; line-height:16px; font-weight:600; }
+.badge.pass { color:var(--pass); background:var(--pass-bg); }
+.badge.fail { color:var(--fail); background:var(--fail-bg); }
+.badge.review { color:var(--review); background:var(--review-bg); }
+.badge.pending { color:var(--pending); background:var(--pending-bg); }
+
+/* main */
+.main { display:grid; grid-template-columns:1fr 360px; min-height:0; }
+.left { display:grid; grid-template-rows:32px 1fr 32px 1fr 32px; min-width:0; min-height:0; background:var(--bg-1); border-right:1px solid var(--stroke-1); }
+.phead { display:flex; align-items:center; gap:12px; padding:0 12px; height:32px; background:var(--bg-3); border-bottom:1px solid var(--stroke-1); font-weight:600; }
+.phead .legend { display:flex; gap:12px; font-weight:400; font-size:12px; color:var(--fg-3); }
+.phead .legend i { display:inline-block; width:16px; height:2px; vertical-align:middle; margin-right:4px; }
+.phead .right { margin-left:auto; display:flex; gap:8px; align-items:center; font-weight:400; font-size:12px; color:var(--fg-3); }
+.toggle { display:inline-flex; align-items:center; gap:6px; color:var(--fg-2); font-size:12px; }
+.switch { width:28px; height:16px; border-radius:8px; border:1px solid var(--fg-3); position:relative; background:var(--bg-1); }
+.switch::after { content:""; position:absolute; top:2px; left:2px; width:10px; height:10px; border-radius:50%; background:var(--fg-2); }
+.switch.on { background:var(--brand); border-color:var(--brand); }
+.switch.on::after { left:14px; background:#fff; }
+.plot { position:relative; min-height:0; }
+.plot svg, .plot canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.axis { position:relative; border-top:1px solid var(--stroke-1); background:var(--bg-1); }
+.axis svg { position:absolute; inset:0; width:100%; height:100%; }
+.range-input { position:absolute; top:4px; height:24px; width:64px; border:1px solid var(--stroke-1); border-bottom:2px solid var(--brand); border-radius:4px; font:12px/16px var(--font); font-variant-numeric:tabular-nums; padding:0 6px; text-align:right; background:var(--bg-1); }
+
+/* right column */
+.right-col { display:flex; flex-direction:column; min-height:0; overflow:auto; background:var(--bg-1); }
+.section { border-bottom:1px solid var(--stroke-1); }
+.section .body { padding:12px; display:flex; flex-direction:column; gap:8px; }
+.video { position:relative; height:250px; background:#1b1f23; }
+.video canvas { width:100%; height:100%; display:block; }
+.video .cap { position:absolute; left:8px; top:8px; font-size:12px; color:#fff; background:rgba(0,0,0,.45); padding:0 6px; border-radius:4px; }
+.transport { display:flex; align-items:center; gap:4px; padding:4px 8px; border-bottom:1px solid var(--stroke-1); }
+.seg { display:inline-flex; border:1px solid var(--stroke-1); border-radius:4px; overflow:hidden; margin-left:4px; }
+.seg button { border:0; background:var(--bg-1); font:12px/16px var(--font); padding:0 8px; height:24px; color:var(--fg-2); cursor:pointer; }
+.seg button + button { border-left:1px solid var(--stroke-1); }
+.seg button.on { background:var(--brand-tint); color:var(--brand); font-weight:600; }
+.time { margin-left:auto; white-space:nowrap; font-size:12px; font-variant-numeric:tabular-nums; color:var(--fg-2); }
+.row { display:flex; align-items:center; gap:8px; }
+.label { color:var(--fg-3); font-size:12px; line-height:16px; }
+.verdict { display:flex; align-items:center; gap:8px; }
+.verdict .big { font-size:20px; line-height:28px; font-weight:600; color:var(--fail); }
+.why { font-size:12px; line-height:16px; color:var(--fg-2); }
+table { border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums; }
+th, td { text-align:left; padding:4px 0; border-bottom:1px solid var(--stroke-2); font-size:12px; line-height:16px; }
+th { color:var(--fg-3); font-weight:400; }
+td.num { text-align:right; }
+textarea, select, input[type=text] { font:inherit; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; background:var(--bg-1); padding:5px 8px; }
+textarea { min-height:52px; resize:vertical; }
+textarea:disabled { background:var(--bg-3); color:var(--fg-disabled); }
+.check { display:inline-flex; align-items:center; gap:6px; }
+.check i { width:16px; height:16px; border:1px solid var(--fg-3); border-radius:2px; display:inline-block; }
+.slider { flex:1; height:4px; background:var(--stroke-1); border-radius:2px; position:relative; }
+.slider::before { content:""; position:absolute; left:0; top:0; bottom:0; width:30%; background:var(--brand); border-radius:2px; }
+.slider::after { content:""; position:absolute; left:30%; top:-6px; width:16px; height:16px; margin-left:-8px; border-radius:50%; background:#fff; border:1px solid var(--stroke-1); box-shadow:0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.14); }
+.memo { display:flex; gap:8px; align-items:flex-start; }
+.pin { flex:none; width:20px; height:20px; border-radius:50%; background:var(--memo); color:#fff; font-size:12px; line-height:20px; text-align:center; font-weight:600; }
+.memo .t { font-size:12px; color:var(--fg-3); font-variant-numeric:tabular-nums; }
+.note { position:fixed; right:372px; bottom:40px; max-width:330px; background:var(--bg-1); border:1px solid var(--stroke-1); border-radius:8px; padding:12px; font-size:12px; line-height:16px; color:var(--fg-2); box-shadow:0 0 2px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.14); }
+.note b { color:var(--fg-1); }
+.note button { float:right; border:0; background:transparent; cursor:pointer; color:var(--fg-3); }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="toolbar">
+    <div class="title">
+      <b>SPL#4_Cooling_onoff_#2.mp4</b>
+      <span>Recipe: SPL#4 냉각 · v002 편집 중</span>
+    </div>
+    <div class="sep"></div>
+    <button class="tool" aria-pressed="true" data-tool title="잡아끌기 (G)">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 13c3-6 6 2 9-3s3-4 5-5"/><circle cx="10" cy="11" r="2.5" fill="currentColor" stroke="none"/></svg>잡아끌기 <span class="kbd">G</span></button>
+    <button class="tool" aria-pressed="false" data-tool title="연필 (P)">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l1-4 8-8 3 3-8 8z"/><path d="M11.5 5.5l3 3"/></svg>연필 <span class="kbd">P</span></button>
+    <button class="tool" aria-pressed="false" data-tool title="판단 불가 (U)">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="12" rx="1"/><path d="M3 12l6-8M7 16l10-12M13 16l4-5"/></svg>판단 불가 <span class="kbd">U</span></button>
+    <button class="tool" aria-pressed="false" data-tool title="메모 (M)">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h12v9H9l-4 3v-3H4z"/></svg>메모 <span class="kbd">M</span></button>
+    <button class="tool" aria-pressed="false" data-tool title="이동 (H, 또는 Shift-드래그)">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2v16M2 10h16M10 2l-2 2M10 2l2 2M10 18l-2-2M10 18l2-2M2 10l2-2M2 10l2 2M18 10l-2-2M18 10l-2 2"/></svg>이동 <span class="kbd">H</span></button>
+    <div class="sep"></div>
+    <button class="btn icon-btn" title="실행 취소 (Ctrl+Z)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 5L3 9l4 4"/><path d="M3 9h9a5 5 0 010 10h-2"/></svg></button>
+    <button class="btn icon-btn" title="다시 실행 (Ctrl+Shift+Z)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 5l4 4-4 4"/><path d="M17 9H8a5 5 0 000 10h2"/></svg></button>
+    <div class="spacer"></div>
+    <div class="picker" title="Glass 선택">
+      <span class="label">Glass</span><span class="name">BASE</span><span class="badge fail">FAIL</span>
+      <span class="more">2개 중 1개 확인 ▾</span>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn">저장</button>
+    <button class="btn primary" disabled title="모든 Glass를 확인해야 제출할 수 있습니다">제출</button>
+  </header>
+
+  <div class="main">
+    <section class="left">
+      <div class="phead">그래프
+        <span class="legend"><span><i style="background:var(--oil)"></i>Oil</span><span><i style="background:var(--foam)"></i>Foam</span><span><i style="border-top:1.5px dashed var(--reference);height:0"></i>참조</span></span>
+        <span class="right">세로: 0선 기준 높이 (px) · 휠 확대, Shift+휠 세로 확대</span>
+      </div>
+      <div class="plot" id="graphBox"><svg id="graph"></svg></div>
+      <div class="phead">맥락 이미지
+        <span class="right"><span class="toggle"><span class="switch"></span>배경 제거 보기</span></span>
+      </div>
+      <div class="plot" id="ctxBox"><canvas id="ctx"></canvas><svg id="ctxOver"></svg></div>
+      <div class="axis" id="axisBox"><svg id="axis"></svg><input class="range-input" id="rangeEnd" value="300" aria-label="표시 끝 시각"></div>
+    </section>
+
+    <aside class="right-col">
+      <div class="phead">원본 영상</div>
+      <div class="video"><canvas id="video"></canvas><span class="cap">BASE · Glass 확대</span></div>
+      <div class="transport">
+        <button class="btn icon-btn" title="이전 프레임 (←)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4h2v12H5zM16 4v12L8 10z"/></svg></button>
+        <button class="btn icon-btn" title="재생 (Space)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4l10 6-10 6z"/></svg></button>
+        <button class="btn icon-btn" title="다음 프레임 (→)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 4h2v12h-2zM4 4v12l8-6z"/></svg></button>
+        <span class="seg"><button class="on">1×</button><button>4×</button><button>16×</button></span>
+        <button class="btn icon-btn" title="구간 반복"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8a5 5 0 019-2l1 1M16 12a5 5 0 01-9 2l-1-1"/><path d="M14 3v4h-4M6 17v-4h4"/></svg></button>
+        <span class="time">01:35.0 / 05:00.0</span>
+      </div>
+
+      <div class="section">
+        <div class="phead">판정 <span class="right">RECOVERY · 회복 제한 120 s</span></div>
+        <div class="body">
+          <div class="verdict"><span class="big">FAIL</span><span class="badge pending">자동 계산</span></div>
+          <div class="why">기동 후 164.0 s에 회복 — 제한 120 s 초과</div>
+          <table>
+            <tr><th>압축기 기동</th><td class="num">30.0 s</td></tr>
+            <tr><th>최저 유면</th><td class="num">72.5 s</td></tr>
+            <tr><th>회복</th><td class="num">194.0 s</td></tr>
+            <tr><th>판단 불가 비율</th><td class="num">6.7 % (기준 30 % 이하)</td></tr>
+          </table>
+          <label class="check"><i></i>판정 덮어쓰기</label>
+          <textarea disabled placeholder="덮어쓸 때 사유 (필수)"></textarea>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="phead">선택</div>
+        <div class="body">
+          <div class="row"><span class="label" style="width:72px">선</span><select><option>Oil 선 1</option><option>Foam 선 1</option></select></div>
+          <div class="row"><span class="label" style="width:72px">끌기 폭</span><span class="slider"></span><span class="label">30 s</span></div>
+          <div class="row"><span class="label" style="width:72px">이 지점</span><button class="btn">모서리로 전환</button></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="phead">메모 <span class="right">그래프를 클릭해 추가</span></div>
+        <div class="body">
+          <div class="memo"><span class="pin">1</span><div><div class="t">62.0 s</div>거품 발생, 유면 식별 어려움</div></div>
+          <div class="memo"><span class="pin">2</span><div><div class="t">212.0 s</div>FULL 도달 확인</div></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div class="note" id="note"><button onclick="this.parentNode.remove()">닫기 ✕</button>
+  <b>목업 (가짜 데이터)</b><br>
+  배치와 색 규칙 확인용입니다. 잡아끌기 도구로 Oil 선을 95 s 근처에서 잡은 상태(옅은 띠 = 영향 폭 30 s)를 보여줍니다.
+  130–150 s는 반사로 <b>판단 불가</b>, 210 s 이후는 선이 Glass 맨 위라 <b>FULL</b> 자동 구간입니다.
+  표시 끝 시각 "300"은 클릭해서 입력 중인 상태입니다.
+</div>
+
+<script>
+(() => {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const T = 300, DT = 0.5, N = T / DT;            // 0.5 s columns
+  const TOP = 200;                                 // Glass rows; FULL at TOP, EMPTY at 0
+  const ZERO = 60;                                 // zero line row
+  const START = 30, PLAY = 95;
+  const PAD = { l: 52, r: 16, t: 14, b: 10 };     // plot inset so FULL/EMPTY lines stay visible
+
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const smooth = (a, b, x0, x1, x) => { const u = clamp((x - x0) / (x1 - x0), 0, 1); return a + (b - a) * (u * u * (3 - 2 * u)); };
+  function oilAt(t) {
+    if (t < START) return 150;
+    if (t < 72) return smooth(150, 38, START, 72, t);
+    if (t < 210) return smooth(38, 200, 90, 210, t);
+    if (t < 270) return 200;
+    return smooth(200, 168, 270, 300, t);
+  }
+  const foamAt = t => (t >= 40 && t <= 150) ? Math.min(TOP, oilAt(t) + smooth(0, 34, 40, 60, t) * smooth(1, 0, 120, 150, t)) : null;
+  const cannot = [[130, 150]];
+  const inCannot = t => cannot.some(([a, b]) => t >= a && t < b);
+
+  function scales(w, h) {
+    return {
+      x: t => PAD.l + (t / T) * (w - PAD.l - PAD.r),
+      y: r => PAD.t + (1 - r / TOP) * (h - PAD.t - PAD.b),
+    };
+  }
+  function path(fn, s, t0 = 0, t1 = T) {
+    let d = "", pen = false;
+    for (let t = t0; t <= t1 + 1e-9; t += DT) {
+      const v = fn(t);
+      if (v == null || inCannot(t)) { pen = false; continue; }
+      d += (pen ? "L" : "M") + s.x(t).toFixed(1) + "," + s.y(v).toFixed(1);
+      pen = true;
+    }
+    return d;
+  }
+  const hatchDef = `<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="6" height="6" fill="rgba(138,138,138,0.12)"/><line x1="0" y1="0" x2="0" y2="6" stroke="${css('--cannot-judge')}" stroke-width="1"/></pattern></defs>`;
+
+  function sharedMarks(s, w, h, withLabels) {
+    let g = "";
+    for (const [a, b] of cannot)
+      g += `<rect x="${s.x(a)}" y="${PAD.t}" width="${s.x(b) - s.x(a)}" height="${h - PAD.t - PAD.b}" fill="url(#hatch)"/>` +
+           (withLabels ? `<text x="${(s.x(a) + s.x(b)) / 2}" y="${PAD.t + 14}" text-anchor="middle" font-size="12" fill="${css('--fg-3')}">판단 불가</text>` : "");
+    g += `<line x1="${s.x(START)}" x2="${s.x(START)}" y1="${PAD.t}" y2="${h - PAD.b}" stroke="${css('--compressor')}" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+    if (withLabels) g += `<text x="${s.x(START) + 4}" y="${PAD.t + 12}" font-size="12" fill="${css('--compressor')}" font-weight="600">기동</text>`;
+    g += `<line x1="${s.x(PLAY)}" x2="${s.x(PLAY)}" y1="${PAD.t - 6}" y2="${h}" stroke="${css('--playhead')}" stroke-width="1"/>`;
+    return g;
+  }
+  function lines(s, halo) {
+    const oil = path(oilAt, s), foam = path(foamAt, s, 40, 150);
+    const h = halo ? `<path d="${oil}" stroke="${css('--line-halo')}" stroke-width="5" fill="none" stroke-linejoin="round"/>
+                      <path d="${foam}" stroke="${css('--line-halo')}" stroke-width="5" fill="none" stroke-linejoin="round"/>` : "";
+    return h + `<path d="${foam}" stroke="${css('--foam')}" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                <path d="${oil}" stroke="${css('--oil')}" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>`;
+  }
+
+  function drawGraph() {
+    const box = document.getElementById("graphBox"), svg = document.getElementById("graph");
+    const w = box.clientWidth, h = box.clientHeight, s = scales(w, h);
+    let g = hatchDef;
+    // FULL band where the line sits at the top
+    g += `<rect x="${s.x(210)}" y="${PAD.t}" width="${s.x(270) - s.x(210)}" height="${h - PAD.t - PAD.b}" fill="${css('--full-band')}"/>
+          <text x="${(s.x(210) + s.x(270)) / 2}" y="${h - PAD.b - 8}" text-anchor="middle" font-size="12" font-weight="600" fill="${css('--oil')}">FULL</text>`;
+    // grid + y ticks (px from zero line)
+    for (let r = 0; r <= TOP; r += 20) {
+      const y = s.y(r), major = (r - ZERO) % 40 === 0;
+      g += `<line x1="${PAD.l}" x2="${w - PAD.r}" y1="${y}" y2="${y}" stroke="${css(major ? '--stroke-2' : '--stroke-3')}"/>`;
+      if (major) g += `<text x="${PAD.l - 8}" y="${y + 4}" text-anchor="end" font-size="12" fill="${css('--fg-3')}" style="font-variant-numeric:tabular-nums">${r - ZERO}</text>`;
+    }
+    for (let t = 0; t <= T; t += 30) g += `<line x1="${s.x(t)}" x2="${s.x(t)}" y1="${PAD.t}" y2="${h - PAD.b}" stroke="${css('--stroke-3')}"/>`;
+    // Glass top / zero / bottom references
+    g += `<line x1="${PAD.l}" x2="${w - PAD.r}" y1="${s.y(TOP)}" y2="${s.y(TOP)}" stroke="${css('--stroke-1')}"/>
+          <text x="${w - PAD.r - 4}" y="${s.y(TOP) - 3}" text-anchor="end" font-size="12" fill="${css('--fg-3')}">Glass 위</text>
+          <line x1="${PAD.l}" x2="${w - PAD.r}" y1="${s.y(ZERO)}" y2="${s.y(ZERO)}" stroke="${css('--reference')}" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="${w - PAD.r - 4}" y="${s.y(ZERO) - 4}" text-anchor="end" font-size="12" fill="${css('--fg-3')}">0선</text>
+          <line x1="${PAD.l}" x2="${w - PAD.r}" y1="${s.y(0)}" y2="${s.y(0)}" stroke="${css('--stroke-1')}"/>`;
+    g += sharedMarks(s, w, h, true);
+    // grab-width preview around the grabbed spot (95 s ± 15 s)
+    g += `<path d="${path(oilAt, s, 80, 110)}" stroke="${css('--oil')}" stroke-opacity="0.15" stroke-width="16" fill="none" stroke-linecap="round"/>`;
+    g += lines(s, false);
+    g += `<circle cx="${s.x(PLAY)}" cy="${s.y(oilAt(PLAY))}" r="5" fill="#fff" stroke="${css('--oil')}" stroke-width="2"/>`;
+    // memo pins
+    for (const [n, t, dy] of [[1, 62, -22], [2, 212, 22]]) {
+      const cx = s.x(t), cy = s.y(oilAt(t)) + dy;
+      g += `<line x1="${cx}" x2="${cx}" y1="${cy}" y2="${s.y(oilAt(t))}" stroke="${css('--memo')}"/>
+            <circle cx="${cx}" cy="${cy}" r="10" fill="${css('--memo')}"/>
+            <text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">${n}</text>`;
+    }
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    svg.innerHTML = g;
+  }
+
+  // deterministic noise
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  function drawContext() {
+    const box = document.getElementById("ctxBox"), cv = document.getElementById("ctx"), over = document.getElementById("ctxOver");
+    const w = box.clientWidth, h = box.clientHeight, s = scales(w, h);
+    const dpr = window.devicePixelRatio || 1;
+    cv.width = w * dpr; cv.height = h * dpr;
+    const c = cv.getContext("2d"); c.scale(dpr, dpr);
+    c.fillStyle = css('--bg-1'); c.fillRect(0, 0, w, h);
+    // the context image: one 0.5 s column per x step, one Glass row per y step
+    const img = c.createImageData(N, TOP); seed = 7;
+    for (let i = 0; i < N; i++) {
+      const t = i * DT, oil = oilAt(t), foam = foamAt(t) ?? oil, glare = inCannot(t);
+      for (let r = 0; r < TOP; r++) {
+        let R, G, B;
+        if (r < oil) { const k = 0.75 + 0.25 * (r / TOP); R = 168 * k; G = 118 * k; B = 40 * k; }
+        else if (r < foam) { R = 226; G = 220; B = 204; }
+        else { R = 70; G = 82; B = 92; }
+        const n = (rnd() - 0.5) * 18; R += n; G += n; B += n;
+        if (glare && r > 70 && r < 150) { R = G = B = 235 + rnd() * 20; }
+        const p = ((TOP - 1 - r) * N + i) * 4;
+        img.data[p] = R; img.data[p + 1] = G; img.data[p + 2] = B; img.data[p + 3] = 255;
+      }
+    }
+    const tmp = document.createElement("canvas"); tmp.width = N; tmp.height = TOP;
+    tmp.getContext("2d").putImageData(img, 0, 0);
+    c.imageSmoothingEnabled = false;
+    c.drawImage(tmp, s.x(0), s.y(TOP), s.x(T) - s.x(0), s.y(0) - s.y(TOP));
+    let g = hatchDef + sharedMarks(s, w, h, false) + lines(s, true);
+    g += `<text x="${PAD.l - 8}" y="${s.y(TOP) + 10}" text-anchor="end" font-size="12" fill="${css('--fg-3')}">위</text>
+          <text x="${PAD.l - 8}" y="${s.y(0)}" text-anchor="end" font-size="12" fill="${css('--fg-3')}">아래</text>`;
+    over.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    over.innerHTML = g;
+  }
+
+  function drawAxis() {
+    const box = document.getElementById("axisBox"), svg = document.getElementById("axis");
+    const w = box.clientWidth, h = box.clientHeight, s = scales(w, h);
+    let g = "";
+    for (let t = 0; t <= T; t += 30) {
+      const x = s.x(t);
+      g += `<line x1="${x}" x2="${x}" y1="0" y2="5" stroke="${css('--stroke-1')}"/>`;
+      if (t > 0 && t < T) g += `<text x="${x}" y="20" text-anchor="middle" font-size="12" fill="${css('--fg-3')}" style="font-variant-numeric:tabular-nums">${t}</text>`;
+    }
+    g += `<text x="${s.x(0)}" y="20" text-anchor="middle" font-size="12" fill="${css('--fg-1')}" text-decoration="underline" style="text-decoration-style:dotted">0</text>`;
+    g += `<text x="${PAD.l - 30}" y="20" text-anchor="middle" font-size="12" fill="${css('--fg-3')}">s</text>`;
+    g += `<path d="M${s.x(PLAY) - 5},0 L${s.x(PLAY) + 5},0 L${s.x(PLAY)},6 Z" fill="${css('--playhead')}"/>`;
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    svg.innerHTML = g;
+    const inp = document.getElementById("rangeEnd");
+    inp.style.left = (s.x(T) - 64 + 8) + "px";
+  }
+
+  function drawVideo() {
+    const cv = document.getElementById("video"), w = cv.clientWidth, h = cv.clientHeight, dpr = window.devicePixelRatio || 1;
+    cv.width = w * dpr; cv.height = h * dpr;
+    const c = cv.getContext("2d"); c.scale(dpr, dpr);
+    // machine background
+    const bg = c.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, "#2a2f34"); bg.addColorStop(1, "#1a1d20");
+    c.fillStyle = bg; c.fillRect(0, 0, w, h);
+    c.fillStyle = "#3a4046"; c.beginPath(); c.arc(w / 2, h / 2, 104, 0, Math.PI * 2); c.fill();
+    const cx = w / 2, cy = h / 2, rx = 56, ry = 96;
+    const yOf = r => cy + ry - (r / TOP) * 2 * ry;
+    c.save(); c.beginPath(); c.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); c.clip();
+    c.fillStyle = "#465058"; c.fillRect(cx - rx, cy - ry, 2 * rx, 2 * ry);
+    const oil = oilAt(PLAY), foam = foamAt(PLAY) ?? oil;
+    c.fillStyle = "#e2dccb"; c.fillRect(cx - rx, yOf(foam), 2 * rx, yOf(oil) - yOf(foam));
+    c.fillStyle = "#a8762a"; c.fillRect(cx - rx, yOf(oil), 2 * rx, cy + ry - yOf(oil));
+    c.fillStyle = "rgba(255,255,255,0.18)"; c.fillRect(cx - rx + 10, cy - ry, 8, 2 * ry);
+    c.restore();
+    // Glass outline + zero line: white dashed over a dark shadow line
+    for (const [col, off] of [["rgba(0,0,0,0.5)", 1], [css('--glass-outline'), 0]]) {
+      c.strokeStyle = col; c.lineWidth = 1; c.setLineDash([4, 3]);
+      c.beginPath(); c.ellipse(cx + off, cy + off, rx, ry, 0, 0, Math.PI * 2); c.stroke();
+      c.beginPath(); c.moveTo(cx - rx - 14 + off, yOf(ZERO) + off); c.lineTo(cx + rx + 14 + off, yOf(ZERO) + off); c.stroke();
+    }
+    c.setLineDash([]);
+    // edited lines over the frame, with halo
+    for (const [r, col] of [[foam, css('--foam')], [oil, css('--oil')]]) {
+      c.strokeStyle = css('--line-halo'); c.lineWidth = 5; c.beginPath(); c.moveTo(cx - rx - 10, yOf(r)); c.lineTo(cx + rx + 10, yOf(r)); c.stroke();
+      c.strokeStyle = col; c.lineWidth = 2; c.beginPath(); c.moveTo(cx - rx - 10, yOf(r)); c.lineTo(cx + rx + 10, yOf(r)); c.stroke();
+    }
+    c.fillStyle = "#fff"; c.font = "12px " + css('--font');
+    c.fillText("0선", cx + rx + 18, yOf(ZERO) + 4);
+  }
+
+  function draw() { drawGraph(); drawContext(); drawAxis(); drawVideo(); }
+  document.querySelectorAll("[data-tool]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-tool]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  }));
+  window.addEventListener("resize", draw);
+  draw();
+})();
+</script>
+</body>
+</html>
