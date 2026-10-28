@@ -402,12 +402,15 @@ queued.
   - The roadmap is unchanged.
 - **Web UI spike:** on branch `spike/webui` (`fb3e076`, `fb627cb`).
   - Mac/Chromium check: 23/23 PASS.
-  - **Queued Windows request:** W1–W9, SPL#4 BASE and SPL#1 BASE, plus a
-    packaged build.
+  - **Windows result: GO for the web UI.**
+    - W1–W4, W7 and W8 pass; the user rates W5 and W9 usable.
+    - W6 snap is △.
+    - The build is 152.3 MB with 105 files.
+    - The user's seven change requests are recorded in the handoff.
 - **Next session:**
-  1. take in the spike's Windows result block;
-  2. continue the v2 interview with the user;
-  3. only then start v2.
+  1. continue the v2 interview with the user, starting from the change
+     requests;
+  2. only then start v2.
 
 **Session handoff — 2026-10-27, final session close (superseded by the
 2026-10-28 handoff):** start with

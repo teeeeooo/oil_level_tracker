@@ -100,6 +100,63 @@ owns its pass criteria W1–W9. They were frozen before the Windows run.
   - It asks for one fixed result block.
 - **Go:** W1–W4, W7 and W8 pass, and the user rates W5 and W9 usable.
 
+### Windows result (user relay, 2026-10-28) — GO
+
+**The spike verdict is GO for the web UI.** Qt is not needed.
+
+**Run set:**
+- Sources were the `spike/webui` ZIP with no SHA-256 mismatch and no CRLF.
+- The runtime was:
+  - Python 3.14.3;
+  - pywebview 6.2.1 and pythonnet 3.2.1;
+  - opencv-python-headless 4.14.0.94 and numpy 2.5.4;
+  - PyInstaller 6.22.3;
+  - WebView2 runtime 156.0.4314.50, under HKLM.
+- The OS was Windows 11 (10.0.26200).
+
+The values below come from the relayed `SPIKE` lines.
+
+| ID | Result | Value |
+|---|---|---|
+| W1 | PASS | One-folder build: 152.3 MB, 105 files |
+| W2 | PASS | `WebView2 Edg/156.0.0.0`, from source and from the exe |
+| W3 | PASS | `127.0.0.1`; no firewall or security prompt |
+| W4 | PASS | SPL#4 BASE: 520 × 544, built in 3.99 s. SPL#1 BASE: 8210 × 773, built in 165.93 s |
+| W5 | user: usable | Comes with change requests; see below |
+| W6 | △ | The user could not tell snap on from snap off. W6 is not a Go condition |
+| W7 | PASS | Seek median: SPL#4 26 ms (n=300); SPL#1 68 ms (n=90) |
+| W8 | PASS | The report opens offline, prints to PDF and prints in the app. SPL#4 is 538 KB; SPL#1 is 9.9 MB |
+| W9 | user: usable | Render median / max: 130 points, 1.4 / 13.3 ms; 2053 points, 13.4 / 30.0 ms |
+
+Save and resume both work: "저장본 v001 불러옴" appears on rerun.
+
+**Notes:**
+- The first SPL#1 run pointed at a bundle capture path that has no video.
+  The rerun used the manifest's source video, `SPL#1_Heating_coldstart.mp4`.
+- The first SPL#4 session was force-closed, so its log has no
+  `window_closed` line. Later runs log `window_closed renderer=edgechromium`.
+
+**Facts for v2 design:**
+- SPL#1 is a 68-minute video:
+  - the context build takes 2.8 min with sequential decode;
+  - the report is 9.9 MB because it embeds the full-width PNG.
+
+**The user's change requests** are design input for the next interview.
+They are not spike fixes.
+1. Points at the FULL position are clipped into half circles and read as a
+   wavy line. Keep points inside the plot.
+2. Moving 130 draft points one by one is close to impossible. The intended
+   flow is to grab the line at a spot and drag to reshape it, not to move
+   points.
+3. A missed press pans the graph. Make panning an explicit mode, or
+   Shift-drag.
+4. Click a time-axis number and type a value to set the visible range.
+5. The frame view is good. Video playback there would be better; how to do
+   it is open.
+6. Defect: a new Foam line is drawn blue like Oil, not orange.
+7. Question: what is a FULL segment for? A line at the top already means
+   FULL, so that stretch should become FULL automatically.
+
 ## Interview topics left for after the spike
 
 - The spike verdict: web UI or Qt.
