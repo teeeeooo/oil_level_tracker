@@ -1,225 +1,33 @@
-# Rotary Oil Level Tracker
+# Oil Level Tracker v2
 
-Windows desktop workbench for tracking oil-air boundaries and bottom-connected foam fronts in rotary-compressor sight-glass test videos. The application turns a reusable Glass geometry/detector **Recipe** and a video-specific **Analysis Session** into reviewable tracking data, events, judgments, captures, graphs, an offline HTML report and CSV files.
+A Windows desktop tool for compressor sight-glass oil inspections.
 
-The authoritative product specification is [docs/rotary_oil_level_tracker_ssot_spec.md](docs/rotary_oil_level_tracker_ssot_spec.md). Use the [documentation guide](docs/README.md) for the roadmap, active work plan, architecture and validation documents.
+1. The app builds a context image from the inspection video.
+2. It draws a draft oil line on that image.
+3. The user corrects the lines on a graph linked to the source video.
+4. The app computes the judgment, and the user submits a versioned report.
 
-## Requirements
+## Status
 
-- Python 3.11–3.14 (`requires-python >=3.11,<3.15`); validate the full suite and one-folder build on the target Windows interpreter
-- Windows 10/11 for the target desktop build
-- PySide6, NumPy, OpenCV headless, Jinja2 and matplotlib
-- `opencv-python-headless` is declared. Do not install `opencv-python` in the same environment.
+V2 started on 2026-10-28.
+- Current state and next step: [docs/work-plan.md](docs/work-plan.md).
+- Product decisions: [docs/decisions.md](docs/decisions.md).
+- Visual rules: [DESIGN.md](DESIGN.md).
 
-## Install
+## v1
 
-```bat
-python -m venv .venv
-.venv\Scripts\activate
-python -m pip install --upgrade pip
-pip install -e ".[dev,packaging]"
-```
+v1 was the automatic-detector application, from Phases 1–2 through S11. It
+is preserved, unchanged:
+- tag `v1-final`;
+- branch `archive/v1`.
 
-For Linux/macOS development, activate with `source .venv/bin/activate`. The packaged product target remains Windows.
+v2 does not read v1 Recipes or result bundles. Code is ported from v1 one
+file at a time, after review.
 
-## Run the GUI
+## Stack
 
-```bat
-python -m oil_tracker
-```
-
-The app opens the **Recipe Workbench** with:
-
-- top Recipe actions and state
-- left Glass list
-- center video/overlay editor
-- right selected-Glass settings
-- bottom video transport
-- optional Validation and Detector Debug docks
-
-## Generate and run the synthetic sample
-
-```bat
-python scripts\generate_sample.py
-python -m oil_tracker.cli analyze ^
-  --recipe sample\synthetic_sample.oilrecipe ^
-  --video sample\synthetic_oil_test.avi ^
-  --output sample\output ^
-  --start 0 --end 7.5 --compressor-start 0 --sampling-fps 2
-```
-
-PowerShell or POSIX shells can place the CLI command on one line.
-
-## Create a Recipe
-
-1. Choose **새 Recipe** and complete the wizard, or choose **Wizard 건너뛰기**.
-2. Open a video and set analysis start/end, compressor start and sampling FPS.
-3. Add a Glass.
-4. Move/resize the ellipse around the sight glass.
-5. Drag the zero line to the engineering reference height.
-6. Set initial observation state, optional mm/pixel, judgment mode and margin.
-7. Add exclusion rectangles over fixed scratches, labels, reflections or residue.
-8. Seek several timestamps and inspect Preview/Debug results.
-9. Save as `*.oilrecipe`, then run **Recipe 검증**.
-
-The Recipe stores source-frame pixel geometry and detector/judgment settings. It does not store the current video path.
-
-## Preview and Debug
-
-Preview runs after seek settles or selected-Glass geometry/settings change. A single-shot debounce prevents every scrub position from launching detector work, and generation IDs suppress stale results.
-
-Enable **Debug mode** to inspect:
-
-- Overlay
-- ROI / Preprocess
-- Edges / Masks
-- Foam
-- Candidates
-- State
-
-Use **선택 frame debug export** to write overlay/ROI/preprocess/Canny/mask/foam PNGs plus candidate CSV and debug JSON.
-
-## Analyze and export
-
-1. Validation must have no readiness errors.
-2. Choose **분석 실행** and an output root.
-3. Analysis, graph rendering, capture generation, CSV and HTML run in a worker thread.
-4. Progress displays sampled timestamp, current Glass and processing rate.
-5. Cancellation discards the staged incomplete bundle.
-6. **결과 보기** opens the offline `report.html`.
-
-Output layout:
-
-```text
-oil_level_analysis_YYYYMMDD_HHMMSS/
-├─ report.html
-├─ tracking_data.csv
-├─ events.csv
-├─ recipe_snapshot.oilrecipe
-├─ session.json
-├─ analysis_manifest.json
-├─ captures/
-├─ graphs/
-├─ assets/
-├─ logs/
-└─ debug/                 # only when supplied to bundle writer
-```
-
-`FULL_NO_INTERFACE` and `EMPTY_NO_INTERFACE` rows keep numeric oil-level columns blank. Their meaning is carried by `fill_state`.
-
-## Tests
-
-```bat
-python -m pytest
-python -m pytest -m qt_app
-```
-
-The first command is the canonical suite. The `qt_app` command is a focused selection
-for tests that share the single pytest-qt `QApplication`; it is not additional
-canonical coverage. Headless subprocess checks use the source tree directly and do
-not inherit the GUI platform environment.
-
-Local S11 corpus checks require matching ignored media and explicit sample3 use.
-The default suite reports those checks as `SKIPPED / QUARANTINED`, which does not
-satisfy the complete legacy corpus gate. When that gate is required, run:
-
-```bat
-python -m tests.diagnostics.s11_corpus_access --purpose legacy-regression -- python -m pytest
-```
-
-See [source-use restrictions](sample/README.md#sample3-use-restriction) for the
-limited purpose and preservation of all four videos and 13 legacy cases.
-
-The test suite covers coordinate conversion, mask/margin/exclusion behavior, Recipe round-trip/versioning, validation, judgment, event debounce, candidate penalties, FillState behavior, foam connectivity, timestamp scheduling, synthetic detector fixtures, full analysis/reporting, multi-Glass decode behavior, cancellation and GUI smoke/routing.
-
-Geometry drag/resize and Windows DPI behavior also require the [manual GUI and Windows checklist](docs/40-operations/manual-gui-windows-checklist.md).
-
-## PyInstaller one-folder build
-
-Build on Windows from the project root:
-
-```bat
-pyinstaller packaging\pyinstaller\oil_tracker.spec
-```
-
-Output:
-
-```text
-dist\RotaryOilLevelTracker\RotaryOilLevelTracker.exe
-```
-
-The spec collects package data and Jinja/style resources. Its Windows-only GUI runtime hook forces the native `windows` Qt platform before PySide6 runtime initialization and the GUI entry script, so users do not need to preconfigure `QT_QPA_PLATFORM`. Build on Windows and perform the clean-PC checklist before release.
-
-## Architecture
-
-```text
-ui → application → domain
-adapters → application ports / domain
-bootstrap → concrete wiring
-```
-
-- `domain`: pure Python geometry, Recipe, session, detection/result models, validation, events and judgment
-- `application`: ports, use cases and orchestration; no OpenCV/PySide6/Jinja2/matplotlib imports
-- `adapters/vision`: OpenCV video, masks, preprocessing, candidates, scoring, foam and temporal detector
-- `adapters/storage`: atomic Recipe and staged output bundle persistence
-- `adapters/reporting`: CSV, matplotlib graphs and Jinja2 HTML
-- `ui`: PySide6 widgets/controllers/workers
-- `bootstrap.py`: concrete dependency wiring
-
-## Detector design
-
-```text
-ellipse effective mask
-→ preprocess
-→ artifact masks
-→ row features
-→ Sobel/Canny/Hough/region/foam candidates
-→ feature scoring and penalties
-→ confidence rejection
-→ FillState classification
-→ temporal smoothing/state hold
-→ separate oil-air and foam-front outputs
-```
-
-The strongest Sobel/Canny/Hough response is never automatically accepted. Full/empty/unknown states are allowed to return no numeric boundary.
-
-## Directory structure
-
-```text
-src/oil_tracker/
-├─ domain/
-├─ application/
-│  ├─ ports/
-│  ├─ services/
-│  └─ use_cases/
-├─ adapters/
-│  ├─ vision/
-│  ├─ storage/
-│  ├─ reporting/
-│  └─ system/
-├─ ui/
-│  ├─ controllers/
-│  ├─ widgets/
-│  └─ wizard/
-├─ config/
-├─ resources/
-├─ bootstrap.py
-├─ cli.py
-└─ __main__.py
-```
-
-Documentation entry points:
-
-- [Documentation guide](docs/README.md)
-- [Project roadmap](docs/00-project/roadmap.md)
-- [Current work plan](docs/00-project/work-plan.md)
-- [Repository execution policy](docs/00-project/execution-policy.md)
-- [Architecture documents](docs/20-architecture/)
-- [Validation contracts](docs/30-validation/)
-- [Windows/package/manual procedures](docs/40-operations/)
-- [Diagnostics](docs/50-diagnostics/)
-- [Completed evidence](docs/60-evidence/)
-
-## Current implementation scope and limitations
-
-The application is not yet generally qualified for operational detector PASS/FAIL use. The active S11 behavioral lifecycle/Foam-witness implementation is locally accepted, but the latest user-reported Windows disposition remains `FIELD FAIL` and no field-qualified detector is claimed. Windows canonical/manual/one-folder packaging acceptance is preserved in [S10 evidence](docs/60-evidence/s10/), and the accepted exact-workload one-hour source-tree stability result is preserved in [S6-F evidence](docs/60-evidence/s6/s6-f-one-hour-long-duration-stability.md). Current authorization and next transition are owned by the [current work plan](docs/00-project/work-plan.md); detector changes route through the [S11 governance contract](docs/30-validation/s11-detector-change-governance.md), the [active behavioral validation/work specification](docs/30-validation/s11-behavioral-lifecycle-and-foam-witness-validation.md), the [manual Windows procedure](docs/40-operations/manual-gui-windows-checklist.md), and the [canonical reviewed truth](docs/30-validation/windows-sample1-heating-coldstart-reviewed-truth.md).
+- **Back end:** Python 3.14. A local server bound to `127.0.0.1`.
+- **Window:** pywebview, which uses WebView2 on Windows.
+- **Front end:** plain JavaScript with no build step. One drawing module is
+  shared by the editor and the report.
+- **Target:** Windows. Development happens on macOS.

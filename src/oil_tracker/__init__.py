@@ -1,4 +1,3 @@
-"""Rotary Oil Level Tracker."""
+"""Oil Level Tracker v2."""
 
-__version__ = "0.1.0"
-DETECTOR_VERSION = "opencv-phase-detector-r22-3-interface-witness-diagnostics-v1"
+__version__ = "2.0.0.dev0"
