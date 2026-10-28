@@ -178,6 +178,35 @@ These take precedence over the earlier tables where the two differ.
 | Compressor start / range | Set both before analysis while watching the video. The compressor-start marker can be dragged in the editor, which recomputes the judgment. Changing the range means re-analysis |
 | Defect to fix | Foam lines must use their own colour |
 
+**UI design direction** (user, 2026-10-28):
+- **Visual language: Microsoft Fluent 2, light theme by default.** Borrow
+  only its token values: Segoe UI, the neutral greys, one accent colour,
+  spacing. Do not adopt a Fluent library; the front end stays plain JS with
+  no build step.
+- **The project writes its own `DESIGN.md`** in the nine-section DESIGN.md
+  format (Google Stitch, as collected in VoltAgent/awesome-design-md).
+  - Its values come from Fluent 2.
+  - Add the domain colour roles: Oil blue, Foam orange, reference grey,
+    "cannot judge" hatching, and FULL/EMPTY bands.
+  - The report uses the same roles.
+- **Interaction and layout references:**
+  - iZotope RX: editing over a time × frequency image;
+  - Melodyne: dragging a curve segment;
+  - WebPlotDigitizer: automatic extraction, then manual correction;
+  - DaVinci Resolve / Premiere: viewer, timeline and playhead layout, and
+    J/K/L keys;
+  - Figma: tool keys, Space-drag pan, wheel zoom.
+- **Proposed layout:**
+  - a top toolbar with the tools, the Glass selector with per-Glass check
+    state, and Save / Submit;
+  - the graph above the context image, sharing one time axis and playhead;
+  - a right column with the cropped video and its transport, above the
+    judgment / override, selection and memo panels.
+- **Sequence at v2 start:**
+  1. `DESIGN.md`;
+  2. a static HTML mock-up of the layout for the user to confirm;
+  3. then work-order step 2 (the Recipe screen).
+
 **v2 first-version work order** (user-approved):
 1. **Start.** Freeze S11 as unmet and open the new roadmap milestone. Create
    the v1 tag and archive branch, then reset `main` to the v2 skeleton. Do
