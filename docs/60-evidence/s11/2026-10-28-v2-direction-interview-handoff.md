@@ -113,6 +113,15 @@ owns its pass criteria W1–W9. They were frozen before the Windows run.
   - the S11 freeze;
   - the new milestone in the roadmap;
   - the v1 tag and archive branch, and the `main` reset.
+  - Cleanup that the user deferred to that step (2026-10-28):
+    - re-review the 150 managed runs in `sample/output/` (311 MB); docs cite
+      them by path and SHA-256;
+    - delete the five remote branches already merged into `main`;
+    - keep the unmerged `codex/ui-ux-refresh` and the two `work/s11-*-20261008`
+      branches, which evidence docs cite.
+
+    Local session scratch, caches and the local `work/*` branches were
+    already removed on 2026-10-28.
 
 ## Detector Governance
 
