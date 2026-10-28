@@ -1,6 +1,6 @@
 # Project Roadmap
 
-**Status:** `ACTIVE`
+**Status:** `FROZEN v1 record` — superseded by V2 on 2026-10-28. This roadmap is the frozen v1 milestone map (tag `v1-final`, branch `archive/v1`); V2 milestones live on the reset `main`.
 
 This document is the milestone-order/state SSOT. It is a bounded current-state map, not an execution journal. Exact current S11 authorization, blockers, and next transition live in [`work-plan.md`](work-plan.md).
 
@@ -30,13 +30,14 @@ Do not append branch chronology, review logs, test counts, or resolved findings 
 | S8 — Repeated-Test Workflow & Result Management | `DONE` | reusable Profile/result workflow and completion/recent-access UX |
 | S9 — Operational Recovery & UX Polish | `DONE` | unsaved-change guard, viewport controls, active-target feedback; autosave remains deferred |
 | S10 — Windows and Packaging Final Release Gate | `DONE` | target-Windows canonical/package/clean-PC acceptance baseline |
-| S11 — Real-Field Detector Effectiveness Recovery | `ACTIVE` | locally accepted behavioral lifecycle/Foam-witness baseline; latest Windows disposition remains `FIELD FAIL`; field qualification outstanding |
-| S11-M — Post-S11 Structural Maintainability | `PLANNED` | evidence-backed responsibility cleanup after the active S11 field gate |
-| S12 — Post-S10 UI/UX Refinement | `PLANNED` | evidence-led post-detector UX refinement; scope not yet authorized |
+| S11 — Real-Field Detector Effectiveness Recovery | `SUPERSEDED` | **frozen as unmet** on 2026-10-28: locally accepted lifecycle/Foam-witness baseline; final Windows disposition `FIELD FAIL`, O2 OPEN; superseded by V2 (detector off in the new flow) |
+| S11-M — Post-S11 Structural Maintainability | `SUPERSEDED` | superseded by the V2 rewrite |
+| S12 — Post-S10 UI/UX Refinement | `SUPERSEDED` | superseded by the V2 rewrite |
+| V2 — Graph-editing inspection | `ACTIVE` | draft-plus-edit inspection on a web UI; owned by the reset `main` ([v2 decisions](../60-evidence/s11/2026-10-28-v2-direction-interview-handoff.md)) |
 
 ## Current sequence
 
-`S1–S10 DONE` → `S11 ACTIVE` → `S11-M / S12 PLANNED`.
+`S1–S10 DONE` → `S11 SUPERSEDED (frozen unmet)` → `V2 ACTIVE` (on the reset `main`).
 
 S11 does not currently authorize another detector revision automatically. Its exact accepted baseline, non-authorized work, field-risk boundary, and next transition are owned by the [Current Work Plan](work-plan.md).
 

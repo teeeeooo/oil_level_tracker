@@ -6,8 +6,13 @@ S11 is ACTIVE; O2 is OPEN; the Windows field result remains FIELD FAIL. The
 [Work Plan](../../00-project/work-plan.md) is the only owner of current state
 and authorization.
 
-- **v2 implementation has NOT started.** The user said so explicitly: "아직
-  v2 구현 시작은 아니야".
+- **V2 STARTED on 2026-10-28** (user: "v2 시작하고 3번까지만 진행해줘").
+  - S11 is frozen as unmet.
+  - The roadmap supersedes S11 with V2.
+  - This document is part of the frozen v1 record (tag `v1-final`).
+  - The earlier "not started" statements below are historical.
+- **v2 implementation had NOT started** when this handoff was written. The user
+  said so explicitly: "아직 v2 구현 시작은 아니야".
 - **None of the decisions below has been executed yet.**
   - S11 is not frozen.
   - No milestone is opened.

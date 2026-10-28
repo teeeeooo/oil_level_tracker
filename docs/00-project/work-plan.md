@@ -1,6 +1,6 @@
 # Current Work Plan
 
-**Current milestone:** `S11 — Real-Field Detector Effectiveness Recovery` / `ACTIVE`.
+**Current milestone:** `V2 — Graph-editing inspection` / `ACTIVE` (started 2026-10-28). `S11` is **FROZEN as unmet** and `SUPERSEDED` by V2; this file stays as the frozen v1/S11 record in tag `v1-final` and branch `archive/v1`. After the `main` reset, the v2 work plan lives on `main`. **The S11 state below is frozen and authorizes nothing.**
 **Current gate:** O1 locally accepted; W4 candidate-identity challenger and O2 acceptance remain OPEN.
 **Field disposition:** latest user-reported Windows result remains `FIELD FAIL`.
 **Accepted baseline:** Default R22 behavior with R22-3/O1 diagnostics; report source context and episode-source review are main-adopted. The initial-FULL comparison has quantified Windows output recovery and a newly exposed false-output checkpoint, remains opt-in and is not a promoted baseline. Local XY remains OFF. The post-CR1/native G0 preflights and closed native-head trial add no detector behavior. Downstream of the detector, the initial-state continuing-run rule, labelled FULL/EMPTY bands and plain judgment reason (`139ba87`) are in main and always on; one Windows report confirmation run passed its written expectation.
@@ -382,7 +382,22 @@ Facts it records:
 The gate is implemented and its local check passed. No Windows request is
 queued.
 
-**Session handoff — 2026-10-28 (latest):** start with the
+**V2 start — 2026-10-28 (latest):** the user said "v2 시작하고 3번까지만 진행해줘".
+- S11 is frozen as unmet: O2 OPEN and FIELD FAIL stay the final S11 field
+  state. No detector work continues.
+- This commit is tagged `v1-final` and kept on branch `archive/v1`.
+- Then `main` is reset to the v2 skeleton without a force push.
+- The deferred cleanup runs with it:
+  - the five remote branches already merged into `main` are deleted;
+  - `sample/output/` moves out of the repository to
+    `~/Developer/oil_level_tracker-v1-evidence/`, decided by the user. The
+    docs' path and SHA-256 references resolve there.
+- Scope of this start: steps 1–3 only:
+  1. freeze and reset;
+  2. `DESIGN.md`;
+  3. a static layout mock-up for the user to confirm.
+
+**Session handoff — 2026-10-28:** start with the
 [v2 direction interview handoff](../60-evidence/s11/2026-10-28-v2-direction-interview-handoff.md).
 - **The user decided the v2 direction in an interview.** None of it is
   executed yet:
