@@ -1,0 +1,5 @@
+# Web UI spike only (Windows: pywebview pulls pythonnet 3.2.x, which supports Python 3.14)
+pywebview==6.2.1
+opencv-python-headless>=4.13,<5
+numpy>=2.5,<3
+pyinstaller>=6.21,<7

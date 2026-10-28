@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>유면 편집 spike</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="editor">
+<header class="toolbar">
+  <div class="group" id="tools">
+    <button data-tool="select" title="선택·이동 (V)">선택 <kbd>V</kbd></button>
+    <button data-tool="add" title="활성 선에 점 추가 (A)">점 추가 <kbd>A</kbd></button>
+    <button data-tool="segment" title="시간 구간 그리기 (S)">구간 <kbd>S</kbd></button>
+    <button data-tool="memo" title="메모 추가 (M)">메모 <kbd>M</kbd></button>
+  </div>
+  <div class="group">
+    <label>활성 선 <select id="lineSelect"></select></label>
+    <select id="newLineKind"><option value="oil">Oil</option><option value="foam">Foam</option><option value="ref">참고선</option></select>
+    <button id="newLine">새 선</button>
+  </div>
+  <div class="group">
+    <label>구간 <select id="segmentState"><option value="FULL">FULL</option><option value="EMPTY">EMPTY</option><option value="UNKNOWN">판독 불가</option></select></label>
+  </div>
+  <div class="group">
+    <label class="toggle"><input type="checkbox" id="snap" checked> 스냅</label>
+    <label class="toggle"><input type="checkbox" id="bgView"> 배경 제거 보기</label>
+    <button id="fit" title="전체 보기 (F)">전체 <kbd>F</kbd></button>
+    <button id="undo" title="실행 취소 (Ctrl+Z)">↶</button>
+    <button id="redo" title="다시 실행 (Ctrl+Shift+Z)">↷</button>
+  </div>
+  <div class="group">
+    <button id="save" class="primary">저장</button>
+    <button id="report">보고서 만들기</button>
+    <button id="printApp" title="WebView 안에서 인쇄 대화상자 확인">앱 안에서 인쇄</button>
+  </div>
+  <span id="status" class="status"></span>
+</header>
+<div class="workspace">
+  <div class="panels">
+    <div class="panel-label">그래프 <span class="hint">휠: 시간 확대 · Shift+휠: 높이 확대 · 빈 곳 드래그: 이동 · 클릭: 프레임 보기 · 점 더블클릭: 꼭짓점 전환 · Delete: 삭제</span></div>
+    <svg id="graphPanel" class="panel"></svg>
+    <div class="panel-label">맥락 이미지 <span class="hint">열 = 시각, 행 = 원본 높이 · 같은 편집이 가능</span></div>
+    <svg id="contextPanel" class="panel"></svg>
+  </div>
+  <aside class="side">
+    <section>
+      <h3>원본 프레임 <span id="frameTime" class="muted"></span></h3>
+      <svg id="framePanel" class="frame"></svg>
+    </section>
+    <section>
+      <h3>선택</h3>
+      <div id="selectionInfo" class="muted">없음</div>
+      <textarea id="memoText" placeholder="메모 내용" hidden></textarea>
+    </section>
+    <section>
+      <h3>메모</h3>
+      <ol id="memoList" class="memo-list"></ol>
+    </section>
+    <section>
+      <h3>진단 <span class="muted">(Windows 보고용)</span></h3>
+      <pre id="diag"></pre>
+    </section>
+  </aside>
+</div>
+<script src="/static/render.js"></script>
+<script src="/static/editor.js"></script>
+</body>
+</html>
