@@ -23,8 +23,8 @@
 | Step | Scope | State |
 |---|---|---|
 | 1 | Start: freeze S11, v1 tag and archive, `main` reset, deferred cleanup | DONE (2026-10-28) |
-| 1a | `DESIGN.md` (Fluent 2, light, domain colour roles) | IN PROGRESS |
-| 1b | Static editor layout mock-up (`design/mockup/editor.html`) | NOT STARTED |
+| 1a | `DESIGN.md` (Fluent 2, light, domain colour roles) | DONE (2026-10-28) |
+| 1b | Static editor layout mock-up (`design/mockup/editor.html`) | IN PROGRESS |
 | 2 | Recipe screen: Glass ellipse, zero line, judgment rule | NOT STARTED |
 | 3 | Analysis: context image and Oil draft, with progress and cache | NOT STARTED |
 | 4 | Editor: grab/pencil, "cannot judge", lines, memos, zoom/pan/axis input, frame and video | NOT STARTED |
