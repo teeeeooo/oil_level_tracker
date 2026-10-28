@@ -116,8 +116,8 @@ owns its pass criteria W1–W9. They were frozen before the Windows run.
 
 ## Detector Governance
 
-- Logic-map nodes: none touched.
-- Failure-registry entries: none touched.
+- Logic-map nodes: `OIL-PHASE-FILL`, `OIL-AUTHORITY`, `OIL-SELECTOR`, `OIL-PROJECTION` — unchanged; this session touched none.
+- Failure-registry entries: `S11-F03`, `S11-F04`, `S11-F05`, `S11-F06`, `S11-F10` — unchanged; this session touched none.
 - First harmful stage: unchanged since the [graph-editing direction handoff](2026-10-27-graph-editing-direction-handoff.md#detector-governance).
 - Existing feature coverage: unchanged; all S11 options stay default OFF.
 - Execution scope: a direction interview and a UI spike on a side branch; no detector run, code change or Windows detector execution.
