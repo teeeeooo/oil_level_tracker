@@ -407,10 +407,20 @@ queued.
     - W6 snap is △.
     - The build is 152.3 MB with 105 files.
     - The user's seven change requests are recorded in the handoff.
-- **Next session:**
-  1. continue the v2 interview with the user, starting from the change
-     requests;
-  2. only then start v2.
+- **The post-spike interview is done.** The handoff records:
+  - the editing model: grab-and-drag plus a pencil;
+  - automatic FULL/EMPTY, plus a "cannot judge" stretch;
+  - video playback;
+  - no snap;
+  - the report header and tables;
+  - one inspection folder;
+  - a reusable Recipe;
+  - an Oil-only draft;
+  - a six-step work order.
+- **Next:** wait for the user to say to start v2. Then run step 1:
+  - freeze S11 and open the milestone;
+  - create the v1 tag and archive branch, and reset `main`;
+  - do the deferred cleanup.
 
 **Session handoff — 2026-10-27, final session close (superseded by the
 2026-10-28 handoff):** start with

@@ -157,7 +157,60 @@ They are not spike fixes.
 7. Question: what is a FULL segment for? A line at the top already means
    FULL, so that stretch should become FULL automatically.
 
+## Decisions from the post-spike interview (user, 2026-10-28)
+
+These take precedence over the earlier tables where the two differ.
+
+| Topic | Decision |
+|---|---|
+| UI technology | **Web UI** (pywebview + WebView2), from the GO above. The Qt fallback is dropped |
+| Editing | **Grab-and-drag plus a pencil.** Grab the line anywhere and drag; nearby parts follow smoothly, within a width the user adjusts. The pencil redraws a time range and replaces that stretch. The draft is kept as dense samples. Points are not edited one by one |
+| FULL / EMPTY | **Automatic from line position.** A line at the Glass top is FULL (`FULL_NO_INTERFACE`); at the bottom it is EMPTY (`EMPTY_NO_INTERFACE`). The only segment tool left is **"cannot judge"**. Those stretches are invalid samples and count against coverage. This replaces the FULL/EMPTY/unknown segments |
+| Pan | Explicit: a pan tool and Shift-drag. A plain drag on empty space does not pan. Wheel zoom stays |
+| Time axis | Click a time-axis number and type a value to set the visible range |
+| Frame view | **Video playback from the first version:** the source file in the browser's player, cropped to the Glass, with the lines drawn over it. The graph cursor follows. Speed control and range repeat are included. A paused frame stays exact |
+| Snap | **Not in the first version.** Precision comes from zoom, the background-subtracted view and the frame/video. Reason: the strongest edge can be a Foam top or glare, and the user felt no difference in the spike |
+| Report contents | **Header:** the user enters compressor model and test type; the video file name, Recipe name, date-time and report version are filled in automatically. **Body:** the graph, the context image with lines, the final judgment, memos, the judgment-criteria table and the key-time table (compressor start, recovery, violations) |
+| Saving | **One inspection folder.** It holds the versioned edit data, the context-image cache and the versioned report HTML. Opening the report or the folder resumes editing. The source video is found by path and SHA-256, not copied |
+| Recipe | **A reusable Recipe stays:** Glass name, ellipse, zero line and judgment rule, made once per equipment/camera setup. A camera shift is corrected in that inspection only. The v1 detector settings are dropped |
+| Draft | **The Oil line only, by a simple method:** the strongest edge per column, with temporal jumps suppressed, and weak-edge stretches marked "cannot judge". The user adds Foam lines. Draft improvement waits for field use |
+| Context build time | 2.8 min on SPL#1 is acceptable. Show progress and the time left, and cache the result in the inspection folder |
+| Compressor start / range | Set both before analysis while watching the video. The compressor-start marker can be dragged in the editor, which recomputes the judgment. Changing the range means re-analysis |
+| Defect to fix | Foam lines must use their own colour |
+
+**v2 first-version work order** (user-approved):
+1. **Start.** Freeze S11 as unmet and open the new roadmap milestone. Create
+   the v1 tag and archive branch, then reset `main` to the v2 skeleton. Do
+   the deferred cleanup: re-review `sample/output` and delete the merged
+   remote branches.
+2. **Recipe screen:** Glass ellipse, zero line and judgment rule.
+3. **Analysis:** the context image and the Oil draft, with progress and a
+   cache.
+4. **Editor:**
+   - grab-and-drag and the pencil;
+   - "cannot judge" stretches;
+   - lines and memos;
+   - zoom, pan and time-axis input;
+   - the frame view and video playback.
+5. **Judgment and report:**
+   - the judgment, with override and reason;
+   - the report;
+   - submit and lock;
+   - versions.
+6. **Windows:** packaging and acceptance with field videos.
+
+**Step 1 runs only when the user says to start v2.** Until then, nothing is
+executed.
+
+The routine details stay the agent's call and are reversible:
+- the save schema;
+- shortcuts;
+- the undo depth;
+- the report image downscaling for print.
+
 ## Interview topics left for after the spike
+
+**Resolved by the post-spike interview above.** The list is kept as asked.
 
 - The spike verdict: web UI or Qt.
 - The order of v2 work for the first version.
