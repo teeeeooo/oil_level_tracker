@@ -10,8 +10,11 @@ A Windows desktop tool for compressor sight-glass oil inspections.
 ## Status
 
 V2 started on 2026-10-28.
-- Current state and next step: [docs/work-plan.md](docs/work-plan.md).
-- Product decisions: [docs/decisions.md](docs/decisions.md).
+- Documentation map: [docs/README.md](docs/README.md).
+- Current state and next step:
+  [docs/00-project/work-plan.md](docs/00-project/work-plan.md).
+- Goal, acceptance criteria and product decisions:
+  [docs/10-product/product.md](docs/10-product/product.md).
 - Visual rules: [DESIGN.md](DESIGN.md).
 
 ## v1

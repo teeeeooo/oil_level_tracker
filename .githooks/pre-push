@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+zero_sha="0000000000000000000000000000000000000000"
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+    [[ -n "${local_sha:-}" ]] || continue
+    [[ "$local_sha" == "$zero_sha" ]] && continue
+    # docs/README.md owns the rule: every tracked docs/ file is in the date catalog.
+    python3 "$repo_root/scripts/check_docs_catalog.py" --ref "$local_sha"
+done

@@ -1,0 +1,19 @@
+# Recall Index
+
+Compact routes to past decisions and material, for work that depends on the
+past or when the reason behind something is unclear.
+
+- **This index owns no current state.** Current owners outrank it.
+- **v1 material is read from tag `v1-final`,** for example with
+  `git show v1-final:<path>`.
+
+| When you need | Go to | Note |
+|---|---|---|
+| Why v2 exists; the user's interview answers | `v1-final:docs/60-evidence/s11/2026-10-28-v2-direction-interview-handoff.md` | Both interview tables, the spike's Windows GO result and the seven change requests. The [Product SSOT](../10-product/product.md) holds the current decisions |
+| Web UI spike code and criteria | branch `spike/webui`, `spikes/webui/` (`README.md`, `WINDOWS_REQUEST.md`) | Port `context.py`, `render.js` and the `server.py` bind fix after review. The request also names the field inputs |
+| Field videos and their v1 Recipes | `spike/webui:spikes/webui/WINDOWS_REQUEST.md` | `SPL#4_Cooling_onoff_#2.mp4` (53,165,455 bytes); `SPL#1_Heating_coldstart.mp4`. Use the bundle manifest's source, not the bundle capture path |
+| Judgment rule semantics to port | `v1-final:src/oil_tracker/domain/judgment.py` (`judge_samples`), `domain/recipe.py` (`JudgmentRule`), `domain/enums.py` (`JudgmentMode`) | RECOVERY / HOLD_BELOW_ZERO / HOLD_ABOVE_ZERO |
+| User-reviewed truth for SPL#1 | `v1-final:docs/30-validation/windows-sample1-heating-coldstart-reviewed-truth.md` | The user's video review, including FULL acceptable from about 672 s |
+| Why S11 stopped; detector failure history | `v1-final:docs/00-project/work-plan.md`, `v1-final:docs/50-diagnostics/s11/s11-detector-mechanism-failure-registry.md` | Frozen; read only for context |
+| v1 local experiment outputs | `~/Developer/oil_level_tracker-v1-evidence/` (not in Git) | 150 managed runs; see its README. Keeping or deleting it is the user's call |
+| v1 documentation conventions | `v1-final:docs/README.md` | v2 keeps the numbered folders, date catalog, roadmap, execution policy and this index. It drops the S11 governance hook and the experiment-artifact tool |
