@@ -5,7 +5,11 @@ closed.
 - **A4 in the app:** SPL#1 takes **60.6 s** on the workstation, from
   "분석 시작" to the cache written. That is well under 180 s, but over the
   60 s flag the request fixed. The adapter alone took 46.4 s on the same
-  PC, so the cause of the gap must be found before V2-5.
+  PC.
+  - **After the run, the user explained the gap:** another job (chunking
+    files for a RAG index) was running on the workstation at about 50 %
+    CPU. The relayed line "멈추지 못한 무거운 작업 = 없음" did not include
+    it. See "A4 in the app" below.
 
 - **Request:** [2026-10-29-v2-2-analysis-flow-windows-request.md](../40-operations/2026-10-29-v2-2-analysis-flow-windows-request.md).
   Its criteria were fixed before the run.
@@ -93,9 +97,13 @@ They stay in `Documents\OilLevelTracker\Inspections` for V2-3.
 - **Why it matters:** V2-5 judges A4 in the app on the slowest PC, where
   the script took 169.7 s of 180 s. A 31 % app overhead there would fail
   A4.
-- **Next:** run `scripts/time_analysis.py` and the app one after the other
-  on the same PC. If the gap stays, time the stages inside the app. This
-  belongs with the slowest-PC speed-up, before V2-5.
+- **The cause, from the user after the run:** a RAG chunking job at about
+  50 % CPU on the workstation during the run. The analysis is CPU-bound,
+  so that load accounts for the gap; the run gives no sign of work the app
+  adds.
+- **Still to confirm:** the app's own share, on a quiet PC. It is seen when
+  the app is timed on the slowest PC, after the speed-up and before
+  V2-5.
 
 ## Limits of this evidence
 
@@ -116,7 +124,7 @@ They stay in `Documents\OilLevelTracker\Inspections` for V2-3.
 
 | Comment | Routing |
 |---|---|
-| R5: the range band (`--brand-tint`) is too faint and close to the blue of the scrub bar; it should be a yellow tone | A DESIGN.md colour change. Waits for the user: now as a small follow-up, or with the V2-3 transport, which reuses the bar |
-| Opinion 1: the compressor start field is unclear between seconds and minutes:seconds; a number typed as seconds should turn into `mm:ss.s` once entered | Fits the time field of DESIGN.md §4. Waits for the user, as above |
+| R5: the range band (`--brand-tint`) is too faint and close to the blue of the scrub bar; it should be a yellow tone | Done after the run, at the user's word: the `--range-fill` and `--range-edge` tokens (DESIGN.md §2.2) |
+| Opinion 1: the compressor start field is unclear between seconds and minutes:seconds; a number typed as seconds should turn into `mm:ss.s` once entered | Done after the run, at the user's word (DESIGN.md §4, "Time field") |
 | Opinion 2: the result screen has no line drawing or zoom yet; the layout and legibility are good | As designed: the result is read-only in V2-2. V2-3 adds the editing, zoom and video to this screen (Product SSOT §6) |
-| Opinion 3: the user would like to type a name for each inspection | A product decision: Product SSOT §8 names the folder from the time and the video, and §7 lets the user enter the compressor model and test type for the report. Waits for the user |
+| Opinion 3: the user would like to type a name for each inspection | The user decided after the run: the name shows in the inspection list and names the folder; without one, the folder is named as before (Product SSOT §3, §8). Done after the run |

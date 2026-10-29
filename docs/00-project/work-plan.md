@@ -53,14 +53,25 @@ Rewrite it; do not append to it.
     [inspection-folder.md](../20-architecture/inspection-folder.md).
     Why: the [draft comparison](../60-evidence/2026-10-29-v2-2-draft-comparison-windows-result.md)
     and the [slowest-PC timing](../60-evidence/2026-10-29-v2-2-slowest-pc-timing-windows-result.md).
-  - **A4 so far:** SPL#1 takes 60.6 s in the app on the workstation,
-    46.4 s for the adapter alone, and 169.7 s for the adapter on the
-    slowest PC (limit 180 s).
+  - **A4 so far:** SPL#1 takes 60.6 s in the app on the workstation (with
+    another job at about 50 % CPU), 46.4 s for the adapter alone, and
+    169.7 s for the adapter on the slowest PC (limit 180 s).
   - **Three inspections stay on the workstation** for V2-3: SPL#4 (an
     ACCUM correction of `cx +1`), and SPL#1 twice. Their folders and
     SHA-256 values are in the result.
   - The web screens share `web/frame.js` (frame view and Glass editing)
     and `web/render.js` (drawing, also for the report).
+- **V2-2 follow-up** (user, 2026-10-29, after the Windows run; not yet seen
+  on Windows):
+  - the analysis range band on the scrub bar is yellow (`--range-fill`,
+    `--range-edge`);
+  - a time field shows a typed value as `mm:ss.s` once entered;
+  - **the inspection name** (Product SSOT §3, §8): optional in the setup,
+    shown in the list and the result, and naming the folder; without one,
+    the folder is named as before. It is fixed once the folder exists;
+  - **fixed:** the local server's listen queue was 5, so a page load
+    sometimes lost a JavaScript module to a reset connection and stayed
+    blank (seen as a flaky browser smoke test). It is now 64.
 - **Documentation:** the v1 conventions, per [docs/README.md](../README.md).
   - numbered folders;
   - the date catalog and its pre-push check;
@@ -80,8 +91,9 @@ Rewrite it; do not append to it.
   converting only the Glass band (PyAV, a new dependency: the user's
   decision).
 - **What the app adds:** 60.6 s in the app against 46.4 s for the adapter
-  on the workstation. First run the script and the app one after the
-  other on the same PC; if the gap stays, time the stages inside the app.
+  on the workstation. The user traced the gap to a RAG chunking job at
+  about 50 % CPU during the run. Confirm the app's own share on a quiet
+  PC when the app is timed on the slowest PC.
 
 **For V2-3:**
 - A5 and A6 on the slowest PC (the editor must hold there too).
@@ -90,13 +102,8 @@ Rewrite it; do not append to it.
 - The video, zoom and tools on the result screen; the snap's reach and
   default are settled with the V2-3 mock-up (Product SSOT §6).
 
-**The user's requests from the V2-2 run, waiting for the user:**
-- the analysis range band on the scrub bar in a yellow tone instead of
-  `--brand-tint` (a DESIGN.md colour change);
-- the time fields: a number typed as seconds shown as `mm:ss.s` once
-  entered;
-- a name the user types for each inspection (a product decision:
-  Product SSOT §7–§8).
+**The next Windows run** also covers the V2-2 follow-up above, as the
+V2-2 run covered the V2-1 follow-up.
 
 **Small facts:**
 - `AnalysisSettings.sample_count` counts to `end_sec`, but the analysis
@@ -123,8 +130,8 @@ Rewrite it; do not append to it.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `0df5ce6`: `141 passed, 2 skipped` on macOS, so
-  `140 passed, 3 skipped` on Windows.
+  test. At `4f7d493`: `146 passed, 2 skipped` on macOS, so
+  `145 passed, 3 skipped` on Windows.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -163,10 +170,7 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done today:** V2-1 and V2-2 closed, each with its Windows run.
-- **Next action:** the user decides
-  - whether the two screen requests above (range band colour, time
-    fields) go in a small follow-up now or with V2-3, and the inspection
-    name;
-  - when V2-3 starts. Its start needs the user's decisions on the editor
-    (the V2-3 mock-up, the snap).
+- **Done today:** V2-1 and V2-2 closed, each with its Windows run; the
+  V2-2 follow-up.
+- **Next action:** the user decides when V2-3 starts. Its start needs the
+  user's decisions on the editor (the V2-3 mock-up, the snap).
