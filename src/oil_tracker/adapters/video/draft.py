@@ -10,7 +10,6 @@ from dataclasses import dataclass
 
 import cv2
 import numpy as np
-from numpy.lib.stride_tricks import sliding_window_view
 
 from oil_tracker.domain.enums import SampleOrigin
 from oil_tracker.domain.line import Line
@@ -21,6 +20,7 @@ MAX_JUMP = 0.25      # of the Glass height per column
 WEAK = 0.25          # mean strength below which a stretch is left empty
 WEAK_WINDOW = 10     # columns (5 s at 2 per second)
 WEAK_MIN_RUN = 4     # columns (2 s); shorter weak runs keep their line
+TIE = 1e-9           # scores closer than this are equal paths
 
 
 @dataclass(frozen=True)
@@ -59,27 +59,62 @@ def strongest_path(s: np.ndarray, start: int | None = None, end: int | None = No
 
     `start` and `end` pin the first and last rows (the point line, Product SSOT §6). Pinned rows
     too far apart for the jump limit are joined by a straight line.
+
+    The jump cost grows linearly, so each column's best score is a windowed maximum, taken in a
+    few NumPy calls per column (_WindowMax); the path is traced back through the stored scores.
     """
     height, columns = s.shape
     jump = max(1, int(MAX_JUMP * height))
     penalty = JUMP_WEIGHT * np.abs(np.arange(-jump, jump + 1)) / height
-    rows = np.arange(height)
+    rise = JUMP_WEIGHT * np.arange(height) / height
+    window = _WindowMax(height, jump)
+    scores = np.empty((columns, height))
     score = s[:, 0].astype(np.float64)
     if start is not None:
-        score = np.where(rows == start, score, -np.inf)
-    back = np.zeros((height, columns), dtype=np.int32)
+        score = np.where(np.arange(height) == start, score, -np.inf)
+    scores[0] = score
     for t in range(1, columns):
-        total = sliding_window_view(np.pad(score, jump, constant_values=-np.inf), 2 * jump + 1) - penalty
-        best = total.argmax(axis=1)
-        back[:, t] = rows + best - jump
-        score = total[rows, best] + s[:, t]
+        score = np.maximum(window.up_to(score + rise) - rise, window.from_(score - rise) + rise) + s[:, t]
+        scores[t] = score
     if end is not None and not np.isfinite(score[end]):
         return np.rint(np.linspace(start, end, columns)).astype(np.int32)
     path = np.zeros(columns, dtype=np.int32)
-    path[-1] = int(score.argmax()) if end is None else end
+    path[-1] = _first_best(score) if end is None else end
+    padded = np.full(height + 2 * jump, -np.inf)
     for t in range(columns - 1, 0, -1):
-        path[t - 1] = back[path[t], t]
+        padded[jump:jump + height] = scores[t - 1]
+        row = int(path[t])
+        path[t - 1] = row + _first_best(padded[row:row + 2 * jump + 1] - penalty) - jump
     return path
+
+
+def _first_best(values: np.ndarray) -> int:
+    """The first of the best, as a search over every pair of rows picks it. The windowed maxima
+    round differently, so values within TIE of the best count as equal."""
+    return int(np.argmax(values >= values.max() - TIE))
+
+
+class _WindowMax:
+    """Maxima of a column over the rows [r - jump, r] or [r, r + jump], from running maxima within
+    blocks of jump + 1 rows (van Herk): a window spans at most two blocks."""
+
+    def __init__(self, height: int, jump: int) -> None:
+        self.block = jump + 1
+        self.jump = jump
+        self.height = height
+        blocks = -(-height // self.block) + 1  # one block of -inf in front of the first row
+        self.padded = np.full(blocks * self.block, -np.inf)
+        self.rows = np.arange(self.block, self.block + height)
+
+    def up_to(self, values: np.ndarray) -> np.ndarray:
+        self.padded[self.block:self.block + self.height] = values
+        blocks = self.padded.reshape(-1, self.block)
+        ahead = np.maximum.accumulate(blocks, axis=1).ravel()
+        behind = np.maximum.accumulate(blocks[:, ::-1], axis=1)[:, ::-1].ravel()
+        return np.maximum(behind[self.rows - self.jump], ahead[self.rows])
+
+    def from_(self, values: np.ndarray) -> np.ndarray:
+        return self.up_to(values[::-1])[::-1]
 
 
 def weak_stretches(strength: np.ndarray) -> np.ndarray:

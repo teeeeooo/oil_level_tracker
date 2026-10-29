@@ -76,6 +76,24 @@ def fourcc(path: Path) -> str:
         capture.release()
 
 
+def keyframe_gaps(path: Path) -> dict[str, float]:
+    """The spacing of the key frames, read from the packets without decoding: it tells how much a
+    decoder that skips to the next key frame after the last sample of each group could save."""
+    capture = cv2.VideoCapture(str(path), cv2.CAP_FFMPEG, [cv2.CAP_PROP_FORMAT, -1])
+    keys, count = [], 0
+    try:
+        while capture.grab():
+            if capture.get(cv2.CAP_PROP_LRF_HAS_KEY_FRAME):
+                keys.append(count)
+            count += 1
+    finally:
+        capture.release()
+    gaps = [b - a for a, b in zip(keys, keys[1:])]
+    if not gaps:
+        return {"keys": len(keys), "min": math.nan, "median": math.nan, "max": math.nan}
+    return {"keys": len(keys), "min": min(gaps), "median": statistics.median(gaps), "max": max(gaps)}
+
+
 def analyse(server: Server, video: Path, recipe) -> tuple[str, float]:
     """Make the inspection and analyse the whole video, as "분석 시작" does; return its id and seconds."""
     opened = server.call("POST", "/api/videos", {"path": str(video)})
@@ -294,6 +312,8 @@ def markdown(facts: dict, found: dict, errors: list[tuple[str, str]]) -> str:
         f"- GPU: {pc['gpu']}; OS: {pc['os']}",
         f"- 영상: `{video['name']}`, {video['bytes']} bytes, {video['width']}x{video['height']}, "
         f"{video['fps']:.3f} fps, {video['frames']} frames, 코덱 `{facts['fourcc']}`",
+        f"- 키프레임: {facts['keys']['keys']}개, 간격 최소 {facts['keys']['min']} / 중앙값 {facts['keys']['median']} "
+        f"/ 최대 {facts['keys']['max']} 프레임",
         f"- Recipe: `{facts['recipe']}`, Glass {facts['glass_count']}개; 창 {facts['size']}",
     ]
     if "analysis_sec" in facts:
@@ -360,6 +380,7 @@ def main(argv: list[str] | None = None) -> int:
         "pc": pc_inventory(),
         "video": {"name": args.video.name, "bytes": args.video.stat().st_size, **video_facts(args.video)},
         "fourcc": fourcc(args.video),
+        "keys": keyframe_gaps(args.video),
         "recipe": recipe.name,
         "glass_count": len(recipe.glasses),
         "size": f"{width}x{height}",

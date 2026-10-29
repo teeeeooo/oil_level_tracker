@@ -50,6 +50,7 @@ def test_the_result_file_has_every_measure(tmp_path, capsys):
     assert code == 0, text
     assert "[4/4] 편집기 측정: chrome" in capsys.readouterr().out
     assert "샘플 12개" in text and "코덱 `MJPG`" in text
+    assert "- 키프레임: 60개, 간격 최소 1 / 중앙값 1 / 최대 1 프레임" in text  # MJPG: every frame is a key frame
     rows = [line for line in text.splitlines() if line.startswith("| ")]
     assert any(row.startswith("| 연필, 전체 보기") for row in rows)
     assert any(row.startswith("| **전체** |") for row in rows)
