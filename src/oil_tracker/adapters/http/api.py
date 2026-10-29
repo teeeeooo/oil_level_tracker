@@ -198,6 +198,15 @@ def routes(ctx: ApiContext) -> list[Route]:
             return json_response({"problems": problems_json(result.problems)}, 422)
         return json_response(recipe_detail(result.recipe))
 
+    def check_recipe(_query, body) -> Response:
+        return json_response({"problems": problems_json(recipes.check(parse_draft(body)))})
+
+    def defaults(_query, _body) -> Response:
+        rule = JudgmentRule()
+        return json_response(
+            {"judgment_rule": {"mode": rule.mode.value, **{key: getattr(rule, key) for key in _RULE_NUMBERS}}}
+        )
+
     def open_folder(_query, _body) -> Response:
         recipes.open_folder()
         return json_response({"ok": True})
@@ -235,7 +244,9 @@ def routes(ctx: ApiContext) -> list[Route]:
     return [
         ("GET", re.compile(r"/api/recipes"), list_recipes),
         ("POST", re.compile(r"/api/recipes"), save_recipe),
+        ("POST", re.compile(r"/api/recipes/check"), check_recipe),
         ("POST", re.compile(r"/api/recipes/open-folder"), open_folder),
+        ("GET", re.compile(r"/api/defaults"), defaults),
         ("GET", re.compile(rf"/api/recipes/{segment}"), get_recipe),
         ("GET", re.compile(rf"/api/recipes/{segment}/reference\.jpg"), reference_jpeg),
         ("POST", re.compile(r"/api/videos/pick"), pick_video),

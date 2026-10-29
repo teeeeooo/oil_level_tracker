@@ -141,3 +141,14 @@ def test_bad_requests(app, tmp_path):
 def test_file_dialog_needs_a_window(app):
     running, _ = app
     assert call(running, "POST", "/api/videos/pick", {})[0] == 501
+
+
+def test_check_and_defaults(app, video):
+    running, tmp_path = app
+    _, opened, _ = call(running, "POST", "/api/videos", {"path": str(video)})
+    body = {"id": None, "name": "x", "glasses": [glass_json(zero_line_y=500)], "reference": {"video_id": opened["id"], "time_sec": 0}}
+    status, result, _ = call(running, "POST", "/api/recipes/check", body)
+    assert status == 200 and [p["field"] for p in result["problems"]] == ["zero_line_y"]
+    assert not (tmp_path / "data" / "Recipes").exists()
+    status, defaults, _ = call(running, "GET", "/api/defaults")
+    assert defaults["judgment_rule"] == glass_json()["judgment_rule"]

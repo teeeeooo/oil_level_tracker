@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oil Level Tracker</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/web/tokens.css">
+<link rel="stylesheet" href="/web/app.css">
+<script type="module" src="/web/recipe.js"></script>
+</head>
+<body>
+
+<div class="view" id="listView" hidden>
+  <header class="toolbar">
+    <span class="big-title">Recipe</span>
+    <div class="spacer"></div>
+    <span class="notice" id="listNotice"></span>
+    <button class="btn primary" id="newRecipe">새 Recipe</button>
+  </header>
+  <div class="list-main">
+    <div class="panel">
+      <table>
+        <thead><tr><th style="width:30%">이름</th><th>Glass</th><th style="width:140px">프레임 크기</th><th style="width:180px">수정일</th><th style="width:88px"></th></tr></thead>
+        <tbody id="recipeRows"></tbody>
+      </table>
+      <div class="list-foot">
+        <div class="err" id="unreadable"></div>
+        <div class="row">
+          <span class="caption">폴더</span>
+          <span class="mono" id="folderPath"></span>
+          <button class="btn small" id="openFolder">폴더 열기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view" id="editView" hidden>
+  <header class="toolbar">
+    <button class="btn subtle" id="back">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4l-6 6 6 6"/></svg>목록</button>
+    <div class="sep"></div>
+    <div class="title"><b id="recipeTitle"></b><span id="saveState"></span></div>
+    <div class="sep"></div>
+    <button class="btn" id="openVideo">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="11" height="10" rx="1"/><path d="M14 9l4-2v6l-4-2"/></svg>영상 열기</button>
+    <div class="spacer"></div>
+    <span class="notice" id="editNotice"></span>
+    <span class="problems" id="problemCount"></span>
+    <button class="btn primary" id="save">저장</button>
+  </header>
+  <div class="main">
+    <section class="left">
+      <div class="phead">기준 프레임
+        <span class="right">
+          <span id="frameSource"></span>
+          <span class="err" id="frameErr"></span>
+          <span id="frameHint"></span>
+          <span>휠 확대 · Shift-드래그 이동 · 화살표 1 px (Shift 10 px)</span>
+        </span>
+      </div>
+      <div class="frame" id="frameBox"><canvas id="frame" tabindex="0" aria-label="기준 프레임과 Glass"></canvas></div>
+      <div class="transport">
+        <button class="btn icon-btn" id="prevFrame" title="이전 프레임 (,)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4h2v12H5zM16 4v12L8 10z"/></svg></button>
+        <button class="btn icon-btn" id="play" title="재생 (Space)"><svg viewBox="0 0 20 20" fill="currentColor"><path id="playIcon" d="M6 4l10 6-10 6z"/></svg></button>
+        <button class="btn icon-btn" id="nextFrame" title="다음 프레임 (.)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 4h2v12h-2zM4 4v12l8-6z"/></svg></button>
+        <div class="scrub off" id="scrub"><div class="track"></div><div class="done" id="scrubDone"></div><span class="ref" id="scrubRef" hidden>기준</span><div class="thumb" id="scrubThumb"></div></div>
+        <span class="time" id="time">--:--.- / --:--.-</span>
+      </div>
+    </section>
+    <aside class="right-col">
+      <div class="section">
+        <div class="phead">Recipe</div>
+        <div class="body">
+          <div class="field"><span class="label">이름</span>
+            <div class="input" id="recipeNameBox"><input id="recipeName" placeholder="예: 2호기 냉각" maxlength="100"></div>
+            <span class="err" id="recipeNameErr"></span></div>
+          <span class="caption" id="fileName"></span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="phead">Glass <span class="right"><button class="btn small subtle" id="addGlass">+ 추가</button></span></div>
+        <div id="glassRows"></div>
+        <div class="err" id="glassesErr" style="padding:0 12px 8px"></div>
+      </div>
+      <div class="section">
+        <div class="phead" id="selHead">선택한 Glass</div>
+        <div class="body" id="selBody"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+</body>
+</html>

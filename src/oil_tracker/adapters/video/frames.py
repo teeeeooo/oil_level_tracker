@@ -11,6 +11,7 @@ import cv2
 from oil_tracker.application.ports import Frame, VideoInfo, VideoUnreadable
 
 JPEG_QUALITY = 90
+READ_ON_LIMIT = 15  # frames; a short jump forward reads on instead of seeking
 
 
 class OpenCvVideo:
@@ -37,7 +38,11 @@ class OpenCvVideo:
             raise ValueError("time_sec must be finite")
         index = min(self.info.frame_count - 1, max(0, round(time_sec * self.info.fps)))
         with self._lock:
-            if index != self._next_index:
+            skip = index - self._next_index
+            if 0 < skip <= READ_ON_LIMIT:
+                for _ in range(skip):
+                    self._capture.grab()
+            elif skip != 0:
                 self._capture.set(cv2.CAP_PROP_POS_FRAMES, index)
             ok, image = self._capture.read()
             self._next_index = index + 1 if ok else -1

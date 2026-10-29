@@ -79,41 +79,56 @@ class Recipes:
                 raise VideoDoesNotFit(_size_message(opened.info.width, opened.info.height, recipe))
         return opened
 
+    def check(self, draft: RecipeDraft) -> tuple[RecipeProblem, ...]:
+        """The problems saving would report, without decoding a frame or writing."""
+        result = self._build(draft, take_frame=False)
+        return result.problems
+
     def save(self, draft: RecipeDraft) -> SaveResult:
         with self._save_lock:
-            existing = self.store.load(draft.id) if draft.id is not None else None
-            if draft.reference is not None:
-                info = self.videos.info(draft.reference.video_id)
-                if existing is not None and not existing.matches_frame_size(info.width, info.height):
-                    return _problem("reference_frame", _size_message(info.width, info.height, existing))
+            result = self._build(draft, take_frame=True)
+            if result.recipe is None:
+                return result
+            try:
+                self.store.save(result.recipe)
+            except RecipeNameTaken as error:
+                return _problem("name", str(error))
+            return result
+
+    def _build(self, draft: RecipeDraft, *, take_frame: bool) -> SaveResult:
+        existing = self.store.load(draft.id) if draft.id is not None else None
+        if draft.reference is not None:
+            info = self.videos.info(draft.reference.video_id)
+            if existing is not None and not existing.matches_frame_size(info.width, info.height):
+                return _problem("reference_frame", _size_message(info.width, info.height, existing))
+            if take_frame:
                 frame = self.videos.frame(
                     draft.reference.video_id, draft.reference.time_sec, max_size=REFERENCE_MAX_SIZE
                 )
-                reference = ReferenceFrame(info.width, info.height, info.name, frame.time_sec, frame.jpeg)
-            elif existing is not None:
-                reference = existing.reference_frame
+                time_sec, jpeg = frame.time_sec, frame.jpeg
             else:
-                return _problem("reference_frame", "영상을 열어 기준 프레임을 정하세요.")
+                time_sec, jpeg = draft.reference.time_sec, b"unchecked"
+            reference = ReferenceFrame(info.width, info.height, info.name, time_sec, jpeg)
+        elif existing is not None:
+            reference = existing.reference_frame
+        else:
+            return _problem("reference_frame", "영상을 열어 기준 프레임을 정하세요.")
 
-            now = self._now()
-            recipe = Recipe(
-                id=existing.id if existing is not None else self._new_id(),
-                name=draft.name.strip(),
-                reference_frame=reference,
-                glasses=tuple(
-                    Glass(g.id, g.name.strip(), g.ellipse, g.zero_line_y, g.judgment_rule) for g in draft.glasses
-                ),
-                created_at=existing.created_at if existing is not None else now,
-                updated_at=now,
-            )
-            problems = recipe_problems(recipe)
-            if problems:
-                return SaveResult(None, tuple(problems))
-            try:
-                self.store.save(recipe)
-            except RecipeNameTaken as error:
-                return _problem("name", str(error))
-            return SaveResult(recipe)
+        now = self._now()
+        recipe = Recipe(
+            id=existing.id if existing is not None else self._new_id(),
+            name=draft.name.strip(),
+            reference_frame=reference,
+            glasses=tuple(
+                Glass(g.id, g.name.strip(), g.ellipse, g.zero_line_y, g.judgment_rule) for g in draft.glasses
+            ),
+            created_at=existing.created_at if existing is not None else now,
+            updated_at=now,
+        )
+        problems = recipe_problems(recipe)
+        if problems:
+            return SaveResult(None, tuple(problems))
+        return SaveResult(recipe)
 
 
 def _problem(field: str, message: str) -> SaveResult:

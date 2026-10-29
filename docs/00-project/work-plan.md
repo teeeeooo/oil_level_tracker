@@ -82,5 +82,10 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done:** steps 1–5.
-- **Next action:** step 6, the Recipe screen in `web`.
+- **Done:** steps 1–6, and the automated part of step 7:
+  - unit and API tests;
+  - the Playwright smoke check (`tests/test_web_recipe_smoke.py`,
+    macOS Chrome);
+  - a pywebview window start on macOS.
+- **Next action:** the user makes a Recipe from a local sample video on
+  macOS (step 7), then confirms closing V2-1.

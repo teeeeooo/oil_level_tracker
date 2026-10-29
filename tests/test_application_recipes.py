@@ -167,3 +167,14 @@ def test_closing_videos(world):
     assert opened["a.mp4"].closed and not opened["b.mp4"].closed
     recipes.videos.close_all()
     assert opened["b.mp4"].closed
+
+
+def test_check_reports_problems_without_decoding_or_writing(world):
+    recipes, store, opened, _ = world
+    video = recipes.open_sample_video(Path("/videos/SPL4.mp4"))
+    bad = replace(GLASS, zero_line_y=999)
+    problems = recipes.check(draft(glasses=(bad,), reference=ReferenceChoice(video.id, 3.0)))
+    assert [p.field for p in problems] == ["zero_line_y"]
+    assert recipes.check(draft(reference=ReferenceChoice(video.id, 3.0))) == ()
+    assert recipes.check(draft()) and store.saved == {}
+    assert opened["SPL4.mp4"].requests == []

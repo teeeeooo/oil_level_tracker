@@ -71,7 +71,8 @@ Nothing else may reuse them.
 | `--compressor` | `#8764B8` | compressor-start marker (vertical, 1.5 px, dash `4 3`, label at the top) |
 | `--playhead` | `#242424` | playhead, 1 px, with a small triangle on the time axis |
 | `--memo` | `#C19C00` | memo pin, a numbered circle with white text |
-| `--glass-outline` | `rgba(255,255,255,0.9)` | Glass ellipse and zero line on frames (Recipe screen, video): 1 px, dash `4 3`, over a 1 px `rgba(0,0,0,0.5)` shadow line |
+| `--glass-outline` | `rgba(255,255,255,0.9)` | Glass ellipse and zero line on frames (Recipe screen, video): 1 px, dash `4 3`, over a 1 px `--glass-shadow` line |
+| `--glass-shadow` | `rgba(0,0,0,0.5)` | shadow line 1 px below every `--glass-outline` stroke |
 
 ### 2.4 Status (judgment and Glass check state)
 

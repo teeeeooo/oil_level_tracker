@@ -1,0 +1,54 @@
+/* DESIGN.md §2 and §3. Change DESIGN.md first; tests/test_web_tokens.py checks the copy. */
+:root {
+  /* 2.1 Neutrals */
+  --bg-1: #FFFFFF;
+  --bg-2: #FAFAFA;
+  --bg-3: #F5F5F5;
+  --bg-4: #F0F0F0;
+  --bg-5: #EBEBEB;
+  --fg-1: #242424;
+  --fg-2: #424242;
+  --fg-3: #616161;
+  --fg-disabled: #BDBDBD;
+  --stroke-1: #D1D1D1;
+  --stroke-2: #E0E0E0;
+  --stroke-3: #F0F0F0;
+  /* 2.2 Brand / interaction */
+  --brand: #0F6CBD;
+  --brand-hover: #115EA3;
+  --brand-pressed: #0C3B5E;
+  --brand-tint: #EBF3FC;
+  --focus-outer: #000000;
+  --focus-inner: #FFFFFF;
+  /* 2.3 Domain roles */
+  --oil: #1F77D0;
+  --foam: #E8710A;
+  --reference: #616161;
+  --line-halo: rgba(255,255,255,0.9);
+  --full-band: rgba(31,119,208,0.10);
+  --empty-band: rgba(97,97,97,0.10);
+  --cannot-judge: #8A8A8A;
+  --compressor: #8764B8;
+  --playhead: #242424;
+  --memo: #C19C00;
+  --glass-outline: rgba(255,255,255,0.9);
+  --glass-shadow: rgba(0,0,0,0.5);
+  /* 2.4 Status (text, background) */
+  --pass: #0E700E;
+  --pass-bg: #F1FAF1;
+  --fail: #C50F1F;
+  --fail-bg: #FDF3F4;
+  --review: #BC4B09;
+  --review-bg: #FFF9F5;
+  --pending: #616161;
+  --pending-bg: #F5F5F5;
+  /* 2.5 Frame chrome */
+  --frame-bg: #1B1F23;
+  --frame-caption-bg: rgba(0,0,0,0.45);
+  /* 2.6 Validation */
+  --error: #BC2F32;
+  --error-border: #D13438;
+  /* 3 Typography */
+  --font: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --mono: "Cascadia Mono", Consolas, monospace;
+}

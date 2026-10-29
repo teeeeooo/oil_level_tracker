@@ -39,9 +39,10 @@ src/oil_tracker/
     desktop/       Operating-system integration: the native file dialog
                    (supplied by app.py from the pywebview window) and
                    opening a folder.
-  web/             index.html, tokens.css (from DESIGN.md), render.js
-                   (shared by editor and report), recipe.js, editor.js,
-                   api.js. Plain JavaScript modules, no build step.
+  web/             index.html, tokens.css (copied from DESIGN.md; a test
+                   checks it), app.css, render.js (shared by editor and
+                   report), recipe.js, editor.js, api.js. Plain
+                   JavaScript modules, no build step.
   bootstrap.py     Builds the concrete adapters and hands them to the use
                    cases. The only wiring point.
   app.py           pywebview window; owns process lifetime.
