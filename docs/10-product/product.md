@@ -53,6 +53,11 @@ judged on target Windows with the PyInstaller one-folder build.
 
 Draft quality is **not** an acceptance criterion.
 
+**Target Windows** (user, 2026-10-29): the inspectors' PCs vary. The
+slowest is about an Intel Xeon E5-1620 v3 (4 cores, 8 threads, 3.5 GHz)
+with 16 GB RAM and an NVIDIA Quadro K620. The time limits (A4–A6) must
+hold on a PC of that class.
+
 ## 3. Flow
 
 **The app opens on the inspection list.** The Recipe list is reached from

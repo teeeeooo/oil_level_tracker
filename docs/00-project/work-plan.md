@@ -99,6 +99,11 @@ Product SSOT §3, §4 and §6:
    - The drafts equal the comparison's method B on Windows (empty 88 %,
      5 %, 51 %).
    - Measured on one 12-core workstation; step 9 times the app itself.
+   - **The slowest target PC** (Product SSOT §2: Xeon E5-1620 v3, 4
+     cores) has about half the speed per core and a third of the cores.
+     Scaling each part of T1 by that, the current single loop would take
+     about 190–210 s there: over the limit. Step 6 therefore speeds up
+     the pass (below).
 3. **Mock-ups** of the inspection list and the setup screen, for the
    user's confirmation:
    [design/mockup/inspection.html](../../design/mockup/inspection.html)
@@ -157,6 +162,17 @@ The working tree is clean, and `main` and the remote are in sync.
   and its images as `GlassImages` (PNG pieces as bytes). It reports
   progress (done and total frames) and checks a cancel flag between
   frames. It decodes in software (`hardware=False`, the A4 result).
+- **A faster pass for the slowest PC** (step 2): the decoder reads ahead
+  on one thread while worker threads compute the row medians. NumPy's
+  sort and OpenCV release the GIL. A prototype on macOS gave identical
+  images on three local videos; on the Windows workstation the pass
+  should drop from the sum of decoding and the medians (81.3 s) toward
+  the larger of the two (about 46 s).
+- **A timing run on a PC of the slowest class** follows step 6, before the
+  screens (step 8), with software and hardware decoding (the Quadro K620
+  decodes H.264). If the pass is still too slow there, the next options
+  are converting frames on two decoders over the two halves of the range,
+  or hardware decoding on that PC.
 - **The PNG pieces** move from `scripts/time_analysis.py:png_pieces` into
   `adapters/video`; the script then imports them.
 - **The SHA-256** is computed on a second thread during the pass, as the
@@ -213,4 +229,5 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done today:** V2-1 closed; V2-2 steps 1 to 5, and the analysis core of
   step 6.
-- **Next action:** step 6 and step 7 as planned above.
+- **Next action:** step 6 with the faster pass, then the timing request
+  for a PC of the slowest class; step 7 while that run waits.
