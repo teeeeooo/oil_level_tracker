@@ -75,13 +75,20 @@ def field(page, label):
     return page.locator(".field", has=page.locator(".label", has_text=label)).locator("input")
 
 
+def open_recipe_list(page, running):
+    """The app opens on the inspection list; the Recipe list is one click away."""
+    page.goto(running.url)
+    page.get_by_text("검사가 없습니다").wait_for()
+    page.get_by_role("button", name="Recipe", exact=True).click()
+    page.get_by_text("Recipe가 없습니다").wait_for()
+
+
 def test_create_edit_save_and_reopen_a_recipe(tmp_path, video, browser_page):
     page, errors = browser_page
     running = bootstrap.start(data_folder=tmp_path / "data")
     try:
         page.on("dialog", lambda dialog: dialog.accept(str(video)))  # no window: the path prompt
-        page.goto(running.url)
-        page.get_by_text("Recipe가 없습니다").wait_for()
+        open_recipe_list(page, running)
         shot(page, "1-empty-list")
 
         page.get_by_role("button", name="새 Recipe").click()
@@ -172,8 +179,7 @@ def test_speed_field_and_help(tmp_path, video, browser_page):
     running = bootstrap.start(data_folder=tmp_path / "data")
     try:
         page.on("dialog", lambda dialog: dialog.accept(str(video)))
-        page.goto(running.url)
-        page.get_by_text("Recipe가 없습니다").wait_for()
+        open_recipe_list(page, running)
 
         # F1 opens the help for the screen on show; Esc closes it
         page.keyboard.press("F1")

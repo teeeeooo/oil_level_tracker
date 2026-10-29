@@ -34,3 +34,14 @@ export async function getImage(path) {
   if (!response.ok) throw new Error((await asJson(response)).error ?? `HTTP ${response.status}`);
   return { bitmap: await createImageBitmap(await response.blob()), headers: response.headers };
 }
+
+/** An image as an object URL (release it with URL.revokeObjectURL), with its width in pixels. */
+export async function getImageUrl(path) {
+  const response = await send("GET", path);
+  if (!response.ok) throw new Error((await asJson(response)).error ?? `HTTP ${response.status}`);
+  const blob = await response.blob();
+  const bitmap = await createImageBitmap(blob);
+  const width = bitmap.width;
+  bitmap.close();
+  return { url: URL.createObjectURL(blob), width };
+}

@@ -49,6 +49,12 @@ td.num { text-align: right; }
 tbody tr:hover td { background: var(--bg-4); }
 tr.sel td { background: var(--brand-tint); }
 .empty-row td { color: var(--fg-3); text-align: center; padding: 24px; }
+tr.off td { color: var(--fg-disabled); }
+tr.off:hover td { background: none; }
+.sub { display: block; font-size: 12px; line-height: 16px; color: var(--fg-3); }
+table.boxed { border: 1px solid var(--stroke-1); }
+.badge { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: 4px; font-size: 12px; line-height: 16px; font-weight: 600; white-space: nowrap; }
+.badge.pending { color: var(--pending); background: var(--pending-bg); }
 .list-foot { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
 .row { display: flex; align-items: center; gap: 8px; }
 
@@ -64,8 +70,12 @@ tr.sel td { background: var(--brand-tint); }
 .scrub .done { position: absolute; left: 0; top: 10px; height: 4px; background: var(--brand); border-radius: 2px; }
 .scrub .thumb { position: absolute; top: 4px; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: var(--bg-1); border: 1px solid var(--fg-3); }
 .scrub.off .done, .scrub.off .thumb { display: none; }
-.scrub .ref { position: absolute; top: -8px; transform: translateX(-50%); font-size: 12px; line-height: 16px; color: var(--brand); font-weight: 600; pointer-events: none; }
-.scrub .ref::after { content: ""; position: absolute; left: 50%; top: 16px; width: 1px; height: 10px; background: var(--brand); }
+.scrub .range { position: absolute; top: 4px; height: 16px; background: var(--brand-tint); border-left: 2px solid var(--brand); border-right: 2px solid var(--brand); }
+.scrub .mark { position: absolute; top: -8px; transform: translateX(-50%); font-size: 12px; line-height: 16px; color: var(--brand); font-weight: 600; white-space: nowrap; pointer-events: none; }
+.scrub .mark::after { content: ""; position: absolute; left: 50%; top: 16px; width: 1px; height: 10px; background: currentColor; }
+.scrub .mark.comp { color: var(--compressor); }
+.scrub .mark.comp::after { width: 1.5px; }
+.scrub.off .range, .scrub.off .mark { display: none; }
 .time { white-space: nowrap; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--fg-2); }
 .speed { position: relative; width: 80px; flex: none; margin-left: 8px; padding-right: 0; }
 .speed .chev { display: flex; align-items: center; justify-content: center; width: 24px; height: 30px; padding: 0; border: 0; background: transparent; color: var(--fg-2); cursor: pointer; }
@@ -102,15 +112,47 @@ select { height: 32px; font: inherit; color: var(--fg-1); border: 1px solid var(
 .glass-empty { padding: 12px; color: var(--fg-3); font-size: 12px; }
 .rule-text { font-size: 12px; line-height: 16px; color: var(--fg-2); background: var(--bg-3); border-radius: 4px; padding: 6px 8px; }
 hr { border: 0; border-top: 1px solid var(--stroke-2); margin: 4px 0; width: 100%; }
+.glass-row .badge { margin-left: auto; }
+.recipe-glasses { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; font-size: 12px; line-height: 16px; }
+.recipe-glasses b { font-weight: 600; }
+.timefield { display: flex; gap: 4px; align-items: center; }
+.timefield .input { flex: 1; min-width: 0; }
+
+/* result (read-only editor layout) */
+.result-left { grid-template-rows: 32px 1fr 32px 1fr 32px; }
+.plot { position: relative; min-height: 0; background: var(--bg-1); }
+.plot svg, .axis svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.axis { position: relative; border-top: 1px solid var(--stroke-1); background: var(--bg-1); }
+.legend { display: flex; gap: 12px; font-weight: 400; font-size: 12px; line-height: 16px; color: var(--fg-3); }
+.swatch { display: inline-block; width: 16px; height: 2px; vertical-align: middle; margin-right: 4px; }
+.swatch.oil { background: var(--oil); }
+.picker { display: flex; align-items: center; gap: 8px; }
+.picker select { min-width: 200px; }
+.toggle { display: inline-flex; align-items: center; gap: 6px; color: var(--fg-2); font-size: 12px; cursor: pointer; }
+.toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.switch { position: relative; width: 28px; height: 16px; border-radius: 8px; border: 1px solid var(--fg-3); background: var(--bg-1); }
+.switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--fg-2); }
+.toggle input:checked + .switch { background: var(--brand); border-color: var(--brand); }
+.toggle input:checked + .switch::after { left: 14px; background: var(--bg-1); }
+.toggle input:focus-visible + .switch { outline: 2px solid var(--focus-outer); outline-offset: 1px; }
+.kv th, .kv td { padding: 4px 0; font-size: 12px; line-height: 16px; background: none; vertical-align: top; }
+.kv th { width: 96px; color: var(--fg-3); font-weight: 400; }
+.kv td { overflow-wrap: anywhere; }
+.kv tr:hover td { background: none; }
 
 /* help dialog; dialog shadow: DESIGN.md §6 */
 dialog { width: 560px; max-height: calc(100vh - 64px); padding: 0; border: 0; border-radius: 8px; background: var(--bg-1); color: var(--fg-1); box-shadow: 0 0 2px rgba(0,0,0,.12), 0 8px 16px rgba(0,0,0,.14); }
 dialog[open] { display: flex; flex-direction: column; }
 dialog::backdrop { background: var(--backdrop); }
+dialog.wide { width: 720px; }
+dialog.narrow { width: 480px; }
+dialog.wide .dlg-body, dialog.narrow .dlg-body { display: flex; flex-direction: column; gap: 12px; }
+.progress { height: 4px; border-radius: 2px; background: var(--stroke-2); overflow: hidden; }
+.progress div { height: 100%; width: 0; background: var(--brand); }
 .dlg-head { padding: 20px 24px 8px; font-size: 16px; line-height: 22px; font-weight: 600; }
 .dlg-body { padding: 0 24px; overflow: auto; min-height: 0; }
 .dlg-body h3 { margin: 12px 0 4px; font-size: 14px; line-height: 20px; font-weight: 600; }
-.dlg-foot { display: flex; justify-content: flex-end; padding: 20px 24px; }
+.dlg-foot { display: flex; justify-content: flex-end; align-items: center; gap: 8px; padding: 20px 24px; }
 .keys td { padding: 4px 0; border: 0; vertical-align: top; }
 .keys td:first-child { width: 168px; padding-right: 12px; white-space: nowrap; color: var(--fg-2); }
 .keys tr:hover td { background: none; }
