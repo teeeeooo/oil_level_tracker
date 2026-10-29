@@ -38,12 +38,19 @@ WEAK = 0.25
 WEAK_WINDOW = 10     # columns (5 s)
 WEAK_MIN_RUN = 4     # columns (2 s)
 BG_MIX = 0.3
-# added after the first run (labelled post-hoc in the diagnostic): D uses only the background view
+# added after the first run (labelled post-hoc in the diagnostic): D uses only the background view;
+# F weakens rows with a strong edge in most columns, standing in for v1's user-marked fixed structures
 POST_HOC_MIX = {"D": 1.0, "E": 0.5}
+FIXED_SHARE = 0.8    # of the columns
+FIXED_LEVEL = 0.5    # edge strength s
+FIXED_PAD = 3        # rows on each side
+FIXED_WEIGHT = 0.2
+OVERVIEW_WIDTH = 2400
 
 NAMES = {"A": "A spike", "B": "B DP", "C": "C DP 0.7 raw + 0.3 bg", "D": "D DP bg only (post-hoc)",
-         "E": "E DP 0.5 raw + 0.5 bg (post-hoc)"}
-COLOURS = {"A": (200, 60, 200), "B": (31, 119, 208), "C": (40, 170, 60), "D": (220, 50, 50), "E": (230, 150, 0)}  # RGB
+         "E": "E DP 0.5 raw + 0.5 bg (post-hoc)", "F": "F DP, fixed bands weakened (v1 artifacts stand-in, post-hoc)"}
+COLOURS = {"A": (200, 60, 200), "B": (31, 119, 208), "C": (40, 170, 60), "D": (220, 50, 50), "E": (230, 150, 0),
+           "F": (0, 170, 170)}  # RGB
 
 
 @dataclass(frozen=True)
@@ -205,12 +212,31 @@ def weak_stretches(strength: np.ndarray) -> np.ndarray:
     return weak
 
 
-def methods(context: Context, keys: str = "ABCDE") -> dict[str, Draft]:
+def fixed_bands(g: np.ndarray) -> np.ndarray:
+    """Rows with a strong edge in most columns, padded: what a user would mark as fixed structure."""
+    strong = (np.minimum(g / EDGE_FULL, 1.0) > FIXED_LEVEL).mean(axis=1) >= FIXED_SHARE
+    mask = np.zeros(g.shape[0], bool)
+    for row in np.flatnonzero(strong):
+        mask[max(0, row - FIXED_PAD):row + FIXED_PAD + 1] = True
+    return mask
+
+
+def methods(context: Context, keys: str = "ABCDEF") -> dict[str, Draft]:
     lum = luma(context.rgb)
     g = edge_strength(lum)
     g_bg = edge_strength(lum - np.median(lum, axis=1, keepdims=True))
     mix = {"B": 0.0, "C": BG_MIX, **POST_HOC_MIX}
-    return {key: draft_spike(g) if key == "A" else draft_dp((1 - mix[key]) * g + mix[key] * g_bg) for key in keys}
+    drafts = {}
+    for key in keys:
+        if key == "A":
+            drafts[key] = draft_spike(g)
+        elif key == "F":
+            weakened = g.copy()
+            weakened[fixed_bands(g)] *= FIXED_WEIGHT
+            drafts[key] = draft_dp(weakened)
+        else:
+            drafts[key] = draft_dp((1 - mix[key]) * g + mix[key] * g_bg)
+    return drafts
 
 
 # ---- scoring ------------------------------------------------------------------------------
@@ -278,7 +304,11 @@ def picture(context: Context, points: list[Point], drafts: dict[str, Draft], pat
         weak = "" if draft.weak is None else f"   grey = cannot judge ({draft.weak.mean():.0%})"
         cv2.putText(label, NAMES[key] + weak, (36, 18), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (40, 40, 40), 1, cv2.LINE_AA)
         panels.append(np.vstack([label, image]))
-    cv2.imwrite(str(path), np.vstack(panels))
+    sheet = np.vstack(panels)
+    cv2.imwrite(str(path), sheet)
+    if sheet.shape[1] > OVERVIEW_WIDTH:  # a long video: also a narrower overview of the same panels
+        overview = cv2.resize(sheet, (OVERVIEW_WIDTH, sheet.shape[0]), interpolation=cv2.INTER_AREA)
+        cv2.imwrite(str(path.with_name(path.stem + "-overview.png")), overview)
 
 
 # ---- report -------------------------------------------------------------------------------
@@ -300,7 +330,7 @@ def run_recipe(video: Path, recipe_path: Path, out: Path) -> None:
         e = item.ellipse
         glass = Glass(item.name, e.center_x, e.center_y, e.radius_x, e.radius_y)
         context = build_context(video, glass)
-        drafts = methods(context, "ABDE")
+        drafts = methods(context, "ABDF")
         rows, columns = context.rgb.shape[:2]
         name = f"{video.stem}-{index}-{''.join(c if c.isalnum() else '_' for c in item.name)}.png"
         picture(context, [], drafts, out / name)
@@ -334,15 +364,15 @@ def run_samples(folder: Path, out: Path) -> None:
         summary[name] = {key: draft.results for key, draft in drafts.items()}
     (out / "summary.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
 
-    print("totals (D and E were added after the first run)")
+    print("totals (D, E and F were added after the first run)")
     for kind in ("gold", "silver"):
-        for key in "ABCDE":
+        for key in "ABCDEF":
             results = [r for name in SAMPLES for r in summary[name][key] if r["kind"] == kind and "hit" in r]
             hits = sum(r["hit"] for r in results)
             weak = sum(r["weak"] for r in results)
             weak_close = sum(r["weak"] and r["close"] for r in results)
             print(f"  {kind:6} {key}: hits={hits}/{len(results)} in_cannot_judge={weak} (of which close={weak_close})")
-    for key in "BCDE":
+    for key in "BCDEF":
         none = [r for name in SAMPLES for r in summary[name][key] if r["kind"] == "silver-none"]
         print(f"  silver-none {key}: in_cannot_judge={sum(r['weak'] for r in none)}/{len(none)}")
 
