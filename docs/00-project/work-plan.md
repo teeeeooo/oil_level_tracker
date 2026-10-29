@@ -145,6 +145,69 @@ the undo depth and the shortcuts.
 8. **Checks:** unit and API tests, macOS smoke checks, and a Windows run.
    It also covers the V2-2 follow-up.
 
+## Session handoff — 2026-10-29 (fourth)
+
+**The session closed after `fb8eef3`,** with this handoff commit on top.
+The working tree is clean, and `main` and the remote are in sync. V2-3
+steps 1 to 3 are done; nothing waits on Windows.
+
+**Resume:** read this file, then
+- [product.md](../10-product/product.md) §4 and §6: the V2-3 decisions
+  (re-analysis after editing, saving, the snap, the range tool, the grab
+  shape);
+- [DESIGN.md](../../DESIGN.md) §2 (`--selection-band`, `--empty-mark`),
+  §4 (tool buttons with names) and §5 ("Editor window");
+- [editor.html](../../design/mockup/editor.html), with `#grab`, `#range`
+  and `#point` for its three states;
+- [architecture.md](../20-architecture/architecture.md): the judgment and
+  the FULL/EMPTY bands come from Python; during a drag only the lines
+  redraw in the browser, and the rest updates from the API on release;
+- [inspection-folder.md](../20-architecture/inspection-folder.md)
+  (`edits.json`) and `src/oil_tracker/domain/edits.py`;
+- for step 5, the spike's editor
+  (`spike/webui:spikes/webui/static/editor.js`: undo stack of 200, snap
+  on the context luma in the browser, the press handling it fixed). Port
+  after review, recording the source path.
+
+**Step 4, next: the editor's use cases and routes.** The plan so far:
+- **A new use case module** (for example `application/editing.py`):
+  open the edits (`load_edits`, else `edits_from_analysis` with the
+  setup's compressor start), save them with `saved_at`, and compute what
+  follows from a Glass's lines (FULL/EMPTY runs, coverage) for the bands
+  and the Glass panel.
+- **Re-analysis:** lift the `InspectionLocked` refusal for an analysed
+  inspection; the check returns the `Dropped` counts for the warning;
+  after the analysis, `merge_reanalysis` rewrites `edits.json` when it
+  exists. The setup's compressor field starts from the edited value.
+- **Point line and snap data** need the context image: the use case reads
+  the cached PNG pieces from the store and hands them to a new
+  `adapters/video` port (adapters do not import each other). The point
+  line reuses the draft's dynamic programming in `adapters/video/draft.py`,
+  pinned through the user's points. The snap can follow the spike and
+  work on the image in the browser, or get edge rows per column from the
+  API; decide in step 4.
+- **The source video over HTTP Range** for the `<video>` element (A6). A
+  `<video>` cannot send the `X-OLT-Token` header, so that one route needs
+  the token another way (a query parameter, with the local Host check).
+  Check the codec of SPL#1 and SPL#4 first: WebView2 plays H.264, not
+  necessarily HEVC.
+- **A9, the SHA-256 warning on reopening:** hashing SPL#1 takes seconds on
+  the slowest PC, so run it in the background and warn when it differs.
+- API tests against the running server, as in `tests/test_http_api.py`.
+
+**Then:** step 5 (the web core), and step 6 at once: A5 and A6 on the
+slowest PC through a terminal request. The app needs a measuring mode that
+writes a Markdown result (redraw times while dragging, frame seek times,
+playback stalls), and that PC needs the app's dependencies (pywebview,
+pythonnet) installed, perhaps from wheels carried over (see the
+slowest-PC request §5).
+
+**Learned from the user this session:**
+- tool buttons need their names; icons alone hid the range tool;
+- the user answers short decision questions quickly; a mock-up goes to
+  the user before the screens are built;
+- background jobs on the workstation can skew timings; ask what else ran.
+
 ## Open items
 
 **Before V2-5** (A4 is judged in the app on the slowest PC):
@@ -186,13 +249,13 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `4f7d493`: `146 passed, 2 skipped` on macOS, so
-  `145 passed, 3 skipped` on Windows.
+  test. At `fb8eef3`: `155 passed, 2 skipped` on macOS, so
+  `154 passed, 3 skipped` on Windows.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
-- The mock-ups `design/mockup/editor.html` and `recipe.html` predate the
-  speed field and the help dialog; DESIGN.md governs where they differ.
+- The mock-up `design/mockup/recipe.html` predates the speed field and
+  the help dialog; DESIGN.md governs where they differ.
 
 ## Known limits, accepted for now
 
@@ -228,5 +291,7 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done today:** V2-1 and V2-2 closed, each with its Windows run; the
   V2-2 follow-up; V2-3 started.
+- **Done today also:** V2-3 steps 1 to 3 (the confirmed mock-up, the edit
+  document, `edits.json`).
 - **Next action:** V2-3 step 4, the `application` use cases and the
-  `adapters/http` routes for the editor.
+  `adapters/http` routes for the editor, as the handoff above says.
