@@ -5,7 +5,6 @@ from __future__ import annotations
 import base64
 import binascii
 import json
-import re
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +14,10 @@ from oil_tracker.domain.geometry import Ellipse
 from oil_tracker.domain.recipe import Glass, JudgmentRule, Recipe, ReferenceFrame
 
 from .files import atomic_write_text
+from .values import integer as _integer
+from .values import number as _number
+from .values import safe_stem
+from .values import text as _text
 
 FORMAT = "oil-level-tracker-recipe"
 SCHEMA_VERSION = 1
@@ -28,8 +31,6 @@ _RULE_NUMBERS = (
     "allowed_px",
 )
 _ELLIPSE_NUMBERS = ("center_x", "center_y", "radius_x", "radius_y")
-_FORBIDDEN = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
-_RESERVED = re.compile(r"^(con|prn|aux|nul|com[0-9¹²³]|lpt[0-9¹²³])(\..*)?$", re.IGNORECASE)
 
 
 class UnreadableRecipe(ValueError):
@@ -113,32 +114,9 @@ def _glass_from(raw: dict[str, Any]) -> Glass:
     )
 
 
-def _text(value: Any) -> str:
-    if not isinstance(value, str):
-        raise TypeError(f"expected text, got {type(value).__name__}")
-    return value
-
-
-def _number(value: Any) -> float:
-    if isinstance(value, bool) or not isinstance(value, int | float):
-        raise TypeError(f"expected a number, got {type(value).__name__}")
-    return float(value)
-
-
-def _integer(value: Any) -> int:
-    if isinstance(value, bool) or not isinstance(value, int):
-        raise TypeError(f"expected an integer, got {type(value).__name__}")
-    return value
-
-
 def file_name_for(recipe_name: str) -> str:
     """A Windows-safe file name for a Recipe name."""
-    stem = _FORBIDDEN.sub("_", recipe_name.strip()).rstrip(". ")
-    if not stem:
-        stem = "_"
-    if _RESERVED.match(stem):
-        stem = "_" + stem
-    return stem + SUFFIX
+    return safe_stem(recipe_name) + SUFFIX
 
 
 class RecipeFolder:
