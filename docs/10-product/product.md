@@ -11,7 +11,9 @@ and what it does. The user made these decisions:
 - on 2026-10-29, at the V2-2 start: the inspection flow and analysis setup
   (§3), and, after the draft comparison, the draft (§4) and the editing
   tools and snap (§6);
-- on 2026-10-29, after the V2-2 Windows run: the inspection name (§3, §8).
+- on 2026-10-29, after the V2-2 Windows run: the inspection name (§3, §8);
+- on 2026-10-29, at the V2-3 start: re-analysis after editing, and saving
+  (§6).
 
 - **Interview record:** `docs/60-evidence/s11/2026-10-28-v2-direction-interview-handoff.md`
   at tag `v1-final`.
@@ -222,7 +224,13 @@ Each Glass in a Recipe has one rule.
   - a paused frame is exact.
 - **Compressor start:** a marker the user can drag. Dragging it recomputes
   the judgment. Changing the analysis range means re-analysis.
+- **Re-analysis after editing** (user, 2026-10-29): the edited lines are
+  kept where the new range overlaps the old one; only the new stretches
+  get a draft. Before it starts, the app says which edits fall outside the
+  new range and will be dropped.
 - **Memos:** attached to a graph position.
+- **Saving** (user, 2026-10-29): "저장" saves the edits. Leaving the editor
+  or closing the window with unsaved changes asks first.
 
 ## 7. Report
 

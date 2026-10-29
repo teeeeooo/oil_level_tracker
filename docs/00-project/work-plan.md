@@ -1,7 +1,6 @@
 # Current Work Plan
 
-**Current milestone:** none active. `V2-3 — Editor` / `PLANNED` starts when
-the user says so.
+**Current milestone:** `V2-3 — Editor` / `ACTIVE` (started 2026-10-29).
 **Last completed:** `V2-2 — Analysis` / `DONE` (2026-10-29).
 
 This is the sole owner of the current state, authorization and next action.
@@ -82,6 +81,59 @@ Rewrite it; do not append to it.
   - v1 local evidence is at `~/Developer/oil_level_tracker-v1-evidence/`.
   - Branch `spike/webui` is kept for porting.
 
+## V2-3 — Editor
+
+**Scope** (roadmap; Product SSOT §4 and §6): editing on the result screen.
+- grab-and-drag, the pencil, range delete and the point line, with a snap
+  that can be switched off;
+- "cannot judge" stretches, Foam and reference lines, memos;
+- zoom, pan and time-axis input;
+- the video, cropped to the Glass with the lines over it;
+- the compressor-start marker; re-analysis; saving and resuming;
+- the warning when a reopened video's SHA-256 differs (A9).
+The judgment, the override, the report and submitting are V2-4.
+
+**Start decisions** (user, 2026-10-29), in the Product SSOT §6:
+- **re-analysis after editing** keeps the edited lines where the new range
+  overlaps the old one, drafts only the new stretches, and says first which
+  edits will be dropped;
+- **saving:** the "저장" button, and a question before leaving the editor
+  or closing the window with unsaved changes;
+- **A5 and A6 on the slowest PC** are measured as soon as grab-and-drag,
+  the pencil and the video work, before the other tools are built.
+
+**Left to the agent** (2026-10-28 interview): the edit document's schema,
+the undo depth and the shortcuts.
+
+**Steps:**
+1. **Mock-up** of the editor, for the user's confirmation: the confirmed
+   [editor.html](../../design/mockup/editor.html) (2026-10-28) brought up
+   to date with the tools added since (range delete, the point line, the
+   snap), the speed field and help, empty stretches, the line kinds,
+   re-analysis and the save state. **The snap's reach and default are
+   settled here** (Product SSOT §6).
+2. **`domain`:** the edit document (lines with pieces and sample origins,
+   "cannot judge" stretches, memos, the compressor start), FULL and EMPTY
+   derived from the line position, and the re-analysis merge.
+3. **`adapters/storage`:** the edit document in the inspection folder,
+   with its format in
+   [inspection-folder.md](../20-architecture/inspection-folder.md).
+4. **`application` and `adapters/http`:** loading and saving the edits,
+   the derived bands, the source video over HTTP Range, re-analysis, the
+   point line (dynamic programming between the user's points) and the
+   edge data for the snap.
+5. **`web`, the core:** the editor state with undo; grab-and-drag, the
+   pencil and range delete; zoom, pan and time-axis input; the playhead;
+   the video.
+6. **A5 and A6 on the slowest PC:** a terminal request for the user
+   (no agent there), with the app timing itself and writing a Markdown
+   result.
+7. **`web`, the rest:** the point line, the snap, "cannot judge", Foam and
+   reference lines, memos, the compressor marker, re-analysis, the save
+   question and the SHA-256 warning.
+8. **Checks:** unit and API tests, macOS smoke checks, and a Windows run.
+   It also covers the V2-2 follow-up.
+
 ## Open items
 
 **Before V2-5** (A4 is judged in the app on the slowest PC):
@@ -94,13 +146,6 @@ Rewrite it; do not append to it.
   on the workstation. The user traced the gap to a RAG chunking job at
   about 50 % CPU during the run. Confirm the app's own share on a quiet
   PC when the app is timed on the slowest PC.
-
-**For V2-3:**
-- A5 and A6 on the slowest PC (the editor must hold there too).
-- Re-analysing an analysed inspection (the API refuses it with 409 until
-  then), and the warning when a reopened video's SHA-256 differs (A9).
-- The video, zoom and tools on the result screen; the snap's reach and
-  default are settled with the V2-3 mock-up (Product SSOT §6).
 
 **The next Windows run** also covers the V2-2 follow-up above, as the
 V2-2 run covered the V2-1 follow-up.
@@ -171,6 +216,6 @@ The three v1 remote branches that v1 docs cite stay.
 ## Next
 
 - **Done today:** V2-1 and V2-2 closed, each with its Windows run; the
-  V2-2 follow-up.
-- **Next action:** the user decides when V2-3 starts. Its start needs the
-  user's decisions on the editor (the V2-3 mock-up, the snap).
+  V2-2 follow-up; V2-3 started.
+- **Next action:** V2-3 step 1, the editor mock-up, for the user's
+  confirmation with the snap's reach and default.
