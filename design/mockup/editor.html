@@ -9,8 +9,8 @@
   2026-10-28: the layout, confirmed by the user.
   2026-10-29 (V2-3 step 1): brought up to date with the tools added at the V2-2 start (range delete,
   the point line, the snap), the speed field and help (DESIGN.md §4), empty stretches, the line kinds,
-  re-analysis and the save state. Tokens follow DESIGN.md §2–§6; the ones marked "proposed" are not
-  in DESIGN.md yet. Open with #grab, #range or #point to show one state.
+  re-analysis and the save state. Confirmed by the user on 2026-10-29, with labelled tool buttons.
+  Tokens follow DESIGN.md §2–§6. Open with #grab, #range or #point to show one state.
 -->
 <style>
 :root {
@@ -24,9 +24,7 @@
   --cannot-judge:#8A8A8A; --compressor:#8764B8; --playhead:#242424; --memo:#C19C00;
   --glass-outline:rgba(255,255,255,0.9); --glass-shadow:rgba(0,0,0,0.5);
   --pending:#616161; --pending-bg:#F5F5F5;
-  /* proposed for V2-3 */
-  --empty-mark:#E37D80;                     /* an empty stretch of the Oil line: invalid until drawn */
-  --selection-band:rgba(15,108,189,0.12);   /* a selected time range, over the graph and the image */
+  --empty-mark:#E37D80; --selection-band:rgba(15,108,189,0.12);
   --font:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Malgun Gothic",sans-serif;
   --mono:"Cascadia Mono",Consolas,ui-monospace,monospace;
 }
@@ -37,7 +35,7 @@ body { background:var(--bg-2); color:var(--fg-1); font:400 14px/20px var(--font)
 
 /* toolbar */
 .toolbar { display:flex; align-items:center; gap:4px; padding:0 12px; background:var(--bg-3); border-bottom:1px solid var(--stroke-1); }
-.title { display:flex; flex-direction:column; min-width:0; width:250px; margin:0 4px; }
+.title { display:flex; flex-direction:column; min-width:0; width:190px; margin:0 4px; }
 .title b { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .title span { font-size:12px; line-height:16px; color:var(--fg-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .title .dirty { color:var(--fg-1); font-weight:600; }
@@ -46,8 +44,9 @@ body { background:var(--bg-2); color:var(--fg-1); font:400 14px/20px var(--font)
 .tool:hover { background:var(--bg-4); }
 .tool[aria-pressed="true"] { background:var(--brand-tint); color:var(--brand); }
 .tool svg { width:20px; height:20px; }
+.tool.labeled { width:auto; padding:0 8px; gap:6px; font:inherit; white-space:nowrap; }
 .spacer { flex:1; }
-.picker { display:flex; align-items:center; gap:8px; height:32px; padding:0 10px; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; background:var(--bg-1); min-width:200px; }
+.picker { display:flex; align-items:center; gap:8px; height:32px; padding:0 10px; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; background:var(--bg-1); min-width:150px; }
 .picker .name { font-weight:600; }
 .picker .more { margin-left:auto; color:var(--fg-3); font-size:12px; }
 .btn { height:32px; padding:0 12px; border-radius:4px; font:inherit; cursor:pointer; border:1px solid var(--stroke-1); background:var(--bg-1); color:var(--fg-1); display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
@@ -138,12 +137,12 @@ table.kv th { color:var(--fg-3); font-weight:400; width:96px; }
       <span><span class="dirty">저장 안 함</span> · SPL#4_Cooling_onoff_#2.mp4</span>
     </div>
     <div class="sep"></div>
-    <button class="tool" data-tool="grab" title="잡아끌기 (G)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 13c3-6 6 2 9-3s3-4 5-5"/><circle cx="10" cy="11" r="2.5" fill="currentColor" stroke="none"/></svg></button>
-    <button class="tool" data-tool="pencil" title="연필 (P)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l1-4 8-8 3 3-8 8z"/><path d="M11.5 5.5l3 3"/></svg></button>
-    <button class="tool" data-tool="point" title="점 잇기 (L): 맥락 이미지에 점을 찍으면 점 사이를 경계를 따라 잇습니다"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 14c2-1 3-6 6-6s3 4 6 2"/><circle cx="4" cy="14" r="1.8" fill="currentColor"/><circle cx="10" cy="8" r="1.8" fill="currentColor"/><circle cx="16" cy="10" r="1.8" fill="currentColor"/></svg></button>
-    <button class="tool" data-tool="range" title="범위 (R): 끌어서 시간 범위를 고르고, Delete로 선 지우기 · U로 판단 불가"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3v14M15 3v14"/><path d="M5 10h10" stroke-dasharray="2 2"/><path d="M7 8l-2 2 2 2M13 8l2 2-2 2"/></svg></button>
-    <button class="tool" data-tool="memo" title="메모 (M)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h12v9H9l-4 3v-3H4z"/></svg></button>
-    <button class="tool" data-tool="pan" title="이동 (H, 또는 Shift-드래그)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2v16M2 10h16M10 2l-2 2M10 2l2 2M10 18l-2-2M10 18l2-2M2 10l2-2M2 10l2 2M18 10l-2-2M18 10l-2 2"/></svg></button>
+    <button class="tool labeled" data-tool="grab" title="잡아끌기 (G)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 13c3-6 6 2 9-3s3-4 5-5"/><circle cx="10" cy="11" r="2.5" fill="currentColor" stroke="none"/></svg>잡아끌기</button>
+    <button class="tool labeled" data-tool="pencil" title="연필 (P)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l1-4 8-8 3 3-8 8z"/><path d="M11.5 5.5l3 3"/></svg>연필</button>
+    <button class="tool labeled" data-tool="point" title="점 잇기 (L): 맥락 이미지에 점을 찍으면 점 사이를 경계를 따라 잇습니다"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 14c2-1 3-6 6-6s3 4 6 2"/><circle cx="4" cy="14" r="1.8" fill="currentColor"/><circle cx="10" cy="8" r="1.8" fill="currentColor"/><circle cx="16" cy="10" r="1.8" fill="currentColor"/></svg>점 잇기</button>
+    <button class="tool labeled" data-tool="range" title="범위 (R): 끌어서 시간 범위를 고르고, Delete로 선 지우기 · U로 판단 불가"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3v14M15 3v14"/><path d="M5 10h10" stroke-dasharray="2 2"/><path d="M7 8l-2 2 2 2M13 8l2 2-2 2"/></svg>범위</button>
+    <button class="tool labeled" data-tool="memo" title="메모 (M)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h12v9H9l-4 3v-3H4z"/></svg>메모</button>
+    <button class="tool labeled" data-tool="pan" title="이동 (H, 또는 Shift-드래그)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2v16M2 10h16M10 2l-2 2M10 2l2 2M10 18l-2-2M10 18l2-2M2 10l2-2M2 10l2 2M18 10l-2-2M18 10l-2 2"/></svg>이동</button>
     <div class="sep"></div>
     <button class="tool" title="실행 취소 (Ctrl+Z)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 5L3 9l4 4"/><path d="M3 9h9a5 5 0 010 10h-2"/></svg></button>
     <button class="tool" title="다시 실행 (Ctrl+Shift+Z)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 5l4 4-4 4"/><path d="M17 9H8a5 5 0 000 10h2"/></svg></button>
@@ -196,6 +195,7 @@ table.kv th { color:var(--fg-3); font-weight:400; width:96px; }
           <div class="row"><span class="label">스냅 <kbd>S</kbd></span><span class="toggle"><span class="switch on"></span>켬</span><span class="caption">8 px 안의 경계에 붙음</span></div>
           <div class="selbox" id="selbox" hidden>
             <div class="head">선택한 범위 <span class="num">03:56.0 – 04:22.0 · 26.0 s</span></div>
+            <div class="caption">범위 도구로 그래프나 맥락 이미지를 가로로 끌어 고릅니다. 양 끝을 끌어 조정하고, <kbd>Esc</kbd>로 풉니다.</div>
             <div class="row" style="flex-wrap:wrap">
               <button class="btn small">선 지우기 <kbd>Delete</kbd></button>
               <button class="btn small">판단 불가 <kbd>U</kbd></button>
@@ -257,12 +257,13 @@ table.kv th { color:var(--fg-3); font-weight:400; width:96px; }
     <button class="btn small" data-state="point">점 잇기 중</button>
   </div>
   <div id="stateText"></div>
-  <b style="display:block;margin-top:8px">확인할 것</b>
+  <b style="display:block;margin-top:8px">확정 (사용자, 2026-10-29)</b>
   <ol>
-    <li><b>스냅</b>: 기본으로 켤지, 거리(목업은 8 px, 원본 프레임 기준)</li>
-    <li><b>범위 도구</b>: 확정 시안의 "판단 불가" 도구를 범위 도구 하나로 합쳤습니다. 범위를 고른 뒤 Delete는 선 지우기, U는 판단 불가</li>
-    <li><b>뾰족하게</b>: "한 지점을 모서리로 전환"을 끌기 모양(부드럽게/뾰족하게)으로 해석했습니다</li>
-    <li><b>빈 구간 표시</b>: 시간축 위 붉은 띠와 "다음 빈 구간(N)". 새 색 --empty-mark</li>
+    <li><b>스냅</b>: 기본으로 켬, 원본 프레임 기준 8 px</li>
+    <li><b>범위 도구</b> 하나로: 범위를 고른 뒤 Delete는 선 지우기, U는 판단 불가</li>
+    <li><b>끌기 모양</b>: 부드럽게 / 뾰족하게(Alt)</li>
+    <li><b>빈 구간</b>: 시간축 위 --empty-mark 띠와 "다음 빈 구간(N)"; 범위 선택은 --selection-band</li>
+    <li><b>도구 단추</b>에 이름을 붙임 (아이콘만으로는 찾기 어려움)</li>
   </ol>
 </div>
 
@@ -466,7 +467,7 @@ table.kv th { color:var(--fg-3); font-weight:400; width:96px; }
 
   const TEXT = {
     grab: "<b>잡아끌기 중</b>: 01:35 근처에서 Oil 선을 잡은 상태. 옅은 띠가 끌기 폭(30 s)이고, 그 안이 부드럽게 따라옵니다. 스냅이 켜져 있어 잡은 지점이 가까운 경계(점선)에 붙습니다. 놓으면 FULL/EMPTY 띠와 빈 구간 수가 새로 계산됩니다.",
-    range: "<b>범위 선택</b>: 범위 도구로 03:56–04:22를 끌어 고른 상태. 오른쪽 \"편집\"에 선 지우기(Delete), 판단 불가(U)가 나옵니다. 구간 반복을 켜면 이 범위를 되풀이 재생합니다.",
+    range: "<b>범위 선택</b>: 툴바의 <b>범위</b>(R)를 누르고, 그래프나 맥락 이미지 위를 03:56에서 04:22까지 가로로 끌어 고른 상태. 양 끝(파란 세로선)을 끌어 넓히거나 줄이고, Esc로 풉니다. 오른쪽 \"편집\"에 선 지우기(Delete), 판단 불가(U)가 나옵니다. 구간 반복을 켜면 이 범위를 되풀이 재생합니다.",
     point: "<b>점 잇기 중</b>: 빈 구간 02:30–02:52 위 맥락 이미지에 점 3개를 찍은 상태. 점 사이는 경계를 따라 이어지고(점선), 마지막 점에서 커서까지 미리 보기가 이어집니다. Enter로 확정하면 그 구간의 Oil 선이 됩니다.",
   };
   function setState(next) {

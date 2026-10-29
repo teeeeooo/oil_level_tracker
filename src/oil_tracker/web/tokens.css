@@ -23,6 +23,7 @@
   --focus-inner: #FFFFFF;
   --range-fill: #FFE07A;
   --range-edge: #8F6A00;
+  --selection-band: rgba(15,108,189,0.12);
   /* 2.3 Domain roles */
   --oil: #1F77D0;
   --foam: #E8710A;
@@ -34,6 +35,7 @@
   --compressor: #8764B8;
   --playhead: #242424;
   --memo: #C19C00;
+  --empty-mark: #E37D80;
   --glass-outline: rgba(255,255,255,0.9);
   --glass-shadow: rgba(0,0,0,0.5);
   /* 2.4 Status (text, background) */

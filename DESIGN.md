@@ -56,6 +56,7 @@ These are the visual rules for every v2 screen and for the report.
 | `--focus-inner` | `#FFFFFF` | focus ring inner (1 px) |
 | `--range-fill` | `#FFE07A` | the analysis range band on the scrub bar: yellow, apart from the blue played part (user, 2026-10-29) |
 | `--range-edge` | `#8F6A00` | that band's 2 px edges and its "시작" and "끝" marks |
+| `--selection-band` | `rgba(15,108,189,0.12)` | a selected time range in the editor, over the graph and the image, between 1 px `--brand` edges |
 
 ### 2.3 Domain roles (data colours)
 
@@ -74,6 +75,7 @@ Nothing else may reuse them.
 | `--compressor` | `#8764B8` | compressor-start marker (vertical, 1.5 px, dash `4 3`, label at the top) |
 | `--playhead` | `#242424` | playhead, 1 px, with a small triangle on the time axis |
 | `--memo` | `#C19C00` | memo pin, a numbered circle with white text |
+| `--empty-mark` | `#E37D80` | an empty stretch of the Oil line (invalid until drawn): a 4 px bar on the time axis, and the label "빈 구간" in the graph |
 | `--glass-outline` | `rgba(255,255,255,0.9)` | Glass ellipse and zero line on frames (Recipe screen, video): 1 px, dash `4 3`, over a 1 px `--glass-shadow` line |
 | `--glass-shadow` | `rgba(0,0,0,0.5)` | shadow line 1 px below every `--glass-outline` stroke |
 
@@ -136,7 +138,11 @@ Do not use sizes outside this ramp.
   - Subtle (toolbar): transparent, `--bg-4` on hover.
   - Disabled: `--fg-disabled`.
 - **Tool buttons:**
-  - 32 × 32, radius 4, a 20 px icon, and a tooltip with the shortcut.
+  - 32 px high, radius 4, padding 0 8: a 20 px icon followed by the tool
+    name in Body 1, gap 6. The tooltip names the shortcut. Icons alone
+    were hard to tell apart (user, 2026-10-29).
+  - Undo, redo and the transport buttons stay 32 × 32 icons with a
+    tooltip.
   - The selected tool gets a `--brand-tint` fill and a `--brand` icon.
   - Only one tool is selected at a time.
 - **Inputs:**
@@ -239,24 +245,43 @@ Do not use sizes outside this ramp.
 - **Spacing scale:** 2, 4, 6, 8, 12, 16, 20, 24, 32 px. Panel padding is 12;
   gaps between controls are 8.
 - **Editor window:** minimum 1280 × 800.
+  - Updated for V2-3 and confirmed by the user on 2026-10-29
+    ([editor.html](design/mockup/editor.html)).
   - **Top toolbar, 48 px:**
-    - tools on the left (grab, pencil, cannot judge, memo, pan);
+    - on the left: "← 검사 목록", then the title (the inspection name, with
+      the save state and the video name below it);
+    - the tools: 잡아끌기 (G), 연필 (P), 점 잇기 (L), 범위 (R), 메모 (M),
+      이동 (H); then undo and redo;
     - the Glass picker in the middle;
-    - Save, Submit and help on the right.
+    - 저장, 제출 and help on the right.
   - **Main area:**
     - **Left column, flexible width:**
       - the graph (about 45 % of the height);
       - the context image (about 45 %);
       - a 32 px shared time axis with the playhead and editable range
-        numbers.
+        numbers. Empty stretches of the Oil line show as `--empty-mark`
+        bars along its top edge.
       - The graph and the image always share the same time scale and
         horizontal scroll.
+      - A selected range is a `--selection-band` over both, with 1 px
+        `--brand` edges that can be dragged.
     - **Right column, 360 px:**
       - the video, cropped to the Glass with the lines drawn over it, and
-        its transport;
-      - the judgment panel (computed result, override, reason);
-      - the selection panel;
-      - the memo list.
+        its transport (frame steps, play, the speed field, range repeat,
+        the time);
+      - **편집:** the line kind the pencil and the point line draw (Oil,
+        Foam, 참조); the grab width with `[` `]`; the grab shape
+        (부드럽게, 뾰족하게, or Alt while dragging); the snap switch with its
+        reach. Below them, the selected range with "선 지우기 (Delete)",
+        "판단 불가 (U)" and "판단 불가 풀기", or the point line in progress
+        with its keys;
+      - **Glass:** the empty stretches, "cannot judge", the valid share
+        against the Recipe's minimum, FULL and EMPTY, and "이전/다음 빈
+        구간" (N);
+      - the judgment panel (computed result, override, reason; V2-4);
+      - the memo list;
+      - **분석:** the range, the compressor start (dragged on the graph),
+        the Recipe copy, and "범위 바꿔 다시 분석…".
 - **Inspection list:** the first screen.
   - **Toolbar, 48 px:** the title "검사" on the left; "Recipe", "새 검사"
     (primary) and help on the right.

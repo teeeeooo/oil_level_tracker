@@ -27,7 +27,8 @@ Rewrite it; do not append to it.
   - A test enforces the dependency rule (`tests/test_architecture.py`).
 - **Visual rules:** [DESIGN.md](../../DESIGN.md), Fluent 2 light.
   - The editor layout in [design/mockup/editor.html](../../design/mockup/editor.html)
-    is **confirmed by the user** (2026-10-28).
+    is **confirmed by the user** (2026-10-28), and its V2-3 update too
+    (2026-10-29).
   - The inspection list and analysis setup in
     [design/mockup/inspection.html](../../design/mockup/inspection.html)
     are **confirmed by the user** (2026-10-29).
@@ -106,12 +107,16 @@ The judgment, the override, the report and submitting are V2-4.
 the undo depth and the shortcuts.
 
 **Steps:**
-1. **Mock-up** of the editor, for the user's confirmation: the confirmed
-   [editor.html](../../design/mockup/editor.html) (2026-10-28) brought up
-   to date with the tools added since (range delete, the point line, the
-   snap), the speed field and help, empty stretches, the line kinds,
-   re-analysis and the save state. **The snap's reach and default are
-   settled here** (Product SSOT §6).
+1. **Mock-up — confirmed by the user** (2026-10-29):
+   [editor.html](../../design/mockup/editor.html), written into DESIGN.md
+   §2, §4 and §5 and the Product SSOT §6.
+   - the snap is on by default and reaches 8 source px;
+   - one range tool: Delete empties the Oil line, U marks "cannot judge";
+   - the grab shape is smooth, or pointed with Alt (the "corner");
+   - empty stretches are `--empty-mark` bars on the time axis, with
+     "다음 빈 구간" (N); a selected range is `--selection-band`;
+   - the tool buttons carry their names: the user could not find the
+     range tool among icons alone.
 2. **`domain`:** the edit document (lines with pieces and sample origins,
    "cannot judge" stretches, memos, the compressor start), FULL and EMPTY
    derived from the line position, and the re-analysis merge.
@@ -217,5 +222,4 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done today:** V2-1 and V2-2 closed, each with its Windows run; the
   V2-2 follow-up; V2-3 started.
-- **Next action:** V2-3 step 1, the editor mock-up, for the user's
-  confirmation with the snap's reach and default.
+- **Next action:** V2-3 step 2, the `domain` edit document.

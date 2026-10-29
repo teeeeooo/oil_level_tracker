@@ -194,14 +194,17 @@ Each Glass in a Recipe has one rule.
   - **Grab-and-drag:** grab a line anywhere; nearby parts follow smoothly,
     within a width the user adjusts.
   - **Pencil:** redraw a time range, replacing that stretch.
-  - **Range delete:** drag to select a time range, then press Delete. The
-    Oil line there becomes empty (§4).
+  - **Range:** the range tool selects a time range by dragging across the
+    graph or the context image. Delete then empties the Oil line there
+    (§4), and U marks it "cannot judge". One tool serves both (user,
+    2026-10-29).
   - **Point line:** click points on the context image. Each pair of
     neighbouring points is joined by a path that follows the edges between
     them: the draft's dynamic programming, pinned to the user's points.
   - The draft is kept as dense samples. Points are not edited one by one.
-- **Curve shape:** smooth with no overshoot. A spot can be switched to a
-  corner.
+- **Curve shape:** grab-and-drag bends the line smoothly, with no
+  overshoot. Holding Alt, or choosing the pointed shape, bends it to a
+  corner at the grabbed spot (user, 2026-10-29).
 - **Precision aids:**
   - zoom;
   - the background-subtracted view;
@@ -209,8 +212,8 @@ Each Glass in a Recipe has one rule.
   - video playback;
   - **snap** (user, 2026-10-29): while dragging, the line settles on a
     nearby edge. It can be switched off, because the strongest edge can be
-    a Foam top or glare. Its reach and default are settled with the V2-3
-    mock-up.
+    a Foam top or glare. It is on by default and reaches 8 px of the
+    source frame (user, 2026-10-29).
 - **Navigation:**
   - wheel zoom;
   - panning only with the pan tool or Shift-drag; a plain drag on empty
