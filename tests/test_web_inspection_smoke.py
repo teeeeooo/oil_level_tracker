@@ -6,6 +6,7 @@ screenshots.
 
 import json
 import os
+import time
 from pathlib import Path
 
 import cv2
@@ -144,15 +145,15 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         shot(page, "i3-setup")
 
         page.get_by_role("button", name="분석 시작").click()
-        page.locator("#resultView").wait_for()
+        page.locator("#editorView").wait_for()
         page.wait_for_function("document.querySelectorAll('#context image').length === 1")
-        assert page.locator("#resultTitle").inner_text() == "스모크: 1차"
-        assert page.locator("#graph path").count() >= 1
-        assert page.locator("#resultGlass option").all_inner_texts() == ["BASE"]
-        page.locator("#resultView .toggle").click()
+        assert page.locator("#editorTitle").inner_text() == "스모크: 1차"
+        assert page.locator("#graph path[data-kind=oil]").count() == 1
+        assert page.locator("#editorGlass option").all_inner_texts() == ["BASE"]
+        page.get_by_text("배경 제거 보기", exact=True).click()
         assert page.locator("#backgroundToggle").is_checked()
         page.wait_for_function("document.querySelectorAll('#context image').length === 1")
-        shot(page, "i4-result")
+        shot(page, "i4-editor")
 
         folder = next((data / "Inspections").iterdir())
         assert folder.name == "스모크_ 1차"  # made safe for Windows
@@ -170,8 +171,129 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         assert "분석 완료" in listed.inner_text() and folder.name in listed.inner_text()
         assert listed.inner_text().startswith("스모크: 1차")
         shot(page, "i5-list")
-        listed.get_by_role("button", name="열기").click()
+        listed.get_by_role("button", name="열기", exact=True).click()
         page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        assert errors == []
+    finally:
+        running.close()
+
+
+def analysed_inspection(running):
+    """An inspection of the smoke video, analysed through the API."""
+    import http.client
+
+    def call(method, path, body=None):
+        connection = http.client.HTTPConnection("127.0.0.1", running.server.server_address[1], timeout=30)
+        headers = {"X-OLT-Token": running.token, "Content-Type": "application/json"}
+        connection.request(method, path, None if body is None else json.dumps(body).encode(), headers)
+        data = json.loads(connection.getresponse().read())
+        connection.close()
+        return data
+
+    return call
+
+
+def oil_path(page):
+    return page.locator("#graph path[data-kind=oil]").get_attribute("d")
+
+
+def wait_for_oil(page, d):
+    page.wait_for_function("d => document.querySelector('#graph path[data-kind=oil]').getAttribute('d') === d", arg=d)
+
+
+def point_on_oil(page, share):
+    x, y = page.evaluate(
+        """share => { const p = document.querySelector('#graph path[data-kind=oil]');
+        const at = p.getPointAtLength(p.getTotalLength() * share); return [at.x, at.y]; }""",
+        share,
+    )
+    box = page.locator("#graph").bounding_box()
+    return box["x"] + x, box["y"] + y
+
+
+def drag(page, start, end, steps=8):
+    page.mouse.move(*start)
+    page.mouse.down()
+    for k in range(1, steps + 1):
+        page.mouse.move(start[0] + (end[0] - start[0]) * k / steps, start[1] + (end[1] - start[1]) * k / steps)
+    page.mouse.up()
+
+
+def test_editing_saving_and_leaving(tmp_path, video, browser_page):
+    page, errors = browser_page
+    data = tmp_path / "data"
+    write_recipes(data / "Recipes")
+    running = bootstrap.start(data_folder=data)
+    try:
+        call = analysed_inspection(running)
+        opened = call("POST", "/api/videos", {"path": str(video)})
+        e = GLASS.ellipse
+        setup = {
+            "inspection_id": None, "video_id": opened["id"], "recipe_id": "r-fit", "name": "편집",
+            "glasses": [{"id": GLASS.id, "zero_line_y": GLASS.zero_line_y, "ellipse": {
+                "center_x": e.center_x, "center_y": e.center_y, "radius_x": e.radius_x, "radius_y": e.radius_y}}],
+            "settings": {"start_sec": 0, "end_sec": 3.9, "compressor_start_sec": 1.0},
+        }
+        job = call("POST", "/api/inspections/start", setup)["job"]
+        for _ in range(500):
+            if call("GET", f"/api/jobs/{job['id']}")["state"] != "running":
+                break
+            time.sleep(0.02)
+        page.goto(running.url)
+        row = page.locator("#inspectionRows tr", has_text="편집")
+        row.get_by_text("분석 완료").wait_for()
+        row.get_by_role("button", name="열기", exact=True).click()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        assert page.locator("#editorState").inner_text().startswith("초안 그대로")
+
+        # grab-and-drag moves the Oil line; undo puts it back, redo again
+        before = oil_path(page)
+        start = point_on_oil(page, 0.5)
+        drag(page, start, (start[0], start[1] + 40))
+        page.get_by_text("저장 안 함").wait_for()
+        moved = oil_path(page)
+        assert moved != before
+        shot(page, "e1-grab")
+        page.keyboard.press("Control+z")
+        wait_for_oil(page, before)  # lines redraw on the next frame
+        page.keyboard.press("Control+Shift+z")
+        wait_for_oil(page, moved)
+
+        # the range tool: Delete empties the Oil line there, which counts as an empty stretch
+        page.keyboard.press("r")
+        box = page.locator("#graph").bounding_box()
+        drag(page, (box["x"] + box["width"] * 0.3, box["y"] + 60), (box["x"] + box["width"] * 0.55, box["y"] + 60))
+        assert page.locator("#selectionText").inner_text() != "없음"
+        page.keyboard.press("Delete")
+        page.locator("#glassFacts").get_by_text("1곳").wait_for()
+        assert page.locator("#axis rect").count() == 1  # the empty stretch's bar on the time axis
+        shot(page, "e2-erased")
+
+        # the video: this AVI cannot play in a <video>, so it plays as exact frames
+        before_time = page.locator("#videoTime").inner_text()
+        page.keyboard.press("Space")
+        page.wait_for_timeout(800)
+        page.keyboard.press("Space")
+        page.wait_for_function(f"document.getElementById('videoTime').textContent !== {json.dumps(before_time)}")
+        page.wait_for_function("!document.getElementById('videoFrame').hidden")
+
+        page.keyboard.press("Control+s")
+        page.get_by_text("저장함").wait_for()
+        folder = data / "Inspections" / "편집"
+        saved = json.loads((folder / "edits.json").read_text(encoding="utf-8"))
+        assert None in saved["glasses"][0]["oil"]["ys"] and "EDITED" in saved["glasses"][0]["oil"]["origins"]
+
+        # leaving with unsaved changes asks first
+        page.keyboard.press("p")
+        drag(page, (box["x"] + box["width"] * 0.3, box["y"] + 100), (box["x"] + box["width"] * 0.5, box["y"] + 120))
+        page.get_by_text("저장 안 함").wait_for()
+        asked = []
+        page.once("dialog", lambda dialog: (asked.append(dialog.message), dialog.dismiss()))
+        page.get_by_role("button", name="검사 목록").click()
+        assert asked and page.locator("#editorView").is_visible()
+        page.once("dialog", lambda dialog: dialog.accept())
+        page.get_by_role("button", name="검사 목록").click()
+        page.locator("#inspectionsView").wait_for()
         assert errors == []
     finally:
         running.close()

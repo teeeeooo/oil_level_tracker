@@ -13,7 +13,7 @@ const FIELDS = [...SETTINGS, "inspection_name"];  // problems shown under their 
 const CHECK_DELAY_MS = 250;
 const POLL_MS = 500;
 
-let links = { openRecipes: () => {}, newRecipeWith: () => {}, openResult: () => {} };
+let links = { openRecipes: () => {}, newRecipeWith: () => {}, openEditor: () => {} };
 
 const setup = {
   inspection: null,      // the existing inspection, or null until the analysis first starts
@@ -93,7 +93,7 @@ function selectRow(row) {
 }
 
 function openInspection(item) {
-  if (item.state === "ANALYSED") links.openResult(item.id);
+  if (item.state === "ANALYSED") links.openEditor(item.id);
   else openSetup(item.id);
 }
 
@@ -105,7 +105,7 @@ async function resumeProgress(job) {
     return;
   }
   const status = await watchProgress(job, detail);
-  if (status.state === "finished") links.openResult(detail.id);
+  if (status.state === "finished") links.openEditor(detail.id);
   else await showList();
 }
 
@@ -381,7 +381,7 @@ async function startAnalysis() {
   const status = await watchProgress(result.data.job, result.data.inspection);
   if (status.state === "finished") {
     await frame.closeVideo();
-    links.openResult(setup.inspection.id);
+    links.openEditor(setup.inspection.id);
     return;
   }
   const detail = await api.call("GET", `/api/inspections/${encodeURIComponent(setup.inspection.id)}`);

@@ -46,9 +46,11 @@ src/oil_tracker/
                    help, keys), ui.js (helpers), api.js; frame.js (the
                    frame view and Glass editing, shared by the Recipe
                    screen and the analysis setup); recipe.js,
-                   inspections.js, result.js (the screens); render.js
-                   (shared by the editor and the report). Plain
-                   JavaScript modules, no build step.
+                   inspections.js, editor.js (the screens); lines.js
+                   (line operations, the snap and undo) and player.js
+                   (the editor's video); render.js (shared by the
+                   editor and the report). Plain JavaScript modules, no
+                   build step.
   bootstrap.py     Builds the concrete adapters and hands them to the use
                    cases. The only wiring point.
   app.py           pywebview window; owns process lifetime.
@@ -109,6 +111,9 @@ app.py ──▶ bootstrap.py
   API response after the user releases.
   - **The snap is local too:** it reads the luma of the context image,
     which the page already has, as the spike did.
+  - **The editor's video plays in a `<video>`;** a paused frame is the
+    exact frame from the frame API (OpenCV, as the analysis read it). A
+    file the `<video>` cannot decode plays as exact frames.
   - **The point line comes from the API,** on each click and for the
     preview to the cursor: Python owns the one path search. The edge
     strength is kept per Glass, so a click after the first costs only the

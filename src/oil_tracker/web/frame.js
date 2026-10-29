@@ -12,7 +12,7 @@ const MIN_RADIUS = 8;    // source px, as domain/geometry.py
 const MAX_ZOOM = 16;
 const SPEED_MIN = 0.1;
 const SPEED_MAX = 16;
-const SPEED_PRESETS = [0.5, 1, 2, 3, 4];
+export const SPEED_PRESETS = [0.5, 1, 2, 3, 4];
 
 const NO_HOOKS = {
   glasses: () => [],          // each {id, name, ellipse, zero_line_y}
@@ -182,7 +182,7 @@ export function stopPlayback() {
 }
 
 /** "2", "2x", "×2" and "*2" all read as 2, clamped to the allowed range; null when it is not a number. */
-function parseSpeed(text) {
+export function parseSpeed(text) {
   const bare = text.trim().replace(/^[x×*]\s*/i, "").replace(/\s*[x×]$/i, "");
   const number = Number(bare);
   if (bare === "" || !Number.isFinite(number)) return null;

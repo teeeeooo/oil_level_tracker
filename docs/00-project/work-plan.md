@@ -157,9 +157,30 @@ the undo depth and the shortcuts.
    - **Not known yet: the codec of SPL#1 and SPL#4.** The videos are only on
      Windows. WebView2 plays H.264, but not necessarily HEVC. Step 6's
      request checks the codec.
-5. **`web`, the core:** the editor state with undo; grab-and-drag, the
-   pencil and range delete; zoom, pan and time-axis input; the playhead;
-   the video.
+5. **`web`, the core — done:** the result screen became the editor
+   (`editor.js`, `lines.js`, `player.js`; `render.js` draws in layers, so a
+   drag redraws only the lines).
+   - grab-and-drag (smooth or pointed with Alt; the grab width with `[`
+     `]`), the pencil, the range tool with Delete; the snap on the context
+     luma; undo and redo;
+   - zoom (wheel; Shift+wheel for height), pan (the pan tool, Shift-drag or
+     the middle button), the time-axis numbers, the playhead; "다음/이전 빈
+     구간" (N);
+   - after each change the API returns FULL/EMPTY, the empty stretches and
+     the coverage for the bands, the axis bars and the Glass panel;
+   - "저장" (Ctrl+S), and a question before leaving with unsaved changes
+     through "검사 목록". The window close comes in step 7.
+   - **The video:** `<video>` over HTTP Range for playback; a paused frame
+     is the exact OpenCV frame. A file the `<video>` cannot decode plays as
+     exact frames (the smoke video, MJPG AVI, does).
+   - **Agent's choices:** undo keeps 200 changes, each the samples it
+     replaced; the snap needs a luma step of 6 to settle; a press within
+     8 px of a drawn line grabs it.
+   - On macOS with an H.264 sample, a lines redraw while dragging took
+     about 0.5 ms; SPL#1 on the slowest PC is step 6.
+   - **Not yet in the editor** (step 7): the point line, "cannot judge",
+     memos, the compressor marker, re-analysis, the window-close question
+     and the SHA-256 warning. Their toolbar buttons are there, disabled.
 6. **A5 and A6 on the slowest PC:** a terminal request for the user
    (no agent there), with the app timing itself and writing a Markdown
    result.
@@ -291,7 +312,8 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done today:** V2-1 and V2-2 closed, each with its Windows run; the
   V2-2 follow-up; V2-3 started.
-- **Done today also:** V2-3 steps 1 to 4 (the confirmed mock-up, the edit
-  document, `edits.json`, the editor's use cases and routes).
-- **Next action:** V2-3 step 5, the web core of the editor (see the steps
-  and the handoff above).
+- **Done today also:** V2-3 steps 1 to 5 (the confirmed mock-up, the edit
+  document, `edits.json`, the editor's use cases and routes, the editor's
+  web core).
+- **Next action:** V2-3 step 6: A5 and A6 on the slowest PC, through a
+  terminal request (see the steps and the handoff above).

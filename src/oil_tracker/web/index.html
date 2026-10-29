@@ -91,38 +91,95 @@
   </div>
 </div>
 
-<div class="view" id="resultView" hidden>
+<div class="view" id="editorView" hidden>
   <header class="toolbar">
-    <button class="btn subtle" id="resultBack"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4l-6 6 6 6"/></svg>검사 목록</button>
+    <button class="btn subtle" id="editorBack"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4l-6 6 6 6"/></svg>검사 목록</button>
     <div class="sep"></div>
-    <div class="title"><b id="resultTitle"></b><span id="resultState"></span></div>
+    <div class="title"><b id="editorTitle"></b><span id="editorState"></span></div>
+    <div class="sep"></div>
+    <button class="tool labeled" data-tool="grab" title="잡아끌기 (G)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13c3 0 4-6 8-6s5 6 8 6"/><path d="M10 3v4M8 5l2-2 2 2"/></svg>잡아끌기</button>
+    <button class="tool labeled" data-tool="pencil" title="연필 (P)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l1-4 8-8 3 3-8 8z"/><path d="M11 6l3 3"/></svg>연필</button>
+    <button class="tool labeled" data-tool="point" title="점 잇기 (L): 다음 단계에서 추가" disabled><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 14c2-1 3-6 6-6s3 4 6 2"/><circle cx="4" cy="14" r="1.8" fill="currentColor"/><circle cx="10" cy="8" r="1.8" fill="currentColor"/><circle cx="16" cy="10" r="1.8" fill="currentColor"/></svg>점 잇기</button>
+    <button class="tool labeled" data-tool="range" title="범위 (R): 끌어서 시간 범위를 고르고, Delete로 선 지우기"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3v14M15 3v14"/><path d="M5 10h10M7 8l-2 2 2 2M13 8l2 2-2 2"/></svg>범위</button>
+    <button class="tool labeled" data-tool="memo" title="메모 (M): 다음 단계에서 추가" disabled><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h12v9H9l-4 3v-3H4z"/></svg>메모</button>
+    <button class="tool labeled" data-tool="pan" title="이동 (H, 또는 Shift-드래그)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2v16M2 10h16M10 2l-2 2M10 2l2 2M10 18l-2-2M10 18l2-2M2 10l2-2M2 10l2 2M18 10l-2-2M18 10l-2 2"/></svg>이동</button>
+    <div class="sep"></div>
+    <button class="tool" id="editorUndo" title="실행 취소 (Ctrl+Z)" aria-label="실행 취소"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 5L3 9l4 4"/><path d="M3 9h9a5 5 0 010 10h-2"/></svg></button>
+    <button class="tool" id="editorRedo" title="다시 실행 (Ctrl+Shift+Z)" aria-label="다시 실행"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 5l4 4-4 4"/><path d="M17 9H8a5 5 0 000 10h2"/></svg></button>
     <div class="spacer"></div>
-    <span class="notice" id="resultNotice"></span>
-    <label class="picker"><span class="label">Glass</span><select id="resultGlass" aria-label="Glass"></select></label>
+    <label class="picker"><span class="label">Glass</span><select id="editorGlass" aria-label="Glass"></select></label>
     <div class="spacer"></div>
+    <span class="notice" id="editorNotice"></span>
+    <button class="btn" id="editorSave" title="저장 (Ctrl+S)">저장</button>
+    <button class="btn primary" disabled title="판정과 제출은 V2-4에서">제출</button>
     <button class="btn icon-btn help-open" title="도움말 (F1)" aria-label="도움말"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M7.8 7.9a2.2 2.2 0 1 1 3 2.05c-.5.2-.8.6-.8 1.15v.4"/><path d="M10 13.6v.4"/></svg></button>
   </header>
   <div class="main">
-    <section class="left result-left">
+    <section class="left editor-left">
       <div class="phead">그래프
-        <span class="legend"><span><i class="swatch oil"></i>Oil</span></span>
-        <span class="right">세로: 0선 기준 높이 (px)</span>
+        <span class="legend"><span><i class="swatch oil"></i>Oil</span><span><i class="swatch foam"></i>Foam</span><span><i class="swatch reference"></i>참조</span><span><i class="swatch empty"></i>빈 구간</span></span>
+        <span class="right">세로: 0선 기준 높이 (px) · 휠 확대</span>
       </div>
-      <div class="plot" id="graphBox"><svg id="graph" aria-label="그래프"></svg></div>
+      <div class="plot" id="graphBox"><svg id="graph" aria-label="그래프"><g></g><g></g><g></g></svg></div>
       <div class="phead">맥락 이미지
         <span class="right"><label class="toggle"><input type="checkbox" id="backgroundToggle" role="switch"><span class="switch"></span>배경 제거 보기</label></span>
       </div>
-      <div class="plot" id="contextBox"><svg id="context" aria-label="맥락 이미지"></svg></div>
-      <div class="axis" id="axisBox"><svg id="axis"></svg></div>
+      <div class="plot" id="contextBox"><svg id="context" aria-label="맥락 이미지"><g></g><g></g><g></g></svg></div>
+      <div class="axis" id="axisBox">
+        <svg id="axis"></svg>
+        <input class="range-number from" id="axisFrom" aria-label="보이는 범위 시작" inputmode="decimal">
+        <input class="range-number to" id="axisTo" aria-label="보이는 범위 끝" inputmode="decimal">
+      </div>
     </section>
     <aside class="right-col">
-      <div class="section">
-        <div class="phead">분석</div>
-        <div class="body"><table class="kv" id="resultFacts"></table></div>
+      <div class="phead">원본 영상 <span class="right">Glass 확대 · 선 겹쳐 보기</span></div>
+      <div class="video" id="videoBox">
+        <div class="video-stage" id="videoStage"><video id="video" muted playsinline preload="metadata"></video><img id="videoFrame" alt="" hidden></div>
+        <svg class="video-overlay" id="videoOverlay"></svg>
+      </div>
+      <div class="transport video-transport">
+        <button class="btn icon-btn" id="videoPrev" title="이전 프레임 (,)" aria-label="이전 프레임"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4h2v12H5zM16 4v12L8 10z"/></svg></button>
+        <button class="btn icon-btn" id="videoPlay" title="재생 (Space)" aria-label="재생"><svg viewBox="0 0 20 20" fill="currentColor"><path id="videoPlayIcon" d="M6 4l10 6-10 6z"/></svg></button>
+        <button class="btn icon-btn" id="videoNext" title="다음 프레임 (.)" aria-label="다음 프레임"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 4h2v12h-2zM4 4v12l8-6z"/></svg></button>
+        <div class="input num speed" title="재생 배속 (0.1–16×)">
+          <input id="videoSpeed" inputmode="decimal" aria-label="재생 배속" value="1"><span class="unit">×</span>
+          <button class="chev" id="videoSpeedBtn" tabindex="-1" aria-label="배속 선택"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg></button>
+          <div class="menu" id="videoSpeedMenu" role="listbox" aria-label="배속" hidden></div>
+        </div>
+        <button class="btn icon-btn" id="videoRepeat" title="구간 반복: 고른 범위를 되풀이 재생" aria-label="구간 반복" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 9V7a2 2 0 012-2h9l-2-2M16 11v2a2 2 0 01-2 2H5l2 2"/></svg></button>
+        <span class="time" id="videoTime">--:--.- / --:--.-</span>
       </div>
       <div class="section">
-        <div class="phead" id="resultGlassHead">Glass</div>
-        <div class="body"><table class="kv" id="resultGlassFacts"></table></div>
+        <div class="phead">편집</div>
+        <div class="body">
+          <div class="row"><span class="label wide">그릴 선</span>
+            <span class="seg" id="lineKind"><button data-kind="oil"><i class="swatch oil"></i>Oil</button><button data-kind="foam"><i class="swatch foam"></i>Foam</button><button data-kind="reference"><i class="swatch reference"></i>참조</button></span></div>
+          <div class="row"><span class="label wide">끌기 폭</span><input type="range" id="grabWidth" min="0" max="8" step="1" aria-label="끌기 폭"><span class="caption num" id="grabWidthText"></span><kbd>[</kbd><kbd>]</kbd></div>
+          <div class="row"><span class="label wide">끌기 모양</span>
+            <span class="seg" id="grabShape"><button data-shape="smooth">부드럽게</button><button data-shape="pointed">뾰족하게</button></span><span class="caption"><kbd>Alt</kbd>+끌기</span></div>
+          <div class="row"><span class="label wide">스냅 <kbd>S</kbd></span><label class="toggle"><input type="checkbox" id="snapToggle" role="switch"><span class="switch"></span>켬</label><span class="caption">8 px 안의 경계에 붙음</span></div>
+          <div class="selbox" id="selectionBox" hidden>
+            <div class="head">선택한 범위 <span class="num" id="selectionText"></span></div>
+            <div class="row">
+              <button class="btn small" id="eraseSelection">선 지우기 <kbd>Delete</kbd></button>
+              <button class="btn small" disabled title="다음 단계에서 추가">판단 불가 <kbd>U</kbd></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="phead"><span id="glassHead">Glass</span><span class="right" id="glassMode"></span></div>
+        <div class="body">
+          <table class="kv" id="glassFacts"></table>
+          <div class="row"><button class="btn small" id="prevEmpty">◀ 이전 빈 구간</button><button class="btn small" id="nextEmpty">다음 빈 구간 ▶</button><span class="caption"><kbd>N</kbd></span></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="phead">판정 <span class="right">V2-4에서 추가</span></div>
+      </div>
+      <div class="section">
+        <div class="phead">분석</div>
+        <div class="body"><table class="kv" id="editorFacts"></table></div>
       </div>
     </aside>
   </div>
@@ -288,13 +345,27 @@
         <tr><td><kbd>F1</kbd> <kbd>?</kbd></td><td>이 도움말</td></tr>
       </table>
     </section>
-    <section data-help="resultView">
-      <h3>분석 결과</h3>
+    <section data-help="editorView">
+      <h3>도구</h3>
       <table class="keys">
-        <tr><td>그래프</td><td>Oil 초안을 0선 기준 높이로 보여 줍니다. 위가 Glass 위쪽입니다.</td></tr>
-        <tr><td>맥락 이미지</td><td>한 열이 한 시각, 한 행이 Glass 띠의 한 줄입니다. 선이 끊긴 곳은 초안을 비워 둔 구간입니다.</td></tr>
+        <tr><td><kbd>G</kbd> 잡아끌기</td><td>선을 잡아 위아래로 끕니다. 끌기 폭 안의 이웃이 부드럽게 따라옵니다. <kbd>Alt</kbd>를 누른 채 끌면 잡은 곳이 뾰족하게 꺾입니다.</td></tr>
+        <tr><td><kbd>P</kbd> 연필</td><td>"그릴 선"을 끈 자리대로 다시 그립니다. 지나간 시간 범위가 바뀝니다.</td></tr>
+        <tr><td><kbd>R</kbd> 범위</td><td>그래프나 맥락 이미지를 가로로 끌어 시간 범위를 고릅니다. 양 끝을 끌어 조정하고, <kbd>Esc</kbd>로 풉니다.</td></tr>
+        <tr><td><kbd>Delete</kbd></td><td>고른 범위의 Oil 선을 지웁니다. 지운 곳은 다시 그릴 때까지 빈 구간(무효)입니다.</td></tr>
+        <tr><td><kbd>H</kbd> 이동 · <kbd>Shift</kbd>+끌기</td><td>보이는 범위를 옮깁니다. 빈 곳을 그냥 끌면 아무 일도 없습니다.</td></tr>
+        <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>끌기 폭을 줄이고 늘립니다.</td></tr>
+        <tr><td><kbd>S</kbd></td><td>스냅 켜기·끄기. 켜면 끄는 선이 8 px 안의 경계에 붙습니다.</td></tr>
+        <tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> · <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td><td>실행 취소 · 다시 실행</td></tr>
+        <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>저장. 저장하지 않고 검사 목록으로 나가면 먼저 묻습니다.</td></tr>
+      </table>
+      <h3>보기</h3>
+      <table class="keys">
+        <tr><td>휠 · <kbd>Shift</kbd>+휠</td><td>시간 방향 확대 · 높이 방향 확대</td></tr>
+        <tr><td>시간축 양 끝 숫자</td><td>클릭해 보이는 범위를 시각으로 입력합니다.</td></tr>
+        <tr><td>클릭</td><td>그 시각으로 재생 위치를 옮기고, 원본 영상의 그 프레임을 보여 줍니다.</td></tr>
+        <tr><td><kbd>N</kbd> · <kbd>Shift</kbd>+<kbd>N</kbd></td><td>다음 · 이전 빈 구간으로 갑니다.</td></tr>
+        <tr><td><kbd>Space</kbd> · <kbd>,</kbd> <kbd>.</kbd></td><td>재생·멈춤 · 한 프레임씩</td></tr>
         <tr><td>"배경 제거 보기"</td><td>시간에 따라 바뀐 부분만 밝게 보여 줍니다.</td></tr>
-        <tr><td>Glass</td><td>툴바에서 다른 Glass를 고릅니다.</td></tr>
         <tr><td><kbd>F1</kbd> <kbd>?</kbd></td><td>이 도움말</td></tr>
       </table>
     </section>

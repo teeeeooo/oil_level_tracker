@@ -139,8 +139,8 @@ def test_create_edit_save_and_reopen_a_recipe(tmp_path, video, browser_page):
         page.wait_for_function("document.getElementById('problemCount').textContent === ''")
 
         # the frame on screen at save becomes the reference
-        page.get_by_title("다음 프레임 (.)").click()
-        page.get_by_title("다음 프레임 (.)").click()
+        page.locator("#transport").get_by_title("다음 프레임 (.)").click()
+        page.locator("#transport").get_by_title("다음 프레임 (.)").click()
         page.wait_for_function("document.getElementById('time').textContent.startsWith('00:00.2')")
         page.wait_for_timeout(300)  # let the frame arrive
         page.get_by_role("button", name="저장").click()
@@ -192,7 +192,7 @@ def test_speed_field_and_help(tmp_path, video, browser_page):
 
         page.get_by_role("button", name="새 Recipe").click()
         page.wait_for_function("document.getElementById('time').textContent.startsWith('00:00.0')")
-        speed = page.get_by_label("재생 배속")
+        speed = page.locator("#transport").get_by_label("재생 배속")
         assert speed.input_value() == "1"
 
         # typed speeds: "*3" reads as 3, text that is not a number keeps it, a large value is clamped

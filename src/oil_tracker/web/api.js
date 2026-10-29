@@ -45,3 +45,15 @@ export async function getImageUrl(path) {
   bitmap.close();
   return { url: URL.createObjectURL(blob), width };
 }
+
+/** A response body as an object URL (release it with URL.revokeObjectURL), with the headers. */
+export async function getBlobUrl(path) {
+  const response = await send("GET", path);
+  if (!response.ok) throw new Error((await asJson(response)).error ?? `HTTP ${response.status}`);
+  return { url: URL.createObjectURL(await response.blob()), headers: response.headers };
+}
+
+/** A URL the page's own elements can load (a <video> cannot send the token header). */
+export function mediaUrl(path) {
+  return `${path}?token=${encodeURIComponent(token)}`;
+}
