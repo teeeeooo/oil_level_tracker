@@ -335,6 +335,7 @@ The three v1 remote branches that v1 docs cite stay.
   [the A5/A6 request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md).
   Judge its result against the request's fixed criteria and write it to
   `60-evidence/`.
-- **Next action meanwhile:** V2-3 step 7, the remaining tools. Change the
-  drawing first if A5 fails, and the paused frame if A6-s fails, as the
-  request's criteria say.
+- **Then:** V2-3 step 7, the remaining tools, after that result: the user
+  decided that A5 and A6 are measured before the other tools are built.
+  If A5 fails, the drawing gets lighter first; A6-s and A6-c route their
+  choices to the user, as the request's criteria say.
