@@ -42,6 +42,7 @@
 | 2026-10-29 | [2026-10-29-v2-1-recipe-windows-request.md](40-operations/2026-10-29-v2-1-recipe-windows-request.md) | V2-1 Recipe 화면 Windows 확인 요청 |
 | 2026-10-29 | [2026-10-29-v2-2-draft-comparison-windows-request.md](40-operations/2026-10-29-v2-2-draft-comparison-windows-request.md) | V2-2 Oil 초안 방식 비교 Windows 요청(SPL#4, SPL#1) |
 | 2026-10-29 | [2026-10-29-v2-2-analysis-timing-windows-request.md](40-operations/2026-10-29-v2-2-analysis-timing-windows-request.md) | V2-2 분석 시간 측정(A4) Windows 요청 |
+| 2026-10-29 | [2026-10-29-v2-2-slowest-pc-timing-windows-request.md](40-operations/2026-10-29-v2-2-slowest-pc-timing-windows-request.md) | V2-2 최저 사양 PC 분석 시간(A4) 측정 요청(사용자 터미널 실행) |
 
 ## docs/50-diagnostics/
 

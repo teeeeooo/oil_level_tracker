@@ -117,11 +117,22 @@ Product SSOT §3, §4 and §6:
    and the cache, in
    [inspection-folder.md](../20-architecture/inspection-folder.md). Images
    cross `application` as encoded PNG pieces (bytes).
-6. **`adapters/video`:** one pass over the video for every Glass: context
-   image, background view and Oil draft, with progress and cancellation.
-   Ported from `spike/webui:spikes/webui/context.py`. The core is built
-   (step 2) and decodes in software; the ports, cancellation and the
-   domain samples remain.
+6. **`adapters/video` — done** (`4750b24`): the `VideoAnalyser` port and
+   `OpenCvAnalyser` (`adapters/video/analysis.py`). One pass for every
+   Glass, in software decoding, gives the context images, the background
+   views, the Oil drafts as domain samples and the PNG pieces, with
+   progress and cancellation.
+   - **The pass is faster for the slowest PC** (step 2): worker threads
+     compute the row medians while the decoder reads on. NumPy's sort and
+     OpenCV release the GIL. The images equal the inline pass on the tests
+     and three local videos.
+   - **Windows, waiting:** the timing on a PC of the slowest class,
+     [2026-10-29-v2-2-slowest-pc-timing-windows-request.md](../40-operations/2026-10-29-v2-2-slowest-pc-timing-windows-request.md)
+     (source `2d43f4c`). The PC has no coding agent, so the user runs
+     `scripts/time_analysis.py` in a terminal; it measures stage by stage
+     and writes a Markdown result. Its table, fixed before the run,
+     decides whether the screens (step 8) wait for more speed and whether
+     hardware decoding is worth offering on that class.
 7. **`application` and `adapters/http`:** creating an inspection, the
    analysis job (progress, time left, cancel) and the result data.
 8. **`web`:** the inspection list, the new-inspection flow, the setup
@@ -153,30 +164,14 @@ The working tree is clean, and `main` and the remote are in sync.
 [A4 timing request](../40-operations/2026-10-29-v2-2-analysis-timing-windows-request.md).
 
 **Since then:** the A4 result came in after the compaction and is judged
-(step 2). Nothing waits on Windows.
+(step 2). The user named the slowest target PC (Product SSOT §2), step 6
+is done, and its timing on that class waits on the user (step 6).
 
-**Step 6, as planned:**
-- **The analysis port** (in `application/ports.py`): given the video path,
-  the Recipe copy's ellipses and the settings, return the times, each
-  Glass's draft as a domain `Line` (`adapters/video/draft.py:draft_line`)
-  and its images as `GlassImages` (PNG pieces as bytes). It reports
-  progress (done and total frames) and checks a cancel flag between
-  frames. It decodes in software (`hardware=False`, the A4 result).
-- **A faster pass for the slowest PC** (step 2): the decoder reads ahead
-  on one thread while worker threads compute the row medians. NumPy's
-  sort and OpenCV release the GIL. A prototype on macOS gave identical
-  images on three local videos; on the Windows workstation the pass
-  should drop from the sum of decoding and the medians (81.3 s) toward
-  the larger of the two (about 46 s).
-- **A timing run on a PC of the slowest class** follows step 6, before the
-  screens (step 8), with software and hardware decoding (the Quadro K620
-  decodes H.264). If the pass is still too slow there, the next options
-  are converting frames on two decoders over the two halves of the range,
-  or hardware decoding on that PC.
-- **The PNG pieces** move from `scripts/time_analysis.py:png_pieces` into
-  `adapters/video`; the script then imports them.
-- **The SHA-256** is computed on a second thread during the pass, as the
-  timing script does.
+**Waiting result:** judge it only against the request's fixed table.
+If the software run is over 180 s there, the next options are two
+decoders over the two halves of the range, or hardware decoding on that
+class. The `wait` column says whether decoding or the medians limit the
+pass.
 
 **Step 7, as planned:**
 - **Use cases:** list inspections; pick a video and list the Recipes that
@@ -184,6 +179,10 @@ The working tree is clean, and `main` and the remote are in sync.
   analysis, which creates the folder with the Recipe copy, then sets
   `ANALYSED` or `FAILED` (cancel clears the cache and keeps
   `NOT_ANALYSED`); load the stored analysis.
+- **The source SHA-256** runs on a second thread during the analysis, as
+  `scripts/time_analysis.py` does. Storage owns it (architecture.md).
+- **Progress** comes from `VideoAnalyser` as work units: the decoded
+  frames, then a tenth more for the drafts and pictures.
 - **HTTP:** the job runs on a thread in `adapters/http`; the UI polls the
   progress and the time left, and can cancel. Image pieces are served by
   inspection, Glass, kind and index.
@@ -195,8 +194,8 @@ The working tree is clean, and `main` and the remote are in sync.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `5aadd35`: `113 passed, 1 skipped` on macOS, so
-  `112 passed, 2 skipped` on Windows.
+  test. At `2d43f4c`: `121 passed, 1 skipped` on macOS, so
+  `120 passed, 2 skipped` on Windows.
 - The mock-ups `design/mockup/editor.html` and `recipe.html` predate the
   speed field and the help dialog; DESIGN.md governs where they differ.
 
@@ -227,7 +226,6 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done today:** V2-1 closed; V2-2 steps 1 to 5, and the analysis core of
-  step 6.
-- **Next action:** step 6 with the faster pass, then the timing request
-  for a PC of the slowest class; step 7 while that run waits.
+- **Done today:** V2-1 closed; V2-2 steps 1 to 6.
+- **Next action:** step 7 while the slowest-PC timing waits; judge that
+  result when the user relays it.
