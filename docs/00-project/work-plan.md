@@ -53,8 +53,10 @@ SSOT:
    - `.recipe.json` with a schema version;
    - atomic writes;
    - the Recipe list.
-3. **Recipe screen layout.** Add it to [DESIGN.md](../../DESIGN.md) §5 with
-   a static mock-up. **The user confirms it** before step 6.
+3. **Recipe screen layout.** Added to [DESIGN.md](../../DESIGN.md) §4–§5,
+   with the static mock-up
+   [design/mockup/recipe.html](../../design/mockup/recipe.html).
+   **Waiting for the user's confirmation;** step 6 needs it.
 4. **`adapters/video`:** video metadata, a frame at a given time, and a
    downscaled JPEG.
 5. **The app shell:**
@@ -79,4 +81,6 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Next action:** V2-1 step 1, `domain`.
+- **Done:** steps 1 (`domain`) and 2 (`adapters/storage`).
+- **Next action:** the user confirms the Recipe screen mock-up (step 3).
+  Steps 4 and 5 do not depend on it.

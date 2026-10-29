@@ -84,6 +84,24 @@ Nothing else may reuse them.
 
 A status is always shown as text plus colour, never colour alone.
 
+### 2.5 Frame chrome
+
+Used around and on top of video frames (Recipe screen, editor video).
+
+| Token | Value | Role |
+|---|---|---|
+| `--frame-bg` | `#1B1F23` | area behind a frame that does not fill its box |
+| `--frame-caption-bg` | `rgba(0,0,0,0.45)` | label chip on a frame (Glass name, "0"), white Caption 1 text |
+
+### 2.6 Validation (Fluent palette red)
+
+| Token | Value | Role |
+|---|---|---|
+| `--error` | `#BC2F32` | field error message and problem count |
+| `--error-border` | `#D13438` | 1 px border of an input with an error |
+
+These mark input errors. They never stand in for FAIL (§2.4).
+
 ## 3. Typography Rules
 
 - **Families:**
@@ -144,6 +162,20 @@ Do not use sizes outside this ramp.
   - a speed segmented control (1× 4× 16×);
   - a range-repeat toggle;
   - the time in `mm:ss.s`.
+- **Frame view (Recipe screen):**
+  - the frame fits its box on `--frame-bg`, with wheel zoom and Shift-drag
+    pan;
+  - unselected Glasses use the `--glass-outline` style in §2.3;
+  - the selected Glass has a 1.5 px solid `--glass-outline` ellipse and
+    zero line, over the same shadow line;
+  - handles: 8 × 8 px squares, `--bg-1` fill, 1 px `--brand` border,
+    on the four ellipse edge midpoints and the right end of the zero line;
+  - the zero line spans the ellipse's bounding-box width;
+  - the Glass name sits above the ellipse in a `--frame-caption-bg` chip;
+  - dragging inside the ellipse moves the Glass with its zero line;
+  - arrow keys move the selected Glass 1 px (Shift: 10 px).
+- **Field errors:** the message sits under the input in Caption 1
+  `--error`, and the input border becomes `--error-border`.
 - **Tables (report and panels):**
   - Body 1;
   - header row `--bg-3`, Body 1 Strong;
@@ -173,6 +205,33 @@ Do not use sizes outside this ramp.
       - the judgment panel (computed result, override, reason);
       - the selection panel;
       - the memo list.
+- **Recipe list:** the same window.
+  - **Toolbar, 48 px:** the title "Recipe" on the left; "새 Recipe"
+    (primary) on the right.
+  - **Body:** one panel with a table: name, Glass names, frame size,
+    modified date. A row opens on double-click or with "열기".
+  - **Below the table:**
+    - files that could not be read, each with its reason, in `--error`;
+    - the Recipes folder path, with a "폴더 열기" button.
+- **Recipe screen:** minimum 1280 × 800.
+  - **Top toolbar, 48 px:**
+    - "← 목록" and the Recipe name with its save state, on the left;
+    - "영상 열기" next to them;
+    - the problem count in `--error` and "저장" (primary), on the right.
+  - **Main area:**
+    - **Left column, flexible width:**
+      - a 32 px header: the source video name, the reference-frame time,
+        and "현재 프레임을 기준으로";
+      - the frame view (§4);
+      - a 40 px transport: previous frame, play/pause, next frame, a
+        scrub bar with a "기준" mark, and the time in `mm:ss.s`.
+    - **Right column, 360 px:**
+      - the Recipe name;
+      - the Glass list, with "+ 추가";
+      - the selected Glass:
+        - its name;
+        - the position in px (centre, radii, zero line);
+        - the judgment rule, showing only the fields its mode uses.
 - **Report:** A4 landscape. In order:
   1. the header block;
   2. the judgment;

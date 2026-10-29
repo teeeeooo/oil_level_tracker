@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v2 Recipe 화면 목업</title>
+<!--
+  Static layout mock-up for user confirmation (V2-1 step 3).
+  Synthetic data only; not product code. Tokens follow DESIGN.md §2–§6.
+-->
+<style>
+:root {
+  --bg-1:#FFFFFF; --bg-2:#FAFAFA; --bg-3:#F5F5F5; --bg-4:#F0F0F0; --bg-5:#EBEBEB;
+  --fg-1:#242424; --fg-2:#424242; --fg-3:#616161; --fg-disabled:#BDBDBD;
+  --stroke-1:#D1D1D1; --stroke-2:#E0E0E0; --stroke-3:#F0F0F0;
+  --brand:#0F6CBD; --brand-hover:#115EA3; --brand-pressed:#0C3B5E; --brand-tint:#EBF3FC;
+  --glass-outline:rgba(255,255,255,0.9);
+  --frame-bg:#1B1F23; --frame-caption-bg:rgba(0,0,0,0.45);
+  --error:#BC2F32; --error-border:#D13438;
+  --font:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+  --mono:"Cascadia Mono",Consolas,ui-monospace,monospace;
+}
+* { box-sizing:border-box; }
+html, body { margin:0; height:100%; }
+body { background:var(--bg-2); color:var(--fg-1); font:400 14px/20px var(--font); }
+.view { display:none; grid-template-rows:48px 1fr; height:100vh; min-width:1280px; min-height:800px; }
+.view.on { display:grid; }
+
+.toolbar { display:flex; align-items:center; gap:8px; padding:0 12px; background:var(--bg-3); border-bottom:1px solid var(--stroke-1); }
+.title { display:flex; flex-direction:column; min-width:0; }
+.title b { font-weight:600; white-space:nowrap; }
+.title span { font-size:12px; line-height:16px; color:var(--fg-3); }
+.big-title { font-size:16px; line-height:22px; font-weight:600; }
+.sep { width:1px; height:24px; background:var(--stroke-1); margin:0 4px; }
+.spacer { flex:1; }
+.btn { display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 12px; border-radius:4px; font:inherit; cursor:pointer; border:1px solid var(--stroke-1); background:var(--bg-1); color:var(--fg-1); white-space:nowrap; }
+.btn:hover { background:var(--bg-4); }
+.btn.primary { background:var(--brand); border-color:var(--brand); color:#fff; }
+.btn.primary:hover { background:var(--brand-hover); }
+.btn.subtle { border-color:transparent; background:transparent; color:var(--fg-2); }
+.btn.subtle:hover { background:var(--bg-4); }
+.btn.small { height:24px; padding:0 8px; font-size:12px; line-height:16px; }
+.btn svg { width:20px; height:20px; }
+.icon-btn { width:32px; padding:0; justify-content:center; border-color:transparent; background:transparent; color:var(--fg-2); }
+.problems { font-size:12px; line-height:16px; color:var(--error); font-weight:600; }
+
+.phead { display:flex; align-items:center; gap:12px; padding:0 12px; height:32px; background:var(--bg-3); border-bottom:1px solid var(--stroke-1); font-weight:600; flex:none; }
+.phead .right { margin-left:auto; display:flex; gap:8px; align-items:center; font-weight:400; font-size:12px; color:var(--fg-3); }
+.label { color:var(--fg-3); font-size:12px; line-height:16px; }
+.caption { font-size:12px; line-height:16px; color:var(--fg-3); }
+.mono { font-family:var(--mono); font-size:12px; line-height:16px; }
+
+/* edit view */
+.main { display:grid; grid-template-columns:1fr 360px; min-height:0; }
+.left { display:grid; grid-template-rows:32px 1fr 40px; min-width:0; min-height:0; background:var(--bg-1); border-right:1px solid var(--stroke-1); }
+.frame { position:relative; min-height:0; background:var(--frame-bg); overflow:hidden; }
+.frame canvas, .frame svg { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.transport { display:flex; align-items:center; gap:4px; padding:0 8px; border-top:1px solid var(--stroke-1); }
+.scrub { position:relative; flex:1; height:4px; margin:0 12px; background:var(--stroke-1); border-radius:2px; }
+.scrub .done { position:absolute; left:0; top:0; bottom:0; width:13.7%; background:var(--brand); border-radius:2px; }
+.scrub .thumb { position:absolute; left:13.7%; top:-6px; width:16px; height:16px; margin-left:-8px; border-radius:50%; background:#fff; border:1px solid var(--stroke-1); box-shadow:0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.14); }
+.scrub .ref { position:absolute; left:4.2%; top:-14px; transform:translateX(-50%); font-size:12px; line-height:16px; color:var(--brand); font-weight:600; }
+.scrub .ref::after { content:""; position:absolute; left:50%; top:16px; width:1px; height:10px; background:var(--brand); }
+.time { white-space:nowrap; font-size:12px; font-variant-numeric:tabular-nums; color:var(--fg-2); }
+
+.right-col { display:flex; flex-direction:column; min-height:0; overflow:auto; background:var(--bg-1); }
+.section { border-bottom:1px solid var(--stroke-1); }
+.section .body { padding:12px; display:flex; flex-direction:column; gap:8px; }
+.field { display:flex; flex-direction:column; gap:4px; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.input { display:flex; align-items:center; height:32px; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; background:var(--bg-1); padding:0 8px; gap:4px; }
+.input input { border:0; outline:0; font:inherit; width:100%; min-width:0; background:transparent; font-variant-numeric:tabular-nums; }
+.input.num input { text-align:right; }
+.input .unit { color:var(--fg-3); font-size:12px; }
+.input:focus-within { border-bottom:2px solid var(--brand); }
+.input.bad { border-color:var(--error-border); }
+.err { font-size:12px; line-height:16px; color:var(--error); }
+select { height:32px; font:inherit; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; background:var(--bg-1); padding:0 8px; }
+.glass-row { display:flex; align-items:center; gap:8px; height:36px; padding:0 12px; border-bottom:1px solid var(--stroke-2); cursor:pointer; }
+.glass-row:hover { background:var(--bg-4); }
+.glass-row.sel { background:var(--brand-tint); }
+.glass-row b { font-weight:600; }
+.glass-row .mode { color:var(--fg-3); font-size:12px; }
+.glass-row .err { margin-left:auto; }
+.glass-row .del { margin-left:auto; visibility:hidden; }
+.glass-row.sel .del { visibility:visible; }
+.glass-row .err + .del { margin-left:0; }
+.rule-text { font-size:12px; line-height:16px; color:var(--fg-2); background:var(--bg-3); border-radius:4px; padding:6px 8px; }
+hr { border:0; border-top:1px solid var(--stroke-2); margin:4px 0; width:100%; }
+
+/* list view */
+.list-main { padding:16px; min-height:0; overflow:auto; }
+.panel { background:var(--bg-1); border:1px solid var(--stroke-1); }
+table { border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums; }
+th, td { text-align:left; padding:8px 12px; border-bottom:1px solid var(--stroke-2); }
+th { background:var(--bg-3); font-weight:600; }
+td.num { text-align:right; }
+tr.sel td { background:var(--brand-tint); }
+tbody tr { cursor:default; }
+.list-foot { padding:12px; display:flex; flex-direction:column; gap:8px; }
+.row { display:flex; align-items:center; gap:8px; }
+
+.note { position:fixed; right:372px; bottom:56px; max-width:360px; background:var(--bg-1); border:1px solid var(--stroke-1); border-radius:8px; padding:12px; font-size:12px; line-height:16px; color:var(--fg-2); box-shadow:0 0 2px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.14); z-index:2; }
+.note b { color:var(--fg-1); }
+.note .tabs { display:flex; gap:4px; margin:8px 0; }
+.note .tabs button { border:1px solid var(--stroke-1); background:var(--bg-1); border-radius:4px; font:12px/16px var(--font); height:24px; padding:0 8px; cursor:pointer; }
+.note .tabs button.on { background:var(--brand-tint); color:var(--brand); border-color:var(--brand); font-weight:600; }
+.note .close { float:right; border:0; background:transparent; cursor:pointer; color:var(--fg-3); }
+</style>
+</head>
+<body>
+
+<!-- Recipe list -->
+<div class="view" id="listView">
+  <header class="toolbar">
+    <span class="big-title">Recipe</span>
+    <div class="spacer"></div>
+    <button class="btn primary" data-go="edit">새 Recipe</button>
+  </header>
+  <div class="list-main">
+    <div class="panel">
+      <table>
+        <thead><tr><th style="width:30%">이름</th><th>Glass</th><th style="width:140px">프레임 크기</th><th style="width:180px">수정일</th><th style="width:88px"></th></tr></thead>
+        <tbody>
+          <tr><td>1호기 가열</td><td>BASE</td><td class="num">1920 × 1080</td><td>2026-10-28 16:40</td><td><button class="btn small">열기</button></td></tr>
+          <tr class="sel" data-go="edit"><td>2호기 냉각</td><td>BASE, Accum</td><td class="num">1280 × 720</td><td>2026-10-29 13:05</td><td><button class="btn small" data-go="edit">열기</button></td></tr>
+          <tr><td>3호기 냉각 (카메라 B)</td><td>BASE, Accum</td><td class="num">1280 × 720</td><td>2026-10-29 09:12</td><td><button class="btn small">열기</button></td></tr>
+        </tbody>
+      </table>
+      <div class="list-foot">
+        <div class="err">읽을 수 없는 파일 1개 — <b>2호기 냉각 - 복사본.recipe.json</b>: 다른 파일과 Recipe ID가 같습니다.</div>
+        <div class="row">
+          <span class="caption">폴더</span>
+          <span class="mono">C:\Users\inspector\Documents\OilLevelTracker\Recipes</span>
+          <button class="btn small">폴더 열기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recipe edit -->
+<div class="view on" id="editView">
+  <header class="toolbar">
+    <button class="btn subtle" data-go="list">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4l-6 6 6 6"/></svg>목록</button>
+    <div class="sep"></div>
+    <div class="title"><b>2호기 냉각</b><span>저장되지 않은 변경 있음</span></div>
+    <div class="sep"></div>
+    <button class="btn">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="11" height="10" rx="1"/><path d="M14 9l4-2v6l-4-2"/></svg>영상 열기</button>
+    <div class="spacer"></div>
+    <span class="problems">문제 1개</span>
+    <button class="btn primary">저장</button>
+  </header>
+  <div class="main">
+    <section class="left">
+      <div class="phead">기준 프레임
+        <span class="right">
+          <span>SPL#4_Cooling_onoff_#2.mp4 · 기준 00:12.5 · 보는 중 00:41.0</span>
+          <button class="btn small">현재 프레임을 기준으로</button>
+          <span>휠 확대 · Shift-드래그 이동 · 화살표 1 px (Shift 10 px)</span>
+        </span>
+      </div>
+      <div class="frame" id="frameBox"><canvas id="frame"></canvas><svg id="over"></svg></div>
+      <div class="transport">
+        <button class="btn icon-btn" title="이전 프레임 (←)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4h2v12H5zM16 4v12L8 10z"/></svg></button>
+        <button class="btn icon-btn" title="재생 (Space)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4l10 6-10 6z"/></svg></button>
+        <button class="btn icon-btn" title="다음 프레임 (→)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 4h2v12h-2zM4 4v12l8-6z"/></svg></button>
+        <div class="scrub"><div class="done"></div><span class="ref">기준</span><div class="thumb"></div></div>
+        <span class="time">00:41.0 / 05:00.0</span>
+      </div>
+    </section>
+    <aside class="right-col">
+      <div class="section">
+        <div class="phead">Recipe</div>
+        <div class="body">
+          <div class="field"><span class="label">이름</span><div class="input"><input value="2호기 냉각"></div></div>
+          <span class="caption">파일: 2호기 냉각.recipe.json</span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="phead">Glass <span class="right"><button class="btn small subtle">+ 추가</button></span></div>
+        <div id="glassRows"></div>
+      </div>
+      <div class="section">
+        <div class="phead" id="selHead">선택한 Glass</div>
+        <div class="body" id="selBody"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div class="note" id="note"><button class="close" onclick="this.parentNode.remove()">닫기 ✕</button>
+  <b>목업 (가짜 데이터)</b>
+  <div class="tabs"><button data-go="list">Recipe 목록</button><button data-go="edit" class="on">Recipe 편집</button></div>
+  <b>편집:</b> 프레임은 합성 그림입니다. BASE가 선택된 상태(실선과 손잡이)이고, Accum은 점선입니다.
+  Accum은 0선이 타원 밖이라 문제 1개로 표시됩니다. 오른쪽 Glass 목록을 눌러 선택을 바꾸고, 판정 방식을 바꾸면
+  그 방식에 쓰는 칸만 보입니다.<br>
+  <b>새 Recipe:</b> 영상을 먼저 고르고, 첫 프레임에서 시작합니다. Glass는 "+ 추가"로 화면 가운데에 놓고 끌어서 맞춥니다.<br>
+  <b>목록:</b> 검사를 시작할 때(V2-2)도 같은 목록에서 Recipe를 고릅니다. Recipe 삭제는 첫 버전에 넣지 않습니다(폴더에서 파일을 지우면 됩니다).
+</div>
+
+<script>
+(() => {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const W = 1280, H = 720;
+  const MODES = {
+    RECOVERY: "기준점 회복",
+    HOLD_BELOW_ZERO: "기준점 아래 유지",
+    HOLD_ABOVE_ZERO: "기준점 위 유지",
+  };
+  const glasses = [
+    { name: "BASE", cx: 560, cy: 400, rx: 90, ry: 150, zero: 420, oil: 455,
+      rule: { mode: "RECOVERY", recovery_limit_sec: 120, stable_hold_sec: 5, minimum_valid_coverage_ratio: 0.7, allowed_sec: 5, allowed_px: 0 } },
+    { name: "Accum", cx: 900, cy: 330, rx: 60, ry: 110, zero: 448, oil: 360,
+      rule: { mode: "HOLD_ABOVE_ZERO", recovery_limit_sec: 120, stable_hold_sec: 5, minimum_valid_coverage_ratio: 0.7, allowed_sec: 5, allowed_px: 0 } },
+  ];
+  let selected = 0;
+  const problemOf = g => (g.zero < g.cy - g.ry || g.zero > g.cy + g.ry) ? "0선이 타원 밖" : null;
+
+  function fit() {
+    const box = document.getElementById("frameBox");
+    const w = box.clientWidth, h = box.clientHeight;
+    const s = Math.min(w / W, h / H);
+    return { w, h, s, ox: (w - W * s) / 2, oy: (h - H * s) / 2 };
+  }
+
+  function drawFrame() {
+    const f = fit(), c = document.getElementById("frame");
+    const dpr = window.devicePixelRatio || 1;
+    c.width = f.w * dpr; c.height = f.h * dpr;
+    const g = c.getContext("2d");
+    g.setTransform(dpr * f.s, 0, 0, dpr * f.s, dpr * f.ox, dpr * f.oy);
+    // synthetic scene: wall, compressor shell, two sight glasses
+    let grad = g.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, "#3a3f44"); grad.addColorStop(1, "#24282c");
+    g.fillStyle = grad; g.fillRect(0, 0, W, H);
+    grad = g.createLinearGradient(380, 0, 1080, 0);
+    grad.addColorStop(0, "#5b6167"); grad.addColorStop(0.5, "#8a9096"); grad.addColorStop(1, "#4d5257");
+    g.fillStyle = grad; g.beginPath(); g.roundRect(380, 120, 700, 520, 40); g.fill();
+    g.fillStyle = "#2e3236"; g.fillRect(380, 600, 700, 40);
+    for (const q of glasses) {
+      g.save();
+      g.fillStyle = "#30353a";
+      g.beginPath(); g.ellipse(q.cx, q.cy, q.rx + 14, q.ry + 14, 0, 0, Math.PI * 2); g.fill();
+      g.beginPath(); g.ellipse(q.cx, q.cy, q.rx, q.ry, 0, 0, Math.PI * 2); g.clip();
+      g.fillStyle = "#c9d2c8"; g.fillRect(q.cx - q.rx, q.cy - q.ry, q.rx * 2, q.ry * 2);
+      grad = g.createLinearGradient(0, q.oil, 0, q.cy + q.ry);
+      grad.addColorStop(0, "#b7832c"); grad.addColorStop(1, "#7a4f12");
+      g.fillStyle = grad; g.fillRect(q.cx - q.rx, q.oil, q.rx * 2, q.cy + q.ry - q.oil);
+      g.fillStyle = "rgba(255,255,255,0.35)";
+      g.fillRect(q.cx - q.rx * 0.55, q.cy - q.ry, q.rx * 0.18, q.ry * 2);
+      g.restore();
+    }
+  }
+
+  function drawOverlay() {
+    const f = fit(), svg = document.getElementById("over");
+    const X = x => f.ox + x * f.s, Y = y => f.oy + y * f.s, L = v => v * f.s;
+    const outline = css("--glass-outline");
+    let out = "";
+    glasses.forEach((q, i) => {
+      const sel = i === selected;
+      const dash = sel ? "" : `stroke-dasharray="4 3"`;
+      const width = sel ? 1.5 : 1;
+      const x0 = X(q.cx - q.rx), x1 = X(q.cx + q.rx), zy = Y(q.zero);
+      for (const [stroke, off] of [["rgba(0,0,0,0.5)", 1], [outline, 0]]) {
+        out += `<ellipse cx="${X(q.cx)}" cy="${Y(q.cy) + off}" rx="${L(q.rx)}" ry="${L(q.ry)}" fill="none" stroke="${stroke}" stroke-width="${width}" ${dash}/>`;
+        out += `<line x1="${x0}" x2="${x1}" y1="${zy + off}" y2="${zy + off}" stroke="${stroke}" stroke-width="${width}" ${dash}/>`;
+      }
+      const chipW = q.name.length * 8 + 12;
+      out += `<rect x="${X(q.cx) - chipW / 2}" y="${Y(q.cy - q.ry) - 26}" width="${chipW}" height="20" rx="4" fill="${css("--frame-caption-bg")}"/>
+              <text x="${X(q.cx)}" y="${Y(q.cy - q.ry) - 12}" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">${q.name}</text>
+              <rect x="${x0 - 20}" y="${zy - 10}" width="16" height="20" rx="4" fill="${css("--frame-caption-bg")}"/>
+              <text x="${x0 - 12}" y="${zy + 4}" text-anchor="middle" font-size="12" fill="#fff">0</text>`;
+      if (sel) {
+        const handles = [[X(q.cx), Y(q.cy - q.ry)], [X(q.cx), Y(q.cy + q.ry)], [x0, Y(q.cy)], [x1, Y(q.cy)], [x1, zy]];
+        for (const [hx, hy] of handles)
+          out += `<rect x="${hx - 4}" y="${hy - 4}" width="8" height="8" fill="${css("--bg-1")}" stroke="${css("--brand")}" stroke-width="1"/>`;
+      }
+    });
+    svg.innerHTML = out;
+  }
+
+  function num(label, value, unit, bad) {
+    return `<div class="field"><span class="label">${label}</span>
+      <div class="input num${bad ? " bad" : ""}"><input value="${value}"><span class="unit">${unit}</span></div>
+      ${bad ? `<span class="err">${bad}</span>` : ""}</div>`;
+  }
+
+  function ruleFields(r) {
+    if (r.mode === "RECOVERY") {
+      return `<div class="grid2">${num("회복 제한 시간", r.recovery_limit_sec, "s")}${num("안정 유지 시간", r.stable_hold_sec, "s")}</div>
+        ${num("최소 유효 비율", Math.round(r.minimum_valid_coverage_ratio * 100), "%")}
+        <div class="rule-text">압축기 기동 후 Oil 선이 0선 이상으로 올라와 ${r.stable_hold_sec} s 동안 머물러야 합니다. 그 시작은 기동 후 ${r.recovery_limit_sec} s 안이어야 합니다.</div>`;
+    }
+    const below = r.mode === "HOLD_BELOW_ZERO";
+    return `<div class="grid2">${num("허용 시간", r.allowed_sec, "s")}${num("허용 높이", r.allowed_px, "px")}</div>
+      ${num("최소 유효 비율", Math.round(r.minimum_valid_coverage_ratio * 100), "%")}
+      <div class="rule-text">Oil 선이 0선 ${below ? "위" : "아래"}로 ${r.allowed_px} px 넘게 벗어난 상태가 한 번에 ${r.allowed_sec} s보다 길게 이어지면 FAIL입니다. Foam은 판정에 쓰지 않습니다.</div>`;
+  }
+
+  function renderPanel() {
+    document.getElementById("glassRows").innerHTML = glasses.map((q, i) => {
+      const p = problemOf(q);
+      return `<div class="glass-row${i === selected ? " sel" : ""}" data-i="${i}">
+        <b>${q.name}</b><span class="mode">${MODES[q.rule.mode]}</span>
+        ${p ? `<span class="err">${p}</span>` : ""}
+        <button class="btn icon-btn del" title="Glass 삭제"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h12M8 6V4h4v2M6 6l1 10h6l1-10"/></svg></button>
+      </div>`;
+    }).join("");
+    const q = glasses[selected];
+    document.getElementById("selHead").textContent = `선택한 Glass · ${q.name}`;
+    const zeroErr = problemOf(q) ? `타원의 위아래 끝(${q.cy - q.ry}–${q.cy + q.ry} px) 사이로 옮기세요.` : null;
+    document.getElementById("selBody").innerHTML = `
+      <div class="field"><span class="label">이름</span><div class="input"><input value="${q.name}"></div></div>
+      <span class="label">위치 (원본 프레임 px)</span>
+      <div class="grid2">${num("중심 X", q.cx, "px")}${num("중심 Y", q.cy, "px")}${num("반지름 X", q.rx, "px")}${num("반지름 Y", q.ry, "px")}</div>
+      ${num("0선 Y", q.zero, "px", zeroErr)}
+      <hr>
+      <div class="field"><span class="label">판정 방식</span>
+        <select id="mode">${Object.entries(MODES).map(([k, v]) => `<option value="${k}"${k === q.rule.mode ? " selected" : ""}>${v}</option>`).join("")}</select></div>
+      ${ruleFields(q.rule)}`;
+    document.getElementById("mode").onchange = e => { q.rule.mode = e.target.value; renderPanel(); };
+    document.querySelectorAll(".glass-row").forEach(row => row.onclick = () => { selected = +row.dataset.i; renderPanel(); drawOverlay(); });
+  }
+
+  function show(view) {
+    document.getElementById("listView").classList.toggle("on", view === "list");
+    document.getElementById("editView").classList.toggle("on", view === "edit");
+    document.querySelectorAll(".note .tabs button").forEach(b => b.classList.toggle("on", b.dataset.go === view));
+    if (view === "edit") { drawFrame(); drawOverlay(); }
+  }
+  document.querySelectorAll("[data-go]").forEach(el => el.addEventListener("click", e => { e.stopPropagation(); show(el.dataset.go); }));
+
+  renderPanel();
+  show(new URLSearchParams(location.search).get("view") === "list" ? "list" : "edit");
+  new ResizeObserver(() => { if (document.getElementById("editView").classList.contains("on")) { drawFrame(); drawOverlay(); } })
+    .observe(document.getElementById("frameBox"));
+})();
+</script>
+</body>
+</html>
