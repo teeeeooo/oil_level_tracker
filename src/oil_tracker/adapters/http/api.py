@@ -14,7 +14,22 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
-from oil_tracker.application.ports import DesktopUnavailable, RecipeNotFound, VideoUnreadable
+from oil_tracker.application.inspections import (
+    GlassPosition,
+    InspectionLocked,
+    InspectionSetup,
+    Inspections,
+    InvalidSetup,
+)
+from oil_tracker.application.ports import (
+    DesktopUnavailable,
+    InspectionEntry,
+    InspectionNotFound,
+    RecipeNotFound,
+    StoredAnalysis,
+    UnreadableAnalysis,
+    VideoUnreadable,
+)
 from oil_tracker.application.recipes import (
     RecipeDraft,
     Recipes,
@@ -24,8 +39,11 @@ from oil_tracker.application.recipes import (
 from oil_tracker.application.videos import OpenedVideo, UnknownVideo, VideoSessions
 from oil_tracker.domain.enums import JudgmentMode
 from oil_tracker.domain.geometry import Ellipse
+from oil_tracker.domain.inspection import AnalysisSettings, Inspection, needs_compressor_start
 from oil_tracker.domain.problems import Problem
 from oil_tracker.domain.recipe import Glass, JudgmentRule, Recipe
+
+from .jobs import Jobs, JobsBusy, UnknownJob
 
 TOKEN_HEADER = "X-OLT-Token"
 MAX_BODY_BYTES = 1_000_000
@@ -54,7 +72,9 @@ class Response:
 @dataclass
 class ApiContext:
     recipes: Recipes
+    inspections: Inspections
     videos: VideoSessions
+    jobs: Jobs
     web_folder: Path
     token: str
 
@@ -128,6 +148,94 @@ def video_json(opened: OpenedVideo) -> dict[str, Any]:
     }
 
 
+def inspection_summary(entry: InspectionEntry) -> dict[str, Any]:
+    inspection = entry.inspection
+    return {
+        "id": inspection.id,
+        "folder": entry.folder_name,
+        "video_name": inspection.video.name,
+        "recipe_name": inspection.recipe.name,
+        "glass_names": [glass.name for glass in inspection.recipe.glasses],
+        "created_at": inspection.created_at,
+        "state": inspection.state.value,
+        "failure": inspection.failure,
+    }
+
+
+def inspection_detail(inspection: Inspection) -> dict[str, Any]:
+    video, settings = inspection.video, inspection.settings
+    return {
+        "id": inspection.id,
+        "created_at": inspection.created_at,
+        "state": inspection.state.value,
+        "failure": inspection.failure,
+        "video": {
+            "path": video.path,
+            "name": video.name,
+            "size_bytes": video.size_bytes,
+            "width": video.width,
+            "height": video.height,
+            "fps": video.fps,
+            "frame_count": video.frame_count,
+            "duration_sec": video.duration_sec,
+            "sha256": video.sha256,
+        },
+        "recipe": recipe_detail(inspection.recipe),
+        "needs_compressor_start": needs_compressor_start(inspection.recipe),
+        "settings": {
+            "start_sec": settings.start_sec,
+            "end_sec": settings.end_sec,
+            "compressor_start_sec": settings.compressor_start_sec,
+            "sample_count": settings.sample_count,
+        },
+    }
+
+
+def analysis_json(stored: StoredAnalysis) -> dict[str, Any]:
+    layouts = {layout.glass_id: layout for layout in stored.images}
+    analysis = stored.analysis
+    return {
+        "finished_at": analysis.finished_at,
+        "times": list(analysis.times),
+        "glasses": [
+            {
+                "glass_id": draft.glass_id,
+                "y0": layouts[draft.glass_id].y0,
+                "rows": layouts[draft.glass_id].rows,
+                "pieces": layouts[draft.glass_id].pieces,
+                "oil": {"ys": list(draft.oil.ys), "origins": [origin.value for origin in draft.oil.origins]},
+            }
+            for draft in analysis.drafts
+        ],
+    }
+
+
+def parse_setup(body: Any) -> InspectionSetup:
+    try:
+        settings = body["settings"]
+        compressor = settings["compressor_start_sec"]
+        return InspectionSetup(
+            inspection_id=_optional_text(body["inspection_id"]),
+            video_id=_optional_text(body["video_id"]),
+            recipe_id=_text(body["recipe_id"]),
+            positions=tuple(
+                GlassPosition(
+                    _text(raw["id"]),
+                    Ellipse(**{key: _number(raw["ellipse"][key]) for key in _ELLIPSE_NUMBERS}),
+                    _number(raw["zero_line_y"]),
+                )
+                for raw in body["glasses"]
+            ),
+            settings=AnalysisSettings(
+                _number(settings["start_sec"]),
+                _number(settings["end_sec"]),
+                None if compressor is None else _number(compressor),
+            ),
+        )
+    except (KeyError, TypeError, ValueError, AttributeError) as failure:
+        raise BadRequest(f"검사 설정 요청 형식이 올바르지 않습니다: {failure}") from failure
+
+
 def parse_draft(body: Any) -> RecipeDraft:
     try:
         recipe_id = body["id"]
@@ -163,6 +271,10 @@ def _text(value: Any) -> str:
     return value
 
 
+def _optional_text(value: Any) -> str | None:
+    return None if value is None else _text(value)
+
+
 def _number(value: Any) -> float:
     if isinstance(value, bool) or not isinstance(value, int | float) or not math.isfinite(value):
         raise TypeError("expected a finite number")
@@ -175,7 +287,7 @@ Route = tuple[str, re.Pattern[str], Callable[..., Response]]
 
 
 def routes(ctx: ApiContext) -> list[Route]:
-    recipes, videos = ctx.recipes, ctx.videos
+    recipes, inspections, videos, jobs = ctx.recipes, ctx.inspections, ctx.videos, ctx.jobs
 
     def list_recipes(_query, _body) -> Response:
         listing = recipes.list()
@@ -241,8 +353,93 @@ def routes(ctx: ApiContext) -> list[Route]:
         videos.close(video_id)
         return json_response({"ok": True})
 
+    def list_inspections(_query, _body) -> Response:
+        listing = inspections.list()
+        return json_response(
+            {
+                "folder": str(inspections.store.location),
+                "inspections": [inspection_summary(entry) for entry in listing.inspections],
+                "unreadable": [{"folder": name, "reason": reason} for name, reason in listing.unreadable],
+                "job": jobs.running(),
+            }
+        )
+
+    def open_inspections_folder(_query, _body) -> Response:
+        inspections.open_folder()
+        return json_response({"ok": True})
+
+    def recipe_choices(query, _body) -> Response:
+        if "video_id" not in query:
+            raise BadRequest("video_id가 필요합니다.")
+        result = inspections.recipe_choices(query["video_id"][0])
+        return json_response(
+            {
+                "recipes": [
+                    {
+                        **recipe_summary(choice.recipe),
+                        "problem": choice.problem,
+                        "needs_compressor_start": needs_compressor_start(choice.recipe),
+                    }
+                    for choice in result.choices
+                ],
+                "unreadable": [{"file": name, "reason": reason} for name, reason in result.unreadable],
+            }
+        )
+
+    def check_setup(_query, body) -> Response:
+        return json_response({"problems": problems_json(inspections.check(parse_setup(body)))})
+
+    def start_analysis(_query, body) -> Response:
+        setup = parse_setup(body)
+        if jobs.running() is not None:
+            raise JobsBusy("다른 분석이 진행 중입니다.")
+        result = inspections.prepare(setup)
+        if result.inspection is None:
+            return json_response({"problems": problems_json(result.problems)}, 422)
+        inspection_id = result.inspection.id
+        job = jobs.start(
+            inspection_id, lambda progress, cancelled: inspections.analyse(inspection_id, progress, cancelled)
+        )
+        return json_response({"inspection": inspection_detail(result.inspection), "job": job})
+
+    def get_inspection(_query, _body, inspection_id) -> Response:
+        return json_response(inspection_detail(inspections.load(inspection_id)))
+
+    def get_analysis(_query, _body, inspection_id) -> Response:
+        stored = inspections.result(inspection_id)
+        if stored is None:
+            return error(404, "분석 결과가 없습니다.")
+        return json_response(analysis_json(stored))
+
+    def open_inspection_video(_query, _body, inspection_id) -> Response:
+        return json_response(video_json(inspections.open_video(inspection_id)))
+
+    def image_piece(_query, _body, inspection_id, glass_id, kind, index) -> Response:
+        return Response(200, inspections.image_piece(inspection_id, glass_id, kind, int(index)), "image/png")
+
+    def job_status(_query, _body, job_id) -> Response:
+        return json_response(jobs.status(job_id))
+
+    def cancel_job(_query, _body, job_id) -> Response:
+        return json_response(jobs.cancel(job_id))
+
     segment = r"([^/]+)"
     return [
+        ("GET", re.compile(r"/api/inspections"), list_inspections),
+        ("POST", re.compile(r"/api/inspections/open-folder"), open_inspections_folder),
+        ("GET", re.compile(r"/api/inspections/recipe-choices"), recipe_choices),
+        ("POST", re.compile(r"/api/inspections/check"), check_setup),
+        ("POST", re.compile(r"/api/inspections/start"), start_analysis),
+        ("GET", re.compile(rf"/api/inspections/{segment}"), get_inspection),
+        ("GET", re.compile(rf"/api/inspections/{segment}/analysis"), get_analysis),
+        ("POST", re.compile(rf"/api/inspections/{segment}/video"), open_inspection_video),
+        (
+            "GET",
+            re.compile(rf"/api/inspections/{segment}/images/{segment}/(context|background)-(\d+)\.png"),
+            image_piece,
+        ),
+        ("GET", re.compile(rf"/api/jobs/{segment}"), job_status),
+        ("POST", re.compile(rf"/api/jobs/{segment}/cancel"), cancel_job),
         ("GET", re.compile(r"/api/recipes"), list_recipes),
         ("POST", re.compile(r"/api/recipes"), save_recipe),
         ("POST", re.compile(r"/api/recipes/check"), check_recipe),
@@ -280,10 +477,14 @@ def make_handler(ctx: ApiContext) -> type[BaseHTTPRequestHandler]:
                 response = self._dispatch(method, url.path, parse_qs(url.query))
             except BadRequest as failure:
                 response = error(400, str(failure))
-            except (RecipeNotFound, UnknownVideo) as failure:
+            except (RecipeNotFound, UnknownVideo, InspectionNotFound, UnknownJob) as failure:
                 response = error(404, str(failure))
-            except (VideoUnreadable, VideoDoesNotFit) as failure:
+            except (VideoUnreadable, VideoDoesNotFit, UnreadableAnalysis) as failure:
                 response = error(422, str(failure))
+            except (InspectionLocked, JobsBusy) as failure:
+                response = error(409, str(failure))
+            except InvalidSetup as failure:
+                response = error(400, str(failure))
             except DesktopUnavailable as failure:
                 response = error(501, str(failure))
             except Exception as failure:  # noqa: BLE001 - report every failure to the UI

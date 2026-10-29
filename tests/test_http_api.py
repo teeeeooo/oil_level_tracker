@@ -1,7 +1,9 @@
 """API tests against a running local server (bootstrap wiring, real adapters)."""
 
+import hashlib
 import http.client
 import json
+import time
 
 import cv2
 import numpy as np
@@ -152,3 +154,92 @@ def test_check_and_defaults(app, video):
     assert not (tmp_path / "data" / "Recipes").exists()
     status, defaults, _ = call(running, "GET", "/api/defaults")
     assert defaults["judgment_rule"] == glass_json()["judgment_rule"]
+
+
+def wait_for_job(running, job_id):
+    for _ in range(500):
+        job = call(running, "GET", f"/api/jobs/{job_id}")[1]
+        if job["state"] != "running":
+            return job
+        time.sleep(0.02)
+    raise AssertionError("the analysis did not end")
+
+
+def saved_recipe(running, video):
+    _, opened, _ = call(running, "POST", "/api/videos", {"path": str(video)})
+    body = {"id": None, "name": "2호기", "glasses": [glass_json()], "reference": {"video_id": opened["id"], "time_sec": 0}}
+    return opened, call(running, "POST", "/api/recipes", body)[1]
+
+
+def setup_json(opened, recipe, compressor=0.5):
+    glass = glass_json()
+    return {
+        "inspection_id": None,
+        "video_id": opened["id"],
+        "recipe_id": recipe["id"],
+        "glasses": [{"id": glass["id"], "ellipse": glass["ellipse"], "zero_line_y": glass["zero_line_y"]}],
+        "settings": {"start_sec": 0, "end_sec": 1.9, "compressor_start_sec": compressor},
+    }
+
+
+def test_an_inspection_from_its_video_to_the_analysis(app, video):
+    running, tmp_path = app
+    opened, recipe = saved_recipe(running, video)
+    status, listing, _ = call(running, "GET", "/api/inspections")
+    assert status == 200
+    assert listing == {"folder": str(tmp_path / "data" / "Inspections"), "inspections": [], "unreadable": [], "job": None}
+
+    status, choices, _ = call(running, "GET", f"/api/inspections/recipe-choices?video_id={opened['id']}")
+    assert [(r["id"], r["problem"], r["needs_compressor_start"]) for r in choices["recipes"]] == [(recipe["id"], None, True)]
+
+    setup = setup_json(opened, recipe, compressor=None)
+    status, checked, _ = call(running, "POST", "/api/inspections/check", setup)
+    assert status == 200 and [p["field"] for p in checked["problems"]] == ["compressor_start_sec"]
+    status, refused, _ = call(running, "POST", "/api/inspections/start", setup)
+    assert status == 422 and [p["field"] for p in refused["problems"]] == ["compressor_start_sec"]
+    assert not (tmp_path / "data" / "Inspections").exists()  # nothing is written before the analysis starts
+
+    setup = setup_json(opened, recipe)
+    status, started, _ = call(running, "POST", "/api/inspections/start", setup)
+    assert status == 200, started
+    inspection_id = started["inspection"]["id"]
+    assert started["inspection"]["state"] == "NOT_ANALYSED" and started["job"]["inspection_id"] == inspection_id
+    assert wait_for_job(running, started["job"]["id"])["state"] == "finished"
+
+    status, detail, _ = call(running, "GET", f"/api/inspections/{inspection_id}")
+    assert (detail["state"], detail["failure"]) == ("ANALYSED", None)
+    assert detail["video"]["sha256"] == hashlib.sha256(video.read_bytes()).hexdigest()
+    assert detail["settings"] == {"start_sec": 0.0, "end_sec": 1.9, "compressor_start_sec": 0.5, "sample_count": 4}
+    assert detail["recipe"]["glasses"][0]["ellipse"] == {"center_x": 160, "center_y": 120, "radius_x": 40, "radius_y": 100}
+
+    status, analysis, _ = call(running, "GET", f"/api/inspections/{inspection_id}/analysis")
+    assert status == 200 and analysis["times"] == [0.0, 0.5, 1.0, 1.5]
+    glass = analysis["glasses"][0]
+    assert (glass["glass_id"], glass["y0"], glass["rows"], glass["pieces"]) == ("g1", 20, 200, 1)
+    assert len(glass["oil"]["ys"]) == 4 and set(glass["oil"]["origins"]) == {"DRAFT"}
+
+    status, png, response = call(running, "GET", f"/api/inspections/{inspection_id}/images/g1/context-0.png")
+    assert status == 200 and png[:8] == b"\x89PNG\r\n\x1a\n" and response.getheader("Content-Type") == "image/png"
+    assert call(running, "GET", f"/api/inspections/{inspection_id}/images/g1/background-0.png")[0] == 200
+    assert call(running, "GET", f"/api/inspections/{inspection_id}/images/g1/context-1.png")[0] == 404
+
+    entry = call(running, "GET", "/api/inspections")[1]["inspections"][0]
+    assert (entry["id"], entry["video_name"], entry["recipe_name"], entry["state"]) == (inspection_id, "sample.avi", "2호기", "ANALYSED")
+
+    status, reopened, _ = call(running, "POST", f"/api/inspections/{inspection_id}/video")
+    assert status == 200 and reopened["name"] == "sample.avi"
+    setup["inspection_id"] = inspection_id
+    assert call(running, "POST", "/api/inspections/start", setup)[0] == 409  # an analysed inspection keeps its setup
+
+
+def test_inspection_errors(app, video):
+    running, _ = app
+    opened, recipe = saved_recipe(running, video)
+    assert call(running, "GET", "/api/inspections/missing")[0] == 404
+    assert call(running, "GET", "/api/inspections/recipe-choices")[0] == 400
+    assert call(running, "GET", "/api/inspections/recipe-choices?video_id=nope")[0] == 404
+    assert call(running, "POST", "/api/inspections/start", {"video_id": opened["id"]})[0] == 400
+    bad = setup_json(opened, recipe)
+    bad["glasses"] = []
+    assert call(running, "POST", "/api/inspections/check", bad)[0] == 400
+    assert call(running, "GET", "/api/jobs/nope")[0] == 404
