@@ -26,6 +26,7 @@ from oil_tracker.application.ports import (
     InspectionEntry,
     InspectionNotFound,
     RecipeNotFound,
+    Region,
     StoredAnalysis,
     UnreadableAnalysis,
     UnreadableEdits,
@@ -486,12 +487,19 @@ def routes(ctx: ApiContext) -> list[Route]:
         try:
             time_sec = float(query.get("t", ["0"])[0])
             max_size = int(query["max"][0]) if "max" in query else None
-        except ValueError as failure:
+            crop = Region(*(int(n) for n in query["crop"][0].split(","))) if "crop" in query else None
+        except (ValueError, TypeError) as failure:
             raise BadRequest(str(failure)) from failure
         if not math.isfinite(time_sec):
             raise BadRequest("t must be finite")
-        shown = videos.frame(video_id, time_sec, max_size=max_size)
+        try:
+            shown = videos.frame(video_id, time_sec, max_size=max_size, crop=crop)
+        except ValueError as failure:
+            raise BadRequest(str(failure)) from failure
         headers = (("X-Frame-Index", str(shown.index)), ("X-Frame-Time", f"{shown.time_sec:.6f}"))
+        if shown.region is not None:
+            r = shown.region
+            headers += (("X-Frame-Region", f"{r.x},{r.y},{r.width},{r.height}"),)
         return Response(200, shown.jpeg, "image/jpeg", headers)
 
     def close_video(_query, _body, video_id) -> Response:

@@ -112,7 +112,7 @@ class FakeVideo:
         width, height = (1920, 1080) if "hd" in path.name else (1280, 720)
         self.info = VideoInfo(path.name, width, height, 10.0, 100, 5_000)
 
-    def frame_at(self, time_sec, *, max_size=None):
+    def frame_at(self, time_sec, *, max_size=None, crop=None):
         raise AssertionError("the inspection use cases decode no frame")
 
     def close(self):

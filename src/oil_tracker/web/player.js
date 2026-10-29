@@ -17,6 +17,7 @@ const state = {
   videoId: null,            // the frame session
   info: null,               // { fps, frame_count, width, height, duration_sec }
   crop: null,               // the source region to show: { x, y, w, h }
+  shown: null,              // the source region the box shows, which exact frames are cut to
   time: 0,
   playing: false,
   speed: 1,
@@ -75,6 +76,11 @@ export function layout() {
   const { x, y, w, h } = state.crop;
   const k = Math.min(bw / w, bh / h);
   const vw = bw / k, vh = bh / k, vx = x + w / 2 - vw / 2, vy = y + h / 2 - vh / 2;
+  const left = Math.max(0, Math.floor(vx)), top = Math.max(0, Math.floor(vy));
+  state.shown = {
+    x: left, y: top,
+    w: Math.min(state.info.width, Math.ceil(vx + vw)) - left, h: Math.min(state.info.height, Math.ceil(vy + vh)) - top,
+  };
   const stage = $("videoStage");
   stage.style.width = `${state.info.width}px`;
   stage.style.height = `${state.info.height}px`;
@@ -99,6 +105,11 @@ export function seekStats() {
   return state.seeks.slice();
 }
 
+/** How the video plays: in the <video>, or as exact frames when the <video> cannot decode it. */
+export function playbackInfo() {
+  return { fallback: state.fallback, playing: state.playing, time: state.time };
+}
+
 /** Show the exact frame at t (paused). */
 export function seek(t) {
   if (!state.info) return;
@@ -121,12 +132,15 @@ function requestFrame(t) {
   }
   state.inFlight = true;
   const began = performance.now();
-  api.getBlobUrl(`/api/videos/${encodeURIComponent(state.videoId)}/frame?t=${t.toFixed(4)}`)
-    .then(async ({ url }) => {
+  const cut = state.shown ? `&crop=${state.shown.x},${state.shown.y},${state.shown.w},${state.shown.h}` : "";
+  api.getBlobUrl(`/api/videos/${encodeURIComponent(state.videoId)}/frame?t=${t.toFixed(4)}${cut}`)
+    .then(async ({ url, headers }) => {
       const img = $("videoFrame");
       const shown = new Image();
       shown.src = url;
       await shown.decode();
+      const [x, y, w, h] = (headers.get("X-Frame-Region") ?? `0,0,${state.info.width},${state.info.height}`).split(",").map(Number);
+      Object.assign(img.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px` });
       img.src = url;
       img.hidden = false;
       if (state.frameUrl) URL.revokeObjectURL(state.frameUrl);

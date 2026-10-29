@@ -8,7 +8,7 @@ from pathlib import Path
 
 import cv2
 
-from oil_tracker.application.ports import Frame, VideoInfo, VideoUnreadable
+from oil_tracker.application.ports import Frame, Region, VideoInfo, VideoUnreadable
 
 JPEG_QUALITY = 90
 READ_ON_LIMIT = 15  # frames; a short jump forward reads on instead of seeking
@@ -33,7 +33,7 @@ class OpenCvVideo:
         self._lock = threading.Lock()
         self._next_index = 0  # the index the next plain read() returns
 
-    def frame_at(self, time_sec: float, *, max_size: int | None = None) -> Frame:
+    def frame_at(self, time_sec: float, *, max_size: int | None = None, crop: Region | None = None) -> Frame:
         if not math.isfinite(time_sec):
             raise ValueError("time_sec must be finite")
         index = min(self.info.frame_count - 1, max(0, round(time_sec * self.info.fps)))
@@ -48,6 +48,14 @@ class OpenCvVideo:
             self._next_index = index + 1 if ok else -1
         if not ok:
             raise VideoUnreadable(f"{index}번 프레임을 읽을 수 없습니다.")
+        region = None
+        if crop is not None:
+            x0, y0 = max(0, crop.x), max(0, crop.y)
+            x1, y1 = min(image.shape[1], crop.x + crop.width), min(image.shape[0], crop.y + crop.height)
+            if x1 <= x0 or y1 <= y0:
+                raise ValueError("The crop lies outside the frame.")
+            image = image[y0:y1, x0:x1]
+            region = Region(x0, y0, x1 - x0, y1 - y0)
         if max_size is not None and max(image.shape[:2]) > max_size:
             scale = max_size / max(image.shape[:2])
             size = (round(image.shape[1] * scale), round(image.shape[0] * scale))
@@ -55,7 +63,7 @@ class OpenCvVideo:
         ok, data = cv2.imencode(".jpg", image, [cv2.IMWRITE_JPEG_QUALITY, JPEG_QUALITY])
         if not ok:
             raise VideoUnreadable(f"{index}번 프레임을 JPEG로 만들 수 없습니다.")
-        return Frame(index, index / self.info.fps, data.tobytes())
+        return Frame(index, index / self.info.fps, data.tobytes(), region)
 
     def close(self) -> None:
         with self._lock:

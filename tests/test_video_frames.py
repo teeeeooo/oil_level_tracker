@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 
 from oil_tracker.adapters.video.frames import open_video
-from oil_tracker.application.ports import VideoUnreadable
+from oil_tracker.application.ports import Region, VideoUnreadable
 
 FPS = 10.0
 COUNT = 30
@@ -72,6 +72,20 @@ def test_max_size_limits_the_longer_side(video):
         assert image.shape[:2] == (60, 80)
         full = cv2.imdecode(np.frombuffer(opened.frame_at(0, max_size=1280).jpeg, np.uint8), cv2.IMREAD_COLOR)
         assert full.shape[:2] == (HEIGHT, WIDTH)
+    finally:
+        opened.close()
+
+
+def test_a_crop_keeps_that_part_clipped_to_the_frame(video):
+    opened = open_video(video)
+    try:
+        frame = opened.frame_at(0, crop=Region(-10, 20, 50, 30))
+        assert frame.region == Region(0, 20, 40, 30)
+        image = cv2.imdecode(np.frombuffer(frame.jpeg, np.uint8), cv2.IMREAD_COLOR)
+        assert image.shape[:2] == (30, 40)
+        assert opened.frame_at(0).region is None
+        with pytest.raises(ValueError):
+            opened.frame_at(0, crop=Region(WIDTH, 0, 10, 10))
     finally:
         opened.close()
 

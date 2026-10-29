@@ -7,7 +7,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from .ports import Frame, OpenVideo, VideoInfo, VideoOpener
+from .ports import Frame, OpenVideo, Region, VideoInfo, VideoOpener
 
 
 class UnknownVideo(LookupError):
@@ -44,8 +44,10 @@ class VideoSessions:
         with self._lock:
             return self._paths[video_id]
 
-    def frame(self, video_id: str, time_sec: float, *, max_size: int | None = None) -> Frame:
-        return self._get(video_id).frame_at(time_sec, max_size=max_size)
+    def frame(
+        self, video_id: str, time_sec: float, *, max_size: int | None = None, crop: Region | None = None
+    ) -> Frame:
+        return self._get(video_id).frame_at(time_sec, max_size=max_size, crop=crop)
 
     def close(self, video_id: str) -> None:
         with self._lock:

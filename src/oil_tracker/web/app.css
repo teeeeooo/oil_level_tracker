@@ -158,7 +158,8 @@ input[type="range"] { flex: 1; min-width: 0; accent-color: var(--brand); }
 .empty-text { color: var(--error); font-weight: 600; }
 .video { position: relative; height: 240px; flex: none; overflow: hidden; background: var(--frame-bg); }
 .video-stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
-.video-stage video, .video-stage img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.video-stage video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.video-stage img { position: absolute; display: block; }  /* placed where its region lies (player.js) */
 .video-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .video-transport { height: 40px; flex: none; border-bottom: 1px solid var(--stroke-1); }
 .video-transport .speed { margin-left: 4px; }

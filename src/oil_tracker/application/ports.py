@@ -158,19 +158,31 @@ class VideoInfo:
 
 
 @dataclass(frozen=True)
+class Region:
+    """A part of the source frame, in source px."""
+
+    x: int
+    y: int
+    width: int
+    height: int
+
+
+@dataclass(frozen=True)
 class Frame:
     """One decoded source frame. The image is opaque to the use cases."""
 
     index: int
     time_sec: float
     jpeg: bytes
+    region: Region | None = None  # the part of the frame the image shows; None for the whole frame
 
 
 class OpenVideo(Protocol):
     info: VideoInfo
 
-    def frame_at(self, time_sec: float, *, max_size: int | None = None) -> Frame:
-        """The frame shown at time_sec, clamped to the video. max_size limits the longer side."""
+    def frame_at(self, time_sec: float, *, max_size: int | None = None, crop: Region | None = None) -> Frame:
+        """The frame shown at time_sec, clamped to the video. `crop` keeps that part of it, clipped
+        to the frame; max_size then limits the longer side."""
         ...
 
     def close(self) -> None: ...

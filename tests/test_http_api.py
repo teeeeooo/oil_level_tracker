@@ -123,6 +123,10 @@ def test_recipe_round_trip_through_the_api(app, video):
     status, jpeg, response = call(running, "GET", f"/api/videos/{opened['id']}/frame?t=0.7")
     assert status == 200 and jpeg[:2] == b"\xff\xd8"
     assert response.getheader("X-Frame-Index") == "7"
+    status, jpeg, response = call(running, "GET", f"/api/videos/{opened['id']}/frame?t=0.7&crop=300,10,50,20")
+    assert status == 200 and response.getheader("X-Frame-Region") == "300,10,20,20"  # clipped to the frame
+    assert call(running, "GET", f"/api/videos/{opened['id']}/frame?t=0&crop=1,2")[0] == 400
+    assert call(running, "GET", f"/api/videos/{opened['id']}/frame?t=0&crop=400,0,10,10")[0] == 400
 
     body = {"id": None, "name": "2호기", "glasses": [glass_json()], "reference": {"video_id": opened["id"], "time_sec": 0.7}}
     status, saved, _ = call(running, "POST", "/api/recipes", body)

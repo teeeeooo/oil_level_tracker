@@ -666,9 +666,16 @@ function onKey(event) {
   event.preventDefault();
 }
 
-/** Redraw times while dragging and exact-frame times, for the A5 and A6 measurement. */
+/** Redraw times while dragging and exact-frame times, for the A5 and A6 measurement
+ * (scripts/measure_editor.py). */
 export function measurements() {
-  return { redraws: state.redraws.slice(), seeks: player.seekStats() };
+  return {
+    redraws: state.redraws.slice(),
+    seeks: player.seekStats(),
+    samples: state.edits?.times.length ?? 0,
+    lumaReady: !!state.luma.get(state.glassId),
+    video: player.playbackInfo(),
+  };
 }
 
 export function init(toList) {

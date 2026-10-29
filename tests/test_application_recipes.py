@@ -38,7 +38,7 @@ class FakeVideo:
         self.closed = False
         self.requests = []
 
-    def frame_at(self, time_sec, *, max_size=None):
+    def frame_at(self, time_sec, *, max_size=None, crop=None):
         self.requests.append((time_sec, max_size))
         index = round(time_sec * 10)
         return Frame(index, index / 10, f"jpeg-{index}".encode())
