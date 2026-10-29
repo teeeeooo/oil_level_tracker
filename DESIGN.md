@@ -260,9 +260,12 @@ Do not use sizes outside this ramp.
 - **Inspection list:** the first screen.
   - **Toolbar, 48 px:** the title "검사" on the left; "Recipe", "새 검사"
     (primary) and help on the right.
-  - **Body:** one panel with a table: the video name with the inspection
-    folder name below it (monospace caption), the Recipe, the creation
-    time and the state (badge and reason). A row opens with "열기".
+  - **Body:** one panel with a table: the inspection, the Recipe, the
+    creation time and the state (badge and reason). A row opens with
+    "열기".
+    - The inspection cell shows its name with the video name below it, or
+      the video name alone when it has no name; then the folder name
+      (monospace caption).
   - **Below the table:** the Inspections folder path, with "폴더 열기".
 - **Recipe picker:** a 720 px dialog after the video is picked.
   - The video name, its frame size and its length.
@@ -282,6 +285,10 @@ Do not use sizes outside this ramp.
     marks in `--range-edge`) and the compressor start ("기동", in
     `--compressor`), then the time and the speed field.
   - **Right column, 360 px:**
+    - 검사 이름, marked "선택": a text field. Its caption says that the
+      name shows in the list and names the folder, and how the folder is
+      named without one. Once the folder exists, the field is read-only
+      (user, 2026-10-29);
     - Recipe: its name and each Glass with its mode, and "바꾸기";
     - 분석 범위: start and end time fields, with the length and the number
       of samples below;

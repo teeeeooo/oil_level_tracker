@@ -152,6 +152,7 @@ def inspection_summary(entry: InspectionEntry) -> dict[str, Any]:
     inspection = entry.inspection
     return {
         "id": inspection.id,
+        "name": inspection.name,
         "folder": entry.folder_name,
         "video_name": inspection.video.name,
         "recipe_name": inspection.recipe.name,
@@ -166,6 +167,7 @@ def inspection_detail(inspection: Inspection) -> dict[str, Any]:
     video, settings = inspection.video, inspection.settings
     return {
         "id": inspection.id,
+        "name": inspection.name,
         "created_at": inspection.created_at,
         "state": inspection.state.value,
         "failure": inspection.failure,
@@ -231,6 +233,7 @@ def parse_setup(body: Any) -> InspectionSetup:
                 _number(settings["end_sec"]),
                 None if compressor is None else _number(compressor),
             ),
+            name=_optional_text(body.get("name")),
         )
     except (KeyError, TypeError, ValueError, AttributeError) as failure:
         raise BadRequest(f"검사 설정 요청 형식이 올바르지 않습니다: {failure}") from failure

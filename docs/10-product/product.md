@@ -10,7 +10,8 @@ and what it does. The user made these decisions:
   the data folder (§8);
 - on 2026-10-29, at the V2-2 start: the inspection flow and analysis setup
   (§3), and, after the draft comparison, the draft (§4) and the editing
-  tools and snap (§6).
+  tools and snap (§6);
+- on 2026-10-29, after the V2-2 Windows run: the inspection name (§3, §8).
 
 - **Interview record:** `docs/60-evidence/s11/2026-10-28-v2-direction-interview-handoff.md`
   at tag `v1-final`.
@@ -89,7 +90,10 @@ its toolbar.
    - the analysis range;
    - the compressor start time. It is required only when a Glass uses
      `RECOVERY`, and it must lie inside the analysis range;
-   - the Glass positions, if the camera shifted (above).
+   - the Glass positions, if the camera shifted (above);
+   - an inspection name, if wanted. It is shown in the inspection list and
+     names the inspection folder (§8). It is set when the analysis first
+     starts.
 3. **Analysis.**
    - The video is read once for all Glasses.
    - Each Glass gets a full-resolution context image. Each column is one
@@ -243,7 +247,8 @@ Each Glass in a Recipe has one rule.
   - It is found with the Windows known-folder API, so a redirected
     Documents folder (for example, to OneDrive) is followed.
   - `Recipes\` holds the Recipes, one `<name>.recipe.json` file each.
-  - `Inspections\` holds the inspection folders, named
+  - `Inspections\` holds the inspection folders. A folder takes the
+    inspection name, made safe for Windows; without a name it is
     `YYYYMMDD-HHMM_<video name>`.
 - **Settings and logs** go to `%LOCALAPPDATA%\OilLevelTracker\`.
 - **Nothing is written inside the package folder.**

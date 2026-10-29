@@ -9,6 +9,7 @@ import { $, MODES, clock, el, localDate, notify, parseClock, typing } from "./ui
 
 const STATES = { ANALYSED: "분석 완료", NOT_ANALYSED: "분석 안 됨", FAILED: "분석 실패" };
 const SETTINGS = ["start_sec", "end_sec", "compressor_start_sec"];
+const FIELDS = [...SETTINGS, "inspection_name"];  // problems shown under their own input
 const CHECK_DELAY_MS = 250;
 const POLL_MS = 500;
 
@@ -16,6 +17,7 @@ let links = { openRecipes: () => {}, newRecipeWith: () => {}, openResult: () => 
 
 const setup = {
   inspection: null,      // the existing inspection, or null until the analysis first starts
+  name: "",              // the inspection name as typed; fixed once the folder is made
   recipe: null,          // the inspection's Recipe copy; Glass positions change in place
   original: null,        // the stored Recipe the copy came from, or null when it is gone
   needsCompressor: false,
@@ -69,7 +71,8 @@ export async function showList() {
     const open = () => openInspection(item);
     const reason = item.failure ? el("span", { class: "err" }, ` ${item.failure}`) : null;
     rows.append(el("tr", { "data-id": item.id, ondblclick: open, onclick: (e) => selectRow(e.currentTarget) },
-      el("td", {}, item.video_name, el("span", { class: "sub mono" }, item.folder)),
+      el("td", {}, item.name ?? item.video_name, item.name ? el("span", { class: "sub" }, item.video_name) : null,
+        el("span", { class: "sub mono" }, item.folder)),
       el("td", {}, item.recipe_name),
       el("td", {}, localDate(item.created_at)),
       el("td", {}, el("span", { class: "badge pending" }, STATES[item.state] ?? item.state), reason),
@@ -122,7 +125,7 @@ async function newInspection() {
     return;
   }
   enterSetup({
-    inspection: null, video, recipe, original: structuredClone(recipe),
+    inspection: null, name: "", video, recipe, original: structuredClone(recipe),
     needsCompressor: choice.needs_compressor_start,
     settings: { start_sec: 0, end_sec: video.duration_sec, compressor_start_sec: null },
   });
@@ -209,6 +212,7 @@ async function openSetup(inspectionId) {
   const original = await api.call("GET", `/api/recipes/${encodeURIComponent(detail.recipe.id)}`);
   enterSetup({
     inspection: detail,
+    name: detail.name ?? "",
     video: opened.ok ? opened.data : null,
     recipe: structuredClone(detail.recipe),
     original: original.ok ? original.data : null,
@@ -222,8 +226,8 @@ async function openSetup(inspectionId) {
   if (!opened.ok) $("setupVideoErr").textContent = `영상을 열 수 없습니다: ${opened.data.error ?? ""}`;
 }
 
-function enterSetup({ inspection, video, recipe, original, needsCompressor, settings }) {
-  Object.assign(setup, { inspection, recipe, original, needsCompressor, settings });
+function enterSetup({ inspection, name, video, recipe, original, needsCompressor, settings }) {
+  Object.assign(setup, { inspection, name, recipe, original, needsCompressor, settings });
   setup.selected = recipe.glasses[0]?.id ?? null;
   setup.problems = [];
   setup.badInputs.clear();
@@ -271,6 +275,7 @@ function body() {
     recipe_id: setup.recipe.id,
     glasses: setup.recipe.glasses.map((g) => ({ id: g.id, ellipse: g.ellipse, zero_line_y: g.zero_line_y })),
     settings: setup.settings,
+    name: setup.inspection ? null : setup.name,
   };
 }
 
@@ -369,8 +374,10 @@ async function startAnalysis() {
     return;
   }
   setup.inspection = result.data.inspection;  // the folder exists from here on
+  setup.name = setup.inspection.name ?? "";
   setup.dirty = false;
   renderTitle();
+  renderNameField();
   const status = await watchProgress(result.data.job, result.data.inspection);
   if (status.state === "finished") {
     await frame.closeVideo();
@@ -432,6 +439,7 @@ async function watchProgress(job, inspection) {
 
 function renderSetup() {
   renderTitle();
+  renderNameField();
   const video = frame.video();
   const facts = video ?? setup.inspection?.video;
   $("setupVideo").textContent = facts ? `${facts.name} · ${facts.width} × ${facts.height} · ${clock(facts.duration_sec)}` : "";
@@ -445,11 +453,28 @@ function renderSetup() {
 }
 
 function renderTitle() {
-  const name = (frame.video() ?? setup.inspection?.video)?.name ?? "";
+  const name = setup.inspection?.name ?? (frame.video() ?? setup.inspection?.video)?.name ?? "";
   $("setupTitle").textContent = `${setup.inspection ? "검사" : "새 검사"} · ${name}`;
   const state = setup.inspection ? STATES[setup.inspection.state] : "분석 전";
   const failure = setup.inspection?.failure ? ` (${setup.inspection.failure})` : "";
   $("setupState").textContent = `${state}${failure} · Recipe ${setup.recipe.name}`;
+}
+
+function renderNameField() {
+  const fixed = Boolean(setup.inspection);
+  const input = el("input", { "aria-label": "검사 이름", placeholder: fixed ? "이름 없음" : "비우면 만든 시각_영상 이름" });
+  input.value = setup.name;
+  input.disabled = fixed;
+  input.addEventListener("input", () => {
+    setup.name = input.value;
+    changed();
+  });
+  input.addEventListener("keydown", (event) => { if (event.key === "Enter") input.blur(); });
+  $("nameField").replaceChildren(
+    el("div", { class: "field" }, el("div", { class: "input" }, input), el("span", { class: "err", "data-err": "inspection_name" })),
+    el("span", { class: "caption" }, fixed
+      ? "검사 폴더를 만든 뒤에는 바꿀 수 없습니다."
+      : "검사 목록에 보이고, 검사 폴더 이름이 됩니다. 비우면 만든 시각과 영상 이름으로 정합니다."));
 }
 
 function timeField(key, label, title, optional) {
@@ -541,7 +566,7 @@ function renderProblems() {
   if (!setup.recipe) return;
   const count = setup.problems.length + setup.badInputs.size;
   $("setupProblemCount").textContent = count ? `문제 ${count}개` : "";
-  for (const key of SETTINGS) {
+  for (const key of FIELDS) {
     const node = document.querySelector(`#setupView [data-err="${key}"]`);
     if (!node) continue;
     const message = setup.badInputs.has(key) ? "시각을 mm:ss.s로 입력하세요."
@@ -550,7 +575,7 @@ function renderProblems() {
     node.parentElement.querySelector(".input").classList.toggle("bad", Boolean(message));
   }
   $("setupRecipeErr").textContent = setup.problems
-    .filter((p) => p.glass_id === null && !SETTINGS.includes(p.field)).map((p) => p.message).join(" ");
+    .filter((p) => p.glass_id === null && !FIELDS.includes(p.field)).map((p) => p.message).join(" ");
   const glass = selectedGlass();
   if (glass) showFieldProblems($("setupGlassBody"), glass, setup.problems, setup.badInputs);
   renderGlassRows();

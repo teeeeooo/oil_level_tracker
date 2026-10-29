@@ -10,11 +10,17 @@ and §8. The code is `src/oil_tracker/adapters/storage/inspection_files.py`.
 
 - **Folder:** `<data folder>\Inspections\<name>\`. The data folder is
   `Documents\OilLevelTracker\`.
-- **Name:** `YYYYMMDD-HHMM_<video file name without its extension>`, from
-  the creation time in local time. The video name is made safe for
-  Windows by the [Recipe file](recipe-file.md) rule.
-- **Two inspections in the same minute** of the same video get `_2`, `_3`,
-  … after the name.
+- **Name:** the inspection name the user gave, made safe for Windows by the
+  [Recipe file](recipe-file.md) rule; a name that would start with a dot
+  gets a leading `_`, so the folder is still read.
+  - **Without a name:** `YYYYMMDD-HHMM_<video file name without its
+    extension>`, from the creation time in local time, with the video name
+    made safe the same way.
+  - The name has at most 60 characters, so the deepest cache file stays
+    inside Windows' 260-character path limit (about 190 characters with
+    `C:\Users\<user>\Documents`).
+- **A folder name already taken,** by the same name or by two inspections
+  of one video in the same minute, gets `_2`, `_3`, … after it.
 - **The folder is made when the analysis starts,** with the Recipe copy
   (Product SSOT §3). A setup left before that writes nothing.
 - **Reading:** every sub-folder is read. A folder whose files cannot be
@@ -48,6 +54,7 @@ UTF-8 JSON:
   "format": "oil-level-tracker-inspection",
   "schema_version": 1,
   "id": "<uuid>",
+  "name": "1차 냉각",
   "created_at": "2026-10-29T05:06:07+00:00",
   "video": {
     "path": "C:\\videos\\SPL#1_Heating_coldstart.mp4",
@@ -65,6 +72,9 @@ UTF-8 JSON:
 }
 ```
 
+- `name` is the inspection name, or `null`. It is set when the folder is
+  made and does not change. Files written before names (2026-10-29) have no
+  `name` key and read as `null`.
 - `video.sha256` is filled in by the analysis. Reopening warns when the
   video's SHA-256 differs (Product SSOT A9).
 - `state` is `NOT_ANALYSED`, `ANALYSED` or `FAILED`; `failure` gives the

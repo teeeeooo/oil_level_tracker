@@ -36,7 +36,7 @@ def test_summary_lines(tmp_path, capsys):
     copy = replace(RECIPE, glasses=(RECIPE.glasses[0], moved))
     folders = InspectionFolders(tmp_path / "Inspections")
 
-    analysed = Inspection("i1", CREATED, source, copy, AnalysisSettings(0.0, 260.0, 12.3), InspectionState.ANALYSED)
+    analysed = Inspection("i1", CREATED, source, copy, AnalysisSettings(0.0, 260.0, 12.3), InspectionState.ANALYSED, name="1차 냉각")
     name = folders.create(analysed)
     oil = Line((400.0, None, None, 402.0), (SampleOrigin.DRAFT,) * 4)
     analysis = Analysis((0.0, 0.5, 1.0, 1.5), (GlassDraft("g-base", oil), GlassDraft("g-acc", oil)), "2026-10-29T05:00:52+00:00")
@@ -48,7 +48,7 @@ def test_summary_lines(tmp_path, capsys):
     written = datetime.fromisoformat(CREATED).timestamp() + 52.4
     os.utime(tmp_path / "Inspections" / name / "cache" / "analysis.json", (written, written))
 
-    later = replace(analysed, id="i2", created_at="2026-10-29T06:00:00+00:00", recipe=replace(copy, id="gone"),
+    later = replace(analysed, id="i2", name=None, created_at="2026-10-29T06:00:00+00:00", recipe=replace(copy, id="gone"),
                     settings=AnalysisSettings(10.0, 20.0), state=InspectionState.NOT_ANALYSED)
     folders.create(later)
     (tmp_path / "Inspections" / "broken").mkdir()
@@ -59,7 +59,7 @@ def test_summary_lines(tmp_path, capsys):
     assert lines[1] == "inspections=2 unreadable=1"
     assert lines[2].startswith('unreadable folder="broken" reason=')
     assert lines[3] == (
-        f'inspection folder="{name}" state=ANALYSED failure="" video="SPL#4.mp4" bytes=11 frames=7800 fps=30.000 '
+        'inspection folder="1차 냉각" name="1차 냉각" state=ANALYSED failure="" video="SPL#4.mp4" bytes=11 frames=7800 fps=30.000 '
         f'range=0.0-260.0 compressor=12.3 recipe="SPL#4 냉각" created_at={CREATED} '
         "recipe_updated_at=2026-10-29T02:00:00+00:00"
     )
@@ -71,6 +71,7 @@ def test_summary_lines(tmp_path, capsys):
     )
     assert lines[7] == '  cache glass name="BASE" y0=160 rows=400 pieces=2 files=3/4 empty=50.0%'
     assert lines[8] == '  cache glass name="Accum" y0=280 rows=240 pieces=1 files=2/2 empty=50.0%'
+    assert ' name="" state=NOT_ANALYSED ' in lines[9]
     assert lines[9].endswith('compressor=- recipe="SPL#4 냉각" created_at=2026-10-29T06:00:00+00:00 recipe_updated_at=-')
     assert lines[10].endswith('recipe_diff="recipe_missing"')
     assert lines[12] == "  analysis none partial=no"

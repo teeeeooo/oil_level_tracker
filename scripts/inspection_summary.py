@@ -78,7 +78,7 @@ def main(argv: list[str] | None = None) -> int:
             stored = None
         compressor = "-" if settings.compressor_start_sec is None else f"{settings.compressor_start_sec:.1f}"
         print(
-            f'inspection folder="{entry.folder_name}" state={inspection.state.value} '
+            f'inspection folder="{entry.folder_name}" name="{inspection.name or ""}" state={inspection.state.value} '
             f'failure="{inspection.failure or ""}" video="{video.name}" bytes={video.size_bytes} '
             f"frames={video.frame_count} fps={video.fps:.3f} range={settings.start_sec:.1f}-{settings.end_sec:.1f} "
             f'compressor={compressor} recipe="{inspection.recipe.name}" created_at={inspection.created_at} '

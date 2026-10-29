@@ -9,6 +9,7 @@ from oil_tracker.domain.inspection import (
     AnalysisSettings,
     GlassDraft,
     SourceVideo,
+    inspection_name,
     needs_compressor_start,
     setup_problems,
 )
@@ -38,6 +39,15 @@ def test_sample_count_matches_the_analysis_rate():
 
 def test_a_complete_setup_has_no_problems():
     assert setup_problems(VIDEO, make_recipe(), AnalysisSettings(0, VIDEO.duration_sec, 532.0)) == []
+
+
+def test_an_inspection_name_is_trimmed_optional_and_short():
+    assert inspection_name("  1차 냉각  ") == "1차 냉각"
+    assert inspection_name("   ") is None and inspection_name(None) is None
+    settings = AnalysisSettings(0, 60, 10)
+    assert setup_problems(VIDEO, make_recipe(), settings, "가" * 60) == []
+    problems = setup_problems(VIDEO, make_recipe(), settings, "가" * 61)
+    assert [(p.field, p.message) for p in problems] == [("inspection_name", "검사 이름은 60자 이하여야 합니다.")]
 
 
 def test_a_recipe_of_another_frame_size_is_refused():

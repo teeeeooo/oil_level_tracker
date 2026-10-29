@@ -13,7 +13,14 @@ from pathlib import Path
 
 from oil_tracker.domain.enums import InspectionState
 from oil_tracker.domain.geometry import Ellipse
-from oil_tracker.domain.inspection import Analysis, AnalysisSettings, Inspection, SourceVideo, setup_problems
+from oil_tracker.domain.inspection import (
+    Analysis,
+    AnalysisSettings,
+    Inspection,
+    SourceVideo,
+    inspection_name,
+    setup_problems,
+)
 from oil_tracker.domain.problems import Problem
 from oil_tracker.domain.recipe import Recipe
 
@@ -65,6 +72,7 @@ class InspectionSetup:
     recipe_id: str                         # the Recipe the copy comes from
     positions: tuple[GlassPosition, ...]   # every Glass of that Recipe, corrected for this inspection only
     settings: AnalysisSettings
+    name: str | None = None                # a new inspection's name as typed; an existing one keeps its own
 
 
 @dataclass(frozen=True)
@@ -118,17 +126,18 @@ class Inspections:
 
     def check(self, setup: InspectionSetup) -> tuple[Problem, ...]:
         """The problems that block "분석 시작", without writing anything."""
-        _, video, recipe = self._resolve(setup)
-        return tuple(setup_problems(video, recipe, setup.settings))
+        existing, video, recipe = self._resolve(setup)
+        return tuple(setup_problems(video, recipe, setup.settings, _name(setup, existing)))
 
     def prepare(self, setup: InspectionSetup) -> SetupResult:
         """Write the inspection with its Recipe copy, ready to analyse: the folder is made here."""
         existing, video, recipe = self._resolve(setup)
-        problems = setup_problems(video, recipe, setup.settings)
+        name = _name(setup, existing)
+        problems = setup_problems(video, recipe, setup.settings, name)
         if problems:
             return SetupResult(None, tuple(problems))
         if existing is None:
-            inspection = Inspection(self._new_id(), self._now(), video, recipe, setup.settings)
+            inspection = Inspection(self._new_id(), self._now(), video, recipe, setup.settings, name=name)
             self.store.create(inspection)
         else:
             inspection = replace(
@@ -211,6 +220,11 @@ class Inspections:
             for g in base.glasses
         )
         return existing, video, replace(base, glasses=glasses)
+
+
+def _name(setup: InspectionSetup, existing: Inspection | None) -> str | None:
+    """The name is set when the folder is made, and stays."""
+    return existing.name if existing is not None else inspection_name(setup.name)
 
 
 def failure_reason(failure: Exception) -> str:

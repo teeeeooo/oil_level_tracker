@@ -101,13 +101,14 @@ function paint(id, width, height, svg) {
 
 function renderHeader() {
   const d = state.detail;
-  $("resultTitle").textContent = d.video.name;
+  $("resultTitle").textContent = d.name ?? d.video.name;
   $("resultState").textContent = `Recipe ${d.recipe.name} · 분석 완료 · 읽기 전용`;
   const picker = $("resultGlass");
   picker.replaceChildren(...d.recipe.glasses.map((g) => el("option", { value: g.id }, g.name)));
   picker.value = state.glassId;
   const s = d.settings;
   const rows = [
+    ["검사 이름", d.name ?? "없음"],
     ["영상", d.video.name],
     ["Recipe", `${d.recipe.name} (이 검사의 사본)`],
     ["분석 범위", `${clock(s.start_sec)} – ${clock(s.end_sec)}`],

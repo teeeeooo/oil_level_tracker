@@ -169,11 +169,11 @@ def world():
     return inspections, store, recipes, analyser, desktop, opened, hashed
 
 
-def setup_for(video_id=None, inspection_id=None, recipe=RECIPE, settings=SETTINGS, **moved):
+def setup_for(video_id=None, inspection_id=None, recipe=RECIPE, settings=SETTINGS, name=None, **moved):
     positions = tuple(
         GlassPosition(g.id, moved.get(g.id, g.ellipse), g.zero_line_y) for g in recipe.glasses
     )
-    return InspectionSetup(inspection_id, video_id, recipe.id, positions, settings)
+    return InspectionSetup(inspection_id, video_id, recipe.id, positions, settings, name)
 
 
 def new_inspection(inspections, name="SPL4.mp4", **changes):
@@ -213,6 +213,17 @@ def test_starting_writes_the_inspection_with_its_own_recipe_copy(world):
     glass = inspection.recipe.glasses[0]
     assert (glass.id, glass.name, glass.ellipse, glass.judgment_rule) == ("g1", "BASE", moved, RECIPE.glasses[0].judgment_rule)
     assert recipes.saved["r1"] == RECIPE  # the Recipe itself is untouched
+
+
+def test_a_new_inspection_takes_its_name_and_keeps_it(world):
+    inspections, store = world[0], world[1]
+    video = inspections.videos.open(Path("/videos/SPL4.mp4"))
+    assert [p.field for p in inspections.check(setup_for(video.id, name="가" * 61))] == ["inspection_name"]
+    named = inspections.prepare(setup_for(video.id, name="  1차 냉각 ")).inspection
+    assert store.saved[named.id].name == "1차 냉각"
+    again = inspections.prepare(setup_for(None, named.id, name="다른 이름")).inspection
+    assert again.name == "1차 냉각"  # set when the folder is made
+    assert inspections.prepare(setup_for(video.id, name="   ")).inspection.name is None
 
 
 def test_problems_write_nothing(world):

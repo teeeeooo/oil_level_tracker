@@ -44,6 +44,25 @@ def test_the_folder_name_is_local_time_and_a_safe_video_name():
     assert folder_name_for(make_inspection()) == f"{local:%Y%m%d-%H%M}_SPL#4_ 냉각"
 
 
+def test_a_named_inspection_names_its_folder(tmp_path):
+    assert folder_name_for(replace(make_inspection(), name="1차: 냉각?")) == "1차_ 냉각_"
+    assert folder_name_for(replace(make_inspection(), name=".숨김")) == "_.숨김"  # a dot folder would not be listed
+    folders = InspectionFolders(tmp_path)
+    first = folders.create(replace(make_inspection("i1"), name="1차 냉각"))
+    second = folders.create(replace(make_inspection("i2"), name="1차 냉각"))
+    assert (first, second) == ("1차 냉각", "1차 냉각_2")
+    assert [(e.folder_name, e.inspection.name) for e in folders.list_inspections().inspections] == [
+        ("1차 냉각", "1차 냉각"), ("1차 냉각_2", "1차 냉각"),
+    ]
+
+
+def test_a_file_written_before_names_reads_without_one():
+    data = json.loads(inspection_to_json(make_inspection()))
+    assert data["name"] is None
+    del data["name"]
+    assert inspection_from_json(json.dumps(data), recipe_to_json(RECIPE)).name is None
+
+
 def test_create_list_load_and_save(tmp_path):
     folders = InspectionFolders(tmp_path / "Inspections")
     first = folders.create(make_inspection("i1"))

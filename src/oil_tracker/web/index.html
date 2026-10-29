@@ -23,7 +23,7 @@
   <div class="list-main">
     <div class="panel">
       <table>
-        <thead><tr><th>영상</th><th style="width:22%">Recipe</th><th style="width:170px">만든 시각</th><th style="width:26%">상태</th><th style="width:88px"></th></tr></thead>
+        <thead><tr><th>검사</th><th style="width:22%">Recipe</th><th style="width:170px">만든 시각</th><th style="width:26%">상태</th><th style="width:88px"></th></tr></thead>
         <tbody id="inspectionRows"></tbody>
       </table>
       <div class="list-foot">
@@ -56,6 +56,10 @@
       </div>
     </section>
     <aside class="right-col">
+      <div class="section">
+        <div class="phead">검사 이름 <span class="right">선택</span></div>
+        <div class="body" id="nameField"></div>
+      </div>
       <div class="section">
         <div class="phead">Recipe <span class="right"><button class="btn small subtle" id="changeRecipe">바꾸기</button></span></div>
         <div class="body">
@@ -278,6 +282,7 @@
       </table>
       <h3>분석</h3>
       <table class="keys">
+        <tr><td>검사 이름</td><td>검사 목록에 보이고, 검사 폴더 이름이 됩니다. 비우면 만든 시각과 영상 이름으로 정합니다. 폴더를 만든 뒤에는 바꿀 수 없습니다.</td></tr>
         <tr><td>"분석 시작"</td><td>검사 폴더와 Recipe 사본을 만들고 분석합니다. 문제가 남아 있으면 시작하지 않습니다.</td></tr>
         <tr><td>"취소"</td><td>설정은 남기고, 만들던 분석 결과는 지웁니다.</td></tr>
         <tr><td><kbd>F1</kbd> <kbd>?</kbd></td><td>이 도움말</td></tr>

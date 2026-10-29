@@ -51,6 +51,7 @@ def inspection_to_json(inspection: Inspection) -> str:
         "format": INSPECTION_FORMAT,
         "schema_version": SCHEMA_VERSION,
         "id": inspection.id,
+        "name": inspection.name,
         "created_at": inspection.created_at,
         "video": {
             "path": video.path,
@@ -102,6 +103,7 @@ def inspection_from_json(inspection_text: str, recipe_text: str) -> Inspection:
             ),
             state=InspectionState(data["state"]),
             failure=optional(text, data["failure"]),
+            name=optional(text, data.get("name")),  # absent in files written before names
         )
     except (KeyError, TypeError, ValueError) as error:
         raise UnreadableInspection(f"검사 내용이 올바르지 않습니다: {error}") from error
@@ -167,7 +169,10 @@ def _document(raw: str, expected_format: str, label: str, failure: type[ValueErr
 
 
 def folder_name_for(inspection: Inspection) -> str:
-    """YYYYMMDD-HHMM_<video name> in local time (Product SSOT §8)."""
+    """The user's inspection name, or YYYYMMDD-HHMM_<video name> in local time (Product SSOT §8)."""
+    if inspection.name is not None:
+        name = safe_stem(inspection.name)
+        return "_" + name if name.startswith(".") else name  # the listing skips a folder whose name starts with a dot
     created = datetime.fromisoformat(inspection.created_at).astimezone()
     return f"{created:%Y%m%d-%H%M}_{safe_stem(Path(inspection.video.name).stem)}"
 

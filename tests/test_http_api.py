@@ -222,9 +222,12 @@ def test_an_inspection_from_its_video_to_the_analysis(app, video):
     assert not (tmp_path / "data" / "Inspections").exists()  # nothing is written before the analysis starts
 
     setup = setup_json(opened, recipe)
+    setup["name"] = "1차 냉각"
     status, started, _ = call(running, "POST", "/api/inspections/start", setup)
     assert status == 200, started
     inspection_id = started["inspection"]["id"]
+    assert started["inspection"]["name"] == "1차 냉각"
+    assert (tmp_path / "data" / "Inspections" / "1차 냉각" / "inspection.json").is_file()
     assert started["inspection"]["state"] == "NOT_ANALYSED" and started["job"]["inspection_id"] == inspection_id
     assert wait_for_job(running, started["job"]["id"])["state"] == "finished"
 
@@ -247,6 +250,7 @@ def test_an_inspection_from_its_video_to_the_analysis(app, video):
 
     entry = call(running, "GET", "/api/inspections")[1]["inspections"][0]
     assert (entry["id"], entry["video_name"], entry["recipe_name"], entry["state"]) == (inspection_id, "sample.avi", "2호기", "ANALYSED")
+    assert (entry["name"], entry["folder"]) == ("1차 냉각", "1차 냉각")
 
     status, reopened, _ = call(running, "POST", f"/api/inspections/{inspection_id}/video")
     assert status == 200 and reopened["name"] == "sample.avi"

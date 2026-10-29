@@ -123,6 +123,14 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         assert field(page, "기동 시각").input_value() == "00:01.0"
         page.wait_for_function("document.getElementById('setupProblemCount').textContent === ''")
 
+        # the inspection name: it names the folder; too long a name is a problem
+        name = page.get_by_label("검사 이름")
+        name.fill("가" * 61)
+        page.get_by_text("검사 이름은 60자 이하여야 합니다.").wait_for()
+        name.fill("스모크: 1차")
+        page.wait_for_function("document.getElementById('setupProblemCount').textContent === ''")
+        shot(page, "i3-name")
+
         # a Glass correction goes into this inspection's copy only, and can be undone
         page.locator("#frame").focus()
         page.keyboard.press("ArrowRight")
@@ -138,7 +146,7 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         page.get_by_role("button", name="분석 시작").click()
         page.locator("#resultView").wait_for()
         page.wait_for_function("document.querySelectorAll('#context image').length === 1")
-        assert page.locator("#resultTitle").inner_text() == "level.avi"
+        assert page.locator("#resultTitle").inner_text() == "스모크: 1차"
         assert page.locator("#graph path").count() >= 1
         assert page.locator("#resultGlass option").all_inner_texts() == ["BASE"]
         page.locator("#resultView .toggle").click()
@@ -147,6 +155,7 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         shot(page, "i4-result")
 
         folder = next((data / "Inspections").iterdir())
+        assert folder.name == "스모크_ 1차"  # made safe for Windows
         copy = json.loads((folder / "recipe.json").read_text(encoding="utf-8"))
         assert copy["glasses"][0]["ellipse"]["center_x"] == 170.0
         stored = json.loads((data / "Recipes" / "스모크.recipe.json").read_text(encoding="utf-8"))
@@ -159,6 +168,7 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         listed = page.locator("#inspectionRows tr", has_text="level.avi")
         listed.wait_for()
         assert "분석 완료" in listed.inner_text() and folder.name in listed.inner_text()
+        assert listed.inner_text().startswith("스모크: 1차")
         shot(page, "i5-list")
         listed.get_by_role("button", name="열기").click()
         page.wait_for_function("document.querySelectorAll('#context image').length === 1")

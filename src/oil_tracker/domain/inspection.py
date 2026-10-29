@@ -12,6 +12,7 @@ from .recipe import Recipe, recipe_problems
 
 ANALYSIS_RATE = 2.0        # samples per second, fixed in the first version (Product SSOT §3)
 MINIMUM_RANGE_SEC = 1.0
+MAXIMUM_NAME_LENGTH = 60   # an inspection name; it names the folder, which must stay inside Windows' path limit
 
 
 @dataclass(frozen=True)
@@ -71,15 +72,26 @@ class Inspection:
     settings: AnalysisSettings
     state: InspectionState = InspectionState.NOT_ANALYSED
     failure: str | None = None
+    name: str | None = None  # the user's name for it, which names its folder; None names it by time and video (§8)
+
+
+def inspection_name(text: str | None) -> str | None:
+    """The name the user typed, without surrounding spaces; None when it is blank."""
+    name = (text or "").strip()
+    return name or None
 
 
 def needs_compressor_start(recipe: Recipe) -> bool:
     return any(glass.judgment_rule.mode is JudgmentMode.RECOVERY for glass in recipe.glasses)
 
 
-def setup_problems(video: SourceVideo, recipe: Recipe, settings: AnalysisSettings) -> list[Problem]:
+def setup_problems(
+    video: SourceVideo, recipe: Recipe, settings: AnalysisSettings, name: str | None = None
+) -> list[Problem]:
     """What blocks "분석 시작" (Product SSOT §3, analysis setup)."""
     problems = recipe_problems(recipe)  # the copy, with any Glass correction
+    if name is not None and len(name) > MAXIMUM_NAME_LENGTH:
+        problems.append(Problem("inspection_name", f"검사 이름은 {MAXIMUM_NAME_LENGTH}자 이하여야 합니다."))
     message = recipe.frame_size_message(video.width, video.height)
     if message is not None:
         problems.append(Problem("recipe", message))
