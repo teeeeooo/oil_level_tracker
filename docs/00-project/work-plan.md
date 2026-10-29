@@ -97,8 +97,11 @@ Product SSOT §3, §4 and §6:
      decides whether the screens wait for more speed and whether hardware
      decoding becomes the default.
 3. **Mock-ups** of the inspection list and the setup screen, for the
-   user's confirmation. The read-only result follows the confirmed editor
-   mock-up.
+   user's confirmation:
+   [design/mockup/inspection.html](../../design/mockup/inspection.html)
+   (the list, the Recipe picker, the setup and the progress dialog).
+   **Waiting for the user.** The read-only result follows the confirmed
+   editor mock-up.
 4. **`domain`:** the inspection, the analysis settings, the line samples
    and the empty and "cannot judge" stretches, with validation.
 5. **`adapters/storage`:** the inspection folder, the Recipe copy and the
@@ -154,5 +157,4 @@ The three v1 remote branches that v1 docs cite stay.
 - **Next action:**
   - the user runs the A4 timing Windows request and relays its result
     block;
-  - meanwhile, step 3: the mock-ups of the inspection list and the setup
-    screen.
+  - the user reviews the step 3 mock-up.

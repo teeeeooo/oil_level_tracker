@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v2 검사 화면 목업</title>
+<!--
+  Static layout mock-up for user confirmation (V2-2 step 3): the inspection list, the Recipe
+  picker, the analysis setup and the analysis progress. Synthetic data only; not product code.
+  Tokens follow DESIGN.md §2–§6.
+-->
+<style>
+:root {
+  --bg-1:#FFFFFF; --bg-2:#FAFAFA; --bg-3:#F5F5F5; --bg-4:#F0F0F0; --bg-5:#EBEBEB;
+  --fg-1:#242424; --fg-2:#424242; --fg-3:#616161; --fg-disabled:#BDBDBD;
+  --stroke-1:#D1D1D1; --stroke-2:#E0E0E0; --stroke-3:#F0F0F0; --backdrop:rgba(0,0,0,0.4);
+  --brand:#0F6CBD; --brand-hover:#115EA3; --brand-pressed:#0C3B5E; --brand-tint:#EBF3FC;
+  --compressor:#8764B8;
+  --glass-outline:rgba(255,255,255,0.9); --glass-shadow:rgba(0,0,0,0.5);
+  --pending:#616161; --pending-bg:#F5F5F5;
+  --frame-bg:#1B1F23; --frame-caption-bg:rgba(0,0,0,0.45);
+  --error:#BC2F32; --error-border:#D13438;
+  --font:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+  --mono:"Cascadia Mono",Consolas,ui-monospace,monospace;
+}
+* { box-sizing:border-box; }
+html, body { margin:0; height:100%; }
+body { background:var(--bg-2); color:var(--fg-1); font:400 14px/20px var(--font); }
+.view { display:none; grid-template-rows:48px 1fr; height:100vh; min-width:1280px; min-height:800px; }
+.view.on { display:grid; }
+
+.toolbar { display:flex; align-items:center; gap:8px; padding:0 12px; background:var(--bg-3); border-bottom:1px solid var(--stroke-1); }
+.title { display:flex; flex-direction:column; min-width:0; }
+.title b { font-weight:600; white-space:nowrap; }
+.title span { font-size:12px; line-height:16px; color:var(--fg-3); }
+.big-title { font-size:16px; line-height:22px; font-weight:600; }
+.sep { width:1px; height:24px; background:var(--stroke-1); margin:0 4px; }
+.spacer { flex:1; }
+.btn { display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 12px; border-radius:4px; font:inherit; cursor:pointer; border:1px solid var(--stroke-1); background:var(--bg-1); color:var(--fg-1); white-space:nowrap; }
+.btn:hover { background:var(--bg-4); }
+.btn.primary { background:var(--brand); border-color:var(--brand); color:#fff; }
+.btn.primary:hover { background:var(--brand-hover); }
+.btn.subtle { border-color:transparent; background:transparent; color:var(--fg-2); }
+.btn.subtle:hover { background:var(--bg-4); }
+.btn.small { height:24px; padding:0 8px; font-size:12px; line-height:16px; }
+.btn svg { width:20px; height:20px; }
+.icon-btn { width:32px; padding:0; justify-content:center; border-color:transparent; background:transparent; color:var(--fg-2); }
+.problems { font-size:12px; line-height:16px; color:var(--error); font-weight:600; }
+
+.phead { display:flex; align-items:center; gap:12px; padding:0 12px; height:32px; background:var(--bg-3); border-bottom:1px solid var(--stroke-1); font-weight:600; flex:none; }
+.phead .right { margin-left:auto; display:flex; gap:8px; align-items:center; font-weight:400; font-size:12px; color:var(--fg-3); }
+.label { color:var(--fg-3); font-size:12px; line-height:16px; }
+.caption { font-size:12px; line-height:16px; color:var(--fg-3); }
+.mono { font-family:var(--mono); font-size:12px; line-height:16px; }
+.err { font-size:12px; line-height:16px; color:var(--error); }
+.badge { display:inline-flex; align-items:center; height:20px; padding:0 6px; border-radius:4px; font-size:12px; line-height:16px; font-weight:600; color:var(--pending); background:var(--pending-bg); }
+
+/* list */
+.list-main { padding:16px; min-height:0; overflow:auto; }
+.panel { background:var(--bg-1); border:1px solid var(--stroke-1); }
+table { border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums; }
+th, td { text-align:left; padding:8px 12px; border-bottom:1px solid var(--stroke-2); }
+th { background:var(--bg-3); font-weight:600; }
+td.num { text-align:right; }
+tr.sel td { background:var(--brand-tint); }
+tr.off td { color:var(--fg-disabled); }
+.list-foot { padding:12px; display:flex; flex-direction:column; gap:8px; }
+.row { display:flex; align-items:center; gap:8px; }
+.sub { display:block; font-size:12px; line-height:16px; color:var(--fg-3); }
+
+/* setup */
+.main { display:grid; grid-template-columns:1fr 360px; min-height:0; }
+.left { display:grid; grid-template-rows:32px 1fr 40px; min-width:0; min-height:0; background:var(--bg-1); border-right:1px solid var(--stroke-1); }
+.frame { position:relative; min-height:0; background:var(--frame-bg); overflow:hidden; }
+.frame canvas, .frame svg { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.transport { display:flex; align-items:center; gap:4px; padding:0 8px; border-top:1px solid var(--stroke-1); }
+.scrub { position:relative; flex:1; height:4px; margin:0 12px; background:var(--stroke-1); border-radius:2px; }
+.scrub .range { position:absolute; top:-6px; bottom:-6px; left:1%; width:98%; background:var(--brand-tint); border-left:2px solid var(--brand); border-right:2px solid var(--brand); }
+.scrub .track { position:absolute; inset:0; background:var(--stroke-1); border-radius:2px; }
+.scrub .done { position:absolute; left:0; top:0; bottom:0; width:12%; background:var(--brand); border-radius:2px; }
+.scrub .thumb { position:absolute; left:12%; top:-6px; width:16px; height:16px; margin-left:-8px; border-radius:50%; background:#fff; border:1px solid var(--fg-3); }
+.scrub .mark { position:absolute; top:-15px; transform:translateX(-50%); font-size:12px; line-height:16px; font-weight:600; white-space:nowrap; }
+.scrub .mark::after { content:""; position:absolute; left:50%; top:16px; width:1.5px; height:12px; }
+.scrub .comp { left:12%; color:var(--compressor); }
+.scrub .comp::after { background:var(--compressor); }
+.scrub .in, .scrub .out { color:var(--brand); }
+.scrub .in { left:1%; } .scrub .out { left:99%; }
+.time { white-space:nowrap; font-size:12px; font-variant-numeric:tabular-nums; color:var(--fg-2); }
+.speed { width:80px; flex:none; margin-left:8px; }
+
+.right-col { display:flex; flex-direction:column; min-height:0; overflow:auto; background:var(--bg-1); }
+.section { border-bottom:1px solid var(--stroke-1); }
+.section .body { padding:12px; display:flex; flex-direction:column; gap:8px; }
+.field { display:flex; flex-direction:column; gap:4px; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.input { display:flex; align-items:center; height:32px; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; background:var(--bg-1); padding:0 8px; gap:4px; }
+.input input { border:0; outline:0; font:inherit; width:100%; min-width:0; background:transparent; font-variant-numeric:tabular-nums; }
+.input.num input { text-align:right; }
+.input .unit { color:var(--fg-3); font-size:12px; }
+.input:focus-within { border-bottom:2px solid var(--brand); }
+.timefield { display:flex; gap:4px; align-items:center; }
+.timefield .input { flex:1; }
+.glass-row { display:flex; align-items:center; gap:8px; height:36px; padding:0 12px; border-bottom:1px solid var(--stroke-2); cursor:pointer; }
+.glass-row:hover { background:var(--bg-4); }
+.glass-row.sel { background:var(--brand-tint); }
+.glass-row b { font-weight:600; }
+.glass-row .mode { color:var(--fg-3); font-size:12px; }
+.glass-row .badge { margin-left:auto; }
+.recipe-glasses { display:grid; grid-template-columns:auto 1fr; gap:2px 12px; font-size:12px; line-height:16px; }
+.recipe-glasses b { font-weight:600; }
+
+/* dialogs (DESIGN.md §4 Help, §6) */
+.backdrop { position:fixed; inset:0; background:var(--backdrop); display:none; align-items:center; justify-content:center; z-index:3; }
+.backdrop.on { display:flex; }
+.dialog { background:var(--bg-1); border-radius:8px; box-shadow:0 0 2px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.14); display:flex; flex-direction:column; max-height:calc(100vh - 64px); }
+.dlg-head { padding:20px 24px 8px; font-size:16px; line-height:22px; font-weight:600; }
+.dlg-body { padding:0 24px; display:flex; flex-direction:column; gap:12px; overflow:auto; }
+.dlg-foot { display:flex; gap:8px; align-items:center; padding:20px 24px; }
+.dlg-body table { border:1px solid var(--stroke-1); }
+.progress { height:4px; background:var(--stroke-2); border-radius:2px; overflow:hidden; }
+.progress div { height:100%; width:42%; background:var(--brand); }
+
+.note { position:fixed; right:16px; bottom:16px; max-width:380px; background:var(--bg-1); border:1px solid var(--stroke-1); border-radius:8px; padding:12px; font-size:12px; line-height:16px; color:var(--fg-2); box-shadow:0 0 2px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.14); z-index:4; }
+.note b { color:var(--fg-1); }
+.note .tabs { display:flex; gap:4px; margin:8px 0; flex-wrap:wrap; }
+.note .tabs button { border:1px solid var(--stroke-1); background:var(--bg-1); border-radius:4px; font:12px/16px var(--font); height:24px; padding:0 8px; cursor:pointer; }
+.note .tabs button.on { background:var(--brand-tint); color:var(--brand); border-color:var(--brand); font-weight:600; }
+.note .close { float:right; border:0; background:transparent; cursor:pointer; color:var(--fg-3); }
+.note p { margin:4px 0; }
+</style>
+</head>
+<body>
+
+<!-- Inspection list: the first screen -->
+<div class="view" id="listView">
+  <header class="toolbar">
+    <span class="big-title">검사</span>
+    <div class="spacer"></div>
+    <button class="btn">Recipe</button>
+    <button class="btn primary" data-go="pick">새 검사</button>
+    <button class="btn icon-btn" title="도움말 (F1)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M7.8 7.9a2.2 2.2 0 1 1 3 2.05c-.5.2-.8.6-.8 1.15v.4"/><path d="M10 13.6v.4"/></svg></button>
+  </header>
+  <div class="list-main">
+    <div class="panel">
+      <table>
+        <thead><tr><th>영상</th><th style="width:22%">Recipe</th><th style="width:170px">만든 시각</th><th style="width:26%">상태</th><th style="width:88px"></th></tr></thead>
+        <tbody>
+          <tr class="sel"><td>2호기_냉각_1029.mp4<span class="sub mono">20261029-1405_2호기_냉각_1029</span></td><td>2호기 냉각</td><td>2026-10-29 14:05</td><td><span class="badge">분석 완료</span></td><td><button class="btn small">열기</button></td></tr>
+          <tr><td>1호기_가열_1028.mp4<span class="sub mono">20261028-1642_1호기_가열_1028</span></td><td>1호기 가열</td><td>2026-10-28 16:42</td><td><span class="badge">분석 안 됨</span> <span class="caption">취소함</span></td><td><button class="btn small" data-go="setup">열기</button></td></tr>
+          <tr><td>2호기_냉각_1027.mp4<span class="sub mono">20261027-0913_2호기_냉각_1027</span></td><td>2호기 냉각</td><td>2026-10-27 09:13</td><td><span class="badge">분석 실패</span> <span class="err">영상을 끝까지 읽지 못했습니다 (31:02.5)</span></td><td><button class="btn small">열기</button></td></tr>
+        </tbody>
+      </table>
+      <div class="list-foot">
+        <div class="row">
+          <span class="caption">폴더</span>
+          <span class="mono">C:\Users\inspector\Documents\OilLevelTracker\Inspections</span>
+          <button class="btn small">폴더 열기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Analysis setup -->
+<div class="view" id="setupView">
+  <header class="toolbar">
+    <button class="btn subtle" data-go="list">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4l-6 6 6 6"/></svg>검사 목록</button>
+    <div class="sep"></div>
+    <div class="title"><b>새 검사 · 2호기_냉각_1029.mp4</b><span>분석 전 · Recipe 2호기 냉각</span></div>
+    <div class="spacer"></div>
+    <span class="problems" id="problemCount"></span>
+    <button class="btn primary" data-go="progress">분석 시작</button>
+    <button class="btn icon-btn" title="도움말 (F1)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M7.8 7.9a2.2 2.2 0 1 1 3 2.05c-.5.2-.8.6-.8 1.15v.4"/><path d="M10 13.6v.4"/></svg></button>
+  </header>
+  <div class="main">
+    <section class="left">
+      <div class="phead">영상
+        <span class="right"><span>2호기_냉각_1029.mp4 · 1280 × 720 · 41:20.0</span></span>
+      </div>
+      <div class="frame" id="frameBox"><canvas id="frame"></canvas><svg id="over"></svg></div>
+      <div class="transport">
+        <button class="btn icon-btn" title="이전 프레임 (,)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4h2v12H5zM16 4v12L8 10z"/></svg></button>
+        <button class="btn icon-btn" title="재생 (Space)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4l10 6-10 6z"/></svg></button>
+        <button class="btn icon-btn" title="다음 프레임 (.)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 4h2v12h-2zM4 4v12l8-6z"/></svg></button>
+        <div class="scrub">
+          <div class="range"></div><div class="track"></div><div class="done"></div>
+          <span class="mark in">시작</span><span class="mark comp">기동</span><span class="mark out">끝</span>
+          <div class="thumb"></div>
+        </div>
+        <span class="time">04:58.5 / 41:20.0</span>
+        <div class="input num speed"><input value="1"><span class="unit">×</span>
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--fg-2)"><path d="M4 6l4 4 4-4"/></svg></div>
+      </div>
+    </section>
+    <aside class="right-col">
+      <div class="section">
+        <div class="phead">Recipe <span class="right"><button class="btn small subtle" data-go="pick">바꾸기</button></span></div>
+        <div class="body">
+          <b>2호기 냉각</b>
+          <div class="recipe-glasses"><b>BASE</b><span>기준점 회복</span><b>Accum</b><span>기준점 위 유지</span></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="phead">분석 범위</div>
+        <div class="body">
+          <div class="grid2">
+            <div class="field"><span class="label">시작</span>
+              <div class="timefield"><div class="input num"><input value="00:24.0"></div><button class="btn small" title="지금 시각으로 ([)">지금</button></div></div>
+            <div class="field"><span class="label">끝</span>
+              <div class="timefield"><div class="input num"><input value="40:55.0"></div><button class="btn small" title="지금 시각으로 (])">지금</button></div></div>
+          </div>
+          <span class="caption">길이 40:31.0 · 샘플 4,863개 (초당 2개)</span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="phead">압축기 기동</div>
+        <div class="body">
+          <div class="field"><span class="label">기동 시각</span>
+            <div class="timefield"><div class="input num" id="compBox"><input id="comp" value="04:58.5"></div><button class="btn small">지금</button></div>
+            <span class="err" id="compErr"></span></div>
+          <span class="caption">기준점 회복 Glass(BASE)가 있어 필요합니다. 분석 범위 안이어야 합니다.</span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="phead">Glass 위치 <span class="right">이 검사에만 적용</span></div>
+        <div class="glass-row sel"><b>BASE</b><span class="mode">기준점 회복</span><span class="badge">Recipe와 다름</span></div>
+        <div class="glass-row"><b>Accum</b><span class="mode">기준점 위 유지</span></div>
+        <div class="body">
+          <div class="grid2">
+            <div class="field"><span class="label">중심 X</span><div class="input num"><input value="566"><span class="unit">px</span></div></div>
+            <div class="field"><span class="label">중심 Y</span><div class="input num"><input value="404"><span class="unit">px</span></div></div>
+            <div class="field"><span class="label">반지름 X</span><div class="input num"><input value="90"><span class="unit">px</span></div></div>
+            <div class="field"><span class="label">반지름 Y</span><div class="input num"><input value="150"><span class="unit">px</span></div></div>
+          </div>
+          <div class="field"><span class="label">0선 Y</span><div class="input num"><input value="424"><span class="unit">px</span></div></div>
+          <div class="row"><button class="btn small">Recipe 위치로 되돌리기</button><span class="caption">Recipe: 560, 400 · 0선 420</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- Recipe picker, over the list -->
+<div class="backdrop" id="pickDialog">
+  <div class="dialog" style="width:720px">
+    <div class="dlg-head">Recipe 고르기</div>
+    <div class="dlg-body">
+      <div><b>2호기_냉각_1029.mp4</b> <span class="caption">1280 × 720 · 41:20.0</span></div>
+      <table>
+        <thead><tr><th style="width:34%">이름</th><th>Glass</th><th style="width:130px">프레임 크기</th><th style="width:150px">수정일</th></tr></thead>
+        <tbody>
+          <tr class="sel"><td>2호기 냉각</td><td>BASE, Accum</td><td class="num">1280 × 720</td><td>2026-10-29 13:05</td></tr>
+          <tr><td>3호기 냉각 (카메라 B)</td><td>BASE, Accum</td><td class="num">1280 × 720</td><td>2026-10-29 09:12</td></tr>
+          <tr class="off"><td>1호기 가열<span class="sub" style="color:var(--fg-3)">해상도가 다릅니다 (1920 × 1080)</span></td><td>BASE</td><td class="num">1920 × 1080</td><td>2026-10-28 16:40</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="dlg-foot">
+      <button class="btn subtle">이 영상으로 새 Recipe 만들기</button>
+      <div class="spacer"></div>
+      <button class="btn" data-go="list">취소</button>
+      <button class="btn primary" data-go="setup">다음</button>
+    </div>
+  </div>
+</div>
+
+<!-- Analysis progress, over the setup -->
+<div class="backdrop" id="progressDialog">
+  <div class="dialog" style="width:480px">
+    <div class="dlg-head">분석 중</div>
+    <div class="dlg-body">
+      <div><b>2호기_냉각_1029.mp4</b> <span class="caption">Glass 2개 · 00:24.0–40:55.0</span></div>
+      <div class="progress"><div></div></div>
+      <div class="row"><b>42%</b><span class="caption">남은 시간 약 1분 10초</span></div>
+      <span class="caption">끝나면 결과 화면이 열립니다. 취소하면 설정은 남고, 만들던 분석 결과는 지웁니다.</span>
+    </div>
+    <div class="dlg-foot"><div class="spacer"></div><button class="btn" data-go="setup">취소</button></div>
+  </div>
+</div>
+
+<div class="note" id="note"><button class="close" onclick="this.parentNode.remove()">닫기 ✕</button>
+  <b>목업 (가짜 데이터)</b>
+  <div class="tabs">
+    <button data-go="list">검사 목록</button><button data-go="pick">Recipe 고르기</button>
+    <button data-go="setup">분석 설정</button><button data-go="progress">분석 중</button>
+    <button data-go="problem">설정 오류 예</button>
+  </div>
+  <p><b>검사 목록</b>은 앱의 첫 화면입니다. Recipe 목록은 툴바의 "Recipe"로 갑니다. 상태는 분석 완료 · 분석 안 됨 · 분석 실패이고, V2-3·V2-4에서 편집 중 · 제출됨이 붙습니다. "분석 안 됨"을 열면 분석 설정으로 갑니다.</p>
+  <p><b>새 검사</b>: 파일 대화상자에서 영상을 고르면 Recipe 고르기가 뜹니다. 해상도가 다른 Recipe는 이유와 함께 흐리게 보이고 고를 수 없습니다.</p>
+  <p><b>분석 설정</b>: 영상은 Recipe 화면처럼 넘겨 보고 재생합니다. 막대 위에 분석 범위(시작·끝)와 압축기 기동 표시가 있습니다. "지금"은 화면의 시각을 넣습니다(키 <b>[</b> <b>]</b>: 범위 시작·끝. 한글 입력 상태에서도 바뀌지 않는 키라서 고름).
+  Glass는 Recipe 화면과 같은 방식으로 끌어서 고치고, 이 검사의 사본에만 저장됩니다. BASE를 6 px 옮긴 상태입니다.</p>
+  <p><b>분석 중</b>: 분석 시작을 누르면 검사 폴더와 Recipe 사본을 만들고 진행률과 남은 시간을 보여 줍니다. 끝나면 읽기 전용 결과 화면(확정된 편집기 배치)이 열립니다.</p>
+</div>
+
+<script>
+(() => {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const W = 1280, H = 720;
+  const glasses = [
+    { name: "BASE", cx: 566, cy: 404, rx: 90, ry: 150, zero: 424, oil: 452 },
+    { name: "Accum", cx: 900, cy: 330, rx: 60, ry: 110, zero: 350, oil: 362 },
+  ];
+  const selected = 0;
+  const chord = (q, y) => { const u = (y - q.cy) / q.ry; const half = q.rx * Math.sqrt(Math.max(0, 1 - u * u)); return [q.cx - half, q.cx + half]; };
+
+  function fit() {
+    const box = document.getElementById("frameBox");
+    const w = box.clientWidth, h = box.clientHeight, s = Math.min(w / W, h / H);
+    return { w, h, s, ox: (w - W * s) / 2, oy: (h - H * s) / 2 };
+  }
+
+  function drawFrame() {
+    const f = fit(), c = document.getElementById("frame"), dpr = window.devicePixelRatio || 1;
+    c.width = f.w * dpr; c.height = f.h * dpr;
+    const g = c.getContext("2d");
+    g.setTransform(dpr * f.s, 0, 0, dpr * f.s, dpr * f.ox, dpr * f.oy);
+    let grad = g.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, "#3a3f44"); grad.addColorStop(1, "#24282c");
+    g.fillStyle = grad; g.fillRect(0, 0, W, H);
+    g.save(); g.translate(6, 4);  // the camera moved a little since the Recipe
+    grad = g.createLinearGradient(380, 0, 1080, 0);
+    grad.addColorStop(0, "#5b6167"); grad.addColorStop(0.5, "#8a9096"); grad.addColorStop(1, "#4d5257");
+    g.fillStyle = grad; g.beginPath(); g.roundRect(380, 120, 700, 520, 40); g.fill();
+    g.fillStyle = "#2e3236"; g.fillRect(380, 600, 700, 40);
+    for (const q of [{ cx: 560, cy: 400, rx: 90, ry: 150, oil: 448 }, { cx: 894, cy: 326, rx: 60, ry: 110, oil: 358 }]) {
+      g.save();
+      g.fillStyle = "#30353a"; g.beginPath(); g.ellipse(q.cx, q.cy, q.rx + 14, q.ry + 14, 0, 0, Math.PI * 2); g.fill();
+      g.beginPath(); g.ellipse(q.cx, q.cy, q.rx, q.ry, 0, 0, Math.PI * 2); g.clip();
+      g.fillStyle = "#c9d2c8"; g.fillRect(q.cx - q.rx, q.cy - q.ry, q.rx * 2, q.ry * 2);
+      grad = g.createLinearGradient(0, q.oil, 0, q.cy + q.ry);
+      grad.addColorStop(0, "#b7832c"); grad.addColorStop(1, "#7a4f12");
+      g.fillStyle = grad; g.fillRect(q.cx - q.rx, q.oil, q.rx * 2, q.cy + q.ry - q.oil);
+      g.fillStyle = "rgba(255,255,255,0.35)"; g.fillRect(q.cx - q.rx * 0.55, q.cy - q.ry, q.rx * 0.18, q.ry * 2);
+      g.restore();
+    }
+    g.restore();
+  }
+
+  function drawOverlay() {
+    const f = fit(), svg = document.getElementById("over");
+    const X = x => f.ox + x * f.s, Y = y => f.oy + y * f.s, L = v => v * f.s;
+    let out = "";
+    glasses.forEach((q, i) => {
+      const sel = i === selected, dash = sel ? "" : `stroke-dasharray="4 3"`, width = sel ? 1.5 : 1;
+      const [c0, c1] = chord(q, q.zero), x0 = X(c0), x1 = X(c1), zy = Y(q.zero);
+      for (const [stroke, off] of [[css("--glass-shadow"), 1], [css("--glass-outline"), 0]]) {
+        out += `<ellipse cx="${X(q.cx)}" cy="${Y(q.cy) + off}" rx="${L(q.rx)}" ry="${L(q.ry)}" fill="none" stroke="${stroke}" stroke-width="${width}" ${dash}/>`;
+        out += `<line x1="${x0}" x2="${x1}" y1="${zy + off}" y2="${zy + off}" stroke="${stroke}" stroke-width="${width}" ${dash}/>`;
+      }
+      const chipW = q.name.length * 8 + 12;
+      out += `<rect x="${X(q.cx) - chipW / 2}" y="${Y(q.cy - q.ry) - 26}" width="${chipW}" height="20" rx="4" fill="${css("--frame-caption-bg")}"/>
+              <text x="${X(q.cx)}" y="${Y(q.cy - q.ry) - 12}" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">${q.name}</text>
+              <rect x="${x0 - 20}" y="${zy - 10}" width="16" height="20" rx="4" fill="${css("--frame-caption-bg")}"/>
+              <text x="${x0 - 12}" y="${zy + 4}" text-anchor="middle" font-size="12" fill="#fff">0</text>`;
+      if (sel) {
+        const bx0 = X(q.cx - q.rx), bx1 = X(q.cx + q.rx), by0 = Y(q.cy - q.ry), by1 = Y(q.cy + q.ry), mx = X(q.cx), my = Y(q.cy);
+        for (const [hx, hy] of [[bx0, by0], [mx, by0], [bx1, by0], [bx1, my], [bx1, by1], [mx, by1], [bx0, by1], [bx0, my]])
+          out += `<rect x="${hx - 4}" y="${hy - 4}" width="8" height="8" fill="${css("--bg-1")}" stroke="${css("--brand")}" stroke-width="1"/>`;
+      }
+    });
+    svg.innerHTML = out;
+  }
+
+  function setProblem(on) {
+    document.getElementById("problemCount").textContent = on ? "문제 1개" : "";
+    document.getElementById("comp").value = on ? "" : "04:58.5";
+    document.getElementById("compBox").style.borderColor = on ? css("--error-border") : "";
+    document.getElementById("compErr").textContent = on ? "기준점 회복 Glass가 있어 압축기 기동 시각이 필요합니다." : "";
+  }
+
+  function show(view) {
+    const base = view === "pick" ? "list" : view === "progress" || view === "problem" ? "setup" : view;
+    document.getElementById("listView").classList.toggle("on", base === "list");
+    document.getElementById("setupView").classList.toggle("on", base === "setup");
+    document.getElementById("pickDialog").classList.toggle("on", view === "pick");
+    document.getElementById("progressDialog").classList.toggle("on", view === "progress");
+    setProblem(view === "problem");
+    document.querySelectorAll(".note .tabs button").forEach(b => b.classList.toggle("on", b.dataset.go === view));
+    if (base === "setup") { drawFrame(); drawOverlay(); }
+  }
+  document.querySelectorAll("[data-go]").forEach(el => el.addEventListener("click", e => { e.stopPropagation(); show(el.dataset.go); }));
+  show(new URLSearchParams(location.search).get("view") || "list");
+  new ResizeObserver(() => { if (document.getElementById("setupView").classList.contains("on")) { drawFrame(); drawOverlay(); } })
+    .observe(document.getElementById("frameBox"));
+})();
+</script>
+</body>
+</html>
