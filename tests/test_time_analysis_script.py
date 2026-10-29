@@ -30,12 +30,21 @@ def test_timing_lines(tmp_path, capsys):
     recipe_path = tmp_path / "test.recipe.json"
     recipe_path.write_text(recipe_to_json(recipe), encoding="utf-8")
 
-    assert script.main(["--video", str(video), "--recipe", str(recipe_path)]) == 0
-    lines = [line for line in capsys.readouterr().out.splitlines() if not line.startswith("  progress")]
-    assert lines[0].startswith('video name="level.avi" bytes=')
-    assert lines[0].endswith("columns=6 frames_decoded=26")
-    assert lines[1].startswith("pass glasses=2 hardware_requested=False hardware_used=False grab=")
-    assert lines[2].startswith('glass name="BASE" context=6x100 mean=')
-    assert lines[3].startswith('glass name="ACCUM" context=6x80 mean=')
-    assert lines[4].startswith("sha256 seconds=")
-    assert lines[5].startswith("analysis total=") and lines[5].endswith("limit=180s")
+    out = tmp_path / "result.md"
+    assert script.main(["--video", str(video), "--recipe", str(recipe_path), "--runs", "software", "--out", str(out)]) == 0
+    printed = capsys.readouterr().out
+    assert "[1/3] PC와 소프트웨어 확인" in printed and "[3/3] 분석: software 디코딩" in printed
+    text = out.read_text(encoding="utf-8")
+    assert text in printed
+    rows = [line for line in text.splitlines() if line.startswith("| software |")]
+    assert rows[0].startswith("| software | False | ")
+    assert rows[1].startswith("| software | BASE | 6x100 | ")
+    assert rows[2].startswith("| software | ACCUM | 6x80 | ")
+    assert "`level.avi`, " in text and ", 160x120, 10.000 fps, 30 frames" in text
+    assert text.rstrip().endswith("오류: 없음")
+
+
+def test_the_source_digest_covers_the_code_that_runs():
+    digest, files = script.source_digest()
+    assert len(digest) == 12 and int(digest, 16) >= 0
+    assert files > 20
