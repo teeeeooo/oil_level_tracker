@@ -125,13 +125,79 @@ Product SSOT §3, §4 and §6:
    The Windows run also covers:
    - **A4 timing on SPL#1** with the whole analysis;
    - the V2-1 follow-up: the speed field, the help dialog and F1 in
-     WebView2. Without Playwright the expected test line stays
-     `77 passed, 2 skipped` plus the new tests.
+     WebView2.
+   - The expected Windows test line is the macOS run without Playwright
+     (see the handoff) minus the macOS-only Documents test.
 
 **V2-1 follow-up** (built in `30b972c`, `298ab15`): the speed field and the
 help dialog (DESIGN.md §4–§5). The user dropped moving the zero line alone
 with the keyboard. The mock-ups `design/mockup/editor.html` and
 `recipe.html` predate these; DESIGN.md governs where they differ.
+
+## Session handoff — 2026-10-29 (second)
+
+**The session closed after `5aadd35`,** with this handoff commit on top.
+The working tree is clean, and `main` and the remote are in sync.
+
+**Resume:** read this file, then
+[product.md](../10-product/product.md) (§3, §4, §6 changed today),
+[architecture.md](../20-architecture/architecture.md),
+[inspection-folder.md](../20-architecture/inspection-folder.md),
+[DESIGN.md](../../DESIGN.md) §4–§5 (the inspection screens) and the
+[A4 timing request](../40-operations/2026-10-29-v2-2-analysis-timing-windows-request.md).
+
+**Waiting:** the user's A4 timing result (source `f330e62`).
+
+**When it arrives:**
+1. **Identify the run** by R1 (`checked=46 mismatched=0`), R2
+   (`87 passed, 2 skipped`) and the environment lines. The text is
+   relayed, so labels and digits can slip; recheck derived values.
+2. **Judge T1–T3** only against the request's fixed table.
+   - T1, SPL#1 software decoding, `analysis total`: ≤ 150 s, go on; 150–180
+     s, go on and look for more speed in step 6; > 180 s, speed up before
+     the screens.
+   - T2 makes hardware decoding the default only if `hardware_used=True`,
+     it is at least 10 % faster than T1, and each Glass `mean` is within
+     1.0 of T1's. Then pass `hardware=True` from the analysis adapter.
+   - Compare `pass` (`grab`, `retrieve`, `reduce`) with the 202.1 s of the
+     draft comparison to see where the time went.
+3. **Record it** in
+   `docs/60-evidence/YYYY-MM-DD-v2-2-analysis-timing-windows-result.md`,
+   with a catalog row, and update step 2 here.
+
+**Step 6, as planned:**
+- **The analysis port** (in `application/ports.py`): given the video path,
+  the Recipe copy's ellipses and the settings, return the times, each
+  Glass's draft as a domain `Line` (`adapters/video/draft.py:draft_line`)
+  and its images as `GlassImages` (PNG pieces as bytes). It reports
+  progress (done and total frames) and checks a cancel flag between
+  frames.
+- **The PNG pieces** move from `scripts/time_analysis.py:png_pieces` into
+  `adapters/video`; the script then imports them.
+- **The SHA-256** is computed on a second thread during the pass, as the
+  timing script does.
+
+**Step 7, as planned:**
+- **Use cases:** list inspections; pick a video and list the Recipes that
+  fit it; check a setup (`domain/inspection.py:setup_problems`); start an
+  analysis, which creates the folder with the Recipe copy, then sets
+  `ANALYSED` or `FAILED` (cancel clears the cache and keeps
+  `NOT_ANALYSED`); load the stored analysis.
+- **HTTP:** the job runs on a thread in `adapters/http`; the UI polls the
+  progress and the time left, and can cancel. Image pieces are served by
+  inspection, Glass, kind and index.
+
+**Other notes:**
+- `scripts/compare_draft_methods.py` is the diagnostic behind the draft
+  decision; it is the only code that reads v1 files.
+- Expected Windows test line: run pytest on macOS without Playwright
+  (`sys.modules['playwright'] = None` and
+  `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
+  subtract one passed and add one skipped for the macOS-only Documents
+  test. At `5aadd35`: `113 passed, 1 skipped` on macOS, so
+  `112 passed, 2 skipped` on Windows.
+- The mock-ups `design/mockup/editor.html` and `recipe.html` predate the
+  speed field and the help dialog; DESIGN.md governs where they differ.
 
 ## Known limits, accepted for now
 
@@ -160,8 +226,7 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Next action:**
-  - the user runs the A4 timing Windows request and relays its result
-    block;
-  - meanwhile, step 6 (the analysis adapter's ports and cancellation)
-    and step 7 (the use cases and the HTTP API).
+- **Done today:** V2-1 closed; V2-2 steps 1, 3, 4 and 5, and the analysis
+  core of step 6.
+- **Next action:** judge the A4 timing result when the user relays it;
+  then step 6 and step 7 as planned above.
