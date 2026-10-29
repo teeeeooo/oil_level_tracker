@@ -3,22 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>v2 편집 화면 목업</title>
+<title>v2 편집 화면 목업 (V2-3)</title>
 <!--
-  Static layout mock-up for user confirmation (work-plan step 1b).
-  Synthetic data only; not product code. Tokens follow DESIGN.md §2–§6.
+  Static layout mock-up for user confirmation. Synthetic data only; not product code.
+  2026-10-28: the layout, confirmed by the user.
+  2026-10-29 (V2-3 step 1): brought up to date with the tools added at the V2-2 start (range delete,
+  the point line, the snap), the speed field and help (DESIGN.md §4), empty stretches, the line kinds,
+  re-analysis and the save state. Tokens follow DESIGN.md §2–§6; the ones marked "proposed" are not
+  in DESIGN.md yet. Open with #grab, #range or #point to show one state.
 -->
 <style>
 :root {
   --bg-1:#FFFFFF; --bg-2:#FAFAFA; --bg-3:#F5F5F5; --bg-4:#F0F0F0; --bg-5:#EBEBEB;
   --fg-1:#242424; --fg-2:#424242; --fg-3:#616161; --fg-disabled:#BDBDBD;
-  --stroke-1:#D1D1D1; --stroke-2:#E0E0E0; --stroke-3:#F0F0F0;
+  --stroke-1:#D1D1D1; --stroke-2:#E0E0E0; --stroke-3:#F0F0F0; --backdrop:rgba(0,0,0,0.4);
   --brand:#0F6CBD; --brand-hover:#115EA3; --brand-pressed:#0C3B5E; --brand-tint:#EBF3FC;
+  --range-fill:#FFE07A; --range-edge:#8F6A00;
   --oil:#1F77D0; --foam:#E8710A; --reference:#616161; --line-halo:rgba(255,255,255,0.9);
   --full-band:rgba(31,119,208,0.10); --empty-band:rgba(97,97,97,0.10);
   --cannot-judge:#8A8A8A; --compressor:#8764B8; --playhead:#242424; --memo:#C19C00;
-  --pass:#0E700E; --pass-bg:#F1FAF1; --fail:#C50F1F; --fail-bg:#FDF3F4;
-  --review:#BC4B09; --review-bg:#FFF9F5; --pending:#616161; --pending-bg:#F5F5F5;
+  --glass-outline:rgba(255,255,255,0.9); --glass-shadow:rgba(0,0,0,0.5);
+  --pending:#616161; --pending-bg:#F5F5F5;
+  /* proposed for V2-3 */
+  --empty-mark:#E37D80;                     /* an empty stretch of the Oil line: invalid until drawn */
+  --selection-band:rgba(15,108,189,0.12);   /* a selected time range, over the graph and the image */
   --font:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Malgun Gothic",sans-serif;
   --mono:"Cascadia Mono",Consolas,ui-monospace,monospace;
 }
@@ -28,34 +36,33 @@ body { background:var(--bg-2); color:var(--fg-1); font:400 14px/20px var(--font)
 .app { display:grid; grid-template-rows:48px 1fr; height:100vh; min-width:1280px; min-height:800px; }
 
 /* toolbar */
-.toolbar { display:flex; align-items:center; gap:8px; padding:0 12px; background:var(--bg-3); border-bottom:1px solid var(--stroke-1); }
-.title { display:flex; flex-direction:column; min-width:0; width:230px; }
+.toolbar { display:flex; align-items:center; gap:4px; padding:0 12px; background:var(--bg-3); border-bottom:1px solid var(--stroke-1); }
+.title { display:flex; flex-direction:column; min-width:0; width:250px; margin:0 4px; }
 .title b { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.title span { font-size:12px; line-height:16px; color:var(--fg-3); }
-.sep { width:1px; height:24px; background:var(--stroke-1); margin:0 4px; }
-.tool { display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 10px; border:0; border-radius:4px; background:transparent; color:var(--fg-2); font:inherit; cursor:pointer; }
+.title span { font-size:12px; line-height:16px; color:var(--fg-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.title .dirty { color:var(--fg-1); font-weight:600; }
+.sep { width:1px; height:24px; background:var(--stroke-1); margin:0 6px; }
+.tool { width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; border:0; border-radius:4px; background:transparent; color:var(--fg-2); cursor:pointer; padding:0; }
 .tool:hover { background:var(--bg-4); }
 .tool[aria-pressed="true"] { background:var(--brand-tint); color:var(--brand); }
 .tool svg { width:20px; height:20px; }
-.kbd { font-size:12px; color:var(--fg-3); }
-.tool[aria-pressed="true"] .kbd { color:var(--brand); }
 .spacer { flex:1; }
-.picker { display:flex; align-items:center; gap:8px; height:32px; padding:0 10px; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; background:var(--bg-1); min-width:250px; }
+.picker { display:flex; align-items:center; gap:8px; height:32px; padding:0 10px; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; background:var(--bg-1); min-width:200px; }
 .picker .name { font-weight:600; }
 .picker .more { margin-left:auto; color:var(--fg-3); font-size:12px; }
-.btn { height:32px; padding:0 12px; border-radius:4px; font:inherit; cursor:pointer; border:1px solid var(--stroke-1); background:var(--bg-1); color:var(--fg-1); }
+.btn { height:32px; padding:0 12px; border-radius:4px; font:inherit; cursor:pointer; border:1px solid var(--stroke-1); background:var(--bg-1); color:var(--fg-1); display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
 .btn:hover { background:var(--bg-4); }
 .btn.primary { background:var(--brand); border-color:var(--brand); color:#fff; }
-.btn.primary:hover { background:var(--brand-hover); }
+.btn.subtle { border-color:transparent; background:transparent; color:var(--fg-2); }
+.btn.subtle:hover { background:var(--bg-4); }
+.btn.small { height:24px; padding:0 8px; font-size:12px; }
 .btn[disabled] { background:var(--bg-4); border-color:var(--bg-4); color:var(--fg-disabled); cursor:not-allowed; }
-.icon-btn { width:32px; padding:0; display:inline-flex; align-items:center; justify-content:center; border-color:transparent; background:transparent; }
+.btn svg { width:20px; height:20px; }
+.icon-btn { width:32px; padding:0; justify-content:center; border-color:transparent; background:transparent; }
 .icon-btn svg { width:20px; height:20px; color:var(--fg-2); }
-
 .badge { display:inline-flex; align-items:center; height:20px; padding:0 6px; border-radius:4px; font-size:12px; line-height:16px; font-weight:600; }
-.badge.pass { color:var(--pass); background:var(--pass-bg); }
-.badge.fail { color:var(--fail); background:var(--fail-bg); }
-.badge.review { color:var(--review); background:var(--review-bg); }
 .badge.pending { color:var(--pending); background:var(--pending-bg); }
+kbd { display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:20px; padding:0 6px; border-radius:4px; background:var(--bg-3); border:1px solid var(--stroke-1); font:600 12px/16px var(--font); }
 
 /* main */
 .main { display:grid; grid-template-columns:1fr 360px; min-height:0; }
@@ -64,8 +71,8 @@ body { background:var(--bg-2); color:var(--fg-1); font:400 14px/20px var(--font)
 .phead .legend { display:flex; gap:12px; font-weight:400; font-size:12px; color:var(--fg-3); }
 .phead .legend i { display:inline-block; width:16px; height:2px; vertical-align:middle; margin-right:4px; }
 .phead .right { margin-left:auto; display:flex; gap:8px; align-items:center; font-weight:400; font-size:12px; color:var(--fg-3); }
-.toggle { display:inline-flex; align-items:center; gap:6px; color:var(--fg-2); font-size:12px; }
-.switch { width:28px; height:16px; border-radius:8px; border:1px solid var(--fg-3); position:relative; background:var(--bg-1); }
+.toggle { display:inline-flex; align-items:center; gap:6px; color:var(--fg-2); font-size:12px; font-weight:400; }
+.switch { width:28px; height:16px; border-radius:8px; border:1px solid var(--fg-3); position:relative; background:var(--bg-1); flex:none; }
 .switch::after { content:""; position:absolute; top:2px; left:2px; width:10px; height:10px; border-radius:50%; background:var(--fg-2); }
 .switch.on { background:var(--brand); border-color:var(--brand); }
 .switch.on::after { left:14px; background:#fff; }
@@ -73,179 +80,228 @@ body { background:var(--bg-2); color:var(--fg-1); font:400 14px/20px var(--font)
 .plot svg, .plot canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
 .axis { position:relative; border-top:1px solid var(--stroke-1); background:var(--bg-1); }
 .axis svg { position:absolute; inset:0; width:100%; height:100%; }
-.range-input { position:absolute; top:4px; height:24px; width:64px; border:1px solid var(--stroke-1); border-bottom:2px solid var(--brand); border-radius:4px; font:12px/16px var(--font); font-variant-numeric:tabular-nums; padding:0 6px; text-align:right; background:var(--bg-1); }
 
 /* right column */
 .right-col { display:flex; flex-direction:column; min-height:0; overflow:auto; background:var(--bg-1); }
 .section { border-bottom:1px solid var(--stroke-1); }
 .section .body { padding:12px; display:flex; flex-direction:column; gap:8px; }
-.video { position:relative; height:250px; background:#1b1f23; }
+.video { position:relative; height:220px; background:#1b1f23; flex:none; }
 .video canvas { width:100%; height:100%; display:block; }
 .video .cap { position:absolute; left:8px; top:8px; font-size:12px; color:#fff; background:rgba(0,0,0,.45); padding:0 6px; border-radius:4px; }
-.transport { display:flex; align-items:center; gap:4px; padding:4px 8px; border-bottom:1px solid var(--stroke-1); }
-.seg { display:inline-flex; border:1px solid var(--stroke-1); border-radius:4px; overflow:hidden; margin-left:4px; }
-.seg button { border:0; background:var(--bg-1); font:12px/16px var(--font); padding:0 8px; height:24px; color:var(--fg-2); cursor:pointer; }
-.seg button + button { border-left:1px solid var(--stroke-1); }
-.seg button.on { background:var(--brand-tint); color:var(--brand); font-weight:600; }
+.transport { display:flex; align-items:center; gap:4px; padding:4px 8px; border-bottom:1px solid var(--stroke-1); flex:none; }
+.speed { display:inline-flex; align-items:center; width:80px; height:32px; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; padding:0 4px 0 8px; font-variant-numeric:tabular-nums; }
+.speed span { flex:1; text-align:right; }
+.speed .unit { flex:none; color:var(--fg-3); margin:0 4px 0 2px; }
+.speed svg { width:16px; height:16px; color:var(--fg-2); }
+.tool.on { background:var(--brand-tint); color:var(--brand); }
 .time { margin-left:auto; white-space:nowrap; font-size:12px; font-variant-numeric:tabular-nums; color:var(--fg-2); }
 .row { display:flex; align-items:center; gap:8px; }
-.label { color:var(--fg-3); font-size:12px; line-height:16px; }
-.verdict { display:flex; align-items:center; gap:8px; }
-.verdict .big { font-size:20px; line-height:28px; font-weight:600; color:var(--fail); }
-.why { font-size:12px; line-height:16px; color:var(--fg-2); }
-table { border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums; }
-th, td { text-align:left; padding:4px 0; border-bottom:1px solid var(--stroke-2); font-size:12px; line-height:16px; }
-th { color:var(--fg-3); font-weight:400; }
-td.num { text-align:right; }
-textarea, select, input[type=text] { font:inherit; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; background:var(--bg-1); padding:5px 8px; }
-textarea { min-height:52px; resize:vertical; }
-textarea:disabled { background:var(--bg-3); color:var(--fg-disabled); }
-.check { display:inline-flex; align-items:center; gap:6px; }
-.check i { width:16px; height:16px; border:1px solid var(--fg-3); border-radius:2px; display:inline-block; }
+.label { color:var(--fg-3); font-size:12px; line-height:16px; width:72px; flex:none; }
+.caption { color:var(--fg-3); font-size:12px; line-height:16px; }
+.seg { display:inline-flex; border:1px solid var(--stroke-1); border-radius:4px; overflow:hidden; }
+.seg button { white-space:nowrap; border:0; background:var(--bg-1); font:12px/16px var(--font); padding:0 10px; height:24px; color:var(--fg-2); cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+.seg button + button { border-left:1px solid var(--stroke-1); }
+.seg button.on { background:var(--brand-tint); color:var(--brand); font-weight:600; }
+.seg i { display:inline-block; width:12px; height:2px; }
 .slider { flex:1; height:4px; background:var(--stroke-1); border-radius:2px; position:relative; }
 .slider::before { content:""; position:absolute; left:0; top:0; bottom:0; width:30%; background:var(--brand); border-radius:2px; }
 .slider::after { content:""; position:absolute; left:30%; top:-6px; width:16px; height:16px; margin-left:-8px; border-radius:50%; background:#fff; border:1px solid var(--stroke-1); box-shadow:0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.14); }
-.memo { display:flex; gap:8px; align-items:flex-start; }
+.num { font-variant-numeric:tabular-nums; }
+table.kv { border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums; }
+table.kv th, table.kv td { text-align:left; padding:4px 0; border-bottom:1px solid var(--stroke-2); font-size:12px; line-height:16px; }
+table.kv th { color:var(--fg-3); font-weight:400; width:96px; }
+.empty-text { color:#B5373B; font-weight:600; }
+.selbox { border:1px solid var(--brand); border-radius:4px; background:var(--brand-tint); padding:8px; display:flex; flex-direction:column; gap:8px; }
+.selbox[hidden] { display:none; }
+.selbox .head { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--brand); font-weight:600; }
+.memo { display:flex; gap:8px; align-items:flex-start; font-size:12px; line-height:16px; }
 .pin { flex:none; width:20px; height:20px; border-radius:50%; background:var(--memo); color:#fff; font-size:12px; line-height:20px; text-align:center; font-weight:600; }
-.memo .t { font-size:12px; color:var(--fg-3); font-variant-numeric:tabular-nums; }
-.note { position:fixed; right:372px; bottom:40px; max-width:330px; background:var(--bg-1); border:1px solid var(--stroke-1); border-radius:8px; padding:12px; font-size:12px; line-height:16px; color:var(--fg-2); box-shadow:0 0 2px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.14); }
+.memo .t { color:var(--fg-3); font-variant-numeric:tabular-nums; }
+.collapsed { color:var(--fg-disabled); font-weight:400; font-size:12px; }
+
+/* the mock-up's own note and state switcher (not part of the design) */
+.note { position:fixed; left:16px; bottom:44px; width:430px; background:var(--bg-1); border:1px solid var(--stroke-1); border-radius:8px; padding:12px; font-size:12px; line-height:16px; color:var(--fg-2); box-shadow:0 0 2px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.14); z-index:5; }
 .note b { color:var(--fg-1); }
-.note button { float:right; border:0; background:transparent; cursor:pointer; color:var(--fg-3); }
+.note ol { margin:6px 0 0; padding-left:18px; }
+.note li { margin:2px 0; }
+.note .states { display:flex; gap:4px; margin:8px 0; }
+.note .close { float:right; border:0; background:transparent; cursor:pointer; color:var(--fg-3); }
 </style>
 </head>
 <body>
 <div class="app">
   <header class="toolbar">
+    <button class="btn subtle"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4l-6 6 6 6"/></svg>검사 목록</button>
+    <div class="sep"></div>
     <div class="title">
-      <b>SPL#4_Cooling_onoff_#2.mp4</b>
-      <span>Recipe: SPL#4 냉각 · v002 편집 중</span>
+      <b>1차 냉각</b>
+      <span><span class="dirty">저장 안 함</span> · SPL#4_Cooling_onoff_#2.mp4</span>
     </div>
     <div class="sep"></div>
-    <button class="tool" aria-pressed="true" data-tool title="잡아끌기 (G)">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 13c3-6 6 2 9-3s3-4 5-5"/><circle cx="10" cy="11" r="2.5" fill="currentColor" stroke="none"/></svg>잡아끌기 <span class="kbd">G</span></button>
-    <button class="tool" aria-pressed="false" data-tool title="연필 (P)">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l1-4 8-8 3 3-8 8z"/><path d="M11.5 5.5l3 3"/></svg>연필 <span class="kbd">P</span></button>
-    <button class="tool" aria-pressed="false" data-tool title="판단 불가 (U)">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="12" rx="1"/><path d="M3 12l6-8M7 16l10-12M13 16l4-5"/></svg>판단 불가 <span class="kbd">U</span></button>
-    <button class="tool" aria-pressed="false" data-tool title="메모 (M)">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h12v9H9l-4 3v-3H4z"/></svg>메모 <span class="kbd">M</span></button>
-    <button class="tool" aria-pressed="false" data-tool title="이동 (H, 또는 Shift-드래그)">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2v16M2 10h16M10 2l-2 2M10 2l2 2M10 18l-2-2M10 18l2-2M2 10l2-2M2 10l2 2M18 10l-2-2M18 10l-2 2"/></svg>이동 <span class="kbd">H</span></button>
+    <button class="tool" data-tool="grab" title="잡아끌기 (G)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 13c3-6 6 2 9-3s3-4 5-5"/><circle cx="10" cy="11" r="2.5" fill="currentColor" stroke="none"/></svg></button>
+    <button class="tool" data-tool="pencil" title="연필 (P)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l1-4 8-8 3 3-8 8z"/><path d="M11.5 5.5l3 3"/></svg></button>
+    <button class="tool" data-tool="point" title="점 잇기 (L): 맥락 이미지에 점을 찍으면 점 사이를 경계를 따라 잇습니다"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 14c2-1 3-6 6-6s3 4 6 2"/><circle cx="4" cy="14" r="1.8" fill="currentColor"/><circle cx="10" cy="8" r="1.8" fill="currentColor"/><circle cx="16" cy="10" r="1.8" fill="currentColor"/></svg></button>
+    <button class="tool" data-tool="range" title="범위 (R): 끌어서 시간 범위를 고르고, Delete로 선 지우기 · U로 판단 불가"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3v14M15 3v14"/><path d="M5 10h10" stroke-dasharray="2 2"/><path d="M7 8l-2 2 2 2M13 8l2 2-2 2"/></svg></button>
+    <button class="tool" data-tool="memo" title="메모 (M)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h12v9H9l-4 3v-3H4z"/></svg></button>
+    <button class="tool" data-tool="pan" title="이동 (H, 또는 Shift-드래그)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2v16M2 10h16M10 2l-2 2M10 2l2 2M10 18l-2-2M10 18l2-2M2 10l2-2M2 10l2 2M18 10l-2-2M18 10l-2 2"/></svg></button>
     <div class="sep"></div>
-    <button class="btn icon-btn" title="실행 취소 (Ctrl+Z)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 5L3 9l4 4"/><path d="M3 9h9a5 5 0 010 10h-2"/></svg></button>
-    <button class="btn icon-btn" title="다시 실행 (Ctrl+Shift+Z)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 5l4 4-4 4"/><path d="M17 9H8a5 5 0 000 10h2"/></svg></button>
+    <button class="tool" title="실행 취소 (Ctrl+Z)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 5L3 9l4 4"/><path d="M3 9h9a5 5 0 010 10h-2"/></svg></button>
+    <button class="tool" title="다시 실행 (Ctrl+Shift+Z)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 5l4 4-4 4"/><path d="M17 9H8a5 5 0 000 10h2"/></svg></button>
     <div class="spacer"></div>
     <div class="picker" title="Glass 선택">
-      <span class="label">Glass</span><span class="name">BASE</span><span class="badge fail">FAIL</span>
-      <span class="more">2개 중 1개 확인 ▾</span>
+      <span class="caption">Glass</span><span class="name">BASE</span><span class="badge pending">확인 전</span>
+      <span class="more">▾</span>
     </div>
     <div class="spacer"></div>
-    <button class="btn">저장</button>
-    <button class="btn primary" disabled title="모든 Glass를 확인해야 제출할 수 있습니다">제출</button>
+    <button class="btn" title="저장 (Ctrl+S)">저장</button>
+    <button class="btn primary" disabled title="판정과 제출은 V2-4에서">제출</button>
+    <button class="btn icon-btn" title="도움말 (F1)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M7.8 7.9a2.2 2.2 0 1 1 3 2.05c-.5.2-.8.6-.8 1.15v.4"/><path d="M10 13.6v.4"/></svg></button>
   </header>
 
   <div class="main">
     <section class="left">
       <div class="phead">그래프
-        <span class="legend"><span><i style="background:var(--oil)"></i>Oil</span><span><i style="background:var(--foam)"></i>Foam</span><span><i style="border-top:1.5px dashed var(--reference);height:0"></i>참조</span></span>
-        <span class="right">세로: 0선 기준 높이 (px) · 휠 확대, Shift+휠 세로 확대</span>
+        <span class="legend"><span><i style="background:var(--oil)"></i>Oil</span><span><i style="background:var(--foam)"></i>Foam</span><span><i style="border-top:1.5px dashed var(--reference);height:0"></i>참조</span><span><i style="background:var(--empty-mark);height:4px"></i>빈 구간</span></span>
+        <span class="right">세로: 0선 기준 높이 (px) · 휠 확대</span>
       </div>
       <div class="plot" id="graphBox"><svg id="graph"></svg></div>
       <div class="phead">맥락 이미지
         <span class="right"><span class="toggle"><span class="switch"></span>배경 제거 보기</span></span>
       </div>
       <div class="plot" id="ctxBox"><canvas id="ctx"></canvas><svg id="ctxOver"></svg></div>
-      <div class="axis" id="axisBox"><svg id="axis"></svg><input class="range-input" id="rangeEnd" value="300" aria-label="표시 끝 시각"></div>
+      <div class="axis" id="axisBox"><svg id="axis"></svg></div>
     </section>
 
     <aside class="right-col">
-      <div class="phead">원본 영상</div>
-      <div class="video"><canvas id="video"></canvas><span class="cap">BASE · Glass 확대</span></div>
+      <div class="phead">원본 영상 <span class="right">BASE 확대 · 선 겹쳐 보기</span></div>
+      <div class="video"><canvas id="video"></canvas></div>
       <div class="transport">
-        <button class="btn icon-btn" title="이전 프레임 (←)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4h2v12H5zM16 4v12L8 10z"/></svg></button>
-        <button class="btn icon-btn" title="재생 (Space)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4l10 6-10 6z"/></svg></button>
-        <button class="btn icon-btn" title="다음 프레임 (→)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 4h2v12h-2zM4 4v12l8-6z"/></svg></button>
-        <span class="seg"><button class="on">1×</button><button>4×</button><button>16×</button></span>
-        <button class="btn icon-btn" title="구간 반복"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8a5 5 0 019-2l1 1M16 12a5 5 0 01-9 2l-1-1"/><path d="M14 3v4h-4M6 17v-4h4"/></svg></button>
+        <button class="tool" title="이전 프레임 (,)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4h2v12H5zM16 4v12L8 10z"/></svg></button>
+        <button class="tool" title="재생 (Space)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4l10 6-10 6z"/></svg></button>
+        <button class="tool" title="다음 프레임 (.)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 4h2v12h-2zM4 4v12l8-6z"/></svg></button>
+        <span class="speed" title="재생 배속 (0.1–16×)"><span>1</span><span class="unit">×</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg></span>
+        <button class="tool" id="repeat" title="구간 반복: 고른 범위를 되풀이 재생"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8a5 5 0 019-2l1 1M16 12a5 5 0 01-9 2l-1-1"/><path d="M14 3v4h-4M6 17v-4h4"/></svg></button>
         <span class="time">01:35.0 / 05:00.0</span>
       </div>
 
       <div class="section">
-        <div class="phead">판정 <span class="right">RECOVERY · 회복 제한 120 s</span></div>
+        <div class="phead">편집</div>
         <div class="body">
-          <div class="verdict"><span class="big">FAIL</span><span class="badge pending">자동 계산</span></div>
-          <div class="why">기동 후 164.0 s에 회복 — 제한 120 s 초과</div>
-          <table>
-            <tr><th>압축기 기동</th><td class="num">30.0 s</td></tr>
-            <tr><th>최저 유면</th><td class="num">72.5 s</td></tr>
-            <tr><th>회복</th><td class="num">194.0 s</td></tr>
-            <tr><th>판단 불가 비율</th><td class="num">6.7 % (기준 30 % 이하)</td></tr>
+          <div class="row"><span class="label">그릴 선</span>
+            <span class="seg"><button class="on"><i style="background:var(--oil)"></i>Oil</button><button><i style="background:var(--foam)"></i>Foam</button><button><i style="border-top:1.5px dashed var(--reference);height:0"></i>참조</button></span></div>
+          <div class="caption" style="margin:-4px 0 0 80px">연필과 점 잇기가 그리는 선. 잡아끌기는 잡은 선을 바꿉니다.</div>
+          <div class="row"><span class="label">끌기 폭</span><span class="slider"></span><span class="caption num">30 s</span><kbd>[</kbd><kbd>]</kbd></div>
+          <div class="row"><span class="label">끌기 모양</span>
+            <span class="seg"><button class="on">부드럽게</button><button>뾰족하게</button></span><span class="caption"><kbd>Alt</kbd>+끌기</span></div>
+          <div class="row"><span class="label">스냅 <kbd>S</kbd></span><span class="toggle"><span class="switch on"></span>켬</span><span class="caption">8 px 안의 경계에 붙음</span></div>
+          <div class="selbox" id="selbox" hidden>
+            <div class="head">선택한 범위 <span class="num">03:56.0 – 04:22.0 · 26.0 s</span></div>
+            <div class="row" style="flex-wrap:wrap">
+              <button class="btn small">선 지우기 <kbd>Delete</kbd></button>
+              <button class="btn small">판단 불가 <kbd>U</kbd></button>
+              <button class="btn small">판단 불가 풀기</button>
+            </div>
+          </div>
+          <div class="selbox" id="pointbox" hidden>
+            <div class="head">점 잇기 · 점 3개 · Oil</div>
+            <div class="caption">맥락 이미지를 클릭해 점을 더합니다. 점 사이는 경계를 따라 이어집니다. <kbd>Enter</kbd> 확정 · <kbd>Esc</kbd> 취소 · <kbd>Backspace</kbd> 마지막 점 빼기</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="phead">Glass · BASE <span class="right">기준점 회복</span></div>
+        <div class="body">
+          <table class="kv">
+            <tr><th>빈 구간</th><td><span class="empty-text">2곳 · 12 %</span> <span class="caption">그리기 전까지 무효</span></td></tr>
+            <tr><th>판단 불가</th><td>1곳 · 6.7 %</td></tr>
+            <tr><th>유효 비율</th><td>81 % <span class="caption">(기준 70 % 이상)</span></td></tr>
+            <tr><th>FULL / EMPTY</th><td>FULL 1곳 · EMPTY 없음 <span class="caption">(선 위치로 자동)</span></td></tr>
           </table>
-          <label class="check"><i></i>판정 덮어쓰기</label>
-          <textarea disabled placeholder="덮어쓸 때 사유 (필수)"></textarea>
+          <div class="row"><button class="btn small">◀ 이전 빈 구간</button><button class="btn small">다음 빈 구간 ▶</button><span class="caption"><kbd>N</kbd></span></div>
         </div>
       </div>
 
       <div class="section">
-        <div class="phead">선택</div>
+        <div class="phead">판정 <span class="right collapsed">V2-4에서 추가</span></div>
+      </div>
+
+      <div class="section">
+        <div class="phead">메모 <span class="right">메모 도구로 그래프를 클릭해 추가</span></div>
         <div class="body">
-          <div class="row"><span class="label" style="width:72px">선</span><select><option>Oil 선 1</option><option>Foam 선 1</option></select></div>
-          <div class="row"><span class="label" style="width:72px">끌기 폭</span><span class="slider"></span><span class="label">30 s</span></div>
-          <div class="row"><span class="label" style="width:72px">이 지점</span><button class="btn">모서리로 전환</button></div>
+          <div class="memo"><span class="pin">1</span><div><div class="t">01:02.0</div>거품 발생, 유면 식별 어려움</div></div>
+          <div class="memo"><span class="pin">2</span><div><div class="t">03:32.0</div>FULL 도달 확인</div></div>
         </div>
       </div>
 
       <div class="section">
-        <div class="phead">메모 <span class="right">그래프를 클릭해 추가</span></div>
+        <div class="phead">분석</div>
         <div class="body">
-          <div class="memo"><span class="pin">1</span><div><div class="t">62.0 s</div>거품 발생, 유면 식별 어려움</div></div>
-          <div class="memo"><span class="pin">2</span><div><div class="t">212.0 s</div>FULL 도달 확인</div></div>
+          <table class="kv">
+            <tr><th>분석 범위</th><td>00:00.0 – 05:00.0</td></tr>
+            <tr><th>압축기 기동</th><td>00:30.0 <span class="caption">(그래프의 기동 선을 끌어 바꿈)</span></td></tr>
+            <tr><th>Recipe</th><td>SPL#4_test1_607bccb (이 검사의 사본)</td></tr>
+          </table>
+          <div class="row"><button class="btn small">범위 바꿔 다시 분석…</button><span class="caption">겹치는 구간의 편집은 남습니다</span></div>
         </div>
       </div>
     </aside>
   </div>
 </div>
 
-<div class="note" id="note"><button onclick="this.parentNode.remove()">닫기 ✕</button>
-  <b>목업 (가짜 데이터)</b><br>
-  배치와 색 규칙 확인용입니다. 잡아끌기 도구로 Oil 선을 95 s 근처에서 잡은 상태(옅은 띠 = 영향 폭 30 s)를 보여줍니다.
-  130–150 s는 반사로 <b>판단 불가</b>, 210 s 이후는 선이 Glass 맨 위라 <b>FULL</b> 자동 구간입니다.
-  표시 끝 시각 "300"은 클릭해서 입력 중인 상태입니다.
+<div class="note" id="note"><button class="close" onclick="this.parentNode.remove()">닫기 ✕</button>
+  <b>V2-3 편집 화면 목업 (가짜 데이터)</b>
+  <div class="states">
+    <button class="btn small" data-state="grab">잡아끌기 중</button>
+    <button class="btn small" data-state="range">범위 선택</button>
+    <button class="btn small" data-state="point">점 잇기 중</button>
+  </div>
+  <div id="stateText"></div>
+  <b style="display:block;margin-top:8px">확인할 것</b>
+  <ol>
+    <li><b>스냅</b>: 기본으로 켤지, 거리(목업은 8 px, 원본 프레임 기준)</li>
+    <li><b>범위 도구</b>: 확정 시안의 "판단 불가" 도구를 범위 도구 하나로 합쳤습니다. 범위를 고른 뒤 Delete는 선 지우기, U는 판단 불가</li>
+    <li><b>뾰족하게</b>: "한 지점을 모서리로 전환"을 끌기 모양(부드럽게/뾰족하게)으로 해석했습니다</li>
+    <li><b>빈 구간 표시</b>: 시간축 위 붉은 띠와 "다음 빈 구간(N)". 새 색 --empty-mark</li>
+  </ol>
 </div>
 
 <script>
 (() => {
   const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
   const T = 300, DT = 0.5, N = T / DT;            // 0.5 s columns
-  const TOP = 200;                                 // Glass rows; FULL at TOP, EMPTY at 0
-  const ZERO = 60;                                 // zero line row
+  const TOP = 200, ZERO = 60;                      // Glass rows; FULL at TOP, EMPTY at 0; zero line row
   const START = 30, PLAY = 95;
-  const PAD = { l: 52, r: 16, t: 14, b: 10 };     // plot inset so FULL/EMPTY lines stay visible
+  const PAD = { l: 52, r: 16, t: 14, b: 10 };
+  const EMPTY = [[150, 172], [246, 258]];          // draft stretches left empty
+  const CANNOT = [[130, 150]];
+  const SELECT = [236, 262];
+  const POINTS = [146, 158, 166];                  // point line in progress; the cursor at 176
+  let state = (location.hash || "#grab").slice(1);
 
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const smooth = (a, b, x0, x1, x) => { const u = clamp((x - x0) / (x1 - x0), 0, 1); return a + (b - a) * (u * u * (3 - 2 * u)); };
-  function oilAt(t) {
+  const within = (list, t) => list.some(([a, b]) => t >= a && t < b);
+  function trueOil(t) {
     if (t < START) return 150;
     if (t < 72) return smooth(150, 38, START, 72, t);
     if (t < 210) return smooth(38, 200, 90, 210, t);
     if (t < 270) return 200;
     return smooth(200, 168, 270, 300, t);
   }
-  const foamAt = t => (t >= 40 && t <= 150) ? Math.min(TOP, oilAt(t) + smooth(0, 34, 40, 60, t) * smooth(1, 0, 120, 150, t)) : null;
-  const cannot = [[130, 150]];
-  const inCannot = t => cannot.some(([a, b]) => t >= a && t < b);
+  const oilAt = t => (within(EMPTY, t) || within(CANNOT, t)) ? null : trueOil(t);
+  const foamAt = t => (t >= 40 && t <= 128) ? Math.min(TOP, trueOil(t) + smooth(0, 34, 40, 60, t) * smooth(1, 0, 110, 128, t)) : null;
+  const refAt = t => (t >= 20 && t <= 120) ? 118 : null;
 
-  function scales(w, h) {
-    return {
-      x: t => PAD.l + (t / T) * (w - PAD.l - PAD.r),
-      y: r => PAD.t + (1 - r / TOP) * (h - PAD.t - PAD.b),
-    };
-  }
+  const scales = (w, h) => ({
+    x: t => PAD.l + (t / T) * (w - PAD.l - PAD.r),
+    y: r => PAD.t + (1 - r / TOP) * (h - PAD.t - PAD.b),
+  });
   function path(fn, s, t0 = 0, t1 = T) {
     let d = "", pen = false;
     for (let t = t0; t <= t1 + 1e-9; t += DT) {
       const v = fn(t);
-      if (v == null || inCannot(t)) { pen = false; continue; }
+      if (v == null) { pen = false; continue; }
       d += (pen ? "L" : "M") + s.x(t).toFixed(1) + "," + s.y(v).toFixed(1);
       pen = true;
     }
@@ -254,53 +310,72 @@ textarea:disabled { background:var(--bg-3); color:var(--fg-disabled); }
   const hatchDef = `<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
       <rect width="6" height="6" fill="rgba(138,138,138,0.12)"/><line x1="0" y1="0" x2="0" y2="6" stroke="${css('--cannot-judge')}" stroke-width="1"/></pattern></defs>`;
 
-  function sharedMarks(s, w, h, withLabels) {
+  function marks(s, w, h, labels) {
     let g = "";
-    for (const [a, b] of cannot)
+    for (const [a, b] of CANNOT)
       g += `<rect x="${s.x(a)}" y="${PAD.t}" width="${s.x(b) - s.x(a)}" height="${h - PAD.t - PAD.b}" fill="url(#hatch)"/>` +
-           (withLabels ? `<text x="${(s.x(a) + s.x(b)) / 2}" y="${PAD.t + 14}" text-anchor="middle" font-size="12" fill="${css('--fg-3')}">판단 불가</text>` : "");
+           (labels ? `<text x="${(s.x(a) + s.x(b)) / 2}" y="${PAD.t + 14}" text-anchor="middle" font-size="12" fill="${css('--fg-3')}">판단 불가</text>` : "");
+    if (labels) for (const [a, b] of EMPTY)
+      g += `<text x="${(s.x(a) + s.x(b)) / 2}" y="${h - PAD.b - 6}" text-anchor="middle" font-size="12" font-weight="600" fill="#B5373B">빈 구간</text>`;
+    if (state === "range")
+      g += `<rect x="${s.x(SELECT[0])}" y="0" width="${s.x(SELECT[1]) - s.x(SELECT[0])}" height="${h}" fill="${css('--selection-band')}"/>
+            <line x1="${s.x(SELECT[0])}" x2="${s.x(SELECT[0])}" y1="0" y2="${h}" stroke="${css('--brand')}"/>
+            <line x1="${s.x(SELECT[1])}" x2="${s.x(SELECT[1])}" y1="0" y2="${h}" stroke="${css('--brand')}"/>`;
     g += `<line x1="${s.x(START)}" x2="${s.x(START)}" y1="${PAD.t}" y2="${h - PAD.b}" stroke="${css('--compressor')}" stroke-width="1.5" stroke-dasharray="4 3"/>`;
-    if (withLabels) g += `<text x="${s.x(START) + 4}" y="${PAD.t + 12}" font-size="12" fill="${css('--compressor')}" font-weight="600">기동</text>`;
+    if (labels) g += `<rect x="${s.x(START) - 5}" y="${PAD.t - 2}" width="10" height="10" rx="2" fill="${css('--compressor')}"/>
+                       <text x="${s.x(START) + 8}" y="${PAD.t + 8}" font-size="12" fill="${css('--compressor')}" font-weight="600">기동 ↔</text>`;
     g += `<line x1="${s.x(PLAY)}" x2="${s.x(PLAY)}" y1="${PAD.t - 6}" y2="${h}" stroke="${css('--playhead')}" stroke-width="1"/>`;
     return g;
   }
   function lines(s, halo) {
-    const oil = path(oilAt, s), foam = path(foamAt, s, 40, 150);
-    const h = halo ? `<path d="${oil}" stroke="${css('--line-halo')}" stroke-width="5" fill="none" stroke-linejoin="round"/>
-                      <path d="${foam}" stroke="${css('--line-halo')}" stroke-width="5" fill="none" stroke-linejoin="round"/>` : "";
-    return h + `<path d="${foam}" stroke="${css('--foam')}" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
-                <path d="${oil}" stroke="${css('--oil')}" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>`;
+    const oil = path(oilAt, s), foam = path(foamAt, s, 40, 128), ref = path(refAt, s, 20, 120);
+    const under = halo ? [oil, foam].map(d => `<path d="${d}" stroke="${css('--line-halo')}" stroke-width="5" fill="none" stroke-linejoin="round"/>`).join("") : "";
+    return under + `<path d="${ref}" stroke="${css('--reference')}" stroke-width="1.5" stroke-dasharray="6 4" fill="none"/>
+      <path d="${foam}" stroke="${css('--foam')}" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="${oil}" stroke="${css('--oil')}" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>`;
+  }
+  function overlay(s) {
+    let g = "";
+    if (state === "grab") {
+      g += `<path d="${path(oilAt, s, 80, 110)}" stroke="${css('--oil')}" stroke-opacity="0.15" stroke-width="16" fill="none" stroke-linecap="round"/>`;
+      g += `<path d="${path(oilAt, s, 80, 110)}" stroke="${css('--oil')}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+      const y = s.y(trueOil(PLAY));
+      g += `<line x1="${s.x(PLAY) - 14}" x2="${s.x(PLAY) + 14}" y1="${y}" y2="${y}" stroke="${css('--brand')}" stroke-width="1" stroke-dasharray="2 2"/>`;
+      g += `<circle cx="${s.x(PLAY)}" cy="${y}" r="5" fill="#fff" stroke="${css('--oil')}" stroke-width="2"/>`;
+      g += `<text x="${s.x(PLAY) + 10}" y="${y - 8}" font-size="12" fill="${css('--brand')}" font-weight="600">스냅</text>`;
+    }
+    if (state === "point") {
+      const ys = { 146: trueOil(146) - 6, 158: trueOil(158) + 4, 166: trueOil(166) - 3 };
+      let d = `M${s.x(146)},${s.y(ys[146])}`;
+      for (let t = 146.5; t <= 166; t += DT) d += `L${s.x(t)},${s.y(trueOil(t) + 3 * Math.sin(t / 2))}`;
+      g += `<path d="${d}" stroke="${css('--line-halo')}" stroke-width="5" fill="none"/><path d="${d}" stroke="${css('--oil')}" stroke-width="2" fill="none" stroke-dasharray="5 3"/>`;
+      g += `<line x1="${s.x(166)}" y1="${s.y(ys[166])}" x2="${s.x(176)}" y2="${s.y(trueOil(176) + 10)}" stroke="${css('--oil')}" stroke-width="1" stroke-dasharray="2 3"/>`;
+      for (const t of POINTS) g += `<circle cx="${s.x(t)}" cy="${s.y(ys[t])}" r="5" fill="#fff" stroke="${css('--oil')}" stroke-width="2"/>`;
+    }
+    return g;
   }
 
   function drawGraph() {
     const box = document.getElementById("graphBox"), svg = document.getElementById("graph");
     const w = box.clientWidth, h = box.clientHeight, s = scales(w, h);
     let g = hatchDef;
-    // FULL band where the line sits at the top
-    g += `<rect x="${s.x(210)}" y="${PAD.t}" width="${s.x(270) - s.x(210)}" height="${h - PAD.t - PAD.b}" fill="${css('--full-band')}"/>
-          <text x="${(s.x(210) + s.x(270)) / 2}" y="${h - PAD.b - 8}" text-anchor="middle" font-size="12" font-weight="600" fill="${css('--oil')}">FULL</text>`;
-    // grid + y ticks (px from zero line)
+    g += `<rect x="${s.x(210)}" y="${PAD.t}" width="${s.x(246) - s.x(210)}" height="${h - PAD.t - PAD.b}" fill="${css('--full-band')}"/>
+          <text x="${(s.x(210) + s.x(246)) / 2}" y="${h - PAD.b - 22}" text-anchor="middle" font-size="12" font-weight="600" fill="${css('--oil')}">FULL</text>`;
     for (let r = 0; r <= TOP; r += 20) {
       const y = s.y(r), major = (r - ZERO) % 40 === 0;
       g += `<line x1="${PAD.l}" x2="${w - PAD.r}" y1="${y}" y2="${y}" stroke="${css(major ? '--stroke-2' : '--stroke-3')}"/>`;
       if (major) g += `<text x="${PAD.l - 8}" y="${y + 4}" text-anchor="end" font-size="12" fill="${css('--fg-3')}" style="font-variant-numeric:tabular-nums">${r - ZERO}</text>`;
     }
     for (let t = 0; t <= T; t += 30) g += `<line x1="${s.x(t)}" x2="${s.x(t)}" y1="${PAD.t}" y2="${h - PAD.b}" stroke="${css('--stroke-3')}"/>`;
-    // Glass top / zero / bottom references
     g += `<line x1="${PAD.l}" x2="${w - PAD.r}" y1="${s.y(TOP)}" y2="${s.y(TOP)}" stroke="${css('--stroke-1')}"/>
           <text x="${w - PAD.r - 4}" y="${s.y(TOP) - 3}" text-anchor="end" font-size="12" fill="${css('--fg-3')}">Glass 위</text>
           <line x1="${PAD.l}" x2="${w - PAD.r}" y1="${s.y(ZERO)}" y2="${s.y(ZERO)}" stroke="${css('--reference')}" stroke-width="1.5" stroke-dasharray="6 4"/>
           <text x="${w - PAD.r - 4}" y="${s.y(ZERO) - 4}" text-anchor="end" font-size="12" fill="${css('--fg-3')}">0선</text>
           <line x1="${PAD.l}" x2="${w - PAD.r}" y1="${s.y(0)}" y2="${s.y(0)}" stroke="${css('--stroke-1')}"/>`;
-    g += sharedMarks(s, w, h, true);
-    // grab-width preview around the grabbed spot (95 s ± 15 s)
-    g += `<path d="${path(oilAt, s, 80, 110)}" stroke="${css('--oil')}" stroke-opacity="0.15" stroke-width="16" fill="none" stroke-linecap="round"/>`;
-    g += lines(s, false);
-    g += `<circle cx="${s.x(PLAY)}" cy="${s.y(oilAt(PLAY))}" r="5" fill="#fff" stroke="${css('--oil')}" stroke-width="2"/>`;
-    // memo pins
+    g += marks(s, w, h, true) + lines(s, false) + overlay(s);
     for (const [n, t, dy] of [[1, 62, -22], [2, 212, 22]]) {
-      const cx = s.x(t), cy = s.y(oilAt(t)) + dy;
-      g += `<line x1="${cx}" x2="${cx}" y1="${cy}" y2="${s.y(oilAt(t))}" stroke="${css('--memo')}"/>
+      const cx = s.x(t), base = s.y(trueOil(t)), cy = base + dy;
+      g += `<line x1="${cx}" x2="${cx}" y1="${cy}" y2="${base}" stroke="${css('--memo')}"/>
             <circle cx="${cx}" cy="${cy}" r="10" fill="${css('--memo')}"/>
             <text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">${n}</text>`;
     }
@@ -308,19 +383,16 @@ textarea:disabled { background:var(--bg-3); color:var(--fg-disabled); }
     svg.innerHTML = g;
   }
 
-  // deterministic noise
   let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
   function drawContext() {
     const box = document.getElementById("ctxBox"), cv = document.getElementById("ctx"), over = document.getElementById("ctxOver");
-    const w = box.clientWidth, h = box.clientHeight, s = scales(w, h);
-    const dpr = window.devicePixelRatio || 1;
+    const w = box.clientWidth, h = box.clientHeight, s = scales(w, h), dpr = window.devicePixelRatio || 1;
     cv.width = w * dpr; cv.height = h * dpr;
     const c = cv.getContext("2d"); c.scale(dpr, dpr);
     c.fillStyle = css('--bg-1'); c.fillRect(0, 0, w, h);
-    // the context image: one 0.5 s column per x step, one Glass row per y step
     const img = c.createImageData(N, TOP); seed = 7;
     for (let i = 0; i < N; i++) {
-      const t = i * DT, oil = oilAt(t), foam = foamAt(t) ?? oil, glare = inCannot(t);
+      const t = i * DT, oil = trueOil(t), foam = foamAt(t) ?? oil, glare = within(CANNOT, t);
       for (let r = 0; r < TOP; r++) {
         let R, G, B;
         if (r < oil) { const k = 0.75 + 0.25 * (r / TOP); R = 168 * k; G = 118 * k; B = 40 * k; }
@@ -336,7 +408,7 @@ textarea:disabled { background:var(--bg-3); color:var(--fg-disabled); }
     tmp.getContext("2d").putImageData(img, 0, 0);
     c.imageSmoothingEnabled = false;
     c.drawImage(tmp, s.x(0), s.y(TOP), s.x(T) - s.x(0), s.y(0) - s.y(TOP));
-    let g = hatchDef + sharedMarks(s, w, h, false) + lines(s, true);
+    let g = hatchDef + marks(s, w, h, false) + lines(s, true) + overlay(s);
     g += `<text x="${PAD.l - 8}" y="${s.y(TOP) + 10}" text-anchor="end" font-size="12" fill="${css('--fg-3')}">위</text>
           <text x="${PAD.l - 8}" y="${s.y(0)}" text-anchor="end" font-size="12" fill="${css('--fg-3')}">아래</text>`;
     over.setAttribute("viewBox", `0 0 ${w} ${h}`);
@@ -347,59 +419,70 @@ textarea:disabled { background:var(--bg-3); color:var(--fg-disabled); }
     const box = document.getElementById("axisBox"), svg = document.getElementById("axis");
     const w = box.clientWidth, h = box.clientHeight, s = scales(w, h);
     let g = "";
+    for (const [a, b] of EMPTY) g += `<rect x="${s.x(a)}" y="0" width="${s.x(b) - s.x(a)}" height="4" fill="${css('--empty-mark')}"/>`;
     for (let t = 0; t <= T; t += 30) {
       const x = s.x(t);
       g += `<line x1="${x}" x2="${x}" y1="0" y2="5" stroke="${css('--stroke-1')}"/>`;
-      if (t > 0 && t < T) g += `<text x="${x}" y="20" text-anchor="middle" font-size="12" fill="${css('--fg-3')}" style="font-variant-numeric:tabular-nums">${t}</text>`;
+      const edge = t === 0 || t === T;
+      g += `<text x="${x}" y="20" text-anchor="middle" font-size="12" fill="${css(edge ? '--fg-1' : '--fg-3')}" style="font-variant-numeric:tabular-nums${edge ? ';text-decoration:underline dotted' : ''}">${t}</text>`;
     }
-    g += `<text x="${s.x(0)}" y="20" text-anchor="middle" font-size="12" fill="${css('--fg-1')}" text-decoration="underline" style="text-decoration-style:dotted">0</text>`;
     g += `<text x="${PAD.l - 30}" y="20" text-anchor="middle" font-size="12" fill="${css('--fg-3')}">s</text>`;
     g += `<path d="M${s.x(PLAY) - 5},0 L${s.x(PLAY) + 5},0 L${s.x(PLAY)},6 Z" fill="${css('--playhead')}"/>`;
     svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
     svg.innerHTML = g;
-    const inp = document.getElementById("rangeEnd");
-    inp.style.left = (s.x(T) - 64 + 8) + "px";
   }
 
   function drawVideo() {
     const cv = document.getElementById("video"), w = cv.clientWidth, h = cv.clientHeight, dpr = window.devicePixelRatio || 1;
     cv.width = w * dpr; cv.height = h * dpr;
     const c = cv.getContext("2d"); c.scale(dpr, dpr);
-    // machine background
     const bg = c.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, "#2a2f34"); bg.addColorStop(1, "#1a1d20");
     c.fillStyle = bg; c.fillRect(0, 0, w, h);
-    c.fillStyle = "#3a4046"; c.beginPath(); c.arc(w / 2, h / 2, 104, 0, Math.PI * 2); c.fill();
-    const cx = w / 2, cy = h / 2, rx = 56, ry = 96;
+    c.fillStyle = "#3a4046"; c.beginPath(); c.arc(w / 2, h / 2, 96, 0, Math.PI * 2); c.fill();
+    const cx = w / 2, cy = h / 2, rx = 52, ry = 88;
     const yOf = r => cy + ry - (r / TOP) * 2 * ry;
     c.save(); c.beginPath(); c.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); c.clip();
     c.fillStyle = "#465058"; c.fillRect(cx - rx, cy - ry, 2 * rx, 2 * ry);
-    const oil = oilAt(PLAY), foam = foamAt(PLAY) ?? oil;
+    const oil = trueOil(PLAY), foam = foamAt(PLAY) ?? oil;
     c.fillStyle = "#e2dccb"; c.fillRect(cx - rx, yOf(foam), 2 * rx, yOf(oil) - yOf(foam));
     c.fillStyle = "#a8762a"; c.fillRect(cx - rx, yOf(oil), 2 * rx, cy + ry - yOf(oil));
     c.fillStyle = "rgba(255,255,255,0.18)"; c.fillRect(cx - rx + 10, cy - ry, 8, 2 * ry);
     c.restore();
-    // Glass outline + zero line: white dashed over a dark shadow line
-    for (const [col, off] of [["rgba(0,0,0,0.5)", 1], [css('--glass-outline'), 0]]) {
+    for (const [col, off] of [[css('--glass-shadow'), 1], [css('--glass-outline'), 0]]) {
       c.strokeStyle = col; c.lineWidth = 1; c.setLineDash([4, 3]);
       c.beginPath(); c.ellipse(cx + off, cy + off, rx, ry, 0, 0, Math.PI * 2); c.stroke();
       c.beginPath(); c.moveTo(cx - rx - 14 + off, yOf(ZERO) + off); c.lineTo(cx + rx + 14 + off, yOf(ZERO) + off); c.stroke();
     }
     c.setLineDash([]);
-    // edited lines over the frame, with halo
     for (const [r, col] of [[foam, css('--foam')], [oil, css('--oil')]]) {
       c.strokeStyle = css('--line-halo'); c.lineWidth = 5; c.beginPath(); c.moveTo(cx - rx - 10, yOf(r)); c.lineTo(cx + rx + 10, yOf(r)); c.stroke();
       c.strokeStyle = col; c.lineWidth = 2; c.beginPath(); c.moveTo(cx - rx - 10, yOf(r)); c.lineTo(cx + rx + 10, yOf(r)); c.stroke();
     }
     c.fillStyle = "#fff"; c.font = "12px " + css('--font');
     c.fillText("0선", cx + rx + 18, yOf(ZERO) + 4);
+    c.fillStyle = "rgba(0,0,0,0.45)"; c.fillRect(8, 8, 92, 20);
+    c.fillStyle = "#fff"; c.fillText("01:35.0 · 일시정지", 14, 22);
   }
 
+  const TEXT = {
+    grab: "<b>잡아끌기 중</b>: 01:35 근처에서 Oil 선을 잡은 상태. 옅은 띠가 끌기 폭(30 s)이고, 그 안이 부드럽게 따라옵니다. 스냅이 켜져 있어 잡은 지점이 가까운 경계(점선)에 붙습니다. 놓으면 FULL/EMPTY 띠와 빈 구간 수가 새로 계산됩니다.",
+    range: "<b>범위 선택</b>: 범위 도구로 03:56–04:22를 끌어 고른 상태. 오른쪽 \"편집\"에 선 지우기(Delete), 판단 불가(U)가 나옵니다. 구간 반복을 켜면 이 범위를 되풀이 재생합니다.",
+    point: "<b>점 잇기 중</b>: 빈 구간 02:30–02:52 위 맥락 이미지에 점 3개를 찍은 상태. 점 사이는 경계를 따라 이어지고(점선), 마지막 점에서 커서까지 미리 보기가 이어집니다. Enter로 확정하면 그 구간의 Oil 선이 됩니다.",
+  };
+  function setState(next) {
+    state = next;
+    const tool = { grab: "grab", range: "range", point: "point" }[state];
+    document.querySelectorAll("[data-tool]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tool === tool)));
+    document.querySelectorAll("[data-state]").forEach(b => b.classList.toggle("primary", b.dataset.state === state));
+    document.getElementById("selbox").hidden = state !== "range";
+    document.getElementById("pointbox").hidden = state !== "point";
+    document.getElementById("stateText").innerHTML = TEXT[state];
+    draw();
+  }
   function draw() { drawGraph(); drawContext(); drawAxis(); drawVideo(); }
-  document.querySelectorAll("[data-tool]").forEach(b => b.addEventListener("click", () => {
-    document.querySelectorAll("[data-tool]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
-  }));
+  document.querySelectorAll("[data-state]").forEach(b => b.addEventListener("click", () => setState(b.dataset.state)));
   window.addEventListener("resize", draw);
-  draw();
+  setState(TEXT[state] ? state : "grab");
 })();
 </script>
 </body>
