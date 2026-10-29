@@ -39,13 +39,13 @@ RUNS = {"software": False, "hardware": True}
 SOURCE_SUFFIXES = {".py", ".js", ".css", ".html"}
 
 
-def source_digest(root: Path = ROOT, script: str = "time_analysis.py") -> tuple[str, int]:
+def source_digest(root: Path = ROOT, scripts: tuple[str, ...] = ("time_analysis.py",)) -> tuple[str, int]:
     """One short digest over the code that runs, to compare with the request."""
     files = sorted(
         path for path in (root / "src").rglob("*")
         if path.suffix in SOURCE_SUFFIXES and "__pycache__" not in path.parts
     )
-    files += [root / "pyproject.toml", root / "scripts" / script]
+    files += [root / "pyproject.toml", *(root / "scripts" / script for script in scripts)]
     digest = hashlib.sha256()
     for path in files:
         digest.update(f"{path.relative_to(root).as_posix()}\0{hashlib.sha256(path.read_bytes()).hexdigest()}\n".encode())

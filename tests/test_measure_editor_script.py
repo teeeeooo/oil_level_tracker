@@ -48,7 +48,8 @@ def test_the_result_file_has_every_measure(tmp_path, capsys):
     if "Executable doesn't exist" in text or "is not found" in text:
         pytest.skip("Chrome is not available")
     assert code == 0, text
-    assert "[4/4] 편집기 측정: chrome" in capsys.readouterr().out
+    printed = capsys.readouterr().out
+    assert "[4/5] 편집기 측정: chrome" in printed and "[5/5] 중앙값 비교 (A4)" in printed
     assert "샘플 12개" in text and "코덱 `MJPG`" in text
     assert "- 키프레임: 60개, 간격 최소 1 / 중앙값 1 / 최대 1 프레임" in text  # MJPG: every frame is a key frame
     rows = [line for line in text.splitlines() if line.startswith("| ")]
@@ -56,5 +57,7 @@ def test_the_result_file_has_every_measure(tmp_path, capsys):
     assert any(row.startswith("| **전체** |") for row in rows)
     assert any(row.startswith("| 정확한 프레임 (서버) | 3 |") for row in rows)
     assert any(row.startswith("| frames (대체) |") for row in rows)  # an AVI does not play in a <video>
+    assert any(row.startswith("| `int16` 정렬 (지금) | 기준 |") for row in rows)
+    assert "**다름**" not in text
     assert text.rstrip().endswith("오류: 없음")
     assert (out.parent / next(p.name for p in out.parent.iterdir() if p.name.startswith("a5a6-data-"))).is_dir()

@@ -11,6 +11,7 @@ Stages:
      intervals during the drags are recorded beside it.
    - A6: exact frames at random times (paused), then 1x playback. For reference, the <video>'s own
      seeks too.
+5. for A4, ways to take the context's row medians (scripts/compare_medians.py).
 It writes the result file (Markdown) and a data folder for the inspection, and prints the text.
 
 Usage: python scripts/measure_editor.py --video VIDEO --recipe RECIPE.recipe.json
@@ -41,6 +42,7 @@ import cv2  # noqa: E402
 from oil_tracker import bootstrap  # noqa: E402
 from oil_tracker.adapters.storage.recipe_files import recipe_from_json  # noqa: E402
 from oil_tracker.domain.inspection import needs_compressor_start  # noqa: E402
+from compare_medians import compare as compare_medians, markdown as medians_markdown  # noqa: E402
 from time_analysis import package_version, pc_inventory, source_digest, video_facts  # noqa: E402
 
 NAME = "A5A6 측정"
@@ -347,6 +349,8 @@ def markdown(facts: dict, found: dict, errors: list[tuple[str, str]]) -> str:
         lines += ["", "## A6: 1배 재생", "", "| 재생 방식 | 벽시계 (s) | 진행 (s) | waiting·stalled | 버린 프레임 / 전체 |",
                   "|---|---|---|---|---|",
                   f"| {p['element']} | {p['wall']:.1f} | **{p['advanced']:.1f}** | **{p['waiting']}** | {p['dropped']} / {p['total']} |"]
+    if "medians" in found:
+        lines += ["", *medians_markdown(found["medians"])]
     lines += ["", f"오류: {'없음' if not errors else len(errors)}"]
     for name, text in errors:
         lines += ["", f"## 오류: {name}", "", "```", text.rstrip(), "```"]
@@ -369,7 +373,7 @@ def main(argv: list[str] | None = None) -> int:
     out = args.out or Path(f"a5a6-editor-{stamp}.md")
     data = out.parent / f"a5a6-data-{stamp}"
 
-    print("[1/4] PC와 소프트웨어 확인", flush=True)
+    print("[1/5] PC와 소프트웨어 확인", flush=True)
     recipe = recipe_from_json(args.recipe.read_text(encoding="utf-8"))
     facts = {
         "when": f"{datetime.now():%Y-%m-%d %H:%M}",
@@ -388,8 +392,8 @@ def main(argv: list[str] | None = None) -> int:
     pc = facts["pc"]
     print(f"  CPU: {pc['cpu']}, cores={pc['cores']}, logical={pc['logical']}, RAM {pc['ram_gb']} GB", flush=True)
 
-    print("[2/4] 소스 확인", flush=True)
-    facts["source"] = source_digest(script="measure_editor.py")
+    print("[2/5] 소스 확인", flush=True)
+    facts["source"] = source_digest(scripts=("measure_editor.py", "time_analysis.py", "compare_medians.py"))
     print(f"  source={facts['source'][0]} files={facts['source'][1]}", flush=True)
 
     found: dict = {}
@@ -398,7 +402,7 @@ def main(argv: list[str] | None = None) -> int:
     shutil.copyfile(args.recipe, data / "Recipes" / args.recipe.name)
     server = Server(data)
     try:
-        print("[3/4] 분석 (앱 서버로, 진행 상황은 30초마다 표시)", flush=True)
+        print("[3/5] 분석 (앱 서버로, 진행 상황은 30초마다 표시)", flush=True)
         try:
             _, facts["analysis_sec"] = analyse(server, args.video, recipe)
             print(f"  끝: {facts['analysis_sec']:.1f}초", flush=True)
@@ -406,7 +410,7 @@ def main(argv: list[str] | None = None) -> int:
             errors.append(("분석", traceback.format_exc()))
             print(errors[-1][1], flush=True)
         if not errors:
-            print(f"[4/4] 편집기 측정: {args.browser}", flush=True)
+            print(f"[4/5] 편집기 측정: {args.browser}", flush=True)
             try:
                 from playwright.sync_api import sync_playwright
 
@@ -422,6 +426,12 @@ def main(argv: list[str] | None = None) -> int:
                 print(errors[-1][1], flush=True)
     finally:
         server.close()
+    print("[5/5] 중앙값 비교 (A4)", flush=True)
+    try:
+        found["medians"] = compare_medians(args.video, [g.ellipse for g in recipe.glasses])
+    except Exception:
+        errors.append(("중앙값 비교", traceback.format_exc()))
+        print(errors[-1][1], flush=True)
 
     text = markdown(facts, found, errors)
     out.write_text(text, encoding="utf-8")
