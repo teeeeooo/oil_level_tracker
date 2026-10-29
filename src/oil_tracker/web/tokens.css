@@ -53,6 +53,10 @@
   /* 2.6 Validation */
   --error: #BC2F32;
   --error-border: #D13438;
+  /* 2.7 Message bar */
+  --warning: #BC4B09;
+  --warning-bg: #FFF9F5;
+  --warning-border: #FDCFB4;
   /* 3 Typography */
   --font: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
   --mono: "Cascadia Mono", Consolas, monospace;

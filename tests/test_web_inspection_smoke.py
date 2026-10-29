@@ -6,6 +6,7 @@ screenshots.
 
 import json
 import os
+import shutil
 import time
 from pathlib import Path
 
@@ -232,10 +233,12 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
     data = tmp_path / "data"
     write_recipes(data / "Recipes")
     closing = []  # what the window would be told: ask before closing or not
+    source = tmp_path / "source.avi"
+    shutil.copyfile(video, source)
     running = bootstrap.start(data_folder=data, ask_before_closing=closing.append)
     try:
         call = analysed_inspection(running)
-        opened = call("POST", "/api/videos", {"path": str(video)})
+        opened = call("POST", "/api/videos", {"path": str(source)})
         e = GLASS.ellipse
         setup = {
             "inspection_id": None, "video_id": opened["id"], "recipe_id": "r-fit", "name": "편집",
@@ -309,6 +312,17 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         page.get_by_role("button", name="검사 목록").click()
         page.locator("#inspectionsView").wait_for()
         wait_until(lambda: closing == [True, False, True, False])
+        assert page.locator("#sourceWarning").is_hidden()
+
+        # reopening warns when the source video changed (A9); "다시 확인" clears it once it is back
+        original = source.read_bytes()
+        source.write_bytes(original + b"\0")
+        row.get_by_role("button", name="열기", exact=True).click()
+        page.locator("#sourceWarning").get_by_text("원본 영상이 분석할 때와 다릅니다").wait_for()
+        shot(page, "e3-source-warning")
+        source.write_bytes(original)
+        page.locator("#sourceWarning").get_by_role("button", name="다시 확인").click()
+        page.locator("#sourceWarning").wait_for(state="hidden")
         assert errors == []
     finally:
         running.close()

@@ -108,6 +108,17 @@ Used around and on top of video frames (Recipe screen, editor video).
 
 These mark input errors. They never stand in for FAIL (§2.4).
 
+### 2.7 Message bar (Fluent warning)
+
+| Token | Value | Role |
+|---|---|---|
+| `--warning` | `#BC4B09` | the warning icon in a message bar |
+| `--warning-bg` | `#FFF9F5` | a message bar's background |
+| `--warning-border` | `#FDCFB4` | a message bar's 1 px bottom edge |
+
+A message bar warns about the data a screen works on, such as a source
+video that changed (A9). It never stands in for a judgment status (§2.4).
+
 ## 3. Typography Rules
 
 - **Families:**
@@ -254,6 +265,12 @@ Do not use sizes outside this ramp.
       이동 (H); then undo and redo;
     - the Glass picker in the middle;
     - 저장, 제출 and help on the right.
+  - **Source warning (A9):** when opening the editor finds the source video
+    changed, missing or unreadable, a message bar spans the window under
+    the toolbar: `--warning-bg` with a 1 px `--warning-border` bottom edge,
+    a `--warning` icon, the message and "다시 확인" (subtle, small). It
+    stays until a check finds the video the same. The check runs in the
+    background each time the editor opens; nothing shows while it runs.
   - **Main area:**
     - **Left column, flexible width:**
       - the graph (about 45 % of the height);

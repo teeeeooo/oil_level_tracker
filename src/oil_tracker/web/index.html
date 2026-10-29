@@ -114,6 +114,11 @@
     <button class="btn primary" disabled title="판정과 제출은 V2-4에서">제출</button>
     <button class="btn icon-btn help-open" title="도움말 (F1)" aria-label="도움말"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M7.8 7.9a2.2 2.2 0 1 1 3 2.05c-.5.2-.8.6-.8 1.15v.4"/><path d="M10 13.6v.4"/></svg></button>
   </header>
+  <div class="message-bar" id="sourceWarning" role="alert" hidden>
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 3l8 14H2z"/><path d="M10 8v4.5M10 14.5v.5"/></svg>
+    <span id="sourceWarningText"></span>
+    <button class="btn subtle small" id="sourceRecheck">다시 확인</button>
+  </div>
   <div class="main">
     <section class="left editor-left">
       <div class="phead">그래프
@@ -356,8 +361,9 @@
         <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>끌기 폭을 줄이고 늘립니다.</td></tr>
         <tr><td><kbd>S</kbd></td><td>스냅 켜기·끄기. 켜면 끄는 선이 8 px 안의 경계에 붙습니다.</td></tr>
         <tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> · <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td><td>실행 취소 · 다시 실행</td></tr>
-        <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>저장. 저장하지 않고 검사 목록으로 나가면 먼저 묻습니다.</td></tr>
+        <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>저장. 저장하지 않고 검사 목록으로 나가거나 창을 닫으면 먼저 묻습니다.</td></tr>
       </table>
+      <p>편집기를 열 때마다 원본 영상이 분석할 때와 같은지 확인합니다. 다르거나 찾을 수 없으면 툴바 아래에 경고가 나옵니다. 영상을 되돌려 놓았다면 "다시 확인"을 누릅니다.</p>
       <h3>보기</h3>
       <table class="keys">
         <tr><td>휠 · <kbd>Shift</kbd>+휠</td><td>시간 방향 확대 · 높이 방향 확대</td></tr>

@@ -198,7 +198,11 @@ dialog.wide .dlg-body, dialog.narrow .dlg-body { display: flex; flex-direction: 
 kbd { display: inline-block; min-width: 20px; height: 20px; padding: 0 6px; border: 1px solid var(--stroke-1); border-radius: 4px; background: var(--bg-3); color: var(--fg-1); font: 600 12px/18px var(--font); text-align: center; }
 
 /* the editor toolbar holds the tools as well: tighter, as in the mock-up */
+#editorView { grid-template-rows: 48px auto 1fr; }
+#editorView > .main { grid-row: 3; }
 #editorView .toolbar { gap: 4px; }
+.message-bar { grid-row: 2; display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 6px 12px; background: var(--warning-bg); border-bottom: 1px solid var(--warning-border); }
+.message-bar > svg { width: 20px; height: 20px; flex: none; color: var(--warning); }
 #editorView .title { max-width: 240px; }
 #editorView .title span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #editorView .picker select { min-width: 150px; }

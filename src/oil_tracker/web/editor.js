@@ -14,6 +14,7 @@ const EDGE_PX = 5;         // how near a selection edge a press moves it
 const DRAG_PX = 3;         // the movement that makes a press a drag
 const MIN_SPAN_SEC = 2;    // the narrowest time view
 const MIN_SPAN_PX = 8;     // the lowest height view, in source px
+const SOURCE_POLL_MS = 300;
 
 const state = {
   detail: null,            // the inspection
@@ -65,6 +66,7 @@ export async function open(inspectionId) {
   }
   state.glassId = state.analysis.glasses[0]?.glass_id ?? null;
   state.playhead = state.analysis.times[0] ?? 0;
+  checkSource().catch(() => {});
   renderHeader();
   renderTools();
   try {
@@ -86,12 +88,33 @@ function release() {
   setDirty(false);
   for (const id of ["graph", "context"]) for (const layer of $(id).children) layer.replaceChildren();
   $("axis").replaceChildren();
+  $("sourceWarning").hidden = true;
 }
 
 function leave() {
   if (state.dirty && !confirm("저장하지 않은 편집이 있습니다. 저장하지 않고 나갈까요?")) return;
   release();
   backToList();
+}
+
+/** Compare the source video with the analysed one (A9) and warn while it differs, is missing or
+ * cannot be read. Hashing a long video takes seconds; the check runs on the server meanwhile. */
+async function checkSource() {
+  const id = state.detail.id;
+  const path = `/api/inspections/${encodeURIComponent(id)}/source-check`;
+  $("sourceRecheck").disabled = true;
+  if (!$("sourceWarning").hidden) $("sourceWarningText").textContent = "원본 영상을 확인하는 중입니다…";
+  let result = await api.call("POST", path);
+  while (result.ok && result.data.state === "CHECKING") {
+    await new Promise((resolve) => setTimeout(resolve, SOURCE_POLL_MS));
+    if (state.detail?.id !== id) return;
+    result = await api.call("GET", path);
+  }
+  if (state.detail?.id !== id) return;
+  const check = result.ok ? result.data : { state: "UNREADABLE", message: result.data.error ?? `HTTP ${result.status}` };
+  $("sourceRecheck").disabled = false;
+  $("sourceWarningText").textContent = check.message ?? "";
+  $("sourceWarning").hidden = check.state === "SAME";
 }
 
 async function showGlass(fit) {
@@ -693,6 +716,7 @@ export function init(toList) {
   nav.register("editorView", { title: "편집", onKey });
   player.wire();
   $("editorBack").addEventListener("click", leave);
+  $("sourceRecheck").addEventListener("click", () => checkSource().catch(() => {}));
   $("editorSave").addEventListener("click", save);
   $("editorUndo").addEventListener("click", () => undo(false));
   $("editorRedo").addEventListener("click", () => undo(true));
