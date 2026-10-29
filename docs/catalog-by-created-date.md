@@ -57,3 +57,4 @@
 | 2026-10-29 | [2026-10-29-v2-1-recipe-windows-result.md](60-evidence/2026-10-29-v2-1-recipe-windows-result.md) | V2-1 Recipe 화면 Windows 결과 판정 |
 | 2026-10-29 | [2026-10-29-v2-2-analysis-timing-windows-result.md](60-evidence/2026-10-29-v2-2-analysis-timing-windows-result.md) | V2-2 분석 시간(A4) Windows 결과 판정 |
 | 2026-10-29 | [2026-10-29-v2-2-draft-comparison-windows-result.md](60-evidence/2026-10-29-v2-2-draft-comparison-windows-result.md) | V2-2 Oil 초안 방식 비교 Windows 결과 |
+| 2026-10-29 | [2026-10-29-v2-2-slowest-pc-timing-windows-result.md](60-evidence/2026-10-29-v2-2-slowest-pc-timing-windows-result.md) | V2-2 최저 사양 PC 분석 시간(A4) 결과 판정 |

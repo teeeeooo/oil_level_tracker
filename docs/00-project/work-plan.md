@@ -101,9 +101,9 @@ Product SSOT §3, §4 and §6:
    - Measured on one 12-core workstation; step 9 times the app itself.
    - **The slowest target PC** (Product SSOT §2: Xeon E5-1620 v3, 4
      cores) has about half the speed per core and a third of the cores.
-     Scaling each part of T1 by that, the current single loop would take
-     about 190–210 s there: over the limit. Step 6 therefore speeds up
-     the pass (below).
+     Scaled from T1, the single loop would have taken about 190–210 s
+     there, so step 6 made the pass faster; that PC then took 169.7 s
+     (step 6).
 3. **Mock-ups** of the inspection list and the setup screen, for the
    user's confirmation:
    [design/mockup/inspection.html](../../design/mockup/inspection.html)
@@ -126,13 +126,17 @@ Product SSOT §3, §4 and §6:
      compute the row medians while the decoder reads on. NumPy's sort and
      OpenCV release the GIL. The images equal the inline pass on the tests
      and three local videos.
-   - **Windows, waiting:** the timing on a PC of the slowest class,
-     [2026-10-29-v2-2-slowest-pc-timing-windows-request.md](../40-operations/2026-10-29-v2-2-slowest-pc-timing-windows-request.md)
-     (source `2d43f4c`). The PC has no coding agent, so the user runs
-     `scripts/time_analysis.py` in a terminal; it measures stage by stage
-     and writes a Markdown result. Its table, fixed before the run,
-     decides whether the screens (step 8) wait for more speed and whether
-     hardware decoding is worth offering on that class.
+   - **Slowest-PC timing — done:**
+     [Windows result](../60-evidence/2026-10-29-v2-2-slowest-pc-timing-windows-result.md)
+     (source `2d43f4c`; the user ran `scripts/time_analysis.py` in a
+     terminal there).
+     - **169.7 s** on the Xeon E5-1620 v3, 46.4 s on the workstation (was
+       87.4 s), with an identical picture on both.
+     - In the 150–180 s band: the screens go on, and the analysis must use
+       less CPU before V2-5. Decoding limits the pass with every core
+       busy, so more threads do not help; the result lists three
+       candidates.
+     - Hardware decoding is slower on both PCs and is out.
 7. **`application` and `adapters/http`:** creating an inspection, the
    analysis job (progress, time left, cancel) and the result data.
 8. **`web`:** the inspection list, the new-inspection flow, the setup
@@ -141,6 +145,9 @@ Product SSOT §3, §4 and §6:
 9. **Checks:** unit and API tests, a macOS smoke check, and a Windows run.
    The Windows run also covers:
    - **A4 timing on SPL#1** with the whole analysis;
+   - if the analysis got less CPU work by then (the slowest-PC result's
+     candidates 1 and 2), the user times the slowest PC again with
+     `scripts/time_analysis.py`;
    - the V2-1 follow-up: the speed field, the help dialog and F1 in
      WebView2.
    - The expected Windows test line is the macOS run without Playwright
@@ -164,14 +171,9 @@ The working tree is clean, and `main` and the remote are in sync.
 [A4 timing request](../40-operations/2026-10-29-v2-2-analysis-timing-windows-request.md).
 
 **Since then:** the A4 result came in after the compaction and is judged
-(step 2). The user named the slowest target PC (Product SSOT §2), step 6
-is done, and its timing on that class waits on the user (step 6).
-
-**Waiting result:** judge it only against the request's fixed table.
-If the software run is over 180 s there, the next options are two
-decoders over the two halves of the range, or hardware decoding on that
-class. The `wait` column says whether decoding or the medians limit the
-pass.
+(step 2). The user named the slowest target PC (Product SSOT §2); step 6
+is done, and its timing on that class is judged (step 6). Nothing waits
+on Windows.
 
 **Step 7, as planned:**
 - **Use cases:** list inspections; pick a video and list the Recipes that
@@ -205,6 +207,11 @@ pass.
   by typing. At that height its chord is a point under the edge handle.
 - There is no Recipe deletion in the first version (user, 2026-10-29).
 - The PyInstaller build (V2-5) must ship `src/oil_tracker/web/` as data.
+- **A4 has about 10 s to spare on the slowest PC** (169.7 s). Less CPU
+  work is due before V2-5; see the step 6 result.
+- **A5 and A6 are not yet measured on the slowest PC.** They must hold
+  there too (Product SSOT §2). The spike's redraw median was 13.4 ms on
+  the workstation against 16 ms, so V2-3 measures the editor on that PC.
 
 ## Local environment (macOS)
 
@@ -226,6 +233,6 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done today:** V2-1 closed; V2-2 steps 1 to 6.
-- **Next action:** step 7 while the slowest-PC timing waits; judge that
-  result when the user relays it.
+- **Done today:** V2-1 closed; V2-2 steps 1 to 6, with the slowest-PC
+  timing judged.
+- **Next action:** step 7 as planned above.
