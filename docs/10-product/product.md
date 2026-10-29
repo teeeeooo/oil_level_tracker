@@ -3,9 +3,11 @@
 **Status:** `ACTIVE`.
 
 This is the single source of truth for what v2 is for, how it is accepted,
-and what it does. The user made these decisions on 2026-10-28, in the
-direction interview, the post-spike interview and the acceptance-criteria
-decision.
+and what it does. The user made these decisions:
+- on 2026-10-28, in the direction interview, the post-spike interview and
+  the acceptance-criteria decision;
+- on 2026-10-29, at the V2-1 start: the Recipe, the judgment rule (§5) and
+  the data folder (§8).
 
 - **Interview record:** `docs/60-evidence/s11/2026-10-28-v2-direction-interview-handoff.md`
   at tag `v1-final`.
@@ -53,9 +55,22 @@ Draft quality is **not** an acceptance criterion.
 1. **Recipe.** It is made once per equipment and camera setup, and reused
    for every inspection.
    - It holds the Glass name, the ellipse, the zero line and the judgment
-     rule.
-   - If the camera shifted, the Glass position is corrected in that
-     inspection only.
+     rule (§5).
+   - The ellipse is axis-aligned. The zero line is horizontal.
+   - **Reference frame:** the user scrubs a sample video and draws on the
+     frame they pick. The Recipe keeps:
+     - that frame, as a downscaled JPEG;
+     - the frame size;
+     - the source video name and time, for reference.
+   - **Picking:** an inspection starts by picking a Recipe from the Recipe
+     folder (§8). The list shows the name, the Glass names, the frame size
+     and the modified date.
+   - **Resolution:** a video whose resolution differs from the Recipe's is
+     refused, with the reason shown.
+   - **Copy:** when analysis starts, a copy of the Recipe is saved in the
+     inspection folder. Later Recipe edits do not change past inspections.
+   - If the camera shifted, the Glass position is corrected in that copy
+     only.
    - There are no detector settings.
 2. **Analysis setup.** While watching the video, the user sets:
    - the analysis range;
@@ -70,8 +85,9 @@ Draft quality is **not** an acceptance criterion.
    - The result is cached in the inspection folder.
    - For reference, 2.8 min for a 68-min video is acceptable.
 4. **Editing.** Every inspection does it; see below.
-5. **Judgment.** It is computed automatically from the edited lines. The
-   user may override it per Glass, with a required reason that is saved.
+5. **Judgment.** It is computed automatically from the edited Oil line
+   (§5). The user may override it per Glass, with a required reason that is
+   saved.
 6. **Submit.**
    - Every Glass must be checked first.
    - Submitting locks that version.
@@ -83,7 +99,7 @@ The detector is not part of the v2 flow.
 ## 4. Lines and states
 
 - **Line kinds:** Oil, Foam and reference.
-  - Oil and Foam feed the judgment; reference lines are only shown.
+  - Only Oil feeds the judgment. Foam and reference lines are only shown.
   - A line may have several pieces.
 - **The draft is the Oil line only,** found by a simple method:
   - the strongest vertical edge per column;
@@ -99,7 +115,46 @@ The detector is not part of the v2 flow.
 - **Sampling and events:** lines are sampled at the analysis rate with no
   extra smoothing. Events are recomputed from the edited samples.
 
-## 5. Editor
+## 5. Judgment rule
+
+Each Glass in a Recipe has one rule.
+- It is computed from the Oil line only.
+- Heights are source-frame pixels from the zero line, positive upward.
+
+| Field | Default | Used by |
+|---|---|---|
+| `mode` | `RECOVERY` | all |
+| `recovery_limit_sec` | 120 | `RECOVERY` |
+| `stable_hold_sec` | 5 | `RECOVERY` |
+| `minimum_valid_coverage_ratio` | 0.70 | all |
+| `allowed_sec` | 5 | both HOLD modes |
+| `allowed_px` | 0 | both HOLD modes |
+
+- **Modes:**
+  - `RECOVERY` (기준점 회복): after the compressor start, the Oil line
+    reaches the zero line or above and stays there for `stable_hold_sec`.
+    That stretch must begin within `recovery_limit_sec` of the compressor
+    start.
+  - `HOLD_BELOW_ZERO` (기준점 아래 유지): a violation is the Oil line more
+    than `allowed_px` above zero.
+  - `HOLD_ABOVE_ZERO` (기준점 위 유지): a violation is the Oil line more
+    than `allowed_px` below zero.
+- **Allowed time:** in a HOLD mode, the Glass fails only when its
+  **longest continuous** violation lasts longer than `allowed_sec`.
+  - v1 measured from the first to the last violating sample instead. v2
+    does not keep that.
+- **Coverage:** "cannot judge" samples are invalid. A valid share below
+  `minimum_valid_coverage_ratio` gives "needs review".
+- **Foam never affects the judgment.** It may rise above the zero line.
+- **Recipe screen:** it shows only the fields the selected mode uses, and
+  all of them are editable.
+- **Dropped from v1:**
+  - `unknown_policy` (v1 never used it);
+  - `initial_state`;
+  - `mm_per_pixel`;
+  - the detector settings, margin, exclusions and artifacts.
+
+## 6. Editor
 
 - **Layout:** the graph above the context image. The two share one time axis
   and one playhead, and the edited lines are drawn over both.
@@ -131,7 +186,7 @@ The detector is not part of the v2 flow.
   the judgment. Changing the analysis range means re-analysis.
 - **Memos:** attached to a graph position.
 
-## 6. Report
+## 7. Report
 
 - **Header:**
   - entered by the user: compressor model and test type;
@@ -148,16 +203,28 @@ The detector is not part of the v2 flow.
   uses the editor's drawing module and the [DESIGN.md](../../DESIGN.md) colour
   roles.
 
-## 7. Storage
+## 8. Storage
 
+- **Data folder:** `Documents\OilLevelTracker\` on each PC.
+  - It is found with the Windows known-folder API, so a redirected
+    Documents folder (for example, to OneDrive) is followed.
+  - `Recipes\` holds the Recipes, one `<name>.recipe.json` file each.
+  - `Inspections\` holds the inspection folders, named
+    `YYYYMMDD-HHMM_<video name>`.
+- **Settings and logs** go to `%LOCALAPPDATA%\OilLevelTracker\`.
+- **Nothing is written inside the package folder.**
+- **Sharing:** the app is installed on several PCs, and each inspector uses
+  their own. Nothing is shared between PCs; a Recipe moves to another PC
+  by copying its file.
 - **One folder per inspection.** It holds:
+  - the Recipe copy (§3);
   - the edit data, versioned;
   - the context-image cache;
   - the report HTML, versioned.
 - **Resuming:** opening the folder or a report resumes editing.
 - **The source video** is referenced by path and SHA-256, not copied.
 
-## 8. Platform and acceptance
+## 9. Platform and acceptance
 
 - **Platform:**
   - a web UI, decided by the spike (`spike/webui`, Windows GO on
@@ -166,7 +233,7 @@ The detector is not part of the v2 flow.
   - a PyInstaller one-folder build for Windows.
 - **Acceptance:** see §2.
 
-## 9. Non-goals of the first version
+## 10. Non-goals of the first version
 
 - detector work;
 - edit history in the report;

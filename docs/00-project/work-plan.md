@@ -1,6 +1,6 @@
 # Current Work Plan
 
-**Current milestone:** `V2-1 — Recipe` / `PLANNED`. It has not started.
+**Current milestone:** `V2-1 — Recipe` / `ACTIVE` (started 2026-10-29).
 **Last completed:** `V2-0 — Start and foundations` / `DONE` (2026-10-28).
 
 This is the sole owner of the current state, authorization and next action.
@@ -34,41 +34,44 @@ Rewrite it; do not append to it.
   - v1 local evidence is at `~/Developer/oil_level_tracker-v1-evidence/`.
   - Branch `spike/webui` is kept for porting.
 
-## Session handoff — 2026-10-28
+## V2-1 — Recipe
 
-**The session closed at `ea570e0`.** The working tree is clean, and `main`
-and the remote are in sync.
+**The start decisions are settled** (2026-10-29) and recorded in the Product
+SSOT:
+- the Recipe contents and reference frame, §3;
+- the judgment rule, §5;
+- the data folder and the Recipe copy, §8.
 
-**What this session settled:**
-1. The web UI spike was GO on Windows.
-2. The v2 product decisions were interviewed and recorded.
-3. V2 started:
-   - S11 frozen as unmet;
-   - `v1-final` and `archive/v1` created;
-   - the merged remote branches deleted;
-   - the v1 local evidence moved out of the repository;
-   - `main` reset to the v2 skeleton.
-4. `DESIGN.md` and the confirmed editor mock-up.
-5. The Product SSOT with A1–A9, the architecture, and the documentation
-   structure.
+**Steps:**
+1. **`domain`.**
+   - `JudgmentMode`, `JudgmentRule`, Glass geometry, the reference frame and
+     `Recipe`, with validation.
+   - Adapted ports from `v1-final:src/oil_tracker/domain/` (`enums.py`,
+     `recipe.py`, `geometry.py`).
+   - The judgment computation itself (`judge_samples`) waits for V2-4.
+2. **`adapters/storage`:** the data folder and the Recipe files.
+   - `.recipe.json` with a schema version;
+   - atomic writes;
+   - the Recipe list.
+3. **Recipe screen layout.** Add it to [DESIGN.md](../../DESIGN.md) §5 with
+   a static mock-up. **The user confirms it** before step 6.
+4. **`adapters/video`:** video metadata, a frame at a given time, and a
+   downscaled JPEG.
+5. **The app shell:**
+   - the `application` use cases;
+   - `adapters/http`, with the `server.py` bind fix from `spike/webui`;
+   - `bootstrap.py` and `app.py`.
+6. **`web`:** the Recipe screen.
+7. **Checks:**
+   - unit and API tests;
+   - a Playwright smoke check on macOS;
+   - the user makes a Recipe from a local sample video.
 
-**Resume:** read this file, then
-[product.md](../10-product/product.md),
-[architecture.md](../20-architecture/architecture.md) and
-[DESIGN.md](../../DESIGN.md). Do not start V2-1 until the user says so.
+**Closing V2-1 (to confirm with the user):** a macOS run is enough for V2-1.
+Windows confirmation is part of V2-5.
 
-**Questions to settle with the user at the V2-1 start:**
-- Which v1 `JudgmentRule` fields v2 keeps. v1 had:
-  - `recovery_limit_sec`, `stable_hold_sec`;
-  - `minimum_valid_coverage_ratio`;
-  - `allowed_excursion_*`, `allowed_violation_*`;
-  - `unknown_policy`.
-- **The Recipe file:** its format, where it lives, and how it is picked when
-  an inspection starts.
-- **The reference frame:** which video frame the Glass ellipse and zero line
-  are drawn on in the Recipe screen.
+## Left to the user, with no deadline
 
-**Left to the user, with no deadline:**
 - deleting `~/Developer/oil_level_tracker-v1-evidence/`;
 - deleting branch `spike/webui` once the porting is done.
 
@@ -76,8 +79,4 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Next action:** V2-1, the Recipe screen and Recipe file. It starts when
-  the user says so.
-- **Expected first ports:** `JudgmentRule` and `JudgmentMode` from
-  `v1-final:src/oil_tracker/domain/`. The `server.py` bind fix from
-  `spike/webui`, into `adapters/http/`.
+- **Next action:** V2-1 step 1, `domain`.
