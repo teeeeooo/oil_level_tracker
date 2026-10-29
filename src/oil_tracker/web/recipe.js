@@ -22,6 +22,9 @@ const MIN_RADIUS = 8;    // source px, as domain/geometry.py
 const MAX_ZOOM = 16;
 const CHECK_DELAY_MS = 250;
 const NOTICE_MS = 8000;
+const SPEED_MIN = 0.1;
+const SPEED_MAX = 16;
+const SPEED_PRESETS = [0.5, 1, 2, 3, 4];
 
 let defaultRule = null;
 const state = {
@@ -38,6 +41,7 @@ const state = {
   problems: [],          // from the last check
   badInputs: new Map(),  // input key -> text that is not a number
   playing: false,
+  speed: 1,
   drag: null,
 };
 
@@ -49,6 +53,14 @@ function clock(seconds) {
   const minutes = Math.floor(tenths / 600);
   const rest = (tenths % 600) / 10;
   return `${String(minutes).padStart(2, "0")}:${rest.toFixed(1).padStart(4, "0")}`;
+}
+
+/** "2", "2x", "×2" and "*2" all read as 2, clamped to the allowed range; null when it is not a number. */
+function parseSpeed(text) {
+  const bare = text.trim().replace(/^[x×*]\s*/i, "").replace(/\s*[x×]$/i, "");
+  const number = Number(bare);
+  if (bare === "" || !Number.isFinite(number)) return null;
+  return Math.round(Math.min(SPEED_MAX, Math.max(SPEED_MIN, number)) * 100) / 100;
 }
 
 function localDate(iso) {
@@ -329,6 +341,10 @@ async function loadFrame() {
 
 let playStart = 0;
 let playFrom = 0;
+function playTime() {
+  return playFrom + (performance.now() - playStart) / 1000 * state.speed;
+}
+
 function togglePlayback() {
   if (state.playing) stopPlayback();
   else startPlayback();
@@ -346,7 +362,7 @@ function startPlayback() {
 
 function playTick() {
   if (!state.playing || !state.video) return;
-  const index = Math.floor((playFrom + (performance.now() - playStart) / 1000) * state.video.fps);
+  const index = Math.floor(playTime() * state.video.fps);
   if (index >= state.video.frame_count - 1) {
     seekIndex(state.video.frame_count - 1);
     stopPlayback();
@@ -359,6 +375,31 @@ function playTick() {
 function stopPlayback() {
   state.playing = false;
   $("playIcon").setAttribute("d", "M6 4l10 6-10 6z");
+}
+
+function setSpeed(speed) {
+  if (state.playing) {  // carry on from where playback is now
+    playFrom = playTime();
+    playStart = performance.now();
+  }
+  state.speed = speed;
+  $("speed").value = String(speed);
+}
+
+function commitSpeed() {
+  const speed = parseSpeed($("speed").value);
+  if (speed === null) $("speed").value = String(state.speed);  // not a number: keep the current speed
+  else setSpeed(speed);
+}
+
+function toggleSpeedMenu(open) {
+  const menu = $("speedMenu");
+  menu.hidden = !open;
+  if (!open) return;
+  menu.replaceChildren(...SPEED_PRESETS.map((speed) => el("button", {
+    class: speed === state.speed ? "on" : "", role: "option", "aria-selected": String(speed === state.speed),
+    onclick: () => { setSpeed(speed); toggleSpeedMenu(false); $("frame").focus(); },
+  }, `${speed}×`)));
 }
 
 function scrubTo(clientX) {
@@ -538,9 +579,19 @@ function onWheel(event) {
 }
 
 function onKey(event) {
-  if (!state.recipe || $("editView").hidden) return;
+  if ($("help").open) return;  // the dialog closes itself on Esc
   const tag = document.activeElement?.tagName;
-  if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+  const typing = tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA";
+  if (event.key === "F1" || (event.key === "?" && !typing)) {
+    event.preventDefault();
+    openHelp();
+    return;
+  }
+  if (event.key === "Escape" && !$("speedMenu").hidden) {
+    toggleSpeedMenu(false);
+    return;
+  }
+  if (!state.recipe || $("editView").hidden || typing) return;
   if (tag === "BUTTON" && (event.key === " " || event.key === "Enter")) return;
   const step = event.shiftKey ? 10 : 1;
   const arrows = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
@@ -626,8 +677,10 @@ function renderFrameInfo() {
   $("frameHint").textContent = state.video ? "저장하면 지금 보이는 프레임이 기준이 됩니다"
     : "영상을 열면 프레임을 넘겨 볼 수 있습니다";
   const off = !state.video;
-  for (const id of ["prevFrame", "play", "nextFrame"]) $(id).disabled = off;
+  for (const id of ["prevFrame", "play", "nextFrame", "speed", "speedMenuBtn"]) $(id).disabled = off;
   $("scrub").classList.toggle("off", off);
+  $("speedBox").classList.toggle("off", off);
+  if (off) toggleSpeedMenu(false);
 }
 
 function renderTransport() {
@@ -894,6 +947,17 @@ function chip(g, x, y, width, text) {
   g.fillText(text, x + width / 2, y + 10.5);
 }
 
+// ---- help ---------------------------------------------------------------------------------
+
+function openHelp() {
+  const view = $("editView").hidden ? "list" : "edit";
+  for (const section of document.querySelectorAll("#help [data-help]")) section.hidden = section.dataset.help !== view;
+  $("helpTitle").textContent = view === "edit" ? "도움말 · Recipe 화면" : "도움말 · Recipe 목록";
+  stopPlayback();
+  toggleSpeedMenu(false);
+  $("help").showModal();
+}
+
 // ---- start --------------------------------------------------------------------------------
 
 function wire() {
@@ -910,6 +974,29 @@ function wire() {
   $("prevFrame").addEventListener("click", () => { stopPlayback(); seekIndex(state.wantIndex - 1); });
   $("nextFrame").addEventListener("click", () => { stopPlayback(); seekIndex(state.wantIndex + 1); });
   $("play").addEventListener("click", togglePlayback);
+  const speed = $("speed");
+  speed.addEventListener("change", commitSpeed);
+  speed.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      commitSpeed();
+      $("frame").focus();
+    } else if (event.key === "Escape") {
+      speed.value = String(state.speed);
+      $("frame").focus();
+    }
+  });
+  $("speedMenuBtn").addEventListener("click", () => toggleSpeedMenu($("speedMenu").hidden));
+  document.addEventListener("pointerdown", (event) => {
+    if (!$("speedMenu").hidden && !$("speedBox").contains(event.target)) toggleSpeedMenu(false);
+  });
+  for (const button of document.querySelectorAll(".help-open")) button.addEventListener("click", openHelp);
+  const help = $("help");
+  $("helpClose").addEventListener("click", () => help.close());
+  help.addEventListener("click", (event) => {  // a click on the backdrop lands on the dialog itself
+    const box = help.getBoundingClientRect();
+    const inside = event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom;
+    if (!inside) help.close();
+  });
   const scrub = $("scrub");
   scrub.addEventListener("pointerdown", (event) => {
     if (!state.video) return;

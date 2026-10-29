@@ -165,3 +165,64 @@ def test_create_edit_save_and_reopen_a_recipe(tmp_path, video, browser_page):
         assert errors == []
     finally:
         running.close()
+
+
+def test_speed_field_and_help(tmp_path, video, browser_page):
+    page, errors = browser_page
+    running = bootstrap.start(data_folder=tmp_path / "data")
+    try:
+        page.on("dialog", lambda dialog: dialog.accept(str(video)))
+        page.goto(running.url)
+        page.get_by_text("Recipe가 없습니다").wait_for()
+
+        # F1 opens the help for the screen on show; Esc closes it
+        page.keyboard.press("F1")
+        help_box = page.locator("#help")
+        help_box.get_by_text("Recipe 파일이 있는 폴더를").wait_for()
+        assert help_box.locator("#helpTitle").inner_text() == "도움말 · Recipe 목록"
+        assert not help_box.get_by_text("타원 안쪽 끌기").is_visible()
+        page.keyboard.press("Escape")
+        assert not help_box.is_visible()
+
+        page.get_by_role("button", name="새 Recipe").click()
+        page.wait_for_function("document.getElementById('time').textContent.startsWith('00:00.0')")
+        speed = page.get_by_label("재생 배속")
+        assert speed.input_value() == "1"
+
+        # typed speeds: "*3" reads as 3, text that is not a number keeps it, a large value is clamped
+        for typed, shown in (("*3", "3"), ("abc", "3"), ("2x", "2"), ("100", "16"), ("0", "0.1")):
+            speed.fill(typed)
+            speed.press("Enter")
+            assert speed.input_value() == shown, typed
+        page.get_by_role("button", name="배속 선택").click()
+        page.get_by_role("option", name="4×").click()
+        assert speed.input_value() == "4"
+        assert page.locator("#speedMenu").is_hidden()
+
+        # 4×: 0.5 s of playback covers about 2 s of the 3 s video
+        page.keyboard.press("Space")
+        page.wait_for_timeout(500)
+        page.keyboard.press("Space")
+        minutes, seconds = page.locator("#time").inner_text().split(" / ")[0].split(":")
+        assert float(seconds) >= 1.2
+        shot(page, "6-speed")
+
+        # the button opens the Recipe screen help; keys do not reach the screen while it is open
+        page.get_by_role("button", name="+ 추가").click()
+        before = field(page, "중심 X").input_value()
+        page.get_by_role("button", name="도움말").click()
+        help_box.get_by_text("타원 안쪽 끌기").wait_for()
+        assert help_box.locator("#helpTitle").inner_text() == "도움말 · Recipe 화면"
+        page.keyboard.press("ArrowRight")
+        shot(page, "7-help")
+        page.mouse.click(5, 5)  # outside the dialog
+        assert not help_box.is_visible()
+        assert field(page, "중심 X").input_value() == before
+        page.locator("#frame").focus()
+        page.keyboard.press("?")
+        help_box.get_by_text("타원 안쪽 끌기").wait_for()
+        help_box.get_by_role("button", name="닫기").click()
+        assert not help_box.is_visible()
+        assert errors == []
+    finally:
+        running.close()
