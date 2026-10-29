@@ -34,6 +34,7 @@ def test_info(video):
         assert opened.info.fps == pytest.approx(FPS)
         assert opened.info.frame_count == COUNT
         assert opened.info.duration_sec == pytest.approx(3.0)
+        assert opened.info.size_bytes == video.stat().st_size
     finally:
         opened.close()
 

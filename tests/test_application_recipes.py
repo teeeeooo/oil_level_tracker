@@ -34,7 +34,7 @@ class FakeStore:
 
 class FakeVideo:
     def __init__(self, name, width, height):
-        self.info = VideoInfo(name, width, height, 10.0, 100)
+        self.info = VideoInfo(name, width, height, 10.0, 100, 1_000)
         self.closed = False
         self.requests = []
 

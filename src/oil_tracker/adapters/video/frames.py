@@ -28,7 +28,7 @@ class OpenCvVideo:
         if not math.isfinite(fps) or fps <= 0 or frame_count <= 0 or width <= 0 or height <= 0:
             capture.release()
             raise VideoUnreadable(f"영상 정보를 읽을 수 없습니다: {path.name}")
-        self.info = VideoInfo(path.name, width, height, fps, frame_count)
+        self.info = VideoInfo(path.name, width, height, fps, frame_count, path.stat().st_size)
         self._capture = capture
         self._lock = threading.Lock()
         self._next_index = 0  # the index the next plain read() returns

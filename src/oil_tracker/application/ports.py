@@ -116,6 +116,12 @@ class InspectionStore(Protocol):
         ...
 
 
+class SourceHasher(Protocol):
+    def __call__(self, path: Path) -> str:
+        """The file's SHA-256 in hex (Product SSOT §8: the source is referenced by path and SHA-256)."""
+        ...
+
+
 class VideoUnreadable(ValueError):
     pass
 
@@ -127,6 +133,7 @@ class VideoInfo:
     height: int
     fps: float
     frame_count: int
+    size_bytes: int
 
     @property
     def duration_sec(self) -> float:

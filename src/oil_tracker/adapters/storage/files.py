@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import hashlib
 import os
 import tempfile
 from pathlib import Path
+
+HASH_CHUNK = 1 << 20
 
 
 def atomic_write_text(path: Path, text: str, encoding: str = "utf-8") -> None:
@@ -19,3 +22,12 @@ def atomic_write_text(path: Path, text: str, encoding: str = "utf-8") -> None:
     except BaseException:
         temp_path.unlink(missing_ok=True)
         raise
+
+
+def sha256_of(path: Path) -> str:
+    """Implements application.ports.SourceHasher."""
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        while chunk := stream.read(HASH_CHUNK):
+            digest.update(chunk)
+    return digest.hexdigest()
