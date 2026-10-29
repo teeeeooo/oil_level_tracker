@@ -263,7 +263,7 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         start = point_on_oil(page, 0.5)
         drag(page, start, (start[0], start[1] + 40))
         page.get_by_text("저장 안 함").wait_for()
-        wait_until(lambda: closing == [True])
+        wait_until(lambda: closing == [False, True])  # the page first says it holds nothing
         moved = oil_path(page)
         assert moved != before
         shot(page, "e1-grab")
@@ -322,7 +322,7 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
 
         page.keyboard.press("Control+s")
         page.get_by_text("저장함").wait_for()
-        wait_until(lambda: closing == [True, False])
+        wait_until(lambda: closing == [False, True, False])
         folder = data / "Inspections" / "편집"
         saved = json.loads((folder / "edits.json").read_text(encoding="utf-8"))
         assert None in saved["glasses"][0]["oil"]["ys"] and "EDITED" in saved["glasses"][0]["oil"]["origins"]
@@ -339,7 +339,7 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         page.once("dialog", lambda dialog: dialog.accept())
         page.get_by_role("button", name="검사 목록").click()
         page.locator("#inspectionsView").wait_for()
-        wait_until(lambda: closing == [True, False, True, False])
+        wait_until(lambda: closing == [False, True, False, True, False])
         assert page.locator("#sourceWarning").is_hidden()
 
         # reopening warns when the source video changed (A9); "다시 확인" clears it once it is back
@@ -530,6 +530,23 @@ def test_memos(tmp_path, video, browser_page):
         (memo,) = saved["glasses"][0]["memos"]
         assert memo["text"] == "거품 발생, 유면 식별 어려움" and memo["y"] is not None
         assert round(memo["time_sec"] * 10) == memo["time_sec"] * 10
+
+        # a change made while a save is on its way is not in it, so it stays unsaved
+        held = []
+        page.route("**/api/inspections/*/edits",
+                   lambda route: held.append(route) if route.request.method == "POST" else route.continue_())
+        page.keyboard.press("Control+s")
+        for _ in range(250):
+            if held:
+                break
+            page.wait_for_timeout(20)
+        page.mouse.click(box["x"] + box["width"] * 0.5, box["y"] + 150)
+        page.keyboard.type("저장 중에 남긴 메모")
+        page.keyboard.press("Control+Enter")
+        page.evaluate("document.getElementById('editorNotice').textContent = ''")  # the last save's notice
+        held[0].continue_()
+        page.get_by_text("저장했습니다.").wait_for()  # this save's response handled
+        assert page.locator("#editorState").inner_text().startswith("저장 안 함")
         assert errors == []
     finally:
         running.close()

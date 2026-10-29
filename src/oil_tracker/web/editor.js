@@ -22,6 +22,7 @@ const state = {
   edits: null,             // the edit document, as the API sends it; changed in place
   savedAt: null,
   dirty: false,
+  changes: 0,              // counts the changes, so a save knows whether more came while it ran
   derived: new Map(),      // glass id -> what follows from its lines (API)
   glassId: null,
   tool: "grab",
@@ -47,6 +48,7 @@ let pending = { back: false, lines: false, marks: false };
 let frameRequested = false;
 let deriving = null;       // the states request in flight
 let deriveAgain = false;
+let unsavedSent = Promise.resolve();  // the window's flag goes out in order (setDirty)
 
 // ---- opening and leaving -----------------------------------------------------------------------
 
@@ -500,10 +502,16 @@ function onWheel(event) {
 function setDirty(dirty) {
   if (state.dirty === dirty) return;
   state.dirty = dirty;
-  api.call("POST", "/api/editor/unsaved", { unsaved: dirty }).catch(() => {});
+  tellWindow(dirty);
+}
+
+/** One call at a time: two in flight could arrive swapped and leave the window's flag wrong. */
+function tellWindow(unsaved) {
+  unsavedSent = unsavedSent.then(() => api.call("POST", "/api/editor/unsaved", { unsaved })).catch(() => {});
 }
 
 function changed() {
+  state.changes += 1;
   setDirty(true);
   renderHeader();
   derive();
@@ -676,13 +684,14 @@ function reveal(t) {
 async function save() {
   if (!state.edits) return false;
   const id = encodeURIComponent(state.detail.id);
+  const sent = state.changes;
   const result = await api.call("POST", `/api/inspections/${id}/edits`, { edits: state.edits });
   if (!result.ok) {
     notify("editorNotice", result.data.error ?? `HTTP ${result.status}`, "error");
     return false;
   }
   state.savedAt = result.data.saved_at;
-  setDirty(false);
+  setDirty(state.changes !== sent);  // a change made while the save ran is not in it
   renderHeader();
   notify("editorNotice", "저장했습니다.");
   return true;
@@ -897,6 +906,7 @@ export function measurements() {
 export function init(toList, openSetup) {
   backToList = toList;
   toSetup = openSetup;
+  tellWindow(false);  // a reloaded page holds no edits
   nav.register("editorView", { title: "편집", onKey });
   player.wire();
   $("editorBack").addEventListener("click", leave);
