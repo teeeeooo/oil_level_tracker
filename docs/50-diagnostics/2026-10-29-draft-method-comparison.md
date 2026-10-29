@@ -150,3 +150,7 @@ SPL#4, which are only on the Windows PC.
 draws A, B, D and F for every Glass of a v2 Recipe, for the user to judge
 by eye. The request is
 [2026-10-29-v2-2-draft-comparison-windows-request.md](../40-operations/2026-10-29-v2-2-draft-comparison-windows-request.md).
+
+**Windows result:** [2026-10-29-v2-2-draft-comparison-windows-result.md](../60-evidence/2026-10-29-v2-2-draft-comparison-windows-result.md).
+No method follows the Oil line on all three Glasses (best: A, F, none), so
+the draft method goes back to the user.

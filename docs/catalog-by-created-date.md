@@ -52,3 +52,4 @@
 | 최초 Git 등록일 (KST) | 문서 | 역할 |
 |---|---|---|
 | 2026-10-29 | [2026-10-29-v2-1-recipe-windows-result.md](60-evidence/2026-10-29-v2-1-recipe-windows-result.md) | V2-1 Recipe 화면 Windows 결과 판정 |
+| 2026-10-29 | [2026-10-29-v2-2-draft-comparison-windows-result.md](60-evidence/2026-10-29-v2-2-draft-comparison-windows-result.md) | V2-2 Oil 초안 방식 비교 Windows 결과 |
