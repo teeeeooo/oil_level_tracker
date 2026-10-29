@@ -113,10 +113,14 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         page.wait_for_timeout(300)
         page.keyboard.press("[")
         assert field(page, "시작").input_value() == "00:00.5"
+        band = page.locator("#scrubRange").evaluate("node => getComputedStyle(node).backgroundColor")
+        assert band == "rgb(255, 224, 122)"  # --range-fill, apart from the blue played part
         field(page, "시작").fill("abc")
         page.get_by_text("시각을 mm:ss.s로 입력하세요.").wait_for()
         field(page, "시작").fill("0")
-        field(page, "기동 시각").fill("00:01.0")
+        field(page, "기동 시각").fill("1")  # seconds, shown as mm:ss.s once entered
+        field(page, "기동 시각").press("Enter")
+        assert field(page, "기동 시각").input_value() == "00:01.0"
         page.wait_for_function("document.getElementById('setupProblemCount').textContent === ''")
 
         # a Glass correction goes into this inspection's copy only, and can be undone

@@ -54,6 +54,8 @@ These are the visual rules for every v2 screen and for the report.
 | `--brand-tint` | `#EBF3FC` | selected rows and selected tool background |
 | `--focus-outer` | `#000000` | focus ring outer (2 px) |
 | `--focus-inner` | `#FFFFFF` | focus ring inner (1 px) |
+| `--range-fill` | `#FFE07A` | the analysis range band on the scrub bar: yellow, apart from the blue played part (user, 2026-10-29) |
+| `--range-edge` | `#8F6A00` | that band's 2 px edges and its "시작" and "끝" marks |
 
 ### 2.3 Domain roles (data colours)
 
@@ -150,6 +152,10 @@ Do not use sizes outside this ramp.
     it in Caption 1 (`--error` for a failure).
 - **Time field:** an input holding `mm:ss.s`, followed by a small "지금"
   button that puts in the time on screen.
+  - It also takes plain seconds or `h:mm:ss`. Once entered (Enter, or
+    leaving the field), it shows the value as `mm:ss.s` (user,
+    2026-10-29).
+  - An empty field shows the placeholder `mm:ss.s`.
 - **Progress bar:** 4 px, radius 2, `--brand` on `--stroke-2`, with the
   percentage and the time left below it.
 - **Panels:**
@@ -272,9 +278,9 @@ Do not use sizes outside this ramp.
   - **Left column:** a 32 px header with the video name, frame size and
     length; the frame view with the Recipe screen's Glass editing (§4);
     a 40 px transport whose scrub bar shows the analysis range (a
-    `--brand-tint` band between "시작" and "끝" marks in `--brand`) and the
-    compressor start ("기동", in `--compressor`), then the time and the
-    speed field.
+    `--range-fill` band with `--range-edge` edges, between "시작" and "끝"
+    marks in `--range-edge`) and the compressor start ("기동", in
+    `--compressor`), then the time and the speed field.
   - **Right column, 360 px:**
     - Recipe: its name and each Glass with its mode, and "바꾸기";
     - 분석 범위: start and end time fields, with the length and the number

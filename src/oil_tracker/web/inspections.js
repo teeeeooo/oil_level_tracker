@@ -454,7 +454,7 @@ function renderTitle() {
 
 function timeField(key, label, title, optional) {
   const value = setup.settings[key];
-  const input = el("input", { inputmode: "decimal", "data-key": key, "aria-label": label });
+  const input = el("input", { inputmode: "decimal", "data-key": key, "aria-label": label, placeholder: "mm:ss.s" });
   input.value = setup.badInputs.get(key) ?? (value === null ? "" : clock(value));
   input.addEventListener("input", () => {
     const text = input.value.trim();
@@ -467,6 +467,10 @@ function timeField(key, label, title, optional) {
     }
     changed();
   });
+  input.addEventListener("change", () => {  // once entered, it reads as mm:ss.s (DESIGN.md §4 "Time field")
+    if (!setup.badInputs.has(key)) input.value = setup.settings[key] === null ? "" : clock(setup.settings[key]);
+  });
+  input.addEventListener("keydown", (event) => { if (event.key === "Enter") input.blur(); });
   return el("div", { class: "field" }, el("span", { class: "label" }, label),
     el("div", { class: "timefield" }, el("div", { class: "input num" }, input),
       el("button", { class: "btn small", title, onclick: () => takeNow(key) }, "지금")),

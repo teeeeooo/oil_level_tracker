@@ -70,9 +70,10 @@ table.boxed { border: 1px solid var(--stroke-1); }
 .scrub .done { position: absolute; left: 0; top: 10px; height: 4px; background: var(--brand); border-radius: 2px; }
 .scrub .thumb { position: absolute; top: 4px; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: var(--bg-1); border: 1px solid var(--fg-3); }
 .scrub.off .done, .scrub.off .thumb { display: none; }
-.scrub .range { position: absolute; top: 4px; height: 16px; background: var(--brand-tint); border-left: 2px solid var(--brand); border-right: 2px solid var(--brand); }
+.scrub .range { position: absolute; top: 4px; height: 16px; background: var(--range-fill); border-left: 2px solid var(--range-edge); border-right: 2px solid var(--range-edge); }
 .scrub .mark { position: absolute; top: -8px; transform: translateX(-50%); font-size: 12px; line-height: 16px; color: var(--brand); font-weight: 600; white-space: nowrap; pointer-events: none; }
 .scrub .mark::after { content: ""; position: absolute; left: 50%; top: 16px; width: 1px; height: 10px; background: currentColor; }
+.scrub .mark.in, .scrub .mark.out { color: var(--range-edge); }
 .scrub .mark.comp { color: var(--compressor); }
 .scrub .mark.comp::after { width: 1.5px; }
 .scrub.off .range, .scrub.off .mark { display: none; }
