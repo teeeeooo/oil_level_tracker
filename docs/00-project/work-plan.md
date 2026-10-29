@@ -73,9 +73,18 @@ Product SSOT §3 and §4:
 - the source SHA-256 is computed on a second thread during the analysis.
 
 **Steps:**
-1. **Draft-method comparison** (the user asked for it): the spike method
-   against dynamic programming on the local samples with user truth, with
-   the criteria fixed before the run. Recorded in `docs/50-diagnostics/`.
+1. **Draft-method comparison** (the user asked for it):
+   [2026-10-29-draft-method-comparison.md](../50-diagnostics/2026-10-29-draft-method-comparison.md).
+   - **macOS, done:** on the local samples every method with raw edges,
+     the spike's and dynamic programming alike, followed static bands and
+     hit none of the 27 truth points. Dynamic programming on the
+     background view (post-hoc) hit 14. Weakening the obvious fixed bands,
+     standing in for v1's fixed-structure templates, hit none.
+   - **Windows, waiting:** the user judges A, B, D and F by eye on SPL#4
+     and SPL#1:
+     [2026-10-29-v2-2-draft-comparison-windows-request.md](../40-operations/2026-10-29-v2-2-draft-comparison-windows-request.md)
+     (source `4f58ead`). Its decision table, fixed before the run, sets the
+     draft's edge source for step 5.
 2. **Mock-ups** of the inspection list and the setup screen, for the
    user's confirmation. The read-only result follows the confirmed editor
    mock-up.
@@ -131,4 +140,8 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Next action:** V2-2 step 1, the draft-method comparison.
+- **Next action:**
+  - the user runs the draft-comparison Windows request and relays its
+    result block;
+  - meanwhile, step 2: the mock-ups of the inspection list and the setup
+    screen.

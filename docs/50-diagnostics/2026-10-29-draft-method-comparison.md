@@ -110,17 +110,32 @@ spike against dynamic programming.**
 
 ### After the first run (post-hoc; does not count for the rule)
 
-Two variants were added after seeing the result above:
+Three variants were added after seeing the result above. F answers the
+user's question whether v1's fixed-structure templates (artifacts, marked
+on the Recipe) would help: it weakens to 20 % the rows where the edge is
+strong (`s > 0.5`) in at least 80 % of the columns, padded by 3 rows. Those
+rows stand in for the bands a user would mark.
 
 | Method | Gold hits | Silver hits | Silver `no_interface`/`unclear` in "cannot judge" |
 |---|---|---|---|
 | D dynamic programming on the background view only | 7 / 11 | 7 / 16 | 2 / 28 |
 | E dynamic programming on 0.5 raw + 0.5 background | 0 / 11 | 0 / 16 | 0 / 28 |
+| F B with the fixed bands weakened | 0 / 11 | 0 / 16 | 0 / 28 |
 
 - **D** removes edges that stay at one height for the whole video, so the
   band at Y 884 drops out. On sample4 it follows the bottom of the Foam
   layer until about 35 s, then falls to the old band.
 - **E** behaves like B: the raw static band still wins at a 0.5 share.
+- **F** finds bands at source Y 477–492 on base_sample_1 and at 798–802,
+  866–872 and 880–888 on sample4 (none on sample2). With them weakened, the
+  path moves to the next static edge: just below the band on base_sample_1,
+  and between the bands on sample4 (errors fall from 22–34 % to 13–26 % of
+  H, still no hit). Marking the few obvious bands is not enough; many
+  weaker fixed edges remain.
+- **v1's own record agrees.** v1 rejected matching candidates outright, and
+  its D2 comparison (`v1-final:docs/60-evidence/s11/2026-10-08-d2-recipe-artifact-comparison.md`)
+  found a template that also removed true Oil boundaries at the same
+  height. It was not adopted.
 - **D's known weakness:** an Oil level that stays at one height for most
   of the video also drops out of the background view. SPL#4 Accum
   (`HOLD_BELOW_ZERO`) may be such a case.
@@ -132,5 +147,6 @@ Two variants were added after seeing the result above:
 The edge source should be judged on the acceptance videos, SPL#1 and
 SPL#4, which are only on the Windows PC.
 `python scripts/compare_draft_methods.py --video <video> --recipe <v2 Recipe>`
-draws A, B, D and E for every Glass of a v2 Recipe, for the user to judge
-by eye.
+draws A, B, D and F for every Glass of a v2 Recipe, for the user to judge
+by eye. The request is
+[2026-10-29-v2-2-draft-comparison-windows-request.md](../40-operations/2026-10-29-v2-2-draft-comparison-windows-request.md).

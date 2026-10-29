@@ -39,6 +39,7 @@
 | 최초 Git 등록일 (KST) | 문서 | 역할 |
 |---|---|---|
 | 2026-10-29 | [2026-10-29-v2-1-recipe-windows-request.md](40-operations/2026-10-29-v2-1-recipe-windows-request.md) | V2-1 Recipe 화면 Windows 확인 요청 |
+| 2026-10-29 | [2026-10-29-v2-2-draft-comparison-windows-request.md](40-operations/2026-10-29-v2-2-draft-comparison-windows-request.md) | V2-2 Oil 초안 방식 비교 Windows 요청(SPL#4, SPL#1) |
 
 ## docs/50-diagnostics/
 
