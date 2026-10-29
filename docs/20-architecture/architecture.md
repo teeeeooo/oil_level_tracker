@@ -35,6 +35,10 @@ src/oil_tracker/
     http/          HTTP API on 127.0.0.1 (standard-library
                    ThreadingHTTPServer): routes to use cases, job
                    progress, video file serving with HTTP Range.
+                   API calls need the per-launch token and a local Host.
+    desktop/       Operating-system integration: the native file dialog
+                   (supplied by app.py from the pywebview window) and
+                   opening a folder.
   web/             index.html, tokens.css (from DESIGN.md), render.js
                    (shared by editor and report), recipe.js, editor.js,
                    api.js. Plain JavaScript modules, no build step.
@@ -76,7 +80,8 @@ app.py ──▶ bootstrap.py
   - Recipe and inspection storage;
   - the context-image cache;
   - report output;
-  - progress and cancellation.
+  - progress and cancellation;
+  - the desktop (file dialog, opening a folder).
 - Internal helpers get no port.
 - Use-case tests run with fake ports, without HTTP, files or OpenCV.
 
@@ -149,5 +154,5 @@ Expected spike sources (branch `spike/webui`, `spikes/webui/`):
 | `adapters/video` | Unit tests on small synthetic videos and arrays |
 | `adapters/storage` | Round-trip, versioning, locking and schema-version tests |
 | `adapters/report` | Output tests on fixed screen data |
-| `adapters/http` | API tests against a running local server |
+| `adapters/http` | API tests against a running local server, wired by `bootstrap.py` |
 | `web` | Browser smoke checks with Playwright on macOS (`--channel chrome`). Windows behaviour is confirmed only by Windows runs |

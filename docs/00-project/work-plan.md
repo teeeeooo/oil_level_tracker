@@ -56,7 +56,8 @@ SSOT:
 3. **Recipe screen layout.** Added to [DESIGN.md](../../DESIGN.md) §4–§5,
    with the static mock-up
    [design/mockup/recipe.html](../../design/mockup/recipe.html).
-   **Waiting for the user's confirmation;** step 6 needs it.
+   **Confirmed by the user** (2026-10-29), with two changes: the frame on
+   screen at save becomes the reference, and the Glass editing follows v1.
 4. **`adapters/video`:** video metadata, a frame at a given time, and a
    downscaled JPEG.
 5. **The app shell:**
@@ -81,6 +82,5 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done:** steps 1 (`domain`) and 2 (`adapters/storage`).
-- **Next action:** the user confirms the Recipe screen mock-up (step 3).
-  Steps 4 and 5 do not depend on it.
+- **Done:** steps 1–5.
+- **Next action:** step 6, the Recipe screen in `web`.

@@ -147,6 +147,10 @@ class RecipeFolder:
     def __init__(self, folder: Path) -> None:
         self.folder = folder
 
+    @property
+    def location(self) -> Path:
+        return self.folder
+
     def list_recipes(self) -> RecipeListing:
         recipes: list[Recipe] = []
         unreadable: list[tuple[str, str]] = []

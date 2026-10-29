@@ -24,6 +24,11 @@ class RecipeListing:
 
 
 class RecipeStore(Protocol):
+    @property
+    def location(self) -> Path:
+        """The folder the Recipes live in, for display and "폴더 열기"."""
+        ...
+
     def list_recipes(self) -> RecipeListing: ...
 
     def load(self, recipe_id: str) -> Recipe: ...
@@ -73,3 +78,15 @@ class VideoOpener(Protocol):
     def __call__(self, path: Path) -> OpenVideo:
         """Raise VideoUnreadable when the file cannot be decoded."""
         ...
+
+
+class DesktopUnavailable(RuntimeError):
+    pass
+
+
+class Desktop(Protocol):
+    def pick_video(self) -> Path | None:
+        """Ask for a video file. None when the user cancels. Raise DesktopUnavailable without a window."""
+        ...
+
+    def open_folder(self, folder: Path) -> None: ...
