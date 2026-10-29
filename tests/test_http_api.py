@@ -3,6 +3,7 @@
 import hashlib
 import http.client
 import json
+import threading
 import time
 
 import cv2
@@ -77,6 +78,27 @@ def test_static_files_and_url(app):
     assert response.getheader("Content-Type").startswith("text/html")
     assert call(running, "GET", "/web/app.js", token=False)[0] == 200
     assert call(running, "GET", "/web/../../etc/passwd", token=False)[0] == 404
+
+
+def test_a_burst_of_connections_is_served(app):
+    # A page load opens its modules at once; a short listen queue reset some and left the page blank.
+    running, _ = app
+    start = threading.Barrier(60)
+    statuses = []
+
+    def fetch():
+        start.wait()
+        try:
+            statuses.append(call(running, "GET", "/web/app.js", token=False)[0])
+        except OSError as failure:
+            statuses.append(type(failure).__name__)
+
+    threads = [threading.Thread(target=fetch) for _ in range(60)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+    assert statuses == [200] * 60
 
 
 def test_api_needs_the_token_and_a_local_host(app):

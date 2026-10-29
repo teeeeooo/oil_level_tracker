@@ -7,6 +7,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 class LocalServer(ThreadingHTTPServer):
     daemon_threads = True
+    # The page loads its JavaScript modules over many connections at once. The default queue of 5
+    # reset some of them, and a page missing one module stays blank.
+    request_queue_size = 64
 
     def server_bind(self) -> None:
         # HTTPServer.server_bind calls socket.getfqdn(), a reverse DNS lookup that can
