@@ -282,7 +282,8 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         assert page.locator("#selectionText").inner_text() != "없음"
         page.keyboard.press("Delete")
         page.locator("#glassFacts").get_by_text("1곳").wait_for()
-        assert page.locator("#axis rect").count() == 1  # the empty stretch's bar on the time axis
+        page.locator("#axis rect").wait_for()  # the empty stretch's bar on the time axis, next frame
+        assert page.locator("#axis rect").count() == 1
         shot(page, "e2-erased")
 
         # U marks the range "cannot judge": hatched, and no longer an empty stretch. Undo takes it
@@ -292,7 +293,7 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         page.keyboard.press("u")
         hatch.wait_for()
         page.locator("#glassFacts").get_by_text("빈 구간").locator("..").get_by_text("없음").wait_for()
-        assert page.locator("#axis rect").count() == 0
+        page.locator("#axis rect").wait_for(state="detached")  # the axis redraws on the next frame
         shot(page, "e2-cannot-judge")
         page.keyboard.press("Control+z")
         hatch.wait_for(state="detached")
@@ -439,7 +440,8 @@ def test_the_compressor_marker_moves(tmp_path, video, browser_page):
         shot(page, "c1-compressor-drag")
         page.mouse.up()
         facts.get_by_text("(설정 00:01.0에서 옮김)").wait_for()
-        assert page.locator("#graph > g").first.locator("line[style*=compressor]").count() == 1
+        page.wait_for_function(  # back in the back layer on the next frame
+            "document.getElementById('graph').children[0].querySelector('line[style*=compressor]')")
         moved = facts.locator("td").inner_text()
         page.get_by_text("저장 안 함").wait_for()
         page.keyboard.press("Control+z")
