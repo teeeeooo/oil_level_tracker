@@ -9,8 +9,10 @@ from oil_tracker.domain.edits import (
     Run,
     Stretch,
     coverage,
+    dropped_by_reanalysis,
     edits_from_analysis,
     empty_line,
+    empty_samples,
     level_states,
     merge_reanalysis,
     runs,
@@ -71,6 +73,7 @@ def test_coverage_counts_empty_and_cannot_judge_once_each():
     times = (0.0, 0.5, 1.0, 1.5, 2.0)
     glass = GlassEdits("g1", line(200.0, None, None, 210.0, 220.0), empty_line(5), empty_line(5),
                        cannot_judge=(Stretch(1.0, 2.0),))
+    assert empty_samples(times, glass) == (False, True, False, False, False)
     found = coverage(times, glass)
     assert found == Coverage(total=5, empty=1, cannot_judge=2)  # the empty sample at 1.0 is "cannot judge"
     assert (found.valid, found.valid_ratio) == (2, 0.4)
@@ -98,6 +101,7 @@ def test_reanalysis_keeps_every_sample_the_new_range_still_has():
     assert glass.memos == (Memo("m2", 1.5, None, "확인"),)
     assert dropped == Dropped(oil_samples=1, foam_samples=1, stretches=1, memos=1)
     assert dropped.anything
+    assert dropped_by_reanalysis(old, new.times, ("g1",)) == dropped  # known before the analysis runs
 
 
 def test_reanalysis_drafts_a_new_glass_and_reports_a_lost_one():
@@ -105,5 +109,6 @@ def test_reanalysis_drafts_a_new_glass_and_reports_a_lost_one():
     merged, dropped = merge_reanalysis(old, analysis([0.0, 0.5], ("g2", line(5.0, 6.0))), None)
     assert merged.glass("g2").oil == line(5.0, 6.0)
     assert dropped.glasses == ("gone",)
+    assert dropped_by_reanalysis(old, (0.0, 0.5), ("g2",)) == dropped
     same, nothing = merge_reanalysis(merged, analysis([0.0, 0.5], ("g2", line(7.0, 8.0))), None)
     assert same.glass("g2").oil == line(5.0, 6.0) and not nothing.anything

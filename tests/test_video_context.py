@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from oil_tracker.adapters.video import context
-from oil_tracker.adapters.video.context import _Band, background_view, build_contexts, sample_indices
+from oil_tracker.adapters.video.context import _Band, background_view, build_contexts
 from oil_tracker.adapters.video.draft import OilDraft, draft_line, oil_draft
 from oil_tracker.application.ports import AnalysisCancelled, VideoUnreadable
 from oil_tracker.domain.enums import SampleOrigin
@@ -50,14 +50,6 @@ def test_band_median_matches_numpy_nanmedian():
         warnings.simplefilter("ignore", RuntimeWarning)
         expected = np.floor(np.nan_to_num(np.nanmedian(crop, axis=1), nan=0.0))
     assert np.array_equal(column, expected[:, ::-1].astype(np.uint8))
-
-
-def test_sample_indices():
-    assert sample_indices(FPS, COUNT, 0, 999, 2) == [0, 5, 10, 15, 20, 25]
-    assert sample_indices(FPS, COUNT, 1.0, 2.0, 2) == [10, 15, 20]
-    assert sample_indices(23.976, 98_413, 0, 1.0, 2) == [0, 12, 24]
-    with pytest.raises(ValueError):
-        sample_indices(FPS, COUNT, 2.0, 1.0, 2)
 
 
 def test_one_pass_samples_every_glass_from_the_same_frames(video):

@@ -11,7 +11,7 @@ import math
 from dataclasses import dataclass, replace
 
 from .enums import LevelState, SampleOrigin
-from .inspection import ANALYSIS_RATE, Analysis
+from .inspection import ANALYSIS_RATE, Analysis, GlassDraft
 from .line import Line
 from .recipe import Glass
 
@@ -154,10 +154,14 @@ def cannot_judge_flags(times: tuple[float, ...], stretches: tuple[Stretch, ...])
     return tuple(any(stretch.holds(t) for stretch in stretches) for t in times)
 
 
-def coverage(times: tuple[float, ...], glass: GlassEdits) -> Coverage:
+def empty_samples(times: tuple[float, ...], glass: GlassEdits) -> tuple[bool, ...]:
+    """Where the Oil line has no sample outside a "cannot judge" stretch: still to be drawn (§4)."""
     flags = cannot_judge_flags(times, glass.cannot_judge)
-    empty = sum(1 for y, flagged in zip(glass.oil.ys, flags) if y is None and not flagged)
-    return Coverage(len(times), empty, sum(flags))
+    return tuple(y is None and not flagged for y, flagged in zip(glass.oil.ys, flags))
+
+
+def coverage(times: tuple[float, ...], glass: GlassEdits) -> Coverage:
+    return Coverage(len(times), sum(empty_samples(times, glass)), sum(cannot_judge_flags(times, glass.cannot_judge)))
 
 
 # ---- re-analysis ----------------------------------------------------------------------------------
@@ -216,6 +220,12 @@ def merge_reanalysis(old: Edits, analysis: Analysis, compressor_start_sec: float
             memos=dropped.memos + len(previous.memos) - len(memos),
         )
     return Edits(times, tuple(glasses), compressor_start_sec), dropped
+
+
+def dropped_by_reanalysis(old: Edits, times: tuple[float, ...], glass_ids: tuple[str, ...]) -> Dropped:
+    """What merge_reanalysis will drop for an analysis with these times and Glasses, before it runs."""
+    blank = empty_line(len(times))
+    return merge_reanalysis(old, Analysis(times, tuple(GlassDraft(g, blank) for g in glass_ids), ""), None)[1]
 
 
 def _match_times(old: tuple[float, ...], new: tuple[float, ...]) -> list[int | None]:

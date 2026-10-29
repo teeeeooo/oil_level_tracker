@@ -75,6 +75,23 @@ class Inspection:
     name: str | None = None  # the user's name for it, which names its folder; None names it by time and video (§8)
 
 
+def sample_indices(fps: float, frame_count: int, start_sec: float, end_sec: float, rate: float) -> list[int]:
+    """The frames the analysis samples: `rate` per second from start to end, clamped to the video."""
+    last = frame_count - 1
+    start = max(0.0, start_sec)
+    end = min(end_sec, last / fps)
+    if not end >= start:
+        raise ValueError("The analysis range is empty.")
+    count = math.floor((end - start) * rate + 1e-9) + 1
+    return sorted({min(last, round((start + k / rate) * fps)) for k in range(count)})
+
+
+def analysis_times(video: SourceVideo, settings: AnalysisSettings) -> tuple[float, ...]:
+    """The times an analysis of these settings will have, for the re-analysis warning."""
+    indices = sample_indices(video.fps, video.frame_count, settings.start_sec, settings.end_sec, ANALYSIS_RATE)
+    return tuple(i / video.fps for i in indices)
+
+
 def inspection_name(text: str | None) -> str | None:
     """The name the user typed, without surrounding spaces; None when it is blank."""
     name = (text or "").strip()

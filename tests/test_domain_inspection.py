@@ -9,8 +9,10 @@ from oil_tracker.domain.inspection import (
     AnalysisSettings,
     GlassDraft,
     SourceVideo,
+    analysis_times,
     inspection_name,
     needs_compressor_start,
+    sample_indices,
     setup_problems,
 )
 from oil_tracker.domain.line import Line
@@ -35,6 +37,19 @@ def fields(problems) -> list[str]:
 def test_sample_count_matches_the_analysis_rate():
     assert AnalysisSettings(0, 2.5).sample_count == 6
     assert AnalysisSettings(0, VIDEO.duration_sec).sample_count == 8210  # SPL#1, as built on Windows
+
+
+def test_sample_indices():
+    assert sample_indices(10.0, 30, 0, 999, 2) == [0, 5, 10, 15, 20, 25]
+    assert sample_indices(10.0, 30, 1.0, 2.0, 2) == [10, 15, 20]
+    assert sample_indices(23.976, 98_413, 0, 1.0, 2) == [0, 12, 24]
+    with pytest.raises(ValueError):
+        sample_indices(10.0, 30, 2.0, 1.0, 2)
+
+
+def test_analysis_times_are_the_sampled_frames():
+    times = analysis_times(VIDEO, AnalysisSettings(0.0, VIDEO.duration_sec))
+    assert len(times) == 8210 and times[:3] == (0.0, 12 / 23.976, 24 / 23.976)
 
 
 def test_a_complete_setup_has_no_problems():

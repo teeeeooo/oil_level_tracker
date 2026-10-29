@@ -24,6 +24,7 @@ import numpy as np
 
 from oil_tracker.application.ports import AnalysisCancelled, VideoUnreadable
 from oil_tracker.domain.geometry import Ellipse
+from oil_tracker.domain.inspection import sample_indices
 
 CENTRAL_BAND = 0.4     # half-width of the sampled band, as a share of radius_x
 PROGRESS_EVERY = 240   # decoded frames between progress calls and cancel checks
@@ -81,17 +82,6 @@ class _Band:
         median = (crop[self.rows, self.low] + crop[self.rows, self.high]) // 2  # rounds down, as the spike
         median[self.empty] = 0
         return median[:, ::-1].astype(np.uint8)  # BGR to RGB
-
-
-def sample_indices(fps: float, frame_count: int, start_sec: float, end_sec: float, rate: float) -> list[int]:
-    """Frame indices at `rate` per second from start to end, clamped to the video."""
-    last = frame_count - 1
-    start = max(0.0, start_sec)
-    end = min(end_sec, last / fps)
-    if not end >= start:
-        raise ValueError("The analysis range is empty.")
-    count = math.floor((end - start) * rate + 1e-9) + 1
-    return sorted({min(last, round((start + k / rate) * fps)) for k in range(count)})
 
 
 def build_contexts(
