@@ -33,3 +33,9 @@
 |---|---|---|
 | 2026-10-28 | [architecture.md](20-architecture/architecture.md) | 모듈 경계·의존 규칙 |
 | 2026-10-29 | [recipe-file.md](20-architecture/recipe-file.md) | Recipe 파일 형식·위치 |
+
+## docs/40-operations/
+
+| 최초 Git 등록일 (KST) | 문서 | 역할 |
+|---|---|---|
+| 2026-10-29 | [2026-10-29-v2-1-recipe-windows-request.md](40-operations/2026-10-29-v2-1-recipe-windows-request.md) | V2-1 Recipe 화면 Windows 확인 요청 |

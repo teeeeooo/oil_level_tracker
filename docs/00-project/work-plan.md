@@ -68,10 +68,12 @@ SSOT:
 7. **Checks:**
    - unit and API tests;
    - a Playwright smoke check on macOS;
-   - the user makes a Recipe from a local sample video.
+   - **a Windows run** (the user has no macOS access now):
+     [2026-10-29-v2-1-recipe-windows-request.md](../40-operations/2026-10-29-v2-1-recipe-windows-request.md).
+     The user makes the SPL#4 and SPL#1 Recipes there; they stay for V2-2.
 
-**Closing V2-1 (to confirm with the user):** a macOS run is enough for V2-1.
-Windows confirmation is part of V2-5.
+**Closing V2-1:** the Windows run passes R1–R12, judged in
+`docs/60-evidence/`.
 
 ## Left to the user, with no deadline
 
@@ -87,5 +89,5 @@ The three v1 remote branches that v1 docs cite stay.
   - the Playwright smoke check (`tests/test_web_recipe_smoke.py`,
     macOS Chrome);
   - a pywebview window start on macOS.
-- **Next action:** the user makes a Recipe from a local sample video on
-  macOS (step 7), then confirms closing V2-1.
+- **Next action:** the user runs the Windows request (source commit
+  `4ea7ade`) and relays its result block.
