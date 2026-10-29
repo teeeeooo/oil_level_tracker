@@ -183,10 +183,10 @@ the undo depth and the shortcuts.
      and the SHA-256 warning. Their toolbar buttons are there, disabled.
 6. **A5 and A6 on the slowest PC — request sent, waiting on the user:**
    [the request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md),
-   commit `ae4873c`, `source=766d5e5886c9 files=52`, criteria fixed in it.
+   commit `8a96b22`, `source=1da92bcf0279 files=54`, criteria fixed in it.
    (Re-pinned before the run: from `4086e54`, whose seek clicks could land
    on the time axis's range numbers; then for the faster draft search and
-   the key-frame spacing line.)
+   the key-frame spacing line; then for the median comparison, stage 5.)
    - The result also gives SPL#1's key-frame spacing (for the PyAV
      decision) and the analysis time through the app's server, now with
      the faster draft search.
@@ -218,8 +218,8 @@ The working tree is clean, and `main` and the remote are in sync.
 - V2-3 steps 1 to 5 are done.
 - **Step 6 waits on the user:** they run the
   [A5/A6 request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md)
-  on the slowest PC (no agent there), pinned to `ae4873c`,
-  `source=766d5e5886c9 files=52`. The user could not reach Windows in the
+  on the slowest PC (no agent there), pinned to `8a96b22`,
+  `source=1da92bcf0279 files=54`. The user could not reach Windows in the
   evening of 2026-10-29.
 
 **Resume:** read this file, then
@@ -239,6 +239,9 @@ write `60-evidence/2026-10-29-v2-3-editor-slowest-pc-windows-result.md`
 (or dated the day it arrives) and add it to the catalog.
 - A5 fails: make the drawing lighter before step 7.
 - A6-s or A6-c fails: put the choice to the user, as the criteria say.
+- A4-m2 passes: put that way into `_Band.median`
+  (`adapters/video/context.py`). The values are identical, so the tests
+  and the pictures stay as they are.
 - Also read: the key-frame spacing line (how much PyAV's skipping could
   save) and the analysis time (the app's share; the draft search is now
   about 7 s faster there).
@@ -246,15 +249,19 @@ write `60-evidence/2026-10-29-v2-3-editor-slowest-pc-windows-result.md`
 **Work the user allowed before the result** (2026-10-29 evening, "1번,
 2번하고 시간 되면 3번도"):
 1. **Review and fixes — done** (`890b5ea`).
-2. **A4 groundwork — partly done.**
-   - Done: the draft search (`ae4873c`) and the facts in the open items
-     below.
-   - Left: a one-minute median benchmark for the slowest PC. Compare the
-     current `int16` sort, `int32` and `float32` sorts (NumPy may use AVX2
-     sorting for 32-bit types on that Haswell CPU) and an 8-bit counting
-     median. The output must be identical; adopt a variant at least 1.5×
-     faster. It can go into the A5/A6 request before the user runs it
-     (re-pin), or into the next request.
+2. **A4 groundwork — done.**
+   - The draft search (`ae4873c`) and the facts in the open items below.
+   - **The median comparison** (`8a96b22`, user: "그 요청서에 넣고 고정한
+     커밋을 다시 바꿔도 돼"): `scripts/compare_medians.py`, stage 5 of the
+     A5/A6 request. It compares 11 ways that must give the app's values
+     exactly: the `int16` sort, other types and layouts, a partition (half
+     of each row's outside pixels sort below every value, half above, so
+     every row's middle ranks fall on the same positions) and an 8-bit
+     counting median. Then it runs the app's context pass over two
+     minutes of SPL#1 with the two fastest. Criteria A4-m1 and A4-m2.
+   - On macOS (ARM) the `int16` sort stays the fastest (0.73 ms a frame
+     for a 728 × 120 band); the partition takes 1.2–1.3 ms and the
+     counting median 2.9 ms, and it scales worst over threads.
 3. **The step 7 parts that do not depend on the drawing or the video —
    not started:**
    - the window-close question (the pywebview closing event, when the
@@ -291,7 +298,7 @@ write `60-evidence/2026-10-29-v2-3-editor-slowest-pc-windows-result.md`
   `retrieve` 45 s).
   - **The draft search — done** (`ae4873c`): about 10× faster, the same
     best path. Exact ties (a saturated edge) now take the upper row.
-  - **Cheaper medians:** a benchmark on that PC decides (handoff above).
+  - **Cheaper medians:** the A5/A6 request's stage 5 decides (A4-m2).
   - **Facts measured on macOS, 2026-10-29 evening:**
     - OpenCV cannot skip to a key frame: its seek decodes from the
       previous one (~59 ms, like ~90 frames in order).
@@ -337,8 +344,8 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `ae4873c`: `183 passed, 3 skipped` on macOS, so
-  `182 passed, 4 skipped` on Windows when its venv has no Playwright.
+  test. At `8a96b22`: `185 passed, 3 skipped` on macOS, so
+  `184 passed, 4 skipped` on Windows when its venv has no Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -386,9 +393,9 @@ The three v1 remote branches that v1 docs cite stay.
   [the A5/A6 request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md).
   Judge its result against the request's fixed criteria and write it to
   `60-evidence/`.
-- **Meanwhile (allowed by the user):** the median benchmark, then the
-  step 7 parts that do not depend on the drawing or the video, as the
-  handoff above lists.
+- **Meanwhile (allowed by the user):** the step 7 parts that do not
+  depend on the drawing or the video, as the handoff above lists. (The
+  median comparison went into the A5/A6 request.)
 - **Then:** the rest of step 7 after that result: the user decided that A5
   and A6 are measured before the other tools are built. If A5 fails, the
   drawing gets lighter first; A6-s and A6-c route their choices to the
