@@ -44,6 +44,7 @@
 | 2026-10-29 | [2026-10-29-v2-2-analysis-timing-windows-request.md](40-operations/2026-10-29-v2-2-analysis-timing-windows-request.md) | V2-2 분석 시간 측정(A4) Windows 요청 |
 | 2026-10-29 | [2026-10-29-v2-2-slowest-pc-timing-windows-request.md](40-operations/2026-10-29-v2-2-slowest-pc-timing-windows-request.md) | V2-2 최저 사양 PC 분석 시간(A4) 측정 요청(사용자 터미널 실행) |
 | 2026-10-29 | [2026-10-29-v2-2-analysis-flow-windows-request.md](40-operations/2026-10-29-v2-2-analysis-flow-windows-request.md) | V2-2 검사·분석 흐름과 앱 안의 A4 시간 Windows 확인 요청 |
+| 2026-10-29 | [2026-10-29-v2-3-editor-slowest-pc-windows-request.md](40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md) | V2-3 최저 사양 PC 편집기(A5·A6) 측정 요청(사용자 터미널 실행) |
 
 ## docs/50-diagnostics/
 

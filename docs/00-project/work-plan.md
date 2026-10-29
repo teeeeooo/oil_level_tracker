@@ -181,9 +181,24 @@ the undo depth and the shortcuts.
    - **Not yet in the editor** (step 7): the point line, "cannot judge",
      memos, the compressor marker, re-analysis, the window-close question
      and the SHA-256 warning. Their toolbar buttons are there, disabled.
-6. **A5 and A6 on the slowest PC:** a terminal request for the user
-   (no agent there), with the app timing itself and writing a Markdown
-   result.
+6. **A5 and A6 on the slowest PC — request sent, waiting on the user:**
+   [the request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md),
+   commit `4086e54`, `source=c41d4173af92 files=52`, criteria fixed in it.
+   - `scripts/measure_editor.py` analyses SPL#1 through the app's server,
+     then drives the editor in **Microsoft Edge** (WebView2's engine) with
+     Playwright, so that PC needs no pywebview or pythonnet (it runs
+     Python 3.15). The packaged app is judged in V2-5.
+   - It times each lines redraw during pencil strokes and grab-and-drags
+     (the spike's measure), the frame intervals beside them, exact frames
+     at 40 random times, the `<video>`'s own seeks, and 60 s of 1×
+     playback; it also reports SPL#1's codec and whether Edge plays it.
+   - **Exact frames are cropped** to the region the video panel shows (the
+     frame API took a crop). On macOS with an H.264 sample, an exact frame
+     took about 60–80 ms, nearly all of it OpenCV seeking and decoding;
+     the `<video>`'s own seek took about 33 ms. If exact frames miss
+     100 ms there, the request's criteria route the choice to the user.
+   - On macOS (sample7, 1,600 × 900) the lines redraw took 0.9 ms at the
+     median and 2.3 ms at most.
 7. **`web`, the rest:** the point line, the snap, "cannot judge", Foam and
    reference lines, memos, the compressor marker, re-analysis, the save
    question and the SHA-256 warning.
@@ -270,8 +285,9 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. After V2-3 step 4: `178 passed, 2 skipped` on macOS, so
-  `177 passed, 3 skipped` on Windows.
+  test. After the A5/A6 script (`4086e54`): `179 passed, 3 skipped` on
+  macOS, so `178 passed, 4 skipped` on Windows when its venv has no
+  Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -315,5 +331,10 @@ The three v1 remote branches that v1 docs cite stay.
 - **Done today also:** V2-3 steps 1 to 5 (the confirmed mock-up, the edit
   document, `edits.json`, the editor's use cases and routes, the editor's
   web core).
-- **Next action:** V2-3 step 6: A5 and A6 on the slowest PC, through a
-  terminal request (see the steps and the handoff above).
+- **Waiting on the user:** the slowest-PC run of
+  [the A5/A6 request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md).
+  Judge its result against the request's fixed criteria and write it to
+  `60-evidence/`.
+- **Next action meanwhile:** V2-3 step 7, the remaining tools. Change the
+  drawing first if A5 fails, and the paused frame if A6-s fails, as the
+  request's criteria say.
