@@ -1,7 +1,8 @@
 """Compare ways to take the context's row medians on one PC, for A4 (the analysis time).
 
-The row median (adapters/video/context.py) sorts each row of a Glass's band as int16. On the slowest
-PC the medians share four cores with the decoder, so a cheaper median leaves more CPU to decoding.
+The row median (adapters/video/context.py) partitions each row of a Glass's band as uint8; until
+2026-10-30 it sorted them as int16 (the slowest PC's result chose the change). On the slowest PC the
+medians share four cores with the decoder, so a cheaper median leaves more CPU to decoding.
 Which way is cheapest depends on the CPU: NumPy sorts some types with SIMD (AVX2 for 32-bit types
 on x86), others not. So this runs on that PC:
 1. frames spread over the video, each way's medians against the app's (they must be identical),
@@ -43,6 +44,7 @@ FRAMES = 40
 REPEATS = 3
 PASS_SEC = 120.0
 SIMD = ("AVX2", "AVX512F", "AVX512_SKX", "AVX512_ICL")
+OUTSIDE = 1000  # sorts after every 8-bit value
 
 
 def sorting(dtype, outside: int, channel_first: bool) -> Factory:
@@ -110,18 +112,18 @@ def counting(band: context._Band) -> Median:
     return median
 
 
-APP = "`int16` 정렬 (지금)"
+APP = "`uint8` 부분 정렬 (지금)"
 WAYS: dict[str, Factory] = {
     APP: lambda band: partial(APP_MEDIAN, band),
-    "`int16` 정렬, 채널 먼저": sorting(np.int16, context._OUTSIDE, True),
-    "`int32` 정렬": sorting(np.int32, context._OUTSIDE, False),
-    "`int32` 정렬, 채널 먼저": sorting(np.int32, context._OUTSIDE, True),
-    "`float32` 정렬": sorting(np.float32, context._OUTSIDE, False),
-    "`float32` 정렬, 채널 먼저": sorting(np.float32, context._OUTSIDE, True),
+    "`int16` 정렬 (이전)": sorting(np.int16, OUTSIDE, False),
+    "`int16` 정렬, 채널 먼저": sorting(np.int16, OUTSIDE, True),
+    "`int32` 정렬": sorting(np.int32, OUTSIDE, False),
+    "`int32` 정렬, 채널 먼저": sorting(np.int32, OUTSIDE, True),
+    "`float32` 정렬": sorting(np.float32, OUTSIDE, False),
+    "`float32` 정렬, 채널 먼저": sorting(np.float32, OUTSIDE, True),
     "`uint8` 정렬, 채널 먼저": sorting(np.uint8, 255, True),  # ties with 255 inside leave the ranks' values alone
-    "`int16` 부분 정렬": selecting(np.int16, -context._OUTSIDE, context._OUTSIDE),
-    "`int32` 부분 정렬": selecting(np.int32, -context._OUTSIDE, context._OUTSIDE),
-    "`uint8` 부분 정렬": selecting(np.uint8, 0, 255),
+    "`int16` 부분 정렬": selecting(np.int16, -OUTSIDE, OUTSIDE),
+    "`int32` 부분 정렬": selecting(np.int32, -OUTSIDE, OUTSIDE),
     "8비트 계수": counting,
 }
 

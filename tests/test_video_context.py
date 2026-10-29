@@ -40,9 +40,19 @@ def boundary(column: np.ndarray, y0: int) -> int:
     return y0 + int(np.argmax(column.mean(axis=1) > 130))
 
 
-def test_band_median_matches_numpy_nanmedian():
-    frame = np.random.default_rng(3).integers(0, 256, (100, 120, 3), dtype=np.uint8)
-    band = _Band(Ellipse(60, 50, 30, 40), 120, 100)
+RNG = np.random.default_rng(3)
+
+
+@pytest.mark.parametrize("frame", [
+    RNG.integers(0, 256, (100, 120, 3), dtype=np.uint8),
+    np.zeros((100, 120, 3), np.uint8),            # every value ties with the fill below
+    np.full((100, 120, 3), 255, np.uint8),        # and above
+    (RNG.integers(0, 2, (100, 120, 3)) * 255).astype(np.uint8),
+], ids=["random", "zeros", "full", "zeros-and-full"])
+@pytest.mark.parametrize("ellipse", [Ellipse(60, 50, 30, 40), Ellipse(70, 45, 31.5, 60), Ellipse(5, 95, 25, 30)],
+                         ids=["inside", "odd-width-cut", "corner"])
+def test_band_median_matches_numpy_nanmedian(frame, ellipse):
+    band = _Band(ellipse, 120, 100)
     column = band.median(frame)
     crop = frame[band.y0:band.y1, band.x0:band.x1].astype(np.float64)
     crop[band.outside] = np.nan

@@ -57,7 +57,7 @@ def test_the_result_file_has_every_measure(tmp_path, capsys):
     assert any(row.startswith("| **전체** |") for row in rows)
     assert any(row.startswith("| 정확한 프레임 (서버) | 3 |") for row in rows)
     assert any(row.startswith("| frames (대체) |") for row in rows)  # an AVI does not play in a <video>
-    assert any(row.startswith("| `int16` 정렬 (지금) | 기준 |") for row in rows)
+    assert any(row.startswith("| `uint8` 부분 정렬 (지금) | 기준 |") for row in rows)
     assert "**다름**" not in text
     assert text.rstrip().endswith("오류: 없음")
     assert (out.parent / next(p.name for p in out.parent.iterdir() if p.name.startswith("a5a6-data-"))).is_dir()

@@ -1,8 +1,10 @@
 """Context images: one pass over the video for every Glass (Product SSOT §3, analysis).
 
 Ported from spike/webui:spikes/webui/context.py (the v1 "ellipse-central-40pct-row-rgb-median"
-method). The row median sorts each row once instead of numpy.nanmedian, which was most of the
-spike's time on SPL#1 (docs/60-evidence/2026-10-29-v2-2-draft-comparison-windows-result.md).
+method). The row median partitions each row once instead of numpy.nanmedian, which was most of
+the spike's time on SPL#1 (docs/60-evidence/2026-10-29-v2-2-draft-comparison-windows-result.md).
+In uint8 with a partition it took 2.5x less worker time than the int16 sort on the slowest PC, with
+identical values (docs/60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md).
 Worker threads compute the medians while the decoder reads on; OpenCV and NumPy's sort release
 the GIL, so on a slow PC the pass takes about the longer of the two instead of their sum
 (docs/60-evidence/2026-10-29-v2-2-analysis-timing-windows-result.md).
@@ -30,7 +32,6 @@ CENTRAL_BAND = 0.4     # half-width of the sampled band, as a share of radius_x
 PROGRESS_EVERY = 240   # decoded frames between progress calls and cancel checks
 REDUCE_WORKERS = max(1, min(4, (os.cpu_count() or 2) // 2))
 IN_FLIGHT = 2          # frames waiting per worker; bounds the memory
-_OUTSIDE = 1000        # sorts after every 8-bit value
 
 
 @dataclass(frozen=True)
@@ -53,9 +54,12 @@ class ContextPass:
 
 
 class _Band:
-    """The central band of one ellipse, prepared once: crop, outside mask and median ranks.
+    """The central band of one ellipse, prepared once: crop, outside mask and median positions.
 
-    median() only reads this, so worker threads share it.
+    Half of each row's outside pixels are set to 0 and the rest to 255, so they fall below and above
+    every inside value (a tie leaves the ranks' values alone). Then the middle ranks of every row sit
+    at the same one or two positions, and one partition finds them. median() only reads this, so
+    worker threads share it.
     """
 
     def __init__(self, ellipse: Ellipse, width: int, height: int) -> None:
@@ -73,13 +77,22 @@ class _Band:
         self.low = np.maximum(valid - 1, 0) // 2   # the two middle ranks; equal for an odd count
         self.high = valid // 2
         self.rows = np.arange(self.y1 - self.y0)
+        below = self.outside.sum(axis=1) // 2
+        self.lower = self.outside & (np.cumsum(self.outside, axis=1) <= below[:, None])
+        self.upper = self.outside & ~self.lower
+        last = self.x1 - self.x0 - 1
+        self.low_at = np.minimum(below + self.low, last)
+        self.high_at = np.minimum(below + self.high, last)
+        self.kth = sorted({int(k) for k in np.concatenate([self.low_at, self.high_at])})
 
     def median(self, frame: np.ndarray) -> np.ndarray:
         """One context column: the RGB median of each row's band pixels in a BGR frame."""
-        crop = frame[self.y0:self.y1, self.x0:self.x1].astype(np.int16)
-        crop[self.outside] = _OUTSIDE
-        crop.sort(axis=1)
-        median = (crop[self.rows, self.low] + crop[self.rows, self.high]) // 2  # rounds down, as the spike
+        data = np.ascontiguousarray(frame[self.y0:self.y1, self.x0:self.x1].transpose(2, 0, 1))  # channel first
+        data[:, self.lower] = 0
+        data[:, self.upper] = 255
+        data.partition(self.kth, axis=2)
+        pair = data[:, self.rows, self.low_at].astype(np.int16), data[:, self.rows, self.high_at].astype(np.int16)
+        median = ((pair[0] + pair[1]) // 2).T  # rounds down, as the spike
         median[self.empty] = 0
         return median[:, ::-1].astype(np.uint8)  # BGR to RGB
 

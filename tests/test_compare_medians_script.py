@@ -30,7 +30,7 @@ def test_every_way_gives_the_apps_medians(tmp_path):
     assert len(found["passes"]) == 3 and all(p["same"] for p in found["passes"])
     assert found["passes"][0]["name"] == script.APP
     text = "\n".join(script.markdown(found))
-    assert "| `int16` 정렬 (지금) | 기준 |" in text and "**다름**" not in text
+    assert "| `uint8` 부분 정렬 (지금) | 기준 |" in text and "**다름**" not in text
     assert "| 2회 |" in text and "| — |" in text  # one round only
 
 
