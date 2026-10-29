@@ -87,18 +87,18 @@ Product SSOT §3, §4 and §6:
      quick deletion and the point line (above).
    - The user found SPL#1's Oil boundary faint but visible by eye in the
      full-size context image, so the context image method stays.
-2. **A4 timing, before the screens.** SPL#1 BASE's context build took
-   202.1 s on Windows, over the 180 s for the whole analysis.
-   - **Done on macOS:** the row median was most of that time
-     (`numpy.nanmedian`); sorting each row gives the same values about ten
-     times faster. The analysis core of step 6 is built ahead for the
-     timing (`adapters/video/context.py`, `draft.py`, `fc3feec`); it
-     matches the comparison script on the local samples.
-   - **Windows, waiting:**
-     [2026-10-29-v2-2-analysis-timing-windows-request.md](../40-operations/2026-10-29-v2-2-analysis-timing-windows-request.md)
-     (source `f330e62`, a commit ZIP). Its table, fixed before the run,
-     decides whether the screens wait for more speed and whether hardware
-     decoding becomes the default.
+2. **A4 timing — done.**
+   [Windows result](../60-evidence/2026-10-29-v2-2-analysis-timing-windows-result.md)
+   (source `f330e62`).
+   - SPL#1's whole analysis core takes **87.4 s** (limit 180 s; the draft
+     comparison took 202.1 s for the context image alone). Sorting each
+     row instead of `numpy.nanmedian` made the difference. The screens go
+     on with this design.
+   - Hardware decoding was 38 % slower, so the analysis uses software
+     decoding.
+   - The drafts equal the comparison's method B on Windows (empty 88 %,
+     5 %, 51 %).
+   - Measured on one 12-core workstation; step 9 times the app itself.
 3. **Mock-ups** of the inspection list and the setup screen, for the
    user's confirmation:
    [design/mockup/inspection.html](../../design/mockup/inspection.html)
@@ -115,7 +115,8 @@ Product SSOT §3, §4 and §6:
 6. **`adapters/video`:** one pass over the video for every Glass: context
    image, background view and Oil draft, with progress and cancellation.
    Ported from `spike/webui:spikes/webui/context.py`. The core is built
-   (step 2); the ports, cancellation and the domain samples remain.
+   (step 2) and decodes in software; the ports, cancellation and the
+   domain samples remain.
 7. **`application` and `adapters/http`:** creating an inspection, the
    analysis job (progress, time left, cancel) and the result data.
 8. **`web`:** the inspection list, the new-inspection flow, the setup
@@ -146,24 +147,8 @@ The working tree is clean, and `main` and the remote are in sync.
 [DESIGN.md](../../DESIGN.md) §4–§5 (the inspection screens) and the
 [A4 timing request](../40-operations/2026-10-29-v2-2-analysis-timing-windows-request.md).
 
-**Waiting:** the user's A4 timing result (source `f330e62`).
-
-**When it arrives:**
-1. **Identify the run** by R1 (`checked=46 mismatched=0`), R2
-   (`87 passed, 2 skipped`) and the environment lines. The text is
-   relayed, so labels and digits can slip; recheck derived values.
-2. **Judge T1–T3** only against the request's fixed table.
-   - T1, SPL#1 software decoding, `analysis total`: ≤ 150 s, go on; 150–180
-     s, go on and look for more speed in step 6; > 180 s, speed up before
-     the screens.
-   - T2 makes hardware decoding the default only if `hardware_used=True`,
-     it is at least 10 % faster than T1, and each Glass `mean` is within
-     1.0 of T1's. Then pass `hardware=True` from the analysis adapter.
-   - Compare `pass` (`grab`, `retrieve`, `reduce`) with the 202.1 s of the
-     draft comparison to see where the time went.
-3. **Record it** in
-   `docs/60-evidence/YYYY-MM-DD-v2-2-analysis-timing-windows-result.md`,
-   with a catalog row, and update step 2 here.
+**Since then:** the A4 result came in after the compaction and is judged
+(step 2). Nothing waits on Windows.
 
 **Step 6, as planned:**
 - **The analysis port** (in `application/ports.py`): given the video path,
@@ -171,7 +156,7 @@ The working tree is clean, and `main` and the remote are in sync.
   Glass's draft as a domain `Line` (`adapters/video/draft.py:draft_line`)
   and its images as `GlassImages` (PNG pieces as bytes). It reports
   progress (done and total frames) and checks a cancel flag between
-  frames.
+  frames. It decodes in software (`hardware=False`, the A4 result).
 - **The PNG pieces** move from `scripts/time_analysis.py:png_pieces` into
   `adapters/video`; the script then imports them.
 - **The SHA-256** is computed on a second thread during the pass, as the
@@ -226,7 +211,6 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done today:** V2-1 closed; V2-2 steps 1, 3, 4 and 5, and the analysis
-  core of step 6.
-- **Next action:** judge the A4 timing result when the user relays it;
-  then step 6 and step 7 as planned above.
+- **Done today:** V2-1 closed; V2-2 steps 1 to 5, and the analysis core of
+  step 6.
+- **Next action:** step 6 and step 7 as planned above.
