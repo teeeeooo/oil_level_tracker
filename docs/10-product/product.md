@@ -9,7 +9,8 @@ and what it does. The user made these decisions:
 - on 2026-10-29, at the V2-1 start: the Recipe, the judgment rule (§5) and
   the data folder (§8);
 - on 2026-10-29, at the V2-2 start: the inspection flow and analysis setup
-  (§3) and the draft method (§4).
+  (§3), and, after the draft comparison, the draft (§4) and the editing
+  tools and snap (§6).
 
 - **Interview record:** `docs/60-evidence/s11/2026-10-28-v2-direction-interview-handoff.md`
   at tag `v1-final`.
@@ -116,14 +117,22 @@ The detector is not part of the v2 flow.
   - the path across time that follows the strongest vertical edges with
     the fewest jumps (dynamic programming), so jumps are suppressed along
     the whole path;
-  - stretches where that path's edge is weak are marked "cannot judge".
+  - stretches where that path's edge is weak are left empty, for the user
+    to draw.
+  - On the acceptance videos this path often follows the Foam boundary or
+    a fixed band (comparison of 2026-10-29). The editor therefore makes a
+    wrong stretch quick to delete and redraw (§6).
   - The user adds Foam lines.
   - Draft quality is not an acceptance condition.
 - **FULL and EMPTY are automatic.**
   - A line at the Glass top is FULL (`FULL_NO_INTERFACE`).
   - A line at the Glass bottom is EMPTY (`EMPTY_NO_INTERFACE`).
-- **"Cannot judge" is the only stretch tool.** Those samples are invalid and
-  count against coverage.
+- **Stretch states:** a stretch of the Oil line can be empty or "cannot
+  judge". Both are invalid samples and count against coverage.
+  - **Empty:** no line yet. It comes from a range delete (§6) or from the
+    draft's weak stretches, and stays invalid until the user draws it, so a
+    forgotten gap never passes.
+  - **"Cannot judge":** set only by the user, on purpose.
 - **Sampling and events:** lines are sampled at the analysis rate with no
   extra smoothing. Events are recomputed from the edited samples.
 
@@ -155,8 +164,8 @@ Each Glass in a Recipe has one rule.
   **longest continuous** violation lasts longer than `allowed_sec`.
   - v1 measured from the first to the last violating sample instead. v2
     does not keep that.
-- **Coverage:** "cannot judge" samples are invalid. A valid share below
-  `minimum_valid_coverage_ratio` gives "needs review".
+- **Coverage:** empty and "cannot judge" samples are invalid (§4). A valid
+  share below `minimum_valid_coverage_ratio` gives "needs review".
 - **Foam never affects the judgment.** It may rise above the zero line.
 - **Recipe screen:** it shows only the fields the selected mode uses, and
   all of them are editable.
@@ -174,6 +183,11 @@ Each Glass in a Recipe has one rule.
   - **Grab-and-drag:** grab a line anywhere; nearby parts follow smoothly,
     within a width the user adjusts.
   - **Pencil:** redraw a time range, replacing that stretch.
+  - **Range delete:** drag to select a time range, then press Delete. The
+    Oil line there becomes empty (§4).
+  - **Point line:** click points on the context image. Each pair of
+    neighbouring points is joined by a path that follows the edges between
+    them: the draft's dynamic programming, pinned to the user's points.
   - The draft is kept as dense samples. Points are not edited one by one.
 - **Curve shape:** smooth with no overshoot. A spot can be switched to a
   corner.
@@ -181,8 +195,11 @@ Each Glass in a Recipe has one rule.
   - zoom;
   - the background-subtracted view;
   - the lines drawn over the source frame;
-  - video playback.
-  - **Snap is not in the first version.**
+  - video playback;
+  - **snap** (user, 2026-10-29): while dragging, the line settles on a
+    nearby edge. It can be switched off, because the strongest edge can be
+    a Foam top or glare. Its reach and default are settled with the V2-3
+    mock-up.
 - **Navigation:**
   - wheel zoom;
   - panning only with the pan tool or Shift-drag; a plain drag on empty
@@ -250,6 +267,5 @@ Each Glass in a Recipe has one rule.
 - detector work;
 - edit history in the report;
 - draft-quality acceptance;
-- snap;
 - Foam draft extraction;
 - reading v1 files.

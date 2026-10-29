@@ -154,3 +154,12 @@ by eye. The request is
 **Windows result:** [2026-10-29-v2-2-draft-comparison-windows-result.md](../60-evidence/2026-10-29-v2-2-draft-comparison-windows-result.md).
 No method follows the Oil line on all three Glasses (best: A, F, none), so
 the draft method goes back to the user.
+
+**Decision (user, 2026-10-29):**
+- the draft is method B (dynamic programming on raw edges); its weak
+  stretches are left empty instead of "cannot judge";
+- the editor (V2-3) makes a wrong stretch quick to fix: range delete, a
+  point line that joins the user's points along the edges, and a snap
+  that can be switched off;
+- SPL#1's Oil boundary is faint but visible by eye in the full-size
+  context image.

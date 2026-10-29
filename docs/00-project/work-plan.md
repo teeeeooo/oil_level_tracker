@@ -53,7 +53,7 @@ Rewrite it; do not append to it.
 ## V2-2 — Analysis
 
 **The start decisions are settled** (user, 2026-10-29) and recorded in the
-Product SSOT §3 and §4:
+Product SSOT §3, §4 and §6:
 - the app opens on the inspection list; a new inspection takes the video,
   then a Recipe;
 - the setup screen sets the range, the compressor start (required only
@@ -61,7 +61,10 @@ Product SSOT §3 and §4:
   the Glass positions in the inspection's Recipe copy;
 - the analysis rate is 2 samples per second, fixed;
 - the Oil draft follows the strongest edges as one path (dynamic
-  programming), with weak stretches marked "cannot judge";
+  programming, method B of the comparison); its weak stretches are left
+  empty, and empty stretches count as invalid until drawn;
+- V2-3 adds range delete, the point line (dynamic programming between the
+  user's points) and a snap that can be switched off;
 - after analysis, the result opens read-only in the editor layout. V2-3
   adds editing to that same screen.
 
@@ -73,37 +76,36 @@ Product SSOT §3 and §4:
 - the source SHA-256 is computed on a second thread during the analysis.
 
 **Steps:**
-1. **Draft-method comparison** (the user asked for it):
-   [2026-10-29-draft-method-comparison.md](../50-diagnostics/2026-10-29-draft-method-comparison.md).
-   - **macOS, done:** on the local samples every method with raw edges,
-     the spike's and dynamic programming alike, followed static bands and
-     hit none of the 27 truth points. Dynamic programming on the
-     background view (post-hoc) hit 14. Weakening the obvious fixed bands,
-     standing in for v1's fixed-structure templates, hit none.
-   - **Windows, waiting:** the user judges A, B, D and F by eye on SPL#4
-     and SPL#1:
-     [2026-10-29-v2-2-draft-comparison-windows-request.md](../40-operations/2026-10-29-v2-2-draft-comparison-windows-request.md)
-     (source `4f58ead`). Its decision table, fixed before the run, sets the
-     draft's edge source for step 5.
-2. **Mock-ups** of the inspection list and the setup screen, for the
+1. **Draft-method comparison — done.**
+   [Diagnostic](../50-diagnostics/2026-10-29-draft-method-comparison.md),
+   [Windows result](../60-evidence/2026-10-29-v2-2-draft-comparison-windows-result.md).
+   - No edge-based method followed the Oil line on SPL#4 and SPL#1; they
+     follow the Foam boundary or fixed bands. The user chose method B plus
+     quick deletion and the point line (above).
+   - The user found SPL#1's Oil boundary faint but visible by eye in the
+     full-size context image, so the context image method stays.
+2. **A4 timing, before the screens.** SPL#1 BASE's context build took
+   202.1 s on Windows, over the 180 s for the whole analysis. Find where
+   the time goes, speed it up (hardware decoding, decoder threads, a faster
+   row median) and confirm with a short Windows timing request.
+3. **Mock-ups** of the inspection list and the setup screen, for the
    user's confirmation. The read-only result follows the confirmed editor
    mock-up.
-3. **`domain`:** the inspection, the analysis settings, the line samples
-   and the "cannot judge" stretches, with validation.
-4. **`adapters/storage`:** the inspection folder, the Recipe copy and the
+4. **`domain`:** the inspection, the analysis settings, the line samples
+   and the empty and "cannot judge" stretches, with validation.
+5. **`adapters/storage`:** the inspection folder, the Recipe copy and the
    cache, with a format document in `docs/20-architecture/`.
-5. **`adapters/video`:** one pass over the video for every Glass: context
+6. **`adapters/video`:** one pass over the video for every Glass: context
    image, background view and Oil draft, with progress and cancellation.
    Ported from `spike/webui:spikes/webui/context.py`.
-6. **`application` and `adapters/http`:** creating an inspection, the
+7. **`application` and `adapters/http`:** creating an inspection, the
    analysis job (progress, time left, cancel) and the result data.
-7. **`web`:** the inspection list, the new-inspection flow, the setup
+8. **`web`:** the inspection list, the new-inspection flow, the setup
    screen, progress, and the read-only result (porting the spike's
    `render.js`).
-8. **Checks:** unit and API tests, a macOS smoke check, and a Windows run.
+9. **Checks:** unit and API tests, a macOS smoke check, and a Windows run.
    The Windows run also covers:
-   - **A4 timing on SPL#1.** The spike took 166 s of the 180 s for one
-     Glass; this is the main risk of V2-2;
+   - **A4 timing on SPL#1** with the whole analysis;
    - the V2-1 follow-up: the speed field, the help dialog and F1 in
      WebView2. Without Playwright the expected test line stays
      `77 passed, 2 skipped` plus the new tests.
@@ -140,8 +142,4 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Next action:**
-  - the user runs the draft-comparison Windows request and relays its
-    result block;
-  - meanwhile, step 2: the mock-ups of the inspection list and the setup
-    screen.
+- **Next action:** step 2 (A4 timing) and step 3 (mock-ups).
