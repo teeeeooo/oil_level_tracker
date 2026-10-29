@@ -183,19 +183,13 @@ the undo depth and the shortcuts.
      and the SHA-256 warning. Their toolbar buttons are there, disabled.
 6. **A5 and A6 on the slowest PC — request sent, waiting on the user:**
    [the request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md),
-   commit `ae4873c`, `source=766d5e5886c9 52 files=`, criteria fixed in it.
+   commit `ae4873c`, `source=766d5e5886c9 files=52`, criteria fixed in it.
    (Re-pinned before the run: from `4086e54`, whose seek clicks could land
    on the time axis's range numbers; then for the faster draft search and
    the key-frame spacing line.)
-   - **A4 groundwork, 2026-10-29 evening (macOS):** OpenCV cannot skip to
-     a key frame (its seek decodes from the previous one, ~59 ms); luma
-     only cuts `retrieve` 72 % and the medians 68 % but greys the context
-     image (user's call); PyAV skipping saved no time with frame threading
-     and its colours differ from OpenCV's by up to 2.6 levels; the draft
-     search became 10× faster (`ae4873c`). Not done yet: a median
-     benchmark for that PC, and the step 7 parts the user allowed before
-     the result (window-close question, SHA-256 warning, re-analysis from
-     the editor, "cannot judge").
+   - The result also gives SPL#1's key-frame spacing (for the PyAV
+     decision) and the analysis time through the app's server, now with
+     the faster draft search.
    - `scripts/measure_editor.py` analyses SPL#1 through the app's server,
      then drives the editor in **Microsoft Edge** (WebView2's engine) with
      Playwright, so that PC needs no pywebview or pythonnet (it runs
@@ -217,53 +211,99 @@ the undo depth and the shortcuts.
 8. **Checks:** unit and API tests, macOS smoke checks, and a Windows run.
    It also covers the V2-2 follow-up.
 
-## Session handoff — 2026-10-29 (fourth)
+## Session handoff — 2026-10-29 (fifth)
 
-**The session closed after `fb8eef3`,** with this handoff commit on top.
-The working tree is clean, and `main` and the remote are in sync. V2-3
-steps 1 to 3 are done; nothing waits on Windows.
+**The session closed after `11c9617`,** with this handoff commit on top.
+The working tree is clean, and `main` and the remote are in sync.
+- V2-3 steps 1 to 5 are done.
+- **Step 6 waits on the user:** they run the
+  [A5/A6 request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md)
+  on the slowest PC (no agent there), pinned to `ae4873c`,
+  `source=766d5e5886c9 files=52`. The user could not reach Windows in the
+  evening of 2026-10-29.
 
 **Resume:** read this file, then
-- [product.md](../10-product/product.md) §4 and §6: the V2-3 decisions
-  (re-analysis after editing, saving, the snap, the range tool, the grab
-  shape);
-- [DESIGN.md](../../DESIGN.md) §2 (`--selection-band`, `--empty-mark`),
-  §4 (tool buttons with names) and §5 ("Editor window");
-- [editor.html](../../design/mockup/editor.html), with `#grab`, `#range`
-  and `#point` for its three states;
-- [architecture.md](../20-architecture/architecture.md): the judgment and
-  the FULL/EMPTY bands come from Python; during a drag only the lines
-  redraw in the browser, and the rest updates from the API on release;
-- [inspection-folder.md](../20-architecture/inspection-folder.md)
-  (`edits.json`) and `src/oil_tracker/domain/edits.py`;
-- for step 5, the spike's editor
-  (`spike/webui:spikes/webui/static/editor.js`: undo stack of 200, snap
-  on the context luma in the browser, the press handling it fixed). Port
-  after review, recording the source path.
+- the A5/A6 request: its fixed criteria (M1–M3, A5, A5-f, A6-s, A6-p,
+  A6-c) decide what comes next;
+- [product.md](../10-product/product.md) §4 and §6,
+  [DESIGN.md](../../DESIGN.md) §5 ("Editor window") and
+  [architecture.md](../20-architecture/architecture.md) ("During a drag",
+  the editor's video, the point line, `/media/`);
+- the code: `web/editor.js` (screen, pointer, keys), `web/lines.js`
+  (operations, snap, undo history), `web/player.js` (video),
+  `web/render.js` (layers), `application/editing.py`,
+  `scripts/measure_editor.py`.
 
-**Step 4** was done after this handoff; see the steps above.
+**When the A5/A6 result comes:** judge it row by row against the request,
+write `60-evidence/2026-10-29-v2-3-editor-slowest-pc-windows-result.md`
+(or dated the day it arrives) and add it to the catalog.
+- A5 fails: make the drawing lighter before step 7.
+- A6-s or A6-c fails: put the choice to the user, as the criteria say.
+- Also read: the key-frame spacing line (how much PyAV's skipping could
+  save) and the analysis time (the app's share; the draft search is now
+  about 7 s faster there).
 
-**Then:** step 5 (the web core), and step 6 at once: A5 and A6 on the
-slowest PC through a terminal request. The app needs a measuring mode that
-writes a Markdown result (redraw times while dragging, frame seek times,
-playback stalls), and that PC needs the app's dependencies (pywebview,
-pythonnet) installed, perhaps from wheels carried over (see the
-slowest-PC request §5).
+**Work the user allowed before the result** (2026-10-29 evening, "1번,
+2번하고 시간 되면 3번도"):
+1. **Review and fixes — done** (`890b5ea`).
+2. **A4 groundwork — partly done.**
+   - Done: the draft search (`ae4873c`) and the facts in the open items
+     below.
+   - Left: a one-minute median benchmark for the slowest PC. Compare the
+     current `int16` sort, `int32` and `float32` sorts (NumPy may use AVX2
+     sorting for 32-bit types on that Haswell CPU) and an 8-bit counting
+     median. The output must be identical; adopt a variant at least 1.5×
+     faster. It can go into the A5/A6 request before the user runs it
+     (re-pin), or into the next request.
+3. **The step 7 parts that do not depend on the drawing or the video —
+   not started:**
+   - the window-close question (the pywebview closing event, when the
+     edits are unsaved);
+   - the SHA-256 warning (the `source-check` API exists; show
+     DIFFERENT, MISSING and UNREADABLE);
+   - re-analysis from the editor: "범위 바꿔 다시 분석…" opens the setup
+     for the analysed inspection, saves the edits first, shows `dropped`
+     from the check before starting, and comes back to the editor;
+   - "cannot judge": U and "판단 불가 풀기" on the selected range. The undo
+     history holds only line samples now, so it needs an entry for
+     stretches.
+   - The rest of step 7 (the point line with its preview, memos, the
+     compressor marker) waits for the A5/A6 result.
 
-**Learned from the user this session:**
-- tool buttons need their names; icons alone hid the range tool;
-- the user answers short decision questions quickly; a mock-up goes to
-  the user before the screens are built;
-- background jobs on the workstation can skew timings; ask what else ran.
+**Learned this session:**
+- zsh does not split an unquoted variable: a re-pin wrote
+  `source=766d5e5886c9 52 files=` until it was caught. Grep pinned values
+  after writing them.
+- Playwright's `get_by_title` and `get_by_label` match hidden elements:
+  scope locators to the screen (the editor repeats the transport labels).
+- `typing()` counts only text fields; a clicked switch or picker must not
+  turn the shortcut keys off.
+- Exact frames on macOS take 60–80 ms, nearly all of it OpenCV seeking and
+  decoding; the page adds little.
+- The user wants parallel progress when Windows is out of reach, inside
+  the decisions already made; ask before crossing one.
 
 ## Open items
 
 **Before V2-5** (A4 is judged in the app on the slowest PC):
 - **Less CPU work in the analysis.** The slowest PC takes 169.7 s of 180 s
-  for the adapter. Candidates, from its result: a faster draft (dynamic
-  programming), cheaper medians on that CPU (benchmark there first), and
-  converting only the Glass band (PyAV, a new dependency: the user's
-  decision).
+  for the adapter; nearly all of it is reading the video (`grab` 113 s,
+  `retrieve` 45 s).
+  - **The draft search — done** (`ae4873c`): about 10× faster, the same
+    best path. Exact ties (a saturated edge) now take the upper row.
+  - **Cheaper medians:** a benchmark on that PC decides (handoff above).
+  - **Facts measured on macOS, 2026-10-29 evening:**
+    - OpenCV cannot skip to a key frame: its seek decodes from the
+      previous one (~59 ms, like ~90 frames in order).
+    - With `CAP_PROP_CONVERT_RGB` off, OpenCV returns only the luma plane
+      and warns on every frame. That cuts `retrieve` by 72 % and the
+      medians by 68 %, but the context image turns grey: the user's call.
+    - PyAV 19.0.2 (in a scratch venv only): skipping to key frames
+      decoded 53–95 % of the frames but saved no time with frame
+      threading (single-threaded decoding saved 17–29 % but is 2–3×
+      slower). Its colours differ from OpenCV's by up to 2.6 levels. It
+      ships a second FFmpeg (macOS warns about the duplicate libraries).
+      Band-only conversion works. A new dependency is the user's decision.
 - **What the app adds:** 60.6 s in the app against 46.4 s for the adapter
   on the workstation. The user traced the gap to a RAG chunking job at
   about 50 % CPU during the run. Confirm the app's own share on a quiet
@@ -297,9 +337,8 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. After the A5/A6 script (`4086e54`): `179 passed, 3 skipped` on
-  macOS, so `178 passed, 4 skipped` on Windows when its venv has no
-  Playwright.
+  test. At `ae4873c`: `183 passed, 3 skipped` on macOS, so
+  `182 passed, 4 skipped` on Windows when its venv has no Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -347,7 +386,10 @@ The three v1 remote branches that v1 docs cite stay.
   [the A5/A6 request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md).
   Judge its result against the request's fixed criteria and write it to
   `60-evidence/`.
-- **Then:** V2-3 step 7, the remaining tools, after that result: the user
-  decided that A5 and A6 are measured before the other tools are built.
-  If A5 fails, the drawing gets lighter first; A6-s and A6-c route their
-  choices to the user, as the request's criteria say.
+- **Meanwhile (allowed by the user):** the median benchmark, then the
+  step 7 parts that do not depend on the drawing or the video, as the
+  handoff above lists.
+- **Then:** the rest of step 7 after that result: the user decided that A5
+  and A6 are measured before the other tools are built. If A5 fails, the
+  drawing gets lighter first; A6-s and A6-c route their choices to the
+  user, as the request's criteria say.
