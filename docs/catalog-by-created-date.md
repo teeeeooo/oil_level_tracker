@@ -40,6 +40,12 @@
 |---|---|---|
 | 2026-10-29 | [2026-10-29-v2-1-recipe-windows-request.md](40-operations/2026-10-29-v2-1-recipe-windows-request.md) | V2-1 Recipe 화면 Windows 확인 요청 |
 
+## docs/50-diagnostics/
+
+| 최초 Git 등록일 (KST) | 문서 | 역할 |
+|---|---|---|
+| 2026-10-29 | [2026-10-29-draft-method-comparison.md](50-diagnostics/2026-10-29-draft-method-comparison.md) | V2-2 Oil 초안 방식 비교(spike 방식 대 동적 계획법) |
+
 ## docs/60-evidence/
 
 | 최초 Git 등록일 (KST) | 문서 | 역할 |
