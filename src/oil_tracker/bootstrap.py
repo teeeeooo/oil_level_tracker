@@ -60,11 +60,12 @@ def start(
     data_folder: Path | None = None,
     port: int = 0,
     pick_video: Callable[[], Path | None] | None = None,
+    ask_before_closing: Callable[[bool], None] | None = None,
     web_folder: Path = WEB_FOLDER,
 ) -> Running:
     data_folder = data_folder or locations.default_data_folder()
     videos = VideoSessions(open_video, new_id)
-    desktop = SystemDesktop(pick_video)
+    desktop = SystemDesktop(pick_video, ask_before_closing)
     recipe_store = RecipeFolder(data_folder / locations.RECIPES)
     recipes = Recipes(recipe_store, videos, desktop, utc_now, new_id)
     inspection_store = InspectionFolders(data_folder / locations.INSPECTIONS)
@@ -78,7 +79,7 @@ def start(
         utc_now,
         new_id,
     )
-    editing = Editing(inspection_store, ContextEdgeTracer(), sha256_of, utc_now)
+    editing = Editing(inspection_store, ContextEdgeTracer(), sha256_of, desktop, utc_now)
     jobs = Jobs(new_id)
     token = secrets.token_urlsafe(24)
     server = start_server(

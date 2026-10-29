@@ -604,6 +604,13 @@ def routes(ctx: ApiContext) -> list[Route]:
     def check_source_again(_query, _body, inspection_id) -> Response:
         return json_response(source_check_json(editing.check_source(inspection_id)))
 
+    def mark_unsaved(_query, body) -> Response:
+        unsaved = body.get("unsaved") if isinstance(body, dict) else None
+        if not isinstance(unsaved, bool):
+            raise BadRequest("unsaved는 true 또는 false여야 합니다.")
+        editing.mark_unsaved(unsaved)
+        return json_response({"ok": True})
+
     def job_status(_query, _body, job_id) -> Response:
         return json_response(jobs.status(job_id))
 
@@ -631,6 +638,7 @@ def routes(ctx: ApiContext) -> list[Route]:
             re.compile(rf"/api/inspections/{segment}/images/{segment}/(context|background)-(\d+)\.png"),
             image_piece,
         ),
+        ("POST", re.compile(r"/api/editor/unsaved"), mark_unsaved),
         ("GET", re.compile(rf"/api/jobs/{segment}"), job_status),
         ("POST", re.compile(rf"/api/jobs/{segment}/cancel"), cancel_job),
         ("GET", re.compile(r"/api/recipes"), list_recipes),

@@ -39,8 +39,8 @@ src/oil_tracker/
                    progress, video file serving with HTTP Range.
                    API calls need the per-launch token and a local Host.
     desktop/       Operating-system integration: the native file dialog
-                   (supplied by app.py from the pywebview window) and
-                   opening a folder.
+                   and the close question (both supplied by app.py from
+                   the pywebview window) and opening a folder.
   web/             index.html, tokens.css (copied from DESIGN.md; a test
                    checks it), app.css; main.js (entry), nav.js (views,
                    help, keys), ui.js (helpers), api.js; frame.js (the
@@ -90,7 +90,8 @@ app.py ──▶ bootstrap.py
   - the context-image cache;
   - report output;
   - progress and cancellation;
-  - the desktop (file dialog, opening a folder).
+  - the desktop (file dialog, opening a folder, asking before the window
+    closes).
 - Internal helpers get no port.
 - Use-case tests run with fake ports, without HTTP, files or OpenCV.
 

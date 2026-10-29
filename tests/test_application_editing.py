@@ -66,8 +66,27 @@ class FakeTracer:
         return tuple(points[0][1] + k for k in range(last - first + 1))
 
 
+class FakeDesktop:
+    def __init__(self):
+        self.asked = []
+
+    def pick_video(self):
+        return None
+
+    def open_folder(self, folder):
+        pass
+
+    def ask_before_closing(self, ask):
+        self.asked.append(ask)
+
+
 @pytest.fixture
-def world():
+def desktop():
+    return FakeDesktop()
+
+
+@pytest.fixture
+def world(desktop):
     store, tracer, hashes = FakeStore(), FakeTracer(), {"/videos/SPL4.mp4": "abc123"}
 
     def hasher(path):
@@ -77,7 +96,7 @@ def world():
         return found
 
     times = iter(f"s{n}" for n in count(1))
-    return Editing(store, tracer, hasher, lambda: next(times)), store, tracer, hashes
+    return Editing(store, tracer, hasher, desktop, lambda: next(times)), store, tracer, hashes
 
 
 def test_the_first_edits_are_the_drafts_with_what_follows_from_them(world):
@@ -189,3 +208,10 @@ def test_the_source_check_compares_the_sha256_with_the_analysis(world):
     editing.check_source("i1")
     assert settled(editing, "i1").state is SourceState.UNREADABLE
     assert editing.source_file("i1") == Path("/videos/SPL4.mp4")
+
+
+def test_unsaved_edits_make_the_window_ask_before_closing(world, desktop):
+    editing = world[0]
+    editing.mark_unsaved(True)
+    editing.mark_unsaved(False)
+    assert desktop.asked == [True, False]

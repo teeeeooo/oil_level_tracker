@@ -27,7 +27,7 @@ from oil_tracker.domain.enums import InspectionState, LevelState
 from oil_tracker.domain.inspection import Analysis, Inspection
 from oil_tracker.domain.recipe import Glass
 
-from .ports import EdgeTracer, InspectionStore, SourceHasher, StoredAnalysis
+from .ports import Desktop, EdgeTracer, InspectionStore, SourceHasher, StoredAnalysis
 
 
 class NotAnalysed(LookupError):
@@ -77,11 +77,17 @@ class SourceCheck:
 
 class Editing:
     def __init__(
-        self, store: InspectionStore, tracer: EdgeTracer, hasher: SourceHasher, now: Callable[[], str]
+        self,
+        store: InspectionStore,
+        tracer: EdgeTracer,
+        hasher: SourceHasher,
+        desktop: Desktop,
+        now: Callable[[], str],
     ) -> None:
         self.store = store
         self._tracer = tracer
         self._hasher = hasher
+        self._desktop = desktop
         self._now = now
         self._checks: dict[str, SourceCheck] = {}
         self._lock = threading.Lock()
@@ -116,6 +122,10 @@ class Editing:
         saved_at = self._now()
         self.store.save_edits(inspection_id, edits, saved_at)
         return saved_at
+
+    def mark_unsaved(self, unsaved: bool) -> None:
+        """The editor holds edits it has not saved: closing the window asks first (§6)."""
+        self._desktop.ask_before_closing(unsaved)
 
     def point_line(self, inspection_id: str, glass_id: str, points: Sequence[tuple[int, float]]) -> DrawnPiece:
         """The line through the user's points along the edges between them (§6). Points are

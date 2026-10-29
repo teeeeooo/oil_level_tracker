@@ -57,7 +57,7 @@ export async function open(inspectionId) {
     const opened = await api.getJson(`/api/inspections/${id}/edits`);
     state.edits = opened.edits;
     state.savedAt = opened.saved_at;
-    state.dirty = opened.unsaved;
+    setDirty(opened.unsaved);
     takeDerived(opened.glasses);
   } catch (error) {
     notify("editorNotice", error.message, "error");
@@ -82,7 +82,8 @@ function release() {
   state.luma.clear();
   state.derived.clear();
   state.history.clear();
-  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null, dirty: false });
+  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null });
+  setDirty(false);
   for (const id of ["graph", "context"]) for (const layer of $(id).children) layer.replaceChildren();
   $("axis").replaceChildren();
 }
@@ -415,8 +416,15 @@ function onWheel(event) {
 
 // ---- changes --------------------------------------------------------------------------------------
 
+/** Unsaved edits: leaving the editor or closing the window asks first (Product SSOT §6). */
+function setDirty(dirty) {
+  if (state.dirty === dirty) return;
+  state.dirty = dirty;
+  api.call("POST", "/api/editor/unsaved", { unsaved: dirty }).catch(() => {});
+}
+
 function changed() {
-  state.dirty = true;
+  setDirty(true);
   renderHeader();
   derive();
 }
@@ -480,7 +488,7 @@ async function save() {
     return;
   }
   state.savedAt = result.data.saved_at;
-  state.dirty = false;
+  setDirty(false);
   renderHeader();
   notify("editorNotice", "저장했습니다.");
 }

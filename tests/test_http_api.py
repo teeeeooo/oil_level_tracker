@@ -403,3 +403,21 @@ def test_the_source_video_is_served_in_ranges(app, video):
     source.unlink()
     status, body, _ = call(running, "GET", path, token=False)
     assert status == 404 and "source.avi" in body["error"]
+
+
+def test_the_editor_tells_the_window_to_ask_before_closing(tmp_path):
+    asked = []
+    running = bootstrap.start(data_folder=tmp_path / "data", ask_before_closing=asked.append)
+    try:
+        assert call(running, "POST", "/api/editor/unsaved", {"unsaved": True})[0] == 200
+        assert call(running, "POST", "/api/editor/unsaved", {"unsaved": False})[0] == 200
+        status, data, _ = call(running, "POST", "/api/editor/unsaved", {"unsaved": "yes"})
+        assert status == 400 and "unsaved" in data["error"]
+        assert asked == [True, False]
+    finally:
+        running.close()
+    without_window = bootstrap.start(data_folder=tmp_path / "data")
+    try:
+        assert call(without_window, "POST", "/api/editor/unsaved", {"unsaved": True})[0] == 200
+    finally:
+        without_window.close()

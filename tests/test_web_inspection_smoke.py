@@ -219,11 +219,20 @@ def drag(page, start, end, steps=8):
     page.mouse.up()
 
 
+def wait_until(check):
+    for _ in range(250):
+        if check():
+            return
+        time.sleep(0.02)
+    raise AssertionError("timed out")
+
+
 def test_editing_saving_and_leaving(tmp_path, video, browser_page):
     page, errors = browser_page
     data = tmp_path / "data"
     write_recipes(data / "Recipes")
-    running = bootstrap.start(data_folder=data)
+    closing = []  # what the window would be told: ask before closing or not
+    running = bootstrap.start(data_folder=data, ask_before_closing=closing.append)
     try:
         call = analysed_inspection(running)
         opened = call("POST", "/api/videos", {"path": str(video)})
@@ -251,6 +260,7 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         start = point_on_oil(page, 0.5)
         drag(page, start, (start[0], start[1] + 40))
         page.get_by_text("저장 안 함").wait_for()
+        wait_until(lambda: closing == [True])
         moved = oil_path(page)
         assert moved != before
         shot(page, "e1-grab")
@@ -282,6 +292,7 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
 
         page.keyboard.press("Control+s")
         page.get_by_text("저장함").wait_for()
+        wait_until(lambda: closing == [True, False])
         folder = data / "Inspections" / "편집"
         saved = json.loads((folder / "edits.json").read_text(encoding="utf-8"))
         assert None in saved["glasses"][0]["oil"]["ys"] and "EDITED" in saved["glasses"][0]["oil"]["origins"]
@@ -297,6 +308,7 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         page.once("dialog", lambda dialog: dialog.accept())
         page.get_by_role("button", name="검사 목록").click()
         page.locator("#inspectionsView").wait_for()
+        wait_until(lambda: closing == [True, False, True, False])
         assert errors == []
     finally:
         running.close()
