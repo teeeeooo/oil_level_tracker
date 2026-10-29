@@ -200,36 +200,76 @@ help dialog (DESIGN.md §4–§5). The user dropped moving the zero line alone
 with the keyboard. The mock-ups `design/mockup/editor.html` and
 `recipe.html` predate these; DESIGN.md governs where they differ.
 
-## Session handoff — 2026-10-29 (second)
+## Session handoff — 2026-10-29 (third)
 
-**The session closed after `5aadd35`,** with this handoff commit on top.
-The working tree is clean, and `main` and the remote are in sync.
+**The session closed after `154f620`,** with this handoff commit on top.
+The working tree is clean, and `main` and the remote are in sync. V2-2
+steps 1 to 8 are done; nothing waits on Windows.
 
 **Resume:** read this file, then
-[product.md](../10-product/product.md) (§3, §4, §6 changed today),
-[architecture.md](../20-architecture/architecture.md),
+[product.md](../10-product/product.md) (§2 now names the slowest target
+PC; §3, §4 and §6 changed today),
+[architecture.md](../20-architecture/architecture.md) (the web modules),
 [inspection-folder.md](../20-architecture/inspection-folder.md),
-[DESIGN.md](../../DESIGN.md) §4–§5 (the inspection screens) and the
-[A4 timing request](../40-operations/2026-10-29-v2-2-analysis-timing-windows-request.md).
+[DESIGN.md](../../DESIGN.md) §4–§5, the two timing results
+([workstation](../60-evidence/2026-10-29-v2-2-analysis-timing-windows-result.md),
+[slowest PC](../60-evidence/2026-10-29-v2-2-slowest-pc-timing-windows-result.md))
+and the two request styles: the
+[V2-1 request](../40-operations/2026-10-29-v2-1-recipe-windows-request.md)
+for the Windows agent, and the
+[slowest-PC request](../40-operations/2026-10-29-v2-2-slowest-pc-timing-windows-request.md)
+for a person in a terminal on a PC without an agent.
 
-**Since then:** the A4 result came in after the compaction and is judged
-(step 2). The user named the slowest target PC (Product SSOT §2); step 6
-is done, and its timing on that class is judged (step 6). Nothing waits
-on Windows.
+**Step 9, next: the Windows request for the whole V2-2 flow.** Written in
+Korean for the Windows agent on the workstation, as the V2-1 request:
+- a commit ZIP and per-file SHA-256 values; criteria fixed before the
+  run; one result block to relay;
+- the tests: `139 passed, 3 skipped` (see the note below);
+- the app on the user's Recipes `SPL#4_test1_607bccb` and
+  `SPL#1_test1_607bccb`: a new inspection for each video through the
+  picker, the setup (range, compressor start for the `RECOVERY` Glasses,
+  one Glass correction and its badge), a cancel from the progress dialog,
+  then a full analysis and the read-only result (both SPL#4 Glasses);
+- **A4 inside the app** on SPL#1, from a first run with no cancel: the
+  inspection's `created_at` (`inspection.json`) to the analysis's
+  `finished_at` (`cache/analysis.json`), both to the second;
+- the V2-1 follow-up in WebView2: the speed field, the help dialog, F1;
+- the frame fix of step 8: "." from frame 0 shows 00:00.0, then the next
+  frame times in order;
+- how the result screen feels on SPL#1 (8,210 columns), which is not
+  measured yet.
+Then judge it, record it in `docs/60-evidence/`, and close V2-2 in the
+roadmap if it passes.
 
-**Step 9, next:** the Windows run (above), with a request written as
-before. It includes the speed-up candidates 1 and 2 of the slowest-PC
-result only if they are done by then.
+**Carried forward:**
+- **Speed before V2-5:** the slowest PC takes 169.7 s of 180 s. The
+  slowest-PC result lists the candidates: the draft's dynamic
+  programming, cheaper medians on that CPU (benchmark there first), and
+  converting only the Glass band (PyAV, the user's decision).
+- **V2-3:** A5 and A6 on the slowest PC; re-analysing an analysed
+  inspection (the API refuses it with 409 until then); the warning when a
+  reopened video's SHA-256 differs (A9); the video, zoom and tools on the
+  result screen.
+- `AnalysisSettings.sample_count` counts to `end_sec`, but the analysis
+  stops at the last frame, so it can be one more than the analysis gives
+  when the range ends at the video's end. The setup caption counts as the
+  analysis does.
+- The slowest PC reported Python 3.15.2 instead of 3.14; the picture was
+  identical.
 
 **Other notes:**
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
+- `scripts/time_analysis.py` runs the app's analysis adapter stage by
+  stage and writes a Markdown result; it is meant for a person in a
+  terminal.
 - Expected Windows test line: run pytest on macOS without Playwright
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. After step 8: `140 passed, 2 skipped` on macOS, so
+  test. At `154f620`: `140 passed, 2 skipped` on macOS, so
   `139 passed, 3 skipped` on Windows.
+- Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
 - The mock-ups `design/mockup/editor.html` and `recipe.html` predate the
   speed field and the help dialog; DESIGN.md governs where they differ.
 
@@ -267,4 +307,5 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done today:** V2-1 closed; V2-2 steps 1 to 8, with the slowest-PC
   timing judged.
-- **Next action:** step 9: the Windows request for the whole V2-2 flow.
+- **Next action:** step 9: write the Windows request for the whole V2-2
+  flow, as the handoff above says.
