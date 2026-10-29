@@ -59,8 +59,11 @@ export function notify(id, message, kind = "info") {
   node.timer = setTimeout(() => { node.textContent = ""; }, NOTICE_MS);
 }
 
-/** Whether keys go to a text field rather than the screen. */
+/** Whether keys go to a text field rather than the screen. A switch or a slider keeps the
+ * screen's keys: clicking one must not turn the shortcuts off. */
 export function typing() {
-  const tag = document.activeElement?.tagName;
-  return tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA";
+  const node = document.activeElement;
+  if (!node) return false;
+  if (node.tagName === "TEXTAREA" || node.tagName === "SELECT" || node.isContentEditable) return true;
+  return node.tagName === "INPUT" && !["checkbox", "radio", "range", "button"].includes(node.type);
 }

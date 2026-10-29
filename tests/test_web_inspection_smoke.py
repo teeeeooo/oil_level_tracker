@@ -259,8 +259,11 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         page.keyboard.press("Control+Shift+z")
         wait_for_oil(page, moved)
 
-        # the range tool: Delete empties the Oil line there, which counts as an empty stretch
+        # the range tool: Delete empties the Oil line there, which counts as an empty stretch.
+        # A switch just clicked keeps the shortcut keys working.
+        page.get_by_text("배경 제거 보기", exact=True).click()
         page.keyboard.press("r")
+        assert page.locator("#editorView button[data-tool=range]").get_attribute("aria-pressed") == "true"
         box = page.locator("#graph").bounding_box()
         drag(page, (box["x"] + box["width"] * 0.3, box["y"] + 60), (box["x"] + box["width"] * 0.55, box["y"] + 60))
         assert page.locator("#selectionText").inner_text() != "없음"

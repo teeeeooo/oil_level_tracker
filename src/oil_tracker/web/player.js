@@ -48,8 +48,9 @@ export async function open(inspectionId, screenHooks) {
 }
 
 export function close() {
-  stop();
+  state.playing = false;  // no last frame for a session about to close
   const video = $("video");
+  video.pause();
   video.removeAttribute("src");
   video.load();
   if (state.videoId) api.call("DELETE", `/api/videos/${encodeURIComponent(state.videoId)}`);
@@ -73,6 +74,7 @@ export function layout() {
   const box = $("videoBox");
   if (!state.crop || !state.info) return;
   const bw = box.clientWidth, bh = box.clientHeight;
+  if (!bw || !bh) return;  // hidden
   const { x, y, w, h } = state.crop;
   const k = Math.min(bw / w, bh / h);
   const vw = bw / k, vh = bh / k, vx = x + w / 2 - vw / 2, vy = y + h / 2 - vh / 2;

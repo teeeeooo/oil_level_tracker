@@ -423,6 +423,7 @@ function changed() {
 
 /** Ask what follows from the lines now; one request at a time, the last change last. */
 async function derive() {
+  if (!state.edits) return;
   if (deriving) {
     deriveAgain = true;
     return;
@@ -440,7 +441,7 @@ async function derive() {
   }
   if (deriveAgain) {
     deriveAgain = false;
-    derive();
+    if (state.edits) derive();
   }
 }
 
@@ -548,7 +549,7 @@ function renderHeader() {
   const saved = state.dirty ? "저장 안 함" : state.savedAt ? `저장함 ${localDate(state.savedAt).slice(11)}` : "초안 그대로";
   $("editorState").replaceChildren(el("span", { class: state.dirty ? "dirty" : "" }, saved), ` · ${d.video.name}`);
   const glasses = $("editorGlass");
-  if (glasses.options.length !== d.recipe.glasses.length) {
+  if ([...glasses.options].map((o) => o.value).join("\n") !== d.recipe.glasses.map((g) => g.id).join("\n")) {
     glasses.replaceChildren(...d.recipe.glasses.map((g) => el("option", { value: g.id }, g.name)));
   }
   glasses.value = state.glassId ?? "";
@@ -586,7 +587,7 @@ function renderGlassPanel() {
 }
 
 function renderTools() {
-  for (const button of document.querySelectorAll("#editorView [data-tool]")) {
+  for (const button of document.querySelectorAll("#editorView button[data-tool]")) {
     button.classList.toggle("on", button.dataset.tool === state.tool);
     button.setAttribute("aria-pressed", String(button.dataset.tool === state.tool));
   }
@@ -596,7 +597,7 @@ function renderTools() {
   $("grabWidth").value = String(index);
   $("grabWidthText").textContent = `${state.width} s`;
   $("snapToggle").checked = state.snap;
-  for (const id of ["graph", "context"]) $(id).dataset.tool = state.tool;
+  for (const id of ["graph", "context"]) $(id).dataset.mode = state.tool;  // its cursor
   renderSelection();
 }
 
@@ -611,6 +612,7 @@ function renderSelection() {
 function setTool(tool) {
   state.tool = tool;
   state.hot = null;
+  for (const id of ["graph", "context"]) $(id).style.cursor = "";
   renderTools();
   requestDraw({ lines: true });
 }
@@ -687,12 +689,13 @@ export function init(toList) {
   $("editorUndo").addEventListener("click", () => undo(false));
   $("editorRedo").addEventListener("click", () => undo(true));
   $("editorGlass").addEventListener("change", () => {
+    $("editorGlass").blur();  // the editor's keys again
     state.glassId = $("editorGlass").value;
     state.selection = null;
     renderSelection();
     showGlass(false);
   });
-  for (const button of document.querySelectorAll("#editorView [data-tool]")) {
+  for (const button of document.querySelectorAll("#editorView button[data-tool]")) {
     button.addEventListener("click", () => setTool(button.dataset.tool));
   }
   for (const button of document.querySelectorAll("#lineKind button")) {

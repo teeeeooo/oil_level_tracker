@@ -192,8 +192,9 @@ class Editor:
         return intervals
 
     def click_axis(self, share: float) -> None:
+        """Click the time axis between its two range numbers, which are inputs of their own."""
         box = self.page.locator("#axis").bounding_box()
-        left, right = box["x"] + 60, box["x"] + box["width"] - 20
+        left, right = box["x"] + 100, box["x"] + box["width"] - 90
         self.page.mouse.click(left + (right - left) * share, box["y"] + box["height"] / 2)
 
 

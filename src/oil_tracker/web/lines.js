@@ -57,9 +57,14 @@ export function grab(line, base, times, index, y, width, shape) {
   return [lo, hi];
 }
 
-/** The pencil: draw from (t0, y0) to (t1, y1), straight in between; returns [first, end). */
+/** The pencil: draw from (t0, y0) to (t1, y1), straight in between; returns [first, end). A press,
+ * or a stroke between two samples, draws the sample nearest to it. */
 export function pencil(line, times, t0, y0, t1, y1, settle = (i, y) => y) {
-  const [first, end] = indexRange(times, t0, t1);
+  let [first, end] = indexRange(times, t0, t1);
+  if (first === end) {
+    first = nearestIndex(times, (t0 + t1) / 2);
+    end = first + 1;
+  }
   for (let i = first; i < end; i++) {
     const share = t1 === t0 ? 1 : (times[i] - t0) / (t1 - t0);
     line.ys[i] = settle(i, y0 + (y1 - y0) * share);
