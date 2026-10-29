@@ -57,11 +57,12 @@ Draft quality is **not** an acceptance criterion.
    - It holds the Glass name, the ellipse, the zero line and the judgment
      rule (§5).
    - The ellipse is axis-aligned. The zero line is horizontal.
-   - **Reference frame:** the user scrubs a sample video and draws on the
-     frame they pick. The Recipe keeps:
-     - that frame, as a downscaled JPEG;
-     - the frame size;
-     - the source video name and time, for reference.
+   - **Reference frame:** the user scrubs a sample video and draws on it.
+     The frame on screen when the Recipe is saved becomes the reference
+     frame; there is no separate "set reference" step.
+     - Saving without a video open keeps the stored reference frame.
+     - The Recipe keeps that frame as a downscaled JPEG, the frame size,
+       and the source video name and time, for reference.
    - **Picking:** an inspection starts by picking a Recipe from the Recipe
      folder (§8). The list shows the name, the Glass names, the frame size
      and the modified date.

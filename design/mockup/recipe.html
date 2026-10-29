@@ -157,8 +157,8 @@ tbody tr { cursor:default; }
     <section class="left">
       <div class="phead">기준 프레임
         <span class="right">
-          <span>SPL#4_Cooling_onoff_#2.mp4 · 기준 00:12.5 · 보는 중 00:41.0</span>
-          <button class="btn small">현재 프레임을 기준으로</button>
+          <span>SPL#4_Cooling_onoff_#2.mp4 · 저장된 기준 00:12.5</span>
+          <span>저장하면 지금 보이는 프레임이 기준이 됩니다</span>
           <span>휠 확대 · Shift-드래그 이동 · 화살표 1 px (Shift 10 px)</span>
         </span>
       </div>
@@ -194,9 +194,9 @@ tbody tr { cursor:default; }
 <div class="note" id="note"><button class="close" onclick="this.parentNode.remove()">닫기 ✕</button>
   <b>목업 (가짜 데이터)</b>
   <div class="tabs"><button data-go="list">Recipe 목록</button><button data-go="edit" class="on">Recipe 편집</button></div>
-  <b>편집:</b> 프레임은 합성 그림입니다. BASE가 선택된 상태(실선과 손잡이)이고, Accum은 점선입니다.
-  Accum은 0선이 타원 밖이라 문제 1개로 표시됩니다. 오른쪽 Glass 목록을 눌러 선택을 바꾸고, 판정 방식을 바꾸면
-  그 방식에 쓰는 칸만 보입니다.<br>
+  <b>편집:</b> 프레임은 합성 그림입니다. BASE가 선택된 상태(실선과 손잡이 8개)이고, Accum은 점선입니다.
+  타원 안쪽을 끌면 이동, 0선은 선 자체를 위아래로 끕니다(v1과 같음). 저장하면 지금 보이는 프레임이 기준이 됩니다.<br>
+  Accum은 허용 시간에 -1을 입력한 상태라 문제 1개로 표시됩니다(Accum을 눌러 보세요). 판정 방식을 바꾸면 그 방식에 쓰는 칸만 보입니다.<br>
   <b>새 Recipe:</b> 영상을 먼저 고르고, 첫 프레임에서 시작합니다. Glass는 "+ 추가"로 화면 가운데에 놓고 끌어서 맞춥니다.<br>
   <b>목록:</b> 검사를 시작할 때(V2-2)도 같은 목록에서 Recipe를 고릅니다. Recipe 삭제는 첫 버전에 넣지 않습니다(폴더에서 파일을 지우면 됩니다).
 </div>
@@ -213,11 +213,14 @@ tbody tr { cursor:default; }
   const glasses = [
     { name: "BASE", cx: 560, cy: 400, rx: 90, ry: 150, zero: 420, oil: 455,
       rule: { mode: "RECOVERY", recovery_limit_sec: 120, stable_hold_sec: 5, minimum_valid_coverage_ratio: 0.7, allowed_sec: 5, allowed_px: 0 } },
-    { name: "Accum", cx: 900, cy: 330, rx: 60, ry: 110, zero: 448, oil: 360,
-      rule: { mode: "HOLD_ABOVE_ZERO", recovery_limit_sec: 120, stable_hold_sec: 5, minimum_valid_coverage_ratio: 0.7, allowed_sec: 5, allowed_px: 0 } },
+    { name: "Accum", cx: 900, cy: 330, rx: 60, ry: 110, zero: 350, oil: 360,
+      rule: { mode: "HOLD_ABOVE_ZERO", recovery_limit_sec: 120, stable_hold_sec: 5, minimum_valid_coverage_ratio: 0.7, allowed_sec: "-1", allowed_px: 0 } },
   ];
   let selected = 0;
-  const problemOf = g => (g.zero < g.cy - g.ry || g.zero > g.cy + g.ry) ? "0선이 타원 밖" : null;
+  // the typed "-1" is not applied (DESIGN.md §4 field errors); it only shows the error
+  const allowedErr = r => r.mode !== "RECOVERY" && Number(r.allowed_sec) < 0 ? "허용 시간: 0 이상이어야 합니다." : null;
+  const problemOf = g => allowedErr(g.rule) ? "허용 시간 오류" : null;
+  const chord = (q, y) => { const u = (y - q.cy) / q.ry; const half = q.rx * Math.sqrt(Math.max(0, 1 - u * u)); return [q.cx - half, q.cx + half]; };
 
   function fit() {
     const box = document.getElementById("frameBox");
@@ -264,7 +267,9 @@ tbody tr { cursor:default; }
       const sel = i === selected;
       const dash = sel ? "" : `stroke-dasharray="4 3"`;
       const width = sel ? 1.5 : 1;
-      const x0 = X(q.cx - q.rx), x1 = X(q.cx + q.rx), zy = Y(q.zero);
+      const [c0, c1] = chord(q, q.zero);
+      const x0 = X(c0), x1 = X(c1), zy = Y(q.zero);
+      const bx0 = X(q.cx - q.rx), bx1 = X(q.cx + q.rx), by0 = Y(q.cy - q.ry), by1 = Y(q.cy + q.ry);
       for (const [stroke, off] of [["rgba(0,0,0,0.5)", 1], [outline, 0]]) {
         out += `<ellipse cx="${X(q.cx)}" cy="${Y(q.cy) + off}" rx="${L(q.rx)}" ry="${L(q.ry)}" fill="none" stroke="${stroke}" stroke-width="${width}" ${dash}/>`;
         out += `<line x1="${x0}" x2="${x1}" y1="${zy + off}" y2="${zy + off}" stroke="${stroke}" stroke-width="${width}" ${dash}/>`;
@@ -275,7 +280,8 @@ tbody tr { cursor:default; }
               <rect x="${x0 - 20}" y="${zy - 10}" width="16" height="20" rx="4" fill="${css("--frame-caption-bg")}"/>
               <text x="${x0 - 12}" y="${zy + 4}" text-anchor="middle" font-size="12" fill="#fff">0</text>`;
       if (sel) {
-        const handles = [[X(q.cx), Y(q.cy - q.ry)], [X(q.cx), Y(q.cy + q.ry)], [x0, Y(q.cy)], [x1, Y(q.cy)], [x1, zy]];
+        const mx = X(q.cx), my = Y(q.cy);
+        const handles = [[bx0, by0], [mx, by0], [bx1, by0], [bx1, my], [bx1, by1], [mx, by1], [bx0, by1], [bx0, my]];
         for (const [hx, hy] of handles)
           out += `<rect x="${hx - 4}" y="${hy - 4}" width="8" height="8" fill="${css("--bg-1")}" stroke="${css("--brand")}" stroke-width="1"/>`;
       }
@@ -296,7 +302,7 @@ tbody tr { cursor:default; }
         <div class="rule-text">압축기 기동 후 Oil 선이 0선 이상으로 올라와 ${r.stable_hold_sec} s 동안 머물러야 합니다. 그 시작은 기동 후 ${r.recovery_limit_sec} s 안이어야 합니다.</div>`;
     }
     const below = r.mode === "HOLD_BELOW_ZERO";
-    return `<div class="grid2">${num("허용 시간", r.allowed_sec, "s")}${num("허용 높이", r.allowed_px, "px")}</div>
+    return `<div class="grid2">${num("허용 시간", r.allowed_sec, "s", allowedErr(r))}${num("허용 높이", r.allowed_px, "px")}</div>
       ${num("최소 유효 비율", Math.round(r.minimum_valid_coverage_ratio * 100), "%")}
       <div class="rule-text">Oil 선이 0선 ${below ? "위" : "아래"}로 ${r.allowed_px} px 넘게 벗어난 상태가 한 번에 ${r.allowed_sec} s보다 길게 이어지면 FAIL입니다. Foam은 판정에 쓰지 않습니다.</div>`;
   }
@@ -312,12 +318,11 @@ tbody tr { cursor:default; }
     }).join("");
     const q = glasses[selected];
     document.getElementById("selHead").textContent = `선택한 Glass · ${q.name}`;
-    const zeroErr = problemOf(q) ? `타원의 위아래 끝(${q.cy - q.ry}–${q.cy + q.ry} px) 사이로 옮기세요.` : null;
     document.getElementById("selBody").innerHTML = `
       <div class="field"><span class="label">이름</span><div class="input"><input value="${q.name}"></div></div>
       <span class="label">위치 (원본 프레임 px)</span>
       <div class="grid2">${num("중심 X", q.cx, "px")}${num("중심 Y", q.cy, "px")}${num("반지름 X", q.rx, "px")}${num("반지름 Y", q.ry, "px")}</div>
-      ${num("0선 Y", q.zero, "px", zeroErr)}
+      ${num("0선 Y", q.zero, "px")}
       <hr>
       <div class="field"><span class="label">판정 방식</span>
         <select id="mode">${Object.entries(MODES).map(([k, v]) => `<option value="${k}"${k === q.rule.mode ? " selected" : ""}>${v}</option>`).join("")}</select></div>

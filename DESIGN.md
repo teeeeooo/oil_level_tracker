@@ -168,14 +168,25 @@ Do not use sizes outside this ramp.
   - unselected Glasses use the `--glass-outline` style in §2.3;
   - the selected Glass has a 1.5 px solid `--glass-outline` ellipse and
     zero line, over the same shadow line;
-  - handles: 8 × 8 px squares, `--bg-1` fill, 1 px `--brand` border,
-    on the four ellipse edge midpoints and the right end of the zero line;
-  - the zero line spans the ellipse's bounding-box width;
   - the Glass name sits above the ellipse in a `--frame-caption-bg` chip;
-  - dragging inside the ellipse moves the Glass with its zero line;
-  - arrow keys move the selected Glass 1 px (Shift: 10 px).
-- **Field errors:** the message sits under the input in Caption 1
-  `--error`, and the input border becomes `--error-border`.
+  - **the interaction follows v1:**
+    - eight resize handles on the ellipse's bounding box (four corners,
+      four edge midpoints): 8 × 8 px squares, `--bg-1` fill, 1 px
+      `--brand` border;
+    - dragging inside the ellipse moves the Glass with its zero line;
+    - the zero line is the chord of the ellipse at its height. It is
+      dragged up and down by the line itself, through a 14 px hit band,
+      with a vertical-resize cursor. It sits above the ellipse, so
+      grabbing it never moves the Glass;
+    - a drag stops the zero line at the ellipse's top and bottom.
+      Resizing the ellipse pulls the zero line back inside;
+  - new in v2: arrow keys move the selected Glass 1 px (Shift: 10 px).
+- **Field errors:**
+  - the message sits under the input in Caption 1 `--error`, and the input
+    border becomes `--error-border`;
+  - an invalid number is not applied; the drawing keeps the last valid
+    value;
+  - saving is blocked while any error remains.
 - **Tables (report and panels):**
   - Body 1;
   - header row `--bg-3`, Body 1 Strong;
@@ -220,11 +231,12 @@ Do not use sizes outside this ramp.
     - the problem count in `--error` and "저장" (primary), on the right.
   - **Main area:**
     - **Left column, flexible width:**
-      - a 32 px header: the source video name, the reference-frame time,
-        and "현재 프레임을 기준으로";
+      - a 32 px header: the source video name, the saved reference-frame
+        time, and the hint "저장하면 지금 보이는 프레임이 기준이 됩니다";
       - the frame view (§4);
       - a 40 px transport: previous frame, play/pause, next frame, a
-        scrub bar with a "기준" mark, and the time in `mm:ss.s`.
+        scrub bar with a "기준" mark at the saved reference time, and the
+        time in `mm:ss.s`.
     - **Right column, 360 px:**
       - the Recipe name;
       - the Glass list, with "+ 추가";
