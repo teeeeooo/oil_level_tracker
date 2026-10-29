@@ -85,9 +85,17 @@ Product SSOT §3, §4 and §6:
    - The user found SPL#1's Oil boundary faint but visible by eye in the
      full-size context image, so the context image method stays.
 2. **A4 timing, before the screens.** SPL#1 BASE's context build took
-   202.1 s on Windows, over the 180 s for the whole analysis. Find where
-   the time goes, speed it up (hardware decoding, decoder threads, a faster
-   row median) and confirm with a short Windows timing request.
+   202.1 s on Windows, over the 180 s for the whole analysis.
+   - **Done on macOS:** the row median was most of that time
+     (`numpy.nanmedian`); sorting each row gives the same values about ten
+     times faster. The analysis core of step 6 is built ahead for the
+     timing (`adapters/video/context.py`, `draft.py`, `fc3feec`); it
+     matches the comparison script on the local samples.
+   - **Windows, waiting:**
+     [2026-10-29-v2-2-analysis-timing-windows-request.md](../40-operations/2026-10-29-v2-2-analysis-timing-windows-request.md)
+     (source `f330e62`, a commit ZIP). Its table, fixed before the run,
+     decides whether the screens wait for more speed and whether hardware
+     decoding becomes the default.
 3. **Mock-ups** of the inspection list and the setup screen, for the
    user's confirmation. The read-only result follows the confirmed editor
    mock-up.
@@ -97,7 +105,8 @@ Product SSOT §3, §4 and §6:
    cache, with a format document in `docs/20-architecture/`.
 6. **`adapters/video`:** one pass over the video for every Glass: context
    image, background view and Oil draft, with progress and cancellation.
-   Ported from `spike/webui:spikes/webui/context.py`.
+   Ported from `spike/webui:spikes/webui/context.py`. The core is built
+   (step 2); the ports, cancellation and the domain samples remain.
 7. **`application` and `adapters/http`:** creating an inspection, the
    analysis job (progress, time left, cancel) and the result data.
 8. **`web`:** the inspection list, the new-inspection flow, the setup
@@ -142,4 +151,8 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Next action:** step 2 (A4 timing) and step 3 (mock-ups).
+- **Next action:**
+  - the user runs the A4 timing Windows request and relays its result
+    block;
+  - meanwhile, step 3: the mock-ups of the inspection list and the setup
+    screen.
