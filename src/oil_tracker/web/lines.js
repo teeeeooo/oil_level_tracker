@@ -132,6 +132,32 @@ export async function lumaOf(urls) {
 
 /** Undo and redo. An entry changes samples of one line: { glassId, kind, first, before, after },
  * where before and after are { ys, origins } for [first, first + length). */
+/** The "cannot judge" stretches with [t0, t1) added, joined where they meet or overlap. */
+export function markStretch(stretches, t0, t1) {
+  const all = [...stretches, { start_sec: t0, end_sec: t1 }].sort((a, b) => a.start_sec - b.start_sec);
+  const joined = [];
+  for (const s of all) {
+    const last = joined[joined.length - 1];
+    if (last && s.start_sec <= last.end_sec) last.end_sec = Math.max(last.end_sec, s.end_sec);
+    else joined.push({ start_sec: s.start_sec, end_sec: s.end_sec });
+  }
+  return joined;
+}
+
+/** The "cannot judge" stretches with [t0, t1) taken out: a stretch across it splits in two. */
+export function clearStretch(stretches, t0, t1) {
+  const kept = [];
+  for (const s of stretches) {
+    if (s.end_sec <= t0 || s.start_sec >= t1) {
+      kept.push({ start_sec: s.start_sec, end_sec: s.end_sec });
+      continue;
+    }
+    if (s.start_sec < t0) kept.push({ start_sec: s.start_sec, end_sec: t0 });
+    if (s.end_sec > t1) kept.push({ start_sec: t1, end_sec: s.end_sec });
+  }
+  return kept;
+}
+
 export class History {
   constructor() {
     this.done = [];
@@ -146,25 +172,37 @@ export class History {
     while (end > first && !differs(end - 1)) end--;
     if (first === end) return false;
     const slice = (l) => ({ ys: l.ys.slice(first, end), origins: l.origins.slice(first, end) });
-    this.done.push({ glassId, kind, first, before: slice(base), after: slice(line) });
-    if (this.done.length > UNDO_DEPTH) this.done.shift();
-    this.undone = [];
+    this.push({ glassId, kind, first, before: slice(base), after: slice(line) });
     return true;
   }
 
-  /** Undo the last change through `lineOf(glassId, kind)`; returns its entry, or null. */
-  undo(lineOf) {
+  /** Record a change of a Glass's "cannot judge" stretches. False when nothing changed. */
+  recordStretches(glassId, before, after) {
+    if (JSON.stringify(before) === JSON.stringify(after)) return false;
+    this.push({ glassId, kind: "cannot_judge", before, after });
+    return true;
+  }
+
+  push(entry) {
+    this.done.push(entry);
+    if (this.done.length > UNDO_DEPTH) this.done.shift();
+    this.undone = [];
+  }
+
+  /** Undo the last change; `edits` gives `lineOf(glassId, kind)` and `setStretches(glassId, list)`.
+   * Returns its entry, or null. */
+  undo(edits) {
     const entry = this.done.pop();
     if (!entry) return null;
-    apply(lineOf(entry.glassId, entry.kind), entry.first, entry.before);
+    restore(edits, entry, entry.before);
     this.undone.push(entry);
     return entry;
   }
 
-  redo(lineOf) {
+  redo(edits) {
     const entry = this.undone.pop();
     if (!entry) return null;
-    apply(lineOf(entry.glassId, entry.kind), entry.first, entry.after);
+    restore(edits, entry, entry.after);
     this.done.push(entry);
     return entry;
   }
@@ -173,6 +211,11 @@ export class History {
     this.done = [];
     this.undone = [];
   }
+}
+
+function restore(edits, entry, part) {
+  if (entry.kind === "cannot_judge") edits.setStretches(entry.glassId, part.map((s) => ({ ...s })));
+  else apply(edits.lineOf(entry.glassId, entry.kind), entry.first, part);
 }
 
 function apply(line, first, part) {

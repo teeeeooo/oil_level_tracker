@@ -493,7 +493,8 @@ function takeDerived(glasses) {
 }
 
 function undo(redo = false) {
-  const entry = redo ? state.history.redo(lineOf) : state.history.undo(lineOf);
+  const target = { lineOf, setStretches: (glassId, list) => { editsOf(glassId).cannot_judge = list; } };
+  const entry = redo ? state.history.redo(target) : state.history.undo(target);
   if (!entry) return;
   if (entry.glassId !== state.glassId) {
     state.glassId = entry.glassId;
@@ -501,7 +502,8 @@ function undo(redo = false) {
     showGlass(false);
   }
   changed();
-  requestDraw({ lines: true });
+  requestDraw(entry.kind === "cannot_judge" ? { back: true } : { lines: true });
+  renderSelection();
 }
 
 function eraseSelection() {
@@ -512,6 +514,23 @@ function eraseSelection() {
   lines.erase(line, first, end);
   if (state.history.record(state.glassId, "oil", base, line)) changed();
   requestDraw({ lines: true });
+}
+
+/** U: mark the selected range "cannot judge" (Product SSOT §4); or take the mark off it. The lines
+ * stay as they are: those samples count neither as valid nor as empty. */
+function judgeSelection(cannot) {
+  const s = state.selection;
+  if (!s || s.t1 <= s.t0) return;
+  const [first, end] = lines.indexRange(state.edits.times, s.t0, s.t1);
+  if (cannot && first === end) return;  // no sample in it
+  const glass = editsOf();
+  const before = glass.cannot_judge;
+  const after = cannot ? lines.markStretch(before, s.t0, s.t1) : lines.clearStretch(before, s.t0, s.t1);
+  if (!state.history.recordStretches(state.glassId, before, after)) return;
+  glass.cannot_judge = after;
+  changed();
+  requestDraw({ back: true });
+  renderSelection();
 }
 
 /** Save the edits; whether they were saved. */
@@ -652,6 +671,9 @@ function renderSelection() {
   const s = state.selection;
   $("selectionText").textContent = s ? `${clock(s.t0)} – ${clock(s.t1)} · ${(s.t1 - s.t0).toFixed(1)} s` : "없음";
   $("eraseSelection").disabled = !s;
+  $("markSelection").disabled = !s;
+  const marked = state.edits ? editsOf()?.cannot_judge ?? [] : [];
+  $("clearSelection").disabled = !s || !marked.some((c) => c.end_sec > s.t0 && c.start_sec < s.t1);
 }
 
 function setTool(tool) {
@@ -695,6 +717,8 @@ function onKey(event) {
     jumpToEmpty(event.shiftKey ? -1 : 1);
   } else if (event.key === "Delete" || event.key === "Backspace") {
     eraseSelection();
+  } else if (event.code === "KeyU") {
+    judgeSelection(true);
   } else if (event.key === "Escape") {
     if (!$("videoSpeedMenu").hidden) player.toggleSpeedMenu(false);
     else {
@@ -734,6 +758,8 @@ export function init(toList, openSetup) {
   $("sourceRecheck").addEventListener("click", () => checkSource().catch(() => {}));
   $("editorSave").addEventListener("click", save);
   $("editorReanalyse").addEventListener("click", reanalyse);
+  $("markSelection").addEventListener("click", () => judgeSelection(true));
+  $("clearSelection").addEventListener("click", () => judgeSelection(false));
   $("editorUndo").addEventListener("click", () => undo(false));
   $("editorRedo").addEventListener("click", () => undo(true));
   $("editorGlass").addEventListener("change", () => {

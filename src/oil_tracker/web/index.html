@@ -101,7 +101,7 @@
     <button class="tool labeled" data-tool="grab" title="잡아끌기 (G)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13c3 0 4-6 8-6s5 6 8 6"/><path d="M10 3v4M8 5l2-2 2 2"/></svg>잡아끌기</button>
     <button class="tool labeled" data-tool="pencil" title="연필 (P)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l1-4 8-8 3 3-8 8z"/><path d="M11 6l3 3"/></svg>연필</button>
     <button class="tool labeled" data-tool="point" title="점 잇기 (L): 다음 단계에서 추가" disabled><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 14c2-1 3-6 6-6s3 4 6 2"/><circle cx="4" cy="14" r="1.8" fill="currentColor"/><circle cx="10" cy="8" r="1.8" fill="currentColor"/><circle cx="16" cy="10" r="1.8" fill="currentColor"/></svg>점 잇기</button>
-    <button class="tool labeled" data-tool="range" title="범위 (R): 끌어서 시간 범위를 고르고, Delete로 선 지우기"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3v14M15 3v14"/><path d="M5 10h10M7 8l-2 2 2 2M13 8l2 2-2 2"/></svg>범위</button>
+    <button class="tool labeled" data-tool="range" title="범위 (R): 끌어서 시간 범위를 고르고, Delete로 선 지우기 · U로 판단 불가"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3v14M15 3v14"/><path d="M5 10h10M7 8l-2 2 2 2M13 8l2 2-2 2"/></svg>범위</button>
     <button class="tool labeled" data-tool="memo" title="메모 (M): 다음 단계에서 추가" disabled><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h12v9H9l-4 3v-3H4z"/></svg>메모</button>
     <button class="tool labeled" data-tool="pan" title="이동 (H, 또는 Shift-드래그)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2v16M2 10h16M10 2l-2 2M10 2l2 2M10 18l-2-2M10 18l2-2M2 10l2-2M2 10l2 2M18 10l-2-2M18 10l-2 2"/></svg>이동</button>
     <div class="sep"></div>
@@ -168,7 +168,8 @@
             <div class="head">선택한 범위 <span class="num" id="selectionText"></span></div>
             <div class="row">
               <button class="btn small" id="eraseSelection">선 지우기 <kbd>Delete</kbd></button>
-              <button class="btn small" disabled title="다음 단계에서 추가">판단 불가 <kbd>U</kbd></button>
+              <button class="btn small" id="markSelection">판단 불가 <kbd>U</kbd></button>
+              <button class="btn small" id="clearSelection">판단 불가 풀기</button>
             </div>
           </div>
         </div>
@@ -361,6 +362,7 @@
         <tr><td><kbd>P</kbd> 연필</td><td>"그릴 선"을 끈 자리대로 다시 그립니다. 지나간 시간 범위가 바뀝니다.</td></tr>
         <tr><td><kbd>R</kbd> 범위</td><td>그래프나 맥락 이미지를 가로로 끌어 시간 범위를 고릅니다. 양 끝을 끌어 조정하고, <kbd>Esc</kbd>로 풉니다.</td></tr>
         <tr><td><kbd>Delete</kbd></td><td>고른 범위의 Oil 선을 지웁니다. 지운 곳은 다시 그릴 때까지 빈 구간(무효)입니다.</td></tr>
+        <tr><td><kbd>U</kbd> · "판단 불가 풀기"</td><td>고른 범위를 판단 불가로 표시합니다(빗금). 그 샘플은 유효하지도, 빈 구간도 아닙니다. "판단 불가 풀기"는 고른 범위만큼 표시를 지웁니다.</td></tr>
         <tr><td><kbd>H</kbd> 이동 · <kbd>Shift</kbd>+끌기</td><td>보이는 범위를 옮깁니다. 빈 곳을 그냥 끌면 아무 일도 없습니다.</td></tr>
         <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>끌기 폭을 줄이고 늘립니다.</td></tr>
         <tr><td><kbd>S</kbd></td><td>스냅 켜기·끄기. 켜면 끄는 선이 8 px 안의 경계에 붙습니다.</td></tr>

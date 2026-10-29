@@ -285,6 +285,32 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         assert page.locator("#axis rect").count() == 1  # the empty stretch's bar on the time axis
         shot(page, "e2-erased")
 
+        # U marks the range "cannot judge": hatched, and no longer an empty stretch. Undo takes it
+        # back, redo again; "판단 불가 풀기" clears it, and U marks it once more for the save below.
+        hatch = page.locator("#graph rect[style*=hatch]")
+        assert page.locator("#clearSelection").is_disabled()
+        page.keyboard.press("u")
+        hatch.wait_for()
+        page.locator("#glassFacts").get_by_text("빈 구간").locator("..").get_by_text("없음").wait_for()
+        assert page.locator("#axis rect").count() == 0
+        shot(page, "e2-cannot-judge")
+        page.keyboard.press("Control+z")
+        hatch.wait_for(state="detached")
+        page.keyboard.press("Control+Shift+z")
+        hatch.wait_for()
+        page.locator("#clearSelection").click()
+        hatch.wait_for(state="detached")
+        page.locator("#axis rect").wait_for()
+        page.keyboard.press("u")
+        hatch.wait_for()
+        joined, split = page.evaluate("""async () => {
+            const l = await import("/web/lines.js");
+            const s = (a, b) => ({ start_sec: a, end_sec: b });
+            return [l.markStretch([s(0, 1), s(2, 3), s(5, 6)], 1, 2.5), l.clearStretch([s(0, 3), s(5, 6)], 1, 2)];
+        }""")
+        assert joined == [{"start_sec": 0, "end_sec": 3}, {"start_sec": 5, "end_sec": 6}]  # touching ones join
+        assert split == [{"start_sec": 0, "end_sec": 1}, {"start_sec": 2, "end_sec": 3}, {"start_sec": 5, "end_sec": 6}]
+
         # the video: this AVI cannot play in a <video>, so it plays as exact frames
         before_time = page.locator("#videoTime").inner_text()
         page.keyboard.press("Space")
@@ -299,6 +325,7 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         folder = data / "Inspections" / "편집"
         saved = json.loads((folder / "edits.json").read_text(encoding="utf-8"))
         assert None in saved["glasses"][0]["oil"]["ys"] and "EDITED" in saved["glasses"][0]["oil"]["origins"]
+        assert len(saved["glasses"][0]["cannot_judge"]) == 1
 
         # leaving with unsaved changes asks first
         page.keyboard.press("p")
