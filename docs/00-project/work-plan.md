@@ -183,9 +183,19 @@ the undo depth and the shortcuts.
      and the SHA-256 warning. Their toolbar buttons are there, disabled.
 6. **A5 and A6 on the slowest PC — request sent, waiting on the user:**
    [the request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md),
-   commit `890b5ea`, `source=b51992b0fbd8 files=52`, criteria fixed in it.
-   (Re-pinned from `4086e54` before the run: its seek clicks could land
-   on the time axis's range numbers.)
+   commit `ae4873c`, `source=766d5e5886c9 52 files=`, criteria fixed in it.
+   (Re-pinned before the run: from `4086e54`, whose seek clicks could land
+   on the time axis's range numbers; then for the faster draft search and
+   the key-frame spacing line.)
+   - **A4 groundwork, 2026-10-29 evening (macOS):** OpenCV cannot skip to
+     a key frame (its seek decodes from the previous one, ~59 ms); luma
+     only cuts `retrieve` 72 % and the medians 68 % but greys the context
+     image (user's call); PyAV skipping saved no time with frame threading
+     and its colours differ from OpenCV's by up to 2.6 levels; the draft
+     search became 10× faster (`ae4873c`). Not done yet: a median
+     benchmark for that PC, and the step 7 parts the user allowed before
+     the result (window-close question, SHA-256 warning, re-analysis from
+     the editor, "cannot judge").
    - `scripts/measure_editor.py` analyses SPL#1 through the app's server,
      then drives the editor in **Microsoft Edge** (WebView2's engine) with
      Playwright, so that PC needs no pywebview or pythonnet (it runs
