@@ -178,8 +178,8 @@ the undo depth and the shortcuts.
      8 px of a drawn line grabs it.
    - On macOS with an H.264 sample, a lines redraw while dragging took
      about 0.5 ms; SPL#1 on the slowest PC is step 6.
-   - **Not yet in the editor** (step 7): the point line, memos and the
-     compressor marker. Their toolbar buttons are there, disabled.
+   - **Not yet in the editor** (step 7): the point line. Its toolbar
+     button is there, disabled.
 6. **A5 and A6 on the slowest PC — request sent, waiting on the user:**
    [the request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md),
    commit `8a96b22`, `source=1da92bcf0279 files=54`, criteria fixed in it.
@@ -226,8 +226,18 @@ the undo depth and the shortcuts.
      - **"Cannot judge"** (`0d7ae43`): U and "판단 불가 풀기" on the
        selected range; stretches join where they meet and split when
        cleared; the undo history records them.
-   - **Left, after the result:** the point line with its preview, memos
-     and the compressor marker.
+   - **Also done before the result** (user, 2026-10-30: they leave the
+     lines layer alone, which A5 measures):
+     - **The compressor marker** (`8ec20d4`): the grab tool drags it when
+       no line is under the pointer, in 0.1 s steps inside the analysis
+       range. It moves to the marks while dragged. Undo covers it; the 분석
+       panel shows the time it was moved from; a re-analysis starts from
+       the moved time. The judgment it recomputes is V2-4.
+     - **Memos** (`fdd9d9f`): the memo tool (M), numbered pins on the
+       graph (`render.memoPinAt`), the memo dialog and the memo list;
+       undoable like the stretches.
+   - **Left, after the result:** the point line with its preview. It
+     redraws the lines layer as points are placed, so it waits for A5.
 8. **Checks:** unit and API tests, macOS smoke checks, and a Windows run.
    It also covers the V2-2 follow-up, and the window-close question in
    the real window (WinForms), which macOS tests cannot reach.
@@ -310,6 +320,15 @@ write `60-evidence/2026-10-29-v2-3-editor-slowest-pc-windows-result.md`
   decoding; the page adds little.
 - The user wants parallel progress when Windows is out of reach, inside
   the decisions already made; ask before crossing one.
+- (2026-10-30) `pytest | tail -1 && git commit` commits whatever the tests
+  say: `8ec20d4` went out with a failing smoke test (fixed in `942dc55`).
+  Check pytest's exit code before committing.
+- The editor's panels update at once, but the plots and the time axis
+  redraw on the next animation frame: smoke checks wait for the drawn
+  marks instead of counting them at once.
+- A `<dialog>`'s "close" event comes a task later than `close()`: after a
+  quick Esc it cleared the next memo's target. Keep dialog state in the
+  code that opens and commits it.
 
 ## Open items
 
@@ -365,7 +384,7 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `0d7ae43`: `188 passed, 3 skipped` on macOS, so
+  test. At `fdd9d9f`: `188 passed, 3 skipped` on macOS, so
   `187 passed, 4 skipped` on Windows when its venv has no Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
@@ -416,8 +435,10 @@ The three v1 remote branches that v1 docs cite stay.
   `60-evidence/`.
 - **Done meanwhile (allowed by the user):** the median comparison, in the
   A5/A6 request; the window-close question, the SHA-256 warning,
-  re-analysis from the editor and "cannot judge" (step 7).
-- **Then:** the rest of step 7 after that result: the user decided that A5
-  and A6 are measured before the other tools are built. If A5 fails, the
+  re-analysis from the editor and "cannot judge"; then (2026-10-30) the
+  compressor marker and memos (step 7).
+- **Then:** the point line, the last of step 7, after that result: the
+  user decided that A5 and A6 are measured before the other tools are
+  built. If A5 fails, the
   drawing gets lighter first; A6-s and A6-c route their choices to the
   user, as the request's criteria say.
