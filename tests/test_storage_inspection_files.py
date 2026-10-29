@@ -9,12 +9,15 @@ from oil_tracker.adapters.storage.inspection_files import (
     UnreadableInspection,
     analysis_from_json,
     analysis_to_json,
+    edits_from_json,
+    edits_to_json,
     folder_name_for,
     inspection_from_json,
     inspection_to_json,
 )
 from oil_tracker.adapters.storage.recipe_files import recipe_to_json
-from oil_tracker.application.ports import GlassImages, InspectionNotFound, UnreadableAnalysis
+from oil_tracker.application.ports import GlassImages, InspectionNotFound, StoredEdits, UnreadableAnalysis, UnreadableEdits
+from oil_tracker.domain.edits import Edits, GlassEdits, Memo, Stretch, empty_line
 from oil_tracker.domain.enums import InspectionState, SampleOrigin
 from oil_tracker.domain.geometry import Ellipse
 from oil_tracker.domain.inspection import Analysis, AnalysisSettings, GlassDraft, Inspection, SourceVideo
@@ -157,3 +160,40 @@ def test_every_analysed_glass_needs_its_images(tmp_path):
     analysis, _ = make_analysis()
     with pytest.raises(ValueError):
         folders.save_analysis("i1", analysis, [])
+
+
+def make_edits() -> Edits:
+    oil = Line((400.0, None, 402.0), (SampleOrigin.DRAFT, SampleOrigin.EDITED, SampleOrigin.DRAWN))
+    foam = Line((None, 380.0, None), (SampleOrigin.DRAFT, SampleOrigin.DRAWN, SampleOrigin.DRAFT))
+    glass = GlassEdits(
+        "0b7c-base", oil, foam, empty_line(3),
+        cannot_judge=(Stretch(0.5, 1.0),),
+        memos=(Memo("m1", 0.5, 380.0, "거품 \"많음\""), Memo("m2", 1.0, None, "")),
+    )
+    return Edits((0.0, 0.5, 1.0), (glass,), 31.5)
+
+
+def test_the_edits_round_trip_and_survive_the_cache(tmp_path):
+    folders = InspectionFolders(tmp_path)
+    folders.create(make_inspection("i1"))
+    assert folders.load_edits("i1") is None
+    folders.save_edits("i1", make_edits(), "2026-10-29T06:00:00+00:00")
+    assert folders.load_edits("i1") == StoredEdits(make_edits(), "2026-10-29T06:00:00+00:00")
+
+    analysis, images = make_analysis()
+    folders.save_analysis("i1", analysis, images)  # re-analysis swaps the cache only
+    folders.clear_analysis("i1")
+    assert folders.load_edits("i1").edits == make_edits()
+
+
+def test_the_edits_format_refuses_other_files_and_broken_contents():
+    good = json.loads(edits_to_json(make_edits(), "t"))
+    assert edits_from_json(json.dumps(good)).edits == make_edits()
+    for change, reason in (
+        ({"format": "oil-level-tracker-analysis"}, "편집 파일이 아닙니다."),
+        ({"schema_version": 2}, "지원하지 않는 편집 파일 버전입니다: 2"),
+        ({"times": [0.0, 0.5]}, "편집 내용이 올바르지 않습니다"),
+        ({"compressor_start_sec": "31.5"}, "편집 내용이 올바르지 않습니다"),
+    ):
+        with pytest.raises(UnreadableEdits, match=reason):
+            edits_from_json(json.dumps({**good, **change}))

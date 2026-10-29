@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
+from oil_tracker.domain.edits import Edits
 from oil_tracker.domain.inspection import Analysis, AnalysisSettings, GlassDraft, Inspection
 from oil_tracker.domain.recipe import Glass, Recipe
 
@@ -42,6 +43,10 @@ class RecipeStore(Protocol):
 
 class InspectionNotFound(LookupError):
     pass
+
+
+class UnreadableEdits(ValueError):
+    """The saved edits cannot be read; the editor does not open over them."""
 
 
 class UnreadableAnalysis(ValueError):
@@ -85,6 +90,12 @@ class StoredAnalysis:
     images: tuple[ImageLayout, ...]
 
 
+@dataclass(frozen=True)
+class StoredEdits:
+    edits: Edits
+    saved_at: str
+
+
 class InspectionStore(Protocol):
     @property
     def location(self) -> Path:
@@ -114,6 +125,12 @@ class InspectionStore(Protocol):
     def image_piece(self, inspection_id: str, glass_id: str, kind: str, index: int) -> bytes:
         """`kind` is "context" or "background"."""
         ...
+
+    def save_edits(self, inspection_id: str, edits: Edits, saved_at: str) -> None:
+        """Replace the saved edits. They live beside the cache, so re-analysis leaves them alone."""
+        ...
+
+    def load_edits(self, inspection_id: str) -> StoredEdits | None: ...
 
 
 class SourceHasher(Protocol):

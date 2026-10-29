@@ -34,12 +34,13 @@ and §8. The code is `src/oil_tracker/adapters/storage/inspection_files.py`.
 |---|---|---|
 | `inspection.json` | the inspection (below) | atomically, on every change |
 | `recipe.json` | the inspection's Recipe copy, in the [Recipe file](recipe-file.md) format; Glass corrections are made here | atomically, with `inspection.json` |
+| `edits.json` | the user's edits (below) | atomically, on "저장" |
 | `cache\analysis.json` | the analysis: times and Oil drafts (below) | inside the cache swap |
 | `cache\<Glass ID>\context-NNN.png` | the context image, in pieces of at most 4,096 columns, `NNN` from `000` | inside the cache swap |
 | `cache\<Glass ID>\background-NNN.png` | the background view, in the same pieces (8-bit grey) | inside the cache swap |
 
-Reserved for later milestones: the versioned edit data (V2-3) and the
-versioned report HTML (V2-4).
+Reserved for V2-4: the versions locked at submission, and the versioned
+report HTML. `edits.json` holds the working edits until then.
 
 **The cache swap.** An analysis writes everything into `cache.partial\`,
 then removes `cache\` and renames `cache.partial\` to `cache\`. A reader
@@ -107,6 +108,44 @@ UTF-8 JSON:
 - `oil.ys` are source-frame y values, `null` where the draft is empty
   (Product SSOT §4). `origins` say where each sample came from: `DRAFT`,
   `EDITED` or `DRAWN`.
+
+## `edits.json`
+
+The user's edits on the analysis (Product SSOT §4 and §6). It sits beside
+`cache\`, so re-analysis, which swaps the cache, leaves it alone; the
+re-analysis then rewrites it with the edits merged onto the new times.
+
+```json
+{
+  "format": "oil-level-tracker-edits",
+  "schema_version": 1,
+  "saved_at": "2026-10-29T06:00:00+00:00",
+  "times": [0.0, 0.5, 1.0],
+  "compressor_start_sec": 532.0,
+  "glasses": [
+    {
+      "glass_id": "<uuid>",
+      "oil": {"ys": [460.0, null, 461.0], "origins": ["DRAFT", "EDITED", "DRAWN"]},
+      "foam": {"ys": [null, 420.0, null], "origins": ["DRAFT", "DRAWN", "DRAFT"]},
+      "reference": {"ys": [null, null, null], "origins": ["DRAFT", "DRAFT", "DRAFT"]},
+      "cannot_judge": [{"start_sec": 0.5, "end_sec": 1.0}],
+      "memos": [{"id": "<uuid>", "time_sec": 0.5, "y": 420.0, "text": "거품"}]
+    }
+  ]
+}
+```
+
+- `times` equal the analysis's. Every line has one value per time.
+- **Lines** are source-frame y values, `null` where empty. A line's pieces
+  are the stretches between its empty samples. An Oil sample emptied by the
+  user is `null` with origin `EDITED`, so re-analysis cannot refill it.
+- `cannot_judge` stretches hold the samples whose times lie in
+  `[start_sec, end_sec)`.
+- `memos` belong to a Glass; `y` is `null` for a memo pinned to a time
+  alone. A memo's text has at most 500 characters.
+- `compressor_start_sec` starts as the setup's value and follows the marker
+  the user drags.
+- FULL and EMPTY are not stored; they follow from the Oil line.
 
 ## Reading rules
 

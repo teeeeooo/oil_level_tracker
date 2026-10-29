@@ -124,9 +124,11 @@ the undo depth and the shortcuts.
    coverage, and the re-analysis merge. The merge keeps every old sample
    whose time the new range still has (within half a step) and reports
    what falls outside, for the warning.
-3. **`adapters/storage`:** the edit document in the inspection folder,
-   with its format in
-   [inspection-folder.md](../20-architecture/inspection-folder.md).
+3. **`adapters/storage` — done:** `edits.json` beside `inspection.json`,
+   written atomically on "저장", with its format in
+   [inspection-folder.md](../20-architecture/inspection-folder.md). It lies
+   outside `cache\`, so the cache swap of a re-analysis leaves it alone.
+   The port gained `save_edits` and `load_edits`.
 4. **`application` and `adapters/http`:** loading and saving the edits,
    the derived bands, the source video over HTTP Range, re-analysis, the
    point line (dynamic programming between the user's points) and the
@@ -226,4 +228,5 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done today:** V2-1 and V2-2 closed, each with its Windows run; the
   V2-2 follow-up; V2-3 started.
-- **Next action:** V2-3 step 3, storing the edit document.
+- **Next action:** V2-3 step 4, the `application` use cases and the
+  `adapters/http` routes for the editor.

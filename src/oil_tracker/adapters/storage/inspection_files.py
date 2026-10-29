@@ -17,8 +17,11 @@ from oil_tracker.application.ports import (
     InspectionListing,
     InspectionNotFound,
     StoredAnalysis,
+    StoredEdits,
     UnreadableAnalysis,
+    UnreadableEdits,
 )
+from oil_tracker.domain.edits import Edits, GlassEdits, Memo, Stretch
 from oil_tracker.domain.enums import InspectionState, SampleOrigin
 from oil_tracker.domain.inspection import Analysis, AnalysisSettings, GlassDraft, Inspection, SourceVideo
 from oil_tracker.domain.line import Line
@@ -29,11 +32,14 @@ from .values import integer, number, optional, safe_stem, text
 
 INSPECTION_FORMAT = "oil-level-tracker-inspection"
 ANALYSIS_FORMAT = "oil-level-tracker-analysis"
+EDITS_FORMAT = "oil-level-tracker-edits"
 SCHEMA_VERSION = 1
 INSPECTION_FILE = "inspection.json"
 RECIPE_FILE = "recipe.json"
 CACHE = "cache"
 ANALYSIS_FILE = "analysis.json"
+EDITS_FILE = "edits.json"
+LINE_KEYS = ("oil", "foam", "reference")
 IMAGE_KINDS = ("context", "background")
 _SAFE_ID = re.compile(r"^[A-Za-z0-9-]{1,64}$")
 
@@ -125,7 +131,7 @@ def analysis_to_json(analysis: Analysis, images: Sequence[GlassImages]) -> str:
                 "y0": layout[draft.glass_id].y0,
                 "rows": layout[draft.glass_id].rows,
                 "pieces": len(layout[draft.glass_id].context_png),
-                "oil": {"ys": list(draft.oil.ys), "origins": [origin.value for origin in draft.oil.origins]},
+                "oil": _line_json(draft.oil),
             }
             for draft in analysis.drafts
         ],
@@ -139,17 +145,64 @@ def analysis_from_json(analysis_text: str) -> StoredAnalysis:
         drafts, layouts = [], []
         for raw in data["glasses"]:
             glass_id = text(raw["glass_id"])
-            oil = raw["oil"]
-            line = Line(
-                tuple(optional(number, y) for y in oil["ys"]),
-                tuple(SampleOrigin(origin) for origin in oil["origins"]),
-            )
-            drafts.append(GlassDraft(glass_id, line))
+            drafts.append(GlassDraft(glass_id, _line_from(raw["oil"])))
             layouts.append(ImageLayout(glass_id, integer(raw["y0"]), integer(raw["rows"]), integer(raw["pieces"])))
         analysis = Analysis(tuple(number(t) for t in data["times"]), tuple(drafts), text(data["finished_at"]))
         return StoredAnalysis(analysis, tuple(layouts))
     except (KeyError, TypeError, ValueError) as error:
         raise UnreadableAnalysis(f"분석 내용이 올바르지 않습니다: {error}") from error
+
+
+# ---- edits.json ------------------------------------------------------------------------------
+
+
+def edits_to_json(edits: Edits, saved_at: str) -> str:
+    data = {
+        "format": EDITS_FORMAT,
+        "schema_version": SCHEMA_VERSION,
+        "saved_at": saved_at,
+        "times": list(edits.times),
+        "compressor_start_sec": edits.compressor_start_sec,
+        "glasses": [
+            {
+                "glass_id": glass.glass_id,
+                **{key: _line_json(getattr(glass, key)) for key in LINE_KEYS},
+                "cannot_judge": [{"start_sec": s.start_sec, "end_sec": s.end_sec} for s in glass.cannot_judge],
+                "memos": [{"id": m.id, "time_sec": m.time_sec, "y": m.y, "text": m.text} for m in glass.memos],
+            }
+            for glass in edits.glasses
+        ],
+    }
+    return json.dumps(data, ensure_ascii=False, allow_nan=False) + "\n"
+
+
+def edits_from_json(edits_text: str) -> StoredEdits:
+    data = _document(edits_text, EDITS_FORMAT, "편집", UnreadableEdits)
+    try:
+        glasses = tuple(
+            GlassEdits(
+                text(raw["glass_id"]),
+                *(_line_from(raw[key]) for key in LINE_KEYS),
+                cannot_judge=tuple(Stretch(number(s["start_sec"]), number(s["end_sec"])) for s in raw["cannot_judge"]),
+                memos=tuple(
+                    Memo(text(m["id"]), number(m["time_sec"]), optional(number, m["y"]), text(m["text"]))
+                    for m in raw["memos"]
+                ),
+            )
+            for raw in data["glasses"]
+        )
+        edits = Edits(tuple(number(t) for t in data["times"]), glasses, optional(number, data["compressor_start_sec"]))
+        return StoredEdits(edits, text(data["saved_at"]))
+    except (KeyError, TypeError, ValueError) as error:
+        raise UnreadableEdits(f"편집 내용이 올바르지 않습니다: {error}") from error
+
+
+def _line_json(line: Line) -> dict[str, Any]:
+    return {"ys": list(line.ys), "origins": [origin.value for origin in line.origins]}
+
+
+def _line_from(raw: Any) -> Line:
+    return Line(tuple(optional(number, y) for y in raw["ys"]), tuple(SampleOrigin(o) for o in raw["origins"]))
 
 
 def _document(raw: str, expected_format: str, label: str, failure: type[ValueError]) -> dict[str, Any]:
@@ -259,6 +312,15 @@ class InspectionFolders:
             return path.read_bytes()
         except FileNotFoundError as error:
             raise InspectionNotFound(f"그림을 찾을 수 없습니다: {kind} {index}") from error
+
+    def save_edits(self, inspection_id: str, edits: Edits, saved_at: str) -> None:
+        atomic_write_text(self._find(inspection_id)[0] / EDITS_FILE, edits_to_json(edits, saved_at))
+
+    def load_edits(self, inspection_id: str) -> StoredEdits | None:
+        path = self._find(inspection_id)[0] / EDITS_FILE
+        if not path.is_file():
+            return None
+        return edits_from_json(path.read_text(encoding="utf-8"))
 
     def _write(self, folder: Path, inspection: Inspection) -> None:
         atomic_write_text(folder / RECIPE_FILE, recipe_to_json(inspection.recipe))
