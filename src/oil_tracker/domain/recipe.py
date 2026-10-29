@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 from .enums import JudgmentMode
 from .geometry import Ellipse
+from .problems import Problem
 
 MAXIMUM_NAME_LENGTH = 100
 
@@ -80,30 +81,23 @@ class Recipe:
         return (width, height) == (self.reference_frame.width, self.reference_frame.height)
 
 
-@dataclass(frozen=True)
-class RecipeProblem:
-    field: str
-    message: str
-    glass_id: str | None = None
-
-
-def recipe_problems(recipe: Recipe) -> list[RecipeProblem]:
-    problems: list[RecipeProblem] = []
+def recipe_problems(recipe: Recipe) -> list[Problem]:
+    problems: list[Problem] = []
     name = recipe.name.strip()
     if not name:
-        problems.append(RecipeProblem("name", "Recipe 이름을 입력하세요."))
+        problems.append(Problem("name", "Recipe 이름을 입력하세요."))
     elif len(name) > MAXIMUM_NAME_LENGTH:
-        problems.append(RecipeProblem("name", f"Recipe 이름은 {MAXIMUM_NAME_LENGTH}자 이하여야 합니다."))
+        problems.append(Problem("name", f"Recipe 이름은 {MAXIMUM_NAME_LENGTH}자 이하여야 합니다."))
 
     frame = recipe.reference_frame
     if frame.width <= 0 or frame.height <= 0:
-        problems.append(RecipeProblem("reference_frame", "기준 프레임 크기가 올바르지 않습니다."))
+        problems.append(Problem("reference_frame", "기준 프레임 크기가 올바르지 않습니다."))
         return problems
     if not frame.jpeg:
-        problems.append(RecipeProblem("reference_frame", "기준 프레임 이미지가 없습니다."))
+        problems.append(Problem("reference_frame", "기준 프레임 이미지가 없습니다."))
 
     if not recipe.glasses:
-        problems.append(RecipeProblem("glasses", "Glass를 하나 이상 추가하세요."))
+        problems.append(Problem("glasses", "Glass를 하나 이상 추가하세요."))
     seen_ids: set[str] = set()
     seen_names: set[str] = set()
     for glass in recipe.glasses:
@@ -116,11 +110,11 @@ def _glass_problems(
     frame: ReferenceFrame,
     seen_ids: set[str],
     seen_names: set[str],
-) -> list[RecipeProblem]:
-    problems: list[RecipeProblem] = []
+) -> list[Problem]:
+    problems: list[Problem] = []
 
     def add(field: str, message: str) -> None:
-        problems.append(RecipeProblem(field, message, glass.id))
+        problems.append(Problem(field, message, glass.id))
 
     if not glass.id or glass.id in seen_ids:
         add("id", "Glass ID가 비어 있거나 중복됩니다.")

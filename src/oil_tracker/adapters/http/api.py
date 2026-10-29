@@ -24,7 +24,8 @@ from oil_tracker.application.recipes import (
 from oil_tracker.application.videos import OpenedVideo, UnknownVideo, VideoSessions
 from oil_tracker.domain.enums import JudgmentMode
 from oil_tracker.domain.geometry import Ellipse
-from oil_tracker.domain.recipe import Glass, JudgmentRule, Recipe, RecipeProblem
+from oil_tracker.domain.problems import Problem
+from oil_tracker.domain.recipe import Glass, JudgmentRule, Recipe
 
 TOKEN_HEADER = "X-OLT-Token"
 MAX_BODY_BYTES = 1_000_000
@@ -110,7 +111,7 @@ def recipe_detail(recipe: Recipe) -> dict[str, Any]:
     }
 
 
-def problems_json(problems: tuple[RecipeProblem, ...]) -> list[dict[str, Any]]:
+def problems_json(problems: tuple[Problem, ...]) -> list[dict[str, Any]]:
     return [{"field": p.field, "glass_id": p.glass_id, "message": p.message} for p in problems]
 
 

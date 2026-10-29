@@ -7,7 +7,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from oil_tracker.domain.recipe import Glass, Recipe, RecipeProblem, ReferenceFrame, recipe_problems
+from oil_tracker.domain.problems import Problem
+from oil_tracker.domain.recipe import Glass, Recipe, ReferenceFrame, recipe_problems
 
 from .ports import Desktop, RecipeListing, RecipeNameTaken, RecipeStore
 from .videos import OpenedVideo, VideoSessions
@@ -38,7 +39,7 @@ class RecipeDraft:
 @dataclass(frozen=True)
 class SaveResult:
     recipe: Recipe | None
-    problems: tuple[RecipeProblem, ...] = ()
+    problems: tuple[Problem, ...] = ()
 
 
 class Recipes:
@@ -79,7 +80,7 @@ class Recipes:
                 raise VideoDoesNotFit(_size_message(opened.info.width, opened.info.height, recipe))
         return opened
 
-    def check(self, draft: RecipeDraft) -> tuple[RecipeProblem, ...]:
+    def check(self, draft: RecipeDraft) -> tuple[Problem, ...]:
         """The problems saving would report, without decoding a frame or writing."""
         result = self._build(draft, take_frame=False)
         return result.problems
@@ -132,7 +133,7 @@ class Recipes:
 
 
 def _problem(field: str, message: str) -> SaveResult:
-    return SaveResult(None, (RecipeProblem(field, message),))
+    return SaveResult(None, (Problem(field, message),))
 
 
 def _size_message(width: int, height: int, recipe: Recipe) -> str:
