@@ -42,6 +42,7 @@ These are the visual rules for every v2 screen and for the report.
 | `--stroke-1` | `#D1D1D1` | control borders, panel dividers |
 | `--stroke-2` | `#E0E0E0` | grid lines, table rules |
 | `--stroke-3` | `#F0F0F0` | minor grid lines |
+| `--backdrop` | `rgba(0,0,0,0.4)` | behind a modal dialog |
 
 ### 2.2 Brand / interaction
 
@@ -160,9 +161,29 @@ Do not use sizes outside this ramp.
     colour at 15 % opacity.
 - **Transport:**
   - subtle 32 px buttons for previous frame, play/pause and next frame;
-  - a speed segmented control (1× 4× 16×);
+  - the speed field (below);
   - a range-repeat toggle;
   - the time in `mm:ss.s`.
+- **Speed field** (the Recipe screen and the editor): a freeform Fluent
+  combobox, 80 px wide, styled like an input, with `×` as its unit.
+  - Its chevron opens a menu of presets: 0.5×, 1×, 2×, 3×, 4×. The menu
+    takes the menu shadow (§6).
+  - Any speed from 0.1× to 16× can be typed. It applies on Enter or when
+    the field loses focus. `2`, `2x`, `×2` and `*2` all mean 2×.
+  - A value outside the range is clamped to it. Text that is not a number,
+    or Esc, restores the current speed.
+- **Help:**
+  - every toolbar ends with a subtle 32 × 32 help button: a "?" icon with
+    the tooltip "도움말 (F1)";
+  - the button, F1 or `?` opens a modal dialog, 560 px wide, on
+    `--backdrop`. It has a Subtitle 2 title, Body 1 Strong group headings,
+    and two columns: the key or mouse action, and what it does;
+  - Esc, "닫기" or a click outside closes it;
+  - **a screen shows a hint inline only when it must be read every time,**
+    such as the save hint on the Recipe screen. Keys, mouse actions and
+    tips go into the help.
+- **Key chip** (in the help): 20 px high and at least 20 px wide, padding
+  0 6, radius 4, `--bg-3` fill, 1 px `--stroke-1`, Caption 1 at weight 600.
 - **Frame view (Recipe screen):**
   - the frame fits its box on `--frame-bg`, with wheel zoom and Shift-drag
     pan;
@@ -204,7 +225,7 @@ Do not use sizes outside this ramp.
   - **Top toolbar, 48 px:**
     - tools on the left (grab, pencil, cannot judge, memo, pan);
     - the Glass picker in the middle;
-    - Save and Submit on the right.
+    - Save, Submit and help on the right.
   - **Main area:**
     - **Left column, flexible width:**
       - the graph (about 45 % of the height);
@@ -221,7 +242,7 @@ Do not use sizes outside this ramp.
       - the memo list.
 - **Recipe list:** the same window.
   - **Toolbar, 48 px:** the title "Recipe" on the left; "새 Recipe"
-    (primary) on the right.
+    (primary) and help on the right.
   - **Body:** one panel with a table: name, Glass names, frame size,
     modified date. A row opens on double-click or with "열기".
   - **Below the table:**
@@ -231,15 +252,16 @@ Do not use sizes outside this ramp.
   - **Top toolbar, 48 px:**
     - "← 목록" and the Recipe name with its save state, on the left;
     - "영상 열기" next to them;
-    - the problem count in `--error` and "저장" (primary), on the right.
+    - the problem count in `--error`, "저장" (primary) and help, on the
+      right.
   - **Main area:**
     - **Left column, flexible width:**
       - a 32 px header: the source video name, the saved reference-frame
         time, and the hint "저장하면 지금 보이는 프레임이 기준이 됩니다";
       - the frame view (§4);
       - a 40 px transport: previous frame, play/pause, next frame, a
-        scrub bar with a "기준" mark at the saved reference time, and the
-        time in `mm:ss.s`.
+        scrub bar with a "기준" mark at the saved reference time, the
+        time in `mm:ss.s`, and the speed field (§4).
     - **Right column, 360 px:**
       - the Recipe name;
       - the Glass list, with "+ 추가";

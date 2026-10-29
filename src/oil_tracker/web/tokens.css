@@ -13,6 +13,7 @@
   --stroke-1: #D1D1D1;
   --stroke-2: #E0E0E0;
   --stroke-3: #F0F0F0;
+  --backdrop: rgba(0,0,0,0.4);
   /* 2.2 Brand / interaction */
   --brand: #0F6CBD;
   --brand-hover: #115EA3;
