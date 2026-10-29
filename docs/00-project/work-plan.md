@@ -137,8 +137,30 @@ Product SSOT §3, §4 and §6:
        busy, so more threads do not help; the result lists three
        candidates.
      - Hardware decoding is slower on both PCs and is out.
-7. **`application` and `adapters/http`:** creating an inspection, the
-   analysis job (progress, time left, cancel) and the result data.
+7. **`application` and `adapters/http` — done** (`8c20d57`, `e9441be`).
+   - **`application/inspections.py`:** the list, the Recipe choices for a
+     video (another frame size is greyed with its reason), the setup check,
+     and `prepare`, which writes the folder with the Recipe copy only when
+     the analysis starts. `analyse` ends `ANALYSED`, `FAILED` with a
+     reason, or `NOT_ANALYSED` when cancelled; the source SHA-256 runs on
+     a second thread (`SourceHasher`, storage).
+   - **`adapters/http/jobs.py`:** one analysis at a time on its own
+     thread, with progress, elapsed time, time left and cancel.
+   - **Routes** for step 8: `GET /api/inspections`,
+     `POST /api/inspections/open-folder`,
+     `GET /api/inspections/recipe-choices?video_id=`,
+     `POST /api/inspections/check`, `POST /api/inspections/start`,
+     `GET /api/inspections/{id}`, `GET /api/inspections/{id}/analysis`,
+     `POST /api/inspections/{id}/video`,
+     `GET /api/inspections/{id}/images/{glass}/{context|background}-{n}.png`,
+     `GET /api/jobs/{id}`, `POST /api/jobs/{id}/cancel`. A new
+     inspection's video comes from the existing `/api/videos/pick` and
+     `/api/videos`.
+   - Checked on a real 250 s video through the server: cancel at 38 %
+     leaves `NOT_ANALYSED` and no cache; starting again gives `ANALYSED`
+     with the cache.
+   - **Left for V2-3:** re-analysing an analysed inspection (409 until
+     then), and the warning when a reopened video's SHA-256 differs (A9).
 8. **`web`:** the inspection list, the new-inspection flow, the setup
    screen, progress, and the read-only result (porting the spike's
    `render.js`).
@@ -175,19 +197,14 @@ The working tree is clean, and `main` and the remote are in sync.
 is done, and its timing on that class is judged (step 6). Nothing waits
 on Windows.
 
-**Step 7, as planned:**
-- **Use cases:** list inspections; pick a video and list the Recipes that
-  fit it; check a setup (`domain/inspection.py:setup_problems`); start an
-  analysis, which creates the folder with the Recipe copy, then sets
-  `ANALYSED` or `FAILED` (cancel clears the cache and keeps
-  `NOT_ANALYSED`); load the stored analysis.
-- **The source SHA-256** runs on a second thread during the analysis, as
-  `scripts/time_analysis.py` does. Storage owns it (architecture.md).
-- **Progress** comes from `VideoAnalyser` as work units: the decoded
-  frames, then a tenth more for the drafts and pictures.
-- **HTTP:** the job runs on a thread in `adapters/http`; the UI polls the
-  progress and the time left, and can cancel. Image pieces are served by
-  inspection, Glass, kind and index.
+**Step 8, next:** the screens in DESIGN.md §5 over the step 7 routes:
+- the inspection list as the first screen (the Recipe list gets
+  "← 검사 목록");
+- the new-inspection flow: the file dialog, the Recipe picker, then the
+  setup screen with the Recipe screen's frame view and Glass editing;
+- the progress dialog, polling the job;
+- the read-only result in the editor layout, porting the spike's
+  `render.js` (`spike/webui:spikes/webui/static/render.js`).
 
 **Other notes:**
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
@@ -196,8 +213,8 @@ on Windows.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `2d43f4c`: `121 passed, 1 skipped` on macOS, so
-  `120 passed, 2 skipped` on Windows.
+  test. At `e9441be`: `140 passed, 1 skipped` on macOS, so
+  `139 passed, 2 skipped` on Windows.
 - The mock-ups `design/mockup/editor.html` and `recipe.html` predate the
   speed field and the help dialog; DESIGN.md governs where they differ.
 
@@ -233,6 +250,6 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done today:** V2-1 closed; V2-2 steps 1 to 6, with the slowest-PC
+- **Done today:** V2-1 closed; V2-2 steps 1 to 7, with the slowest-PC
   timing judged.
-- **Next action:** step 7 as planned above.
+- **Next action:** step 8 as above.
