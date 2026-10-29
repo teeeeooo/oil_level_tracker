@@ -39,3 +39,9 @@
 | 최초 Git 등록일 (KST) | 문서 | 역할 |
 |---|---|---|
 | 2026-10-29 | [2026-10-29-v2-1-recipe-windows-request.md](40-operations/2026-10-29-v2-1-recipe-windows-request.md) | V2-1 Recipe 화면 Windows 확인 요청 |
+
+## docs/60-evidence/
+
+| 최초 Git 등록일 (KST) | 문서 | 역할 |
+|---|---|---|
+| 2026-10-29 | [2026-10-29-v2-1-recipe-windows-result.md](60-evidence/2026-10-29-v2-1-recipe-windows-result.md) | V2-1 Recipe 화면 Windows 결과 판정 |
