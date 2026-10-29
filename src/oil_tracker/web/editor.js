@@ -41,6 +41,7 @@ const state = {
   redraws: [],             // ms per lines redraw while dragging, for the A5 measurement
 };
 let backToList = () => {};
+let toSetup = () => {};
 let pending = { back: false, lines: false, marks: false };
 let frameRequested = false;
 let deriving = null;       // the states request in flight
@@ -95,6 +96,17 @@ function leave() {
   if (state.dirty && !confirm("저장하지 않은 편집이 있습니다. 저장하지 않고 나갈까요?")) return;
   release();
   backToList();
+}
+
+/** "범위 바꿔 다시 분석…": the setup of this inspection. The re-analysis merges the saved edits, so
+ * unsaved ones are saved first. */
+async function reanalyse() {
+  if (!state.detail) return;
+  if (state.dirty && !confirm("다시 분석하기 전에 편집을 저장합니다. 저장하고 분석 설정으로 갈까요?")) return;
+  if (state.dirty && !(await save())) return;
+  const id = state.detail.id;
+  release();
+  toSetup(id);
 }
 
 /** Compare the source video with the analysed one (A9) and warn while it differs, is missing or
@@ -502,18 +514,20 @@ function eraseSelection() {
   requestDraw({ lines: true });
 }
 
+/** Save the edits; whether they were saved. */
 async function save() {
-  if (!state.edits) return;
+  if (!state.edits) return false;
   const id = encodeURIComponent(state.detail.id);
   const result = await api.call("POST", `/api/inspections/${id}/edits`, { edits: state.edits });
   if (!result.ok) {
     notify("editorNotice", result.data.error ?? `HTTP ${result.status}`, "error");
-    return;
+    return false;
   }
   state.savedAt = result.data.saved_at;
   setDirty(false);
   renderHeader();
   notify("editorNotice", "저장했습니다.");
+  return true;
 }
 
 // ---- the playhead and the view --------------------------------------------------------------------
@@ -711,13 +725,15 @@ export function measurements() {
   };
 }
 
-export function init(toList) {
+export function init(toList, openSetup) {
   backToList = toList;
+  toSetup = openSetup;
   nav.register("editorView", { title: "편집", onKey });
   player.wire();
   $("editorBack").addEventListener("click", leave);
   $("sourceRecheck").addEventListener("click", () => checkSource().catch(() => {}));
   $("editorSave").addEventListener("click", save);
+  $("editorReanalyse").addEventListener("click", reanalyse);
   $("editorUndo").addEventListener("click", () => undo(false));
   $("editorRedo").addEventListener("click", () => undo(true));
   $("editorGlass").addEventListener("change", () => {

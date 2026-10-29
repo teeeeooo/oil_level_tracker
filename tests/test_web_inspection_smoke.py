@@ -179,8 +179,8 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         running.close()
 
 
-def analysed_inspection(running):
-    """An inspection of the smoke video, analysed through the API."""
+def analysed_inspection(running, video, name):
+    """An inspection of the smoke video, analysed through the API; the API call it used."""
     import http.client
 
     def call(method, path, body=None):
@@ -191,6 +191,19 @@ def analysed_inspection(running):
         connection.close()
         return data
 
+    opened = call("POST", "/api/videos", {"path": str(video)})
+    e = GLASS.ellipse
+    setup = {
+        "inspection_id": None, "video_id": opened["id"], "recipe_id": "r-fit", "name": name,
+        "glasses": [{"id": GLASS.id, "zero_line_y": GLASS.zero_line_y, "ellipse": {
+            "center_x": e.center_x, "center_y": e.center_y, "radius_x": e.radius_x, "radius_y": e.radius_y}}],
+        "settings": {"start_sec": 0, "end_sec": 3.9, "compressor_start_sec": 1.0},
+    }
+    job = call("POST", "/api/inspections/start", setup)["job"]
+    for _ in range(500):
+        if call("GET", f"/api/jobs/{job['id']}")["state"] != "running":
+            break
+        time.sleep(0.02)
     return call
 
 
@@ -237,20 +250,7 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
     shutil.copyfile(video, source)
     running = bootstrap.start(data_folder=data, ask_before_closing=closing.append)
     try:
-        call = analysed_inspection(running)
-        opened = call("POST", "/api/videos", {"path": str(source)})
-        e = GLASS.ellipse
-        setup = {
-            "inspection_id": None, "video_id": opened["id"], "recipe_id": "r-fit", "name": "편집",
-            "glasses": [{"id": GLASS.id, "zero_line_y": GLASS.zero_line_y, "ellipse": {
-                "center_x": e.center_x, "center_y": e.center_y, "radius_x": e.radius_x, "radius_y": e.radius_y}}],
-            "settings": {"start_sec": 0, "end_sec": 3.9, "compressor_start_sec": 1.0},
-        }
-        job = call("POST", "/api/inspections/start", setup)["job"]
-        for _ in range(500):
-            if call("GET", f"/api/jobs/{job['id']}")["state"] != "running":
-                break
-            time.sleep(0.02)
+        analysed_inspection(running, source, "편집")
         page.goto(running.url)
         row = page.locator("#inspectionRows tr", has_text="편집")
         row.get_by_text("분석 완료").wait_for()
@@ -323,6 +323,60 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         source.write_bytes(original)
         page.locator("#sourceWarning").get_by_role("button", name="다시 확인").click()
         page.locator("#sourceWarning").wait_for(state="hidden")
+        assert errors == []
+    finally:
+        running.close()
+
+
+def test_reanalysis_from_the_editor(tmp_path, video, browser_page):
+    page, errors = browser_page
+    data = tmp_path / "data"
+    write_recipes(data / "Recipes")
+    running = bootstrap.start(data_folder=data)
+    try:
+        analysed_inspection(running, video, "다시")
+        page.goto(running.url)
+        row = page.locator("#inspectionRows tr", has_text="다시")
+        row.get_by_role("button", name="열기", exact=True).click()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+
+        # an unsaved pencil stroke near the end; going to the setup saves it first
+        page.keyboard.press("p")
+        box = page.locator("#graph").bounding_box()
+        drag(page, (box["x"] + box["width"] * 0.8, box["y"] + 100), (box["x"] + box["width"] * 0.95, box["y"] + 110))
+        page.get_by_text("저장 안 함").wait_for()
+        asked = []
+        page.once("dialog", lambda dialog: (asked.append(dialog.message), dialog.accept()))
+        page.get_by_role("button", name="범위 바꿔 다시 분석…").click()
+        page.locator("#setupView").wait_for()
+        assert "저장" in asked[0]
+        assert (data / "Inspections" / "다시" / "edits.json").exists()
+        assert page.locator("#setupBack").inner_text() == "편집기"
+        assert page.locator("#startAnalysis").inner_text() == "다시 분석"
+
+        # "← 편집기" goes back without analysing
+        page.locator("#setupBack").click()
+        page.get_by_text("저장함").wait_for()
+        page.get_by_role("button", name="범위 바꿔 다시 분석…").click()
+        page.locator("#setupView").wait_for()
+
+        # a shorter range drops the stroke; the setup says so, and asks before it starts
+        end = field(page, "끝")
+        end.fill("00:02.0")
+        end.press("Enter")
+        dropped = page.locator("#droppedCaption")
+        dropped.get_by_text("Oil 샘플").wait_for()
+        shot(page, "r1-reanalysis-setup")
+        asked.clear()
+        page.once("dialog", lambda dialog: (asked.append(dialog.message), dialog.accept()))
+        page.get_by_role("button", name="다시 분석").click()
+        page.locator("#editorView").wait_for()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        assert "Oil 샘플" in asked[0]
+        assert "00:00.0 – 00:02.0" in page.locator("#editorFacts").inner_text()
+        assert "5개" in page.locator("#editorFacts").inner_text()  # 0 to 2 s, two a second
+        saved = json.loads((data / "Inspections" / "다시" / "edits.json").read_text(encoding="utf-8"))
+        assert len(saved["times"]) == 5
         assert errors == []
     finally:
         running.close()

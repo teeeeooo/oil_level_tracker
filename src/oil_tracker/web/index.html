@@ -40,7 +40,7 @@
 
 <div class="view" id="setupView" hidden>
   <header class="toolbar">
-    <button class="btn subtle" id="setupBack"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4l-6 6 6 6"/></svg>검사 목록</button>
+    <button class="btn subtle" id="setupBack"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4l-6 6 6 6"/></svg><span id="setupBackLabel">검사 목록</span></button>
     <div class="sep"></div>
     <div class="title"><b id="setupTitle"></b><span id="setupState"></span></div>
     <div class="spacer"></div>
@@ -73,6 +73,7 @@
         <div class="body">
           <div class="grid2" id="rangeFields"></div>
           <span class="caption" id="rangeCaption"></span>
+          <span class="caption" id="droppedCaption" hidden></span>
         </div>
       </div>
       <div class="section">
@@ -184,7 +185,10 @@
       </div>
       <div class="section">
         <div class="phead">분석</div>
-        <div class="body"><table class="kv" id="editorFacts"></table></div>
+        <div class="body">
+          <table class="kv" id="editorFacts"></table>
+          <div class="row"><button class="btn" id="editorReanalyse">범위 바꿔 다시 분석…</button></div>
+        </div>
       </div>
     </aside>
   </div>
@@ -363,6 +367,7 @@
         <tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> · <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td><td>실행 취소 · 다시 실행</td></tr>
         <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>저장. 저장하지 않고 검사 목록으로 나가거나 창을 닫으면 먼저 묻습니다.</td></tr>
       </table>
+      <p>"범위 바꿔 다시 분석…"은 저장한 편집을 새 분석으로 옮깁니다. 새 범위와 겹치는 편집은 남고, 새로 생긴 범위만 초안으로 채웁니다. 새 범위 밖의 편집은 사라지므로 시작하기 전에 알려 줍니다.</p>
       <p>편집기를 열 때마다 원본 영상이 분석할 때와 같은지 확인합니다. 다르거나 찾을 수 없으면 툴바 아래에 경고가 나옵니다. 영상을 되돌려 놓았다면 "다시 확인"을 누릅니다.</p>
       <h3>보기</h3>
       <table class="keys">

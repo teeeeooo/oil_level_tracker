@@ -298,7 +298,8 @@ Do not use sizes outside this ramp.
       - the judgment panel (computed result, override, reason; V2-4);
       - the memo list;
       - **분석:** the range, the compressor start (dragged on the graph),
-        the Recipe copy, and "범위 바꿔 다시 분석…".
+        the Recipe copy, and "범위 바꿔 다시 분석…". With unsaved edits it
+        asks to save them first: the re-analysis keeps the saved edits.
 - **Inspection list:** the first screen.
   - **Toolbar, 48 px:** the title "검사" on the left; "Recipe", "새 검사"
     (primary) and help on the right.
@@ -340,6 +341,11 @@ Do not use sizes outside this ramp.
       "Recipe 위치로 되돌리기".
   - **Keys:** `[` and `]` set the range start and end to the time on
     screen; they are the same in Korean input mode.
+  - **Re-analysis** (from the editor's "범위 바꿔 다시 분석…"): the same
+    screen, with "← 편집기" instead of "← 검사 목록" and "다시 분석" as the
+    primary button. Under 분석 범위, a caption lists the saved edits the
+    new range would drop; "다시 분석" asks first when it drops any. The
+    editor opens again when the analysis is done or on "← 편집기".
 - **Analysis progress:** a 480 px dialog over the setup: the video, the
   Glass count and the range; the progress bar; a caption that the result
   opens when done and that cancelling keeps the settings; "취소".

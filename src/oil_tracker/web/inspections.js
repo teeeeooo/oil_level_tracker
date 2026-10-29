@@ -26,6 +26,8 @@ const setup = {
   problems: [],          // from the last check
   badInputs: new Map(),  // input key -> text that is not a number or a time
   dirty: false,
+  again: false,          // a re-analysis, opened from the editor: back goes to the editor
+  dropped: null,         // from the last check: the saved edits a re-analysis would drop
 };
 
 const setupHooks = {
@@ -199,7 +201,8 @@ async function pickRecipe(video, { allowNew, current = null, noticeId }) {
 
 // ---- setup ----------------------------------------------------------------------------------
 
-async function openSetup(inspectionId) {
+/** The setup of an existing inspection: one not analysed yet, or an analysed one to analyse again. */
+export async function openSetup(inspectionId) {
   const id = encodeURIComponent(inspectionId);
   let detail;
   try {
@@ -232,6 +235,11 @@ function enterSetup({ inspection, name, video, recipe, original, needsCompressor
   setup.problems = [];
   setup.badInputs.clear();
   setup.dirty = false;
+  setup.again = inspection?.state === "ANALYSED";
+  setup.dropped = null;
+  $("setupBackLabel").textContent = setup.again ? "편집기" : "검사 목록";
+  $("startAnalysis").textContent = setup.again ? "다시 분석" : "분석 시작";
+  renderDropped();
   $("setupNotice").textContent = "";
   $("setupVideoErr").textContent = "";
   nav.show("setupView");
@@ -296,7 +304,30 @@ async function runCheck() {
     return;
   }
   setup.problems = result.data.problems;
+  setup.dropped = result.data.dropped;
   renderProblems();
+  renderDropped();
+}
+
+/** What a re-analysis drops from the saved edits, in words; "" when nothing. */
+function droppedText(dropped) {
+  if (!dropped?.anything) return "";
+  const names = new Map(setup.inspection.recipe.glasses.map((g) => [g.id, g.name]));
+  const parts = [
+    [dropped.oil_samples, (n) => `Oil 샘플 ${n.toLocaleString()}개`],
+    [dropped.foam_samples, (n) => `Foam 샘플 ${n.toLocaleString()}개`],
+    [dropped.reference_samples, (n) => `참조 샘플 ${n.toLocaleString()}개`],
+    [dropped.stretches, (n) => `판단 불가 ${n}곳`],
+    [dropped.memos, (n) => `메모 ${n}개`],
+  ].filter(([n]) => n > 0).map(([n, words]) => words(n));
+  if (dropped.glasses.length) parts.push(`Glass ${dropped.glasses.map((id) => names.get(id) ?? id).join(", ")}의 편집 전부`);
+  return parts.join(", ");
+}
+
+function renderDropped() {
+  const text = setup.again ? droppedText(setup.dropped) : "";
+  $("droppedCaption").hidden = !text;
+  $("droppedCaption").textContent = text ? `다시 분석하면 새 범위 밖의 편집이 사라집니다: ${text}.` : "";
 }
 
 /** Put the time on screen into a setting ("지금", or the [ and ] keys). */
@@ -336,8 +367,15 @@ function revertGlass(glass) {
 }
 
 async function back() {
-  if (setup.dirty && !confirm("분석을 시작하지 않으면 바꾼 설정은 저장되지 않습니다. 검사 목록으로 갈까요?")) return;
-  await showList();
+  const where = setup.again ? "편집기로 돌아갈까요?" : "검사 목록으로 갈까요?";
+  if (setup.dirty && !confirm(`분석을 시작하지 않으면 바꾼 설정은 저장되지 않습니다. ${where}`)) return;
+  if (!setup.again) {
+    await showList();
+    return;
+  }
+  await frame.closeVideo();
+  setup.recipe = null;
+  links.openEditor(setup.inspection.id);
 }
 
 function onKey(event) {
@@ -360,6 +398,11 @@ async function startAnalysis() {
     return;
   }
   frame.stopPlayback();
+  if (setup.again) {  // say first what the new range drops (Product SSOT §6)
+    const check = await api.call("POST", "/api/inspections/check", body());
+    const text = check.ok ? droppedText(check.data.dropped) : "";
+    if (text && !confirm(`다시 분석하면 새 범위 밖의 편집이 사라집니다: ${text}. 다시 분석할까요?`)) return;
+  }
   $("startAnalysis").disabled = true;
   const result = await api.call("POST", "/api/inspections/start", body());
   $("startAnalysis").disabled = false;

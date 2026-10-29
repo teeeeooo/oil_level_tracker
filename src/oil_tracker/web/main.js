@@ -9,7 +9,7 @@ import { notify } from "./ui.js";
 async function start() {
   nav.wire();
   frame.wire();
-  editor.init(inspections.showList);
+  editor.init(inspections.showList, inspections.openSetup);
   inspections.init({
     openRecipes: recipe.showList,
     newRecipeWith: recipe.newRecipeWith,
