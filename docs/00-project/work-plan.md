@@ -184,16 +184,25 @@ Product SSOT §3, §4 and §6:
    - Checked with three browser smoke tests on macOS Chrome, and by hand
      on a 250 s local video: cancel from the dialog, start again, the
      result with two Glasses.
-9. **Checks:** unit and API tests, a macOS smoke check, and a Windows run.
-   The Windows run also covers:
-   - **A4 timing on SPL#1** with the whole analysis;
-   - if the analysis got less CPU work by then (the slowest-PC result's
-     candidates 1 and 2), the user times the slowest PC again with
-     `scripts/time_analysis.py`;
-   - the V2-1 follow-up: the speed field, the help dialog and F1 in
-     WebView2.
-   - The expected Windows test line is the macOS run without Playwright
-     (see the handoff) minus the macOS-only Documents test.
+9. **Checks — the Windows request is written; waiting on Windows:**
+   [2026-10-29-v2-2-analysis-flow-windows-request.md](../40-operations/2026-10-29-v2-2-analysis-flow-windows-request.md)
+   (source `0df5ce6`, 72 per-file SHA-256 values; tests
+   `140 passed, 3 skipped`).
+   - The user, with the Windows agent on the workstation: three new
+     inspections on the V2-1 Recipes. SPL#4 with a kept 1 px Accum
+     correction; SPL#1 once with no cancel and no correction, for A4;
+     SPL#1 again with a cancel, an app close during the analysis and a
+     resumed analysis. Also a setup left before "분석 시작", the V2-1
+     follow-up (speed field, help, F1) and the frame step in WebView2.
+   - `scripts/inspection_summary.py` (new, read-only) prints each
+     inspection: its Glass copy against the stored Recipe, the time from
+     `created_at` to the cache written (`cache_written`), the cache
+     pieces and the source SHA-256 computed again.
+   - **A4 in the app:** SPL#1's `cache_written` ≤ 180 s. Over 60 s means
+     the app adds work beyond the adapter's 46.4 s; V2-2 still closes, and
+     the cause is found before V2-5.
+   - The slowest PC is not timed again: the analysis has not changed since
+     its run.
 
 **V2-1 follow-up** (built in `30b972c`, `298ab15`): the speed field and the
 help dialog (DESIGN.md §4–§5). The user dropped moving the zero line alone
@@ -202,9 +211,8 @@ with the keyboard. The mock-ups `design/mockup/editor.html` and
 
 ## Session handoff — 2026-10-29 (third)
 
-**The session closed after `154f620`,** with this handoff commit on top.
-The working tree is clean, and `main` and the remote are in sync. V2-2
-steps 1 to 8 are done; nothing waits on Windows.
+**The session resumed from this handoff** and wrote the step 9 request
+(step 9 above). V2-2 steps 1 to 8 are done; step 9 waits on Windows.
 
 **Resume:** read this file, then
 [product.md](../10-product/product.md) (§2 now names the slowest target
@@ -220,26 +228,9 @@ for the Windows agent, and the
 [slowest-PC request](../40-operations/2026-10-29-v2-2-slowest-pc-timing-windows-request.md)
 for a person in a terminal on a PC without an agent.
 
-**Step 9, next: the Windows request for the whole V2-2 flow.** Written in
-Korean for the Windows agent on the workstation, as the V2-1 request:
-- a commit ZIP and per-file SHA-256 values; criteria fixed before the
-  run; one result block to relay;
-- the tests: `139 passed, 3 skipped` (see the note below);
-- the app on the user's Recipes `SPL#4_test1_607bccb` and
-  `SPL#1_test1_607bccb`: a new inspection for each video through the
-  picker, the setup (range, compressor start for the `RECOVERY` Glasses,
-  one Glass correction and its badge), a cancel from the progress dialog,
-  then a full analysis and the read-only result (both SPL#4 Glasses);
-- **A4 inside the app** on SPL#1, from a first run with no cancel: the
-  inspection's `created_at` (`inspection.json`) to the analysis's
-  `finished_at` (`cache/analysis.json`), both to the second;
-- the V2-1 follow-up in WebView2: the speed field, the help dialog, F1;
-- the frame fix of step 8: "." from frame 0 shows 00:00.0, then the next
-  frame times in order;
-- how the result screen feels on SPL#1 (8,210 columns), which is not
-  measured yet.
-Then judge it, record it in `docs/60-evidence/`, and close V2-2 in the
-roadmap if it passes.
+**When the step 9 result comes back:** judge it against R1–R15 of the
+request, record it in `docs/60-evidence/`, and close V2-2 in the roadmap
+if it passes. R11 (how the SPL#1 result screen feels) is recorded only.
 
 **Carried forward:**
 - **Speed before V2-5:** the slowest PC takes 169.7 s of 180 s. The
@@ -267,8 +258,8 @@ roadmap if it passes.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `154f620`: `140 passed, 2 skipped` on macOS, so
-  `139 passed, 3 skipped` on Windows.
+  test. At `0df5ce6`: `141 passed, 2 skipped` on macOS, so
+  `140 passed, 3 skipped` on Windows.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
 - The mock-ups `design/mockup/editor.html` and `recipe.html` predate the
   speed field and the help dialog; DESIGN.md governs where they differ.
@@ -306,6 +297,6 @@ The three v1 remote branches that v1 docs cite stay.
 ## Next
 
 - **Done today:** V2-1 closed; V2-2 steps 1 to 8, with the slowest-PC
-  timing judged.
-- **Next action:** step 9: write the Windows request for the whole V2-2
-  flow, as the handoff above says.
+  timing judged; the step 9 Windows request.
+- **Next action:** the user runs the step 9 request on the workstation and
+  relays its result block; then judge it (see the handoff above).
