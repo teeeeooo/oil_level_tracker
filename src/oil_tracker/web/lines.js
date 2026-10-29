@@ -183,14 +183,21 @@ export class History {
     return true;
   }
 
+  /** Record a move of the compressor start. False when it did not move. */
+  recordCompressor(before, after) {
+    if (before === after) return false;
+    this.push({ glassId: null, kind: "compressor", before, after });
+    return true;
+  }
+
   push(entry) {
     this.done.push(entry);
     if (this.done.length > UNDO_DEPTH) this.done.shift();
     this.undone = [];
   }
 
-  /** Undo the last change; `edits` gives `lineOf(glassId, kind)` and `setStretches(glassId, list)`.
-   * Returns its entry, or null. */
+  /** Undo the last change; `edits` gives `lineOf(glassId, kind)`, `setStretches(glassId, list)` and
+   * `setCompressor(time)`. Returns its entry, or null. */
   undo(edits) {
     const entry = this.done.pop();
     if (!entry) return null;
@@ -215,6 +222,7 @@ export class History {
 
 function restore(edits, entry, part) {
   if (entry.kind === "cannot_judge") edits.setStretches(entry.glassId, part.map((s) => ({ ...s })));
+  else if (entry.kind === "compressor") edits.setCompressor(part);
   else apply(edits.lineOf(entry.glassId, entry.kind), entry.first, part);
 }
 

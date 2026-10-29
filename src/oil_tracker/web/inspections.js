@@ -213,6 +213,11 @@ export async function openSetup(inspectionId) {
   }
   const opened = await api.call("POST", `/api/inspections/${id}/video`, {});
   const original = await api.call("GET", `/api/recipes/${encodeURIComponent(detail.recipe.id)}`);
+  let compressor = detail.settings.compressor_start_sec;
+  if (detail.state === "ANALYSED") {  // a re-analysis starts from the compressor start as edited
+    const saved = await api.call("GET", `/api/inspections/${id}/edits`);
+    if (saved.ok) compressor = saved.data.edits.compressor_start_sec;
+  }
   enterSetup({
     inspection: detail,
     name: detail.name ?? "",
@@ -223,7 +228,7 @@ export async function openSetup(inspectionId) {
     settings: {
       start_sec: detail.settings.start_sec,
       end_sec: detail.settings.end_sec,
-      compressor_start_sec: detail.settings.compressor_start_sec,
+      compressor_start_sec: compressor,
     },
   });
   if (!opened.ok) $("setupVideoErr").textContent = `영상을 열 수 없습니다: ${opened.data.error ?? ""}`;

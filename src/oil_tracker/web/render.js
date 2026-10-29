@@ -12,7 +12,8 @@
 // first/end are sample indices [first, end). Every field but times, top and bottom may be absent.
 //
 // The editor draws three layers per plot, so a drag redraws only the lines (architecture.md):
-// back (grid, bands, picture), lines, and marks ({ playhead, selection, grab, hot }).
+// back (grid, bands, picture), lines, and marks ({ playhead, selection, grab, compressor }); the
+// compressor start moves to the marks while it is dragged.
 
 export const INSET = { left: 52, right: 16, top: 14, bottom: 10 };  // DESIGN.md §7: no line clipped at the edge
 export const KINDS = ["reference", "foam", "oil"];                  // drawing order: Oil on top
@@ -265,6 +266,9 @@ export function marksSvg(marks, view, width, height, id) {
     for (const t of [t0, t1]) {
       parts.push(`<line x1="${s.sx(t)}" x2="${s.sx(t)}" y1="0" y2="${height}" style="stroke:var(--brand);stroke-width:1"/>`);
     }
+  }
+  if (marks.compressor !== null && marks.compressor !== undefined) {
+    parts.push(compressorLine(marks, s, height, id === "graph"));
   }
   if (marks.playhead !== null && marks.playhead !== undefined) {
     const x = s.sx(marks.playhead);

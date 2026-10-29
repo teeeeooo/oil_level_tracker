@@ -300,6 +300,11 @@ Do not use sizes outside this ramp.
       - **분석:** the range, the compressor start (dragged on the graph),
         the Recipe copy, and "범위 바꿔 다시 분석…". With unsaved edits it
         asks to save them first: the re-analysis keeps the saved edits.
+      - **The compressor marker** moves with the grab tool: a press within
+        5 px of it (a line under the pointer comes first; the cursor shows
+        `ew-resize`) drags it in 0.1 s steps inside the analysis range.
+        The 분석 panel shows the time it was moved from. A re-analysis
+        starts from the moved time.
 - **Inspection list:** the first screen.
   - **Toolbar, 48 px:** the title "검사" on the left; "Recipe", "새 검사"
     (primary) and help on the right.

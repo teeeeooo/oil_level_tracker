@@ -10,7 +10,7 @@ import { $, MODES, clock, el, localDate, notify, parseClock, typing } from "./ui
 
 const TOOL_KEYS = { KeyG: "grab", KeyP: "pencil", KeyR: "range", KeyH: "pan" };
 const HIT_PX = 8;          // how near a line a press grabs it
-const EDGE_PX = 5;         // how near a selection edge a press moves it
+const EDGE_PX = 5;         // how near a selection edge or the compressor marker a press moves it
 const DRAG_PX = 3;         // the movement that makes a press a drag
 const MIN_SPAN_SEC = 2;    // the narrowest time view
 const MIN_SPAN_PX = 8;     // the lowest height view, in source px
@@ -201,7 +201,7 @@ function panel() {
     times: state.edits.times,
     top: z - (e.center_y - e.radius_y),
     bottom: z - (e.center_y + e.radius_y),
-    compressor: state.edits.compressor_start_sec,
+    compressor: state.drag?.type === "compressor" ? null : state.edits.compressor_start_sec,  // in the marks meanwhile
     lines: { oil: heights(edits.oil), foam: heights(edits.foam), reference: heights(edits.reference) },
     levels: derived?.levels ?? [],
     empty: derived?.empty ?? [],
@@ -215,7 +215,8 @@ function marks() {
   const grab = drag?.type === "grab"
     ? { t0: state.edits.times[drag.index] - state.width, t1: state.edits.times[drag.index] + state.width, kind: drag.kind }
     : null;
-  return { playhead: state.playhead, selection: state.selection, grab };
+  const compressor = drag?.type === "compressor" ? drag.time : null;
+  return { playhead: state.playhead, selection: state.selection, grab, compressor };
 }
 
 // ---- drawing ------------------------------------------------------------------------------------
@@ -317,6 +318,17 @@ function hitLine(at) {
   return best;
 }
 
+function nearCompressor(at) {
+  const t = state.edits.compressor_start_sec;
+  return t !== null && Math.abs(at.s.sx(t) - at.x) <= EDGE_PX;
+}
+
+/** A compressor start the pointer can put: in 0.1 s steps, inside the analysis range. */
+function compressorAt(t) {
+  const s = state.detail.settings;
+  return Math.round(Math.min(s.end_sec, Math.max(s.start_sec, t)) * 10) / 10;
+}
+
 function selectionEdge(at) {
   if (!state.selection) return null;
   for (const edge of ["t0", "t1"]) if (Math.abs(at.s.sx(state.selection[edge]) - at.x) <= EDGE_PX) return edge;
@@ -346,6 +358,11 @@ function onPointerDown(event) {
   }
   if (state.tool === "grab") {
     const hit = hitLine(at);
+    if (!hit && nearCompressor(at)) {  // a line under the pointer comes first
+      state.drag = { ...start, type: "compressor", time: state.edits.compressor_start_sec };
+      requestDraw({ back: true, marks: true });
+      return;
+    }
     if (!hit) {
       state.drag = { ...start, type: "click" };
       return;
@@ -388,6 +405,9 @@ function onPointerMove(event) {
     state.selection = { ...state.selection, [drag.edge]: at.t };
     renderSelection();
     requestDraw({ marks: true });
+  } else if (drag.type === "compressor" && drag.moved) {
+    drag.time = compressorAt(at.t);
+    requestDraw({ marks: true });
   } else if (drag.type === "grab" && drag.moved) {
     const line = lineOf(state.glassId, drag.kind);
     const target = settle(drag.index, drag.base.ys[drag.index] + (zero() - at.h) - drag.y0);
@@ -407,8 +427,15 @@ function onPointerUp() {
   const drag = state.drag;
   state.drag = null;
   if (!drag) return;
-  if ((drag.type === "click" || drag.type === "pan" || drag.type === "select") && !drag.moved) {
+  if ((drag.type === "click" || drag.type === "pan" || drag.type === "select" || drag.type === "compressor") && !drag.moved) {
     setPlayhead(drag.at.t);
+  }
+  if (drag.type === "compressor") {
+    if (drag.moved && state.history.recordCompressor(state.edits.compressor_start_sec, drag.time)) {
+      state.edits.compressor_start_sec = drag.time;
+      changed();
+    }
+    requestDraw({ back: true });
   } else if (drag.type === "edge" && state.selection) {
     const { t0, t1 } = state.selection;
     state.selection = { t0: Math.min(t0, t1), t1: Math.max(t0, t1) };
@@ -421,9 +448,10 @@ function onPointerUp() {
 
 function hover(event) {
   if (state.tool !== "grab" || !state.edits) return;
-  const hit = hitLine(pointer(event.currentTarget, event));
+  const at = pointer(event.currentTarget, event);
+  const hit = hitLine(at);
   const hot = hit?.kind ?? null;
-  event.currentTarget.style.cursor = hot ? "ns-resize" : "";
+  event.currentTarget.style.cursor = hot ? "ns-resize" : nearCompressor(at) ? "ew-resize" : "";
   if (hot !== state.hot) {
     state.hot = hot;
     requestDraw({ lines: true });
@@ -493,16 +521,20 @@ function takeDerived(glasses) {
 }
 
 function undo(redo = false) {
-  const target = { lineOf, setStretches: (glassId, list) => { editsOf(glassId).cannot_judge = list; } };
+  const target = {
+    lineOf,
+    setStretches: (glassId, list) => { editsOf(glassId).cannot_judge = list; },
+    setCompressor: (time) => { state.edits.compressor_start_sec = time; },
+  };
   const entry = redo ? state.history.redo(target) : state.history.undo(target);
   if (!entry) return;
-  if (entry.glassId !== state.glassId) {
+  if (entry.glassId !== null && entry.glassId !== state.glassId) {
     state.glassId = entry.glassId;
     $("editorGlass").value = entry.glassId;
     showGlass(false);
   }
   changed();
-  requestDraw(entry.kind === "cannot_judge" ? { back: true } : { lines: true });
+  requestDraw(entry.kind === "cannot_judge" || entry.kind === "compressor" ? { back: true } : { lines: true });
   renderSelection();
 }
 
@@ -620,13 +652,19 @@ function renderHeader() {
   const s = d.settings;
   const rows = [
     ["분석 범위", `${clock(s.start_sec)} – ${clock(s.end_sec)}`],
-    ["압축기 기동", state.edits?.compressor_start_sec === null ? "없음" : clock(state.edits?.compressor_start_sec)],
+    ["압축기 기동", compressorText()],
     ["Recipe", `${d.recipe.name} (이 검사의 사본)`],
     ["샘플", `${state.analysis.times.length.toLocaleString()}개 (초당 2개)`],
     ["분석한 시각", localDate(state.analysis.finished_at)],
     ["원본 SHA-256", d.video.sha256 ?? "-"],
   ];
   $("editorFacts").replaceChildren(...rows.map(([k, v]) => el("tr", {}, el("th", {}, k), el("td", { class: k.includes("SHA") ? "mono" : "" }, v))));
+}
+
+function compressorText() {
+  const t = state.edits?.compressor_start_sec ?? null, set = state.detail.settings.compressor_start_sec;
+  if (t === null) return "없음";
+  return t === set ? clock(t) : `${clock(t)} (설정 ${clock(set)}에서 옮김)`;
 }
 
 function renderGlassPanel() {

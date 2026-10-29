@@ -407,3 +407,56 @@ def test_reanalysis_from_the_editor(tmp_path, video, browser_page):
         assert errors == []
     finally:
         running.close()
+
+
+def test_the_compressor_marker_moves(tmp_path, video, browser_page):
+    page, errors = browser_page
+    data = tmp_path / "data"
+    write_recipes(data / "Recipes")
+    running = bootstrap.start(data_folder=data)
+    try:
+        analysed_inspection(running, video, "기동")  # the compressor start at 1.0 s
+        page.goto(running.url)
+        page.locator("#inspectionRows tr", has_text="기동").get_by_role("button", name="열기", exact=True).click()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        facts = page.locator("#editorFacts tr", has_text="압축기 기동")
+        assert facts.locator("td").inner_text() == "00:01.0"
+
+        # the grab tool drags the marker where no line is under the pointer
+        box = page.locator("#graph").bounding_box()
+        x = box["x"] + float(page.locator("#graph line[style*=compressor]").get_attribute("x1"))
+        y = box["y"] + 30
+        page.mouse.move(x + 2, y)
+        assert page.evaluate("document.getElementById('graph').style.cursor") == "ew-resize"
+        page.mouse.down()
+        page.mouse.move(x + box["width"] * 0.12, y)
+        page.mouse.move(x + box["width"] * 0.25, y)
+        # while dragged, the marker is drawn with the marks; the back layer is not redrawn per move
+        page.wait_for_function("""() => {
+            const [back, , marks] = document.getElementById('graph').children;
+            return !back.querySelector('line[style*=compressor]') && marks.querySelector('line[style*=compressor]');
+        }""")
+        shot(page, "c1-compressor-drag")
+        page.mouse.up()
+        facts.get_by_text("(설정 00:01.0에서 옮김)").wait_for()
+        assert page.locator("#graph > g").first.locator("line[style*=compressor]").count() == 1
+        moved = facts.locator("td").inner_text()
+        page.get_by_text("저장 안 함").wait_for()
+        page.keyboard.press("Control+z")
+        facts.get_by_text("00:01.0", exact=True).wait_for()
+        page.keyboard.press("Control+Shift+z")
+        facts.get_by_text("(설정 00:01.0에서 옮김)").wait_for()
+        page.keyboard.press("Control+s")
+        page.get_by_text("저장함").wait_for()
+        saved = json.loads((data / "Inspections" / "기동" / "edits.json").read_text(encoding="utf-8"))
+        time_sec = saved["compressor_start_sec"]
+        assert 1.5 < time_sec < 3.9 and round(time_sec * 10) == time_sec * 10  # 0.1 s steps
+        assert moved.startswith(f"00:0{time_sec:.1f}")
+
+        # a re-analysis starts from the moved time
+        page.get_by_role("button", name="범위 바꿔 다시 분석…").click()
+        page.locator("#setupView").wait_for()
+        assert field(page, "기동 시각").input_value() == f"00:0{time_sec:.1f}"
+        assert errors == []
+    finally:
+        running.close()
