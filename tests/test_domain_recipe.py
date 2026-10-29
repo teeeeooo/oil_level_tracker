@@ -130,3 +130,5 @@ def test_frame_size_match():
     recipe = make_recipe()
     assert recipe.matches_frame_size(1280, 720)
     assert not recipe.matches_frame_size(1920, 1080)
+    assert recipe.frame_size_message(1280, 720) is None
+    assert recipe.frame_size_message(1920, 1080) == "영상 해상도 1920×1080가 이 Recipe의 1280×720와 다릅니다."

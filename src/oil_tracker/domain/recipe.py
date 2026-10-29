@@ -80,6 +80,13 @@ class Recipe:
     def matches_frame_size(self, width: int, height: int) -> bool:
         return (width, height) == (self.reference_frame.width, self.reference_frame.height)
 
+    def frame_size_message(self, width: int, height: int) -> str | None:
+        """Why a video of this size cannot use the Recipe, or None when it can (Product SSOT §3)."""
+        if self.matches_frame_size(width, height):
+            return None
+        frame = self.reference_frame
+        return f"영상 해상도 {width}×{height}가 이 Recipe의 {frame.width}×{frame.height}와 다릅니다."
+
 
 def recipe_problems(recipe: Recipe) -> list[Problem]:
     problems: list[Problem] = []

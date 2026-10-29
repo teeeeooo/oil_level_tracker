@@ -74,10 +74,10 @@ class Recipes:
         """Open a video to draw on. An existing Recipe accepts only its own frame size."""
         opened = self.videos.open(path)
         if recipe_id is not None:
-            recipe = self.store.load(recipe_id)
-            if not recipe.matches_frame_size(opened.info.width, opened.info.height):
+            message = self.store.load(recipe_id).frame_size_message(opened.info.width, opened.info.height)
+            if message is not None:
                 self.videos.close(opened.id)
-                raise VideoDoesNotFit(_size_message(opened.info.width, opened.info.height, recipe))
+                raise VideoDoesNotFit(message)
         return opened
 
     def check(self, draft: RecipeDraft) -> tuple[Problem, ...]:
@@ -100,8 +100,9 @@ class Recipes:
         existing = self.store.load(draft.id) if draft.id is not None else None
         if draft.reference is not None:
             info = self.videos.info(draft.reference.video_id)
-            if existing is not None and not existing.matches_frame_size(info.width, info.height):
-                return _problem("reference_frame", _size_message(info.width, info.height, existing))
+            message = existing.frame_size_message(info.width, info.height) if existing is not None else None
+            if message is not None:
+                return _problem("reference_frame", message)
             if take_frame:
                 frame = self.videos.frame(
                     draft.reference.video_id, draft.reference.time_sec, max_size=REFERENCE_MAX_SIZE
@@ -134,8 +135,3 @@ class Recipes:
 
 def _problem(field: str, message: str) -> SaveResult:
     return SaveResult(None, (Problem(field, message),))
-
-
-def _size_message(width: int, height: int, recipe: Recipe) -> str:
-    frame = recipe.reference_frame
-    return f"영상 해상도 {width}×{height}가 이 Recipe의 {frame.width}×{frame.height}와 다릅니다."
