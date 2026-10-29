@@ -27,7 +27,8 @@ src/oil_tracker/
   adapters/
     video/         OpenCV and NumPy: one pass over the video for all
                    Glasses, context image, background-subtracted view,
-                   Oil draft, frame reads.
+                   Oil draft, the point line (the draft's path pinned
+                   through the user's points), frame reads.
     storage/       Recipe files, inspection folders, versioned edit
                    documents, context-image cache, schema versions,
                    SHA-256 of the source.
@@ -82,7 +83,7 @@ app.py ──▶ bootstrap.py
 ## Ports
 
 - **A port exists only at a real boundary:**
-  - video reading and analysis;
+  - video reading and analysis, and the point line on the context image;
   - Recipe and inspection storage;
   - the context-image cache;
   - report output;
@@ -106,6 +107,12 @@ app.py ──▶ bootstrap.py
 - **During a drag, only the lines redraw locally.** The FULL/EMPTY bands,
   the events and the judgment keep their last values. They update from the
   API response after the user releases.
+  - **The snap is local too:** it reads the luma of the context image,
+    which the page already has, as the spike did.
+  - **The point line comes from the API,** on each click and for the
+    preview to the cursor: Python owns the one path search. The edge
+    strength is kept per Glass, so a click after the first costs only the
+    path between two points.
 - **Lines are dense samples at the analysis rate.**
   - The samples are plain Python values; they are the source of truth.
   - Grab-and-drag and the pencil are editor operations that produce new
@@ -129,6 +136,11 @@ app.py ──▶ bootstrap.py
   - The UI polls progress and the time left, and can cancel.
 - **The source video** is referenced by path and SHA-256, and served to the
   built-in player with HTTP Range.
+  - It is served under `/media/`. A `<video>` element cannot send the
+    token header, so these routes take the token as a query parameter.
+    The local Host check still applies.
+  - Reopening an inspection hashes the source on a thread and warns when
+    it differs (A9).
 
 ## What v2 does not take from v1
 

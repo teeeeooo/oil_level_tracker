@@ -19,6 +19,8 @@ from oil_tracker.adapters.storage.inspection_files import InspectionFolders
 from oil_tracker.adapters.storage.recipe_files import RecipeFolder
 from oil_tracker.adapters.video.analysis import OpenCvAnalyser
 from oil_tracker.adapters.video.frames import open_video
+from oil_tracker.adapters.video.trace import ContextEdgeTracer
+from oil_tracker.application.editing import Editing
 from oil_tracker.application.inspections import Inspections
 from oil_tracker.application.recipes import Recipes
 from oil_tracker.application.videos import VideoSessions
@@ -65,8 +67,9 @@ def start(
     desktop = SystemDesktop(pick_video)
     recipe_store = RecipeFolder(data_folder / locations.RECIPES)
     recipes = Recipes(recipe_store, videos, desktop, utc_now, new_id)
+    inspection_store = InspectionFolders(data_folder / locations.INSPECTIONS)
     inspections = Inspections(
-        InspectionFolders(data_folder / locations.INSPECTIONS),
+        inspection_store,
         recipe_store,
         videos,
         OpenCvAnalyser(),
@@ -75,7 +78,10 @@ def start(
         utc_now,
         new_id,
     )
+    editing = Editing(inspection_store, ContextEdgeTracer(), sha256_of, utc_now)
     jobs = Jobs(new_id)
     token = secrets.token_urlsafe(24)
-    server = start_server(make_handler(ApiContext(recipes, inspections, videos, jobs, web_folder, token)), port)
+    server = start_server(
+        make_handler(ApiContext(recipes, inspections, editing, videos, jobs, web_folder, token)), port
+    )
     return Running(server, videos, jobs, token)

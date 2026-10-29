@@ -43,27 +43,40 @@ def edge_strength(rgb: np.ndarray) -> np.ndarray:
     return cv2.GaussianBlur(strength, (5, 1), 0)
 
 
+def normalised_strength(rgb: np.ndarray) -> np.ndarray:
+    """Edge strength from 0 to 1, as the draft path weighs it."""
+    return np.minimum(edge_strength(rgb) / EDGE_FULL, 1.0)
+
+
 def oil_draft(rgb: np.ndarray) -> OilDraft:
-    s = np.minimum(edge_strength(rgb) / EDGE_FULL, 1.0)
+    s = normalised_strength(rgb)
     rows = strongest_path(s)
     return OilDraft(rows, weak_stretches(s[rows, np.arange(len(rows))]))
 
 
-def strongest_path(s: np.ndarray) -> np.ndarray:
-    """The row per column that maximises the summed strength minus the jump cost."""
+def strongest_path(s: np.ndarray, start: int | None = None, end: int | None = None) -> np.ndarray:
+    """The row per column that maximises the summed strength minus the jump cost.
+
+    `start` and `end` pin the first and last rows (the point line, Product SSOT §6). Pinned rows
+    too far apart for the jump limit are joined by a straight line.
+    """
     height, columns = s.shape
     jump = max(1, int(MAX_JUMP * height))
     penalty = JUMP_WEIGHT * np.abs(np.arange(-jump, jump + 1)) / height
     rows = np.arange(height)
     score = s[:, 0].astype(np.float64)
+    if start is not None:
+        score = np.where(rows == start, score, -np.inf)
     back = np.zeros((height, columns), dtype=np.int32)
     for t in range(1, columns):
         total = sliding_window_view(np.pad(score, jump, constant_values=-np.inf), 2 * jump + 1) - penalty
         best = total.argmax(axis=1)
         back[:, t] = rows + best - jump
         score = total[rows, best] + s[:, t]
+    if end is not None and not np.isfinite(score[end]):
+        return np.rint(np.linspace(start, end, columns)).astype(np.int32)
     path = np.zeros(columns, dtype=np.int32)
-    path[-1] = int(score.argmax())
+    path[-1] = int(score.argmax()) if end is None else end
     for t in range(columns - 1, 0, -1):
         path[t - 1] = back[path[t], t]
     return path

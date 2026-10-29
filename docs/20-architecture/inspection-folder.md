@@ -46,6 +46,12 @@ report HTML. `edits.json` holds the working edits until then.
 then removes `cache\` and renames `cache.partial\` to `cache\`. A reader
 never sees half of an analysis; a cancelled one leaves no cache.
 
+**Re-analysis** (V2-3): while it runs, `inspection.json`, `recipe.json`,
+`cache\` and `edits.json` keep the previous analysis, so the editor stays
+usable and a cancel, a failure or closing the app leaves the inspection as
+it was. When it ends, the cache swap comes first, then `edits.json` (the
+merged edits), then `inspection.json` with the new setup.
+
 ## `inspection.json`
 
 UTF-8 JSON:
@@ -114,6 +120,9 @@ UTF-8 JSON:
 The user's edits on the analysis (Product SSOT §4 and §6). It sits beside
 `cache\`, so re-analysis, which swaps the cache, leaves it alone; the
 re-analysis then rewrites it with the edits merged onto the new times.
+- If the app stops between the cache swap and that rewrite, the times no
+  longer match the cache. The editor then merges on opening and shows the
+  edits as unsaved.
 
 ```json
 {

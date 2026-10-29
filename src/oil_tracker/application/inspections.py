@@ -1,7 +1,7 @@
 """Inspection use cases: the list, a new inspection's Recipe, the setup, the analysis and its result.
 
-Product SSOT §3 and §8; the screens are in DESIGN.md §5. The analysis itself runs as a job in
-adapters/http, which calls analyse() on its own thread.
+Product SSOT §3, §6 (re-analysis) and §8; the screens are in DESIGN.md §5. The analysis itself runs
+as a job in adapters/http, which calls analyse() on its own thread.
 """
 
 from __future__ import annotations
@@ -11,6 +11,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from pathlib import Path
 
+from oil_tracker.domain.edits import Dropped, dropped_by_reanalysis, merge_reanalysis
 from oil_tracker.domain.enums import InspectionState
 from oil_tracker.domain.geometry import Ellipse
 from oil_tracker.domain.inspection import (
@@ -18,6 +19,7 @@ from oil_tracker.domain.inspection import (
     AnalysisSettings,
     Inspection,
     SourceVideo,
+    analysis_times,
     inspection_name,
     setup_problems,
 )
@@ -36,10 +38,6 @@ from .ports import (
     VideoUnreadable,
 )
 from .videos import OpenedVideo, VideoSessions
-
-
-class InspectionLocked(ValueError):
-    """An analysed inspection keeps its setup; re-analysis comes with the editor (V2-3)."""
 
 
 class InvalidSetup(ValueError):
@@ -129,8 +127,24 @@ class Inspections:
         existing, video, recipe = self._resolve(setup)
         return tuple(setup_problems(video, recipe, setup.settings, _name(setup, existing)))
 
+    def dropped(self, setup: InspectionSetup) -> Dropped:
+        """What re-analysing with this setup drops from the saved edits, to say before it starts (§6)."""
+        existing, video, recipe = self._resolve(setup)
+        saved = None if existing is None else self.store.load_edits(existing.id)
+        if saved is None:
+            return Dropped()
+        try:
+            times = analysis_times(video, setup.settings)
+        except ValueError:  # an empty range, which the check reports as a problem
+            return Dropped()
+        return dropped_by_reanalysis(saved.edits, times, tuple(glass.id for glass in recipe.glasses))
+
     def prepare(self, setup: InspectionSetup) -> SetupResult:
-        """Write the inspection with its Recipe copy, ready to analyse: the folder is made here."""
+        """The inspection with its Recipe copy, ready to analyse: the folder is made here.
+
+        An analysed inspection is not written: a re-analysis keeps the stored setup and analysis until
+        the new one is done, so a cancel or a failure leaves it as it was.
+        """
         existing, video, recipe = self._resolve(setup)
         name = _name(setup, existing)
         problems = setup_problems(video, recipe, setup.settings, name)
@@ -143,39 +157,46 @@ class Inspections:
             inspection = replace(
                 existing, recipe=recipe, settings=setup.settings, state=InspectionState.NOT_ANALYSED, failure=None
             )
-            self.store.save(inspection)
+            if existing.state is not InspectionState.ANALYSED:
+                self.store.save(inspection)
         return SetupResult(inspection)
 
     def analyse(
         self,
-        inspection_id: str,
+        inspection: Inspection,
         progress: Callable[[int, int], None],
         cancelled: Callable[[], bool],
     ) -> Inspection:
-        """Analyse a prepared inspection; it ends ANALYSED, FAILED, or NOT_ANALYSED when cancelled.
+        """Analyse an inspection from prepare(); it ends ANALYSED, FAILED, or NOT_ANALYSED when cancelled.
 
-        The source SHA-256 runs on a second thread meanwhile. A cancel or a failure clears the cache,
-        is recorded, then raised again.
+        The source SHA-256 runs on a second thread meanwhile. A first analysis records a cancel or a
+        failure, clears the cache and raises again; a re-analysis only raises, leaving the previous
+        analysis in place. Saved edits are fitted to the new analysis (Product SSOT §6).
         """
-        inspection = self.store.load(inspection_id)
-        if inspection.state is InspectionState.ANALYSED:
-            raise InspectionLocked("이미 분석이 끝난 검사입니다.")
-        self.store.clear_analysis(inspection_id)
+        again = self.store.load(inspection.id).state is InspectionState.ANALYSED
+        if not again:
+            self.store.clear_analysis(inspection.id)
         path = Path(inspection.video.path)
         hashing = _Background(lambda: self._hasher(path))
         try:
             found = self.analyser.analyse(path, inspection.recipe.glasses, inspection.settings, progress, cancelled)
             sha256 = hashing.result()
             analysis = Analysis(found.times, found.drafts, self._now())
-            self.store.save_analysis(inspection_id, analysis, found.images)
+            self.store.save_analysis(inspection.id, analysis, found.images)
         except AnalysisCancelled:
-            self.store.clear_analysis(inspection_id)
-            self.store.save(replace(inspection, state=InspectionState.NOT_ANALYSED, failure=None))
+            if not again:
+                self.store.clear_analysis(inspection.id)
+                self.store.save(replace(inspection, state=InspectionState.NOT_ANALYSED, failure=None))
             raise
         except Exception as failure:
-            self.store.clear_analysis(inspection_id)
-            self.store.save(replace(inspection, state=InspectionState.FAILED, failure=failure_reason(failure)))
+            if not again:
+                self.store.clear_analysis(inspection.id)
+                self.store.save(replace(inspection, state=InspectionState.FAILED, failure=failure_reason(failure)))
             raise
+        saved = self.store.load_edits(inspection.id)
+        if saved is not None:
+            merged, _ = merge_reanalysis(saved.edits, analysis, inspection.settings.compressor_start_sec)
+            self.store.save_edits(inspection.id, merged, self._now())
         analysed = replace(
             inspection,
             video=replace(inspection.video, sha256=sha256),
@@ -196,8 +217,6 @@ class Inspections:
         existing = None
         if setup.inspection_id is not None:
             existing = self.store.load(setup.inspection_id)
-            if existing.state is InspectionState.ANALYSED:
-                raise InspectionLocked("분석이 끝난 검사는 설정을 바꿀 수 없습니다.")
             video = existing.video
         elif setup.video_id is not None:
             info = self.videos.info(setup.video_id)

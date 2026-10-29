@@ -6,7 +6,6 @@ import pytest
 
 from oil_tracker.application.inspections import (
     GlassPosition,
-    InspectionLocked,
     InspectionSetup,
     Inspections,
     InvalidSetup,
@@ -21,11 +20,13 @@ from oil_tracker.application.ports import (
     RecipeListing,
     RecipeNotFound,
     StoredAnalysis,
+    StoredEdits,
     VideoAnalysis,
     VideoInfo,
     VideoUnreadable,
 )
 from oil_tracker.application.videos import VideoSessions
+from oil_tracker.domain.edits import Dropped, Memo, edits_from_analysis
 from oil_tracker.domain.enums import InspectionState, JudgmentMode, SampleOrigin
 from oil_tracker.domain.geometry import Ellipse
 from oil_tracker.domain.inspection import AnalysisSettings, GlassDraft
@@ -47,7 +48,7 @@ class FakeInspectionStore:
     location = Path("/inspections")
 
     def __init__(self):
-        self.saved, self.analyses, self.cleared = {}, {}, []
+        self.saved, self.analyses, self.cleared, self.edits = {}, {}, [], {}
 
     def create(self, inspection):
         self.saved[inspection.id] = inspection
@@ -80,6 +81,12 @@ class FakeInspectionStore:
 
     def image_piece(self, inspection_id, glass_id, kind, index):
         return f"{inspection_id}/{glass_id}/{kind}-{index}".encode()
+
+    def save_edits(self, inspection_id, edits, saved_at):
+        self.edits[inspection_id] = StoredEdits(edits, saved_at)
+
+    def load_edits(self, inspection_id):
+        return self.edits.get(inspection_id)
 
 
 class FakeRecipeStore:
@@ -124,9 +131,10 @@ class FakeAnalyser:
             raise AnalysisCancelled()
         if self.outcome == "fail":
             raise VideoUnreadable("영상을 열 수 없습니다: SPL4.mp4")
-        oil = Line((400.0, None), (SampleOrigin.DRAFT,) * 2)
+        times = tuple(settings.start_sec + k / 2 for k in range(settings.sample_count))  # as at 10 fps
+        oil = Line(tuple(None if k % 2 else 400.0 for k in range(len(times))), (SampleOrigin.DRAFT,) * len(times))
         return VideoAnalysis(
-            (0.0, 0.5),
+            times,
             tuple(GlassDraft(g.id, oil) for g in glasses),
             tuple(GlassImages(g.id, 160, 400, (b"png",), (b"bg",)) for g in glasses),
         )
@@ -252,14 +260,14 @@ def test_the_analysis_stores_its_result_and_the_source_sha256(world):
     inspections, store, _, analyser, _, _, hashed = world
     inspection = new_inspection(inspections)
     calls = []
-    analysed = inspections.analyse(inspection.id, lambda d, t: calls.append((d, t)), lambda: False)
+    analysed = inspections.analyse(inspection, lambda d, t: calls.append((d, t)), lambda: False)
     assert analysed.state is InspectionState.ANALYSED and analysed.failure is None
     assert analysed.video.sha256 == "abc123" and store.saved[inspection.id] == analysed
     assert hashed == [Path("/videos/SPL4.mp4")]
     assert analyser.calls == [(Path("/videos/SPL4.mp4"), inspection.recipe.glasses, SETTINGS)]
     assert calls == [(5, 10)]
     analysis, images = store.analyses[inspection.id]
-    assert analysis.times == (0.0, 0.5) and analysis.finished_at == "t2"
+    assert analysis.times[:3] == (0.0, 0.5, 1.0) and len(analysis.times) == 19 and analysis.finished_at == "t2"
     assert [d.glass_id for d in analysis.drafts] == ["g1"] and [i.glass_id for i in images] == ["g1"]
     stored = inspections.result(inspection.id)
     assert stored.images == (ImageLayout("g1", 160, 400, 1),)
@@ -272,7 +280,7 @@ def test_a_cancelled_analysis_keeps_the_setup(world):
     inspection = new_inspection(inspections)
     analyser.outcome = "cancel"
     with pytest.raises(AnalysisCancelled):
-        inspections.analyse(inspection.id, lambda d, t: None, lambda: True)
+        inspections.analyse(inspection, lambda d, t: None, lambda: True)
     kept = store.saved[inspection.id]
     assert (kept.state, kept.failure, kept.settings) == (InspectionState.NOT_ANALYSED, None, SETTINGS)
     assert store.analyses == {} and inspections.result(inspection.id) is None
@@ -283,7 +291,7 @@ def test_a_failed_analysis_records_its_reason(world):
     inspection = new_inspection(inspections)
     analyser.outcome = "fail"
     with pytest.raises(VideoUnreadable):
-        inspections.analyse(inspection.id, lambda d, t: None, lambda: False)
+        inspections.analyse(inspection, lambda d, t: None, lambda: False)
     failed = store.saved[inspection.id]
     assert failed.state is InspectionState.FAILED
     assert failed.failure == "영상을 열 수 없습니다: SPL4.mp4"
@@ -294,7 +302,7 @@ def test_an_unreadable_source_for_the_sha256_fails_the_analysis(world):
     inspections, store = world[0], world[1]
     inspection = new_inspection(inspections, name="unreadable.mp4")
     with pytest.raises(OSError):
-        inspections.analyse(inspection.id, lambda d, t: None, lambda: False)
+        inspections.analyse(inspection, lambda d, t: None, lambda: False)
     failed = store.saved[inspection.id]
     assert failed.state is InspectionState.FAILED and failed.failure.startswith("파일을 읽거나 쓸 수 없습니다")
     assert store.analyses == {}
@@ -305,7 +313,7 @@ def test_a_failed_inspection_can_be_set_up_again(world):
     inspection = new_inspection(inspections)
     analyser.outcome = "fail"
     with pytest.raises(VideoUnreadable):
-        inspections.analyse(inspection.id, lambda d, t: None, lambda: False)
+        inspections.analyse(inspection, lambda d, t: None, lambda: False)
     recipes.save(replace(RECIPE, name="renamed later"))
     other = inspections.videos.open(Path("/videos/hd.mp4"))
     again = inspections.prepare(
@@ -328,16 +336,52 @@ def test_another_recipe_replaces_the_copy(world):
     assert again.recipe.id == "r2" and [g.id for g in again.recipe.glasses] == ["g9"]
 
 
-def test_an_analysed_inspection_is_locked(world):
-    inspections = world[0]
+def test_a_reanalysis_leaves_the_inspection_as_it_was_until_it_is_done(world):
+    inspections, store, _, analyser, _, _, _ = world
     inspection = new_inspection(inspections)
-    inspections.analyse(inspection.id, lambda d, t: None, lambda: False)
-    with pytest.raises(InspectionLocked):
-        inspections.check(setup_for(None, inspection.id))
-    with pytest.raises(InspectionLocked):
-        inspections.prepare(setup_for(None, inspection.id))
-    with pytest.raises(InspectionLocked):
-        inspections.analyse(inspection.id, lambda d, t: None, lambda: False)
+    analysed = inspections.analyse(inspection, lambda d, t: None, lambda: False)
+    first = store.analyses[inspection.id]
+    shorter = AnalysisSettings(0.0, 5.0, 1.0)
+    plan = inspections.prepare(setup_for(None, inspection.id, settings=shorter)).inspection
+    assert plan.settings == shorter and store.saved[inspection.id] == analysed  # nothing written yet
+
+    for outcome, raised in (("cancel", AnalysisCancelled), ("fail", VideoUnreadable)):
+        analyser.outcome = outcome
+        with pytest.raises(raised):
+            inspections.analyse(plan, lambda d, t: None, lambda: outcome == "cancel")
+        assert store.saved[inspection.id] == analysed and store.analyses[inspection.id] == first
+
+    analyser.outcome = "ok"
+    again = inspections.analyse(plan, lambda d, t: None, lambda: False)
+    assert (again.state, again.settings) == (InspectionState.ANALYSED, shorter)
+    assert store.saved[inspection.id] == again and len(store.analyses[inspection.id][0].times) == 11
+    assert store.cleared == [inspection.id]  # only before the first analysis
+
+
+def test_a_reanalysis_says_what_it_drops_and_keeps_the_rest(world):
+    inspections, store = world[0], world[1]
+    inspection = new_inspection(inspections)
+    inspections.analyse(inspection, lambda d, t: None, lambda: False)
+    edits = edits_from_analysis(store.analyses[inspection.id][0], 1.0)
+    oil = edits.glasses[0].oil
+    ys, origins = list(oil.ys), list(oil.origins)
+    ys[3], origins[3] = 380.0, SampleOrigin.DRAWN    # 1.5 s
+    ys[16], origins[16] = 390.0, SampleOrigin.EDITED  # 8.0 s
+    glass = replace(edits.glasses[0], oil=Line(tuple(ys), tuple(origins)), memos=(Memo("m1", 8.5, None, "거품"),))
+    store.save_edits(inspection.id, replace(edits, glasses=(glass,), compressor_start_sec=1.5), "t9")
+
+    shorter = setup_for(None, inspection.id, settings=AnalysisSettings(0.0, 5.0, 1.5))
+    assert inspections.dropped(shorter) == Dropped(oil_samples=1, memos=1)
+    assert inspections.dropped(setup_for(None, inspection.id)) == Dropped()
+    other = inspections.videos.open(Path("/videos/SPL4.mp4"))
+    assert inspections.dropped(setup_for(other.id)) == Dropped()  # a new inspection has no edits
+
+    inspections.analyse(inspections.prepare(shorter).inspection, lambda d, t: None, lambda: False)
+    merged = store.edits[inspection.id]
+    assert len(merged.edits.times) == 11 and merged.saved_at not in ("t9", None)
+    kept = merged.edits.glasses[0]
+    assert (kept.oil.ys[3], kept.oil.origins[3]) == (380.0, SampleOrigin.DRAWN)
+    assert kept.memos == () and merged.edits.compressor_start_sec == 1.5
 
 
 def test_listing_opening_and_the_folder(world):

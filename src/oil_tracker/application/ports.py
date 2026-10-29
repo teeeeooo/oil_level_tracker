@@ -211,6 +211,19 @@ class VideoAnalyser(Protocol):
         ...
 
 
+class EdgeTracer(Protocol):
+    def trace(
+        self, key: str, piece: Callable[[int], bytes], pieces: int, points: Sequence[tuple[int, int]]
+    ) -> tuple[int, ...]:
+        """The context row of every column from the first point to the last, along the strongest edges.
+
+        `points` are (column, row) in a Glass's context image, in increasing columns; the path passes
+        through each. `piece(i)` reads that image's i-th PNG piece; `key` names the image, so an
+        adapter may keep what it decoded for the next call.
+        """
+        ...
+
+
 class DesktopUnavailable(RuntimeError):
     pass
 

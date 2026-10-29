@@ -14,9 +14,9 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
+from oil_tracker.application.editing import Editing, GlassState, InvalidEdits, NotAnalysed, SourceCheck
 from oil_tracker.application.inspections import (
     GlassPosition,
-    InspectionLocked,
     InspectionSetup,
     Inspections,
     InvalidSetup,
@@ -28,6 +28,7 @@ from oil_tracker.application.ports import (
     RecipeNotFound,
     StoredAnalysis,
     UnreadableAnalysis,
+    UnreadableEdits,
     VideoUnreadable,
 )
 from oil_tracker.application.recipes import (
@@ -37,22 +38,34 @@ from oil_tracker.application.recipes import (
     VideoDoesNotFit,
 )
 from oil_tracker.application.videos import OpenedVideo, UnknownVideo, VideoSessions
-from oil_tracker.domain.enums import JudgmentMode
+from oil_tracker.domain.edits import Dropped, Edits, GlassEdits, Memo, Stretch
+from oil_tracker.domain.enums import JudgmentMode, SampleOrigin
 from oil_tracker.domain.geometry import Ellipse
 from oil_tracker.domain.inspection import AnalysisSettings, Inspection, needs_compressor_start
+from oil_tracker.domain.line import Line
 from oil_tracker.domain.problems import Problem
 from oil_tracker.domain.recipe import Glass, JudgmentRule, Recipe
 
 from .jobs import Jobs, JobsBusy, UnknownJob
 
 TOKEN_HEADER = "X-OLT-Token"
-MAX_BODY_BYTES = 1_000_000
+MAX_BODY_BYTES = 16_000_000  # the edits of a 68-min video with three Glasses are about 2 MB
+COPY_CHUNK = 1 << 20
 STATIC_TYPES = {
     ".html": "text/html; charset=utf-8",
     ".js": "text/javascript; charset=utf-8",
     ".css": "text/css; charset=utf-8",
     ".svg": "image/svg+xml",
 }
+VIDEO_TYPES = {
+    ".mp4": "video/mp4",
+    ".m4v": "video/mp4",
+    ".mov": "video/quicktime",
+    ".mkv": "video/x-matroska",
+    ".webm": "video/webm",
+    ".avi": "video/x-msvideo",
+}
+LINE_KEYS = ("oil", "foam", "reference")
 _RULE_NUMBERS = ("recovery_limit_sec", "stable_hold_sec", "minimum_valid_coverage_ratio", "allowed_sec", "allowed_px")
 _ELLIPSE_NUMBERS = ("center_x", "center_y", "radius_x", "radius_y")
 
@@ -61,18 +74,33 @@ class BadRequest(ValueError):
     pass
 
 
+class RangeNotSatisfiable(ValueError):
+    pass
+
+
+@dataclass(frozen=True)
+class FilePart:
+    """Bytes of a file sent as the body, read as they go out: a source video is too large to hold."""
+
+    path: Path
+    start: int
+    length: int
+
+
 @dataclass(frozen=True)
 class Response:
     status: int
     body: bytes
     content_type: str
     headers: tuple[tuple[str, str], ...] = ()
+    file: FilePart | None = None
 
 
 @dataclass
 class ApiContext:
     recipes: Recipes
     inspections: Inspections
+    editing: Editing
     videos: VideoSessions
     jobs: Jobs
     web_folder: Path
@@ -205,11 +233,63 @@ def analysis_json(stored: StoredAnalysis) -> dict[str, Any]:
                 "y0": layouts[draft.glass_id].y0,
                 "rows": layouts[draft.glass_id].rows,
                 "pieces": layouts[draft.glass_id].pieces,
-                "oil": {"ys": list(draft.oil.ys), "origins": [origin.value for origin in draft.oil.origins]},
+                "oil": line_json(draft.oil),
             }
             for draft in analysis.drafts
         ],
     }
+
+
+def line_json(line: Line) -> dict[str, Any]:
+    return {"ys": list(line.ys), "origins": [origin.value for origin in line.origins]}
+
+
+def edits_json(edits: Edits) -> dict[str, Any]:
+    return {
+        "times": list(edits.times),
+        "compressor_start_sec": edits.compressor_start_sec,
+        "glasses": [
+            {
+                "glass_id": glass.glass_id,
+                **{key: line_json(getattr(glass, key)) for key in LINE_KEYS},
+                "cannot_judge": [{"start_sec": s.start_sec, "end_sec": s.end_sec} for s in glass.cannot_judge],
+                "memos": [{"id": m.id, "time_sec": m.time_sec, "y": m.y, "text": m.text} for m in glass.memos],
+            }
+            for glass in edits.glasses
+        ],
+    }
+
+
+def glass_state_json(state: GlassState) -> dict[str, Any]:
+    cover = state.coverage
+    return {
+        "glass_id": state.glass_id,
+        "levels": [{"state": run.value.value, "first": run.first, "end": run.end} for run in state.levels],
+        "empty": [{"first": run.first, "end": run.end} for run in state.empty],
+        "coverage": {
+            "total": cover.total,
+            "empty": cover.empty,
+            "cannot_judge": cover.cannot_judge,
+            "valid": cover.valid,
+            "valid_ratio": cover.valid_ratio,
+        },
+    }
+
+
+def dropped_json(dropped: Dropped) -> dict[str, Any]:
+    return {
+        "oil_samples": dropped.oil_samples,
+        "foam_samples": dropped.foam_samples,
+        "reference_samples": dropped.reference_samples,
+        "stretches": dropped.stretches,
+        "memos": dropped.memos,
+        "glasses": list(dropped.glasses),
+        "anything": dropped.anything,
+    }
+
+
+def source_check_json(check: SourceCheck) -> dict[str, Any]:
+    return {"state": check.state.value, "message": check.message}
 
 
 def parse_setup(body: Any) -> InspectionSetup:
@@ -237,6 +317,54 @@ def parse_setup(body: Any) -> InspectionSetup:
         )
     except (KeyError, TypeError, ValueError, AttributeError) as failure:
         raise BadRequest(f"검사 설정 요청 형식이 올바르지 않습니다: {failure}") from failure
+
+
+def parse_edits(body: Any) -> Edits:
+    try:
+        raw = body["edits"]
+        glasses = tuple(
+            GlassEdits(
+                _text(glass["glass_id"]),
+                *(_line(glass[key]) for key in LINE_KEYS),
+                cannot_judge=tuple(Stretch(_number(s["start_sec"]), _number(s["end_sec"])) for s in glass["cannot_judge"]),
+                memos=tuple(
+                    Memo(_text(m["id"]), _number(m["time_sec"]), _optional_number(m["y"]), _text(m["text"]))
+                    for m in glass["memos"]
+                ),
+            )
+            for glass in raw["glasses"]
+        )
+        return Edits(tuple(_number(t) for t in raw["times"]), glasses, _optional_number(raw["compressor_start_sec"]))
+    except (KeyError, TypeError, ValueError, AttributeError) as failure:
+        raise BadRequest(f"편집 요청 형식이 올바르지 않습니다: {failure}") from failure
+
+
+def parse_points(body: Any) -> tuple[str, tuple[tuple[int, float], ...]]:
+    try:
+        return _text(body["glass_id"]), tuple((_index(p["index"]), _number(p["y"])) for p in body["points"])
+    except (KeyError, TypeError, ValueError, AttributeError) as failure:
+        raise BadRequest(f"점 잇기 요청 형식이 올바르지 않습니다: {failure}") from failure
+
+
+def byte_range(header: str | None, size: int) -> tuple[int, int] | None:
+    """The one byte range a player asks for, as [start, end); None serves the whole file.
+
+    Other forms of the header are ignored, as RFC 9110 §14.2 allows.
+    """
+    match = re.fullmatch(r"bytes=(\d*)-(\d*)", (header or "").strip())
+    if match is None or match.groups() == ("", ""):
+        return None
+    first, last = match.groups()
+    if first == "":
+        if int(last) == 0:
+            raise RangeNotSatisfiable()
+        return max(0, size - int(last)), size
+    start = int(first)
+    if last != "" and int(last) < start:
+        return None
+    if start >= size:
+        raise RangeNotSatisfiable()
+    return start, size if last == "" else min(size, int(last) + 1)
 
 
 def parse_draft(body: Any) -> RecipeDraft:
@@ -278,6 +406,20 @@ def _optional_text(value: Any) -> str | None:
     return None if value is None else _text(value)
 
 
+def _optional_number(value: Any) -> float | None:
+    return None if value is None else _number(value)
+
+
+def _index(value: Any) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise TypeError("expected a whole number")
+    return value
+
+
+def _line(raw: Any) -> Line:
+    return Line(tuple(_optional_number(y) for y in raw["ys"]), tuple(SampleOrigin(_text(o)) for o in raw["origins"]))
+
+
 def _number(value: Any) -> float:
     if isinstance(value, bool) or not isinstance(value, int | float) or not math.isfinite(value):
         raise TypeError("expected a finite number")
@@ -290,7 +432,7 @@ Route = tuple[str, re.Pattern[str], Callable[..., Response]]
 
 
 def routes(ctx: ApiContext) -> list[Route]:
-    recipes, inspections, videos, jobs = ctx.recipes, ctx.inspections, ctx.videos, ctx.jobs
+    recipes, inspections, editing, videos, jobs = ctx.recipes, ctx.inspections, ctx.editing, ctx.videos, ctx.jobs
 
     def list_recipes(_query, _body) -> Response:
         listing = recipes.list()
@@ -390,7 +532,10 @@ def routes(ctx: ApiContext) -> list[Route]:
         )
 
     def check_setup(_query, body) -> Response:
-        return json_response({"problems": problems_json(inspections.check(parse_setup(body)))})
+        setup = parse_setup(body)
+        problems = inspections.check(setup)
+        dropped = Dropped() if problems else inspections.dropped(setup)
+        return json_response({"problems": problems_json(problems), "dropped": dropped_json(dropped)})
 
     def start_analysis(_query, body) -> Response:
         setup = parse_setup(body)
@@ -399,11 +544,9 @@ def routes(ctx: ApiContext) -> list[Route]:
         result = inspections.prepare(setup)
         if result.inspection is None:
             return json_response({"problems": problems_json(result.problems)}, 422)
-        inspection_id = result.inspection.id
-        job = jobs.start(
-            inspection_id, lambda progress, cancelled: inspections.analyse(inspection_id, progress, cancelled)
-        )
-        return json_response({"inspection": inspection_detail(result.inspection), "job": job})
+        inspection = result.inspection
+        job = jobs.start(inspection.id, lambda progress, cancelled: inspections.analyse(inspection, progress, cancelled))
+        return json_response({"inspection": inspection_detail(inspection), "job": job})
 
     def get_inspection(_query, _body, inspection_id) -> Response:
         return json_response(inspection_detail(inspections.load(inspection_id)))
@@ -419,6 +562,39 @@ def routes(ctx: ApiContext) -> list[Route]:
 
     def image_piece(_query, _body, inspection_id, glass_id, kind, index) -> Response:
         return Response(200, inspections.image_piece(inspection_id, glass_id, kind, int(index)), "image/png")
+
+    def open_edits(_query, _body, inspection_id) -> Response:
+        opened = editing.open(inspection_id)
+        return json_response(
+            {
+                "saved_at": opened.saved_at,
+                "unsaved": opened.unsaved,
+                "edits": edits_json(opened.edits),
+                "glasses": [glass_state_json(s) for s in editing.states(inspection_id, opened.edits)],
+            }
+        )
+
+    def save_edits(_query, body, inspection_id) -> Response:
+        edits = parse_edits(body)
+        running = jobs.running()
+        if running is not None and running["inspection_id"] == inspection_id:
+            raise JobsBusy("이 검사를 다시 분석하는 중에는 저장할 수 없습니다.")
+        return json_response({"saved_at": editing.save(inspection_id, edits)})
+
+    def edit_states(_query, body, inspection_id) -> Response:
+        states = editing.states(inspection_id, parse_edits(body))
+        return json_response({"glasses": [glass_state_json(s) for s in states]})
+
+    def point_line(_query, body, inspection_id) -> Response:
+        glass_id, points = parse_points(body)
+        drawn = editing.point_line(inspection_id, glass_id, points)
+        return json_response({"first": drawn.first, "ys": list(drawn.ys)})
+
+    def source_check(_query, _body, inspection_id) -> Response:
+        return json_response(source_check_json(editing.source_check(inspection_id)))
+
+    def check_source_again(_query, _body, inspection_id) -> Response:
+        return json_response(source_check_json(editing.check_source(inspection_id)))
 
     def job_status(_query, _body, job_id) -> Response:
         return json_response(jobs.status(job_id))
@@ -436,6 +612,12 @@ def routes(ctx: ApiContext) -> list[Route]:
         ("GET", re.compile(rf"/api/inspections/{segment}"), get_inspection),
         ("GET", re.compile(rf"/api/inspections/{segment}/analysis"), get_analysis),
         ("POST", re.compile(rf"/api/inspections/{segment}/video"), open_inspection_video),
+        ("GET", re.compile(rf"/api/inspections/{segment}/edits"), open_edits),
+        ("POST", re.compile(rf"/api/inspections/{segment}/edits"), save_edits),
+        ("POST", re.compile(rf"/api/inspections/{segment}/edits/states"), edit_states),
+        ("POST", re.compile(rf"/api/inspections/{segment}/point-line"), point_line),
+        ("GET", re.compile(rf"/api/inspections/{segment}/source-check"), source_check),
+        ("POST", re.compile(rf"/api/inspections/{segment}/source-check"), check_source_again),
         (
             "GET",
             re.compile(rf"/api/inspections/{segment}/images/{segment}/(context|background)-(\d+)\.png"),
@@ -457,8 +639,35 @@ def routes(ctx: ApiContext) -> list[Route]:
     ]
 
 
+MediaRoute = tuple[re.Pattern[str], Callable[..., Response]]
+
+
+def media_routes(ctx: ApiContext) -> list[MediaRoute]:
+    """Files the page's own elements load: a <video> cannot send the token header, so it comes in the query."""
+
+    def source_video(range_header, inspection_id) -> Response:
+        path = ctx.editing.source_file(inspection_id)
+        try:
+            size = path.stat().st_size
+        except FileNotFoundError:
+            return error(404, f"원본 영상을 찾을 수 없습니다: {path}")
+        kind = VIDEO_TYPES.get(path.suffix.lower(), "application/octet-stream")
+        try:
+            span = byte_range(range_header, size)
+        except RangeNotSatisfiable:
+            return Response(416, b"", kind, (("Content-Range", f"bytes */{size}"),))
+        if span is None:
+            return Response(200, b"", kind, (("Accept-Ranges", "bytes"),), FilePart(path, 0, size))
+        start, end = span
+        headers = (("Accept-Ranges", "bytes"), ("Content-Range", f"bytes {start}-{end - 1}/{size}"))
+        return Response(206, b"", kind, headers, FilePart(path, start, end - start))
+
+    return [(re.compile(r"/media/inspections/([^/]+)/source"), source_video)]
+
+
 def make_handler(ctx: ApiContext) -> type[BaseHTTPRequestHandler]:
     table = routes(ctx)
+    media = media_routes(ctx)
     web_folder = ctx.web_folder.resolve()
 
     class Handler(BaseHTTPRequestHandler):
@@ -482,11 +691,11 @@ def make_handler(ctx: ApiContext) -> type[BaseHTTPRequestHandler]:
                 response = error(400, str(failure))
             except (RecipeNotFound, UnknownVideo, InspectionNotFound, UnknownJob) as failure:
                 response = error(404, str(failure))
-            except (VideoUnreadable, VideoDoesNotFit, UnreadableAnalysis) as failure:
+            except (VideoUnreadable, VideoDoesNotFit, UnreadableAnalysis, UnreadableEdits) as failure:
                 response = error(422, str(failure))
-            except (InspectionLocked, JobsBusy) as failure:
+            except (NotAnalysed, JobsBusy) as failure:
                 response = error(409, str(failure))
-            except InvalidSetup as failure:
+            except (InvalidSetup, InvalidEdits) as failure:
                 response = error(400, str(failure))
             except DesktopUnavailable as failure:
                 response = error(501, str(failure))
@@ -498,6 +707,8 @@ def make_handler(ctx: ApiContext) -> type[BaseHTTPRequestHandler]:
         def _dispatch(self, method: str, path: str, query: dict[str, list[str]]) -> Response:
             if not self._host_is_local():
                 return error(403, "forbidden host")
+            if path.startswith("/media/"):
+                return self._media(method, path, query)
             if not path.startswith("/api/"):
                 return self._static(method, path) if method == "GET" else error(405, "method not allowed")
             if self.headers.get(TOKEN_HEADER) != ctx.token:
@@ -507,6 +718,15 @@ def make_handler(ctx: ApiContext) -> type[BaseHTTPRequestHandler]:
                 match = pattern.fullmatch(path)
                 if match and route_method == method:
                     return function(query, body, *(unquote(group) for group in match.groups()))
+            return error(404, "not found")
+
+        def _media(self, method: str, path: str, query: dict[str, list[str]]) -> Response:
+            if query.get("token") != [ctx.token]:
+                return error(403, "missing or wrong token")
+            for pattern, function in media:
+                match = pattern.fullmatch(path)
+                if match and method == "GET":
+                    return function(self.headers.get("Range"), *(unquote(group) for group in match.groups()))
             return error(404, "not found")
 
         def _host_is_local(self) -> bool:
@@ -530,13 +750,25 @@ def make_handler(ctx: ApiContext) -> type[BaseHTTPRequestHandler]:
             return Response(200, target.read_bytes(), STATIC_TYPES[target.suffix])
 
         def _send(self, response: Response) -> None:
+            part = response.file
             self.send_response(response.status)
             self.send_header("Content-Type", response.content_type)
-            self.send_header("Content-Length", str(len(response.body)))
+            self.send_header("Content-Length", str(len(response.body) if part is None else part.length))
             self.send_header("Cache-Control", "no-store")
             for key, value in response.headers:
                 self.send_header(key, value)
             self.end_headers()
-            self.wfile.write(response.body)
+            if part is None:
+                self.wfile.write(response.body)
+                return
+            try:
+                with part.path.open("rb") as source:
+                    source.seek(part.start)
+                    left = part.length
+                    while left > 0 and (chunk := source.read(min(COPY_CHUNK, left))):
+                        self.wfile.write(chunk)
+                        left -= len(chunk)
+            except (BrokenPipeError, ConnectionResetError):
+                pass  # the player stopped reading; it asks again with another range
 
     return Handler

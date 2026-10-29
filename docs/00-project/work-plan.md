@@ -129,10 +129,34 @@ the undo depth and the shortcuts.
    [inspection-folder.md](../20-architecture/inspection-folder.md). It lies
    outside `cache\`, so the cache swap of a re-analysis leaves it alone.
    The port gained `save_edits` and `load_edits`.
-4. **`application` and `adapters/http`:** loading and saving the edits,
-   the derived bands, the source video over HTTP Range, re-analysis, the
-   point line (dynamic programming between the user's points) and the
-   edge data for the snap.
+4. **`application` and `adapters/http` — done:**
+   - **`application/editing.py`:** opening the edits (the saved ones, or
+     the drafts), saving, and what follows from any edits, saved or not:
+     the FULL/EMPTY runs, the empty runs and the coverage.
+   - **Re-analysis:** an analysed inspection can be set up again.
+     - The check also returns what the saved edits would lose
+       (`dropped`), from the times the new range will have
+       (`domain.inspection.analysis_times`).
+     - The previous analysis and setup stay until the new analysis is
+       stored, so a cancel, a failure or closing the app leaves the
+       inspection as it was (agent's choice, for A9). Then the edits are
+       merged and saved.
+   - **The point line:** `adapters/video/trace.py`, the draft's path pinned
+     through the user's points. The edge strength is kept for two Glasses.
+     At SPL#1's size on macOS, the first click takes 0.16 s and later
+     ones 0.03 s per 100 columns.
+   - **The snap stays in the browser,** on the context image's luma, as in
+     the spike (architecture.md).
+   - **The source video:** `/media/inspections/<id>/source?token=…`, with
+     HTTP Range.
+   - **A9:** `source-check` hashes the source on a thread.
+   - **Routes,** under `/api/inspections/<id>/`: `edits` (GET to open, POST
+     to save; refused while that inspection is re-analysed),
+     `edits/states`, `point-line` and `source-check` (GET reads, POST
+     checks again).
+   - **Not known yet: the codec of SPL#1 and SPL#4.** The videos are only on
+     Windows. WebView2 plays H.264, but not necessarily HEVC. Step 6's
+     request checks the codec.
 5. **`web`, the core:** the editor state with undo; grab-and-drag, the
    pencil and range delete; zoom, pan and time-axis input; the playhead;
    the video.
@@ -169,31 +193,7 @@ steps 1 to 3 are done; nothing waits on Windows.
   on the context luma in the browser, the press handling it fixed). Port
   after review, recording the source path.
 
-**Step 4, next: the editor's use cases and routes.** The plan so far:
-- **A new use case module** (for example `application/editing.py`):
-  open the edits (`load_edits`, else `edits_from_analysis` with the
-  setup's compressor start), save them with `saved_at`, and compute what
-  follows from a Glass's lines (FULL/EMPTY runs, coverage) for the bands
-  and the Glass panel.
-- **Re-analysis:** lift the `InspectionLocked` refusal for an analysed
-  inspection; the check returns the `Dropped` counts for the warning;
-  after the analysis, `merge_reanalysis` rewrites `edits.json` when it
-  exists. The setup's compressor field starts from the edited value.
-- **Point line and snap data** need the context image: the use case reads
-  the cached PNG pieces from the store and hands them to a new
-  `adapters/video` port (adapters do not import each other). The point
-  line reuses the draft's dynamic programming in `adapters/video/draft.py`,
-  pinned through the user's points. The snap can follow the spike and
-  work on the image in the browser, or get edge rows per column from the
-  API; decide in step 4.
-- **The source video over HTTP Range** for the `<video>` element (A6). A
-  `<video>` cannot send the `X-OLT-Token` header, so that one route needs
-  the token another way (a query parameter, with the local Host check).
-  Check the codec of SPL#1 and SPL#4 first: WebView2 plays H.264, not
-  necessarily HEVC.
-- **A9, the SHA-256 warning on reopening:** hashing SPL#1 takes seconds on
-  the slowest PC, so run it in the background and warn when it differs.
-- API tests against the running server, as in `tests/test_http_api.py`.
+**Step 4** was done after this handoff; see the steps above.
 
 **Then:** step 5 (the web core), and step 6 at once: A5 and A6 on the
 slowest PC through a terminal request. The app needs a measuring mode that
@@ -249,8 +249,8 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `fb8eef3`: `155 passed, 2 skipped` on macOS, so
-  `154 passed, 3 skipped` on Windows.
+  test. After V2-3 step 4: `178 passed, 2 skipped` on macOS, so
+  `177 passed, 3 skipped` on Windows.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -291,7 +291,7 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done today:** V2-1 and V2-2 closed, each with its Windows run; the
   V2-2 follow-up; V2-3 started.
-- **Done today also:** V2-3 steps 1 to 3 (the confirmed mock-up, the edit
-  document, `edits.json`).
-- **Next action:** V2-3 step 4, the `application` use cases and the
-  `adapters/http` routes for the editor, as the handoff above says.
+- **Done today also:** V2-3 steps 1 to 4 (the confirmed mock-up, the edit
+  document, `edits.json`, the editor's use cases and routes).
+- **Next action:** V2-3 step 5, the web core of the editor (see the steps
+  and the handoff above).

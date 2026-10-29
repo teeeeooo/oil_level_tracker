@@ -3,6 +3,7 @@
 import hashlib
 import http.client
 import json
+import shutil
 import threading
 import time
 
@@ -34,10 +35,10 @@ def app(tmp_path):
     running.close()
 
 
-def call(running, method, path, body=None, token=True, host=None):
+def call(running, method, path, body=None, token=True, host=None, headers=None):
     port = running.server.server_address[1]
     connection = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
-    headers = {"Content-Type": "application/json"}
+    headers = {"Content-Type": "application/json", **(headers or {})}
     if token:
         headers["X-OLT-Token"] = running.token
     if host:
@@ -254,8 +255,6 @@ def test_an_inspection_from_its_video_to_the_analysis(app, video):
 
     status, reopened, _ = call(running, "POST", f"/api/inspections/{inspection_id}/video")
     assert status == 200 and reopened["name"] == "sample.avi"
-    setup["inspection_id"] = inspection_id
-    assert call(running, "POST", "/api/inspections/start", setup)[0] == 409  # an analysed inspection keeps its setup
 
 
 def test_inspection_errors(app, video):
@@ -269,3 +268,134 @@ def test_inspection_errors(app, video):
     bad["glasses"] = []
     assert call(running, "POST", "/api/inspections/check", bad)[0] == 400
     assert call(running, "GET", "/api/jobs/nope")[0] == 404
+
+
+def analysed_inspection(running, video):
+    opened, recipe = saved_recipe(running, video)
+    status, started, _ = call(running, "POST", "/api/inspections/start", setup_json(opened, recipe))
+    assert status == 200, started
+    assert wait_for_job(running, started["job"]["id"])["state"] == "finished"
+    return started["inspection"]["id"], opened, recipe
+
+
+def test_editing_through_the_api(app, video):
+    running, tmp_path = app
+    inspection_id, _, _ = analysed_inspection(running, video)
+    base = f"/api/inspections/{inspection_id}"
+    status, opened, _ = call(running, "GET", f"{base}/edits")
+    assert status == 200 and (opened["saved_at"], opened["unsaved"]) == (None, False)
+    edits = opened["edits"]
+    assert (edits["times"], edits["compressor_start_sec"]) == ([0.0, 0.5, 1.0, 1.5], 0.5)
+    glass = edits["glasses"][0]
+    assert (glass["glass_id"], glass["foam"]["ys"], glass["cannot_judge"], glass["memos"]) == ("g1", [None] * 4, [], [])
+    assert opened["glasses"][0]["coverage"]["total"] == 4
+
+    # the Glass bottom is y 220: EMPTY there
+    glass["oil"] = {"ys": [220.0, 220.0, 150.0, None], "origins": ["EDITED", "EDITED", "DRAWN", "DRAFT"]}
+    glass["cannot_judge"] = [{"start_sec": 1.4, "end_sec": 2.0}]
+    glass["memos"] = [{"id": "m1", "time_sec": 0.5, "y": 150.0, "text": "거품"}]
+    status, states, _ = call(running, "POST", f"{base}/edits/states", {"edits": edits})
+    assert status == 200
+    assert states["glasses"] == [
+        {
+            "glass_id": "g1",
+            "levels": [{"state": "EMPTY_NO_INTERFACE", "first": 0, "end": 2}],
+            "empty": [],
+            "coverage": {"total": 4, "empty": 0, "cannot_judge": 1, "valid": 3, "valid_ratio": 0.75},
+        }
+    ]
+
+    status, saved, _ = call(running, "POST", f"{base}/edits", {"edits": edits})
+    assert status == 200 and saved["saved_at"]
+    folder = call(running, "GET", "/api/inspections")[1]["inspections"][0]["folder"]
+    assert (tmp_path / "data" / "Inspections" / folder / "edits.json").is_file()
+    status, again, _ = call(running, "GET", f"{base}/edits")
+    assert (again["edits"], again["saved_at"], again["unsaved"]) == (edits, saved["saved_at"], False)
+
+    points = {"glass_id": "g1", "points": [{"index": 0, "y": 100}, {"index": 3, "y": 120.4}]}
+    status, drawn, _ = call(running, "POST", f"{base}/point-line", points)
+    assert status == 200 and drawn["first"] == 0 and len(drawn["ys"]) == 4
+    assert (drawn["ys"][0], drawn["ys"][-1]) == (100.0, 120.0)
+
+    for _ in range(200):
+        check = call(running, "GET", f"{base}/source-check")[1]
+        if check["state"] != "CHECKING":
+            break
+        time.sleep(0.02)
+    assert check == {"state": "SAME", "message": None}
+    assert call(running, "POST", f"{base}/source-check")[1]["state"] in ("CHECKING", "SAME")
+
+
+def test_editing_errors(app, video):
+    running, _ = app
+    inspection_id, _, _ = analysed_inspection(running, video)
+    base = f"/api/inspections/{inspection_id}"
+    edits = call(running, "GET", f"{base}/edits")[1]["edits"]
+    assert call(running, "GET", "/api/inspections/missing/edits")[0] == 404
+    assert call(running, "POST", f"{base}/edits", {"edits": {"times": []}})[0] == 400
+    assert call(running, "POST", f"{base}/edits", {"edits": {**edits, "times": [0.0, 0.5, 1.0, 1.6]}})[0] == 400
+    unknown = {**edits, "glasses": [{**edits["glasses"][0], "glass_id": "g9"}]}
+    assert call(running, "POST", f"{base}/edits/states", {"edits": unknown})[0] == 400
+    bad_line = {**edits, "glasses": [{**edits["glasses"][0], "oil": {"ys": ["1"] * 4, "origins": ["DRAFT"] * 4}}]}
+    assert call(running, "POST", f"{base}/edits", {"edits": bad_line})[0] == 400
+    for points in ([{"index": 1.5, "y": 100}, {"index": 3, "y": 100}], [{"index": 3, "y": 100}, {"index": 1, "y": 100}]):
+        assert call(running, "POST", f"{base}/point-line", {"glass_id": "g1", "points": points})[0] == 400
+
+
+def test_a_reanalysis_says_what_it_drops_and_keeps_the_rest(app, video):
+    running, _ = app
+    inspection_id, opened, recipe = analysed_inspection(running, video)
+    base = f"/api/inspections/{inspection_id}"
+    edits = call(running, "GET", f"{base}/edits")[1]["edits"]
+    glass = edits["glasses"][0]
+    glass["oil"] = {"ys": [150.0, 150.0, 160.0, 170.0], "origins": ["EDITED", "EDITED", "DRAWN", "DRAFT"]}
+    glass["memos"] = [{"id": "m1", "time_sec": 0.5, "y": None, "text": "거품"}]
+    assert call(running, "POST", f"{base}/edits", {"edits": edits})[0] == 200
+
+    later = setup_json(opened, recipe, compressor=1.0)
+    later.update(inspection_id=inspection_id, video_id=None)
+    later["settings"].update(start_sec=0.8, end_sec=1.9)  # frames 8, 13 and 18
+    status, checked, _ = call(running, "POST", "/api/inspections/check", later)
+    assert status == 200 and checked["problems"] == []
+    assert checked["dropped"] == {
+        "oil_samples": 2, "foam_samples": 0, "reference_samples": 0, "stretches": 0, "memos": 1, "glasses": [], "anything": True,
+    }
+
+    status, started, _ = call(running, "POST", "/api/inspections/start", later)
+    assert status == 200, started
+    assert wait_for_job(running, started["job"]["id"])["state"] == "finished"
+    detail = call(running, "GET", base)[1]
+    assert (detail["state"], detail["settings"]["start_sec"]) == ("ANALYSED", 0.8)
+    reopened = call(running, "GET", f"{base}/edits")[1]
+    assert reopened["unsaved"] is False and reopened["edits"]["times"] == [0.8, 1.3, 1.8]
+    kept = reopened["edits"]["glasses"][0]
+    assert kept["oil"]["ys"][:2] == [160.0, 170.0] and kept["oil"]["origins"][:2] == ["DRAWN", "DRAFT"]
+    assert kept["memos"] == [] and reopened["edits"]["compressor_start_sec"] == 1.0
+
+
+def test_the_source_video_is_served_in_ranges(app, video):
+    running, tmp_path = app
+    source = tmp_path / "source.avi"
+    shutil.copyfile(video, source)
+    inspection_id, _, _ = analysed_inspection(running, source)
+    data = source.read_bytes()
+    size = len(data)
+    path = f"/media/inspections/{inspection_id}/source?token={running.token}"
+
+    status, body, response = call(running, "GET", path, token=False)
+    assert (status, body) == (200, data)
+    assert response.getheader("Content-Type") == "video/x-msvideo" and response.getheader("Accept-Ranges") == "bytes"
+    for asked, start, end in (("bytes=10-19", 10, 20), ("bytes=-5", size - 5, size), (f"bytes=100-{size + 50}", 100, size)):
+        status, body, response = call(running, "GET", path, token=False, headers={"Range": asked})
+        assert (status, body) == (206, data[start:end])
+        assert response.getheader("Content-Range") == f"bytes {start}-{end - 1}/{size}"
+    status, body, response = call(running, "GET", path, token=False, headers={"Range": f"bytes={size}-"})
+    assert (status, body, response.getheader("Content-Range")) == (416, b"", f"bytes */{size}")
+    assert call(running, "GET", path, token=False, headers={"Range": "bytes=5-2"})[0] == 200  # not a range: ignored
+
+    assert call(running, "GET", f"/media/inspections/{inspection_id}/source")[0] == 403  # the header is not enough
+    assert call(running, "GET", f"/media/inspections/{inspection_id}/source?token=wrong", token=False)[0] == 403
+    assert call(running, "GET", f"/media/inspections/missing/source?token={running.token}", token=False)[0] == 404
+    source.unlink()
+    status, body, _ = call(running, "GET", path, token=False)
+    assert status == 404 and "source.avi" in body["error"]
