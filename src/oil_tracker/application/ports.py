@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
-from oil_tracker.domain.inspection import Analysis, Inspection
-from oil_tracker.domain.recipe import Recipe
+from oil_tracker.domain.inspection import Analysis, AnalysisSettings, GlassDraft, Inspection
+from oil_tracker.domain.recipe import Glass, Recipe
 
 
 class RecipeNotFound(LookupError):
@@ -155,6 +155,35 @@ class OpenVideo(Protocol):
 class VideoOpener(Protocol):
     def __call__(self, path: Path) -> OpenVideo:
         """Raise VideoUnreadable when the file cannot be decoded."""
+        ...
+
+
+class AnalysisCancelled(Exception):
+    pass
+
+
+@dataclass(frozen=True)
+class VideoAnalysis:
+    """One pass over the range for every Glass, in the order of the Glasses given."""
+
+    times: tuple[float, ...]            # source-video seconds of the sampled frames
+    drafts: tuple[GlassDraft, ...]      # one Oil sample per time; None where the draft is empty
+    images: tuple[GlassImages, ...]
+
+
+class VideoAnalyser(Protocol):
+    def analyse(
+        self,
+        path: Path,
+        glasses: Sequence[Glass],
+        settings: AnalysisSettings,
+        progress: Callable[[int, int], None],
+        cancelled: Callable[[], bool],
+    ) -> VideoAnalysis:
+        """Report progress as (done, total) work units and ask `cancelled` between steps.
+
+        Raise AnalysisCancelled when it returns True, VideoUnreadable when the file cannot be decoded.
+        """
         ...
 
 

@@ -4,9 +4,10 @@ import cv2
 import numpy as np
 import pytest
 
+from oil_tracker.adapters.video import context
 from oil_tracker.adapters.video.context import _Band, background_view, build_contexts, sample_indices
 from oil_tracker.adapters.video.draft import OilDraft, draft_line, oil_draft
-from oil_tracker.application.ports import VideoUnreadable
+from oil_tracker.application.ports import AnalysisCancelled, VideoUnreadable
 from oil_tracker.domain.enums import SampleOrigin
 from oil_tracker.domain.geometry import Ellipse
 
@@ -42,13 +43,13 @@ def boundary(column: np.ndarray, y0: int) -> int:
 def test_band_median_matches_numpy_nanmedian():
     frame = np.random.default_rng(3).integers(0, 256, (100, 120, 3), dtype=np.uint8)
     band = _Band(Ellipse(60, 50, 30, 40), 120, 100)
-    band.add(frame)
+    column = band.median(frame)
     crop = frame[band.y0:band.y1, band.x0:band.x1].astype(np.float64)
     crop[band.outside] = np.nan
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)
         expected = np.floor(np.nan_to_num(np.nanmedian(crop, axis=1), nan=0.0))
-    assert np.array_equal(band.columns[0], expected[:, ::-1].astype(np.uint8))
+    assert np.array_equal(column, expected[:, ::-1].astype(np.uint8))
 
 
 def test_sample_indices():
@@ -72,6 +73,29 @@ def test_one_pass_samples_every_glass_from_the_same_frames(video):
         assert image.rgb.shape == (2 * ellipse.radius_y, 6, 3)
         for column, index in enumerate(result.frame_indices):
             assert abs(boundary(image.rgb[:, column], image.y0) - level(index)) <= 2
+
+
+@pytest.mark.parametrize("workers", [1, 3])
+def test_worker_threads_give_the_same_images(video, workers):
+    inline = build_contexts(video, GLASSES, start_sec=0, end_sec=999, rate=2, workers=0)
+    threaded = build_contexts(video, GLASSES, start_sec=0, end_sec=999, rate=2, workers=workers)
+    assert threaded.frame_indices == inline.frame_indices
+    for a, b in zip(threaded.images, inline.images):
+        assert np.array_equal(a.rgb, b.rgb) and a.y0 == b.y0
+    assert set(threaded.seconds) == {"grab", "retrieve", "reduce", "wait"}
+
+
+def test_the_pass_stops_when_cancelled(video, monkeypatch):
+    monkeypatch.setattr(context, "PROGRESS_EVERY", 5)
+    asked = []
+
+    def cancelled():
+        asked.append(True)
+        return len(asked) == 2
+
+    with pytest.raises(AnalysisCancelled):
+        build_contexts(video, GLASSES, start_sec=0, end_sec=999, rate=2, cancelled=cancelled)
+    assert len(asked) == 2
 
 
 def test_a_range_seeks_to_its_first_frame(video):
