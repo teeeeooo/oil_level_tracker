@@ -145,6 +145,13 @@ Do not use sizes outside this ramp.
   its status badge.
 - **Badges:** 20 px high, radius 4, Caption 1 at weight 600, using the
   status colours.
+  - An inspection's state (분석 완료, 분석 안 됨, 분석 실패) is not a
+    judgment: its badge uses the `--pending` colours, and a reason follows
+    it in Caption 1 (`--error` for a failure).
+- **Time field:** an input holding `mm:ss.s`, followed by a small "지금"
+  button that puts in the time on screen.
+- **Progress bar:** 4 px, radius 2, `--brand` on `--stroke-2`, with the
+  percentage and the time left below it.
 - **Panels:**
   - `--bg-1` on `--bg-2`, with a 1 px `--stroke-1` divider between panels;
     no cards with shadows.
@@ -240,9 +247,46 @@ Do not use sizes outside this ramp.
       - the judgment panel (computed result, override, reason);
       - the selection panel;
       - the memo list.
-- **Recipe list:** the same window.
-  - **Toolbar, 48 px:** the title "Recipe" on the left; "새 Recipe"
+- **Inspection list:** the first screen.
+  - **Toolbar, 48 px:** the title "검사" on the left; "Recipe", "새 검사"
     (primary) and help on the right.
+  - **Body:** one panel with a table: the video name with the inspection
+    folder name below it (monospace caption), the Recipe, the creation
+    time and the state (badge and reason). A row opens with "열기".
+  - **Below the table:** the Inspections folder path, with "폴더 열기".
+- **Recipe picker:** a 720 px dialog after the video is picked.
+  - The video name, its frame size and its length.
+  - The Recipe table, as in the Recipe list. A Recipe of another frame size
+    is greyed out (`--fg-disabled`) with the reason below its name, and
+    cannot be picked.
+  - Footer: "이 영상으로 새 Recipe 만들기" (subtle) on the left; "취소" and
+    "다음" (primary) on the right.
+- **Analysis setup:** minimum 1280 × 800, laid out like the Recipe screen.
+  - **Top toolbar, 48 px:** "← 검사 목록" and the title (새 검사 · video
+    name, with the state and the Recipe below) on the left; the problem
+    count in `--error`, "분석 시작" (primary) and help on the right.
+  - **Left column:** a 32 px header with the video name, frame size and
+    length; the frame view with the Recipe screen's Glass editing (§4);
+    a 40 px transport whose scrub bar shows the analysis range (a
+    `--brand-tint` band between "시작" and "끝" marks in `--brand`) and the
+    compressor start ("기동", in `--compressor`), then the time and the
+    speed field.
+  - **Right column, 360 px:**
+    - Recipe: its name and each Glass with its mode, and "바꾸기";
+    - 분석 범위: start and end time fields, with the length and the number
+      of samples below;
+    - 압축기 기동: a time field, with whether it is required;
+    - Glass 위치, "이 검사에만 적용": the Glass list (a changed Glass shows
+      a "Recipe와 다름" badge), the selected Glass's position fields and
+      "Recipe 위치로 되돌리기".
+  - **Keys:** `[` and `]` set the range start and end to the time on
+    screen; they are the same in Korean input mode.
+- **Analysis progress:** a 480 px dialog over the setup: the video, the
+  Glass count and the range; the progress bar; a caption that the result
+  opens when done and that cancelling keeps the settings; "취소".
+- **Recipe list:** the same window.
+  - **Toolbar, 48 px:** "← 검사 목록" and the title "Recipe" on the left;
+    "새 Recipe" (primary) and help on the right.
   - **Body:** one panel with a table: name, Glass names, frame size,
     modified date. A row opens on double-click or with "열기".
   - **Below the table:**

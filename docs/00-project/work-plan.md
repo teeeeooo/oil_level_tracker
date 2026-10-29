@@ -28,6 +28,9 @@ Rewrite it; do not append to it.
 - **Visual rules:** [DESIGN.md](../../DESIGN.md), Fluent 2 light.
   - The editor layout in [design/mockup/editor.html](../../design/mockup/editor.html)
     is **confirmed by the user** (2026-10-28).
+  - The inspection list and analysis setup in
+    [design/mockup/inspection.html](../../design/mockup/inspection.html)
+    are **confirmed by the user** (2026-10-29).
   - The Recipe layout in [design/mockup/recipe.html](../../design/mockup/recipe.html)
     is **confirmed by the user** (2026-10-29). The Glass editing follows v1.
 - **V2-1 result:** the Recipe screen and the `.recipe.json` file
@@ -100,8 +103,8 @@ Product SSOT §3, §4 and §6:
    user's confirmation:
    [design/mockup/inspection.html](../../design/mockup/inspection.html)
    (the list, the Recipe picker, the setup and the progress dialog).
-   **Waiting for the user.** The read-only result follows the confirmed
-   editor mock-up.
+   **Confirmed by the user** (2026-10-29) and written into DESIGN.md §4–§5.
+   The read-only result follows the confirmed editor mock-up.
 4. **`domain`:** the inspection, the analysis settings, the line samples
    and the empty and "cannot judge" stretches, with validation.
 5. **`adapters/storage`:** the inspection folder, the Recipe copy and the
@@ -157,4 +160,4 @@ The three v1 remote branches that v1 docs cite stay.
 - **Next action:**
   - the user runs the A4 timing Windows request and relays its result
     block;
-  - the user reviews the step 3 mock-up.
+  - meanwhile, step 4 (`domain`) and step 5 (`adapters/storage`).
