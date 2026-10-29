@@ -15,8 +15,8 @@ it.
 | Change | Evidence |
 |---|---|
 | Documentation | `scripts/check_docs_catalog.py`, `tests/test_docs_catalog.py` and `git diff --check` |
-| `domain`, `analysis`, `storage` | Focused unit tests for the changed behaviour |
-| `server`, `web` | API tests, plus a Playwright browser smoke check on macOS for visible behaviour |
+| `domain`, `application`, `adapters/video`, `adapters/storage`, `adapters/report` | Focused unit tests for the changed behaviour; use cases run with fake ports |
+| `adapters/http`, `web` | API tests, plus a Playwright browser smoke check on macOS for visible behaviour |
 | Platform and package | A Windows run (below). macOS results never stand in for it |
 
 A passing local suite never substitutes for a criterion that requires

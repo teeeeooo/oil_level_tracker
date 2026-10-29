@@ -13,8 +13,14 @@ Rewrite it; do not append to it.
   - Acceptance videos: SPL#1 and SPL#4.
   - All product decisions.
 - **Architecture:** [architecture.md](../20-architecture/architecture.md).
-  Feature modules with one-way dependencies; the judgment lives only in
-  Python.
+  The judgment lives only in Python. On 2026-10-29 the user switched to
+  v1-style layers:
+  - `domain` ← `application` (use cases and ports) ← `adapters`
+    (`video`, `storage`, `report`, `http`);
+  - `bootstrap.py` is the only wiring point;
+  - there is no NumPy in `domain` or `application`;
+  - during a drag, the bands and the judgment update from the API after
+    release.
 - **Visual rules:** [DESIGN.md](../../DESIGN.md), Fluent 2 light.
   - The editor layout in [design/mockup/editor.html](../../design/mockup/editor.html)
     is **confirmed by the user** (2026-10-28).
@@ -74,4 +80,4 @@ The three v1 remote branches that v1 docs cite stay.
   the user says so.
 - **Expected first ports:** `JudgmentRule` and `JudgmentMode` from
   `v1-final:src/oil_tracker/domain/`. The `server.py` bind fix from
-  `spike/webui`.
+  `spike/webui`, into `adapters/http/`.
