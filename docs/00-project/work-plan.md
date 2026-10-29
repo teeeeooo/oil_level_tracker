@@ -49,19 +49,22 @@ Rewrite it; do not append to it.
   - v1 local evidence is at `~/Developer/oil_level_tracker-v1-evidence/`.
   - Branch `spike/webui` is kept for porting.
 
-## Open: requests from the V2-1 run (need the user)
+## V2-1 follow-up (user, 2026-10-29)
 
-The user raised these during the Windows run. They change DESIGN.md and the
-Recipe screen, so each waits for the user's decision. None blocks V2-2.
-
-1. **Playback speed on the Recipe screen.** The user asked for 0.5×, 2×,
-   3×, 4× and a user choice. DESIGN.md §4 gives the editor transport
-   1× 4× 16×. Settle one speed control for both screens.
-2. **Showing the frame-step keys.** `,` and `.` appear only in the button
-   tooltips today.
-3. **Optional: moving the zero line alone with the keyboard.** The arrow
-   keys move the whole Glass, as DESIGN.md §4 says. The zero line alone
-   moves by dragging it or with the "0선 Y" field.
+The user's requests from the Windows run are settled and built (`30b972c`,
+`298ab15`); DESIGN.md §4–§5 holds the rules.
+- **Speed field:** type any speed from 0.1× to 16×, or pick 0.5×–4× from
+  its menu. The same control replaces the editor's 1× 4× 16× segmented
+  control.
+- **Help:** a "?" button on every toolbar; F1 or `?` opens an overlay
+  dialog. Inline hints stay only where they must be read every time; the
+  frame header's mouse and key hint moved into the help.
+- **Dropped by the user:** moving the zero line alone with the keyboard.
+- **Not yet on Windows:** F1 in WebView2, the speed field and the help
+  dialog. Add them to the next Windows request (V2-2). Without Playwright
+  the expected test line stays `77 passed, 2 skipped`.
+- The mock-ups `design/mockup/editor.html` and `recipe.html` predate this.
+  DESIGN.md governs where they differ.
 
 ## Known limits, accepted for now
 
@@ -100,7 +103,5 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Next action:** the user decides
-  - whether the three requests above go in a small V2-1 follow-up now or
-    wait for the editor transport in V2-3, and the speed choices;
-  - when V2-2 starts.
+- **Next action:** V2-2 starts when the user says so; settle the questions
+  above first.
