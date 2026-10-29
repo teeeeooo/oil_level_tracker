@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
+from oil_tracker.domain.inspection import Analysis, Inspection
 from oil_tracker.domain.recipe import Recipe
 
 
@@ -35,6 +37,82 @@ class RecipeStore(Protocol):
 
     def save(self, recipe: Recipe) -> None:
         """Create or replace the Recipe with this id. Renaming moves its file."""
+        ...
+
+
+class InspectionNotFound(LookupError):
+    pass
+
+
+class UnreadableAnalysis(ValueError):
+    pass
+
+
+@dataclass(frozen=True)
+class InspectionEntry:
+    folder_name: str
+    inspection: Inspection
+
+
+@dataclass(frozen=True)
+class InspectionListing:
+    inspections: tuple[InspectionEntry, ...]  # newest first
+    unreadable: tuple[tuple[str, str], ...]   # (folder name, reason)
+
+
+@dataclass(frozen=True)
+class GlassImages:
+    """One Glass's analysis pictures as encoded PNG pieces; opaque to the use cases."""
+
+    glass_id: str
+    y0: int                            # the source-frame y of the first row
+    rows: int
+    context_png: tuple[bytes, ...]     # pieces of at most 4,096 columns, in time order
+    background_png: tuple[bytes, ...]
+
+
+@dataclass(frozen=True)
+class ImageLayout:
+    glass_id: str
+    y0: int
+    rows: int
+    pieces: int
+
+
+@dataclass(frozen=True)
+class StoredAnalysis:
+    analysis: Analysis
+    images: tuple[ImageLayout, ...]
+
+
+class InspectionStore(Protocol):
+    @property
+    def location(self) -> Path:
+        """The Inspections folder, for display and "폴더 열기"."""
+        ...
+
+    def create(self, inspection: Inspection) -> str:
+        """Make the inspection's folder with its Recipe copy; return the folder name."""
+        ...
+
+    def list_inspections(self) -> InspectionListing: ...
+
+    def load(self, inspection_id: str) -> Inspection: ...
+
+    def save(self, inspection: Inspection) -> None:
+        """Replace the inspection and its Recipe copy."""
+        ...
+
+    def save_analysis(self, inspection_id: str, analysis: Analysis, images: Sequence[GlassImages]) -> None:
+        """Replace the cached analysis as a whole: a reader never sees half of one."""
+        ...
+
+    def load_analysis(self, inspection_id: str) -> StoredAnalysis | None: ...
+
+    def clear_analysis(self, inspection_id: str) -> None: ...
+
+    def image_piece(self, inspection_id: str, glass_id: str, kind: str, index: int) -> bytes:
+        """`kind` is "context" or "background"."""
         ...
 
 

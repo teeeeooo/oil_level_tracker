@@ -105,10 +105,13 @@ Product SSOT §3, §4 and §6:
    (the list, the Recipe picker, the setup and the progress dialog).
    **Confirmed by the user** (2026-10-29) and written into DESIGN.md §4–§5.
    The read-only result follows the confirmed editor mock-up.
-4. **`domain`:** the inspection, the analysis settings, the line samples
-   and the empty and "cannot judge" stretches, with validation.
-5. **`adapters/storage`:** the inspection folder, the Recipe copy and the
-   cache, with a format document in `docs/20-architecture/`.
+4. **`domain` — done** (`3a0516f`): the inspection, the analysis
+   settings with the setup checks, and lines as samples (empty where
+   `None`). The "cannot judge" stretches come with the editor (V2-3).
+5. **`adapters/storage` — done:** the inspection folder, the Recipe copy
+   and the cache, in
+   [inspection-folder.md](../20-architecture/inspection-folder.md). Images
+   cross `application` as encoded PNG pieces (bytes).
 6. **`adapters/video`:** one pass over the video for every Glass: context
    image, background view and Oil draft, with progress and cancellation.
    Ported from `spike/webui:spikes/webui/context.py`. The core is built
@@ -160,4 +163,5 @@ The three v1 remote branches that v1 docs cite stay.
 - **Next action:**
   - the user runs the A4 timing Windows request and relays its result
     block;
-  - meanwhile, step 4 (`domain`) and step 5 (`adapters/storage`).
+  - meanwhile, step 6 (the analysis adapter's ports and cancellation)
+    and step 7 (the use cases and the HTTP API).

@@ -115,7 +115,8 @@ app.py ──▶ bootstrap.py
   editor state, so the report can inline it.
 - **Saved data carries a schema version.** Readers reject unknown future
   versions. There is no v1 reader. Each format has its own document:
-  - [recipe-file.md](recipe-file.md).
+  - [recipe-file.md](recipe-file.md);
+  - [inspection-folder.md](inspection-folder.md).
 - **Long work runs as a job.** Analysis is an example.
   - `application` reports progress and checks for cancellation through a
     port.
