@@ -185,8 +185,10 @@ Do not use sizes outside this ramp.
 - **Field errors:**
   - the message sits under the input in Caption 1 `--error`, and the input
     border becomes `--error-border`;
-  - an invalid number is not applied; the drawing keeps the last valid
+  - text that is not a number is not applied; the drawing keeps the last
     value;
+  - a number that breaks a rule is applied and drawn. The Python check
+    marks it, so no rule is copied into JavaScript;
   - saving is blocked while any error remains.
 - **Tables (report and panels):**
   - Body 1;
