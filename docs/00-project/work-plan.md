@@ -183,7 +183,9 @@ the undo depth and the shortcuts.
      and the SHA-256 warning. Their toolbar buttons are there, disabled.
 6. **A5 and A6 on the slowest PC — request sent, waiting on the user:**
    [the request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md),
-   commit `4086e54`, `source=c41d4173af92 files=52`, criteria fixed in it.
+   commit `890b5ea`, `source=b51992b0fbd8 files=52`, criteria fixed in it.
+   (Re-pinned from `4086e54` before the run: its seek clicks could land
+   on the time axis's range numbers.)
    - `scripts/measure_editor.py` analyses SPL#1 through the app's server,
      then drives the editor in **Microsoft Edge** (WebView2's engine) with
      Playwright, so that PC needs no pywebview or pythonnet (it runs

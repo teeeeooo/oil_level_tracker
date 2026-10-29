@@ -30,12 +30,12 @@
    - `SPL#1_Heating_coldstart.mp4` (683,165,477 bytes)
    - `SPL#1_test1_607bccb.recipe.json`
 4. **소스**: 아래 주소의 ZIP을 받아 압축을 푼다. 커밋 하나로 고정된 코드다.
-   `https://github.com/teeeeooo/oil_level_tracker/archive/4086e549f9c96a8d859325d65ffaecdaeb440e93.zip`
+   `https://github.com/teeeeooo/oil_level_tracker/archive/890b5ea9e8a50cc5a606dbd8aa5b741d50e51b6a.zip`
 5. 측정 중에는 **다른 프로그램을 닫는다.**
 
 ## 2. PowerShell 열기 [사용자]
 
-압축을 푼 폴더(`oil_level_tracker-4086e549…`, 안에 `scripts`와 `src` 폴더가 있다)를 탐색기로 열고,
+압축을 푼 폴더(`oil_level_tracker-890b5ea9…`, 안에 `scripts`와 `src` 폴더가 있다)를 탐색기로 열고,
 주소창에 `powershell`을 입력한 뒤 Enter를 누른다. 그 폴더에서 PowerShell이 열린다.
 
 ## 3. 실행 [사용자]
@@ -89,7 +89,7 @@ py -3.14 -m pip download opencv-python-headless==4.14.0.94 numpy==2.5.4 playwrig
 
 | ID | 조건 | 결정 |
 |---|---|---|
-| M1 | 결과 파일의 소스 줄이 `source=c41d4173af92 files=52` | 소스가 맞다 |
+| M1 | 결과 파일의 소스 줄이 `source=b51992b0fbd8 files=52` | 소스가 맞다 |
 | M2 | CPU 줄이 Xeon E5-1620 v3 또는 그와 비슷한 4코어 CPU | 최저 사양급 PC다 |
 | M3 | 분석 줄에 `샘플 8210개` | SPL#1 전체를 편집했다 |
 | A5 | A5 표 **전체** 줄의 중앙값이 **16ms 이하**이고 최대가 **50ms 이하** | 통과. 아니면 나머지 도구(7단계) 전에 그리기를 가볍게 만든다 |
