@@ -5,8 +5,9 @@ import numpy as np
 import pytest
 
 from oil_tracker.adapters.video.context import _Band, background_view, build_contexts, sample_indices
-from oil_tracker.adapters.video.draft import oil_draft
+from oil_tracker.adapters.video.draft import OilDraft, draft_line, oil_draft
 from oil_tracker.application.ports import VideoUnreadable
+from oil_tracker.domain.enums import SampleOrigin
 from oil_tracker.domain.geometry import Ellipse
 
 FPS = 10.0
@@ -120,3 +121,10 @@ def test_weak_stretches_are_left_empty():
     draft = oil_draft(rgb)
     assert not draft.empty[:20].any()
     assert draft.empty[40:].all()
+
+
+def test_the_draft_becomes_source_frame_samples():
+    draft = OilDraft(np.array([5, 6, 7]), np.array([False, True, False]))
+    line = draft_line(draft, y0=400)
+    assert line.ys == (405.0, None, 407.0)
+    assert line.origins == (SampleOrigin.DRAFT,) * 3

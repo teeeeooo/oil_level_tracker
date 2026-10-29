@@ -12,6 +12,9 @@ import cv2
 import numpy as np
 from numpy.lib.stride_tricks import sliding_window_view
 
+from oil_tracker.domain.enums import SampleOrigin
+from oil_tracker.domain.line import Line
+
 EDGE_FULL = 24.0     # luma step that counts as a full-strength edge
 JUMP_WEIGHT = 5.0    # cost of a jump of the whole Glass height
 MAX_JUMP = 0.25      # of the Glass height per column
@@ -24,6 +27,12 @@ WEAK_MIN_RUN = 4     # columns (2 s); shorter weak runs keep their line
 class OilDraft:
     rows: np.ndarray   # one context row per column
     empty: np.ndarray  # True where the edge is weak: no draft line there
+
+
+def draft_line(draft: OilDraft, y0: int) -> Line:
+    """The draft as domain samples: source-frame y, or None where it is left empty."""
+    ys = tuple(None if empty else float(y0 + row) for row, empty in zip(draft.rows.tolist(), draft.empty.tolist()))
+    return Line(ys, (SampleOrigin.DRAFT,) * len(ys))
 
 
 def edge_strength(rgb: np.ndarray) -> np.ndarray:
