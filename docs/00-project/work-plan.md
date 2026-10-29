@@ -242,73 +242,61 @@ the undo depth and the shortcuts.
    It also covers the V2-2 follow-up, and the window-close question in
    the real window (WinForms), which macOS tests cannot reach.
 
-## Session handoff — 2026-10-29 (fifth)
+## Session handoff — 2026-10-30
 
-**The session closed after `11c9617`,** with this handoff commit on top.
+**The session closed after `8bec4fb`,** with this handoff commit on top.
 The working tree is clean, and `main` and the remote are in sync.
-- V2-3 steps 1 to 5 are done.
+- V2-3 steps 1 to 5 are done; step 7 is done but for the point line.
 - **Step 6 waits on the user:** they run the
   [A5/A6 request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md)
   on the slowest PC (no agent there), pinned to `8a96b22`,
-  `source=1da92bcf0279 files=54`. The user could not reach Windows in the
-  evening of 2026-10-29.
+  `source=1da92bcf0279 files=54`. Later commits do not change that ZIP.
 
 **Resume:** read this file, then
 - the A5/A6 request: its fixed criteria (M1–M3, A5, A5-f, A6-s, A6-p,
-  A6-c) decide what comes next;
+  A6-c, A4-m1, A4-m2) decide what comes next;
 - [product.md](../10-product/product.md) §4 and §6,
-  [DESIGN.md](../../DESIGN.md) §5 ("Editor window") and
+  [DESIGN.md](../../DESIGN.md) §2.7 and §5 ("Editor window", the
+  re-analysis setup) and
   [architecture.md](../20-architecture/architecture.md) ("During a drag",
-  the editor's video, the point line, `/media/`);
-- the code: `web/editor.js` (screen, pointer, keys), `web/lines.js`
-  (operations, snap, undo history), `web/player.js` (video),
-  `web/render.js` (layers), `application/editing.py`,
-  `scripts/measure_editor.py`.
+  the editor's video, the point line, `/media/`, the desktop port);
+- the code: `web/editor.js` (screen, pointer, keys, memos, the source
+  check, the unsaved flag), `web/lines.js` (operations, snap, stretches,
+  undo history), `web/player.js`, `web/render.js` (layers, memo pins),
+  `web/inspections.js` (setup, re-analysis), `application/editing.py`,
+  `app.py` (the close question), `scripts/measure_editor.py` and
+  `scripts/compare_medians.py`.
 
 **When the A5/A6 result comes:** judge it row by row against the request,
-write `60-evidence/2026-10-29-v2-3-editor-slowest-pc-windows-result.md`
-(or dated the day it arrives) and add it to the catalog.
-- A5 fails: make the drawing lighter before step 7.
+write `60-evidence/<the day it arrives>-v2-3-editor-slowest-pc-windows-result.md`
+and add it to the catalog.
+- A5 fails: make the drawing lighter before the point line.
 - A6-s or A6-c fails: put the choice to the user, as the criteria say.
 - A4-m2 passes: put that way into `_Band.median`
-  (`adapters/video/context.py`). The values are identical, so the tests
+  (`adapters/video/context.py`); the values are identical, so the tests
   and the pictures stay as they are.
 - Also read: the key-frame spacing line (how much PyAV's skipping could
   save) and the analysis time (the app's share; the draft search is now
   about 7 s faster there).
+- Then the point line (step 7), then step 8: the checks and a Windows run,
+  which also covers the V2-2 follow-up and the close question in the real
+  window.
 
-**Work the user allowed before the result** (2026-10-29 evening, "1번,
-2번하고 시간 되면 3번도"):
-1. **Review and fixes — done** (`890b5ea`).
-2. **A4 groundwork — done.**
-   - The draft search (`ae4873c`) and the facts in the open items below.
-   - **The median comparison** (`8a96b22`, user: "그 요청서에 넣고 고정한
-     커밋을 다시 바꿔도 돼"): `scripts/compare_medians.py`, stage 5 of the
-     A5/A6 request. It compares 11 ways that must give the app's values
-     exactly: the `int16` sort, other types and layouts, a partition (half
-     of each row's outside pixels sort below every value, half above, so
-     every row's middle ranks fall on the same positions) and an 8-bit
-     counting median. Then it runs the app's context pass over two
-     minutes of SPL#1 with the two fastest. Criteria A4-m1 and A4-m2.
-   - On macOS (ARM) the `int16` sort stays the fastest (0.73 ms a frame
-     for a 728 × 120 band); the partition takes 1.2–1.3 ms and the
-     counting median 2.9 ms, and it scales worst over threads.
-3. **The step 7 parts that do not depend on the drawing or the video —
-   done** (step 7 above lists the commits). The plan was:
-   - the window-close question (the pywebview closing event, when the
-     edits are unsaved);
-   - the SHA-256 warning (the `source-check` API exists; show
-     DIFFERENT, MISSING and UNREADABLE);
-   - re-analysis from the editor: "범위 바꿔 다시 분석…" opens the setup
-     for the analysed inspection, saves the edits first, shows `dropped`
-     from the check before starting, and comes back to the editor;
-   - "cannot judge": U and "판단 불가 풀기" on the selected range. The undo
-     history holds only line samples now, so it needs an entry for
-     stretches.
-   - The rest of step 7 (the point line with its preview, memos, the
-     compressor marker) waits for the A5/A6 result.
+**Done before the result, with the user's leave** (2026-10-29 evening and
+2026-10-30): the review fixes (`890b5ea`), the draft search (`ae4873c`),
+the median comparison in the request (`8a96b22`), and in step 7 the close
+question, the SHA-256 warning, re-analysis from the editor, "cannot
+judge", the compressor marker and memos (step 7 above lists the commits).
+A closing review found three ordering bugs in the unsaved state and fixed
+them (`8bec4fb`): an edit made while a save ran was marked saved; the
+window flag's calls could arrive swapped; a reload left the flag set.
 
-**Learned this session:**
+**Agent's choices to show the user if asked:** the source-warning bar
+(DESIGN.md §2.7 tokens), the source check on every editor open (about 5 s
+of background hashing on the slowest PC), the compressor in 0.1 s steps,
+memo pins on the graph only, and the memo dialog. All are in DESIGN.md §5.
+
+**Learned these sessions:**
 - zsh does not split an unquoted variable: a re-pin wrote
   `source=766d5e5886c9 52 files=` until it was caught. Grep pinned values
   after writing them.
@@ -320,15 +308,18 @@ write `60-evidence/2026-10-29-v2-3-editor-slowest-pc-windows-result.md`
   decoding; the page adds little.
 - The user wants parallel progress when Windows is out of reach, inside
   the decisions already made; ask before crossing one.
-- (2026-10-30) `pytest | tail -1 && git commit` commits whatever the tests
-  say: `8ec20d4` went out with a failing smoke test (fixed in `942dc55`).
+- `pytest | tail -1 && git commit` commits whatever the tests say:
+  `8ec20d4` went out with a failing smoke test (fixed in `942dc55`).
   Check pytest's exit code before committing.
 - The editor's panels update at once, but the plots and the time axis
   redraw on the next animation frame: smoke checks wait for the drawn
   marks instead of counting them at once.
-- A `<dialog>`'s "close" event comes a task later than `close()`: after a
-  quick Esc it cleared the next memo's target. Keep dialog state in the
-  code that opens and commits it.
+- Async ordering in the page: a `<dialog>`'s "close" event comes a task
+  later than `close()`, parallel fetches can arrive swapped, and a save's
+  response can come after newer edits. Keep such state where it is
+  changed, send in order, and count changes across an await.
+- A check written for a race must fail without the fix: the save-race
+  check passed at first because an earlier notice was still on screen.
 
 ## Open items
 
