@@ -108,7 +108,8 @@ app.py ──▶ bootstrap.py
   overlay for both the editor and the report. It has no dependency on the
   editor state, so the report can inline it.
 - **Saved data carries a schema version.** Readers reject unknown future
-  versions. There is no v1 reader.
+  versions. There is no v1 reader. Each format has its own document:
+  - [recipe-file.md](recipe-file.md).
 - **Long work runs as a job.** Analysis is an example.
   - `application` reports progress and checks for cancellation through a
     port.
