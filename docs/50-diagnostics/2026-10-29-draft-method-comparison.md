@@ -70,3 +70,67 @@ decision rule below.
   B's hits. A point in a "cannot judge" stretch counts as not a hit.
 - Any parameter changed after seeing the result is labelled as such and
   does not count for this rule.
+
+## Result (run on 2026-10-29, macOS)
+
+Command: `python scripts/compare_draft_methods.py`. The pictures are in
+`sample/output/draft-comparison/` (ignored by Git).
+
+| Method | Gold hits | Silver hits | Silver `no_interface`/`unclear` in "cannot judge" |
+|---|---|---|---|
+| A spike | 0 / 11 | 0 / 16 | — |
+| B dynamic programming | 0 / 11 | 0 / 16 | 0 / 28 |
+| C B on 0.7 raw + 0.3 background | 0 / 11 | 0 / 16 | 0 / 28 |
+
+- **Every method missed every point.** On all three videos the strongest
+  edge is not the Oil boundary:
+  - **sample4:** a bright horizontal band near the bottom of the ellipse
+    (about Y 884), present for the whole video. B and C follow it from
+    start to end; A follows it for the last two thirds. The Oil boundary
+    is the bottom of the bright Foam layer, about 30 px higher.
+  - **base_sample_1:** the video itself carries red and green horizontal
+    bars from about 4.5 s, drawn over the picture, and A and B settle on
+    another horizontal band, about 100 px below the truth.
+  - **sample2:** 9.6 s long, and the picture changes from column to
+    column; all methods sit at Y 652–654 against a truth of 592.
+- **"Cannot judge" never appeared** for B or C, not even at the 28
+  points where the silver truth sees no interface. A strong but wrong edge
+  is not weak, so the weak-edge rule cannot flag it.
+- **Draft time** is 25–80 µs per column for B, so about 1 s for SPL#1's
+  8,210 columns.
+
+**Decision rule, as fixed:**
+- B stays (A does not have 3 more hits).
+- C does not replace B (it has no more hits).
+- The "cannot judge" threshold stays (B has no hits to cover).
+
+The rule keeps B, but its premise failed: B found no Oil boundary on
+these samples. **The comparison says the edge source matters more than
+spike against dynamic programming.**
+
+### After the first run (post-hoc; does not count for the rule)
+
+Two variants were added after seeing the result above:
+
+| Method | Gold hits | Silver hits | Silver `no_interface`/`unclear` in "cannot judge" |
+|---|---|---|---|
+| D dynamic programming on the background view only | 7 / 11 | 7 / 16 | 2 / 28 |
+| E dynamic programming on 0.5 raw + 0.5 background | 0 / 11 | 0 / 16 | 0 / 28 |
+
+- **D** removes edges that stay at one height for the whole video, so the
+  band at Y 884 drops out. On sample4 it follows the bottom of the Foam
+  layer until about 35 s, then falls to the old band.
+- **E** behaves like B: the raw static band still wins at a 0.5 share.
+- **D's known weakness:** an Oil level that stays at one height for most
+  of the video also drops out of the background view. SPL#4 Accum
+  (`HOLD_BELOW_ZERO`) may be such a case.
+- These are three short, unusual videos chosen after the fact. They do not
+  settle the edge source for the field videos.
+
+## Next
+
+The edge source should be judged on the acceptance videos, SPL#1 and
+SPL#4, which are only on the Windows PC.
+`python scripts/compare_draft_methods.py --video <video> --recipe <v2 Recipe>`
+draws A, B, D and E for every Glass of a v2 Recipe, for the user to judge
+by eye.
