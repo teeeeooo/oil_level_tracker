@@ -178,9 +178,8 @@ the undo depth and the shortcuts.
      8 px of a drawn line grabs it.
    - On macOS with an H.264 sample, a lines redraw while dragging took
      about 0.5 ms; SPL#1 on the slowest PC is step 6.
-   - **Not yet in the editor** (step 7): the point line, "cannot judge",
-     memos, the compressor marker, re-analysis, the window-close question
-     and the SHA-256 warning. Their toolbar buttons are there, disabled.
+   - **Not yet in the editor** (step 7): the point line, memos and the
+     compressor marker. Their toolbar buttons are there, disabled.
 6. **A5 and A6 on the slowest PC — request sent, waiting on the user:**
    [the request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md),
    commit `8a96b22`, `source=1da92bcf0279 files=54`, criteria fixed in it.
@@ -208,8 +207,30 @@ the undo depth and the shortcuts.
 7. **`web`, the rest:** the point line, the snap, "cannot judge", Foam and
    reference lines, memos, the compressor marker, re-analysis, the save
    question and the SHA-256 warning.
+   - **Done before the A5/A6 result** (user, 2026-10-29: the parts that do
+     not depend on the drawing or the video):
+     - **The window-close question** (`117f98b`): the editor tells the API
+       when it holds unsaved edits (`POST /api/editor/unsaved`); `Editing`
+       passes it to the `Desktop` port and app.py sets pywebview's
+       `confirm_close`, with the question in Korean through pywebview's
+       localization. Not yet seen on Windows (WinForms shows it with OK and
+       Cancel).
+     - **The SHA-256 warning (A9)** (`a79f8f2`): each time the editor opens
+       it checks the source again in the background; DIFFERENT, MISSING and
+       UNREADABLE show a message bar under the toolbar with "다시 확인"
+       (DESIGN.md §2.7 and §5).
+     - **Re-analysis from the editor** (`a6f7fcb`): "범위 바꿔 다시 분석…"
+       saves unsaved edits after asking, opens the setup with "← 편집기"
+       and "다시 분석", shows what the new range drops and asks before it
+       starts, and opens the editor again.
+     - **"Cannot judge"** (`0d7ae43`): U and "판단 불가 풀기" on the
+       selected range; stretches join where they meet and split when
+       cleared; the undo history records them.
+   - **Left, after the result:** the point line with its preview, memos
+     and the compressor marker.
 8. **Checks:** unit and API tests, macOS smoke checks, and a Windows run.
-   It also covers the V2-2 follow-up.
+   It also covers the V2-2 follow-up, and the window-close question in
+   the real window (WinForms), which macOS tests cannot reach.
 
 ## Session handoff — 2026-10-29 (fifth)
 
@@ -263,7 +284,7 @@ write `60-evidence/2026-10-29-v2-3-editor-slowest-pc-windows-result.md`
      for a 728 × 120 band); the partition takes 1.2–1.3 ms and the
      counting median 2.9 ms, and it scales worst over threads.
 3. **The step 7 parts that do not depend on the drawing or the video —
-   not started:**
+   done** (step 7 above lists the commits). The plan was:
    - the window-close question (the pywebview closing event, when the
      edits are unsaved);
    - the SHA-256 warning (the `source-check` API exists; show
@@ -344,8 +365,8 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `8a96b22`: `185 passed, 3 skipped` on macOS, so
-  `184 passed, 4 skipped` on Windows when its venv has no Playwright.
+  test. At `0d7ae43`: `188 passed, 3 skipped` on macOS, so
+  `187 passed, 4 skipped` on Windows when its venv has no Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -393,9 +414,9 @@ The three v1 remote branches that v1 docs cite stay.
   [the A5/A6 request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md).
   Judge its result against the request's fixed criteria and write it to
   `60-evidence/`.
-- **Meanwhile (allowed by the user):** the step 7 parts that do not
-  depend on the drawing or the video, as the handoff above lists. (The
-  median comparison went into the A5/A6 request.)
+- **Done meanwhile (allowed by the user):** the median comparison, in the
+  A5/A6 request; the window-close question, the SHA-256 warning,
+  re-analysis from the editor and "cannot judge" (step 7).
 - **Then:** the rest of step 7 after that result: the user decided that A5
   and A6 are measured before the other tools are built. If A5 fails, the
   drawing gets lighter first; A6-s and A6-c route their choices to the
