@@ -189,6 +189,10 @@ Do not use sizes outside this ramp.
   - **a screen shows a hint inline only when it must be read every time,**
     such as the save hint on the Recipe screen. Keys, mouse actions and
     tips go into the help.
+- **Switch** (an on/off view option, such as "배경 제거 보기"): a 28 × 16
+  track, radius 8, with a 1 px `--fg-3` border and a 10 px `--fg-2` knob;
+  on, the track is `--brand` and the knob white. Its label follows it in
+  Caption 1. From the confirmed editor mock-up.
 - **Key chip** (in the help): 20 px high and at least 20 px wide, padding
   0 6, radius 4, `--bg-3` fill, 1 px `--stroke-1`, Caption 1 at weight 600.
 - **Frame view (Recipe screen):**

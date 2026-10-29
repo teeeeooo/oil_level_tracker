@@ -40,8 +40,12 @@ src/oil_tracker/
                    (supplied by app.py from the pywebview window) and
                    opening a folder.
   web/             index.html, tokens.css (copied from DESIGN.md; a test
-                   checks it), app.css, render.js (shared by editor and
-                   report), recipe.js, editor.js, api.js. Plain
+                   checks it), app.css; main.js (entry), nav.js (views,
+                   help, keys), ui.js (helpers), api.js; frame.js (the
+                   frame view and Glass editing, shared by the Recipe
+                   screen and the analysis setup); recipe.js,
+                   inspections.js, result.js (the screens); render.js
+                   (shared by the editor and the report). Plain
                    JavaScript modules, no build step.
   bootstrap.py     Builds the concrete adapters and hands them to the use
                    cases. The only wiring point.

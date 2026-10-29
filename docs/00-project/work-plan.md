@@ -161,9 +161,29 @@ Product SSOT §3, §4 and §6:
      with the cache.
    - **Left for V2-3:** re-analysing an analysed inspection (409 until
      then), and the warning when a reopened video's SHA-256 differs (A9).
-8. **`web`:** the inspection list, the new-inspection flow, the setup
-   screen, progress, and the read-only result (porting the spike's
-   `render.js`).
+8. **`web` — done:** the screens of DESIGN.md §5 over the step 7 routes.
+   - **The inspection list** is the first screen; the Recipe list gets
+     "← 검사 목록".
+   - **New inspection:** the file dialog, the Recipe picker (another
+     frame size greyed with its reason; "이 영상으로 새 Recipe 만들기"),
+     then the setup.
+   - **Setup:** the Recipe screen's frame view and Glass editing, now
+     shared in `web/frame.js`; the range and the compressor start as
+     `mm:ss.s` fields with "지금" and the `[` `]` keys; marks on the scrub
+     bar; "Recipe와 다름" and "Recipe 위치로 되돌리기".
+   - **Progress dialog,** polling the job, with cancel.
+   - **The read-only result** in the editor layout: the graph, the context
+     image with a "배경 제거 보기" switch, the shared time axis and the
+     Glass picker; the right column shows the analysis and Glass facts.
+     The video, zoom, tools and judgment come with V2-3 and V2-4.
+   - `web/render.js` is ported in part from the spike's `render.js`.
+   - **Fixed on the way:** the frame view asked for the middle of a frame
+     and the server rounds a half to even, so an odd frame index showed
+     the next frame and the view kept reloading it (also on the V2-1
+     Recipe screen). It now asks for the frame's start.
+   - Checked with three browser smoke tests on macOS Chrome, and by hand
+     on a 250 s local video: cancel from the dialog, start again, the
+     result with two Glasses.
 9. **Checks:** unit and API tests, a macOS smoke check, and a Windows run.
    The Windows run also covers:
    - **A4 timing on SPL#1** with the whole analysis;
@@ -197,14 +217,9 @@ The working tree is clean, and `main` and the remote are in sync.
 is done, and its timing on that class is judged (step 6). Nothing waits
 on Windows.
 
-**Step 8, next:** the screens in DESIGN.md §5 over the step 7 routes:
-- the inspection list as the first screen (the Recipe list gets
-  "← 검사 목록");
-- the new-inspection flow: the file dialog, the Recipe picker, then the
-  setup screen with the Recipe screen's frame view and Glass editing;
-- the progress dialog, polling the job;
-- the read-only result in the editor layout, porting the spike's
-  `render.js` (`spike/webui:spikes/webui/static/render.js`).
+**Step 9, next:** the Windows run (above), with a request written as
+before. It includes the speed-up candidates 1 and 2 of the slowest-PC
+result only if they are done by then.
 
 **Other notes:**
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
@@ -213,8 +228,8 @@ on Windows.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `e9441be`: `140 passed, 1 skipped` on macOS, so
-  `139 passed, 2 skipped` on Windows.
+  test. After step 8: `140 passed, 2 skipped` on macOS, so
+  `139 passed, 3 skipped` on Windows.
 - The mock-ups `design/mockup/editor.html` and `recipe.html` predate the
   speed field and the help dialog; DESIGN.md governs where they differ.
 
@@ -250,6 +265,6 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done today:** V2-1 closed; V2-2 steps 1 to 7, with the slowest-PC
+- **Done today:** V2-1 closed; V2-2 steps 1 to 8, with the slowest-PC
   timing judged.
-- **Next action:** step 8 as above.
+- **Next action:** step 9: the Windows request for the whole V2-2 flow.
