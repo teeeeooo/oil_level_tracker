@@ -12,8 +12,8 @@
 // first/end are sample indices [first, end). Every field but times, top and bottom may be absent.
 //
 // The editor draws three layers per plot, so a drag redraws only the lines (architecture.md):
-// back (grid, bands, picture), lines, and marks ({ playhead, selection, grab, compressor }); the
-// compressor start moves to the marks while it is dragged.
+// back (grid, bands, picture), lines, and marks ({ playhead, selection, grab, compressor, memos });
+// the compressor start moves to the marks while it is dragged. Memos are [{ n, t, h or null }].
 
 export const INSET = { left: 52, right: 16, top: 14, bottom: 10 };  // DESIGN.md §7: no line clipped at the edge
 export const KINDS = ["reference", "foam", "oil"];                  // drawing order: Oil on top
@@ -25,6 +25,8 @@ const STROKES = {
   foam: "stroke:var(--foam)",
   reference: "stroke:var(--reference);stroke-dasharray:6 4",
 };
+const PIN_R = 10;       // a memo pin's radius (DESIGN.md §2.3 --memo)
+const PIN_RISE = 22;    // how far above its point a memo pin stands
 const TIME_STEPS = [0.5, 1, 2, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600, 7200];
 
 /** The whole panel: every time column and the Glass from bottom to top. */
@@ -270,12 +272,29 @@ export function marksSvg(marks, view, width, height, id) {
   if (marks.compressor !== null && marks.compressor !== undefined) {
     parts.push(compressorLine(marks, s, height, id === "graph"));
   }
+  for (const memo of marks.memos ?? []) parts.push(memoPin(memo, s));
   if (marks.playhead !== null && marks.playhead !== undefined) {
     const x = s.sx(marks.playhead);
     parts.push(`<line x1="${x}" x2="${x}" y1="0" y2="${height}" style="stroke:var(--playhead);stroke-width:1"/>`);
   }
   parts.push("</g>");
   return parts.join("");
+}
+
+/** Where a memo's pin stands: above its point, or below it near the top; a memo pinned to a time
+ * alone stands at the top. */
+export function memoPinAt(memo, s) {
+  const x = s.sx(memo.t);
+  const base = memo.h === null ? INSET.top : s.sy(memo.h);
+  const y = base - PIN_RISE - PIN_R < 0 ? base + PIN_RISE : base - PIN_RISE;
+  return { x, y, base, r: PIN_R };
+}
+
+function memoPin(memo, s) {
+  const { x, y, base, r } = memoPinAt(memo, s);
+  return `<g data-memo="${memo.n}"><line x1="${x}" x2="${x}" y1="${base}" y2="${y}" style="stroke:var(--memo);stroke-width:1"/>`
+    + `<circle cx="${x}" cy="${y}" r="${r}" style="fill:var(--memo)"/>`
+    + `<text x="${x}" y="${y + 4}" text-anchor="middle" style="${TEXT};fill:var(--bg-1);font-weight:600">${memo.n}</text></g>`;
 }
 
 /** The graph in one piece: what the report shows. */

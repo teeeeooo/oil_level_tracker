@@ -158,6 +158,8 @@ export function clearStretch(stretches, t0, t1) {
   return kept;
 }
 
+const LISTS = ["cannot_judge", "memos"];
+
 export class History {
   constructor() {
     this.done = [];
@@ -176,10 +178,11 @@ export class History {
     return true;
   }
 
-  /** Record a change of a Glass's "cannot judge" stretches. False when nothing changed. */
-  recordStretches(glassId, before, after) {
+  /** Record a change of a Glass's list: its "cannot_judge" stretches or its "memos". False when
+   * nothing changed. */
+  recordList(glassId, kind, before, after) {
     if (JSON.stringify(before) === JSON.stringify(after)) return false;
-    this.push({ glassId, kind: "cannot_judge", before, after });
+    this.push({ glassId, kind, before, after });
     return true;
   }
 
@@ -196,8 +199,8 @@ export class History {
     this.undone = [];
   }
 
-  /** Undo the last change; `edits` gives `lineOf(glassId, kind)`, `setStretches(glassId, list)` and
-   * `setCompressor(time)`. Returns its entry, or null. */
+  /** Undo the last change; `edits` gives `lineOf(glassId, kind)`, `setList(glassId, kind, list)`
+   * and `setCompressor(time)`. Returns its entry, or null. */
   undo(edits) {
     const entry = this.done.pop();
     if (!entry) return null;
@@ -221,7 +224,7 @@ export class History {
 }
 
 function restore(edits, entry, part) {
-  if (entry.kind === "cannot_judge") edits.setStretches(entry.glassId, part.map((s) => ({ ...s })));
+  if (LISTS.includes(entry.kind)) edits.setList(entry.glassId, entry.kind, part.map((item) => ({ ...item })));
   else if (entry.kind === "compressor") edits.setCompressor(part);
   else apply(edits.lineOf(entry.glassId, entry.kind), entry.first, part);
 }

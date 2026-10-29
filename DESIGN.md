@@ -296,10 +296,21 @@ Do not use sizes outside this ramp.
         against the Recipe's minimum, FULL and EMPTY, and "이전/다음 빈
         구간" (N);
       - the judgment panel (computed result, override, reason; V2-4);
-      - the memo list;
+      - **메모:** the Glass's memos in time order, each a 20 px numbered
+        `--memo` pin, its time (Caption 1, `--fg-3`) and its text; a click
+        brings the time into view and opens the memo;
       - **분석:** the range, the compressor start (dragged on the graph),
         the Recipe copy, and "범위 바꿔 다시 분석…". With unsaved edits it
         asks to save them first: the re-analysis keeps the saved edits.
+      - **Memos:** the memo tool (M) opens the memo dialog at a click on the
+        graph or the context image, for a new memo at that time and
+        height; a click on a pin opens that memo. On the graph a pin is a
+        10 px `--memo` circle with its number in white Caption 1 at weight
+        600, 22 px above its point (below it near the top) on a 1 px stem.
+        The memo dialog (480 px) has the time in its title, a text area
+        of up to 500 characters with its count, and "삭제" (subtle, for an
+        existing memo), "취소" and "확인" (primary, or Ctrl+Enter). Undo
+        covers adding, changing and deleting.
       - **The compressor marker** moves with the grab tool: a press within
         5 px of it (a line under the pointer comes first; the cursor shows
         `ew-resize`) drags it in 0.1 s steps inside the analysis range.

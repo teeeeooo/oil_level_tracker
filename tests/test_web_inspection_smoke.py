@@ -462,3 +462,74 @@ def test_the_compressor_marker_moves(tmp_path, video, browser_page):
         assert errors == []
     finally:
         running.close()
+
+
+def test_memos(tmp_path, video, browser_page):
+    page, errors = browser_page
+    data = tmp_path / "data"
+    write_recipes(data / "Recipes")
+    running = bootstrap.start(data_folder=data)
+    try:
+        analysed_inspection(running, video, "메모")
+        page.goto(running.url)
+        page.locator("#inspectionRows tr", has_text="메모").get_by_role("button", name="열기", exact=True).click()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        page.keyboard.press("m")
+        assert page.locator("#editorView button[data-tool=memo]").get_attribute("aria-pressed") == "true"
+        box = page.locator("#graph").bounding_box()
+        dialog = page.locator("#memoDialog")
+        items = page.locator("#memoItems button.memo")
+
+        # a click on the graph opens a new memo; "확인" waits for some text
+        page.mouse.click(box["x"] + box["width"] * 0.6, box["y"] + 120)
+        assert dialog.locator("#memoTitle").inner_text().startswith("새 메모 · ")
+        assert dialog.get_by_role("button", name="확인").is_disabled()
+        page.keyboard.type("거품 발생")
+        dialog.get_by_role("button", name="확인").click()
+        page.locator('#graph [data-memo="1"]').wait_for()
+        page.get_by_text("저장 안 함").wait_for()
+
+        # an earlier memo takes number 1 (Ctrl+Enter confirms); Esc adds nothing
+        page.mouse.click(box["x"] + box["width"] * 0.3, box["y"] + 150)
+        page.keyboard.type("FULL 도달 확인")
+        page.keyboard.press("Control+Enter")
+        page.locator('#graph [data-memo="2"]').wait_for()
+        assert items.all_inner_texts()[0].endswith("FULL 도달 확인")
+        page.mouse.click(box["x"] + box["width"] * 0.8, box["y"] + 150)
+        page.keyboard.type("버림")
+        page.keyboard.press("Escape")
+        assert items.count() == 2
+
+        # a click on pin 2 opens it; the change can be undone and redone
+        pin = page.locator('#graph [data-memo="2"] circle')
+        x = box["x"] + float(pin.get_attribute("cx"))
+        y = box["y"] + float(pin.get_attribute("cy"))
+        page.mouse.click(x, y)
+        assert dialog.locator("#memoTitle").inner_text().startswith("메모 2 · ")
+        assert dialog.locator("#memoText").input_value() == "거품 발생"
+        dialog.locator("#memoText").fill("거품 발생, 유면 식별 어려움")
+        dialog.get_by_role("button", name="확인").click()
+        items.nth(1).get_by_text("유면 식별 어려움").wait_for()
+        page.locator("#memoItems").scroll_into_view_if_needed()
+        shot(page, "m1-memos")
+        page.keyboard.press("Control+z")
+        items.nth(1).get_by_text("거품 발생", exact=True).wait_for()
+        page.keyboard.press("Control+Shift+z")
+        items.nth(1).get_by_text("유면 식별 어려움").wait_for()
+
+        # the list opens a memo too; "삭제" removes it
+        items.first.click()
+        assert dialog.locator("#memoTitle").inner_text().startswith("메모 1 · ")
+        dialog.get_by_role("button", name="삭제").click()
+        page.locator('#graph [data-memo="2"]').wait_for(state="detached")
+        assert items.all_inner_texts()[0].endswith("거품 발생, 유면 식별 어려움")
+
+        page.keyboard.press("Control+s")
+        page.get_by_text("저장함").wait_for()
+        saved = json.loads((data / "Inspections" / "메모" / "edits.json").read_text(encoding="utf-8"))
+        (memo,) = saved["glasses"][0]["memos"]
+        assert memo["text"] == "거품 발생, 유면 식별 어려움" and memo["y"] is not None
+        assert round(memo["time_sec"] * 10) == memo["time_sec"] * 10
+        assert errors == []
+    finally:
+        running.close()

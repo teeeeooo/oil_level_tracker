@@ -102,7 +102,7 @@
     <button class="tool labeled" data-tool="pencil" title="연필 (P)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l1-4 8-8 3 3-8 8z"/><path d="M11 6l3 3"/></svg>연필</button>
     <button class="tool labeled" data-tool="point" title="점 잇기 (L): 다음 단계에서 추가" disabled><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 14c2-1 3-6 6-6s3 4 6 2"/><circle cx="4" cy="14" r="1.8" fill="currentColor"/><circle cx="10" cy="8" r="1.8" fill="currentColor"/><circle cx="16" cy="10" r="1.8" fill="currentColor"/></svg>점 잇기</button>
     <button class="tool labeled" data-tool="range" title="범위 (R): 끌어서 시간 범위를 고르고, Delete로 선 지우기 · U로 판단 불가"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3v14M15 3v14"/><path d="M5 10h10M7 8l-2 2 2 2M13 8l2 2-2 2"/></svg>범위</button>
-    <button class="tool labeled" data-tool="memo" title="메모 (M): 다음 단계에서 추가" disabled><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h12v9H9l-4 3v-3H4z"/></svg>메모</button>
+    <button class="tool labeled" data-tool="memo" title="메모 (M): 그래프를 클릭해 메모를 남기고, 핀을 클릭해 고치기"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h12v9H9l-4 3v-3H4z"/></svg>메모</button>
     <button class="tool labeled" data-tool="pan" title="이동 (H, 또는 Shift-드래그)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2v16M2 10h16M10 2l-2 2M10 2l2 2M10 18l-2-2M10 18l2-2M2 10l2-2M2 10l2 2M18 10l-2-2M18 10l-2 2"/></svg>이동</button>
     <div class="sep"></div>
     <button class="tool" id="editorUndo" title="실행 취소 (Ctrl+Z)" aria-label="실행 취소"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 5L3 9l4 4"/><path d="M3 9h9a5 5 0 010 10h-2"/></svg></button>
@@ -183,6 +183,10 @@
       </div>
       <div class="section">
         <div class="phead">판정 <span class="right">V2-4에서 추가</span></div>
+      </div>
+      <div class="section">
+        <div class="phead">메모 <span class="right">메모 도구로 그래프를 클릭해 추가</span></div>
+        <div class="body memo-list" id="memoItems"></div>
       </div>
       <div class="section">
         <div class="phead">분석</div>
@@ -302,6 +306,20 @@
   </div>
 </dialog>
 
+<dialog id="memoDialog" class="narrow" aria-labelledby="memoTitle">
+  <div class="dlg-head" id="memoTitle">메모</div>
+  <div class="dlg-body">
+    <textarea id="memoText" rows="4" maxlength="500" aria-label="메모 내용"></textarea>
+    <span class="caption" id="memoLength"></span>
+  </div>
+  <div class="dlg-foot">
+    <button class="btn subtle" id="memoDelete">삭제</button>
+    <div class="spacer"></div>
+    <button class="btn" id="memoCancel">취소</button>
+    <button class="btn primary" id="memoSave">확인</button>
+  </div>
+</dialog>
+
 <dialog id="progressDialog" class="narrow" aria-labelledby="progressTitle">
   <div class="dlg-head" id="progressTitle">분석 중</div>
   <div class="dlg-body">
@@ -363,6 +381,7 @@
         <tr><td><kbd>R</kbd> 범위</td><td>그래프나 맥락 이미지를 가로로 끌어 시간 범위를 고릅니다. 양 끝을 끌어 조정하고, <kbd>Esc</kbd>로 풉니다.</td></tr>
         <tr><td><kbd>Delete</kbd></td><td>고른 범위의 Oil 선을 지웁니다. 지운 곳은 다시 그릴 때까지 빈 구간(무효)입니다.</td></tr>
         <tr><td><kbd>U</kbd> · "판단 불가 풀기"</td><td>고른 범위를 판단 불가로 표시합니다(빗금). 그 샘플은 유효하지도, 빈 구간도 아닙니다. "판단 불가 풀기"는 고른 범위만큼 표시를 지웁니다.</td></tr>
+        <tr><td><kbd>M</kbd> 메모</td><td>그래프를 클릭한 자리에 메모를 남깁니다. 번호 핀을 클릭하거나 오른쪽 메모 목록에서 고르면 고치거나 지웁니다. 대화상자에서 <kbd>Ctrl</kbd>+<kbd>Enter</kbd>는 확인입니다.</td></tr>
         <tr><td>"기동" 표시 끌기</td><td>잡아끌기 도구로 그래프의 압축기 기동 표시를 좌우로 끌어 옮깁니다(0.1초 단위, 분석 범위 안). 다시 분석하면 옮긴 시각에서 시작합니다.</td></tr>
         <tr><td><kbd>H</kbd> 이동 · <kbd>Shift</kbd>+끌기</td><td>보이는 범위를 옮깁니다. 빈 곳을 그냥 끌면 아무 일도 없습니다.</td></tr>
         <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>끌기 폭을 줄이고 늘립니다.</td></tr>

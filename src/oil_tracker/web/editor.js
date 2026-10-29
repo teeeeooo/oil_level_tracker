@@ -8,7 +8,7 @@ import * as player from "./player.js";
 import * as render from "./render.js";
 import { $, MODES, clock, el, localDate, notify, parseClock, typing } from "./ui.js";
 
-const TOOL_KEYS = { KeyG: "grab", KeyP: "pencil", KeyR: "range", KeyH: "pan" };
+const TOOL_KEYS = { KeyG: "grab", KeyP: "pencil", KeyR: "range", KeyM: "memo", KeyH: "pan" };
 const HIT_PX = 8;          // how near a line a press grabs it
 const EDGE_PX = 5;         // how near a selection edge or the compressor marker a press moves it
 const DRAG_PX = 3;         // the movement that makes a press a drag
@@ -39,6 +39,7 @@ const state = {
   images: new Map(),       // "glass/kind" -> [{ url, width }]
   luma: new Map(),         // glass id -> the context image's luma
   redraws: [],             // ms per lines redraw while dragging, for the A5 measurement
+  memo: null,              // the memo in the dialog: { glassId, id or null for a new one, time, y }; set on open
 };
 let backToList = () => {};
 let toSetup = () => {};
@@ -85,7 +86,8 @@ function release() {
   state.luma.clear();
   state.derived.clear();
   state.history.clear();
-  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null });
+  if ($("memoDialog").open) $("memoDialog").close();
+  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null, memo: null });
   setDirty(false);
   for (const id of ["graph", "context"]) for (const layer of $(id).children) layer.replaceChildren();
   $("axis").replaceChildren();
@@ -138,6 +140,7 @@ async function showGlass(fit) {
   player.frameGlass(glass);
   player.seek(state.playhead);
   renderGlassPanel();
+  renderMemos();
   requestDraw({ back: true, lines: true, marks: true });
   try {
     await loadImages(state.glassId, state.background ? "background" : "context");
@@ -216,7 +219,7 @@ function marks() {
     ? { t0: state.edits.times[drag.index] - state.width, t1: state.edits.times[drag.index] + state.width, kind: drag.kind }
     : null;
   const compressor = drag?.type === "compressor" ? drag.time : null;
-  return { playhead: state.playhead, selection: state.selection, grab, compressor };
+  return { playhead: state.playhead, selection: state.selection, grab, compressor, memos: memoMarks() };
 }
 
 // ---- drawing ------------------------------------------------------------------------------------
@@ -237,6 +240,7 @@ function draw() {
   const data = panel();
   const view = state.view;
   const plots = [["graph", "graphBox", false], ["context", "contextBox", true]];
+  const shown = parts.back || parts.marks ? marks() : null;
   for (const [id, box, halo] of plots) {
     const width = $(box).clientWidth, height = $(box).clientHeight;
     const svg = $(id);
@@ -244,7 +248,7 @@ function draw() {
     const [back, line, mark] = svg.children;
     if (parts.back) back.innerHTML = id === "graph" ? render.graphBack(data, view, width, height, id) : render.contextBack(data, view, width, height, id);
     if (parts.back || parts.lines) line.innerHTML = render.linesSvg(data, view, width, height, id, { halo, hot: state.hot });
-    if (parts.back || parts.marks) mark.innerHTML = render.marksSvg(marks(), view, width, height, id);
+    if (shown) mark.innerHTML = render.marksSvg(id === "graph" ? shown : { ...shown, memos: [] }, view, width, height, id);  // pins on the graph
   }
   if (parts.back || parts.marks) {
     const width = $("axisBox").clientWidth;
@@ -351,6 +355,10 @@ function onPointerDown(event) {
     state.drag = { ...start, type: "pan", view: { ...state.view } };
     return;
   }
+  if (state.tool === "memo") {
+    state.drag = { ...start, type: "memo" };
+    return;
+  }
   if (state.tool === "range") {
     const edge = selectionEdge(at);
     state.drag = edge ? { ...start, type: "edge", edge } : { ...start, type: "select" };
@@ -427,8 +435,12 @@ function onPointerUp() {
   const drag = state.drag;
   state.drag = null;
   if (!drag) return;
-  if ((drag.type === "click" || drag.type === "pan" || drag.type === "select" || drag.type === "compressor") && !drag.moved) {
+  if (["click", "pan", "select", "compressor", "memo"].includes(drag.type) && !drag.moved) {
     setPlayhead(drag.at.t);
+  }
+  if (drag.type === "memo" && !drag.moved) {
+    const id = drag.svg.id === "graph" ? hitMemo(drag.at) : null;
+    openMemo(id, drag.at.t, zero() - drag.at.h);
   }
   if (drag.type === "compressor") {
     if (drag.moved && state.history.recordCompressor(state.edits.compressor_start_sec, drag.time)) {
@@ -447,6 +459,11 @@ function onPointerUp() {
 }
 
 function hover(event) {
+  if (state.tool === "memo" && state.edits) {
+    const over = event.currentTarget.id === "graph" && hitMemo(pointer(event.currentTarget, event));
+    event.currentTarget.style.cursor = over ? "pointer" : "";
+    return;
+  }
   if (state.tool !== "grab" || !state.edits) return;
   const at = pointer(event.currentTarget, event);
   const hit = hitLine(at);
@@ -523,7 +540,7 @@ function takeDerived(glasses) {
 function undo(redo = false) {
   const target = {
     lineOf,
-    setStretches: (glassId, list) => { editsOf(glassId).cannot_judge = list; },
+    setList: (glassId, kind, list) => { editsOf(glassId)[kind] = list; },
     setCompressor: (time) => { state.edits.compressor_start_sec = time; },
   };
   const entry = redo ? state.history.redo(target) : state.history.undo(target);
@@ -534,8 +551,10 @@ function undo(redo = false) {
     showGlass(false);
   }
   changed();
-  requestDraw(entry.kind === "cannot_judge" || entry.kind === "compressor" ? { back: true } : { lines: true });
+  const layer = { cannot_judge: { back: true }, compressor: { back: true }, memos: { marks: true } }[entry.kind];
+  requestDraw(layer ?? { lines: true });
   renderSelection();
+  renderMemos();
 }
 
 function eraseSelection() {
@@ -558,11 +577,99 @@ function judgeSelection(cannot) {
   const glass = editsOf();
   const before = glass.cannot_judge;
   const after = cannot ? lines.markStretch(before, s.t0, s.t1) : lines.clearStretch(before, s.t0, s.t1);
-  if (!state.history.recordStretches(state.glassId, before, after)) return;
+  if (!state.history.recordList(state.glassId, "cannot_judge", before, after)) return;
   glass.cannot_judge = after;
   changed();
   requestDraw({ back: true });
   renderSelection();
+}
+
+// ---- memos ----------------------------------------------------------------------------------------
+
+/** The Glass's memos in time order: the order of their numbers. */
+function memoList() {
+  return [...editsOf().memos].sort((a, b) => a.time_sec - b.time_sec);
+}
+
+/** The pins to draw: { n, t, h, id }, h in the graph's heights (null for a memo on a time alone). */
+function memoMarks() {
+  const z = zero();
+  return memoList().map((m, k) => ({ n: k + 1, t: m.time_sec, h: m.y === null ? null : z - m.y, id: m.id }));
+}
+
+/** The memo whose pin is under the pointer on the graph, or null. */
+function hitMemo(at) {
+  for (const memo of memoMarks().reverse()) {  // the last drawn lies on top
+    const pin = render.memoPinAt(memo, at.s);
+    if (Math.hypot(at.x - pin.x, at.y - pin.y) <= pin.r + 2) return memo.id;
+  }
+  return null;
+}
+
+/** The memo dialog, for memo `id` or for a new one at (t, source y). */
+function openMemo(id, t = null, y = null) {
+  const memos = memoList();
+  const k = memos.findIndex((m) => m.id === id);
+  const memo = k >= 0 ? memos[k] : null;
+  const times = state.edits.times;
+  const time = memo ? memo.time_sec : Math.round(Math.min(times.at(-1), Math.max(times[0], t)) * 10) / 10;
+  state.memo = { glassId: state.glassId, id: memo?.id ?? null, time, y: memo ? memo.y : Math.round(y * 10) / 10 };
+  if (player.isPlaying()) player.stop();
+  $("memoTitle").textContent = memo ? `메모 ${k + 1} · ${clock(time)}` : `새 메모 · ${clock(time)}`;
+  $("memoText").value = memo?.text ?? "";
+  $("memoDelete").hidden = !memo;
+  renderMemoDialog();
+  $("memoDialog").showModal();
+  $("memoText").focus();
+}
+
+function renderMemoDialog() {
+  const text = $("memoText").value;
+  $("memoLength").textContent = `${text.length} / ${$("memoText").maxLength}`;
+  $("memoSave").disabled = !text.trim();
+}
+
+/** Add, change or delete the memo in the dialog; an undoable change of the Glass's memos. */
+function commitMemo(remove) {
+  const target = state.memo;
+  const text = $("memoText").value.trim();
+  state.memo = null;
+  $("memoDialog").close();
+  if (!target || !state.edits || (!remove && !text)) return;
+  const glass = editsOf(target.glassId);
+  const before = glass.memos;
+  let after;
+  if (remove) after = before.filter((m) => m.id !== target.id);
+  else if (target.id) after = before.map((m) => (m.id === target.id ? { ...m, text } : m));
+  else after = [...before, { id: crypto.randomUUID(), time_sec: target.time, y: target.y, text }];
+  if (!state.history.recordList(target.glassId, "memos", before, after)) return;
+  glass.memos = after;
+  changed();
+  renderMemos();
+  requestDraw({ marks: true });
+}
+
+function renderMemos() {
+  if (!state.edits) return;
+  const memos = memoList();
+  const items = memos.map((m, k) => el("button", {
+    class: "memo",
+    onclick: () => {
+      reveal(m.time_sec);
+      setPlayhead(m.time_sec);
+      openMemo(m.id);
+    },
+  }, el("span", { class: "pin" }, String(k + 1)), el("span", {}, el("span", { class: "t" }, clock(m.time_sec)), el("span", { class: "text" }, m.text))));
+  $("memoItems").replaceChildren(...(items.length ? items : [el("span", { class: "caption" }, "메모 없음")]));
+}
+
+/** Bring time t into view, keeping the zoom. */
+function reveal(t) {
+  const v = state.view;
+  if (t >= v.t0 && t <= v.t1) return;
+  const span = v.t1 - v.t0;
+  state.view = { ...v, t0: t - span / 2, t1: t + span / 2 };
+  requestDraw({ back: true });
 }
 
 /** Save the edits; whether they were saved. */
@@ -797,6 +904,15 @@ export function init(toList, openSetup) {
   $("editorSave").addEventListener("click", save);
   $("editorReanalyse").addEventListener("click", reanalyse);
   $("markSelection").addEventListener("click", () => judgeSelection(true));
+  $("memoText").addEventListener("input", renderMemoDialog);
+  $("memoText").addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && (event.ctrlKey || event.metaKey) && !$("memoSave").disabled) commitMemo(false);
+  });
+  $("memoSave").addEventListener("click", () => commitMemo(false));
+  $("memoDelete").addEventListener("click", () => commitMemo(true));
+  // openMemo sets the dialog's memo; nothing clears it on the "close" event, which comes a task
+  // later and could clear a memo opened meanwhile
+  $("memoCancel").addEventListener("click", () => $("memoDialog").close());
   $("clearSelection").addEventListener("click", () => judgeSelection(false));
   $("editorUndo").addEventListener("click", () => undo(false));
   $("editorRedo").addEventListener("click", () => undo(true));
