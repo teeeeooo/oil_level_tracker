@@ -16,7 +16,8 @@ cross-module principles. What the product does belongs to the
 
 ```
 src/oil_tracker/
-  domain/          Recipe, Glass, JudgmentRule, Line (samples), Inspection;
+  domain/          Recipe, Glass, JudgmentRule, Line (samples), Inspection,
+                   the edit document;
                    judgment, events, FULL/EMPTY derivation.
                    Pure: no I/O, no NumPy, no OpenCV, no clock.
   application/     One module per use case, for example "analyse

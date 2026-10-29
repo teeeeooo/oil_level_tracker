@@ -117,9 +117,13 @@ the undo depth and the shortcuts.
      "다음 빈 구간" (N); a selected range is `--selection-band`;
    - the tool buttons carry their names: the user could not find the
      range tool among icons alone.
-2. **`domain`:** the edit document (lines with pieces and sample origins,
-   "cannot judge" stretches, memos, the compressor start), FULL and EMPTY
-   derived from the line position, and the re-analysis merge.
+2. **`domain` — done** (`domain/edits.py`): the edit document (an Oil,
+   a Foam and a reference line per Glass, as samples with their origins;
+   "cannot judge" stretches; memos; the compressor start), FULL and EMPTY
+   from the line position (1 px from the Glass top or bottom), the
+   coverage, and the re-analysis merge. The merge keeps every old sample
+   whose time the new range still has (within half a step) and reports
+   what falls outside, for the warning.
 3. **`adapters/storage`:** the edit document in the inspection folder,
    with its format in
    [inspection-folder.md](../20-architecture/inspection-folder.md).
@@ -222,4 +226,4 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done today:** V2-1 and V2-2 closed, each with its Windows run; the
   V2-2 follow-up; V2-3 started.
-- **Next action:** V2-3 step 2, the `domain` edit document.
+- **Next action:** V2-3 step 3, storing the edit document.

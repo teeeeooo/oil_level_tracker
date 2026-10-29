@@ -21,3 +21,18 @@ class SampleOrigin(StrEnum):
     DRAFT = "DRAFT"
     EDITED = "EDITED"
     DRAWN = "DRAWN"
+
+
+class LineKind(StrEnum):
+    """Only Oil feeds the judgment; Foam and reference lines are only shown (Product SSOT §4)."""
+
+    OIL = "OIL"
+    FOAM = "FOAM"
+    REFERENCE = "REFERENCE"
+
+
+class LevelState(StrEnum):
+    """Where an Oil sample at the Glass top or bottom puts the level (Product SSOT §4)."""
+
+    FULL = "FULL_NO_INTERFACE"
+    EMPTY = "EMPTY_NO_INTERFACE"
