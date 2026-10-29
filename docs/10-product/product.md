@@ -7,7 +7,9 @@ and what it does. The user made these decisions:
 - on 2026-10-28, in the direction interview, the post-spike interview and
   the acceptance-criteria decision;
 - on 2026-10-29, at the V2-1 start: the Recipe, the judgment rule (§5) and
-  the data folder (§8).
+  the data folder (§8);
+- on 2026-10-29, at the V2-2 start: the inspection flow and analysis setup
+  (§3) and the draft method (§4).
 
 - **Interview record:** `docs/60-evidence/s11/2026-10-28-v2-direction-interview-handoff.md`
   at tag `v1-final`.
@@ -52,6 +54,9 @@ Draft quality is **not** an acceptance criterion.
 
 ## 3. Flow
 
+**The app opens on the inspection list.** The Recipe list is reached from
+its toolbar.
+
 1. **Recipe.** It is made once per equipment and camera setup, and reused
    for every inspection.
    - It holds the Glass name, the ellipse, the zero line and the judgment
@@ -63,19 +68,22 @@ Draft quality is **not** an acceptance criterion.
      - Saving without a video open keeps the stored reference frame.
      - The Recipe keeps that frame as a downscaled JPEG, the frame size,
        and the source video name and time, for reference.
-   - **Picking:** an inspection starts by picking a Recipe from the Recipe
-     folder (§8). The list shows the name, the Glass names, the frame size
-     and the modified date.
+   - **Picking:** a new inspection starts with the video, then a Recipe
+     from the Recipe folder (§8). The list shows the name, the Glass names,
+     the frame size and the modified date.
    - **Resolution:** a video whose resolution differs from the Recipe's is
      refused, with the reason shown.
    - **Copy:** when analysis starts, a copy of the Recipe is saved in the
      inspection folder. Later Recipe edits do not change past inspections.
    - If the camera shifted, the Glass position is corrected in that copy
-     only.
+     only, during the analysis setup, with the Recipe screen's Glass
+     editing.
    - There are no detector settings.
 2. **Analysis setup.** While watching the video, the user sets:
    - the analysis range;
-   - the compressor start time.
+   - the compressor start time. It is required only when a Glass uses
+     `RECOVERY`, and it must lie inside the analysis range;
+   - the Glass positions, if the camera shifted (above).
 3. **Analysis.**
    - The video is read once for all Glasses.
    - Each Glass gets a full-resolution context image. Each column is one
@@ -83,6 +91,8 @@ Draft quality is **not** an acceptance criterion.
      band of the ellipse.
    - Each Glass gets a background-subtracted view and an Oil draft line.
    - Progress and the time left are shown.
+   - The analysis rate is **2 samples per second**, fixed in the first
+     version.
    - The result is cached in the inspection folder.
    - For reference, 2.8 min for a 68-min video is acceptable.
 4. **Editing.** Every inspection does it; see below.
@@ -103,9 +113,10 @@ The detector is not part of the v2 flow.
   - Only Oil feeds the judgment. Foam and reference lines are only shown.
   - A line may have several pieces.
 - **The draft is the Oil line only,** found by a simple method:
-  - the strongest vertical edge per column;
-  - temporal jumps suppressed;
-  - weak-edge stretches marked "cannot judge".
+  - the path across time that follows the strongest vertical edges with
+    the fewest jumps (dynamic programming), so jumps are suppressed along
+    the whole path;
+  - stretches where that path's edge is weak are marked "cannot judge".
   - The user adds Foam lines.
   - Draft quality is not an acceptance condition.
 - **FULL and EMPTY are automatic.**

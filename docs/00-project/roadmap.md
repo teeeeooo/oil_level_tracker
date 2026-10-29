@@ -24,14 +24,14 @@ This document is the milestone-order and milestone-state SSOT.
 | v1 (Phases 1–2, S1–S11) | `SUPERSEDED` | Automatic-detector application. S11 was frozen as unmet on 2026-10-28. Preserved at tag `v1-final` and branch `archive/v1` |
 | V2-0 — Start and foundations | `DONE` | S11 freeze, v1 tag and archive, `main` reset, `DESIGN.md`, a confirmed editor mock-up, Product SSOT, architecture, documentation structure |
 | V2-1 — Recipe | `DONE` | Recipe screen and file: Glass ellipse, zero line, judgment rule |
-| V2-2 — Analysis | `PLANNED` | One video pass, context image, background view, Oil draft, progress, cache |
+| V2-2 — Analysis | `ACTIVE` | One video pass, context image, background view, Oil draft, progress, cache |
 | V2-3 — Editor | `PLANNED` | Grab/pencil, "cannot judge", lines, memos, zoom/pan/axis input, frame and video |
 | V2-4 — Judgment and report | `PLANNED` | Judgment, override with reason, report, submit/lock, versions |
 | V2-5 — Windows acceptance | `PLANNED` | One-folder package and the Product SSOT §2 criteria A1–A9 on target Windows |
 
 ## Current sequence
 
-`v1 SUPERSEDED` → `V2-0 DONE` → `V2-1 DONE` → `V2-2 … V2-5 PLANNED`.
+`v1 SUPERSEDED` → `V2-0 DONE` → `V2-1 DONE` → `V2-2 ACTIVE` → `V2-3 … V2-5 PLANNED`.
 
 The first version is accepted only at V2-5, against the Product SSOT §2.
 
