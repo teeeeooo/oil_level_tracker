@@ -422,3 +422,19 @@ def test_the_editor_tells_the_window_to_ask_before_closing(tmp_path):
         assert call(without_window, "POST", "/api/editor/unsaved", {"unsaved": True})[0] == 200
     finally:
         without_window.close()
+
+
+@pytest.mark.parametrize("dropped", [ConnectionAbortedError, ConnectionResetError, BrokenPipeError])
+def test_a_dropped_connection_prints_nothing(app, capsys, dropped):
+    # Windows reports a page that stops reading (a seek in the player) as ConnectionAbortedError
+    running, _ = app
+    try:
+        raise dropped("the page went away")
+    except ConnectionError:
+        running.server.handle_error(None, ("127.0.0.1", 1))
+    assert capsys.readouterr().err == ""
+    try:
+        raise ValueError("a real failure")
+    except ValueError:
+        running.server.handle_error(None, ("127.0.0.1", 1))
+    assert "Traceback" in capsys.readouterr().err

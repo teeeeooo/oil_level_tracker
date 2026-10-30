@@ -784,7 +784,7 @@ def make_handler(ctx: ApiContext) -> type[BaseHTTPRequestHandler]:
                     while left > 0 and (chunk := source.read(min(COPY_CHUNK, left))):
                         self.wfile.write(chunk)
                         left -= len(chunk)
-            except (BrokenPipeError, ConnectionResetError):
-                pass  # the player stopped reading; it asks again with another range
+            except ConnectionError:
+                pass  # the player stopped reading (Windows: ConnectionAbortedError); it asks again with another range
 
     return Handler

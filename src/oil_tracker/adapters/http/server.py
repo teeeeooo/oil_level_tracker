@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import socketserver
+import sys
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
@@ -16,6 +17,13 @@ class LocalServer(ThreadingHTTPServer):
         # stall for tens of seconds on some networks; a 127.0.0.1 server never needs it.
         socketserver.TCPServer.server_bind(self)
         self.server_name, self.server_port = self.server_address[:2]
+
+    def handle_error(self, request, client_address) -> None:
+        # A page that drops a connection (a seek, a reload, the window closing) is not an error;
+        # Windows reports it as ConnectionAbortedError, which printed a traceback to the console.
+        if isinstance(sys.exception(), ConnectionError):
+            return
+        super().handle_error(request, client_address)
 
 
 def start_server(handler: type[BaseHTTPRequestHandler], port: int = 0) -> LocalServer:
