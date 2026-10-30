@@ -115,10 +115,12 @@ app.py ──▶ bootstrap.py
   - **The editor's video plays in a `<video>`;** a paused frame is the
     exact frame from the frame API (OpenCV, as the analysis read it). A
     file the `<video>` cannot decode plays as exact frames.
-  - **The point line comes from the API,** on each click and for the
-    preview to the cursor: Python owns the one path search. The edge
-    strength is kept per Glass, so a click after the first costs only the
-    path between two points.
+  - **The point line comes from the API** with the snap on, on each click
+    and for the preview to the cursor: Python owns the one path search,
+    kept within 8 px of the straight line between two points
+    (`video/trace.py`). The edge strength is kept per Glass, so a click
+    after the first costs only the path between two points. With the snap
+    off the browser joins the points straight (`lines.straight`).
 - **Lines are dense samples at the analysis rate.**
   - The samples are plain Python values; they are the source of truth.
   - Grab-and-drag and the pencil are editor operations that produce new

@@ -63,6 +63,12 @@ and below, blurred over 5 columns and full at a step of 24 levels
 - **The 8 px snap** (`lines.snap`) is separate. It settles a grab, a
   pencil press or a clicked point on the strongest step in its column.
 
+**Then** (user, 2026-10-30): that freedom is too much for the spans a
+user joins (seconds to five minutes); in practice the path ran to the
+image's top or bottom. The point line now keeps within the snap's 8 px of
+the straight line between two points, and is straight where no edge lies
+there.
+
 The Windows agent's own answer said the draft does not follow these edges.
 That was wrong, and it was corrected for the user.
 

@@ -4,7 +4,7 @@ from numpy.lib.stride_tricks import sliding_window_view
 
 from oil_tracker.adapters.video.analysis import png_pieces
 from oil_tracker.adapters.video.draft import JUMP_WEIGHT, MAX_JUMP, strongest_path
-from oil_tracker.adapters.video.trace import ContextEdgeTracer
+from oil_tracker.adapters.video.trace import REACH, ContextEdgeTracer, corridor_path
 
 
 def two_edges(columns=80):
@@ -97,3 +97,29 @@ def test_the_tracer_keeps_the_latest_images():
     for key in ("a", "b", "a", "c", "a", "b"):
         tracer.trace(key, piece, pieces, [(0, 30), (5, 30)])
     assert len(calls) == 4  # a, b, c, then b again after c pushed it out
+
+
+def test_the_path_keeps_near_the_straight_line_between_the_points():
+    # user, 2026-10-30: free to follow the strongest edges, the path ran to the image's top or bottom
+    s = np.zeros((200, 60))
+    s[0] = s[199] = 1.0  # the strongest steps, far from the points
+    s[100, 10:50] = 0.8  # an edge 6 rows from the line
+    rows = corridor_path(s, 0, 94, 59, 94)
+    assert (rows[0], rows[-1]) == (94, 94)
+    assert all(abs(r - 94) <= REACH for r in rows)
+    assert (rows[12:48] == 100).all()  # it follows the edge within reach
+
+
+def test_without_an_edge_near_the_line_the_path_is_straight():
+    s = np.zeros((200, 41))
+    s[0] = s[199] = 1.0
+    s[120:130] = 0.2  # steps below the snap's minimum are no edge
+    rows = corridor_path(s, 0, 100, 40, 140)
+    assert rows.tolist() == [100 + k for k in range(41)]
+
+
+def test_the_band_is_cut_at_the_image_edges():
+    s = np.zeros((20, 10))
+    s[0] = 1.0
+    rows = corridor_path(s, 0, 2, 9, 2)
+    assert rows.min() >= 0 and (rows[2:-2] == 0).all()  # the top row's edge, never above it

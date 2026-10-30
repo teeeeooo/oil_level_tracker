@@ -214,8 +214,11 @@ Each Glass in a Recipe has one rule.
     (user, 2026-10-30: on the graph to join line pieces, or to draw roughly
     while looking at the picture). With the snap on, each pair of
     neighbouring points is joined by a path that follows the edges between
-    them: the draft's dynamic programming, pinned to the user's points.
-    With the snap off they are joined straight (user, 2026-10-30).
+    them: the draft's dynamic programming, pinned to the user's points,
+    kept within the snap's reach (8 px) of the straight line between them
+    and straight where no edge lies there (user, 2026-10-30: free to
+    follow the strongest edges, it ran to the image's top or bottom). With
+    the snap off they are joined straight (user, 2026-10-30).
   - The draft is kept as dense samples. Points are not edited one by one.
 - **Curve shape:** grab-and-drag bends the line smoothly, with no
   overshoot. Holding Alt, or choosing the pointed shape, bends it to a

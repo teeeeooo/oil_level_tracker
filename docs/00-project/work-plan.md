@@ -94,8 +94,13 @@ Rewrite it; do not append to it.
     empties the line chosen in "그릴 선"; the point line follows the snap
     (along the edges, or straight); the pencil's "수평·수직" switch; the
     view stays inside the analysed range, with "전체 보기".
+  - **After the re-check** (user, 2026-10-30): with the snap on, the point
+    line keeps within 8 px of the straight line between two points
+    (`video/trace.py`); free to follow the strongest edges, it ran to the
+    image's top or bottom in practice (for spans of 10 s and more).
   - **Not yet seen on Windows:** the upright stroke as a vertical step
-    (`ca7d3ee`, from the re-check's C4 note).
+    (`ca7d3ee`, from the re-check's C4 note) and the point line's 8 px
+    band.
 - **Documentation:** the v1 conventions, per [docs/README.md](../README.md).
   - numbered folders;
   - the date catalog and its pre-push check;
@@ -156,7 +161,8 @@ answered them. Earlier editor work is in the two V2-3 results and in Git.
   while the range tool stays (the video's range repeat uses it).
 - **Pencil:** its switch in the 편집 panel, with no key; an upright stroke
   joins two neighbouring samples.
-- **Point line:** straight joins interpolated in time; points kept in time
+- **Point line:** inside its 8 px band a luma step below 6 counts as no
+  edge, as for the snap; straight joins interpolated in time; points kept in time
   order; a click at a sample that has a point replaces it; the snap
   settles a point as it does a drag; straight dotted guides until a path
   arrives.
@@ -236,8 +242,8 @@ workstation since 2026-10-30; these are simple speed-ups, never blockers):
   frames). A cheap gain if wanted: keep the frames decoded on the way to
   a seek, so stepping back a frame and clicking nearby are instant.
 
-**The next Windows run** also covers the upright stroke (`ca7d3ee`), as
-each run covered the previous follow-up.
+**The next Windows run** also covers the upright stroke (`ca7d3ee`) and
+the point line's 8 px band, as each run covered the previous follow-up.
 
 **Small facts:**
 - `AnalysisSettings.sample_count` counts to `end_sec`, but the analysis
@@ -303,5 +309,5 @@ The three v1 remote branches that v1 docs cite stay.
 ## Next
 
 - **Done:** V2-3 (2026-10-30): the workstation run and its re-check pass;
-  the upright stroke followed (`ca7d3ee`).
+  the upright stroke and the point line's 8 px band followed.
 - **Waiting on the user:** V2-4's start decisions (V2-4 step 1).

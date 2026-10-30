@@ -54,19 +54,24 @@ def oil_draft(rgb: np.ndarray) -> OilDraft:
     return OilDraft(rows, weak_stretches(s[rows, np.arange(len(rows))]))
 
 
-def strongest_path(s: np.ndarray, start: int | None = None, end: int | None = None) -> np.ndarray:
+def strongest_path(
+    s: np.ndarray, start: int | None = None, end: int | None = None, scale: int | None = None
+) -> np.ndarray:
     """The row per column that maximises the summed strength minus the jump cost.
 
     `start` and `end` pin the first and last rows (the point line, Product SSOT §6). Pinned rows
-    too far apart for the jump limit are joined by a straight line.
+    too far apart for the jump limit are joined by a straight line. `scale` is the height the jump
+    cost and limit are measured against, when `s` is a band cut from a taller image (s's height by
+    default).
 
     The jump cost grows linearly, so each column's best score is a windowed maximum, taken in a
     few NumPy calls per column (_WindowMax); the path is traced back through the stored scores.
     """
     height, columns = s.shape
-    jump = max(1, int(MAX_JUMP * height))
-    penalty = JUMP_WEIGHT * np.abs(np.arange(-jump, jump + 1)) / height
-    rise = JUMP_WEIGHT * np.arange(height) / height
+    scale = scale or height
+    jump = max(1, min(height - 1, int(MAX_JUMP * scale)))
+    penalty = JUMP_WEIGHT * np.abs(np.arange(-jump, jump + 1)) / scale
+    rise = JUMP_WEIGHT * np.arange(height) / scale
     window = _WindowMax(height, jump)
     scores = np.empty((columns, height))
     score = s[:, 0].astype(np.float64)
