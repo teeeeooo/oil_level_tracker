@@ -105,6 +105,8 @@ table.boxed { border: 1px solid var(--stroke-1); }
 .input.num input { text-align: right; }
 .input .unit { color: var(--fg-3); font-size: 12px; }
 .input:focus-within { border-bottom: 2px solid var(--brand); }
+.input:has(input:disabled) { background: var(--bg-3); border-color: var(--bg-4); }  /* a field that cannot change */
+.input input:disabled { color: var(--fg-2); cursor: not-allowed; }
 .input.bad { border-color: var(--error-border); }
 select { height: 32px; font: inherit; color: var(--fg-1); border: 1px solid var(--stroke-1); border-bottom-color: var(--fg-3); border-radius: 4px; background: var(--bg-1); padding: 0 8px; }
 .glass-row { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border-bottom: 1px solid var(--stroke-2); cursor: pointer; }
