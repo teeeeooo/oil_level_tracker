@@ -4,7 +4,8 @@ Usage: python scripts/inspection_summary.py [--data DATA_FOLDER]
 Read-only. The default data folder is Documents\\OilLevelTracker. The source SHA-256 of every
 analysed inspection is computed again from its video, when the video is still there. Saved edits
 (edits.json) are counted per Glass: each line's samples by origin and empty, the "cannot judge"
-stretches with the coverage, and the memos.
+stretches with the coverage, the memos and the user's decision. The report header and the submitted
+versions (V2-4) are listed with each inspection.
 """
 
 from __future__ import annotations
@@ -16,7 +17,14 @@ from pathlib import Path
 
 from oil_tracker.adapters.storage import locations
 from oil_tracker.adapters.storage.files import sha256_of
-from oil_tracker.adapters.storage.inspection_files import ANALYSIS_FILE, CACHE, IMAGE_KINDS, InspectionFolders
+from oil_tracker.adapters.storage.inspection_files import (
+    ANALYSIS_FILE,
+    CACHE,
+    IMAGE_KINDS,
+    REPORT_FILE,
+    VERSIONS,
+    InspectionFolders,
+)
 from oil_tracker.adapters.storage.recipe_files import RecipeFolder
 from oil_tracker.application.ports import InspectionNotFound, RecipeNotFound
 from oil_tracker.domain.edits import coverage
@@ -94,6 +102,8 @@ def main(argv: list[str] | None = None) -> int:
             f'compressor={compressor} recipe="{inspection.recipe.name}" created_at={inspection.created_at} '
             f"recipe_updated_at={stored.updated_at if stored else '-'}"
         )
+        header = inspection.header
+        print(f'  header compressor_model="{header.compressor_model or ""}" test_type="{header.test_type or ""}"')
         for glass in inspection.recipe.glasses:
             e = glass.ellipse
             print(
@@ -135,6 +145,16 @@ def main(argv: list[str] | None = None) -> int:
                 f'  cache glass name="{names.get(layout.glass_id, layout.glass_id)}" y0={layout.y0} '
                 f"rows={layout.rows} pieces={layout.pieces} files={files}/{2 * layout.pieces} empty={empty:.1f}%"
             )
+        for version in entry.versions:
+            report = folder / VERSIONS / f"{version.number:03d}" / REPORT_FILE
+            size = report.stat().st_size if report.is_file() else 0
+            print(f"  version v={version.number} submitted_at={version.submitted_at} report_bytes={size}")
+            for glass in version.glasses:
+                print(
+                    f'  version glass name="{names.get(glass.glass_id, glass.glass_id)}" verdict={glass.verdict.value} '
+                    f"computed={glass.computed.value} override={glass.override.value if glass.override else '-'} "
+                    f"reason_chars={len(glass.reason)} checked_at={glass.checked_at}"
+                )
         saved = folders.load_edits(inspection.id)
         if saved is None:
             print("  edits none")
@@ -148,7 +168,9 @@ def main(argv: list[str] | None = None) -> int:
                 f'  edits glass name="{names.get(glass.glass_id, glass.glass_id)}" '
                 f"oil={line_counts(glass.oil)} foam={line_counts(glass.foam)} reference={line_counts(glass.reference)} "
                 f"cannot_judge={len(glass.cannot_judge)} empty={c.empty} cannot={c.cannot_judge} "
-                f"valid={100 * c.valid_ratio:.1f}% memos={len(glass.memos)}"
+                f"valid={100 * c.valid_ratio:.1f}% memos={len(glass.memos)} "
+                f"override={glass.decision.override.value if glass.decision.override else '-'} "
+                f"reason_chars={len(glass.decision.reason)} checked={'yes' if glass.decision.checked_at else 'no'}"
             )
     return 0
 
