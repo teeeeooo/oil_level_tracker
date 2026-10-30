@@ -243,68 +243,65 @@ the undo depth and the shortcuts.
      pointer would add. Enter writes the path into the chosen line from
      the first point to the last as one undoable change; Backspace takes
      the last placed point off; Esc, another tool or another Glass cancels.
-8. **Checks — the Windows run is requested, waiting on the user:**
-   [the request](../40-operations/2026-10-30-v2-3-editor-windows-request.md),
-   pinned to `3cbe46e` (`checked=86`), criteria fixed in it.
-   - **First try (2026-10-30) stopped at the tests:** `2 failed` on Windows
-     only. The range-serving test deleted the source while its frame
-     session held it open (WinError 32); the source-check test keyed a fake
-     by a POSIX path string. Both fixed in `3cbe46e`; the request was
-     re-pinned there, the app and the measure script unchanged.
-   - **On macOS:** 208 tests pass, the editor's smoke checks among them.
-   - **The run, on the workstation with its agent:**
-     - the tests (`198 passed, 4 skipped`);
-     - **A4, A5 and A6 judged there** with `scripts/measure_editor.py` in
-       Edge (`source=4f9cb83ac6d9 files=54`), as on the slowest PC;
-     - the editor on one SPL#1 inspection of V2-2 in the real window: every
-       tool, undo, saving, the questions on leaving and on closing the
-       window (WinForms), and resuming after a restart;
-     - a new inspection named `V2-3 확인` from a copy of SPL#4 (the V2-2
-       follow-up: the yellow range band, `mm:ss.s`, the name), re-analysed
-       to 03:30 to drop an edit, and the source warning (A9) with the copy
-       renamed and back;
-     - `scripts/inspection_summary.py` now counts the saved edits
-       (`3ac76ce`), which the criteria R2–R4 read.
+8. **Checks — the workstation run is done; a re-check is requested,
+   waiting on the user:**
+   - **The run (2026-10-30):**
+     [the result](../60-evidence/2026-10-30-v2-3-editor-windows-result.md),
+     judged against
+     [the request](../40-operations/2026-10-30-v2-3-editor-windows-request.md)
+     (pinned to `3cbe46e` after a first try stopped at two Windows-only
+     test failures).
+     - **The time limits pass on the workstation:** A4 39.3 s, A5 2.8 /
+       8.9 ms, the exact frame 56 ms, 1× playback in the `<video>`.
+     - E1–E17, N1–N11, R1, R3 and R4 pass; WinForms asks before closing
+       with unsaved edits, and N9 showed no video session holds the file.
+     - **R2 fails:** no drawn Oil sample and no "cannot judge" stretch in
+       the saved SPL#1 edits. No code path loses them; the run most likely
+       did (Delete emptied only Oil, over the drawings; "판단 불가 풀기"
+       with the whole stretch still selected). The re-check shows it.
+     - **The console row fails:** Windows reports a dropped video range as
+       `ConnectionAbortedError`, which printed a traceback. Fixed
+       (`9bd9f9c`).
+   - **The user's notes and decisions** (2026-10-30, Product SSOT §6),
+     done in `8c9ea35`: the view stays inside the analysed range and
+     "전체 보기" returns to all of it; Delete empties the line chosen in
+     "그릴 선"; another tool lets the range go, and its buttons wrap; the
+     point line follows the snap (straight with it off); the pencil's
+     "수평·수직" switch; the list does not repeat a name that is also the
+     folder.
+   - **On macOS:** 212 tests pass, the editor's smoke checks among them;
+     each new check fails without its fix.
+   - **The re-check:**
+     [the request](../40-operations/2026-10-30-v2-3-editor-recheck-windows-request.md),
+     pinned to `8c9ea35` (`checked=86`), criteria fixed in it: the tests
+     (`201 passed, 4 skipped`), C1–C12 on the SPL#1 edit inspection, no
+     `Traceback` in the console, and R1–R3 from the summary. No timing.
    - If it passes, V2-3 closes.
 
-## Session handoff — 2026-10-30 (second)
+## Session handoff — 2026-10-30 (third)
 
-**The session closed after `69a3be0`.** The working tree is clean, and
-`main` and the remote are in sync.
-- V2-3 steps 1 to 7 are done; the point line closed step 7 (`9aa6382`).
-- The slowest PC's A5/A6 result is judged in
-  [its result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md);
-  the user then moved the time limits to the workstation (Product SSOT §2).
-- **Waiting on the user:** the workstation run of
-  [the V2-3 editor request](../40-operations/2026-10-30-v2-3-editor-windows-request.md)
-  (step 8), re-pinned to `3cbe46e` after the first try stopped at two
-  Windows-only test failures. It starts again from §0 in a new folder.
-  Later commits do not change that ZIP. The first try showed
-  `checked=86 mismatched=0` and WebView2 156.0.4314.50.
+**Where it stands:** V2-3 steps 1 to 7 are done; step 8's workstation run
+came back with R2 and the console row failing, both handled above, and the
+user's notes are in (`9bd9f9c`, `8c9ea35`).
+- **Waiting on the user:** the
+  [re-check](../40-operations/2026-10-30-v2-3-editor-recheck-windows-request.md),
+  pinned to `8c9ea35`, in a new folder with the app venv only.
 
-**Resume:** read this file and the request (its criteria S1–S2, M1–M3, A4,
-A5, A6-s, A6-p, E1–E17, N1–N11, R1–R4), then as needed:
-- `scripts/inspection_summary.py`: its `edits` lines count each line's
-  samples as `draft/edited/drawn/empty`, which R2–R4 read;
-- `scripts/measure_editor.py`: the result file that §4 returns, judged as
-  in the [slowest-PC result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md);
-- the editor code: `web/editor.js` (tools, the point line, keys, the
-  unsaved flag), `web/lines.js`, `web/player.js`, `web/render.js`,
-  `web/inspections.js` (setup, re-analysis), `application/editing.py`,
-  `app.py` (the close question).
-
-**When the result comes:** judge it row by row against the request's fixed
-criteria, write `60-evidence/<the day it arrives>-v2-3-editor-windows-result.md`
+**When the result comes:** judge it row by row against the re-check's
+fixed criteria (S1, S2, C, T, R1–R3), write
+`60-evidence/<the day it arrives>-v2-3-editor-recheck-windows-result.md`
 and add it to the catalog. If everything passes, close V2-3 (roadmap and
-this file) and start V2-4; a failed row gets a fix and a re-check of what
+this file) and start V2-4. A failed row gets a fix and a re-check of what
 it touches only.
-- **Watch N9:** renaming the video copy while the app runs works only if
-  no frame session or capture still holds it (Windows refuses an open
-  file). If it fails, look at where the app closes its video sessions
-  (`frame.closeVideo`, `player.close`, `Videos.close`).
-- The user's notes (E2, E11, the overall remarks) may ask for changes:
-  those inside the decided scope go to a fix; anything that changes a
-  decision goes to the user.
+- **R2 reads the summary's `edits glass` line** of
+  `20261029-1913_SPL#1_Heating_coldstart`: `oil=draft/edited/drawn/empty`
+  needs drawn ≥ 1, `foam` edited ≥ 1 (Delete on Foam marks even empty
+  samples `EDITED`), `cannot_judge` ≥ 1, and the memos and compressor as
+  in §3 of that run.
+- If R2 fails again, the run's sequence is no longer the explanation: look
+  at the save and the history (`lines.History`, `editor.js` `save`).
+- The user's notes may ask for more: inside the decided scope they go to a
+  fix; anything that changes a decision goes to the user.
 
 **Done before the result, with the user's leave** (2026-10-29 evening and
 2026-10-30): the review fixes (`890b5ea`), the draft search (`ae4873c`),
@@ -315,7 +312,11 @@ A closing review found three ordering bugs in the unsaved state and fixed
 them (`8bec4fb`): an edit made while a save ran was marked saved; the
 window flag's calls could arrive swapped; a reload left the flag set.
 
-**Agent's choices to show the user if asked:** the source-warning bar
+**Agent's choices to show the user if asked:** "전체 보기" in the graph
+header, the pencil switch in the 편집 panel (no key), an upright stroke
+moving only the pressed sample, the straight point line interpolated in
+time, and the selected range kept while the range tool stays (the
+video's range repeat uses it). Earlier: the source-warning bar
 (DESIGN.md §2.7 tokens), the source check on every editor open (about 5 s
 of background hashing on the slowest PC), the compressor in 0.1 s steps,
 memo pins on the graph only, and the memo dialog. All are in DESIGN.md §5.
@@ -324,6 +325,12 @@ a point replaces it, the snap settles a point as it does a drag, and
 straight dotted guides until a path arrives.
 
 **Learned these sessions:**
+- A request's steps must not undo what its criteria count: E7 told the
+  user to Delete "몇 초" anywhere, and R2 then counted drawn Oil. Say where
+  each step acts when a later criterion reads its result.
+- A Windows agent's own O/X can differ from the fixed criterion (it passed
+  the console row because the traceback did not come at a close). Judge
+  from the relayed lines, not the agent's table.
 - Tests that pass on macOS can fail on Windows: an open file cannot be
   deleted or renamed there (close every video session first), and
   `str(Path)` uses backslashes (compare paths as `Path`).
@@ -412,8 +419,8 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `3cbe46e`: `199 passed, 3 skipped` on macOS, so
-  `198 passed, 4 skipped` on Windows when its venv has no Playwright.
+  test. At `8c9ea35`: `202 passed, 3 skipped` on macOS, so
+  `201 passed, 4 skipped` on Windows when its venv has no Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -450,10 +457,10 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done:** V2-3 steps 1 to 7. The A5/A6 result passed A5, playback and
-  the median comparison; the `uint8` medians are in the app. The user
-  moved the time limits to the workstation and keeps the slowest PC for
-  reference (Product SSOT §2). The point line closed step 7.
-- **Waiting on the user:** the workstation run of
-  [the V2-3 editor request](../40-operations/2026-10-30-v2-3-editor-windows-request.md)
-  (step 8). Its result closes V2-3 or names what to fix.
+- **Done:** V2-3 steps 1 to 7, and step 8's workstation run: the time
+  limits pass there; R2 and the console row failed, the console fixed and
+  R2 traced to the run's sequence; the user's notes are in (`9bd9f9c`,
+  `8c9ea35`).
+- **Waiting on the user:** the
+  [re-check](../40-operations/2026-10-30-v2-3-editor-recheck-windows-request.md)
+  on the workstation. Its result closes V2-3 or names what to fix.
