@@ -267,22 +267,44 @@ the undo depth and the shortcuts.
        (`3ac76ce`), which the criteria R2–R4 read.
    - If it passes, V2-3 closes.
 
-## Session handoff — 2026-10-30
+## Session handoff — 2026-10-30 (second)
 
-**The A5/A6 result arrived on 2026-10-30** and is judged in
-[its result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md).
-The user then moved the time limits to the workstation (Product SSOT §2).
+**The session closed after `69a3be0`.** The working tree is clean, and
+`main` and the remote are in sync.
 - V2-3 steps 1 to 7 are done; the point line closed step 7 (`9aa6382`).
+- The slowest PC's A5/A6 result is judged in
+  [its result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md);
+  the user then moved the time limits to the workstation (Product SSOT §2).
 - **Waiting on the user:** the workstation run of
-  [the V2-3 editor request](../40-operations/2026-10-30-v2-3-editor-windows-request.md),
-  re-pinned to `3cbe46e` after the first try stopped at two Windows-only
-  test failures. Later commits do not change that ZIP.
+  [the V2-3 editor request](../40-operations/2026-10-30-v2-3-editor-windows-request.md)
+  (step 8), re-pinned to `3cbe46e` after the first try stopped at two
+  Windows-only test failures. It starts again from §0 in a new folder.
+  Later commits do not change that ZIP. The first try showed
+  `checked=86 mismatched=0` and WebView2 156.0.4314.50.
+
+**Resume:** read this file and the request (its criteria S1–S2, M1–M3, A4,
+A5, A6-s, A6-p, E1–E17, N1–N11, R1–R4), then as needed:
+- `scripts/inspection_summary.py`: its `edits` lines count each line's
+  samples as `draft/edited/drawn/empty`, which R2–R4 read;
+- `scripts/measure_editor.py`: the result file that §4 returns, judged as
+  in the [slowest-PC result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md);
+- the editor code: `web/editor.js` (tools, the point line, keys, the
+  unsaved flag), `web/lines.js`, `web/player.js`, `web/render.js`,
+  `web/inspections.js` (setup, re-analysis), `application/editing.py`,
+  `app.py` (the close question).
 
 **When the result comes:** judge it row by row against the request's fixed
 criteria, write `60-evidence/<the day it arrives>-v2-3-editor-windows-result.md`
 and add it to the catalog. If everything passes, close V2-3 (roadmap and
 this file) and start V2-4; a failed row gets a fix and a re-check of what
 it touches only.
+- **Watch N9:** renaming the video copy while the app runs works only if
+  no frame session or capture still holds it (Windows refuses an open
+  file). If it fails, look at where the app closes its video sessions
+  (`frame.closeVideo`, `player.close`, `Videos.close`).
+- The user's notes (E2, E11, the overall remarks) may ask for changes:
+  those inside the decided scope go to a fix; anything that changes a
+  decision goes to the user.
 
 **Done before the result, with the user's leave** (2026-10-29 evening and
 2026-10-30): the review fixes (`890b5ea`), the draft search (`ae4873c`),
