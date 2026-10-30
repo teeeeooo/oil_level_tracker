@@ -275,10 +275,12 @@ Each Glass in a Recipe has one rule.
   - the key-time table: compressor start, recovery and violations;
   - memos, as numbered pins with a list below.
 - **Left out:** the v1 detector graph and the edit history. The report
-  shows only the final judgment: whether it was overridden, the computed
-  result, the reason and how much of the draft was changed stay in the
+  shows the final judgment; for a Glass the user judged themselves, one
+  line "판정 사유: <reason>" under its heading, never the word "덮어씀".
+  The computed result and how much of the draft was changed stay in the
   inspection as the user's record, shown in the app (user, 2026-10-30: a
-  reader could take an override for tampered data).
+  reader could take an override for tampered data, but a judgment against
+  the criteria table needs its reason).
 - **Format:** self-contained HTML that works offline and prints to PDF. It
   uses the editor's drawing module and the [DESIGN.md](../../DESIGN.md) colour
   roles.

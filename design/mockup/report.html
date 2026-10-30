@@ -19,7 +19,7 @@
   --oil:#1F77D0; --foam:#E8710A; --reference:#616161; --line-halo:rgba(255,255,255,0.9);
   --full-band:rgba(31,119,208,0.10); --empty-band:rgba(97,97,97,0.10);
   --cannot-judge:#8A8A8A; --compressor:#8764B8; --memo:#C19C00; --empty-mark:#E37D80;
-  --pass:#0E700E; --pass-bg:#F1FAF1; --fail:#C50F1F; --fail-bg:#FDF3F4; --review:#BC4B09; --review-bg:#FFF9F5;
+  --violation-band:rgba(197,15,31,0.10); --pass:#0E700E; --pass-bg:#F1FAF1; --fail:#C50F1F; --fail-bg:#FDF3F4; --review:#BC4B09; --review-bg:#FFF9F5;
   --font:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Malgun Gothic",sans-serif;
 }
 * { box-sizing:border-box; }
@@ -130,6 +130,7 @@ td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
 <section class="page">
   <div class="strip"><b>오일 레벨 검사 보고서</b><span>1차 냉각</span><span>GB-2 R410A · 냉각 on/off</span><span class="right">v1 · 제출 2026-10-30 14:22</span></div>
   <h2>Accum <span class="mode">기준점 위 유지</span> <span class="badge big fail">불합격</span></h2>
+  <div class="reason"><b>판정 사유:</b> 01:40 부근 거품이 유면을 가려 위반 길이를 믿을 수 없음. 재시험 필요.</div>
   <div class="plots" data-glass="accum">
     <div class="label"><b style="color:var(--fg-1)">그래프</b><span><i style="background:var(--oil)"></i>Oil</span><span><i style="background:var(--foam)"></i>Foam</span><span>세로: 0선 기준 높이 (px)</span></div>
     <div class="plot" style="height:220px"><svg class="graph"></svg></div>
@@ -158,7 +159,7 @@ td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
   <ol>
     <li>A4 가로. 첫 쪽에 머리글과 Glass별 판정 요약, 그 뒤 Glass마다 그래프·맥락 이미지·판정 기준표·주요 시각표·메모 (DESIGN.md §5 순서).</li>
     <li>머리글: 압축기 모델과 시험 종류(분석 설정에서 입력)에 영상·Recipe·작성 일시·<b>버전</b>을 자동으로.</li>
-    <li>판정은 최종 판정만 적습니다. 직접 판정했는지, 자동 판정, 이유, 초안을 얼마나 고쳤는지는 앱 안의 기록으로만 남깁니다(사용자, 2026-10-30).</li>
+    <li>판정은 최종 판정만 적습니다. 직접 판정한 Glass는 그 Glass 제목 아래에 "판정 사유:" 한 줄만 둡니다("덮어씀"이라는 말은 쓰지 않음). 자동 판정과 초안을 얼마나 고쳤는지는 앱 안의 기록으로만 남깁니다(사용자, 2026-10-30).</li>
     <li>파일: 검사 폴더의 versions\001\report.html. 한 파일로 오프라인에서 열리고 Ctrl+P로 PDF가 됩니다(A7: 5 MB 이하).</li>
     <li>편집 기록과 v1의 검출기 그래프는 넣지 않습니다(§7).</li>
   </ol>
@@ -188,7 +189,7 @@ td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
     let out = "";
     for (const [a, b] of g.cannot) out += `<rect x="${s.x(a)}" y="${PAD.t}" width="${s.x(b) - s.x(a)}" height="${h - PAD.t - PAD.b}" fill="url(#h)"/>`;
     for (const [a, b] of g.full) out += `<rect x="${s.x(a)}" y="${PAD.t}" width="${s.x(b) - s.x(a)}" height="${h - PAD.t - PAD.b}" fill="${css('--full-band')}"/>`;
-    for (const [a, b] of g.violation ?? []) out += `<rect x="${s.x(a)}" y="${PAD.t}" width="${s.x(b) - s.x(a)}" height="${h - PAD.t - PAD.b}" fill="rgba(197,15,31,0.10)"/>` +
+    for (const [a, b] of g.violation ?? []) out += `<rect x="${s.x(a)}" y="${PAD.t}" width="${s.x(b) - s.x(a)}" height="${h - PAD.t - PAD.b}" fill="${css('--violation-band')}"/>` +
       (labels ? `<text x="${s.x(b) + 4}" y="${PAD.t + 12}" font-size="11" fill="${css('--fail')}" font-weight="600">위반 3.5 s</text>` : "");
     out += `<line x1="${s.x(START)}" x2="${s.x(START)}" y1="${PAD.t}" y2="${h - PAD.b}" stroke="${css('--compressor')}" stroke-width="1.5" stroke-dasharray="4 3"/>`;
     if (labels) out += `<text x="${s.x(START) + 4}" y="${PAD.t + 10}" font-size="11" fill="${css('--compressor')}" font-weight="600">기동</text>`;

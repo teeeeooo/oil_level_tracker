@@ -130,7 +130,7 @@ DESIGN.md §5 keeps a place in the editor's right column for the judgment
 panel (computed result, override, reason).
 
 **Steps:**
-1. **Start decisions — done; the mock-ups wait on the user.**
+1. **Start decisions and mock-ups — done** (2026-10-30).
    - **The user's decisions** (2026-10-30, Product SSOT §3 and §7):
      - each Glass is checked with its own "확인" on the judgment; changing
        that Glass's lines afterwards takes the check off;
@@ -139,14 +139,15 @@ panel (computed result, override, reason).
      - the report header (compressor model, test type) is entered with the
        inspection name in the analysis setup, per inspection;
      - the mock-ups come first;
-     - **the report shows only the final judgment;** an override (the
-       computed result, the reason) and how much of the draft was changed
-       are the user's record in the app (Product SSOT §7, DESIGN.md §2.4).
-       "덮어씀" on the report could read as tampered data.
+     - **the report shows the final judgment,** and for a Glass the user
+       judged, one line "판정 사유: <reason>", never "덮어씀"; the computed
+       result and how much of the draft was changed are the user's record
+       in the app (Product SSOT §7, DESIGN.md §2.4).
    - **No report is written yet:** there is no `adapters/report`, and the
      editor's "제출" is disabled. The folder layout reserves the versions
      and their report ([inspection-folder.md](../20-architecture/inspection-folder.md)).
-   - **The mock-ups, for the user to confirm:**
+   - **The mock-ups, confirmed by the user** and written into DESIGN.md
+     §2.3, §2.4 and §5:
      - [editor.html](../../design/mockup/editor.html) `#judge`,
        `#override`, `#checked`, `#submit`, `#locked`: the judgment panel
        (the computed result and its grounds, the override with a required
@@ -158,16 +159,15 @@ panel (computed result, override, reason).
      - [inspection.html](../../design/mockup/inspection.html): "검사 정보"
        in the setup (name, compressor model, test type) and the submitted
        state in the list ("v1 제출함", "v2 고치는 중").
-   - **The agent's proposals inside them, to confirm with the mock-ups:**
-     the check also comes off when that Glass's "cannot judge" stretches
-     or the compressor start change (they change the judgment); the
-     header stays editable in the editor's "검사 정보" until submitting;
-     the override is a 자동/합격/불합격 choice; the versions live in
-     `versions\NNN\` with the edits, the judgment and `report.html`; a
-     violation stretch is marked with `--fail` at 10 % (a token to add to
-     DESIGN.md once confirmed); BASE shares page 1 with the header.
-2. **`domain`, the judgment** (§5): it needs none of the open decisions
-   and can start once the user agrees.
+   - **The agent's choices inside them,** confirmed with the mock-ups: the
+     check also comes off when that Glass's "cannot judge" stretches or the
+     compressor start change; the header stays editable in the editor
+     until submitting; the override is a 자동/합격/불합격 choice; the
+     versions live in `versions\NNN\` with the edits, the judgment and
+     `report.html`; a HOLD mode's longest violation is `--violation-band`;
+     the first Glass shares page 1 with the header.
+2. **`domain`, the judgment** (§5) — in progress: the computed result
+   per Glass from the edited Oil line, with fixed-case unit tests (A3).
 3. The rest follows the decisions: the application and API, the panel,
    submitting and versions, the report, then a Windows run.
 
@@ -175,12 +175,11 @@ panel (computed result, override, reason).
 
 **V2-3 closed** after its re-check passed every row (S1, S2, C1–C12, T,
 R1–R3). After it: the upright stroke (`ca7d3ee`) and the point line's 8 px
-band (`9eea291`). V2-4's start decisions are in; its mock-ups wait on the
-user (step 1 above).
+band (`9eea291`). V2-4's start decisions and mock-ups are confirmed (step 1
+above); step 2, the judgment in `domain`, is next.
 
 **Resume:** read this file, the Product SSOT §3, §5 and §7, DESIGN.md §2.4
-and §5, and the three mock-ups. Once the user confirms them (or asks for
-changes), write the confirmed layout into DESIGN.md §5 and start step 2.
+and §5, and the three mock-ups, then continue step 2.
 Earlier editor work is in the two V2-3 results and in Git.
 
 **Agent's choices in V2-3 to show the user if asked:**
@@ -337,4 +336,4 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done:** V2-3 (2026-10-30): the workstation run and its re-check pass;
   the upright stroke and the point line's 8 px band followed.
-- **Waiting on the user:** the V2-4 mock-ups (V2-4 step 1).
+- **Now:** V2-4 step 2, the judgment in `domain`.

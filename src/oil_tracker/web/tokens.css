@@ -31,6 +31,7 @@
   --line-halo: rgba(255,255,255,0.9);
   --full-band: rgba(31,119,208,0.10);
   --empty-band: rgba(97,97,97,0.10);
+  --violation-band: rgba(197,15,31,0.10);
   --cannot-judge: #8A8A8A;
   --compressor: #8764B8;
   --playhead: #242424;

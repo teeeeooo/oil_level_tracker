@@ -71,6 +71,7 @@ Nothing else may reuse them.
 | `--line-halo` | `rgba(255,255,255,0.9)` | 3 px halo under every line drawn over an image |
 | `--full-band` | `rgba(31,119,208,0.10)` | automatic FULL stretch band; label "FULL" in `--oil` |
 | `--empty-band` | `rgba(97,97,97,0.10)` | automatic EMPTY stretch band; label "EMPTY" in `--fg-3` |
+| `--violation-band` | `rgba(197,15,31,0.10)` | a HOLD mode's longest violation, in the editor and the report; label "위반 <seconds> s" in `--fail` (V2-4) |
 | `--cannot-judge` | `#8A8A8A` | "cannot judge" stretch: 45° hatch, 1 px lines, 6 px apart, plus a `rgba(138,138,138,0.12)` fill |
 | `--compressor` | `#8764B8` | compressor-start marker (vertical, 1.5 px, dash `4 3`, label at the top) |
 | `--playhead` | `#242424` | playhead, 1 px, with a small triangle on the time axis |
@@ -92,7 +93,9 @@ A status is always shown as text plus colour, never colour alone.
 
 An overridden judgment shows its final status like any other. The app
 records the override beside it ("직접 판정", the computed result and the
-reason); the report shows only the final judgment (user, 2026-10-30).
+reason). The report shows the final judgment and, under that Glass's
+heading, one line "판정 사유: <reason>"; it never says "덮어씀" (user,
+2026-10-30).
 
 ### 2.5 Frame chrome
 
@@ -267,8 +270,20 @@ Do not use sizes outside this ramp.
       the save state and the video name below it);
     - the tools: 잡아끌기 (G), 연필 (P), 점 잇기 (L), 범위 (R), 메모 (M),
       이동 (H); then undo and redo;
-    - the Glass picker in the middle;
-    - 저장, 제출 and help on the right.
+    - the Glass picker in the middle; each item shows its status badge:
+      "확인 전" (`--pending`) until checked, then the final judgment;
+    - 저장, 제출 and help on the right. 제출 stays disabled until every
+      Glass is checked; its tooltip names the Glasses left.
+  - **Submit dialog** (480–520 px): "v<N> 제출"; a table of each Glass
+    with its final judgment and check time ("직접 판정 (자동: …)" in
+    Caption 1 after an override); the header fields; a caption that the
+    version is locked and its report written to `versions\NNN\`; "취소"
+    and "제출" (primary).
+  - **A submitted version** is read-only: the tools are disabled, the
+    title reads "v<N> 제출함 <date time>", and a 40 px `--brand-tint` bar
+    under the toolbar says so, with the version picker (older versions
+    open read-only), "보고서 열기" and "고쳐서 다시 제출 (v<N+1>)…"
+    (primary).
   - **Source warning (A9):** when opening the editor finds the source video
     changed, missing or unreadable, a message bar spans the window under
     the toolbar: `--warning-bg` with a 1 px `--warning-border` bottom edge,
@@ -300,10 +315,27 @@ Do not use sizes outside this ramp.
         "판단 불가 (U)" and "판단 불가 풀기", wrapping inside the column, or
         the point line in progress with its keys. Another tool lets the
         range go;
-      - **Glass:** the empty stretches, "cannot judge", the valid share
+      - **Glass:** the 편집 기록 row (the draft samples changed and the
+        samples drawn, the user's record; not in the report), the empty
+        stretches, "cannot judge", the valid share
         against the Recipe's minimum, FULL and EMPTY, and "이전/다음 빈
         구간" (N);
-      - the judgment panel (computed result, override, reason; V2-4);
+      - **판정 · <Glass>** with the mode on the right (V2-4, confirmed by
+        the user on 2026-10-30 in [editor.html](design/mockup/editor.html)):
+        - the final judgment as a Subtitle 1 badge (§2.4); after an
+          override, "직접 판정 · 자동 판정은 <result>" in Caption 1 beside
+          it;
+        - the grounds as a key-value table: the compressor start, then
+          the mode's measures against their limits, then the valid share;
+        - 덮어쓰기: a segmented 자동 / 합격 / 불합격; with 합격 or 불합격,
+          a required "덮어쓴 이유" text area whose caption says the report
+          prints it as "판정 사유";
+        - "이 Glass 확인" (primary, small) with the Glasses still to check;
+          once checked, "✓ 확인함 HH:MM" in `--pass` with "확인 풀기".
+          Changing that Glass's lines, its "cannot judge" stretches or the
+          compressor start takes the check off;
+      - **검사 정보, "보고서 머리글":** the compressor model and the test
+        type as text fields, editable until submitting;
       - **메모:** the Glass's memos in time order, each a 20 px numbered
         `--memo` pin, its time (Caption 1, `--fg-3`) and its text; a click
         brings the time into view and opens the memo;
@@ -332,7 +364,10 @@ Do not use sizes outside this ramp.
     "열기".
     - The inspection cell shows its name with the video name below it, or
       the video name alone when it has no name; then the folder name
-      (monospace caption).
+      (monospace caption) when it differs from the name.
+    - A submitted inspection's state is "v<N> 제출함" with each Glass's
+      final judgment in Caption 1; one being changed again is "v<N+1>
+      고치는 중" with the last submission. One row per inspection.
   - **Below the table:** the Inspections folder path, with "폴더 열기".
 - **Recipe picker:** a 720 px dialog after the video is picked.
   - The video name, its frame size and its length.
@@ -352,10 +387,12 @@ Do not use sizes outside this ramp.
     marks in `--range-edge`) and the compressor start ("기동", in
     `--compressor`), then the time and the speed field.
   - **Right column, 360 px:**
-    - 검사 이름, marked "선택": a text field. Its caption says that the
-      name shows in the list and names the folder, and how the folder is
-      named without one. Once the folder exists, the field is read-only
-      (user, 2026-10-29);
+    - **검사 정보, "보고서 머리글":** 검사 이름 (optional), then 압축기
+      모델 and 시험 종류 side by side (optional; user, 2026-10-30). The
+      caption says that the name shows in the list and names the folder,
+      how the folder is named without one, and that the other two print
+      in the report header. Once the folder exists, the name is read-only
+      (user, 2026-10-29); the other two stay editable until submitting;
     - Recipe: its name and each Glass with its mode, and "바꾸기";
     - 분석 범위: start and end time fields, with the length and the number
       of samples below;
@@ -402,12 +439,24 @@ Do not use sizes outside this ramp.
         - its name;
         - the position in px (centre, radii, zero line);
         - the judgment rule, showing only the fields its mode uses.
-- **Report:** A4 landscape. In order:
-  1. the header block;
-  2. the judgment;
-  3. the graph and the context image, at full width;
-  4. the criteria and key-time tables;
-  5. the memo list.
+- **Report:** A4 landscape, confirmed by the user on 2026-10-30
+  ([report.html](design/mockup/report.html)). In order:
+  1. **the header block:** the title "오일 레벨 검사 보고서" (Title 3)
+     with the inspection name below it and the version and submission
+     time on the right, over a 2 px `--fg-1` rule; then a four-column
+     grid: 압축기 모델, 시험 종류, 영상 파일, Recipe, 분석 범위, 압축기
+     기동, 검사 이름, 작성;
+  2. **the judgment:** a table of each Glass, its rule and its final
+     judgment badge;
+  3. **then each Glass in turn**, the first on page 1 and each other on
+     its own page under a one-line running header:
+     - its name, rule and a Subtitle 1 judgment badge; for a Glass the
+       user judged, one line "판정 사유: <reason>" below (§2.4);
+     - the graph and the context image at full width, on one time axis;
+     - the criteria table (measure, limit, result) and the key-time
+       table side by side;
+     - its memo list;
+  4. a footer with the inspection name, the version and the page number.
 
 ## 6. Depth & Elevation
 
