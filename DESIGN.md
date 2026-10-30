@@ -276,7 +276,9 @@ Do not use sizes outside this ramp.
       Glass is checked; its tooltip names the Glasses left.
   - **Submit dialog** (480–520 px): "v<N> 제출"; a table of each Glass
     with its final judgment and check time ("직접 판정 (자동: …)" in
-    Caption 1 after an override); the header fields; a caption that the
+    Caption 1 after an override); the report header's two fields,
+    entered in the setup and checked or changed here, saved at once
+    (user, 2026-10-30, after the V2-4 Windows run); a caption that the
     version is locked and its report written to `versions\NNN\`; "취소"
     and "제출" (primary).
   - **A submitted version** is read-only: the tools are disabled, the
@@ -316,17 +318,12 @@ Do not use sizes outside this ramp.
         the time);
       - **편집:** the line kind the pencil and the point line draw (Oil,
         Foam, 참조); the grab width with `[` `]`; the grab shape
-        (부드럽게, 뾰족하게, or Alt while dragging); the pencil's "수평·수직"
+        (부드럽게, 뾰족하게, or Alt while dragging); the pencil's "수평"
         switch; the snap switch with its reach. Below them, the selected
         range with "<line> 선 지우기 (Delete)" naming the chosen line,
         "판단 불가 (U)" and "판단 불가 풀기", wrapping inside the column, or
         the point line in progress with its keys. Another tool lets the
         range go;
-      - **Glass:** the 편집 기록 row (the draft samples changed and the
-        samples drawn, the user's record; not in the report), the empty
-        stretches, "cannot judge", the valid share
-        against the Recipe's minimum, FULL and EMPTY, and "이전/다음 빈
-        구간" (N);
       - **판정 · <Glass>** with the mode on the right (V2-4, confirmed by
         the user on 2026-10-30 in [editor.html](design/mockup/editor.html)):
         - the final judgment as a Subtitle 1 badge (§2.4); after an
@@ -342,19 +339,27 @@ Do not use sizes outside this ramp.
           Changing that Glass's Oil line, its "cannot judge" stretches or
           the compressor start takes the check off (Foam, reference lines
           and memos do not feed the judgment);
-      - **검사 정보, "보고서 머리글":** the compressor model and the test
-        type as text fields side by side, as in the setup, editable until
-        submitting. A change is saved at once, apart from the edits'
-        "저장" (agent's choice, 2026-10-30);
-      - **메모:** the Glass's memos in time order, each a 20 px numbered
-        `--memo` pin, its time (Caption 1, `--fg-3`) and its text; a click
-        brings the time into view and opens the memo;
+      - **Glass:** the 편집 기록 row (the draft samples changed and the
+        samples drawn, the user's record; not in the report), the empty
+        stretches, "cannot judge", the valid share
+        against the Recipe's minimum, FULL and EMPTY, and "이전/다음 빈
+        구간" (N);
+      - The right column's order is 원본 영상, 편집, 판정, Glass, 분석
+        (user, 2026-10-30, after the V2-4 Windows run). The report header
+        moved to the submit dialog and the memos to the memo list.
       - **분석:** the range, the compressor start (dragged on the graph),
         the Recipe copy, and "범위 바꿔 다시 분석…". With unsaved edits it
         asks to save them first: the re-analysis keeps the saved edits.
-      - **Memos:** the memo tool (M) opens the memo dialog at a click on the
-        graph or the context image, for a new memo at that time and
-        height; a click on a pin opens that memo. On the graph a pin is a
+      - **Memos:** the toolbar's "메모" (M) opens the memo list (user,
+        2026-10-30, after the V2-4 Windows run): a 360 px popover under
+        the button, "메모 · <Glass>", with the Glass's memos in time order
+        (a checkbox, the numbered `--memo` pin, the time and the text) and
+        "추가" (primary, small), "삭제" (with the count picked) and "닫기";
+        Esc or M closes it. A click on a memo brings its time into view
+        and opens it. "추가" turns on the memo tool, which opens the memo
+        dialog at a click on the graph or the context image, for a new
+        memo at that time and height; with it, a click on a pin opens that
+        memo. "삭제" removes the picked memos as one undoable change. On the graph a pin is a
         10 px `--memo` circle with its number in white Caption 1 at weight
         600, 22 px above its point (below it near the top) on a 1 px stem.
         The memo dialog (480 px) has the time in its title, a text area
@@ -458,15 +463,18 @@ Do not use sizes outside this ramp.
      기동, 검사 이름, 작성;
   2. **the judgment:** a table of each Glass, its rule and its final
      judgment badge;
-  3. **then each Glass in turn**, the first on page 1 and each other on
-     its own page under a one-line running header:
+  3. **every Glass's graph**, each under a one-line label (name, rule,
+     badge) with its time axis, sharing the rest of page 1 (squeezed is
+     fine; user, 2026-10-30, after the V2-4 Windows run);
+  4. **then each Glass on its own page** under a one-line running header,
+     the graph and the context image filling what the tables leave:
      - its name, rule and a Subtitle 1 judgment badge; for a Glass the
        user judged, one line "판정 사유: <reason>" below (§2.4);
      - the graph and the context image at full width, on one time axis;
      - the criteria table (measure, limit, result) and the key-time
        table side by side;
      - its memo list;
-  4. a footer with the inspection name, the version and the page number.
+  5. a footer with the inspection name, the version and the page number.
   - **Agent's choices** (V2-4 step 6, 2026-10-30): the key-time table
     also lists the first three FULL, EMPTY and "cannot judge" stretches
     (then "외 N곳"); the graph shows the memo pins and, in a HOLD mode,

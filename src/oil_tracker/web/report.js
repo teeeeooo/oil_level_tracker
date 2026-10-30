@@ -7,6 +7,15 @@
     svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
     svg.innerHTML = content;
   };
+  for (const box of document.querySelectorAll(".overview-glass")) {  // page 1: the graphs alone
+    const index = Number(box.dataset.index);
+    const panel = panels[index];
+    const view = fitView(panel);
+    const graph = box.querySelector(".graph svg"), axis = box.querySelector(".axis svg");
+    const [gw, gh] = [graph.clientWidth, graph.clientHeight];
+    fill(graph, gw, gh, graphSvg(panel, view, gw, gh, `overview${index}`) + marksSvg({ memos: panel.memos }, view, gw, gh, `overview${index}`));
+    fill(axis, axis.clientWidth, 32, axisSvg(view, axis.clientWidth, { times: panel.times, empty: panel.empty }));
+  }
   for (const box of document.querySelectorAll(".plots")) {
     const index = Number(box.dataset.index);
     const panel = panels[index];

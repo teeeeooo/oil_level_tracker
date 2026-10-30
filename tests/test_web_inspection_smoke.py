@@ -169,16 +169,9 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         assert inspection["settings"] == {"start_sec": 0.0, "end_sec": 4.0, "compressor_start_sec": 1.0}
         assert inspection["report_header"] == {"compressor_model": "GB-2 R410A", "test_type": None}
 
-        # the editor's 검사 정보 saves at once, apart from the edits; leaving sends what was typed
-        header = page.locator("#editorHeader")
-        assert header.get_by_label("압축기 모델").input_value() == "GB-2 R410A"
-        header.get_by_label("시험 종류").fill("냉각 on/off")
         page.get_by_role("button", name="검사 목록").click()
         listed = page.locator("#inspectionRows tr", has_text="level.avi")
         listed.wait_for()
-        inspection = json.loads((folder / "inspection.json").read_text(encoding="utf-8"))
-        assert inspection["report_header"] == {"compressor_model": "GB-2 R410A", "test_type": "냉각 on/off"}
-        assert not (folder / "edits.json").exists()
         assert "분석 완료" in listed.inner_text() and folder.name in listed.inner_text()
         assert listed.inner_text().startswith("스모크: 1차")
         shot(page, "i5-list")
@@ -410,13 +403,11 @@ def test_reanalysis_from_the_editor(tmp_path, video, browser_page):
         box = page.locator("#graph").bounding_box()
         drag(page, (box["x"] + box["width"] * 0.8, box["y"] + 100), (box["x"] + box["width"] * 0.95, box["y"] + 110))
         page.get_by_text("저장 안 함").wait_for()
-        page.locator("#editorHeader").get_by_label("시험 종류").fill("편집기에서")  # sent before the setup reads it
         asked = []
         page.once("dialog", lambda dialog: (asked.append(dialog.message), dialog.accept()))
         page.get_by_role("button", name="범위 바꿔 다시 분석…").click()
         page.locator("#setupView").wait_for()
         assert "저장" in asked[0]
-        assert field(page, "시험 종류").input_value() == "편집기에서"
         assert (data / "Inspections" / "다시" / "edits.json").exists()
         assert page.locator("#setupBack").inner_text() == "편집기"
         assert page.locator("#startAnalysis").inner_text() == "다시 분석"
@@ -426,7 +417,8 @@ def test_reanalysis_from_the_editor(tmp_path, video, browser_page):
         field(page, "시험 종류").fill("재분석")
         page.locator("#setupBack").click()
         page.get_by_text("저장함").wait_for()
-        assert page.locator("#editorHeader").get_by_label("시험 종류").input_value() == "재분석"
+        stored = json.loads((data / "Inspections" / "다시" / "inspection.json").read_text(encoding="utf-8"))
+        assert stored["report_header"]["test_type"] == "재분석"
         page.get_by_role("button", name="범위 바꿔 다시 분석…").click()
         page.locator("#setupView").wait_for()
 
@@ -518,7 +510,12 @@ def test_memos(tmp_path, video, browser_page):
         page.goto(running.url)
         page.locator("#inspectionRows tr", has_text="메모").get_by_role("button", name="열기", exact=True).click()
         page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        # "메모" (M) opens the Glass's memo list; "추가" turns graph clicks into new memos
         page.keyboard.press("m")
+        pop = page.locator("#memoPop")
+        pop.get_by_text("메모 없음").wait_for()
+        pop.get_by_role("button", name="추가").click()
+        assert pop.is_hidden()
         assert page.locator("#editorView button[data-tool=memo]").get_attribute("aria-pressed") == "true"
         box = page.locator("#graph").bounding_box()
         dialog = page.locator("#memoDialog")
@@ -538,11 +535,14 @@ def test_memos(tmp_path, video, browser_page):
         page.keyboard.type("FULL 도달 확인")
         page.keyboard.press("Control+Enter")
         page.locator('#graph [data-memo="2"]').wait_for()
-        assert items.all_inner_texts()[0].endswith("FULL 도달 확인")
         page.mouse.click(box["x"] + box["width"] * 0.8, box["y"] + 150)
         page.keyboard.type("버림")
         page.keyboard.press("Escape")
-        assert items.count() == 2
+        page.keyboard.press("m")  # the closed dialog leaves the editor's keys
+        pop.wait_for()
+        assert items.count() == 2 and items.all_inner_texts()[0].endswith("FULL 도달 확인")
+        page.keyboard.press("Escape")  # closes the list
+        assert pop.is_hidden()
 
         # a click on pin 2 opens it; the change can be undone and redone
         pin = page.locator('#graph [data-memo="2"] circle')
@@ -553,20 +553,38 @@ def test_memos(tmp_path, video, browser_page):
         assert dialog.locator("#memoText").input_value() == "거품 발생"
         dialog.locator("#memoText").fill("거품 발생, 유면 식별 어려움")
         dialog.get_by_role("button", name="확인").click()
+        page.keyboard.press("m")
         items.nth(1).get_by_text("유면 식별 어려움").wait_for()
-        page.locator("#memoItems").scroll_into_view_if_needed()
         shot(page, "m1-memos")
+        page.keyboard.press("Escape")
         page.keyboard.press("Control+z")
+        page.keyboard.press("m")
         items.nth(1).get_by_text("거품 발생", exact=True).wait_for()
+        page.keyboard.press("Escape")
         page.keyboard.press("Control+Shift+z")
+        page.keyboard.press("m")
         items.nth(1).get_by_text("유면 식별 어려움").wait_for()
 
-        # the list opens a memo too; "삭제" removes it
+        # the list opens a memo, and its dialog deletes it
         items.first.click()
-        assert dialog.locator("#memoTitle").inner_text().startswith("메모 1 · ")
+        assert pop.is_hidden() and dialog.locator("#memoTitle").inner_text().startswith("메모 1 · ")
         dialog.get_by_role("button", name="삭제").click()
         page.locator('#graph [data-memo="2"]').wait_for(state="detached")
-        assert items.all_inner_texts()[0].endswith("거품 발생, 유면 식별 어려움")
+
+        # picked memos go together with "삭제", as one change
+        page.mouse.click(box["x"] + box["width"] * 0.2, box["y"] + 150)  # the memo tool is still on
+        page.keyboard.type("하나 더")
+        page.keyboard.press("Control+Enter")
+        page.locator('#graph [data-memo="2"]').wait_for()
+        page.keyboard.press("m")
+        remove = pop.locator("#memoRemove")
+        assert remove.is_disabled()
+        pop.locator(".memo-row input").first.check()
+        assert remove.inner_text() == "삭제 (1)"
+        remove.click()
+        page.locator('#graph [data-memo="2"]').wait_for(state="detached")
+        assert items.count() == 1 and items.all_inner_texts()[0].endswith("거품 발생, 유면 식별 어려움")
+        page.keyboard.press("Escape")
 
         page.keyboard.press("Control+s")
         page.get_by_text("저장함").wait_for()
@@ -687,8 +705,8 @@ def test_the_point_line(tmp_path, video, browser_page):
 
 
 def test_the_pencil_lock(tmp_path, video, browser_page):
-    # "수평·수직" (user, 2026-10-30): a stroke mostly across draws level at the pressed height;
-    # mostly up or down, it joins the pressed height to the pointer's between two neighbouring samples
+    # "수평" (user, 2026-10-30): every stroke draws level at the pressed height; the upright stroke
+    # was dropped after the V2-4 Windows run
     page, errors = browser_page
     data = tmp_path / "data"
     write_recipes(data / "Recipes")
@@ -699,7 +717,7 @@ def test_the_pencil_lock(tmp_path, video, browser_page):
         page.locator("#inspectionRows tr", has_text="직선").get_by_role("button", name="열기", exact=True).click()
         page.wait_for_function("document.querySelectorAll('#context image').length === 1")
         page.keyboard.press("s")  # the snap off: the pressed height stays
-        page.get_by_text("수평·수직", exact=True).click()
+        page.get_by_text("수평", exact=True).click()
         page.keyboard.press("p")
         box = page.locator("#graph").bounding_box()
         left, top = box["x"] + box["width"] * 0.2, box["y"] + box["height"] * 0.4
@@ -714,10 +732,9 @@ def test_the_pencil_lock(tmp_path, video, browser_page):
         level = drawn()
         assert len(level) > 3 and len(set(level)) == 1
         page.keyboard.press("Control+z")
-        drag(page, (left, top), (left + 12, top + 60))  # up or down, a little slanted
-        upright = drawn()
-        assert len(upright) == 2 and upright[0] == level[0]  # from the pressed height
-        assert upright[1] > upright[0]  # to the pointer's, lower on the screen: a larger source y
+        drag(page, (left, top), (left + 40, top + 80))  # mostly down: still level, across the time moved
+        steep = drawn()
+        assert len(steep) >= 1 and set(steep) == {level[0]}
         assert errors == []
     finally:
         running.close()
@@ -788,8 +805,6 @@ def test_the_judgment_the_users_verdict_and_the_check(tmp_path, video, browser_p
         page.wait_for_function("t => document.getElementById('verdictBadge').textContent === t", arg=computed)
         assert page.locator("#reasonBox").is_hidden() and page.locator("#checkRow").is_visible()
         shot(page, "j1-judgment")
-        page.locator("#editorHeader").scroll_into_view_if_needed()
-        shot(page, "j2-inspection-info")
         assert errors == []
     finally:
         running.close()
@@ -807,8 +822,6 @@ def test_submitting_locks_a_version_and_revising_starts_the_next(tmp_path, video
         page.locator("#inspectionRows tr", has_text="제출").get_by_role("button", name="열기", exact=True).click()
         page.wait_for_function("document.querySelectorAll('#context image').length === 1")
         assert page.locator("#versionBar").is_hidden()
-        page.locator("#editorHeader").get_by_label("압축기 모델").fill("GB-2")
-        page.keyboard.press("Enter")  # leaves the field: the editor's keys again
 
         # an unsaved pencil stroke, then the check: the submit dialog sends both
         page.keyboard.press("p")
@@ -820,7 +833,7 @@ def test_submitting_locks_a_version_and_revising_starts_the_next(tmp_path, video
         dialog = page.locator("#submitDialog")
         assert dialog.locator("#submitTitle").inner_text() == "v1 제출"
         assert dialog.locator("#submitRows tr").count() == 1 and "BASE" in dialog.locator("#submitRows").inner_text()
-        assert "GB-2" in dialog.locator("#submitHeader").inner_text()
+        dialog.get_by_label("압축기 모델").fill("GB-2")  # the report header, checked and changed here
         shot(page, "s1-submit-dialog")
         dialog.get_by_role("button", name="제출", exact=True).click()
 
@@ -834,7 +847,6 @@ def test_submitting_locks_a_version_and_revising_starts_the_next(tmp_path, video
         assert page.locator("#editorState").inner_text().startswith("v1 제출함")
         for selector in ("#editorView button[data-tool=pencil]", "#editorSave", "#editorSubmit", "#editorUndo", "#editorReanalyse"):
             assert page.locator(selector).is_disabled(), selector
-        assert page.locator("#editorHeader").get_by_label("압축기 모델").is_disabled()
         assert page.locator("#checkRow").is_hidden() and page.locator("#uncheckGlass").is_hidden()
         assert page.locator("#editSection").is_hidden() and page.locator("#overrideRow").is_hidden()
         assert "v1에 제출됨" in page.locator("#checkedText").inner_text()
@@ -876,7 +888,8 @@ def test_submitting_locks_a_version_and_revising_starts_the_next(tmp_path, video
         # v1's report: one file that draws itself offline with render.js (not opened from the editor
         # here, which would start the system browser)
         page.goto((folder / "versions" / "001" / "report.html").as_uri())
-        page.locator(".graph svg path[data-kind=oil]").wait_for(state="attached")
+        page.locator(".plots .graph svg path[data-kind=oil]").wait_for(state="attached")
+        assert page.locator(".overview-glass .graph svg path[data-kind=oil]").count() == 1  # page 1's graph
         assert page.locator(".context svg image").count() == 1 and page.locator(".axis svg text").count() > 0
         assert page.locator("h1").inner_text() == "오일 레벨 검사 보고서" and "GB-2" in page.locator(".fields").inner_text()
         if os.environ.get("OLT_SMOKE_SHOTS"):

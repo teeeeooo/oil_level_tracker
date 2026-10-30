@@ -90,7 +90,10 @@ def data_of(html):
 
 def test_the_report_has_the_header_the_final_judgments_and_a_page_per_glass():
     html = HtmlReports(WEB_FOLDER).write(report_input())
-    assert html.count('<section class="page') == 2 and html.count('class="page first"') == 1
+    # page 1: the facts, the judgments and every Glass's graph; then a page per Glass (user, 2026-10-30)
+    assert html.count('<section class="page') == 3 and html.count('class="page first"') == 1
+    first = html[html.index('class="page first"'):html.index("</section>")]
+    assert first.count('class="overview-glass"') == 2 and 'class="plot context"' not in first
     for text in ("오일 레벨 검사 보고서", "GB-2 R410A", "냉각 on/off", "SPL#4_Cooling.mp4", "2호기 냉각", "00:00.0 – 04:59.5", "00:30.0"):
         assert text in html, text
     assert "Accum &lt;A&gt;" in html and "<A>" not in html
@@ -101,7 +104,7 @@ def test_the_report_has_the_header_the_final_judgments_and_a_page_per_glass():
     assert "30 s" in html and "기동 후 30 s" in html                    # BASE recovered 30 s after the start
     assert "0선 아래로 내려간 최장 시간" in html and "4.5 s, 최대 0선 아래 6.0 px" in html
     assert "01:40.0 – 01:44.5" in html and "02:10.0 – 02:30.0" in html  # the violation; "cannot judge"
-    assert '<div class="foot"><span>1차 냉각 · v1</span><span>2 / 2</span></div>' in html
+    assert '<div class="foot"><span>1차 냉각 · v1</span><span>3 / 3</span></div>' in html
 
 
 def test_typed_text_is_escaped_and_not_read_again():

@@ -9,7 +9,7 @@ import * as player from "./player.js";
 import * as render from "./render.js";
 import { $, MODES, clock, el, localDate, notify, parseClock, typing } from "./ui.js";
 
-const TOOL_KEYS = { KeyG: "grab", KeyP: "pencil", KeyL: "point", KeyR: "range", KeyM: "memo", KeyH: "pan" };
+const TOOL_KEYS = { KeyG: "grab", KeyP: "pencil", KeyL: "point", KeyR: "range", KeyH: "pan" };  // M opens the memo list
 const KIND_NAMES = { oil: "Oil", foam: "Foam", reference: "참조" };
 const VERDICTS = { PASS: ["합격", "pass"], FAIL: ["불합격", "fail"], REVIEW: ["검토 필요", "review"] };  // text, badge
 const HIT_PX = 8;          // how near a line a press grabs it
@@ -18,7 +18,7 @@ const DRAG_PX = 3;         // the movement that makes a press a drag
 const MIN_SPAN_SEC = 2;    // the narrowest time view
 const MIN_SPAN_PX = 8;     // the lowest height view, in source px
 const SOURCE_POLL_MS = 300;
-const VIEW_KEYS = new Set(["KeyN", "Space", "Comma", "Period", "Escape"]);  // all a submitted version takes
+const VIEW_KEYS = new Set(["KeyN", "KeyM", "Space", "Comma", "Period", "Escape"]);  // all a submitted version takes
 
 const state = {
   detail: null,            // the inspection
@@ -34,7 +34,7 @@ const state = {
   width: 30,               // the grab width, seconds
   shape: "smooth",
   snap: true,
-  lock: false,             // the pencil draws only level or upright strokes (user, 2026-10-30)
+  lock: false,             // the pencil draws only level strokes (user, 2026-10-30)
   background: false,
   view: null,
   selection: null,         // { t0, t1 }
@@ -58,6 +58,7 @@ let deriveAgain = false;
 let unsavedSent = Promise.resolve();  // the window's flag goes out in order (setDirty)
 let previewing = false;    // the point line's preview request in flight
 let previewAgain = false;
+const memoPicked = new Set();  // memo ids picked in the memo list for "삭제"
 const headerSaver = new HeaderSaver(
   () => {},
   (message) => notify("editorNotice", `검사 정보를 저장하지 못했습니다: ${message}`, "error"),
@@ -89,7 +90,6 @@ export async function open(inspectionId, version = null) {
   checkSource().catch(() => {});
   if (locked()) state.tool = "pan";  // looking only: a drag moves the view, a click the playhead
   renderHeader();
-  renderReportHeader();
   renderTools();
   renderVersion();
   try {
@@ -107,6 +107,8 @@ function release() {
   state.luma.clear();
   state.derived.clear();
   state.history.clear();
+  memoPicked.clear();
+  $("memoPop").hidden = true;
   if ($("memoDialog").open) $("memoDialog").close();
   Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null, memo: null, point: null, submission: null });
   setDirty(false);
@@ -456,7 +458,7 @@ function onPointerMove(event) {
     lines.grab(line, drag.base, state.edits.times, drag.index, target, state.width, event.altKey ? "pointed" : state.shape);
     requestDraw({ lines: true });
   } else if (drag.type === "pencil" && drag.anchor) {
-    lockedStroke(drag, at, event);
+    lockedStroke(drag, at);
     setPlayhead(Math.min(state.edits.times.at(-1), Math.max(state.edits.times[0], at.t)), true);
     requestDraw({ lines: true });
   } else if (drag.type === "pencil") {
@@ -469,10 +471,9 @@ function onPointerMove(event) {
   }
 }
 
-/** The pencil with "수평·수직" on, like Shift in Paint: from the press, a level stroke at the pressed
- * height when the pointer has moved more across than up or down, else an upright one from the pressed
- * height to the pointer's. Each move redraws the stroke from the line as it was. */
-function lockedStroke(drag, at, event) {
+/** The pencil with "수평" on: a level stroke at the pressed height, from the press to the pointer's
+ * time. Each move redraws the stroke from the line as it was. */
+function lockedStroke(drag, at) {
   const line = lineOf(state.glassId, drag.kind);
   const [from, to] = drag.touched;
   for (let i = from; i < to; i++) {
@@ -480,10 +481,7 @@ function lockedStroke(drag, at, event) {
     line.origins[i] = drag.base.origins[i];
   }
   const { t, y } = drag.anchor;
-  const level = Math.abs(event.clientX - drag.x) >= Math.abs(event.clientY - drag.y);
-  drag.touched = level
-    ? lines.pencil(line, state.edits.times, t, y, at.t, y)
-    : lines.upright(line, state.edits.times, t, y, zero() - at.h);
+  drag.touched = lines.pencil(line, state.edits.times, t, y, at.t, y);
 }
 
 function onPointerUp() {
@@ -877,18 +875,65 @@ function commitMemo(remove) {
   requestDraw({ marks: true });
 }
 
+/** The memo list under the toolbar's "메모" (user, 2026-10-30): the Glass's memos in time order; a
+ * click opens one, the boxes pick memos for "삭제", and "추가" turns the graph's clicks into new
+ * memos (the memo tool). */
 function renderMemos() {
   if (!state.edits) return;
   const memos = memoList();
-  const items = memos.map((m, k) => el("button", {
-    class: "memo",
-    onclick: () => {
-      reveal(m.time_sec);
-      setPlayhead(m.time_sec);
-      openMemo(m.id);
-    },
-  }, el("span", { class: "pin" }, String(k + 1)), el("span", {}, el("span", { class: "t" }, clock(m.time_sec)), el("span", { class: "text" }, m.text))));
-  $("memoItems").replaceChildren(...(items.length ? items : [el("span", { class: "caption" }, "메모 없음")]));
+  const ids = new Set(memos.map((m) => m.id));
+  for (const id of memoPicked) if (!ids.has(id)) memoPicked.delete(id);
+  const off = locked();
+  const items = memos.map((m, k) => {
+    const box = el("input", { type: "checkbox", "aria-label": `메모 ${k + 1} 고르기` });
+    box.checked = memoPicked.has(m.id);
+    box.disabled = off;
+    box.addEventListener("change", () => {
+      if (box.checked) memoPicked.add(m.id);
+      else memoPicked.delete(m.id);
+      renderMemos();
+    });
+    return el("div", { class: "memo-row" }, box, el("button", {
+      class: "memo",
+      onclick: () => {
+        showMemoList(false);
+        reveal(m.time_sec);
+        setPlayhead(m.time_sec);
+        openMemo(m.id);
+      },
+    }, el("span", { class: "pin" }, String(k + 1)), el("span", {}, el("span", { class: "t" }, clock(m.time_sec)), el("span", { class: "text" }, m.text))));
+  });
+  $("memoPopTitle").textContent = `메모 · ${recipeGlass().name}`;
+  $("memoItems").replaceChildren(...(items.length ? items : [el("span", { class: "caption" }, "메모 없음. \"추가\"를 누르고 그래프를 클릭하세요.")]));
+  $("memoAdd").disabled = off;
+  $("memoRemove").disabled = off || memoPicked.size === 0;
+  $("memoRemove").textContent = memoPicked.size ? `삭제 (${memoPicked.size})` : "삭제";
+}
+
+function showMemoList(open) {
+  const pop = $("memoPop");
+  if (open) {
+    const button = document.querySelector("#editorView button[data-tool=memo]").getBoundingClientRect();
+    pop.style.left = `${Math.max(8, Math.min(button.left, innerWidth - 368))}px`;
+    pop.style.top = `${button.bottom + 4}px`;
+    renderMemos();
+  }
+  pop.hidden = !open;
+}
+
+/** "삭제": the picked memos, as one undoable change. */
+function removePickedMemos() {
+  if (locked() || memoPicked.size === 0) return;
+  const glass = editsOf();
+  const before = glass.memos;
+  const after = before.filter((m) => !memoPicked.has(m.id));
+  memoPicked.clear();
+  if (state.history.recordList(state.glassId, "memos", before, after)) {
+    glass.memos = after;
+    changed();
+    requestDraw({ marks: true });
+  }
+  renderMemos();
 }
 
 /** The view with its times inside the analysed range: no time before the first sample or after the
@@ -995,10 +1040,6 @@ function shownVersion() {
   return locked() ? state.submission.versions.find((v) => v.version === state.submission.showing) : null;
 }
 
-function shownHeader() {
-  return state.submission.header;
-}
-
 /** The bar under the toolbar once there are versions: what is shown, the picker and "고쳐서 다시 제출". */
 function renderVersion() {
   const { versions, showing, editable } = state.submission;
@@ -1021,10 +1062,11 @@ function renderVersion() {
   $("editorSave").hidden = $("editorSubmit").hidden = showing !== null;
   $("reviseButton").textContent = `고쳐서 다시 제출 (v${latest + 1})…`;
   const off = locked();  // a submitted version: tools off, the editing panels hidden
-  for (const node of document.querySelectorAll("#editorView button[data-tool], #editorUndo, #editorRedo, #editorSave, #editorReanalyse")) {
-    node.disabled = off;
+  for (const node of document.querySelectorAll("#editorView button[data-tool]:not([data-tool=memo]), #editorUndo, #editorRedo, #editorSave, #editorReanalyse")) {
+    node.disabled = off;  // the memo list stays: it shows the memos
   }
-  for (const id of ["editSection", "overrideRow", "checkCaption", "headerCaption"]) $(id).hidden = off;
+  for (const id of ["editSection", "overrideRow", "checkCaption"]) $(id).hidden = off;
+  renderMemos();
   $("overrideReason").readOnly = off;
   renderSelection();  // its buttons follow the selection again
   renderGlassPicker();
@@ -1065,9 +1107,11 @@ function openSubmit() {
     return el("tr", {}, el("td", {}, recipeGlass(g.glass_id).name), el("td", {}, el("span", { class: `badge ${tone}` }, text), own),
       el("td", {}, localDate(g.decision.checked_at).slice(11)));
   }));
-  const header = state.detail.header;
-  $("submitHeader").replaceChildren(...[["압축기 모델", header.compressor_model], ["시험 종류", header.test_type]]
-    .map(([k, v]) => el("tr", {}, el("th", {}, k), el("td", {}, v?.trim() || "-"))));
+  const d = state.detail;  // the report header, entered in the setup and checked here (user, 2026-10-30)
+  $("submitHeader").replaceChildren(headerFields(d.header, (key, text) => {
+    d.header[key] = text;
+    headerSaver.change(d.id, d.header);
+  }, () => headerSaver.flush()));
   $("submitCaption").textContent = `제출하면 v${next}이 잠기고, 보고서를 검사 폴더의 versions\\${String(next).padStart(3, "0")}\\report.html로 만듭니다. `
     + "저장하지 않은 편집도 함께 제출됩니다.";
   $("submitDialog").showModal();
@@ -1137,17 +1181,6 @@ function renderHeader() {
     ["원본 SHA-256", d.video.sha256 ?? "-"],
   ];
   $("editorFacts").replaceChildren(...rows.map(([k, v]) => el("tr", {}, el("th", {}, k), el("td", { class: k.includes("SHA") ? "mono" : "" }, v))));
-}
-
-/** 검사 정보: the report header, saved at once (header.js). */
-function renderReportHeader() {
-  const d = state.detail;
-  const fields = headerFields(locked() ? shownHeader() : d.header, (key, text) => {
-    d.header[key] = text;
-    headerSaver.change(d.id, d.header);
-  }, () => headerSaver.flush());
-  for (const input of fields.querySelectorAll("input")) input.disabled = locked();
-  $("editorHeader").replaceChildren(fields);
 }
 
 function compressorText() {
@@ -1350,6 +1383,8 @@ function onKey(event) {
     save();
   } else if (ctrl || event.altKey) {
     return;
+  } else if (event.code === "KeyM") {
+    showMemoList($("memoPop").hidden);
   } else if (TOOL_KEYS[event.code]) {
     setTool(TOOL_KEYS[event.code]);
   } else if (event.code === "BracketLeft" || event.code === "BracketRight") {
@@ -1368,6 +1403,7 @@ function onKey(event) {
     judgeSelection(true);
   } else if (event.key === "Escape") {
     if (!$("videoSpeedMenu").hidden) player.toggleSpeedMenu(false);
+    else if (!$("memoPop").hidden) showMemoList(false);
     else if (state.point) cancelPoint();
     else {
       state.selection = null;
@@ -1426,6 +1462,11 @@ export function init(toList, openSetup) {
   // openMemo sets the dialog's memo; nothing clears it on the "close" event, which comes a task
   // later and could clear a memo opened meanwhile
   $("memoCancel").addEventListener("click", () => $("memoDialog").close());
+  for (const id of ["memoDialog", "submitDialog"]) {  // a closed dialog keeps its focus: give the keys back
+    const letGo = () => { if ($(id).contains(document.activeElement)) document.activeElement.blur(); };
+    $(id).addEventListener("cancel", letGo);  // Esc: at once, before the "close" event a task later
+    $(id).addEventListener("close", letGo);
+  }
   $("clearSelection").addEventListener("click", () => judgeSelection(false));
   $("editorUndo").addEventListener("click", () => undo(false));
   $("editorRedo").addEventListener("click", () => undo(true));
@@ -1433,13 +1474,22 @@ export function init(toList, openSetup) {
     $("editorGlass").blur();  // the editor's keys again
     state.glassId = $("editorGlass").value;
     state.selection = null;
+    memoPicked.clear();
     if (state.point) cancelPoint();
     renderSelection();
     showGlass(false);
   });
   for (const button of document.querySelectorAll("#editorView button[data-tool]")) {
-    button.addEventListener("click", () => setTool(button.dataset.tool));
+    if (button.dataset.tool === "memo") button.addEventListener("click", () => showMemoList($("memoPop").hidden));
+    else button.addEventListener("click", () => setTool(button.dataset.tool));
   }
+  $("memoAdd").addEventListener("click", () => {
+    showMemoList(false);
+    setTool("memo");
+    notify("editorNotice", "그래프를 클릭해 메모 추가");
+  });
+  $("memoRemove").addEventListener("click", removePickedMemos);
+  $("memoPopClose").addEventListener("click", () => showMemoList(false));
   for (const button of document.querySelectorAll("#lineKind button")) {
     button.addEventListener("click", () => {
       state.kind = button.dataset.kind;

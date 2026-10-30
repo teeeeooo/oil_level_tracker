@@ -73,17 +73,6 @@ export function pencil(line, times, t0, y0, t1, y1, settle = (i, y) => y) {
   return [first, end];
 }
 
-/** An upright stroke at time t from y0 to y1: the nearest sample at y0 and the next at y1, the
- * steepest the samples can draw (user, 2026-10-30: a vertical line, as Shift in Paint draws).
- * Returns [first, end). */
-export function upright(line, times, t, y0, y1) {
-  const i = Math.max(0, Math.min(nearestIndex(times, t), times.length - 2));
-  line.ys[i] = y0;
-  line.ys[i + 1] = y1;
-  line.origins[i] = line.origins[i + 1] = "DRAWN";
-  return [i, i + 2];
-}
-
 /** Empty the samples in [first, end): no line there until it is drawn (Product SSOT §4). */
 export function erase(line, first, end) {
   for (let i = first; i < end; i++) {

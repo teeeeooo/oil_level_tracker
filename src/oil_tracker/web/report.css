@@ -38,11 +38,15 @@ table.summary th:nth-child(2) { width: 220px; }
 .plots .label i { display: inline-block; width: 14px; height: 2px; vertical-align: middle; margin-right: 4px; }
 .plot { position: relative; }
 .plot svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.plot.graph { height: 220px; }
-.plot.context { height: 140px; }
+.plots { flex: 1; min-height: 0; }  /* a Glass's page: the plots take what the tables and memos leave */
+.plots .plot.graph { flex: 3; min-height: 120px; }
+.plots .plot.context { flex: 2; min-height: 80px; }
 .plot.axis { height: 32px; }
-.page.first .plot.graph { height: 118px; }
-.page.first .plot.context { height: 76px; }
+.overview { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.overview-glass { flex: 1; min-height: 0; display: flex; flex-direction: column; border: 1px solid var(--stroke-1); }
+.overview-glass .label { font-size: 12px; line-height: 16px; color: var(--fg-3); padding: 2px 8px; background: var(--bg-3); border-bottom: 1px solid var(--stroke-1); display: flex; align-items: center; gap: 12px; }
+.overview-glass .label b { color: var(--fg-1); }
+.overview-glass .plot.graph { flex: 1; height: auto; min-height: 60px; }
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
 .memos { display: flex; flex-direction: column; gap: 2px; font-size: 13px; line-height: 18px; }
 .memo { display: flex; gap: 8px; align-items: flex-start; overflow-wrap: anywhere; }

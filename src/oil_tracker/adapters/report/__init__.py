@@ -54,18 +54,24 @@ class HtmlReports:
         decided = {glass.glass_id: glass for glass in version.glasses}
         layouts = {layout.glass_id: layout for layout in report.layouts}
         title = inspection.name or inspection.video.name
-        pages, data = [], []
-        order = [glass.glass_id for glass in edits.glasses]
-        for number, glass_edits in enumerate(edits.glasses, start=1):
+        # page 1: the facts, the judgments and every Glass's graph; then a page per Glass (user, 2026-10-30)
+        order = [(glasses[g.glass_id], decided[g.glass_id]) for g in edits.glasses]
+        total = 1 + len(order)
+
+        def page(number: int, body: str, first: bool = False) -> str:
+            return (
+                f'<section class="page{" first" if first else ""}">{body}'
+                f'<div class="foot"><span>{escape(title)} · v{version.number}</span><span>{number} / {total}</span></div></section>'
+            )
+
+        pages = [page(1, _first_page(report, title, order) + _overview(order), first=True)]
+        data = []
+        for index, glass_edits in enumerate(edits.glasses):
             glass = glasses[glass_edits.glass_id]
             judgment = judge(edits.times, glass_edits, glass, edits.compressor_start_sec)
             data.append(_panel(edits.times, glass_edits, glass, judgment, layouts[glass.id], report))
-            body = _glass_section(edits.times, glass_edits, glass, judgment, decided[glass.id], number - 1, edits.compressor_start_sec)
-            top = _first_page(report, title, [(glasses[g], decided[g]) for g in order]) if number == 1 else _running_header(report, title)
-            pages.append(
-                f'<section class="page{" first" if number == 1 else ""}">{top}{body}'
-                f'<div class="foot"><span>{escape(title)} · v{version.number}</span><span>{number} / {len(order)}</span></div></section>'
-            )
+            body = _glass_section(edits.times, glass_edits, glass, judgment, decided[glass.id], index, edits.compressor_start_sec)
+            pages.append(page(index + 2, _running_header(report, title) + body))
         parts = {
             "TITLE": escape(f"{TITLE} · {title} · v{version.number}"),
             "STYLE": self._read("tokens.css") + self._read("report.css"),
@@ -105,6 +111,16 @@ def _first_page(report: ReportInput, title: str, glasses: list[tuple[Glass, Glas
         '<div class="fields">' + "".join(f"<div><span>{k}</span>{escape(v)}</div>" for k, v in fields) + "</div>"
         f'<h2>판정</h2><table class="summary"><tr><th>Glass</th><th>판정 규칙</th><th>판정</th></tr>{rows}</table>'
     )
+
+
+def _overview(glasses: list[tuple[Glass, GlassVerdict]]) -> str:
+    """Every Glass's graph on page 1, sharing what is left of the page (squeezed is fine)."""
+    return '<div class="overview">' + "".join(
+        f'<div class="overview-glass" data-index="{index}"><div class="label"><b>{escape(glass.name)}</b>'
+        f'<span>{MODES[glass.judgment_rule.mode]}</span>{_badge(decided.verdict)}</div>'
+        '<div class="plot graph"><svg></svg></div><div class="plot axis"><svg></svg></div></div>'
+        for index, (glass, decided) in enumerate(glasses)
+    ) + "</div>"
 
 
 def _running_header(report: ReportInput, title: str) -> str:

@@ -251,6 +251,17 @@ panel (computed result, override, reason).
    and a v3 working copy, most likely from "고쳐서 다시 제출", left
    `edits.json` after v2. The user's notes (the right column, the memo
    list, the report's first page) and U1's meaning wait on the user.
+   - **The user's decisions** (2026-10-30, after the run): the upright
+     stroke goes, leaving "수평"; the report header is entered in the
+     setup and checked in the submit dialog, not in the right column;
+     the memos move to a list under the toolbar's "메모" (추가, 삭제 of
+     picked memos); the right column reads 원본 영상, 편집, 판정, Glass,
+     분석; the report's page 1 holds the facts, the judgments and every
+     Glass's graph, then a page per Glass. R2's working copy came from
+     the user's "고쳐서 다시 제출 (v3)…": as designed.
+   - **Done** the same day; also, a closed dialog no longer keeps the
+     focus (Esc on the memo dialog left the editor's keys off).
+     A re-check on Windows is next.
    Earlier text of this step: The request, pinned to `95de064`:
    [2026-10-30-v2-4-judgment-report-windows-request.md](../40-operations/2026-10-30-v2-4-judgment-report-windows-request.md).
    It backs the Inspections folder up first (submitting cannot be undone),
