@@ -245,8 +245,16 @@ panel (computed result, override, reason).
      default browser; printing makes an A4 landscape PDF, in colour.
    - The editor's graph also shows a HOLD mode's longest violation.
    - Agent's choices: DESIGN.md §5 "Report".
-7. A Windows run of V2-4, with the V2-3 follow-ups (the upright stroke,
-   the point line's 8 px band).
+7. **A Windows run of V2-4, with the V2-3 follow-ups — waiting on the
+   user's run.** The request, pinned to `95de064`:
+   [2026-10-30-v2-4-judgment-report-windows-request.md](../40-operations/2026-10-30-v2-4-judgment-report-windows-request.md).
+   It backs the Inspections folder up first (submitting cannot be undone),
+   then judges, submits twice and opens the reports on the SPL#4
+   inspection, and on the V2-3 SPL#1 inspection (schema 1 files) checks
+   the upright stroke and the point line's 8 px band and submits a
+   68-minute report (A7). Expected tests on Windows: `242 passed, 4
+   skipped`. `scripts/inspection_summary.py` now lists the report header,
+   the versions and each Glass's decision.
 
 ## Session handoff — 2026-10-30 (fifth)
 
