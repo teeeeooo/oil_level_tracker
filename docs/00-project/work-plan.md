@@ -1,7 +1,7 @@
 # Current Work Plan
 
 **Current milestone:** `V2-4 — Judgment and report` / `ACTIVE` (started
-2026-10-30; its start decisions wait on the user).
+2026-10-30; built; its Windows re-check waits on the user).
 **Last completed:** `V2-3 — Editor` / `DONE` (2026-10-30).
 
 This is the sole owner of the current state, authorization and next action.
@@ -273,67 +273,70 @@ panel (computed result, override, reason).
    skipped`. `scripts/inspection_summary.py` now lists the report header,
    the versions and each Glass's decision.
 
-## Session handoff — 2026-10-30 (fifth)
+## Session handoff — 2026-10-30 (sixth)
 
-**The session closed after `29cfbf2`** (and this handoff). The working
-tree is clean, and `main` and the remote are in sync. 241 tests pass on
-macOS.
+**The session closed after `b24849c`** (and this handoff). The working
+tree is clean, and `main` and the remote are in sync. 255 tests pass on
+macOS (Windows expects `242 passed, 4 skipped`).
 
-**Where it stands:** V2-3 is `DONE`. V2-4 is `ACTIVE`: steps 1–3 are done
-(start decisions and confirmed mock-ups, the judgment in `domain`, the
-judgment panel with the user's verdict and the check in the editor).
-**Next is step 4, the report header,** then 5 (submitting and versions),
-6 (the report) and 7 (the Windows run). Nothing waits on the user.
+**Where it stands:** V2-4 is `ACTIVE`. Steps 1–6 are done (the judgment,
+the report header, submitting and versions, the report). Step 7, the
+Windows run, ran once
+([result](../60-evidence/2026-10-30-v2-4-judgment-report-windows-result.md)):
+everything passed but U1 (the upright stroke) and R2 (a v3 working copy
+the user started). The user's decisions after it are done in `b66f387`
+(step 7 above). **Waiting on the user:** the re-check,
+[2026-10-30-v2-4-recheck-windows-request.md](../40-operations/2026-10-30-v2-4-recheck-windows-request.md),
+pinned to `b66f387`. When its result comes, judge it against its fixed
+criteria, write the result under `60-evidence/`, and close V2-4 if every
+row passes (then the roadmap's next milestone).
 
-**Resume:** read this file (the V2-4 steps above), the Product SSOT §3,
-§5 and §7, DESIGN.md §2.4 and §5, and the mock-ups
-[editor.html](../../design/mockup/editor.html) (`#judge` … `#locked`),
-[report.html](../../design/mockup/report.html) and
-[inspection.html](../../design/mockup/inspection.html). Then as needed:
-- `domain/judgment.py` (`judge`, `final_verdict`) and `domain/edits.py`
-  (`Decision` on `GlassEdits`);
-- `application/editing.py` (`GlassState.judgment`, `.verdict`);
-- `adapters/http/api.py` (`judgment_json`, `_decision`) and
-  `adapters/storage/inspection_files.py` (`edits.json` schema 2);
-- `web/editor.js` ("the judgment" section: `takeCheckOff`, `decide`,
-  `renderJudgment`, `renderGlassPicker`) and `web/lines.js`
-  (`History.listener`).
+**State left on the workstation** (before the re-check):
+- `20261029-1907_SPL#4_Cooling_onoff_#2`: v1 and v2 submitted, v3 being
+  edited; header `V24-모델` / `V24-시험2`.
+- `20261029-1913_SPL#1_Heating_coldstart`: v1 submitted (locked, the old
+  report layout).
+- `20261029-1910_SPL#1_Heating_coldstart` and `V2-3 확인`: untouched by
+  V2-4 (schema 1 files, empty header).
+- Backups: `C:\olt-v24-backup` (before the first V2-4 run); the re-check
+  makes `C:\olt-v24b-backup`.
 
-**Step 4 plan:** the header (`compressor_model`, `test_type`, both
-optional) is part of the inspection, so `inspection.json` gains it (a
-schema change: read the files without it, as `edits.json` did). The setup
-shows it under 검사 정보 with the name (DESIGN.md §5); the editor's 검사
-정보 section edits it until submitting. Decide whether an edit there saves
-at once or with "저장" (it is not part of the edits).
-
-**Step 5 notes:** submitting saves first, needs every Glass checked, and
-writes `versions\NNN\` (edits, judgment, report); a submitted version is
-read-only; "고쳐서 다시 제출 (vN+1)" starts a working copy from it; the list
-shows one row per inspection with the latest state. `inspection-folder.md`
-reserves the layout; write its format there before the code.
+**Resume:** read this file (V2-4 step 7), the re-check request, the
+result above, the Product SSOT §3, §6 and §7, DESIGN.md §5 (editor,
+submit dialog, memo list, report) and
+[inspection-folder.md](../20-architecture/inspection-folder.md)
+("Versions"). Code to know:
+- `domain/version.py`; `application/editing.py` (`submit`, `revise`,
+  `open(version)`, `open_report`, `is_locked`, `Locked`);
+- `adapters/report/__init__.py` (`HtmlReports`) with `web/report.html`,
+  `report.css`, `report.js` (joined after `render.js`);
+- `adapters/storage/inspection_files.py` (`inspection.json` schema 2,
+  `versions\NNN\`, `submit`, `versions`, `report_path`);
+- `web/header.js` (`HeaderSaver`), `web/editor.js` ("submitting and
+  versions": `renderVersion`, `openSubmit`, `revise`, `pickVersion`; the
+  memo list: `renderMemos`, `showMemoList`, `removePickedMemos`);
+- `scripts/inspection_summary.py` (header, versions, decisions).
 
 **The user's rules that shape V2-4** (2026-10-30):
 - the report shows the final judgment only; a Glass the user judged gets
-  one line "판정 사유: <reason>", never "덮어씀"; the computed result and the
-  edit record stay in the app;
+  one line "판정 사유: <reason>", never "덮어씀";
 - versions stay in the same inspection folder;
+- the report header is entered in the setup and checked in the submit
+  dialog; the editor's right column reads 원본 영상, 편집, 판정, Glass,
+  분석; memos live in the toolbar's list;
+- the report's page 1 holds the facts, the judgments and every Glass's
+  graph; then a page per Glass;
+- the pencil's lock is "수평" only;
 - reply to the user in Korean (saved in memory).
 
-**Agent's choices in V2-3 to show the user if asked:**
-- **Views:** "전체 보기" in the graph header; the selected range kept
-  while the range tool stays (the video's range repeat uses it).
-- **Pencil:** its switch in the 편집 panel, with no key; an upright stroke
-  joins two neighbouring samples.
-- **Point line:** inside its 8 px band a luma step below 6 counts as no
-  edge, as for the snap; straight joins interpolated in time; points kept in time
-  order; a click at a sample that has a point replaces it; the snap
-  settles a point as it does a drag; straight dotted guides until a path
-  arrives.
-- **Elsewhere:** the source-warning bar (DESIGN.md §2.7 tokens); the
-  source check on every editor open (about 5 s of background hashing on
-  the slowest PC); the compressor in 0.1 s steps; memo pins on the graph
-  only; the memo dialog.
-- DESIGN.md §5 lists them all.
+**Agent's choices in V2-4 to show the user if asked** (all in DESIGN.md
+§5 and step 7): the header saves at once and holds 60 characters; revising
+keeps each Glass's decision and check; a submitted version hides the
+editing panels; an older version a later re-analysis no longer fits
+offers its report; the report embeds the context image at most 2,000 ×
+360 px as JPEG and prints in colour; "보고서 열기" uses the default
+browser; the HOLD modes' longest violation is banded in the editor and
+the report.
 
 **Learned these sessions:**
 - A request whose agent's quick O/X was wrong once (the console row) is
@@ -375,6 +378,16 @@ reserves the layout; write its format there before the code.
   changed, send in order, and count changes across an await.
 - A check written for a race must fail without the fix: the save-race
   check passed at first because an earlier notice was still on screen.
+- A Windows request that submits must say which steps not to take: the
+  user pressed "고쳐서 다시 제출 (v3)…" after v2, and R2 then expected no
+  working copy. Name the irreversible buttons a step must leave alone.
+- A sampled line cannot draw a vertical: one height per 0.5 s makes any
+  "upright" a slope and a spike back. Explain what the data can hold
+  before building the second fix of a visual complaint.
+- A modal `<dialog>` closed by Esc keeps the focus on its text field, so
+  `typing()` stays true; let go of it on "cancel" (at once) and "close".
+- A report's page that shares a fixed height should let its plots flex
+  (`flex: 1`): fixed heights left a squeezed page 1 and an empty page 2.
 
 ## Open items
 
@@ -475,7 +488,8 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done:** V2-3 (2026-10-30): the workstation run and its re-check pass;
-  the upright stroke and the point line's 8 px band followed.
-- **Next:** V2-4 step 4, the report header; then submitting and versions,
-  and the report.
+- **Done:** V2-3 (2026-10-30). V2-4 steps 1–6 and the changes after its
+  first Windows run (2026-10-30).
+- **Next:** the user's V2-4 re-check on Windows
+  ([request](../40-operations/2026-10-30-v2-4-recheck-windows-request.md));
+  judge it, then close V2-4 or fix what fails.
