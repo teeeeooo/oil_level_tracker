@@ -201,7 +201,9 @@ Each Glass in a Recipe has one rule.
   - **Pencil:** redraw a time range, replacing that stretch. A
     "수평·수직" switch (user, 2026-10-30, as Shift in Paint) draws only a
     level stroke at the pressed height, or an upright one at the pressed
-    time, by the way the pointer moves.
+    time from the pressed height to the pointer's, by the way the pointer
+    moves. An upright stroke joins two neighbouring samples, as steep as
+    the samples allow (0.5 s apart at two a second).
   - **Range:** the range tool selects a time range by dragging across the
     graph or the context image. Delete then empties the line chosen to
     draw, Oil, Foam or reference (user, 2026-10-30; before, the Oil line

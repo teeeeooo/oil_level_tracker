@@ -671,7 +671,7 @@ def test_the_point_line(tmp_path, video, browser_page):
 
 def test_the_pencil_lock(tmp_path, video, browser_page):
     # "수평·수직" (user, 2026-10-30): a stroke mostly across draws level at the pressed height;
-    # mostly up or down, it moves only the pressed sample
+    # mostly up or down, it joins the pressed height to the pointer's between two neighbouring samples
     page, errors = browser_page
     data = tmp_path / "data"
     write_recipes(data / "Recipes")
@@ -697,9 +697,10 @@ def test_the_pencil_lock(tmp_path, video, browser_page):
         level = drawn()
         assert len(level) > 3 and len(set(level)) == 1
         page.keyboard.press("Control+z")
-        drag(page, (left, top), (left + 4, top + 60))  # up or down: one sample, at the pointer
+        drag(page, (left, top), (left + 12, top + 60))  # up or down, a little slanted
         upright = drawn()
-        assert len(upright) == 1 and upright[0] > level[0]  # lower on the screen: a larger source y
+        assert len(upright) == 2 and upright[0] == level[0]  # from the pressed height
+        assert upright[1] > upright[0]  # to the pointer's, lower on the screen: a larger source y
         assert errors == []
     finally:
         running.close()

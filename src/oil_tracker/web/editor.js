@@ -449,8 +449,8 @@ function onPointerMove(event) {
 }
 
 /** The pencil with "수평·수직" on, like Shift in Paint: from the press, a level stroke at the pressed
- * height when the pointer has moved more across than up or down, else the pressed sample moved to the
- * pointer's height. Each move redraws the stroke from the line as it was. */
+ * height when the pointer has moved more across than up or down, else an upright one from the pressed
+ * height to the pointer's. Each move redraws the stroke from the line as it was. */
 function lockedStroke(drag, at, event) {
   const line = lineOf(state.glassId, drag.kind);
   const [from, to] = drag.touched;
@@ -462,7 +462,7 @@ function lockedStroke(drag, at, event) {
   const level = Math.abs(event.clientX - drag.x) >= Math.abs(event.clientY - drag.y);
   drag.touched = level
     ? lines.pencil(line, state.edits.times, t, y, at.t, y)
-    : lines.pencil(line, state.edits.times, t, zero() - at.h, t, zero() - at.h);
+    : lines.upright(line, state.edits.times, t, y, zero() - at.h);
 }
 
 function onPointerUp() {
