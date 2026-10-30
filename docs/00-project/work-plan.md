@@ -182,8 +182,7 @@ the undo depth and the shortcuts.
      8 px of a drawn line grabs it.
    - On macOS with an H.264 sample, a lines redraw while dragging took
      about 0.5 ms; SPL#1 on the slowest PC is step 6.
-   - **Not yet in the editor** (step 7): the point line. Its toolbar
-     button is there, disabled.
+   - The point line came in step 7.
 6. **A5 and A6 on the slowest PC — done** (2026-10-30):
    [the result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md),
    judged against
@@ -237,8 +236,13 @@ the undo depth and the shortcuts.
      - **Memos** (`fdd9d9f`): the memo tool (M), numbered pins on the
        graph (`render.memoPinAt`), the memo dialog and the memo list;
        undoable like the stretches.
-   - **Left:** the point line with its preview. A5 passed, so the drawing
-     allows it.
+   - **The point line** (`9aa6382`, 2026-10-30): L; points on the context
+     image **or the graph** (user, 2026-10-30, Product SSOT §6); the path
+     between them from the API, dashed on the marks layer, so the lines
+     layer is not redrawn; the preview shows the joins a click at the
+     pointer would add. Enter writes the path into the chosen line from
+     the first point to the last as one undoable change; Backspace takes
+     the last placed point off; Esc, another tool or another Glass cancels.
 8. **Checks:** unit and API tests, macOS smoke checks, and a Windows run.
    It also covers the V2-2 follow-up, and the window-close question in
    the real window (WinForms), which macOS tests cannot reach.
@@ -248,21 +252,16 @@ the undo depth and the shortcuts.
 **The A5/A6 result arrived on 2026-10-30** and is judged in
 [its result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md).
 The user then moved the time limits to the workstation (Product SSOT §2).
-- V2-3 steps 1 to 6 are done; step 7 is done but for the point line.
+- V2-3 steps 1 to 7 are done; the point line closed step 7 (`9aa6382`).
 - Nothing waits on the user.
 
-**Resume:** read this file, then
-- [product.md](../10-product/product.md) §4 and §6 (the point line),
-  [DESIGN.md](../../DESIGN.md) §5 ("Editor window") and
-  [architecture.md](../20-architecture/architecture.md) (the point line,
-  "During a drag");
-- the code: `adapters/video/trace.py` and the `point-line` route,
-  `web/editor.js` (the disabled point-line button), `web/lines.js`
-  (operations, undo history), `web/render.js` (layers).
+**Resume:** read this file, then step 8 below, the
+[V2-2 flow request](../40-operations/2026-10-29-v2-2-analysis-flow-windows-request.md)
+(the pattern for an agent request) and
+[execution-policy.md](execution-policy.md).
 
-**Next:** the point line (step 7), then step 8: the checks and a Windows
-run on the workstation, which also covers the V2-2 follow-up and the close
-question in the real window.
+**Next:** step 8: the checks and a Windows run on the workstation, which
+also covers the V2-2 follow-up and the close question in the real window.
 
 **Done before the result, with the user's leave** (2026-10-29 evening and
 2026-10-30): the review fixes (`890b5ea`), the draft search (`ae4873c`),
@@ -277,6 +276,9 @@ window flag's calls could arrive swapped; a reload left the flag set.
 (DESIGN.md §2.7 tokens), the source check on every editor open (about 5 s
 of background hashing on the slowest PC), the compressor in 0.1 s steps,
 memo pins on the graph only, and the memo dialog. All are in DESIGN.md §5.
+The point line's: points kept in time order, a click at a sample that has
+a point replaces it, the snap settles a point as it does a drag, and
+straight dotted guides until a path arrives.
 
 **Learned these sessions:**
 - zsh does not split an unquoted variable: a re-pin wrote
@@ -364,7 +366,7 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `908f624`: `199 passed, 3 skipped` on macOS, so
+  test. At `9aa6382`: `199 passed, 3 skipped` on macOS, so
   `198 passed, 4 skipped` on Windows when its venv has no Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
@@ -402,9 +404,8 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done:** V2-3 steps 1 to 6 and step 7 but for the point line. The A5/A6
-  result passed A5, playback and the median comparison; the `uint8`
-  medians are in the app. The user moved the time limits to the
-  workstation and keeps the slowest PC for reference (Product SSOT §2).
-- **Now:** the point line with its preview (step 7).
-- **Then:** step 8, the checks and a Windows run on the workstation.
+- **Done:** V2-3 steps 1 to 7. The A5/A6 result passed A5, playback and
+  the median comparison; the `uint8` medians are in the app. The user
+  moved the time limits to the workstation and keeps the slowest PC for
+  reference (Product SSOT §2). The point line closed step 7.
+- **Now:** step 8, the checks and a Windows run on the workstation.
