@@ -203,17 +203,51 @@ panel (computed result, override, reason).
 7. A Windows run of V2-4, with the V2-3 follow-ups (the upright stroke,
    the point line's 8 px band).
 
-## Session handoff — 2026-10-30 (fourth)
+## Session handoff — 2026-10-30 (fifth)
 
-**V2-3 closed** after its re-check passed every row (S1, S2, C1–C12, T,
-R1–R3). After it: the upright stroke (`ca7d3ee`) and the point line's 8 px
-band (`9eea291`). V2-4's start decisions and mock-ups are confirmed (step 1
-above); steps 2 and 3 (the judgment in `domain` and in the editor) are
-done; step 4 is next.
+**The session closed after `29cfbf2`** (and this handoff). The working
+tree is clean, and `main` and the remote are in sync. 241 tests pass on
+macOS.
 
-**Resume:** read this file, the Product SSOT §3, §5 and §7, DESIGN.md §2.4
-and §5, and the three mock-ups, then continue with step 4.
-Earlier editor work is in the two V2-3 results and in Git.
+**Where it stands:** V2-3 is `DONE`. V2-4 is `ACTIVE`: steps 1–3 are done
+(start decisions and confirmed mock-ups, the judgment in `domain`, the
+judgment panel with the user's verdict and the check in the editor).
+**Next is step 4, the report header,** then 5 (submitting and versions),
+6 (the report) and 7 (the Windows run). Nothing waits on the user.
+
+**Resume:** read this file (the V2-4 steps above), the Product SSOT §3,
+§5 and §7, DESIGN.md §2.4 and §5, and the mock-ups
+[editor.html](../../design/mockup/editor.html) (`#judge` … `#locked`),
+[report.html](../../design/mockup/report.html) and
+[inspection.html](../../design/mockup/inspection.html). Then as needed:
+- `domain/judgment.py` (`judge`, `final_verdict`) and `domain/edits.py`
+  (`Decision` on `GlassEdits`);
+- `application/editing.py` (`GlassState.judgment`, `.verdict`);
+- `adapters/http/api.py` (`judgment_json`, `_decision`) and
+  `adapters/storage/inspection_files.py` (`edits.json` schema 2);
+- `web/editor.js` ("the judgment" section: `takeCheckOff`, `decide`,
+  `renderJudgment`, `renderGlassPicker`) and `web/lines.js`
+  (`History.listener`).
+
+**Step 4 plan:** the header (`compressor_model`, `test_type`, both
+optional) is part of the inspection, so `inspection.json` gains it (a
+schema change: read the files without it, as `edits.json` did). The setup
+shows it under 검사 정보 with the name (DESIGN.md §5); the editor's 검사
+정보 section edits it until submitting. Decide whether an edit there saves
+at once or with "저장" (it is not part of the edits).
+
+**Step 5 notes:** submitting saves first, needs every Glass checked, and
+writes `versions\NNN\` (edits, judgment, report); a submitted version is
+read-only; "고쳐서 다시 제출 (vN+1)" starts a working copy from it; the list
+shows one row per inspection with the latest state. `inspection-folder.md`
+reserves the layout; write its format there before the code.
+
+**The user's rules that shape V2-4** (2026-10-30):
+- the report shows the final judgment only; a Glass the user judged gets
+  one line "판정 사유: <reason>", never "덮어씀"; the computed result and the
+  edit record stay in the app;
+- versions stay in the same inspection folder;
+- reply to the user in Korean (saved in memory).
 
 **Agent's choices in V2-3 to show the user if asked:**
 - **Views:** "전체 보기" in the graph header; the selected range kept
@@ -232,6 +266,10 @@ Earlier editor work is in the two V2-3 results and in Git.
 - DESIGN.md §5 lists them all.
 
 **Learned these sessions:**
+- A request whose agent's quick O/X was wrong once (the console row) is
+  read from its raw lines; likewise a mock-up label can carry meaning the
+  user did not intend ("덮어씀" read as tampering). Show wording that a
+  reader outside the team will see before building it.
 - A Windows agent's account of the code can be wrong: it told the user the
   draft does not follow the point line's edges, when both use the same
   edge strength. Check the code before relaying such an answer.
