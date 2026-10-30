@@ -401,11 +401,12 @@ The three v1 remote branches that v1 docs cite stay.
 - **Waiting on the user: how to make the exact frame faster (A6-s).** The
   cost is the source's key-frame spacing (250 frames), not the app's code,
   so each way trades something the user owns:
-  1. **A shorter key-frame interval at the recorder** (about 1 s): exact
-     frames near 25 ms on that PC with no app change, for new videos only.
+  1. **A shorter key-frame interval at the recorder** (about 1 s): about
+     12 frames to decode instead of 125, so well under 100 ms on that PC
+     with no app change; for new videos only.
   2. **Exact frames prepared during the analysis** at the sample times,
      with clicks on the graph landing on a sample: instant there, but more
-     analysis time (A4) and much more disk per inspection.
+     analysis time (A4) and more disk per inspection.
   3. **PyAV** (a new dependency), which can skip frames no other frame
      needs; whether SPL#1 has such frames is unknown, so it may gain
      nothing.
