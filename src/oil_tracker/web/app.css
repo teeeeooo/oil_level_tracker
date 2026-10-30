@@ -124,7 +124,7 @@ hr { border: 0; border-top: 1px solid var(--stroke-2); margin: 4px 0; width: 100
 .plot { position: relative; min-height: 0; background: var(--bg-1); }
 .plot svg, .axis svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .plot svg { touch-action: none; user-select: none; }
-.plot svg[data-mode="pencil"] { cursor: crosshair; }
+.plot svg[data-mode="pencil"], .plot svg[data-mode="point"] { cursor: crosshair; }
 .plot svg[data-mode="range"] { cursor: col-resize; }
 .plot svg[data-mode="pan"] { cursor: grab; }
 .plot svg[data-mode="memo"] { cursor: copy; }

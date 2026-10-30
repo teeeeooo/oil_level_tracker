@@ -550,3 +550,83 @@ def test_memos(tmp_path, video, browser_page):
         assert errors == []
     finally:
         running.close()
+
+
+def point_in(page, plot, share, rise):
+    """Page coordinates `rise` px above the Oil line at `share` of its length, in plot `plot`."""
+    x, y = page.evaluate(
+        """([plot, share]) => { const p = document.querySelector(`#${plot} path[data-kind=oil]`);
+        const at = p.getPointAtLength(p.getTotalLength() * share); return [at.x, at.y]; }""",
+        [plot, share],
+    )
+    box = page.locator(f"#{plot}").bounding_box()
+    return box["x"] + x, box["y"] + y - rise
+
+
+def test_the_point_line(tmp_path, video, browser_page):
+    page, errors = browser_page
+    data = tmp_path / "data"
+    write_recipes(data / "Recipes")
+    running = bootstrap.start(data_folder=data)
+    try:
+        analysed_inspection(running, video, "점 잇기")
+        page.goto(running.url)
+        page.locator("#inspectionRows tr", has_text="점 잇기").get_by_role("button", name="열기", exact=True).click()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        before = oil_path(page)
+        points = page.locator("#graph circle[data-point]")
+        text = page.locator("#pointText")
+
+        page.keyboard.press("s")  # the snap off: the points stay where they are clicked
+        page.keyboard.press("l")
+        assert page.locator("#editorView button[data-tool=point]").get_attribute("aria-pressed") == "true"
+        assert page.locator("#pointBox").is_visible() and text.inner_text() == "점 0개 · Oil"
+
+        # a point on the context image, then the pointer over the graph: the preview joins them
+        page.mouse.click(*point_in(page, "context", 0.15, 12))
+        assert text.inner_text() == "점 1개 · Oil"
+        page.mouse.move(*point_in(page, "graph", 0.6, 20))
+        page.wait_for_function("document.querySelector('#graph path[style*=\"2 3\"]')")  # the preview, dotted
+        # a point on the graph: the path between the two comes from the API, dashed on both plots
+        page.mouse.click(*point_in(page, "graph", 0.85, 20))
+        assert text.inner_text() == "점 2개 · Oil"
+        page.wait_for_function("document.querySelector('#context path[style*=\"5 3\"]')")
+        assert points.count() == 2 and page.locator("#context circle[data-point]").count() == 2
+        shot(page, "p1-point-line")
+
+        # Backspace takes the last point off; a click puts it back. The line is untouched so far.
+        page.keyboard.press("Backspace")
+        assert text.inner_text() == "점 1개 · Oil"
+        page.mouse.click(*point_in(page, "graph", 0.85, 20))
+        assert oil_path(page) == before and page.locator("#editorState").inner_text().startswith("초안 그대로")
+
+        # Enter: the path becomes the Oil line from the first point to the last, as one change
+        page.mouse.move(*point_in(page, "graph", 0.5, 0))
+        page.keyboard.press("Enter")
+        page.get_by_text("저장 안 함").wait_for()
+        page.wait_for_function("d => document.querySelector('#graph path[data-kind=oil]').getAttribute('d') !== d", arg=before)
+        drawn = oil_path(page)
+        assert points.count() == 0 and text.inner_text() == "점 0개 · Oil"
+        page.keyboard.press("Control+z")
+        wait_for_oil(page, before)
+        page.keyboard.press("Control+Shift+z")
+        wait_for_oil(page, drawn)
+        page.keyboard.press("Control+s")
+        page.get_by_text("저장함").wait_for()
+        oil = json.loads((data / "Inspections" / "점 잇기" / "edits.json").read_text(encoding="utf-8"))["glasses"][0]["oil"]
+        drawn_at = [k for k, origin in enumerate(oil["origins"]) if origin == "DRAWN"]
+        assert len(drawn_at) >= 2 and drawn_at == list(range(drawn_at[0], drawn_at[-1] + 1))  # one stretch
+
+        # Esc cancels points not yet joined; changing the tool does too
+        page.mouse.click(*point_in(page, "graph", 0.3, 10))
+        page.wait_for_function("document.querySelectorAll('#graph circle[data-point]').length === 1")  # next frame
+        page.keyboard.press("Escape")
+        page.wait_for_function("document.querySelectorAll('#graph circle[data-point]').length === 0")
+        page.mouse.click(*point_in(page, "graph", 0.3, 10))
+        page.keyboard.press("g")
+        page.wait_for_function("document.querySelectorAll('#graph circle[data-point]').length === 0")
+        assert page.locator("#pointBox").is_hidden()
+        assert oil_path(page) == drawn
+        assert errors == []
+    finally:
+        running.close()

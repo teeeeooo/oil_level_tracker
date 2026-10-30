@@ -8,7 +8,8 @@ import * as player from "./player.js";
 import * as render from "./render.js";
 import { $, MODES, clock, el, localDate, notify, parseClock, typing } from "./ui.js";
 
-const TOOL_KEYS = { KeyG: "grab", KeyP: "pencil", KeyR: "range", KeyM: "memo", KeyH: "pan" };
+const TOOL_KEYS = { KeyG: "grab", KeyP: "pencil", KeyL: "point", KeyR: "range", KeyM: "memo", KeyH: "pan" };
+const KIND_NAMES = { oil: "Oil", foam: "Foam", reference: "참조" };
 const HIT_PX = 8;          // how near a line a press grabs it
 const EDGE_PX = 5;         // how near a selection edge or the compressor marker a press moves it
 const DRAG_PX = 3;         // the movement that makes a press a drag
@@ -26,7 +27,7 @@ const state = {
   derived: new Map(),      // glass id -> what follows from its lines (API)
   glassId: null,
   tool: "grab",
-  kind: "oil",             // the line the pencil draws
+  kind: "oil",             // the line the pencil and the point line draw
   width: 30,               // the grab width, seconds
   shape: "smooth",
   snap: true,
@@ -41,6 +42,7 @@ const state = {
   luma: new Map(),         // glass id -> the context image's luma
   redraws: [],             // ms per lines redraw while dragging, for the A5 measurement
   memo: null,              // the memo in the dialog: { glassId, id or null for a new one, time, y }; set on open
+  point: null,             // the point line in progress (see "the point line" below)
 };
 let backToList = () => {};
 let toSetup = () => {};
@@ -49,6 +51,8 @@ let frameRequested = false;
 let deriving = null;       // the states request in flight
 let deriveAgain = false;
 let unsavedSent = Promise.resolve();  // the window's flag goes out in order (setDirty)
+let previewing = false;    // the point line's preview request in flight
+let previewAgain = false;
 
 // ---- opening and leaving -----------------------------------------------------------------------
 
@@ -89,7 +93,7 @@ function release() {
   state.derived.clear();
   state.history.clear();
   if ($("memoDialog").open) $("memoDialog").close();
-  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null, memo: null });
+  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null, memo: null, point: null });
   setDirty(false);
   for (const id of ["graph", "context"]) for (const layer of $(id).children) layer.replaceChildren();
   $("axis").replaceChildren();
@@ -221,7 +225,7 @@ function marks() {
     ? { t0: state.edits.times[drag.index] - state.width, t1: state.edits.times[drag.index] + state.width, kind: drag.kind }
     : null;
   const compressor = drag?.type === "compressor" ? drag.time : null;
-  return { playhead: state.playhead, selection: state.selection, grab, compressor, memos: memoMarks() };
+  return { playhead: state.playhead, selection: state.selection, grab, compressor, memos: memoMarks(), point: pointMarks() };
 }
 
 // ---- drawing ------------------------------------------------------------------------------------
@@ -357,6 +361,10 @@ function onPointerDown(event) {
     state.drag = { ...start, type: "pan", view: { ...state.view } };
     return;
   }
+  if (state.tool === "point") {
+    if (event.button === 0) addPoint(at);
+    return;
+  }
   if (state.tool === "memo") {
     state.drag = { ...start, type: "memo" };
     return;
@@ -461,6 +469,10 @@ function onPointerUp() {
 }
 
 function hover(event) {
+  if (state.tool === "point" && state.edits) {
+    previewTo(pointer(event.currentTarget, event));
+    return;
+  }
   if (state.tool === "memo" && state.edits) {
     const over = event.currentTarget.id === "graph" && hitMemo(pointer(event.currentTarget, event));
     event.currentTarget.style.cursor = over ? "pointer" : "";
@@ -590,6 +602,163 @@ function judgeSelection(cannot) {
   changed();
   requestDraw({ back: true });
   renderSelection();
+}
+
+// ---- the point line -------------------------------------------------------------------------------
+// Points clicked on the context image or the graph (Product SSOT §6) are joined along the edges
+// between them by the API (architecture.md); Enter writes the path into the chosen line. state.point
+// while points are placed: { glassId, kind, points: [{ index, y }] in time order, order: [index] in
+// the order placed (Backspace), path: { first, ys } or null, tracing: its request, cursor:
+// { index, y } or null, preview: { first, ys } or null }, y in source px.
+
+/** The sample and source y the pointer points at, settled on a nearby edge when the snap is on. */
+function pointAt(at) {
+  const index = lines.nearestIndex(state.edits.times, at.t);
+  return { index, y: settle(index, zero() - at.h) };
+}
+
+/** The points a point at `index` would join: its neighbours in time, without one at that time. */
+function neighbours(points, index) {
+  const before = points.filter((p) => p.index < index).at(-1);
+  const after = points.find((p) => p.index > index);
+  return [before, after].filter(Boolean);
+}
+
+function addPoint(at) {
+  if (!state.point || state.point.glassId !== state.glassId) {
+    state.point = { glassId: state.glassId, kind: state.kind, points: [], order: [], path: null, tracing: null, cursor: null, preview: null };
+  }
+  const point = state.point;
+  const added = pointAt(at);
+  point.points = [...point.points.filter((p) => p.index !== added.index), added].sort((a, b) => a.index - b.index);
+  point.order = [...point.order.filter((i) => i !== added.index), added.index];
+  point.cursor = null;
+  point.preview = null;
+  tracePoints();
+}
+
+function removeLastPoint() {
+  const point = state.point;
+  const index = point.order.pop();
+  point.points = point.points.filter((p) => p.index !== index);
+  point.preview = null;
+  tracePoints();
+}
+
+function cancelPoint() {
+  state.point = null;
+  renderPointBox();
+  requestDraw({ marks: true });
+}
+
+/** Ask for the path through the points; an answer to an older request is dropped. */
+function tracePoints() {
+  const point = state.point;
+  point.path = null;
+  point.tracing = null;
+  if (point.points.length >= 2) {
+    const tracing = askPath(point.glassId, point.points).then((path) => {
+      if (state.point === point && point.tracing === tracing && path) {
+        point.path = path;
+        requestDraw({ marks: true });
+      }
+    });
+    point.tracing = tracing;
+  }
+  renderPointBox();
+  requestDraw({ marks: true });
+}
+
+/** The API's path through `points`: { first, ys }, or null after an error (told unless quiet). */
+async function askPath(glassId, points, quiet = false) {
+  const id = encodeURIComponent(state.detail.id);
+  const body = { glass_id: glassId, points: points.map((p) => ({ index: p.index, y: p.y })) };
+  const result = await api.call("POST", `/api/inspections/${id}/point-line`, body);
+  if (result.ok) return result.data;
+  if (!quiet) notify("editorNotice", result.data.error ?? `HTTP ${result.status}`, "error");
+  return null;
+}
+
+/** The preview: the path a click here would add, between the neighbouring points. */
+function previewTo(at) {
+  const point = state.point;
+  if (!point || point.glassId !== state.glassId || !point.points.length) return;
+  point.cursor = pointAt(at);
+  point.preview = null;
+  requestDraw({ marks: true });
+  askPreview();
+}
+
+/** One preview request at a time, for the pointer's latest place. */
+async function askPreview() {
+  if (previewing) {
+    previewAgain = true;
+    return;
+  }
+  const point = state.point, cursor = point?.cursor;
+  if (!cursor) return;
+  previewing = true;
+  const joined = [...neighbours(point.points, cursor.index), cursor].sort((a, b) => a.index - b.index);
+  const path = await askPath(point.glassId, joined, true);
+  previewing = false;
+  if (path && state.point === point && point.cursor === cursor) {
+    point.preview = path;
+    requestDraw({ marks: true });
+  }
+  if (previewAgain) {
+    previewAgain = false;
+    askPreview();
+  }
+}
+
+function leavePlot() {
+  if (!state.point?.cursor) return;
+  state.point.cursor = null;
+  state.point.preview = null;
+  requestDraw({ marks: true });
+}
+
+/** Enter: the path becomes the chosen line from the first point to the last, as one change. */
+async function commitPoint() {
+  const point = state.point;
+  if (point.points.length < 2) {
+    notify("editorNotice", "점을 두 개 이상 찍어야 이을 수 있습니다.");
+    return;
+  }
+  while (state.point === point && !point.path && point.tracing) {
+    const tracing = point.tracing;
+    await tracing;
+    if (point.tracing === tracing) break;  // it answered, or failed, and no newer request was made
+  }
+  if (state.point !== point || !point.path || !state.edits) return;
+  const line = lineOf(point.glassId, point.kind);
+  const base = lines.copyLine(line);
+  lines.place(line, point.path.first, point.path.ys);
+  state.point = null;
+  if (state.history.record(point.glassId, point.kind, base, line)) changed();
+  renderPointBox();
+  requestDraw({ lines: true, marks: true });
+}
+
+/** What the marks draw of the point line, in the plots' heights. */
+function pointMarks() {
+  const point = state.point;
+  if (!point || point.glassId !== state.glassId) return null;
+  const times = state.edits.times, z = zero();
+  const at = (p) => ({ t: times[p.index], h: z - p.y });
+  const piece = (path) => path && { times: times.slice(path.first, path.first + path.ys.length), hs: path.ys.map((y) => z - y) };
+  const guides = [];
+  if (!point.path) for (let k = 1; k < point.points.length; k++) guides.push([at(point.points[k - 1]), at(point.points[k])]);
+  if (point.cursor && !point.preview) {
+    for (const p of neighbours(point.points, point.cursor.index)) guides.push([at(p), at(point.cursor)]);
+  }
+  return { kind: point.kind, points: point.points.map(at), path: piece(point.path), preview: piece(point.preview), guides };
+}
+
+function renderPointBox() {
+  $("pointBox").hidden = state.tool !== "point";
+  const point = state.point;
+  $("pointText").textContent = `점 ${point?.points.length ?? 0}개 · ${KIND_NAMES[point?.kind ?? state.kind]}`;
 }
 
 // ---- memos ----------------------------------------------------------------------------------------
@@ -817,6 +986,7 @@ function renderTools() {
   $("snapToggle").checked = state.snap;
   for (const id of ["graph", "context"]) $(id).dataset.mode = state.tool;  // its cursor
   renderSelection();
+  renderPointBox();
 }
 
 function renderSelection() {
@@ -831,6 +1001,7 @@ function renderSelection() {
 }
 
 function setTool(tool) {
+  if (tool !== "point" && state.point) cancelPoint();
   state.tool = tool;
   state.hot = null;
   for (const id of ["graph", "context"]) $(id).style.cursor = "";
@@ -869,12 +1040,17 @@ function onKey(event) {
     renderTools();
   } else if (event.code === "KeyN") {
     jumpToEmpty(event.shiftKey ? -1 : 1);
+  } else if (state.point && event.key === "Enter") {
+    commitPoint();
+  } else if (state.point && event.key === "Backspace") {
+    removeLastPoint();
   } else if (event.key === "Delete" || event.key === "Backspace") {
     eraseSelection();
   } else if (event.code === "KeyU") {
     judgeSelection(true);
   } else if (event.key === "Escape") {
     if (!$("videoSpeedMenu").hidden) player.toggleSpeedMenu(false);
+    else if (state.point) cancelPoint();
     else {
       state.selection = null;
       renderSelection();
@@ -930,6 +1106,7 @@ export function init(toList, openSetup) {
     $("editorGlass").blur();  // the editor's keys again
     state.glassId = $("editorGlass").value;
     state.selection = null;
+    if (state.point) cancelPoint();
     renderSelection();
     showGlass(false);
   });
@@ -937,7 +1114,12 @@ export function init(toList, openSetup) {
     button.addEventListener("click", () => setTool(button.dataset.tool));
   }
   for (const button of document.querySelectorAll("#lineKind button")) {
-    button.addEventListener("click", () => { state.kind = button.dataset.kind; renderTools(); });
+    button.addEventListener("click", () => {
+      state.kind = button.dataset.kind;
+      if (state.point) state.point.kind = state.kind;  // the line the points will draw
+      renderTools();
+      requestDraw({ marks: true });
+    });
   }
   for (const button of document.querySelectorAll("#grabShape button")) {
     button.addEventListener("click", () => { state.shape = button.dataset.shape; renderTools(); });
@@ -972,6 +1154,7 @@ export function init(toList, openSetup) {
     svg.addEventListener("pointermove", onPointerMove);
     svg.addEventListener("pointerup", onPointerUp);
     svg.addEventListener("pointercancel", onPointerUp);
+    svg.addEventListener("pointerleave", leavePlot);
     svg.addEventListener("wheel", onWheel, { passive: false });
   }
   $("axis").addEventListener("pointerdown", (event) => {

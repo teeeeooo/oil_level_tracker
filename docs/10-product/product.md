@@ -203,9 +203,11 @@ Each Glass in a Recipe has one rule.
     graph or the context image. Delete then empties the Oil line there
     (§4), and U marks it "cannot judge". One tool serves both (user,
     2026-10-29).
-  - **Point line:** click points on the context image. Each pair of
-    neighbouring points is joined by a path that follows the edges between
-    them: the draft's dynamic programming, pinned to the user's points.
+  - **Point line:** click points on the context image or on the graph
+    (user, 2026-10-30: on the graph to join line pieces, or to draw roughly
+    while looking at the picture). Each pair of neighbouring points is
+    joined by a path that follows the edges between them: the draft's
+    dynamic programming, pinned to the user's points.
   - The draft is kept as dense samples. Points are not edited one by one.
 - **Curve shape:** grab-and-drag bends the line smoothly, with no
   overshoot. Holding Alt, or choosing the pointed shape, bends it to a

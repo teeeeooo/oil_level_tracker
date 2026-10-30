@@ -12,8 +12,10 @@
 // first/end are sample indices [first, end). Every field but times, top and bottom may be absent.
 //
 // The editor draws three layers per plot, so a drag redraws only the lines (architecture.md):
-// back (grid, bands, picture), lines, and marks ({ playhead, selection, grab, compressor, memos });
-// the compressor start moves to the marks while it is dragged. Memos are [{ n, t, h or null }].
+// back (grid, bands, picture), lines, and marks ({ playhead, selection, grab, compressor, memos,
+// point }); the compressor start moves to the marks while it is dragged. Memos are
+// [{ n, t, h or null }]. The point line in progress is { kind, points: [{ t, h }], path, preview,
+// guides: [[{ t, h }, { t, h }]] }, where path and preview are { times, hs } or null.
 
 export const INSET = { left: 52, right: 16, top: 14, bottom: 10 };  // DESIGN.md §7: no line clipped at the edge
 export const KINDS = ["reference", "foam", "oil"];                  // drawing order: Oil on top
@@ -255,7 +257,8 @@ export function linesSvg(panel, view, width, height, id, { halo = false, hot = n
   return parts.join("");
 }
 
-/** The marks layer: the selected range, the grab-width preview and the playhead. */
+/** The marks layer: the selected range, the grab-width preview, the point line in progress and the
+ * playhead. */
 export function marksSvg(marks, view, width, height, id) {
   const s = scales(view, width, height);
   const parts = [`<g clip-path="url(#${id}-clip)">`];
@@ -273,11 +276,34 @@ export function marksSvg(marks, view, width, height, id) {
     parts.push(compressorLine(marks, s, height, id === "graph"));
   }
   for (const memo of marks.memos ?? []) parts.push(memoPin(memo, s));
+  if (marks.point) parts.push(pointLine(marks.point, s, view));
   if (marks.playhead !== null && marks.playhead !== undefined) {
     const x = s.sx(marks.playhead);
     parts.push(`<line x1="${x}" x2="${x}" y1="0" y2="${height}" style="stroke:var(--playhead);stroke-width:1"/>`);
   }
   parts.push("</g>");
+  return parts.join("");
+}
+
+/** The point line in progress (Product SSOT §6): the traced path dashed, the preview to the pointer
+ * and the straight guides dotted until their paths arrive, and the points. */
+function pointLine(point, s, view) {
+  const stroke = `stroke:var(--${point.kind})`;
+  const parts = [];
+  const path = (piece, style, halo) => {
+    const d = piece && linePath(piece.times, piece.hs, s.sx, s.sy, view);
+    if (!d) return;
+    if (halo) parts.push(`<path d="${d}" style="stroke:var(--line-halo);stroke-width:5;${SHAPE}"/>`);
+    parts.push(`<path d="${d}" style="${style};${SHAPE}"/>`);
+  };
+  path(point.path, `${stroke};stroke-width:2;stroke-dasharray:5 3`, true);
+  path(point.preview, `${stroke};stroke-width:1;stroke-dasharray:2 3`, false);
+  for (const [a, b] of point.guides ?? []) {
+    parts.push(`<line x1="${s.sx(a.t)}" y1="${s.sy(a.h)}" x2="${s.sx(b.t)}" y2="${s.sy(b.h)}" style="${stroke};stroke-width:1;stroke-dasharray:2 3"/>`);
+  }
+  for (const p of point.points) {
+    parts.push(`<circle data-point cx="${s.sx(p.t)}" cy="${s.sy(p.h)}" r="5" style="fill:var(--bg-1);${stroke};stroke-width:2"/>`);
+  }
   return parts.join("");
 }
 
