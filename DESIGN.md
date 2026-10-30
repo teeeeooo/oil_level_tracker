@@ -467,6 +467,15 @@ Do not use sizes outside this ramp.
        table side by side;
      - its memo list;
   4. a footer with the inspection name, the version and the page number.
+  - **Agent's choices** (V2-4 step 6, 2026-10-30): the key-time table
+    also lists the first three FULL, EMPTY and "cannot judge" stretches
+    (then "외 N곳"); the graph shows the memo pins and, in a HOLD mode,
+    the longest violation (`--violation-band`, also in the editor's
+    graph); the axis shows the empty stretches; the context image is
+    scaled to at most 2,000 × 360 px. The report prints its colours.
+    "보고서 열기" opens it in the default browser, where printing makes the
+    PDF; an older version that a later re-analysis no longer fits offers
+    its report from the version picker.
 
 ## 6. Depth & Elevation
 

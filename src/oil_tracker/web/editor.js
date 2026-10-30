@@ -237,6 +237,7 @@ function panel() {
     empty: derived?.empty ?? [],
     cannot: edits.cannot_judge,
     image: { top: z - layout.y0, rows: layout.rows, pieces },
+    violation: derived?.judgment?.violation ?? null,
   };
 }
 
@@ -1013,9 +1014,11 @@ function renderVersion() {
     $("versionCaption").textContent = "";
   } else {
     $("versionText").replaceChildren(el("b", {}, `v${showing}을 제출했습니다.`), " 제출한 버전은 고칠 수 없습니다.");
-    $("versionCaption").textContent = `검사 폴더의 ${folder(showing)}에 편집과 판정이 있습니다.`;
+    $("versionCaption").textContent = `검사 폴더의 ${folder(showing)}에 편집, 판정과 보고서가 있습니다.`;
   }
   $("reviseButton").hidden = editable || showing !== latest;
+  $("editorReport").hidden = showing === null;
+  $("editorSave").hidden = $("editorSubmit").hidden = showing !== null;
   $("reviseButton").textContent = `고쳐서 다시 제출 (v${latest + 1})…`;
   const off = locked();  // a submitted version: tools off, the editing panels hidden
   for (const node of document.querySelectorAll("#editorView button[data-tool], #editorUndo, #editorRedo, #editorSave, #editorReanalyse")) {
@@ -1040,8 +1043,10 @@ async function pickVersion() {
   if (version !== null) {
     const found = await api.call("GET", `/api/inspections/${encodeURIComponent(id)}/edits?version=${version}`);
     if (!found.ok) {
-      notify("editorNotice", found.data.error ?? `HTTP ${found.status}`, "error");
       renderVersion();
+      const message = found.data.error ?? `HTTP ${found.status}`;
+      if (found.status !== 409) notify("editorNotice", message, "error");
+      else if (confirm(`${message} v${version}의 보고서를 열까요?`)) openReport(version);  // re-analysed since
       return;
     }
   }
@@ -1063,7 +1068,7 @@ function openSubmit() {
   const header = state.detail.header;
   $("submitHeader").replaceChildren(...[["압축기 모델", header.compressor_model], ["시험 종류", header.test_type]]
     .map(([k, v]) => el("tr", {}, el("th", {}, k), el("td", {}, v?.trim() || "-"))));
-  $("submitCaption").textContent = `제출하면 v${next}이 잠기고, 편집과 판정을 검사 폴더의 versions\\${String(next).padStart(3, "0")}에 남깁니다. `
+  $("submitCaption").textContent = `제출하면 v${next}이 잠기고, 보고서를 검사 폴더의 versions\\${String(next).padStart(3, "0")}\\report.html로 만듭니다. `
     + "저장하지 않은 편집도 함께 제출됩니다.";
   $("submitDialog").showModal();
 }
@@ -1081,6 +1086,14 @@ async function submit() {
   }
   setDirty(false);  // the submitted version holds them
   await open(id);  // the bar says it is submitted
+}
+
+/** "보고서 열기": a version's report (the shown one by default) in the default browser, where it
+ * prints to PDF. */
+async function openReport(version = state.submission.showing) {
+  const id = encodeURIComponent(state.detail.id);
+  const result = await api.call("POST", `/api/inspections/${id}/versions/${version}/report/open`);
+  if (!result.ok) notify("editorNotice", result.data.error ?? `HTTP ${result.status}`, "error");
 }
 
 /** "고쳐서 다시 제출": the next version starts from the latest one, which stays as submitted. */
@@ -1401,6 +1414,7 @@ export function init(toList, openSetup) {
     pickVersion();
   });
   $("reviseButton").addEventListener("click", revise);
+  $("editorReport").addEventListener("click", () => openReport());
   $("editorReanalyse").addEventListener("click", reanalyse);
   $("markSelection").addEventListener("click", () => judgeSelection(true));
   $("memoText").addEventListener("input", renderMemoDialog);

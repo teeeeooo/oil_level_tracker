@@ -151,9 +151,13 @@ class InspectionStore(Protocol):
         """The inspection and its Recipe copy as submitted in that version."""
         ...
 
-    def submit(self, inspection: Inspection, edits: Edits, version: Version) -> None:
-        """Lock the edits as this version, with copies of the inspection and its Recipe, and remove
-        the working edits."""
+    def submit(self, inspection: Inspection, edits: Edits, version: Version, report_html: str) -> None:
+        """Lock the edits as this version, with copies of the inspection and its Recipe and the report,
+        and remove the working edits."""
+        ...
+
+    def report_path(self, inspection_id: str, number: int) -> Path:
+        """A version's report file."""
         ...
 
 
@@ -260,6 +264,23 @@ class EdgeTracer(Protocol):
         ...
 
 
+@dataclass(frozen=True)
+class ReportInput:
+    """What a report is made of (Product SSOT §7): a submitted version and its context images."""
+
+    inspection: Inspection                  # as submitted, with the report header and the Recipe copy
+    version: Version
+    edits: Edits
+    layouts: tuple[ImageLayout, ...]
+    context_piece: Callable[[str, int], bytes]  # (Glass id, piece index) -> a context PNG piece
+
+
+class ReportWriter(Protocol):
+    def write(self, report: ReportInput) -> str:
+        """The report as one self-contained HTML document that works offline (A7: at most 5 MB)."""
+        ...
+
+
 class DesktopUnavailable(RuntimeError):
     pass
 
@@ -270,6 +291,10 @@ class Desktop(Protocol):
         ...
 
     def open_folder(self, folder: Path) -> None: ...
+
+    def open_file(self, path: Path) -> None:
+        """Open a file with its default application: a report in the browser."""
+        ...
 
     def ask_before_closing(self, ask: bool) -> None:
         """While True, closing the window asks first. Without a window, nothing happens."""

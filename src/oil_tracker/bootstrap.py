@@ -13,6 +13,7 @@ from oil_tracker.adapters.desktop import SystemDesktop
 from oil_tracker.adapters.http.api import ApiContext, make_handler
 from oil_tracker.adapters.http.jobs import Jobs
 from oil_tracker.adapters.http.server import LocalServer, start_server
+from oil_tracker.adapters.report import HtmlReports
 from oil_tracker.adapters.storage import locations
 from oil_tracker.adapters.storage.files import sha256_of
 from oil_tracker.adapters.storage.inspection_files import InspectionFolders
@@ -79,7 +80,8 @@ def start(
         utc_now,
         new_id,
     )
-    editing = Editing(inspection_store, ContextEdgeTracer(), sha256_of, desktop, utc_now)
+    reports = HtmlReports(WEB_FOLDER)  # the shipped drawing module, whatever folder is served
+    editing = Editing(inspection_store, ContextEdgeTracer(), sha256_of, desktop, utc_now, reports)
     jobs = Jobs(new_id)
     token = secrets.token_urlsafe(24)
     server = start_server(

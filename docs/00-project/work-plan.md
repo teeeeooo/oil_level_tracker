@@ -231,8 +231,20 @@ panel (computed result, override, reason).
      editing panels are hidden; an older version that a later
      re-analysis no longer fits opens only as its report; the app sets no
      read-only file attributes (the lock is the app's).
-6. **The report:** `adapters/report`, self-contained HTML from
-   `web/render.js` (A7: ≤ 5 MB, A4 landscape print).
+6. **The report — done** (2026-10-30):
+   - `adapters/report` (`HtmlReports`) writes `versions\NNN\report.html`
+     on submitting: Python writes the text and the tables (header,
+     judgment summary, then per Glass the final badge, "판정 사유" for a
+     Glass the user judged, the criteria and key-time tables and the
+     memos); `web/render.js` with `web/report.js`, inlined, draws the
+     graph, the context image and the axis on opening. The context image
+     is joined from the cache, scaled to at most 2,000 × 360 px and
+     embedded as JPEG; a 68-minute video with three Glasses and noise
+     images stays under 5 MB (A7, `tests/test_report.py`).
+   - "보고서 열기" (`POST …/versions/<n>/report/open`) opens it in the
+     default browser; printing makes an A4 landscape PDF, in colour.
+   - The editor's graph also shows a HOLD mode's longest violation.
+   - Agent's choices: DESIGN.md §5 "Report".
 7. A Windows run of V2-4, with the V2-3 follow-ups (the upright stroke,
    the point line's 8 px band).
 

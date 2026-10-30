@@ -51,7 +51,7 @@ versions stay in the inspection folder, one subfolder each:
 | `versions\NNN\version.json` | the version: its number, when it was submitted and each Glass's judgment (below) |
 | `versions\NNN\edits.json` | the submitted edits, in the `edits.json` format; `saved_at` is the submission time |
 | `versions\NNN\inspection.json`, `recipe.json` | copies of the inspection (with the report header) and its Recipe copy as submitted |
-| `versions\NNN\report.html` | the report (V2-4 step 6) |
+| `versions\NNN\report.html` | the report (Product SSOT §7): one self-contained HTML file that opens offline and prints to A4 landscape PDF |
 
 - **Writing:** everything goes into `versions\NNN.partial\`, which is
   then renamed to `versions\NNN\`; then the working `edits.json` is

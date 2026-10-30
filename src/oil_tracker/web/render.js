@@ -7,7 +7,8 @@
 //   { times: [s], top: h, bottom: h, compressor: s or null,
 //     lines: { oil: [h or null], foam: [...], reference: [...] },
 //     levels: [{ state, first, end }], empty: [{ first, end }], cannot: [{ start_sec, end_sec }],
-//     image: { top: h, rows, pieces: [{ href, first, count }] } or null }
+//     image: { top: h, rows, pieces: [{ href, first, count }] } or null,
+//     violation: { first, end, seconds } or null }
 // where h is a height in source px above the zero line (the Glass top has the largest h), and
 // first/end are sample indices [first, end). Every field but times, top and bottom may be absent.
 //
@@ -193,6 +194,15 @@ function levelBands(panel, s, height) {
   return parts.join("");
 }
 
+/** A HOLD mode's longest violation (DESIGN.md §2.3 --violation-band). */
+function violationBand(panel, s, height) {
+  const v = panel.violation;
+  if (!v) return "";
+  const [t0, t1] = sampleSpan(panel.times, v.first, v.end);
+  return vband(s, t0, t1, height, "fill:var(--violation-band)")
+    + `<text x="${s.sx(t0) + 4}" y="${INSET.top + 28}" style="${TEXT};font-weight:600;fill:var(--fail)">위반 ${Number(v.seconds.toFixed(1))} s</text>`;
+}
+
 function cannotJudge(panel, s, height, id) {
   return (panel.cannot ?? []).map((c) => vband(s, c.start_sec, c.end_sec, height, `fill:url(#${id}-hatch)`)).join("");
 }
@@ -209,7 +219,7 @@ export function graphBack(panel, view, width, height, id) {
     parts.push(hline(s.sy(h), INSET.left, right, "stroke:var(--stroke-2)"));
     parts.push(`<text x="${INSET.left - 8}" y="${s.sy(h) + 4}" text-anchor="end" style="${TEXT};fill:var(--fg-3)">${Math.round(h)}</text>`);
   }
-  parts.push(`<g clip-path="url(#${id}-clip)">${levelBands(panel, s, height)}${cannotJudge(panel, s, height, id)}</g>`);
+  parts.push(`<g clip-path="url(#${id}-clip)">${levelBands(panel, s, height)}${violationBand(panel, s, height)}${cannotJudge(panel, s, height, id)}</g>`);
   parts.push(hline(s.sy(panel.top), INSET.left, right, "stroke:var(--stroke-1)"));
   parts.push(`<text x="${right - 4}" y="${s.sy(panel.top) - 3}" text-anchor="end" style="${TEXT};fill:var(--fg-3)">Glass 위</text>`);
   parts.push(hline(s.sy(panel.bottom), INSET.left, right, "stroke:var(--stroke-1)"));

@@ -1,4 +1,5 @@
-"""Operating-system integration: the native file dialog, opening a folder and the close question."""
+"""Operating-system integration: the native file dialog, opening a folder or a report and the close
+question."""
 
 from __future__ import annotations
 
@@ -33,9 +34,17 @@ class SystemDesktop:
 
     def open_folder(self, folder: Path) -> None:
         folder.mkdir(parents=True, exist_ok=True)
-        if sys.platform == "win32":
-            os.startfile(folder)  # noqa: S606 - opens Explorer on the app's own folder
-        elif sys.platform == "darwin":
-            subprocess.run(["open", str(folder)], check=False)
-        else:
-            subprocess.run(["xdg-open", str(folder)], check=False)
+        _open(folder)
+
+    def open_file(self, path: Path) -> None:
+        _open(path)
+
+
+def _open(path: Path) -> None:
+    """Explorer for a folder; the default application for a file (a report opens in the browser)."""
+    if sys.platform == "win32":
+        os.startfile(path)  # noqa: S606 - the app's own folders and reports
+    elif sys.platform == "darwin":
+        subprocess.run(["open", str(path)], check=False)
+    else:
+        subprocess.run(["xdg-open", str(path)], check=False)

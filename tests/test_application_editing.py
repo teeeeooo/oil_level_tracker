@@ -41,6 +41,10 @@ class FakeStore:
         self.pieces = []
         self.submitted = {}
         self.copies = {}
+        self.reports = {}
+
+    def report_path(self, inspection_id, number):
+        return Path(f"/reports/{inspection_id}/{number}.html")
 
     def load(self, inspection_id):
         if inspection_id not in self.inspections:
@@ -72,7 +76,8 @@ class FakeStore:
         self.load_version_edits(inspection_id, number)
         return self.copies[(inspection_id, number)]
 
-    def submit(self, inspection, edits, version):
+    def submit(self, inspection, edits, version, report_html):
+        self.reports[(inspection.id, version.number)] = report_html
         self.copies[(inspection.id, version.number)] = inspection
         self.submitted.setdefault(inspection.id, []).append((version, edits))
         self.edits.pop(inspection.id, None)
@@ -80,6 +85,12 @@ class FakeStore:
     def image_piece(self, inspection_id, glass_id, kind, index):
         self.pieces.append((inspection_id, glass_id, kind, index))
         return b"png"
+
+
+class FakeReports:
+    def write(self, report):
+        piece = report.context_piece(report.layouts[0].glass_id, 0)
+        return f"report v{report.version.number} {report.inspection.id} {len(report.edits.times)} {piece.decode()}"
 
 
 class FakeTracer:
@@ -95,6 +106,10 @@ class FakeTracer:
 class FakeDesktop:
     def __init__(self):
         self.asked = []
+        self.opened = []
+
+    def open_file(self, path):
+        self.opened.append(path)
 
     def pick_video(self):
         return None
@@ -122,7 +137,7 @@ def world(desktop):
         return found
 
     times = iter(f"s{n}" for n in count(1))
-    return Editing(store, tracer, hasher, desktop, lambda: next(times)), store, tracer, hashes
+    return Editing(store, tracer, hasher, desktop, lambda: next(times), FakeReports()), store, tracer, hashes
 
 
 def test_the_first_edits_are_the_drafts_with_what_follows_from_them(world):
@@ -251,7 +266,7 @@ def checked(edits, override=None, reason=""):
     return replace(edits, glasses=tuple(replace(g, decision=decision) for g in edits.glasses))
 
 
-def test_submitting_needs_every_glass_checked_and_locks_the_version(world):
+def test_submitting_needs_every_glass_checked_and_locks_the_version(world, desktop):
     editing, store = world[0], world[1]
     edits = editing.open("i1").edits
     with pytest.raises(InvalidEdits, match="남은 Glass: BASE"):
@@ -262,6 +277,9 @@ def test_submitting_needs_every_glass_checked_and_locks_the_version(world):
     assert (version.number, glass.verdict, glass.override, glass.reason, glass.checked_at) == (1, Verdict.PASS, Verdict.PASS, "영상으로 확인", "c1")
     assert glass.computed is editing.states("i1", edits)[0].judgment.verdict
     assert not store.has_edits("i1")  # the working edits went into the version
+    assert store.reports[("i1", 1)] == "report v1 i1 6 png"  # with its report, from the context pieces
+    editing.open_report("i1", 1)
+    assert desktop.opened == [Path("/reports/i1/1.html")]
 
     opened = editing.open("i1")  # the latest version, read-only
     assert opened.version == 1 and opened.edits.glasses[0].decision.reason == "영상으로 확인"

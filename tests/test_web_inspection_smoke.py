@@ -843,6 +843,8 @@ def test_submitting_locks_a_version_and_revising_starts_the_next(tmp_path, video
         drag(page, (box["x"] + box["width"] * 0.3, box["y"] + 60), (box["x"] + box["width"] * 0.4, box["y"] + 90))
         assert page.locator("#editorState").inner_text().startswith("v1 제출함")  # a drag only moved the view
         shot(page, "s2-locked")
+        assert page.locator("#editorReport").is_visible() and page.locator("#editorSave").is_hidden()
+
 
         page.get_by_role("button", name="검사 목록").click()
         row = page.locator("#inspectionRows tr", has_text="제출")
@@ -869,6 +871,17 @@ def test_submitting_locks_a_version_and_revising_starts_the_next(tmp_path, video
         page.locator("#submitDialog").get_by_role("button", name="제출", exact=True).click()
         page.locator("#versionBar").get_by_text("v2을 제출했습니다.").wait_for()
         assert sorted(p.name for p in (folder / "versions").iterdir()) == ["001", "002"]
+        assert errors == []
+
+        # v1's report: one file that draws itself offline with render.js (not opened from the editor
+        # here, which would start the system browser)
+        page.goto((folder / "versions" / "001" / "report.html").as_uri())
+        page.locator(".graph svg path[data-kind=oil]").wait_for(state="attached")
+        assert page.locator(".context svg image").count() == 1 and page.locator(".axis svg text").count() > 0
+        assert page.locator("h1").inner_text() == "오일 레벨 검사 보고서" and "GB-2" in page.locator(".fields").inner_text()
+        if os.environ.get("OLT_SMOKE_SHOTS"):
+            page.screenshot(path=str(Path(os.environ["OLT_SMOKE_SHOTS"]) / "s3-report.png"), full_page=True)
+            page.pdf(path=str(Path(os.environ["OLT_SMOKE_SHOTS"]) / "s3-report.pdf"), prefer_css_page_size=True)
         assert errors == []
     finally:
         running.close()

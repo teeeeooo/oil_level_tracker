@@ -32,15 +32,20 @@ src/oil_tracker/
     storage/       Recipe files, inspection folders, versioned edit
                    documents, context-image cache, schema versions,
                    SHA-256 of the source.
-    report/        Self-contained report HTML; inlines web/render.js and
-                   the DESIGN.md tokens.
+    report/        Self-contained report HTML (V2-4): the text and tables
+                   from Python, the plots drawn on opening by
+                   web/render.js and web/report.js, inlined with
+                   tokens.css and report.css into web/report.html; the
+                   context image joined, scaled down and embedded as
+                   JPEG. Reads the shipped web folder.
     http/          HTTP API on 127.0.0.1 (standard-library
                    ThreadingHTTPServer): routes to use cases, job
                    progress, video file serving with HTTP Range.
                    API calls need the per-launch token and a local Host.
     desktop/       Operating-system integration: the native file dialog
                    and the close question (both supplied by app.py from
-                   the pywebview window) and opening a folder.
+                   the pywebview window), opening a folder and opening a
+                   report in the default browser.
   web/             index.html, tokens.css (copied from DESIGN.md; a test
                    checks it), app.css; main.js (entry), nav.js (views,
                    help, keys), ui.js (helpers), api.js; frame.js (the

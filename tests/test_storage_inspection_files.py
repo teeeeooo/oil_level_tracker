@@ -269,10 +269,11 @@ def test_submitting_writes_the_version_as_a_whole_and_removes_the_working_edits(
     folders.save_edits("i1", make_edits(), "s0")
     (tmp_path / name / "versions" / "001.partial").mkdir(parents=True)  # left by a stopped submission
     headed = replace(make_inspection(), header=ReportHeader("GB-2", None))
-    folders.submit(headed, make_edits(), make_version())
+    folders.submit(headed, make_edits(), make_version(), "<html>v1</html>")
 
     version = tmp_path / name / "versions" / "001"
-    assert sorted(p.name for p in version.iterdir()) == ["edits.json", "inspection.json", "recipe.json", "version.json"]
+    assert sorted(p.name for p in version.iterdir()) == ["edits.json", "inspection.json", "recipe.json", "report.html", "version.json"]
+    assert folders.report_path("i1", 1).read_text(encoding="utf-8") == "<html>v1</html>"
     assert sorted(p.name for p in (tmp_path / name / "versions").iterdir()) == ["001"]
     assert not folders.has_edits("i1") and folders.load_edits("i1") is None
     assert folders.versions("i1") == (make_version(),)
@@ -283,11 +284,11 @@ def test_submitting_writes_the_version_as_a_whole_and_removes_the_working_edits(
     assert (entry.versions, entry.has_edits) == ((make_version(),), False)
 
     with pytest.raises(ValueError):
-        folders.submit(make_inspection(), make_edits(), make_version())  # v1 is never written twice
+        folders.submit(make_inspection(), make_edits(), make_version(), "<html>v1</html>")  # v1 is never written twice
     with pytest.raises(InspectionNotFound):
         folders.load_version_edits("i1", 2)
     folders.save_edits("i1", make_edits(), "s1")  # "고쳐서 다시 제출"
-    folders.submit(make_inspection(), make_edits(), make_version(2))
+    folders.submit(make_inspection(), make_edits(), make_version(2), "<html>v2</html>")
     assert [v.number for v in folders.versions("i1")] == [1, 2]
 
 
@@ -299,7 +300,7 @@ def test_the_version_format_round_trips_and_refuses_broken_files(tmp_path):
             version_from_json(json.dumps({**data, **change}))
     folders = InspectionFolders(tmp_path)
     name = folders.create(make_inspection())
-    folders.submit(make_inspection(), make_edits(), make_version())
+    folders.submit(make_inspection(), make_edits(), make_version(), "<html>v1</html>")
     (tmp_path / name / "versions" / "001" / "version.json").write_text(json.dumps({**data, "version": 2}), encoding="utf-8")
     listing = folders.list_inspections()
     assert listing.inspections == () and listing.unreadable == ((name, "버전 001: 폴더와 버전 번호가 다릅니다."),)

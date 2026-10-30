@@ -1,0 +1,52 @@
+/* The report (DESIGN.md §5 "Report"): A4 landscape pages, after tokens.css. */
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg-4); color: var(--fg-1); font: 400 14px/20px var(--font); print-color-adjust: exact; -webkit-print-color-adjust: exact; }  /* badges and swatches print in colour */
+.page { width: 297mm; height: 210mm; margin: 16px auto; background: var(--bg-1); padding: 9mm 12mm 7mm; display: flex; flex-direction: column; gap: 6px; overflow: hidden; box-shadow: 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.14); }
+@page { size: A4 landscape; margin: 0; }
+@media print {
+  body { background: var(--bg-1); }
+  .page { margin: 0; box-shadow: none; break-after: page; }
+}
+.head { display: flex; align-items: flex-start; gap: 16px; border-bottom: 2px solid var(--fg-1); padding-bottom: 8px; }
+.head h1 { margin: 0; font-size: 24px; line-height: 32px; font-weight: 600; }
+.sub { color: var(--fg-3); font-size: 12px; line-height: 16px; }
+.head .ver { margin-left: auto; text-align: right; }
+.head .ver b { font-size: 20px; line-height: 28px; }
+.strip { display: flex; gap: 16px; border-bottom: 1px solid var(--stroke-1); padding-bottom: 4px; font-size: 12px; line-height: 16px; color: var(--fg-3); }
+.strip b { color: var(--fg-1); }
+.strip .right { margin-left: auto; }
+.fields { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 16px; }
+.fields div { display: flex; flex-direction: column; min-width: 0; overflow-wrap: anywhere; }
+.fields span { color: var(--fg-3); font-size: 12px; line-height: 16px; }
+h2 { margin: 4px 0 0; font-size: 16px; line-height: 22px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+h2 .mode { font-weight: 400; color: var(--fg-3); font-size: 14px; }
+.badge { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: 4px; font-size: 12px; line-height: 16px; font-weight: 600; }
+.badge.big { height: 28px; padding: 0 10px; font-size: 20px; line-height: 28px; }
+.pass { color: var(--pass); background: var(--pass-bg); }
+.fail { color: var(--fail); background: var(--fail-bg); }
+.review { color: var(--review); background: var(--review-bg); }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; padding: 3px 8px; border-bottom: 1px solid var(--stroke-2); font-size: 13px; line-height: 18px; vertical-align: top; }
+th { background: var(--bg-3); font-weight: 600; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.summary th:first-child { width: 160px; }
+table.summary th:nth-child(2) { width: 220px; }
+.reason { font-size: 12px; line-height: 16px; color: var(--fg-2); overflow-wrap: anywhere; }
+.plots { display: flex; flex-direction: column; border: 1px solid var(--stroke-1); }
+.plots .label { font-size: 12px; line-height: 16px; color: var(--fg-3); padding: 2px 8px; background: var(--bg-3); border-bottom: 1px solid var(--stroke-1); display: flex; gap: 12px; }
+.plots .label b { color: var(--fg-1); }
+.plots .label i { display: inline-block; width: 14px; height: 2px; vertical-align: middle; margin-right: 4px; }
+.plot { position: relative; }
+.plot svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.plot.graph { height: 220px; }
+.plot.context { height: 140px; }
+.plot.axis { height: 32px; }
+.page.first .plot.graph { height: 118px; }
+.page.first .plot.context { height: 76px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.memos { display: flex; flex-direction: column; gap: 2px; font-size: 13px; line-height: 18px; }
+.memo { display: flex; gap: 8px; align-items: flex-start; overflow-wrap: anywhere; }
+.pin { flex: none; width: 18px; height: 18px; border-radius: 50%; background: var(--memo); color: var(--bg-1); font-size: 12px; line-height: 18px; text-align: center; font-weight: 600; }
+.memo .t { color: var(--fg-3); font-variant-numeric: tabular-nums; width: 56px; flex: none; }
+.foot { margin-top: auto; display: flex; font-size: 12px; line-height: 16px; color: var(--fg-3); }
+.foot span:last-child { margin-left: auto; }

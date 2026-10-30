@@ -430,13 +430,16 @@ class InspectionFolders:
         recipe = self._version_file(inspection_id, number, RECIPE_FILE).read_text(encoding="utf-8")
         return inspection_from_json(inspection, recipe)
 
+    def report_path(self, inspection_id: str, number: int) -> Path:
+        return self._version_file(inspection_id, number, REPORT_FILE)
+
     def _version_file(self, inspection_id: str, number: int, name: str) -> Path:
         path = self._find(inspection_id)[0] / VERSIONS / f"{number:03d}" / name
         if not 1 <= number <= MAXIMUM_VERSIONS or not path.is_file():
             raise InspectionNotFound(f"버전을 찾을 수 없습니다: v{number}")
         return path
 
-    def submit(self, inspection: Inspection, edits: Edits, version: Version) -> None:
+    def submit(self, inspection: Inspection, edits: Edits, version: Version, report_html: str) -> None:
         """Write the version as a whole, then remove the working edits (inspection-folder.md)."""
         folder = self._find(inspection.id)[0]
         versions = folder / VERSIONS
@@ -452,6 +455,7 @@ class InspectionFolders:
             EDITS_FILE: edits_to_json(edits, version.submitted_at),
             INSPECTION_FILE: inspection_to_json(inspection),
             RECIPE_FILE: recipe_to_json(inspection.recipe),
+            REPORT_FILE: report_html,
         }
         for file_name, content in files.items():
             (partial / file_name).write_text(content, encoding="utf-8")

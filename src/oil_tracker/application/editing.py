@@ -31,7 +31,7 @@ from oil_tracker.domain.judgment import Judgment, final_verdict, judge
 from oil_tracker.domain.recipe import Glass
 from oil_tracker.domain.version import Version, unchecked, version_of
 
-from .ports import Desktop, EdgeTracer, InspectionStore, SourceHasher, StoredAnalysis
+from .ports import Desktop, EdgeTracer, InspectionStore, ReportInput, ReportWriter, SourceHasher, StoredAnalysis
 
 
 class NotAnalysed(LookupError):
@@ -105,8 +105,10 @@ class Editing:
         hasher: SourceHasher,
         desktop: Desktop,
         now: Callable[[], str],
+        reports: ReportWriter,
     ) -> None:
         self.store = store
+        self._reports = reports
         self._tracer = tracer
         self._hasher = hasher
         self._desktop = desktop
@@ -159,7 +161,8 @@ class Editing:
         return self.store.has_edits(inspection_id)
 
     def submit(self, inspection_id: str, edits: Edits) -> Version:
-        """Lock these edits, saved or not, as the next version (§3). Every Glass must be checked."""
+        """Lock these edits, saved or not, as the next version with its report (§3, §7). Every Glass
+        must be checked."""
         inspection = self._editable(inspection_id, edits)
         left = unchecked(edits)
         if left:
@@ -169,8 +172,15 @@ class Editing:
         versions = self.store.versions(inspection_id)
         number = (versions[-1].number if versions else 0) + 1
         version = version_of(number, self._now(), edits, states, inspection.recipe)
-        self.store.submit(inspection, edits, version)
+        images = self._analysed(inspection_id)[1].images
+        piece = lambda glass_id, index: self.store.image_piece(inspection_id, glass_id, "context", index)  # noqa: E731
+        report = self._reports.write(ReportInput(inspection, version, edits, images, piece))
+        self.store.submit(inspection, edits, version, report)
         return version
+
+    def open_report(self, inspection_id: str, number: int) -> None:
+        """"보고서 열기": the version's report in the default browser."""
+        self._desktop.open_file(self.store.report_path(inspection_id, number))
 
     def revise(self, inspection_id: str) -> None:
         """"고쳐서 다시 제출": the next version's working edits start as the latest version's, with each

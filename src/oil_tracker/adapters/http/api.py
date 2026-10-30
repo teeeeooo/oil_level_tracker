@@ -693,6 +693,10 @@ def routes(ctx: ApiContext) -> list[Route]:
         editing.revise(inspection_id)
         return json_response({})
 
+    def open_report(_query, _body, inspection_id, number) -> Response:
+        editing.open_report(inspection_id, int(number))
+        return json_response({})
+
     def save_edits(_query, body, inspection_id) -> Response:
         edits = parse_edits(body)
         running = jobs.running()
@@ -744,6 +748,7 @@ def routes(ctx: ApiContext) -> list[Route]:
         ("POST", re.compile(rf"/api/inspections/{segment}/edits/states"), edit_states),
         ("POST", re.compile(rf"/api/inspections/{segment}/submit"), submit),
         ("POST", re.compile(rf"/api/inspections/{segment}/revise"), revise),
+        ("POST", re.compile(rf"/api/inspections/{segment}/versions/(\d{{1,3}})/report/open"), open_report),
         ("POST", re.compile(rf"/api/inspections/{segment}/point-line"), point_line),
         ("GET", re.compile(rf"/api/inspections/{segment}/source-check"), source_check),
         ("POST", re.compile(rf"/api/inspections/{segment}/source-check"), check_source_again),
