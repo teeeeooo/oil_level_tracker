@@ -27,6 +27,7 @@ from oil_tracker.domain.inspection import (
 from oil_tracker.domain.problems import Problem
 from oil_tracker.domain.recipe import Recipe
 
+from .editing import Locked, is_locked
 from .ports import (
     AnalysisCancelled,
     Desktop,
@@ -152,6 +153,8 @@ class Inspections:
         problems = setup_problems(video, recipe, setup.settings, name)
         if problems:
             return SetupResult(None, tuple(problems))
+        if existing is not None and is_locked(self.store, existing.id):
+            raise Locked("제출한 버전은 다시 분석할 수 없습니다. \"고쳐서 다시 제출\"로 새 버전을 시작하세요.")
         if existing is None:
             inspection = Inspection(
                 self._new_id(), self._now(), video, recipe, setup.settings, name=name, header=setup.header
@@ -166,7 +169,10 @@ class Inspections:
         return SetupResult(inspection)
 
     def set_header(self, inspection_id: str, header: ReportHeader) -> Inspection:
-        """Save the report header at once, apart from the edits (DESIGN.md §5, 검사 정보)."""
+        """Save the report header at once, apart from the edits (DESIGN.md §5, 검사 정보). A submitted
+        version keeps its own copy; the header is locked until "고쳐서 다시 제출"."""
+        if is_locked(self.store, inspection_id):
+            raise Locked("제출한 버전의 검사 정보는 고칠 수 없습니다.")
         changed = replace(self.store.load(inspection_id), header=header)
         self.store.save(changed)
         return changed

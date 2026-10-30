@@ -9,12 +9,14 @@ from oil_tracker.application.editing import (
     DrawnPiece,
     Editing,
     InvalidEdits,
+    Locked,
     NotAnalysed,
     SourceState,
+    VersionOutOfDate,
 )
 from oil_tracker.application.ports import ImageLayout, InspectionNotFound, StoredAnalysis, StoredEdits
-from oil_tracker.domain.edits import Coverage, Run, Stretch, edits_from_analysis
-from oil_tracker.domain.enums import InspectionState, LevelState, SampleOrigin
+from oil_tracker.domain.edits import Coverage, Decision, Run, Stretch, edits_from_analysis
+from oil_tracker.domain.enums import InspectionState, LevelState, SampleOrigin, Verdict
 from oil_tracker.domain.geometry import Ellipse
 from oil_tracker.domain.inspection import Analysis, AnalysisSettings, GlassDraft, Inspection, SourceVideo
 from oil_tracker.domain.line import Line
@@ -37,6 +39,8 @@ class FakeStore:
         self.analyses = {"i1": StoredAnalysis(ANALYSIS, (ImageLayout("g1", 90, 420, 3),))}
         self.edits = {}
         self.pieces = []
+        self.submitted = {}
+        self.copies = {}
 
     def load(self, inspection_id):
         if inspection_id not in self.inspections:
@@ -51,6 +55,27 @@ class FakeStore:
 
     def save_edits(self, inspection_id, edits, saved_at):
         self.edits[inspection_id] = StoredEdits(edits, saved_at)
+
+    def has_edits(self, inspection_id):
+        return inspection_id in self.edits
+
+    def versions(self, inspection_id):
+        return tuple(version for version, _ in self.submitted.get(inspection_id, []))
+
+    def load_version_edits(self, inspection_id, number):
+        for version, edits in self.submitted.get(inspection_id, []):
+            if version.number == number:
+                return StoredEdits(edits, version.submitted_at)
+        raise InspectionNotFound(number)
+
+    def load_version_inspection(self, inspection_id, number):
+        self.load_version_edits(inspection_id, number)
+        return self.copies[(inspection_id, number)]
+
+    def submit(self, inspection, edits, version):
+        self.copies[(inspection.id, version.number)] = inspection
+        self.submitted.setdefault(inspection.id, []).append((version, edits))
+        self.edits.pop(inspection.id, None)
 
     def image_piece(self, inspection_id, glass_id, kind, index):
         self.pieces.append((inspection_id, glass_id, kind, index))
@@ -216,3 +241,59 @@ def test_unsaved_edits_make_the_window_ask_before_closing(world, desktop):
     editing.mark_unsaved(True)
     editing.mark_unsaved(False)
     assert desktop.asked == [True, False]
+
+
+# ---- submitting and versions (Product SSOT §3, A9) ----
+
+
+def checked(edits, override=None, reason=""):
+    decision = Decision(override, reason, "c1")
+    return replace(edits, glasses=tuple(replace(g, decision=decision) for g in edits.glasses))
+
+
+def test_submitting_needs_every_glass_checked_and_locks_the_version(world):
+    editing, store = world[0], world[1]
+    edits = editing.open("i1").edits
+    with pytest.raises(InvalidEdits, match="남은 Glass: BASE"):
+        editing.submit("i1", edits)
+    store.save_edits("i1", edits, "s0")
+    version = editing.submit("i1", checked(edits, Verdict.PASS, "영상으로 확인"))  # unsaved edits go with it
+    (glass,) = version.glasses
+    assert (version.number, glass.verdict, glass.override, glass.reason, glass.checked_at) == (1, Verdict.PASS, Verdict.PASS, "영상으로 확인", "c1")
+    assert glass.computed is editing.states("i1", edits)[0].judgment.verdict
+    assert not store.has_edits("i1")  # the working edits went into the version
+
+    opened = editing.open("i1")  # the latest version, read-only
+    assert opened.version == 1 and opened.edits.glasses[0].decision.reason == "영상으로 확인"
+    for change in (lambda: editing.save("i1", opened.edits), lambda: editing.submit("i1", opened.edits)):
+        with pytest.raises(Locked):
+            change()
+
+
+def test_revising_starts_the_next_version_from_the_latest(world):
+    editing, store = world[0], world[1]
+    with pytest.raises(Locked):
+        editing.revise("i1")  # nothing submitted
+    first = checked(editing.open("i1").edits)
+    editing.submit("i1", first)
+    editing.revise("i1")
+    opened = editing.open("i1")
+    assert opened.version is None and opened.edits == first  # with the checks; a change takes one off
+    with pytest.raises(Locked):
+        editing.revise("i1")
+    editing.save("i1", first)
+    assert editing.submit("i1", first).number == 2
+    assert [v.number for v in editing.versions("i1")] == [1, 2]
+    assert editing.open("i1", 1).version == 1
+
+
+def test_an_older_version_after_a_reanalysis_opens_only_as_its_report(world):
+    editing, store = world[0], world[1]
+    editing.submit("i1", checked(editing.open("i1").edits))
+    editing.revise("i1")
+    shorter = Analysis(TIMES[:4], (GlassDraft("g1", Line(DRAFT.ys[:4], (D,) * 4)),), "t2")
+    store.analyses["i1"] = StoredAnalysis(shorter, store.analyses["i1"].images)
+    with pytest.raises(VersionOutOfDate):
+        editing.open("i1", 1)
+    with pytest.raises(InspectionNotFound):
+        editing.open("i1", 7)

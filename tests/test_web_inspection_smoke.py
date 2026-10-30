@@ -756,7 +756,7 @@ def test_the_judgment_the_users_verdict_and_the_check(tmp_path, video, browser_p
         page.get_by_role("button", name="이 Glass 확인").click()
         page.locator("#checkedRow").wait_for()
         assert picker.all_inner_texts() == [f"BASE · {own}"]
-        assert "제출은 다음 단계" in page.locator("#editorSubmit").get_attribute("title")
+        assert page.locator("#editorSubmit").get_attribute("title") == "v1 제출"
 
         # a Foam stroke keeps the check; an Oil change takes it off, and its undo too
         page.keyboard.press("p")
@@ -790,6 +790,85 @@ def test_the_judgment_the_users_verdict_and_the_check(tmp_path, video, browser_p
         shot(page, "j1-judgment")
         page.locator("#editorHeader").scroll_into_view_if_needed()
         shot(page, "j2-inspection-info")
+        assert errors == []
+    finally:
+        running.close()
+
+
+def test_submitting_locks_a_version_and_revising_starts_the_next(tmp_path, video, browser_page):
+    page, errors = browser_page
+    data = tmp_path / "data"
+    write_recipes(data / "Recipes")
+    running = bootstrap.start(data_folder=data)
+    folder = data / "Inspections" / "제출"
+    try:
+        analysed_inspection(running, video, "제출")
+        page.goto(running.url)
+        page.locator("#inspectionRows tr", has_text="제출").get_by_role("button", name="열기", exact=True).click()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        assert page.locator("#versionBar").is_hidden()
+        page.locator("#editorHeader").get_by_label("압축기 모델").fill("GB-2")
+        page.keyboard.press("Enter")  # leaves the field: the editor's keys again
+
+        # an unsaved pencil stroke, then the check: the submit dialog sends both
+        page.keyboard.press("p")
+        box = page.locator("#graph").bounding_box()
+        drag(page, (box["x"] + box["width"] * 0.6, box["y"] + 60), (box["x"] + box["width"] * 0.7, box["y"] + 60))
+        page.get_by_text("저장 안 함").wait_for()
+        page.get_by_role("button", name="이 Glass 확인").click()
+        page.locator("#editorSubmit").click()
+        dialog = page.locator("#submitDialog")
+        assert dialog.locator("#submitTitle").inner_text() == "v1 제출"
+        assert dialog.locator("#submitRows tr").count() == 1 and "BASE" in dialog.locator("#submitRows").inner_text()
+        assert "GB-2" in dialog.locator("#submitHeader").inner_text()
+        shot(page, "s1-submit-dialog")
+        dialog.get_by_role("button", name="제출", exact=True).click()
+
+        # v1 is locked: read-only, with the bar
+        page.locator("#versionBar").get_by_text("v1을 제출했습니다.").wait_for()
+        assert (folder / "versions" / "001" / "version.json").is_file() and not (folder / "edits.json").exists()
+        submitted = json.loads((folder / "versions" / "001" / "edits.json").read_text(encoding="utf-8"))
+        assert "DRAWN" in submitted["glasses"][0]["oil"]["origins"]  # the unsaved stroke went with it
+        copy = json.loads((folder / "versions" / "001" / "inspection.json").read_text(encoding="utf-8"))
+        assert copy["report_header"]["compressor_model"] == "GB-2"
+        assert page.locator("#editorState").inner_text().startswith("v1 제출함")
+        for selector in ("#editorView button[data-tool=pencil]", "#editorSave", "#editorSubmit", "#editorUndo", "#editorReanalyse"):
+            assert page.locator(selector).is_disabled(), selector
+        assert page.locator("#editorHeader").get_by_label("압축기 모델").is_disabled()
+        assert page.locator("#checkRow").is_hidden() and page.locator("#uncheckGlass").is_hidden()
+        assert page.locator("#editSection").is_hidden() and page.locator("#overrideRow").is_hidden()
+        assert "v1에 제출됨" in page.locator("#checkedText").inner_text()
+        page.keyboard.press("p")  # no tool keys
+        assert page.locator("#editorView button[data-tool=pan]").get_attribute("aria-pressed") == "true"
+        drag(page, (box["x"] + box["width"] * 0.3, box["y"] + 60), (box["x"] + box["width"] * 0.4, box["y"] + 90))
+        assert page.locator("#editorState").inner_text().startswith("v1 제출함")  # a drag only moved the view
+        shot(page, "s2-locked")
+
+        page.get_by_role("button", name="검사 목록").click()
+        row = page.locator("#inspectionRows tr", has_text="제출")
+        row.get_by_text("v1 제출함").wait_for()
+        assert "BASE" in row.inner_text()
+        row.get_by_role("button", name="열기", exact=True).click()
+        page.locator("#versionBar").get_by_text("v1을 제출했습니다.").wait_for()
+
+        # "고쳐서 다시 제출" starts v2 from v1, with the check; v1 stays as it was
+        page.once("dialog", lambda dialog: dialog.accept())
+        page.get_by_role("button", name="고쳐서 다시 제출 (v2)…").click()
+        page.locator("#versionBar").get_by_text("v2을 고치는 중입니다.").wait_for()
+        assert page.locator("#editorState").inner_text().startswith("v2 고치는 중")
+        assert (folder / "edits.json").exists()
+        assert not page.locator("#editorSave").is_disabled() and not page.locator("#editorSubmit").is_disabled()
+        assert page.locator("#editSection").is_visible() and page.locator("#overrideRow").is_visible()
+        page.locator("#versionPicker").select_option("1")
+        page.locator("#versionBar").get_by_text("v1을 제출했습니다.").wait_for()
+        assert page.locator("#reviseButton").is_hidden()  # v2 is already being edited
+        page.locator("#versionPicker").select_option("")
+        page.locator("#versionBar").get_by_text("v2을 고치는 중입니다.").wait_for()
+        page.locator("#editorSubmit").click()
+        assert page.locator("#submitTitle").inner_text() == "v2 제출"
+        page.locator("#submitDialog").get_by_role("button", name="제출", exact=True).click()
+        page.locator("#versionBar").get_by_text("v2을 제출했습니다.").wait_for()
+        assert sorted(p.name for p in (folder / "versions").iterdir()) == ["001", "002"]
         assert errors == []
     finally:
         running.close()

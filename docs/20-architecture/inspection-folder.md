@@ -39,9 +39,65 @@ and §8. The code is `src/oil_tracker/adapters/storage/inspection_files.py`.
 | `cache\analysis.json` | the analysis: times and Oil drafts (below) | inside the cache swap |
 | `cache\<Glass ID>\context-NNN.png` | the context image, in pieces of at most 4,096 columns, `NNN` from `000` | inside the cache swap |
 | `cache\<Glass ID>\background-NNN.png` | the background view, in the same pieces (8-bit grey) | inside the cache swap |
+| `versions\NNN\` | a submitted version, `NNN` from `001` (below) | once, on "제출"; never changed |
 
-Reserved for V2-4: the versions locked at submission, and the versioned
-report HTML. `edits.json` holds the working edits until then.
+## Versions
+
+Submitting (Product SSOT §3, A9; V2-4) locks the edits as a version. The
+versions stay in the inspection folder, one subfolder each:
+
+| Path | Contents |
+|---|---|
+| `versions\NNN\version.json` | the version: its number, when it was submitted and each Glass's judgment (below) |
+| `versions\NNN\edits.json` | the submitted edits, in the `edits.json` format; `saved_at` is the submission time |
+| `versions\NNN\inspection.json`, `recipe.json` | copies of the inspection (with the report header) and its Recipe copy as submitted |
+| `versions\NNN\report.html` | the report (V2-4 step 6) |
+
+- **Writing:** everything goes into `versions\NNN.partial\`, which is
+  then renamed to `versions\NNN\`; then the working `edits.json` is
+  removed. A stale `.partial` folder is removed before the next
+  submission and never read.
+- **The inspection's state follows from the folder:**
+  - no version: being edited (`edits.json`, once saved);
+  - versions and no `edits.json`: the latest version is submitted and
+    locked. The editor shows it read-only; saving, the report header and
+    re-analysis are refused;
+  - versions and an `edits.json`: the next version is being edited ("고쳐서
+    다시 제출" copied the latest version's edits there, with each Glass's
+    decision and check).
+- **A version is never changed or removed by the app.** An older version
+  opens read-only in the editor while the cache still fits its times;
+  after a later re-analysis only its report shows it.
+
+### `version.json`
+
+```json
+{
+  "format": "oil-level-tracker-version",
+  "schema_version": 1,
+  "version": 1,
+  "submitted_at": "2026-10-30T05:22:00+00:00",
+  "glasses": [
+    {
+      "glass_id": "<uuid>",
+      "verdict": "FAIL",
+      "computed": "PASS",
+      "computed_reason": "기동 후 20초에 0선을 회복해 5초 이상 유지했습니다.",
+      "override": "FAIL",
+      "reason": "거품이 유면을 가림",
+      "checked_at": "2026-10-30T05:21:00+00:00"
+    }
+  ]
+}
+```
+
+- `version` equals the folder's `NNN`.
+- `verdict` is the final judgment the report shows; `computed` and
+  `computed_reason` are the app's own result, kept as the user's record
+  (DESIGN.md §2.4). `override` and `reason` are the user's decision
+  (`null` and `""` without one); `checked_at` is when the Glass was
+  checked.
+- One entry per Glass of the Recipe copy, in its order.
 
 **The cache swap.** An analysis writes everything into `cache.partial\`,
 then removes `cache\` and renames `cache.partial\` to `cache\`. A reader

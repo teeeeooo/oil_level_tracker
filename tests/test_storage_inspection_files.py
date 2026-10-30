@@ -14,9 +14,18 @@ from oil_tracker.adapters.storage.inspection_files import (
     folder_name_for,
     inspection_from_json,
     inspection_to_json,
+    version_from_json,
+    version_to_json,
 )
 from oil_tracker.adapters.storage.recipe_files import recipe_to_json
-from oil_tracker.application.ports import GlassImages, InspectionNotFound, StoredEdits, UnreadableAnalysis, UnreadableEdits
+from oil_tracker.application.ports import (
+    GlassImages,
+    InspectionNotFound,
+    StoredEdits,
+    UnreadableAnalysis,
+    UnreadableEdits,
+    UnreadableVersion,
+)
 from oil_tracker.domain.edits import Decision, Edits, GlassEdits, Memo, Stretch, empty_line
 from oil_tracker.domain.enums import InspectionState, SampleOrigin, Verdict
 from oil_tracker.domain.geometry import Ellipse
@@ -31,6 +40,7 @@ from oil_tracker.domain.inspection import (
 )
 from oil_tracker.domain.line import Line
 from oil_tracker.domain.recipe import Glass, Recipe, ReferenceFrame
+from oil_tracker.domain.version import GlassVerdict, Version
 
 RECIPE = Recipe(
     "r1", "2호기 냉각", ReferenceFrame(1280, 720, "SPL#4.mp4", 12.5, b"\xff\xd8jpeg"),
@@ -243,3 +253,53 @@ def test_edits_of_schema_1_read_as_undecided():
     assert edits_from_json(json.dumps(first)).edits.glasses[0].decision == Decision()
     with pytest.raises(UnreadableEdits):
         edits_from_json(json.dumps({**good, "glasses": [{**good["glasses"][0], "decision": {"override": "REVIEW", "reason": "", "checked_at": None}}]}))
+
+
+# ---- versions (inspection-folder.md "Versions") ----
+
+
+def make_version(number=1) -> Version:
+    glass = GlassVerdict("0b7c-base", Verdict.FAIL, Verdict.PASS, "기동 후 20초에 회복", Verdict.FAIL, "거품이 유면을 가림", "c1")
+    return Version(number, f"2026-10-30T05:2{number}:00+00:00", (glass,))
+
+
+def test_submitting_writes_the_version_as_a_whole_and_removes_the_working_edits(tmp_path):
+    folders = InspectionFolders(tmp_path)
+    name = folders.create(make_inspection())
+    folders.save_edits("i1", make_edits(), "s0")
+    (tmp_path / name / "versions" / "001.partial").mkdir(parents=True)  # left by a stopped submission
+    headed = replace(make_inspection(), header=ReportHeader("GB-2", None))
+    folders.submit(headed, make_edits(), make_version())
+
+    version = tmp_path / name / "versions" / "001"
+    assert sorted(p.name for p in version.iterdir()) == ["edits.json", "inspection.json", "recipe.json", "version.json"]
+    assert sorted(p.name for p in (tmp_path / name / "versions").iterdir()) == ["001"]
+    assert not folders.has_edits("i1") and folders.load_edits("i1") is None
+    assert folders.versions("i1") == (make_version(),)
+    assert folders.load_version_edits("i1", 1) == StoredEdits(make_edits(), make_version().submitted_at)
+    copy = inspection_from_json((version / "inspection.json").read_text(encoding="utf-8"), (version / "recipe.json").read_text(encoding="utf-8"))
+    assert copy == headed == folders.load_version_inspection("i1", 1)
+    (entry,) = folders.list_inspections().inspections
+    assert (entry.versions, entry.has_edits) == ((make_version(),), False)
+
+    with pytest.raises(ValueError):
+        folders.submit(make_inspection(), make_edits(), make_version())  # v1 is never written twice
+    with pytest.raises(InspectionNotFound):
+        folders.load_version_edits("i1", 2)
+    folders.save_edits("i1", make_edits(), "s1")  # "고쳐서 다시 제출"
+    folders.submit(make_inspection(), make_edits(), make_version(2))
+    assert [v.number for v in folders.versions("i1")] == [1, 2]
+
+
+def test_the_version_format_round_trips_and_refuses_broken_files(tmp_path):
+    assert version_from_json(version_to_json(make_version())) == make_version()
+    data = json.loads(version_to_json(make_version()))
+    for change in ({"format": "x"}, {"schema_version": 2}, {"glasses": [{"glass_id": "g"}]}):
+        with pytest.raises(UnreadableVersion):
+            version_from_json(json.dumps({**data, **change}))
+    folders = InspectionFolders(tmp_path)
+    name = folders.create(make_inspection())
+    folders.submit(make_inspection(), make_edits(), make_version())
+    (tmp_path / name / "versions" / "001" / "version.json").write_text(json.dumps({**data, "version": 2}), encoding="utf-8")
+    listing = folders.list_inspections()
+    assert listing.inspections == () and listing.unreadable == ((name, "버전 001: 폴더와 버전 번호가 다릅니다."),)

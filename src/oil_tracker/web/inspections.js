@@ -9,6 +9,7 @@ import { positionFields, renderPositionInputs, showFieldProblems } from "./recip
 import { $, MODES, clock, el, localDate, notify, parseClock, typing } from "./ui.js";
 
 const STATES = { ANALYSED: "분석 완료", NOT_ANALYSED: "분석 안 됨", FAILED: "분석 실패" };
+const VERDICT_NAMES = { PASS: "합격", FAIL: "불합격", REVIEW: "검토 필요" };
 const SETTINGS = ["start_sec", "end_sec", "compressor_start_sec"];
 const FIELDS = [...SETTINGS, "inspection_name", "compressor_model", "test_type"];  // problems shown under their own input
 const CHECK_DELAY_MS = 250;
@@ -79,7 +80,7 @@ export async function showList() {
         item.folder !== item.name ? el("span", { class: "sub mono" }, item.folder) : null),  // a named folder repeats the name
       el("td", {}, item.recipe_name),
       el("td", {}, localDate(item.created_at)),
-      el("td", {}, el("span", { class: "badge pending" }, STATES[item.state] ?? item.state), reason),
+      el("td", {}, ...stateCell(item), reason),
       el("td", {}, el("button", { class: "btn small", onclick: open }, "열기"))));
   }
   const box = $("inspectionsUnreadable");
@@ -90,6 +91,18 @@ export async function showList() {
   }
   $("inspectionsFolder").textContent = listing.folder;
   if (listing.job && !$("progressDialog").open) resumeProgress(listing.job);
+}
+
+/** The state badge: the analysis state, or once submitted the latest version (DESIGN.md §5). */
+function stateCell(item) {
+  const submitted = item.submitted;
+  if (!submitted) return [el("span", { class: "badge pending" }, STATES[item.state] ?? item.state)];
+  if (item.revising) {
+    return [el("span", { class: "badge pending" }, `v${submitted.version + 1} 고치는 중`),
+      el("span", { class: "sub" }, `v${submitted.version} 제출함 ${localDate(submitted.submitted_at).slice(5)}`)];
+  }
+  const verdicts = submitted.verdicts.map((v) => `${v.glass_name} ${VERDICT_NAMES[v.verdict]}`).join(" · ");
+  return [el("span", { class: "badge pending" }, `v${submitted.version} 제출함`), el("span", { class: "sub" }, verdicts)];
 }
 
 function selectRow(row) {

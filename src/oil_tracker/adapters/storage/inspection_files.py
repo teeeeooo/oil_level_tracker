@@ -20,6 +20,7 @@ from oil_tracker.application.ports import (
     StoredEdits,
     UnreadableAnalysis,
     UnreadableEdits,
+    UnreadableVersion,
 )
 from oil_tracker.domain.edits import Decision, Edits, GlassEdits, Memo, Stretch
 from oil_tracker.domain.enums import InspectionState, SampleOrigin, Verdict
@@ -32,6 +33,7 @@ from oil_tracker.domain.inspection import (
     SourceVideo,
 )
 from oil_tracker.domain.line import Line
+from oil_tracker.domain.version import MAXIMUM_VERSIONS, GlassVerdict, Version
 
 from .files import atomic_write_text
 from .recipe_files import UnreadableRecipe, recipe_from_json, recipe_to_json
@@ -40,6 +42,7 @@ from .values import integer, number, optional, safe_stem, text
 INSPECTION_FORMAT = "oil-level-tracker-inspection"
 ANALYSIS_FORMAT = "oil-level-tracker-analysis"
 EDITS_FORMAT = "oil-level-tracker-edits"
+VERSION_FORMAT = "oil-level-tracker-version"
 SCHEMA_VERSION = 1
 INSPECTION_SCHEMA_VERSION = 2  # 2 adds the report header (V2-4); 1 still reads, with an empty header
 EDITS_SCHEMA_VERSION = 2  # 2 adds each Glass's decision (V2-4); 1 still reads, as undecided
@@ -49,9 +52,13 @@ RECIPE_FILE = "recipe.json"
 CACHE = "cache"
 ANALYSIS_FILE = "analysis.json"
 EDITS_FILE = "edits.json"
+VERSIONS = "versions"
+VERSION_FILE = "version.json"
+REPORT_FILE = "report.html"
 LINE_KEYS = ("oil", "foam", "reference")
 IMAGE_KINDS = ("context", "background")
 _SAFE_ID = re.compile(r"^[A-Za-z0-9-]{1,64}$")
+_VERSION_FOLDER = re.compile(r"^\d{3}$")
 
 
 class UnreadableInspection(ValueError):
@@ -228,6 +235,54 @@ def _decision_from(raw: Any) -> Decision:
     return Decision(optional(lambda v: Verdict(text(v)), raw["override"]), text(raw["reason"]), optional(text, raw["checked_at"]))
 
 
+# ---- versions\NNN\version.json ------------------------------------------------------------------
+
+
+def version_to_json(version: Version) -> str:
+    data = {
+        "format": VERSION_FORMAT,
+        "schema_version": SCHEMA_VERSION,
+        "version": version.number,
+        "submitted_at": version.submitted_at,
+        "glasses": [
+            {
+                "glass_id": glass.glass_id,
+                "verdict": glass.verdict.value,
+                "computed": glass.computed.value,
+                "computed_reason": glass.computed_reason,
+                "override": None if glass.override is None else glass.override.value,
+                "reason": glass.reason,
+                "checked_at": glass.checked_at,
+            }
+            for glass in version.glasses
+        ],
+    }
+    return json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
+
+
+def version_from_json(version_text: str) -> Version:
+    data = _document(version_text, VERSION_FORMAT, "버전", UnreadableVersion)
+    try:
+        return Version(
+            integer(data["version"]),
+            text(data["submitted_at"]),
+            tuple(
+                GlassVerdict(
+                    text(raw["glass_id"]),
+                    Verdict(text(raw["verdict"])),
+                    Verdict(text(raw["computed"])),
+                    text(raw["computed_reason"]),
+                    optional(lambda v: Verdict(text(v)), raw["override"]),
+                    text(raw["reason"]),
+                    text(raw["checked_at"]),
+                )
+                for raw in data["glasses"]
+            ),
+        )
+    except (KeyError, TypeError, ValueError) as error:
+        raise UnreadableVersion(f"버전 내용이 올바르지 않습니다: {error}") from error
+
+
 def _line_json(line: Line) -> dict[str, Any]:
     return {"ys": list(line.ys), "origins": [origin.value for origin in line.origins]}
 
@@ -297,7 +352,12 @@ class InspectionFolders:
                 unreadable.append((path.name, "다른 폴더와 검사 ID가 같습니다."))
             else:
                 seen.add(result.id)
-                entries.append(InspectionEntry(path.name, result))
+                try:
+                    versions = self._versions(path)
+                except UnreadableVersion as error:
+                    unreadable.append((path.name, str(error)))
+                    continue
+                entries.append(InspectionEntry(path.name, result, versions, (path / EDITS_FILE).is_file()))
         entries.sort(key=lambda entry: entry.inspection.created_at, reverse=True)
         return InspectionListing(tuple(entries), tuple(unreadable))
 
@@ -354,6 +414,66 @@ class InspectionFolders:
         if not path.is_file():
             return None
         return edits_from_json(path.read_text(encoding="utf-8"))
+
+    def has_edits(self, inspection_id: str) -> bool:
+        return (self._find(inspection_id)[0] / EDITS_FILE).is_file()
+
+    def versions(self, inspection_id: str) -> tuple[Version, ...]:
+        return self._versions(self._find(inspection_id)[0])
+
+    def load_version_edits(self, inspection_id: str, number: int) -> StoredEdits:
+        return edits_from_json(self._version_file(inspection_id, number, EDITS_FILE).read_text(encoding="utf-8"))
+
+    def load_version_inspection(self, inspection_id: str, number: int) -> Inspection:
+        """The inspection as submitted in this version, with its Recipe copy and report header."""
+        inspection = self._version_file(inspection_id, number, INSPECTION_FILE).read_text(encoding="utf-8")
+        recipe = self._version_file(inspection_id, number, RECIPE_FILE).read_text(encoding="utf-8")
+        return inspection_from_json(inspection, recipe)
+
+    def _version_file(self, inspection_id: str, number: int, name: str) -> Path:
+        path = self._find(inspection_id)[0] / VERSIONS / f"{number:03d}" / name
+        if not 1 <= number <= MAXIMUM_VERSIONS or not path.is_file():
+            raise InspectionNotFound(f"버전을 찾을 수 없습니다: v{number}")
+        return path
+
+    def submit(self, inspection: Inspection, edits: Edits, version: Version) -> None:
+        """Write the version as a whole, then remove the working edits (inspection-folder.md)."""
+        folder = self._find(inspection.id)[0]
+        versions = folder / VERSIONS
+        name = f"{version.number:03d}"
+        if not 1 <= version.number <= MAXIMUM_VERSIONS or (versions / name).exists():
+            raise ValueError(f"버전 번호를 쓸 수 없습니다: v{version.number}")
+        for stale in versions.glob("*.partial") if versions.is_dir() else ():
+            shutil.rmtree(stale, ignore_errors=True)
+        partial = versions / (name + ".partial")
+        partial.mkdir(parents=True)
+        files = {
+            VERSION_FILE: version_to_json(version),
+            EDITS_FILE: edits_to_json(edits, version.submitted_at),
+            INSPECTION_FILE: inspection_to_json(inspection),
+            RECIPE_FILE: recipe_to_json(inspection.recipe),
+        }
+        for file_name, content in files.items():
+            (partial / file_name).write_text(content, encoding="utf-8")
+        partial.rename(versions / name)
+        (folder / EDITS_FILE).unlink(missing_ok=True)
+
+    def _versions(self, folder: Path) -> tuple[Version, ...]:
+        versions = folder / VERSIONS
+        if not versions.is_dir():
+            return ()
+        found = []
+        for path in sorted(p for p in versions.iterdir() if p.is_dir() and _VERSION_FOLDER.match(p.name)):
+            try:
+                version = version_from_json((path / VERSION_FILE).read_text(encoding="utf-8"))
+            except (OSError, UnicodeDecodeError) as error:
+                raise UnreadableVersion(f"버전 {path.name}을 읽을 수 없습니다: {error}") from error
+            except UnreadableVersion as error:
+                raise UnreadableVersion(f"버전 {path.name}: {error}") from error
+            if version.number != int(path.name):
+                raise UnreadableVersion(f"버전 {path.name}: 폴더와 버전 번호가 다릅니다.")
+            found.append(version)
+        return tuple(found)
 
     def _write(self, folder: Path, inspection: Inspection) -> None:
         atomic_write_text(folder / RECIPE_FILE, recipe_to_json(inspection.recipe))

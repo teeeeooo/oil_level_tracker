@@ -208,9 +208,29 @@ panel (computed result, override, reason).
      question of the handoff); the 60-character limit; the editor's fields
      side by side, as in the setup. Nothing locks the header yet: step 5
      does, on submitting.
-5. **Submitting and versions:** the submit dialog; `versions\NNN\` with
-   the edits, the judgment and the report; a submitted version read-only;
-   "고쳐서 다시 제출"; the list's states.
+5. **Submitting and versions — done** (2026-10-30), without the report:
+   - **Format** ([inspection-folder.md](../20-architecture/inspection-folder.md)
+     "Versions"): `versions\NNN\` holds `version.json` (each Glass's
+     final and computed judgment, the user's decision and check),
+     `edits.json`, and copies of `inspection.json` and `recipe.json`,
+     written through `NNN.partial\`; then the working `edits.json` is
+     removed. The state follows from the folder: versions without
+     `edits.json` are locked; with it, the next version is being edited.
+   - **Code:** `domain/version.py`; `Editing.submit`, `.revise` and
+     `.open(version)`; `is_locked` refuses saving, submitting, the report
+     header and re-analysis (`Locked`, 409); API `POST …/submit`,
+     `POST …/revise`, `GET …/edits?version=N` and the list's `submitted`
+     and `revising`.
+   - **Screens:** the submit dialog; a submitted version read-only under
+     a `--brand-tint` bar with the version picker and "고쳐서 다시 제출
+     (v<N+1>)…"; the list's "v<N> 제출함" with each Glass's judgment, or
+     "v<N+1> 고치는 중".
+   - **Agent's choices, to show the user:** revising keeps each Glass's
+     decision and check (a change takes a check off as before); the bar
+     stays while the next version is edited; on a submitted version the
+     editing panels are hidden; an older version that a later
+     re-analysis no longer fits opens only as its report; the app sets no
+     read-only file attributes (the lock is the app's).
 6. **The report:** `adapters/report`, self-contained HTML from
    `web/render.js` (A7: ≤ 5 MB, A4 landscape print).
 7. A Windows run of V2-4, with the V2-3 follow-ups (the upright stroke,

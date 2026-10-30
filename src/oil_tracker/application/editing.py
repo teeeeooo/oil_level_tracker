@@ -1,6 +1,8 @@
-"""Editor use cases: the edits, what follows from them, the point line and the source check.
+"""Editor use cases: the edits, what follows from them, the point line, the source check and
+submitting.
 
-Product SSOT §4, §5, §6 and A9; DESIGN.md §5 ("Editor window").
+Product SSOT §3 (submitting), §4, §5, §6 and A9; DESIGN.md §5 ("Editor window"). The versions and
+the inspection's state that follows from them: docs/20-architecture/inspection-folder.md.
 """
 
 from __future__ import annotations
@@ -27,6 +29,7 @@ from oil_tracker.domain.enums import InspectionState, LevelState, Verdict
 from oil_tracker.domain.inspection import Analysis, Inspection
 from oil_tracker.domain.judgment import Judgment, final_verdict, judge
 from oil_tracker.domain.recipe import Glass
+from oil_tracker.domain.version import Version, unchecked, version_of
 
 from .ports import Desktop, EdgeTracer, InspectionStore, SourceHasher, StoredAnalysis
 
@@ -39,11 +42,26 @@ class InvalidEdits(ValueError):
     """The edits or points do not fit the inspection's analysis: a client error."""
 
 
+class Locked(RuntimeError):
+    """The latest version is submitted: nothing changes until "고쳐서 다시 제출" (§3)."""
+
+
+class VersionOutOfDate(RuntimeError):
+    """An older version whose times the cache no longer has, after a later re-analysis."""
+
+
+def is_locked(store: InspectionStore, inspection_id: str) -> bool:
+    """Versions and no working edits: the latest version is submitted and read-only."""
+    return bool(store.versions(inspection_id)) and not store.has_edits(inspection_id)
+
+
 @dataclass(frozen=True)
 class OpenedEdits:
     edits: Edits
     saved_at: str | None  # None until the first "저장": the drafts as found
     unsaved: bool = False  # the saved edits were fitted to a newer analysis just now
+    version: int | None = None  # the submitted version shown read-only; None for the working edits
+    submitted: Inspection | None = None  # that version's inspection as submitted, with its report header
 
 
 @dataclass(frozen=True)
@@ -96,13 +114,22 @@ class Editing:
         self._checks: dict[str, SourceCheck] = {}
         self._lock = threading.Lock()
 
-    def open(self, inspection_id: str) -> OpenedEdits:
-        """The saved edits, or the first ones from the drafts.
+    def open(self, inspection_id: str, version: int | None = None) -> OpenedEdits:
+        """The saved edits, or the first ones from the drafts; or a submitted version, read-only.
 
-        Saved edits that no longer fit the analysis (the app stopped between a re-analysis and its
-        merge) are merged now and come back unsaved.
+        Without a version, a locked inspection shows its latest version. Saved edits that no longer
+        fit the analysis (the app stopped between a re-analysis and its merge) are merged now and
+        come back unsaved.
         """
         inspection, stored = self._analysed(inspection_id)
+        if version is None and is_locked(self.store, inspection_id):
+            version = self.store.versions(inspection_id)[-1].number
+        if version is not None:
+            submitted = self.store.load_version_edits(inspection_id, version)
+            if not _fits(submitted.edits, stored.analysis):
+                raise VersionOutOfDate(f"v{version} 뒤에 다시 분석해서 이 버전은 편집기로 열 수 없습니다. 보고서로 보세요.")
+            copy = self.store.load_version_inspection(inspection_id, version)
+            return OpenedEdits(submitted.edits, submitted.saved_at, version=version, submitted=copy)
         saved = self.store.load_edits(inspection_id)
         if saved is None:
             return OpenedEdits(edits_from_analysis(stored.analysis, inspection.settings.compressor_start_sec), None)
@@ -120,12 +147,39 @@ class Editing:
 
     def save(self, inspection_id: str, edits: Edits) -> str:
         """Replace the saved edits; return the time they were saved."""
-        _, stored = self._analysed(inspection_id)
-        if not _fits(edits, stored.analysis):
-            raise InvalidEdits("편집 내용이 이 검사의 분석과 맞지 않습니다.")
+        self._editable(inspection_id, edits)
         saved_at = self._now()
         self.store.save_edits(inspection_id, edits, saved_at)
         return saved_at
+
+    def versions(self, inspection_id: str) -> tuple[Version, ...]:
+        return self.store.versions(inspection_id)
+
+    def has_edits(self, inspection_id: str) -> bool:
+        return self.store.has_edits(inspection_id)
+
+    def submit(self, inspection_id: str, edits: Edits) -> Version:
+        """Lock these edits, saved or not, as the next version (§3). Every Glass must be checked."""
+        inspection = self._editable(inspection_id, edits)
+        left = unchecked(edits)
+        if left:
+            names = {glass.id: glass.name for glass in inspection.recipe.glasses}
+            raise InvalidEdits(f"모든 Glass를 확인해야 제출할 수 있습니다 (남은 Glass: {', '.join(names.get(g, g) for g in left)}).")
+        states = {state.glass_id: state.judgment for state in self.states(inspection_id, edits)}
+        versions = self.store.versions(inspection_id)
+        number = (versions[-1].number if versions else 0) + 1
+        version = version_of(number, self._now(), edits, states, inspection.recipe)
+        self.store.submit(inspection, edits, version)
+        return version
+
+    def revise(self, inspection_id: str) -> None:
+        """"고쳐서 다시 제출": the next version's working edits start as the latest version's, with each
+        Glass's decision and check; a change takes a Glass's check off as before."""
+        self._analysed(inspection_id)
+        if not is_locked(self.store, inspection_id):
+            raise Locked("이미 고치는 중이거나 제출한 버전이 없습니다.")
+        latest = self.store.versions(inspection_id)[-1].number
+        self.store.save_edits(inspection_id, self.store.load_version_edits(inspection_id, latest).edits, self._now())
 
     def mark_unsaved(self, unsaved: bool) -> None:
         """The editor holds edits it has not saved: closing the window asks first (§6)."""
@@ -189,6 +243,14 @@ class Editing:
             result = SourceCheck(SourceState.UNREADABLE, f"원본 영상을 읽을 수 없습니다: {failure}")
         with self._lock:
             self._checks[inspection_id] = result
+
+    def _editable(self, inspection_id: str, edits: Edits) -> Inspection:
+        inspection, stored = self._analysed(inspection_id)
+        if is_locked(self.store, inspection_id):
+            raise Locked("제출한 버전은 고칠 수 없습니다. \"고쳐서 다시 제출\"로 새 버전을 시작하세요.")
+        if not _fits(edits, stored.analysis):
+            raise InvalidEdits("편집 내용이 이 검사의 분석과 맞지 않습니다.")
+        return inspection
 
     def _analysed(self, inspection_id: str) -> tuple[Inspection, StoredAnalysis]:
         inspection = self.store.load(inspection_id)

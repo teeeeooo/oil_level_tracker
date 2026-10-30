@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+from oil_tracker.application.editing import Locked
 from oil_tracker.application.inspections import (
     GlassPosition,
     InspectionSetup,
@@ -29,7 +30,7 @@ from oil_tracker.application.videos import VideoSessions
 from oil_tracker.domain.edits import Dropped, Memo, edits_from_analysis
 from oil_tracker.domain.enums import InspectionState, JudgmentMode, SampleOrigin
 from oil_tracker.domain.geometry import Ellipse
-from oil_tracker.domain.inspection import AnalysisSettings, GlassDraft
+from oil_tracker.domain.inspection import AnalysisSettings, GlassDraft, ReportHeader
 from oil_tracker.domain.line import Line
 from oil_tracker.domain.recipe import Glass, JudgmentRule, Recipe, ReferenceFrame
 
@@ -49,6 +50,7 @@ class FakeInspectionStore:
 
     def __init__(self):
         self.saved, self.analyses, self.cleared, self.edits = {}, {}, [], {}
+        self.versions_of = {}
 
     def create(self, inspection):
         self.saved[inspection.id] = inspection
@@ -87,6 +89,12 @@ class FakeInspectionStore:
 
     def load_edits(self, inspection_id):
         return self.edits.get(inspection_id)
+
+    def has_edits(self, inspection_id):
+        return inspection_id in self.edits
+
+    def versions(self, inspection_id):
+        return self.versions_of.get(inspection_id, ())
 
 
 class FakeRecipeStore:
@@ -395,3 +403,19 @@ def test_listing_opening_and_the_folder(world):
     assert desktop.opened == [Path("/inspections")]
     with pytest.raises(InspectionNotFound):
         inspections.load("missing")
+
+
+def test_the_report_header_and_a_reanalysis_wait_for_revising_once_submitted(world):
+    inspections, store = world[0], world[1]
+    inspection = inspections.analyse(new_inspection(inspections), lambda d, t: None, lambda: False)
+    header = ReportHeader("GB-2", "냉각")
+    assert inspections.set_header(inspection.id, header).header == header
+    assert store.saved[inspection.id].header == header
+    store.versions_of[inspection.id] = ("v1",)  # submitted, with no working edits: locked
+    with pytest.raises(Locked):
+        inspections.set_header(inspection.id, ReportHeader())
+    with pytest.raises(Locked):
+        inspections.prepare(setup_for(None, inspection.id))
+    store.edits[inspection.id] = "working"  # "고쳐서 다시 제출"
+    assert inspections.set_header(inspection.id, ReportHeader()).header == ReportHeader()
+    assert inspections.prepare(setup_for(None, inspection.id)).inspection is not None

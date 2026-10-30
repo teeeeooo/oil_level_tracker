@@ -371,6 +371,48 @@ def test_editing_errors(app, video):
         assert call(running, "POST", f"{base}/point-line", {"glass_id": "g1", "points": points})[0] == 400
 
 
+def test_submitting_locks_a_version_until_revising(app, video):
+    running, tmp_path = app
+    inspection_id, opened, recipe = analysed_inspection(running, video)
+    base = f"/api/inspections/{inspection_id}"
+    first = call(running, "GET", f"{base}/edits")[1]
+    assert first["submission"] == {"versions": [], "showing": None, "header": None, "editable": True}
+    edits = first["edits"]
+    status, refused, _ = call(running, "POST", f"{base}/submit", {"edits": edits})
+    assert status == 400 and "남은 Glass: BASE" in refused["error"]
+
+    edits["glasses"][0]["decision"] = {"override": "FAIL", "reason": "거품", "checked_at": "2026-10-30T05:00:00+00:00"}
+    status, version, _ = call(running, "POST", f"{base}/submit", {"edits": edits})
+    assert status == 200 and version["version"] == 1
+    assert version["glasses"][0] | {"computed": None} == {
+        "glass_id": "g1", "verdict": "FAIL", "computed": None, "override": "FAIL", "reason": "거품",
+        "checked_at": "2026-10-30T05:00:00+00:00",
+    }
+    folder = next((tmp_path / "data" / "Inspections").iterdir())
+    assert (folder / "versions" / "001" / "version.json").is_file() and not (folder / "edits.json").exists()
+
+    locked = call(running, "GET", f"{base}/edits")[1]
+    assert (locked["submission"]["showing"], locked["submission"]["editable"]) == (1, False)
+    assert locked["edits"]["glasses"][0]["decision"]["reason"] == "거품"
+    assert locked["submission"]["header"] == {"compressor_model": None, "test_type": None}
+    entry = call(running, "GET", "/api/inspections")[1]["inspections"][0]
+    assert entry["submitted"]["version"] == 1 and entry["submitted"]["verdicts"] == [{"glass_name": "BASE", "verdict": "FAIL"}]
+    assert entry["revising"] is False
+    for path, body in ((f"{base}/edits", {"edits": edits}), (f"{base}/submit", {"edits": edits}),
+                       (f"{base}/header", {"test_type": "x"}), ("/api/inspections/start", setup_json(opened, recipe) | {"inspection_id": inspection_id, "video_id": None})):
+        assert call(running, "POST", path, body)[0] == 409, path
+
+    assert call(running, "POST", f"{base}/revise")[0] == 200
+    assert call(running, "POST", f"{base}/revise")[0] == 409
+    working = call(running, "GET", f"{base}/edits")[1]
+    assert working["submission"]["showing"] is None and working["submission"]["editable"] is True
+    assert call(running, "GET", "/api/inspections")[1]["inspections"][0]["revising"] is True
+    assert call(running, "GET", f"{base}/edits?version=1")[1]["submission"]["showing"] == 1
+    assert call(running, "GET", f"{base}/edits?version=2")[0] == 404
+    assert call(running, "GET", f"{base}/edits?version=x")[0] == 400
+    assert call(running, "POST", f"{base}/submit", {"edits": working["edits"]})[1]["version"] == 2
+
+
 def test_a_reanalysis_says_what_it_drops_and_keeps_the_rest(app, video):
     running, _ = app
     inspection_id, opened, recipe = analysed_inspection(running, video)

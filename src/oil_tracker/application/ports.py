@@ -10,6 +10,7 @@ from typing import Protocol
 from oil_tracker.domain.edits import Edits
 from oil_tracker.domain.inspection import Analysis, AnalysisSettings, GlassDraft, Inspection
 from oil_tracker.domain.recipe import Glass, Recipe
+from oil_tracker.domain.version import Version
 
 
 class RecipeNotFound(LookupError):
@@ -53,10 +54,16 @@ class UnreadableAnalysis(ValueError):
     pass
 
 
+class UnreadableVersion(ValueError):
+    pass
+
+
 @dataclass(frozen=True)
 class InspectionEntry:
     folder_name: str
     inspection: Inspection
+    versions: tuple[Version, ...] = ()  # the submitted versions, oldest first
+    has_edits: bool = False              # working edits are saved: with versions, the next is being edited
 
 
 @dataclass(frozen=True)
@@ -131,6 +138,23 @@ class InspectionStore(Protocol):
         ...
 
     def load_edits(self, inspection_id: str) -> StoredEdits | None: ...
+
+    def has_edits(self, inspection_id: str) -> bool: ...
+
+    def versions(self, inspection_id: str) -> tuple[Version, ...]:
+        """The submitted versions, oldest first."""
+        ...
+
+    def load_version_edits(self, inspection_id: str, number: int) -> StoredEdits: ...
+
+    def load_version_inspection(self, inspection_id: str, number: int) -> Inspection:
+        """The inspection and its Recipe copy as submitted in that version."""
+        ...
+
+    def submit(self, inspection: Inspection, edits: Edits, version: Version) -> None:
+        """Lock the edits as this version, with copies of the inspection and its Recipe, and remove
+        the working edits."""
+        ...
 
 
 class SourceHasher(Protocol):

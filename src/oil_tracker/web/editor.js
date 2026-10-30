@@ -18,6 +18,7 @@ const DRAG_PX = 3;         // the movement that makes a press a drag
 const MIN_SPAN_SEC = 2;    // the narrowest time view
 const MIN_SPAN_PX = 8;     // the lowest height view, in source px
 const SOURCE_POLL_MS = 300;
+const VIEW_KEYS = new Set(["KeyN", "Space", "Comma", "Period", "Escape"]);  // all a submitted version takes
 
 const state = {
   detail: null,            // the inspection
@@ -46,6 +47,7 @@ const state = {
   redraws: [],             // ms per lines redraw while dragging, for the A5 measurement
   memo: null,              // the memo in the dialog: { glassId, id or null for a new one, time, y }; set on open
   point: null,             // the point line in progress (see "the point line" below)
+  submission: null,        // { versions, showing, editable } (API); showing a version means read-only
 };
 let backToList = () => {};
 let toSetup = () => {};
@@ -63,16 +65,19 @@ const headerSaver = new HeaderSaver(
 
 // ---- opening and leaving -----------------------------------------------------------------------
 
-export async function open(inspectionId) {
+/** Open the inspection's working edits, or a submitted version read-only; a locked inspection
+ * shows its latest version. */
+export async function open(inspectionId, version = null) {
   release();
   nav.show("editorView");
   const id = encodeURIComponent(inspectionId);
   try {
     state.detail = await api.getJson(`/api/inspections/${id}`);
     state.analysis = await api.getJson(`/api/inspections/${id}/analysis`);
-    const opened = await api.getJson(`/api/inspections/${id}/edits`);
+    const opened = await api.getJson(`/api/inspections/${id}/edits${version === null ? "" : `?version=${version}`}`);
     state.edits = opened.edits;
     state.savedAt = opened.saved_at;
+    state.submission = opened.submission;
     setDirty(opened.unsaved);
     takeDerived(opened.glasses);
   } catch (error) {
@@ -82,9 +87,11 @@ export async function open(inspectionId) {
   state.glassId = state.analysis.glasses[0]?.glass_id ?? null;
   state.playhead = state.analysis.times[0] ?? 0;
   checkSource().catch(() => {});
+  if (locked()) state.tool = "pan";  // looking only: a drag moves the view, a click the playhead
   renderHeader();
   renderReportHeader();
   renderTools();
+  renderVersion();
   try {
     await player.open(inspectionId, { time: onPlayerTime, overlay, repeat: () => state.selection });
   } catch (error) {
@@ -101,11 +108,15 @@ function release() {
   state.derived.clear();
   state.history.clear();
   if ($("memoDialog").open) $("memoDialog").close();
-  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null, memo: null, point: null });
+  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null, memo: null, point: null, submission: null });
   setDirty(false);
   for (const id of ["graph", "context"]) for (const layer of $(id).children) layer.replaceChildren();
   $("axis").replaceChildren();
   $("sourceWarning").hidden = true;
+}
+
+function locked() {
+  return state.submission?.showing != null;
 }
 
 async function leave() {
@@ -831,7 +842,9 @@ function openMemo(id, t = null, y = null) {
   if (player.isPlaying()) player.stop();
   $("memoTitle").textContent = memo ? `메모 ${k + 1} · ${clock(time)}` : `새 메모 · ${clock(time)}`;
   $("memoText").value = memo?.text ?? "";
-  $("memoDelete").hidden = !memo;
+  $("memoText").readOnly = locked();
+  $("memoDelete").hidden = !memo || locked();
+  $("memoSave").hidden = locked();
   renderMemoDialog();
   $("memoDialog").showModal();
   $("memoText").focus();
@@ -849,7 +862,7 @@ function commitMemo(remove) {
   const text = $("memoText").value.trim();
   state.memo = null;
   $("memoDialog").close();
-  if (!target || !state.edits || (!remove && !text)) return;
+  if (!target || !state.edits || locked() || (!remove && !text)) return;
   const glass = editsOf(target.glassId);
   const before = glass.memos;
   let after;
@@ -975,14 +988,127 @@ function applyRangeNumber(input, edge) {
   renderRangeNumbers();
 }
 
+// ---- submitting and versions (Product SSOT §3; DESIGN.md §5) ------------------------------------
+
+function shownVersion() {
+  return locked() ? state.submission.versions.find((v) => v.version === state.submission.showing) : null;
+}
+
+function shownHeader() {
+  return state.submission.header;
+}
+
+/** The bar under the toolbar once there are versions: what is shown, the picker and "고쳐서 다시 제출". */
+function renderVersion() {
+  const { versions, showing, editable } = state.submission;
+  const latest = versions.at(-1)?.version ?? 0;
+  $("versionBar").hidden = versions.length === 0;
+  $("versionPicker").replaceChildren(
+    ...versions.map((v) => el("option", { value: String(v.version) }, `v${v.version} 제출함 ${localDate(v.submitted_at).slice(5)}`)),
+    editable ? el("option", { value: "" }, `v${latest + 1} 고치는 중`) : null);
+  $("versionPicker").value = showing === null ? "" : String(showing);
+  const folder = (n) => `versions\\${String(n).padStart(3, "0")}`;
+  if (showing === null) {
+    $("versionText").replaceChildren(el("b", {}, `v${latest + 1}을 고치는 중입니다.`), ` 제출한 v${latest}은 그대로 남아 있습니다.`);
+    $("versionCaption").textContent = "";
+  } else {
+    $("versionText").replaceChildren(el("b", {}, `v${showing}을 제출했습니다.`), " 제출한 버전은 고칠 수 없습니다.");
+    $("versionCaption").textContent = `검사 폴더의 ${folder(showing)}에 편집과 판정이 있습니다.`;
+  }
+  $("reviseButton").hidden = editable || showing !== latest;
+  $("reviseButton").textContent = `고쳐서 다시 제출 (v${latest + 1})…`;
+  const off = locked();  // a submitted version: tools off, the editing panels hidden
+  for (const node of document.querySelectorAll("#editorView button[data-tool], #editorUndo, #editorRedo, #editorSave, #editorReanalyse")) {
+    node.disabled = off;
+  }
+  for (const id of ["editSection", "overrideRow", "checkCaption", "headerCaption"]) $(id).hidden = off;
+  $("overrideReason").readOnly = off;
+  renderSelection();  // its buttons follow the selection again
+  renderGlassPicker();
+}
+
+/** Another version from the picker; "" is the working edits. One the cache no longer fits is
+ * refused before anything is left. */
+async function pickVersion() {
+  const value = $("versionPicker").value;
+  const version = value === "" ? null : Number(value);
+  if (state.dirty && !confirm("저장하지 않은 편집이 있습니다. 저장하지 않고 다른 버전을 열까요?")) {
+    renderVersion();
+    return;
+  }
+  const id = state.detail.id;
+  if (version !== null) {
+    const found = await api.call("GET", `/api/inspections/${encodeURIComponent(id)}/edits?version=${version}`);
+    if (!found.ok) {
+      notify("editorNotice", found.data.error ?? `HTTP ${found.status}`, "error");
+      renderVersion();
+      return;
+    }
+  }
+  await headerSaver.flush();
+  await open(id, version);
+}
+
+function openSubmit() {
+  if (locked() || !state.edits || state.edits.glasses.some((g) => !g.decision.checked_at)) return;
+  const next = (state.submission.versions.at(-1)?.version ?? 0) + 1;
+  $("submitTitle").textContent = `v${next} 제출`;
+  $("submitRows").replaceChildren(...state.edits.glasses.map((g) => {
+    const judgment = state.derived.get(g.glass_id)?.judgment;
+    const [text, tone] = VERDICTS[g.decision.override ?? judgment?.verdict ?? "REVIEW"];
+    const own = g.decision.override ? el("span", { class: "caption" }, ` 직접 판정 (자동: ${VERDICTS[judgment.computed][0]})`) : null;
+    return el("tr", {}, el("td", {}, recipeGlass(g.glass_id).name), el("td", {}, el("span", { class: `badge ${tone}` }, text), own),
+      el("td", {}, localDate(g.decision.checked_at).slice(11)));
+  }));
+  const header = state.detail.header;
+  $("submitHeader").replaceChildren(...[["압축기 모델", header.compressor_model], ["시험 종류", header.test_type]]
+    .map(([k, v]) => el("tr", {}, el("th", {}, k), el("td", {}, v?.trim() || "-"))));
+  $("submitCaption").textContent = `제출하면 v${next}이 잠기고, 편집과 판정을 검사 폴더의 versions\\${String(next).padStart(3, "0")}에 남깁니다. `
+    + "저장하지 않은 편집도 함께 제출됩니다.";
+  $("submitDialog").showModal();
+}
+
+async function submit() {
+  $("submitConfirm").disabled = true;
+  await headerSaver.flush();  // the version copies the stored header
+  const id = state.detail.id;
+  const result = await api.call("POST", `/api/inspections/${encodeURIComponent(id)}/submit`, { edits: state.edits });
+  $("submitConfirm").disabled = false;
+  $("submitDialog").close();
+  if (!result.ok) {
+    notify("editorNotice", result.data.error ?? `HTTP ${result.status}`, "error");
+    return;
+  }
+  setDirty(false);  // the submitted version holds them
+  await open(id);  // the bar says it is submitted
+}
+
+/** "고쳐서 다시 제출": the next version starts from the latest one, which stays as submitted. */
+async function revise() {
+  const latest = state.submission.versions.at(-1).version;
+  if (!confirm(`v${latest}을 이어받아 v${latest + 1}을 고칩니다. 제출한 v${latest}은 그대로 남습니다. 시작할까요?`)) return;
+  const id = state.detail.id;
+  const result = await api.call("POST", `/api/inspections/${encodeURIComponent(id)}/revise`);
+  if (!result.ok) {
+    notify("editorNotice", result.data.error ?? `HTTP ${result.status}`, "error");
+    return;
+  }
+  await open(id);
+  notify("editorNotice", `v${latest + 1}을 고치는 중입니다. 확인한 Glass는 고치면 확인이 풀립니다.`);
+}
+
 // ---- panels -----------------------------------------------------------------------------------------
 
 function renderHeader() {
   const d = state.detail;
   if (!d) return;
   $("editorTitle").textContent = d.name ?? d.video.name;
-  const saved = state.dirty ? "저장 안 함" : state.savedAt ? `저장함 ${localDate(state.savedAt).slice(11)}` : "초안 그대로";
-  $("editorState").replaceChildren(el("span", { class: state.dirty ? "dirty" : "" }, saved), ` · ${d.video.name}`);
+  const shown = shownVersion();
+  const versions = state.submission?.versions ?? [];
+  const saved = shown ? `v${shown.version} 제출함 ${localDate(shown.submitted_at).slice(5)}`
+    : state.dirty ? "저장 안 함" : state.savedAt ? `저장함 ${localDate(state.savedAt).slice(11)}` : "초안 그대로";
+  const revising = !shown && versions.length ? `v${versions.length + 1} 고치는 중 · ` : "";
+  $("editorState").replaceChildren(revising, el("span", { class: state.dirty ? "dirty" : "" }, saved), ` · ${d.video.name}`);
   const glasses = $("editorGlass");
   if ([...glasses.options].map((o) => o.value).join("\n") !== d.recipe.glasses.map((g) => g.id).join("\n")) {
     glasses.replaceChildren(...d.recipe.glasses.map((g) => el("option", { value: g.id }, g.name)));
@@ -1003,10 +1129,12 @@ function renderHeader() {
 /** 검사 정보: the report header, saved at once (header.js). */
 function renderReportHeader() {
   const d = state.detail;
-  $("editorHeader").replaceChildren(headerFields(d.header, (key, text) => {
+  const fields = headerFields(locked() ? shownHeader() : d.header, (key, text) => {
     d.header[key] = text;
     headerSaver.change(d.id, d.header);
-  }, () => headerSaver.flush()));
+  }, () => headerSaver.flush());
+  for (const input of fields.querySelectorAll("input")) input.disabled = locked();
+  $("editorHeader").replaceChildren(fields);
 }
 
 function compressorText() {
@@ -1062,9 +1190,11 @@ function renderJudgment() {
   }
   $("reasonBox").hidden = !decision.override;
   if (document.activeElement !== $("overrideReason")) $("overrideReason").value = decision.reason;
-  $("checkRow").hidden = Boolean(decision.checked_at);
+  $("checkRow").hidden = Boolean(decision.checked_at) || locked();
   $("checkedRow").hidden = !decision.checked_at;
-  $("checkedText").textContent = decision.checked_at ? `✓ 확인함 ${localDate(decision.checked_at).slice(11)}` : "";
+  const submitted = locked() ? ` · v${state.submission.showing}에 제출됨` : "";
+  $("checkedText").textContent = decision.checked_at ? `✓ 확인함 ${localDate(decision.checked_at).slice(11)}${submitted}` : "";
+  $("uncheckGlass").hidden = locked();
   const left = state.edits.glasses.filter((g) => !g.decision.checked_at).map((g) => recipeGlass(g.glass_id).name);
   $("checkLeft").textContent = left.length ? `남은 Glass: ${left.join(", ")}` : "";
   renderGlassPicker();
@@ -1103,9 +1233,10 @@ function renderGlassPicker() {
     option.textContent = `${recipeGlass(option.value).name} · ${status}`;
   }
   const left = state.edits.glasses.filter((g) => !g.decision.checked_at).map((g) => recipeGlass(g.glass_id).name);
-  $("editorSubmit").title = left.length
-    ? `모든 Glass를 확인해야 제출할 수 있습니다 (남은 Glass: ${left.join(", ")})`
-    : "제출은 다음 단계에서 만듭니다";
+  const next = (state.submission?.versions.at(-1)?.version ?? 0) + 1;
+  $("editorSubmit").disabled = locked() || left.length > 0;
+  $("editorSubmit").title = locked() ? "제출한 버전입니다"
+    : left.length ? `모든 Glass를 확인해야 제출할 수 있습니다 (남은 Glass: ${left.join(", ")})` : `v${next} 제출`;
 }
 
 function renderGlassPanel() {
@@ -1192,7 +1323,8 @@ function stepWidth(direction) {
 // ---- keys -----------------------------------------------------------------------------------------
 
 function onKey(event) {
-  if (!state.edits || typing()) return;
+  if (!state.edits || typing() || $("submitDialog").open) return;
+  if (locked() && (event.ctrlKey || event.metaKey || event.altKey || !VIEW_KEYS.has(event.code))) return;
   const ctrl = event.ctrlKey || event.metaKey;
   if (ctrl && event.code === "KeyZ") {
     event.preventDefault();
@@ -1261,6 +1393,14 @@ export function init(toList, openSetup) {
   $("editorBack").addEventListener("click", leave);
   $("sourceRecheck").addEventListener("click", () => checkSource().catch(() => {}));
   $("editorSave").addEventListener("click", save);
+  $("editorSubmit").addEventListener("click", openSubmit);
+  $("submitConfirm").addEventListener("click", submit);
+  $("submitCancel").addEventListener("click", () => $("submitDialog").close());
+  $("versionPicker").addEventListener("change", () => {
+    $("versionPicker").blur();  // the editor's keys again
+    pickVersion();
+  });
+  $("reviseButton").addEventListener("click", revise);
   $("editorReanalyse").addEventListener("click", reanalyse);
   $("markSelection").addEventListener("click", () => judgeSelection(true));
   $("memoText").addEventListener("input", renderMemoDialog);

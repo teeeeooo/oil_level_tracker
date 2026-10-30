@@ -14,7 +14,15 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
-from oil_tracker.application.editing import Editing, GlassState, InvalidEdits, NotAnalysed, SourceCheck
+from oil_tracker.application.editing import (
+    Editing,
+    GlassState,
+    InvalidEdits,
+    Locked,
+    NotAnalysed,
+    SourceCheck,
+    VersionOutOfDate,
+)
 from oil_tracker.application.inspections import (
     GlassPosition,
     InspectionSetup,
@@ -30,6 +38,7 @@ from oil_tracker.application.ports import (
     StoredAnalysis,
     UnreadableAnalysis,
     UnreadableEdits,
+    UnreadableVersion,
     VideoUnreadable,
 )
 from oil_tracker.application.recipes import (
@@ -51,6 +60,7 @@ from oil_tracker.domain.inspection import (
 )
 from oil_tracker.domain.line import Line
 from oil_tracker.domain.problems import Problem
+from oil_tracker.domain.version import Version
 from oil_tracker.domain.recipe import Glass, JudgmentRule, Recipe
 
 from .jobs import Jobs, JobsBusy, UnknownJob
@@ -185,6 +195,8 @@ def video_json(opened: OpenedVideo) -> dict[str, Any]:
 
 def inspection_summary(entry: InspectionEntry) -> dict[str, Any]:
     inspection = entry.inspection
+    names = {glass.id: glass.name for glass in inspection.recipe.glasses}
+    latest = entry.versions[-1] if entry.versions else None
     return {
         "id": inspection.id,
         "name": inspection.name,
@@ -195,6 +207,30 @@ def inspection_summary(entry: InspectionEntry) -> dict[str, Any]:
         "created_at": inspection.created_at,
         "state": inspection.state.value,
         "failure": inspection.failure,
+        "submitted": None if latest is None else {
+            "version": latest.number,
+            "submitted_at": latest.submitted_at,
+            "verdicts": [{"glass_name": names.get(g.glass_id, g.glass_id), "verdict": g.verdict.value} for g in latest.glasses],
+        },
+        "revising": latest is not None and entry.has_edits,  # the next version is being edited
+    }
+
+
+def version_json(version: Version) -> dict[str, Any]:
+    return {
+        "version": version.number,
+        "submitted_at": version.submitted_at,
+        "glasses": [
+            {
+                "glass_id": g.glass_id,
+                "verdict": g.verdict.value,
+                "computed": g.computed.value,
+                "override": None if g.override is None else g.override.value,
+                "reason": g.reason,
+                "checked_at": g.checked_at,
+            }
+            for g in version.glasses
+        ],
     }
 
 
@@ -624,16 +660,38 @@ def routes(ctx: ApiContext) -> list[Route]:
     def image_piece(_query, _body, inspection_id, glass_id, kind, index) -> Response:
         return Response(200, inspections.image_piece(inspection_id, glass_id, kind, int(index)), "image/png")
 
-    def open_edits(_query, _body, inspection_id) -> Response:
-        opened = editing.open(inspection_id)
+    def open_edits(query, _body, inspection_id) -> Response:
+        try:
+            version = int(query["version"][0]) if "version" in query else None
+        except ValueError as failure:
+            raise BadRequest(f"버전 번호가 올바르지 않습니다: {failure}") from failure
+        opened = editing.open(inspection_id, version)
+        versions = editing.versions(inspection_id)
         return json_response(
             {
                 "saved_at": opened.saved_at,
                 "unsaved": opened.unsaved,
                 "edits": edits_json(opened.edits),
                 "glasses": [glass_state_json(s) for s in editing.states(inspection_id, opened.edits)],
+                "submission": {
+                    "versions": [version_json(v) for v in versions],
+                    "showing": opened.version,  # a submitted version, read-only; None for the working edits
+                    "header": None if opened.submitted is None else header_json(opened.submitted.header),
+                    "editable": not versions or editing.has_edits(inspection_id),  # a working copy exists
+                },
             }
         )
+
+    def submit(_query, body, inspection_id) -> Response:
+        edits = parse_edits(body)
+        running = jobs.running()
+        if running is not None and running["inspection_id"] == inspection_id:
+            raise JobsBusy("이 검사를 다시 분석하는 중에는 제출할 수 없습니다.")
+        return json_response(version_json(editing.submit(inspection_id, edits)))
+
+    def revise(_query, _body, inspection_id) -> Response:
+        editing.revise(inspection_id)
+        return json_response({})
 
     def save_edits(_query, body, inspection_id) -> Response:
         edits = parse_edits(body)
@@ -684,6 +742,8 @@ def routes(ctx: ApiContext) -> list[Route]:
         ("GET", re.compile(rf"/api/inspections/{segment}/edits"), open_edits),
         ("POST", re.compile(rf"/api/inspections/{segment}/edits"), save_edits),
         ("POST", re.compile(rf"/api/inspections/{segment}/edits/states"), edit_states),
+        ("POST", re.compile(rf"/api/inspections/{segment}/submit"), submit),
+        ("POST", re.compile(rf"/api/inspections/{segment}/revise"), revise),
         ("POST", re.compile(rf"/api/inspections/{segment}/point-line"), point_line),
         ("GET", re.compile(rf"/api/inspections/{segment}/source-check"), source_check),
         ("POST", re.compile(rf"/api/inspections/{segment}/source-check"), check_source_again),
@@ -761,9 +821,9 @@ def make_handler(ctx: ApiContext) -> type[BaseHTTPRequestHandler]:
                 response = error(400, str(failure))
             except (RecipeNotFound, UnknownVideo, InspectionNotFound, UnknownJob) as failure:
                 response = error(404, str(failure))
-            except (VideoUnreadable, VideoDoesNotFit, UnreadableAnalysis, UnreadableEdits) as failure:
+            except (VideoUnreadable, VideoDoesNotFit, UnreadableAnalysis, UnreadableEdits, UnreadableVersion) as failure:
                 response = error(422, str(failure))
-            except (NotAnalysed, JobsBusy) as failure:
+            except (NotAnalysed, JobsBusy, Locked, VersionOutOfDate) as failure:
                 response = error(409, str(failure))
             except (InvalidSetup, InvalidEdits) as failure:
                 response = error(400, str(failure))

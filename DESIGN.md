@@ -284,6 +284,13 @@ Do not use sizes outside this ramp.
     under the toolbar says so, with the version picker (older versions
     open read-only), "보고서 열기" and "고쳐서 다시 제출 (v<N+1>)…"
     (primary).
+    - **Agent's choices** (V2-4 step 5, 2026-10-30): on a submitted
+      version the 편집 panel, the 덮어쓰기 row and the check captions are
+      hidden, not just disabled; a drag moves the view and a click the
+      playhead. While v<N+1> is being edited the same bar stays, saying so,
+      with the picker for the submitted versions. An older version that a
+      later re-analysis no longer fits does not open in the editor (only
+      its report shows it). "보고서 열기" comes with the report (step 6).
   - **Source warning (A9):** when opening the editor finds the source video
     changed, missing or unreadable, a message bar spans the window under
     the toolbar: `--warning-bg` with a 1 px `--warning-border` bottom edge,
