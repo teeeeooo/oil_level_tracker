@@ -2,7 +2,9 @@
 
 Usage: python scripts/inspection_summary.py [--data DATA_FOLDER]
 Read-only. The default data folder is Documents\\OilLevelTracker. The source SHA-256 of every
-analysed inspection is computed again from its video, when the video is still there.
+analysed inspection is computed again from its video, when the video is still there. Saved edits
+(edits.json) are counted per Glass: each line's samples by origin and empty, the "cannot judge"
+stretches with the coverage, and the memos.
 """
 
 from __future__ import annotations
@@ -17,7 +19,9 @@ from oil_tracker.adapters.storage.files import sha256_of
 from oil_tracker.adapters.storage.inspection_files import ANALYSIS_FILE, CACHE, IMAGE_KINDS, InspectionFolders
 from oil_tracker.adapters.storage.recipe_files import RecipeFolder
 from oil_tracker.application.ports import InspectionNotFound, RecipeNotFound
-from oil_tracker.domain.enums import InspectionState
+from oil_tracker.domain.edits import coverage
+from oil_tracker.domain.enums import InspectionState, SampleOrigin
+from oil_tracker.domain.line import Line
 from oil_tracker.domain.recipe import Glass, Recipe
 
 POSITION = (("cx", "center_x"), ("cy", "center_y"), ("rx", "radius_x"), ("ry", "radius_y"))
@@ -46,6 +50,12 @@ def has_piece(folders: InspectionFolders, inspection_id: str, glass_id: str, kin
     except InspectionNotFound:
         return False
     return True
+
+
+def line_counts(line: Line) -> str:
+    """Samples by origin, then the empty ones: "draft/edited/drawn/empty"."""
+    by = [sum(o is origin for o in line.origins) for origin in (SampleOrigin.DRAFT, SampleOrigin.EDITED, SampleOrigin.DRAWN)]
+    return "/".join(str(n) for n in (*by, sum(y is None for y in line.ys)))
 
 
 def seconds_between(start: str, end: str) -> float:
@@ -124,6 +134,21 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f'  cache glass name="{names.get(layout.glass_id, layout.glass_id)}" y0={layout.y0} '
                 f"rows={layout.rows} pieces={layout.pieces} files={files}/{2 * layout.pieces} empty={empty:.1f}%"
+            )
+        saved = folders.load_edits(inspection.id)
+        if saved is None:
+            print("  edits none")
+            continue
+        edits = saved.edits
+        moved = "-" if edits.compressor_start_sec is None else f"{edits.compressor_start_sec:.1f}"
+        print(f"  edits saved_at={saved.saved_at} times={len(edits.times)} compressor={moved}")
+        for glass in edits.glasses:
+            c = coverage(edits.times, glass)
+            print(
+                f'  edits glass name="{names.get(glass.glass_id, glass.glass_id)}" '
+                f"oil={line_counts(glass.oil)} foam={line_counts(glass.foam)} reference={line_counts(glass.reference)} "
+                f"cannot_judge={len(glass.cannot_judge)} empty={c.empty} cannot={c.cannot_judge} "
+                f"valid={100 * c.valid_ratio:.1f}% memos={len(glass.memos)}"
             )
     return 0
 

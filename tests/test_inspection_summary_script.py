@@ -8,6 +8,7 @@ from pathlib import Path
 from oil_tracker.adapters.storage.inspection_files import InspectionFolders
 from oil_tracker.adapters.storage.recipe_files import RecipeFolder
 from oil_tracker.application.ports import GlassImages
+from oil_tracker.domain.edits import Edits, GlassEdits, Memo, Stretch, empty_line
 from oil_tracker.domain.enums import InspectionState, SampleOrigin
 from oil_tracker.domain.geometry import Ellipse
 from oil_tracker.domain.inspection import Analysis, AnalysisSettings, GlassDraft, Inspection, SourceVideo
@@ -47,6 +48,11 @@ def test_summary_lines(tmp_path, capsys):
     (tmp_path / "Inspections" / name / "cache" / "g-base" / "background-001.png").unlink()
     written = datetime.fromisoformat(CREATED).timestamp() + 52.4
     os.utime(tmp_path / "Inspections" / name / "cache" / "analysis.json", (written, written))
+    D, E, W = SampleOrigin.DRAFT, SampleOrigin.EDITED, SampleOrigin.DRAWN
+    edited = GlassEdits("g-base", Line((400.0, None, 401.0, 402.0), (D, E, W, W)), empty_line(4),
+                        Line((380.0,) * 4, (W,) * 4), (Stretch(1.4, 1.6),), (Memo("m1", 0.5, None, "거품"),))
+    folders.save_edits("i1", Edits(analysis.times, (edited, GlassEdits("g-acc", oil, empty_line(4), empty_line(4))), 20.5),
+                       "2026-10-29T05:10:00+00:00")
 
     later = replace(analysed, id="i2", name=None, created_at="2026-10-29T06:00:00+00:00", recipe=replace(copy, id="gone"),
                     settings=AnalysisSettings(10.0, 20.0), state=InspectionState.NOT_ANALYSED)
@@ -71,7 +77,12 @@ def test_summary_lines(tmp_path, capsys):
     )
     assert lines[7] == '  cache glass name="BASE" y0=160 rows=400 pieces=2 files=3/4 empty=50.0%'
     assert lines[8] == '  cache glass name="Accum" y0=280 rows=240 pieces=1 files=2/2 empty=50.0%'
-    assert ' name="" state=NOT_ANALYSED ' in lines[9]
-    assert lines[9].endswith('compressor=- recipe="SPL#4 냉각" created_at=2026-10-29T06:00:00+00:00 recipe_updated_at=-')
-    assert lines[10].endswith('recipe_diff="recipe_missing"')
-    assert lines[12] == "  analysis none partial=no"
+    assert lines[9] == "  edits saved_at=2026-10-29T05:10:00+00:00 times=4 compressor=20.5"
+    assert lines[10] == ('  edits glass name="BASE" oil=1/1/2/1 foam=4/0/0/4 reference=0/0/4/0 '
+                         "cannot_judge=1 empty=1 cannot=1 valid=50.0% memos=1")  # the sample at 1.5 s is "cannot judge"
+    assert lines[11] == ('  edits glass name="Accum" oil=4/0/0/2 foam=4/0/0/4 reference=4/0/0/4 '
+                         "cannot_judge=0 empty=2 cannot=0 valid=50.0% memos=0")
+    assert ' name="" state=NOT_ANALYSED ' in lines[12]
+    assert lines[12].endswith('compressor=- recipe="SPL#4 냉각" created_at=2026-10-29T06:00:00+00:00 recipe_updated_at=-')
+    assert lines[13].endswith('recipe_diff="recipe_missing"')
+    assert lines[15] == "  analysis none partial=no"
