@@ -11,6 +11,10 @@ Rewrite it; do not append to it.
 - **Product SSOT:** [product.md](../10-product/product.md).
   - Goal and the acceptance criteria A1–A9.
   - Acceptance videos: SPL#1 and SPL#4.
+  - **Where the time limits are judged** (user, 2026-10-30, §2): A4–A6
+    pass or fail on the workstation. The slowest PC is the worst case,
+    for reference only: its timings point to simple speed-ups, and a miss
+    there holds nothing up.
   - All product decisions. On 2026-10-29 the user settled the Recipe (§3),
     the judgment rule (§5) and the data folder (§8) at the V2-1 start, and
     the inspection flow, the analysis setup (§3), the draft method (§4)
@@ -190,11 +194,14 @@ the undo depth and the shortcuts.
      no lightening.
    - **1× playback passes** in the `<video>`; SPL#1 is H.264, which Edge
      plays.
-   - **The exact frame fails (A6-s):** 230 ms at the median, 413 ms at most,
-     against 100 ms; the `<video>`'s seek is slower (352 ms). SPL#1 has a
+   - **The exact frame took 230 ms** at the median (413 ms at most), over
+     the 100 ms limit; the `<video>`'s seek is slower (352 ms). SPL#1 has a
      key frame every 250 frames, and a seek decodes from the previous one
-     (1.6–1.8 ms a frame there). By the criteria, making the frame reading
-     faster comes first. **The way is put to the user** (see Next).
+     (1.6–1.8 ms a frame there). On the workstation, which decodes about
+     7.5× faster, the same path should take about 30 ms (not measured).
+     **The user's call** (2026-10-30): usable, so reference only; the time
+     limits are judged on the workstation (Product SSOT §2). Nothing waits
+     on it.
    - **The cheaper median passes (A4-m2):** the `uint8` partition is in
      `_Band.median` (`908f624`), with identical values.
    - The analysis through the app's server took 163.0 s.
@@ -231,7 +238,7 @@ the undo depth and the shortcuts.
        graph (`render.memoPinAt`), the memo dialog and the memo list;
        undoable like the stretches.
    - **Left:** the point line with its preview. A5 passed, so the drawing
-     allows it; the criteria put the frame reading (A6-s) first.
+     allows it.
 8. **Checks:** unit and API tests, macOS smoke checks, and a Windows run.
    It also covers the V2-2 follow-up, and the window-close question in
    the real window (WinForms), which macOS tests cannot reach.
@@ -240,24 +247,22 @@ the undo depth and the shortcuts.
 
 **The A5/A6 result arrived on 2026-10-30** and is judged in
 [its result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md).
+The user then moved the time limits to the workstation (Product SSOT §2).
 - V2-3 steps 1 to 6 are done; step 7 is done but for the point line.
-- **Waiting on the user:** the way to make the exact frame faster (A6-s),
-  from the options in Next.
+- Nothing waits on the user.
 
-**Resume:** read this file and the result, then
-- [product.md](../10-product/product.md) §2 (A6), §4 and §6,
-  [DESIGN.md](../../DESIGN.md) §2.7 and §5 ("Editor window") and
-  [architecture.md](../20-architecture/architecture.md) (the editor's
-  video, the point line, `/media/`);
-- the code: `adapters/video/frames.py` (`OpenCvVideo.frame_at`, the read-on
-  limit), `web/player.js` (`seek`, frame steps, the `<video>`),
-  `web/editor.js`, `web/lines.js`, `web/render.js`,
-  `application/editing.py` and `scripts/measure_editor.py`.
+**Resume:** read this file, then
+- [product.md](../10-product/product.md) §4 and §6 (the point line),
+  [DESIGN.md](../../DESIGN.md) §5 ("Editor window") and
+  [architecture.md](../20-architecture/architecture.md) (the point line,
+  "During a drag");
+- the code: `adapters/video/trace.py` and the `point-line` route,
+  `web/editor.js` (the disabled point-line button), `web/lines.js`
+  (operations, undo history), `web/render.js` (layers).
 
-**After the A6-s choice:** build it, measure it on macOS, and if it changes
-the frame path, re-measure on the slowest PC. Then the point line (step 7),
-then step 8: the checks and a Windows run, which also covers the V2-2
-follow-up and the close question in the real window.
+**Next:** the point line (step 7), then step 8: the checks and a Windows
+run on the workstation, which also covers the V2-2 follow-up and the close
+question in the real window.
 
 **Done before the result, with the user's leave** (2026-10-29 evening and
 2026-10-30): the review fixes (`890b5ea`), the draft search (`ae4873c`),
@@ -300,10 +305,11 @@ memo pins on the graph only, and the memo dialog. All are in DESIGN.md §5.
 
 ## Open items
 
-**Before V2-5** (A4 is judged in the app on the slowest PC):
-- **Less CPU work in the analysis.** The slowest PC takes 169.7 s of 180 s
-  for the adapter; nearly all of it is reading the video (`grab` 113 s,
-  `retrieve` 45 s).
+**Speed on the slowest PC, for reference** (the limits are judged on the
+workstation since 2026-10-30; these are simple speed-ups, never blockers):
+- **Less CPU work in the analysis.** The slowest PC took 169.7 s for the
+  adapter (limit 180 s on the workstation, where it took 46.4 s); nearly
+  all of it is reading the video (`grab` 113 s, `retrieve` 45 s).
   - **The draft search — done** (`ae4873c`): about 10× faster, the same
     best path. Exact ties (a saturated edge) now take the upper row.
   - **Cheaper medians — done** (`908f624`): the `uint8` partition, 2.46×
@@ -326,6 +332,9 @@ memo pins on the graph only, and the memo dialog. All are in DESIGN.md §5.
   should take after the faster draft search. So the server adds little;
   the workstation's 60.6 s against 46.4 s was the other job. The window
   (pywebview) is timed in V2-5.
+- **Exact frames** took 230 ms on the slowest PC (key frames every 250
+  frames). A cheap gain if wanted: keep the frames decoded on the way to
+  a seek, so stepping back a frame and clicking nearby are instant.
 
 **The next Windows run** also covers the V2-2 follow-up above, as the
 V2-2 run covered the V2-1 follow-up.
@@ -369,11 +378,9 @@ V2-2 run covered the V2-1 follow-up.
   by typing. At that height its chord is a point under the edge handle.
 - There is no Recipe deletion in the first version (user, 2026-10-29).
 - The PyInstaller build (V2-5) must ship `src/oil_tracker/web/` as data.
-- **A4 has about 17 s to spare on the slowest PC** (163.0 s through the
-  app's server), before the `uint8` medians and the window. See the open
-  items.
-- **The exact frame misses A6 on the slowest PC** (230 ms against 100 ms):
-  see step 6 and Next.
+- **On the slowest PC (reference only),** the analysis takes 163.0 s
+  through the app's server and an exact frame 230 ms. The user finds that
+  usable (2026-10-30).
 
 ## Local environment (macOS)
 
@@ -397,21 +404,7 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done:** V2-3 steps 1 to 6 and step 7 but for the point line. The A5/A6
   result passed A5, playback and the median comparison; the `uint8`
-  medians are in the app.
-- **Waiting on the user: how to make the exact frame faster (A6-s).** The
-  cost is the source's key-frame spacing (250 frames), not the app's code,
-  so each way trades something the user owns:
-  1. **A shorter key-frame interval at the recorder** (about 1 s): about
-     12 frames to decode instead of 125, so well under 100 ms on that PC
-     with no app change; for new videos only.
-  2. **Exact frames prepared during the analysis** at the sample times,
-     with clicks on the graph landing on a sample: instant there, but more
-     analysis time (A4) and more disk per inspection.
-  3. **PyAV** (a new dependency), which can skip frames no other frame
-     needs; whether SPL#1 has such frames is unknown, so it may gain
-     nothing.
-  4. **A changed A6**, e.g. the median over frame steps and nearby clicks
-     rather than random times (a change to the acceptance criteria).
-  - The agent can add, in any case: keeping the frames decoded on the
-    way to a seek, so stepping back and clicking nearby are instant.
-- **Then:** the point line (step 7), then step 8.
+  medians are in the app. The user moved the time limits to the
+  workstation and keeps the slowest PC for reference (Product SSOT §2).
+- **Now:** the point line with its preview (step 7).
+- **Then:** step 8, the checks and a Windows run on the workstation.

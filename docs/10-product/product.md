@@ -56,10 +56,15 @@ judged on target Windows with the PyInstaller one-folder build.
 
 Draft quality is **not** an acceptance criterion.
 
-**Target Windows** (user, 2026-10-29): the inspectors' PCs vary. The
-slowest is about an Intel Xeon E5-1620 v3 (4 cores, 8 threads, 3.5 GHz)
-with 16 GB RAM and an NVIDIA Quadro K620. The time limits (A4–A6) must
-hold on a PC of that class.
+**Target Windows** (user, 2026-10-29; changed 2026-10-30): the inspectors'
+PCs vary.
+- **The time limits (A4–A6) are judged on the workstation** (AMD Ryzen
+  Threadripper PRO 7945WX, 12 cores, 128 GB RAM).
+- **The slowest PC is for reference only:** about an Intel Xeon E5-1620 v3
+  (4 cores, 8 threads, 3.5 GHz) with 16 GB RAM and an NVIDIA Quadro K620,
+  the worst case. Its timings show where a simple change could make the
+  app faster; missing a limit there does not fail acceptance or hold work
+  up. What matters there is that the app is usable.
 
 ## 3. Flow
 

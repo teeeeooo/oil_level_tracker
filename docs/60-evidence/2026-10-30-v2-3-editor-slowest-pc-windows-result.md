@@ -10,6 +10,10 @@
 - **The cheaper median passes** (A4-m2): the `uint8` partition went into
   the app (`908f624`).
 
+**Later the same day** the user judged the exact frame usable and moved the
+time limits to the workstation; the slowest PC is now for reference only
+(Product SSOT §2). So the A6-s miss holds nothing up.
+
 - **Request:** [2026-10-29-v2-3-editor-slowest-pc-windows-request.md](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md).
   Its criteria were fixed before the run.
 - **Source run:** commit `8a96b22`, confirmed by
