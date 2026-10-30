@@ -261,7 +261,8 @@ panel (computed result, override, reason).
      the user's "고쳐서 다시 제출 (v3)…": as designed.
    - **Done** the same day; also, a closed dialog no longer keeps the
      focus (Esc on the memo dialog left the editor's keys off).
-     A re-check on Windows is next.
+     The re-check, pinned to `b66f387`, waits on the user's run:
+     [2026-10-30-v2-4-recheck-windows-request.md](../40-operations/2026-10-30-v2-4-recheck-windows-request.md).
    Earlier text of this step: The request, pinned to `95de064`:
    [2026-10-30-v2-4-judgment-report-windows-request.md](../40-operations/2026-10-30-v2-4-judgment-report-windows-request.md).
    It backs the Inspections folder up first (submitting cannot be undone),

@@ -48,6 +48,7 @@
 | 2026-10-30 | [2026-10-30-v2-3-editor-windows-request.md](40-operations/2026-10-30-v2-3-editor-windows-request.md) | V2-3 편집기, 워크스테이션의 A4–A6, V2-2 후속 Windows 확인 요청 |
 | 2026-10-30 | [2026-10-30-v2-3-editor-recheck-windows-request.md](40-operations/2026-10-30-v2-3-editor-recheck-windows-request.md) | V2-3 편집기 재확인(R2, 콘솔, 사용자 소감 반영) Windows 요청 |
 | 2026-10-30 | [2026-10-30-v2-4-judgment-report-windows-request.md](40-operations/2026-10-30-v2-4-judgment-report-windows-request.md) | V2-4 판정·제출·보고서와 V2-3 후속(세로선, 점 잇기 8 px) Windows 확인 요청 |
+| 2026-10-30 | [2026-10-30-v2-4-recheck-windows-request.md](40-operations/2026-10-30-v2-4-recheck-windows-request.md) | V2-4 재확인(연필 수평, 메모 목록, 오른쪽 칸, 제출 창 머리글, 보고서 1쪽) Windows 요청 |
 
 ## docs/50-diagnostics/
 
