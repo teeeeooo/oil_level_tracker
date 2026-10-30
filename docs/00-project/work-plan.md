@@ -243,9 +243,24 @@ the undo depth and the shortcuts.
      pointer would add. Enter writes the path into the chosen line from
      the first point to the last as one undoable change; Backspace takes
      the last placed point off; Esc, another tool or another Glass cancels.
-8. **Checks:** unit and API tests, macOS smoke checks, and a Windows run.
-   It also covers the V2-2 follow-up, and the window-close question in
-   the real window (WinForms), which macOS tests cannot reach.
+8. **Checks — the Windows run is requested, waiting on the user:**
+   [the request](../40-operations/2026-10-30-v2-3-editor-windows-request.md),
+   pinned to `3ac76ce` (`checked=86`), criteria fixed in it.
+   - **On macOS:** 208 tests pass, the editor's smoke checks among them.
+   - **The run, on the workstation with its agent:**
+     - the tests (`198 passed, 4 skipped`);
+     - **A4, A5 and A6 judged there** with `scripts/measure_editor.py` in
+       Edge (`source=4f9cb83ac6d9 files=54`), as on the slowest PC;
+     - the editor on one SPL#1 inspection of V2-2 in the real window: every
+       tool, undo, saving, the questions on leaving and on closing the
+       window (WinForms), and resuming after a restart;
+     - a new inspection named `V2-3 확인` from a copy of SPL#4 (the V2-2
+       follow-up: the yellow range band, `mm:ss.s`, the name), re-analysed
+       to 03:30 to drop an edit, and the source warning (A9) with the copy
+       renamed and back;
+     - `scripts/inspection_summary.py` now counts the saved edits
+       (`3ac76ce`), which the criteria R2–R4 read.
+   - If it passes, V2-3 closes.
 
 ## Session handoff — 2026-10-30
 
@@ -253,15 +268,15 @@ the undo depth and the shortcuts.
 [its result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md).
 The user then moved the time limits to the workstation (Product SSOT §2).
 - V2-3 steps 1 to 7 are done; the point line closed step 7 (`9aa6382`).
-- Nothing waits on the user.
+- **Waiting on the user:** the workstation run of
+  [the V2-3 editor request](../40-operations/2026-10-30-v2-3-editor-windows-request.md),
+  pinned to `3ac76ce`. Later commits do not change that ZIP.
 
-**Resume:** read this file, then step 8 below, the
-[V2-2 flow request](../40-operations/2026-10-29-v2-2-analysis-flow-windows-request.md)
-(the pattern for an agent request) and
-[execution-policy.md](execution-policy.md).
-
-**Next:** step 8: the checks and a Windows run on the workstation, which
-also covers the V2-2 follow-up and the close question in the real window.
+**When the result comes:** judge it row by row against the request's fixed
+criteria, write `60-evidence/<the day it arrives>-v2-3-editor-windows-result.md`
+and add it to the catalog. If everything passes, close V2-3 (roadmap and
+this file) and start V2-4; a failed row gets a fix and a re-check of what
+it touches only.
 
 **Done before the result, with the user's leave** (2026-10-29 evening and
 2026-10-30): the review fixes (`890b5ea`), the draft search (`ae4873c`),
@@ -366,7 +381,7 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `9aa6382`: `199 passed, 3 skipped` on macOS, so
+  test. At `3ac76ce`: `199 passed, 3 skipped` on macOS, so
   `198 passed, 4 skipped` on Windows when its venv has no Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
@@ -408,4 +423,6 @@ The three v1 remote branches that v1 docs cite stay.
   the median comparison; the `uint8` medians are in the app. The user
   moved the time limits to the workstation and keeps the slowest PC for
   reference (Product SSOT §2). The point line closed step 7.
-- **Now:** step 8, the checks and a Windows run on the workstation.
+- **Waiting on the user:** the workstation run of
+  [the V2-3 editor request](../40-operations/2026-10-30-v2-3-editor-windows-request.md)
+  (step 8). Its result closes V2-3 or names what to fix.
