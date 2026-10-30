@@ -336,7 +336,9 @@ Do not use sizes outside this ramp.
           the compressor start takes the check off (Foam, reference lines
           and memos do not feed the judgment);
       - **검사 정보, "보고서 머리글":** the compressor model and the test
-        type as text fields, editable until submitting;
+        type as text fields side by side, as in the setup, editable until
+        submitting. A change is saved at once, apart from the edits'
+        "저장" (agent's choice, 2026-10-30);
       - **메모:** the Glass's memos in time order, each a 20 px numbered
         `--memo` pin, its time (Caption 1, `--fg-3`) and its text; a click
         brings the time into view and opens the memo;

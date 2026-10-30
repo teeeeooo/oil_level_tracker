@@ -3,13 +3,14 @@
 // edits and shows. Nothing is written until "분석 시작".
 import * as api from "./api.js";
 import * as frame from "./frame.js";
+import { HeaderSaver, headerFields } from "./header.js";
 import * as nav from "./nav.js";
 import { positionFields, renderPositionInputs, showFieldProblems } from "./recipe.js";
 import { $, MODES, clock, el, localDate, notify, parseClock, typing } from "./ui.js";
 
 const STATES = { ANALYSED: "분석 완료", NOT_ANALYSED: "분석 안 됨", FAILED: "분석 실패" };
 const SETTINGS = ["start_sec", "end_sec", "compressor_start_sec"];
-const FIELDS = [...SETTINGS, "inspection_name"];  // problems shown under their own input
+const FIELDS = [...SETTINGS, "inspection_name", "compressor_model", "test_type"];  // problems shown under their own input
 const CHECK_DELAY_MS = 250;
 const POLL_MS = 500;
 
@@ -18,6 +19,7 @@ let links = { openRecipes: () => {}, newRecipeWith: () => {}, openEditor: () => 
 const setup = {
   inspection: null,      // the existing inspection, or null until the analysis first starts
   name: "",              // the inspection name as typed; fixed once the folder is made
+  header: {},            // the report header as typed; saved at once once the folder exists
   recipe: null,          // the inspection's Recipe copy; Glass positions change in place
   original: null,        // the stored Recipe the copy came from, or null when it is gone
   needsCompressor: false,
@@ -127,7 +129,7 @@ async function newInspection() {
     return;
   }
   enterSetup({
-    inspection: null, name: "", video, recipe, original: structuredClone(recipe),
+    inspection: null, name: "", header: {}, video, recipe, original: structuredClone(recipe),
     needsCompressor: choice.needs_compressor_start,
     settings: { start_sec: 0, end_sec: video.duration_sec, compressor_start_sec: null },
   });
@@ -221,6 +223,7 @@ export async function openSetup(inspectionId) {
   enterSetup({
     inspection: detail,
     name: detail.name ?? "",
+    header: { ...detail.header },
     video: opened.ok ? opened.data : null,
     recipe: structuredClone(detail.recipe),
     original: original.ok ? original.data : null,
@@ -234,8 +237,8 @@ export async function openSetup(inspectionId) {
   if (!opened.ok) $("setupVideoErr").textContent = `영상을 열 수 없습니다: ${opened.data.error ?? ""}`;
 }
 
-function enterSetup({ inspection, name, video, recipe, original, needsCompressor, settings }) {
-  Object.assign(setup, { inspection, name, recipe, original, needsCompressor, settings });
+function enterSetup({ inspection, name, header, video, recipe, original, needsCompressor, settings }) {
+  Object.assign(setup, { inspection, name, header, recipe, original, needsCompressor, settings });
   setup.selected = recipe.glasses[0]?.id ?? null;
   setup.problems = [];
   setup.badInputs.clear();
@@ -289,6 +292,7 @@ function body() {
     glasses: setup.recipe.glasses.map((g) => ({ id: g.id, ellipse: g.ellipse, zero_line_y: g.zero_line_y })),
     settings: setup.settings,
     name: setup.inspection ? null : setup.name,
+    header: setup.inspection ? null : setup.header,
   };
 }
 
@@ -372,6 +376,7 @@ function revertGlass(glass) {
 }
 
 async function back() {
+  await headerSaver.flush();
   const where = setup.again ? "편집기로 돌아갈까요?" : "검사 목록으로 갈까요?";
   if (setup.dirty && !confirm(`분석을 시작하지 않으면 바꾼 설정은 저장되지 않습니다. ${where}`)) return;
   if (!setup.again) {
@@ -403,6 +408,7 @@ async function startAnalysis() {
     return;
   }
   frame.stopPlayback();
+  await headerSaver.flush();  // the analysis keeps the stored header
   if (setup.again) {  // say first what the new range drops (Product SSOT §6)
     const check = await api.call("POST", "/api/inspections/check", body());
     const text = check.ok ? droppedText(check.data.dropped) : "";
@@ -423,6 +429,7 @@ async function startAnalysis() {
   }
   setup.inspection = result.data.inspection;  // the folder exists from here on
   setup.name = setup.inspection.name ?? "";
+  setup.header = { ...setup.inspection.header };
   setup.dirty = false;
   renderTitle();
   renderNameField();
@@ -518,12 +525,25 @@ function renderNameField() {
     changed();
   });
   input.addEventListener("keydown", (event) => { if (event.key === "Enter") input.blur(); });
+  const header = headerFields(setup.header, (key, text) => {
+    setup.header[key] = text;
+    if (setup.inspection) headerSaver.change(setup.inspection.id, setup.header);
+    else changed();
+  }, () => headerSaver.flush());
   $("nameField").replaceChildren(
-    el("div", { class: "field" }, el("div", { class: "input" }, input), el("span", { class: "err", "data-err": "inspection_name" })),
+    el("div", { class: "field" }, el("span", { class: "label" }, "검사 이름"), el("div", { class: "input" }, input),
+      el("span", { class: "err", "data-err": "inspection_name" })),
+    header,
     el("span", { class: "caption" }, fixed
-      ? "검사 폴더를 만든 뒤에는 바꿀 수 없습니다."
-      : "검사 목록에 보이고, 검사 폴더 이름이 됩니다. 비우면 만든 시각과 영상 이름으로 정합니다."));
+      ? "검사 이름은 검사 폴더를 만든 뒤에는 바꿀 수 없습니다. 압축기 모델과 시험 종류는 보고서 머리글에 나오고, 고치면 바로 저장됩니다."
+      : "검사 이름은 검사 목록에 보이고 검사 폴더 이름이 됩니다. 비우면 만든 시각과 영상 이름으로 정합니다. "
+        + "압축기 모델과 시험 종류는 보고서 머리글에 나오고, 제출 전까지 편집기의 \"검사 정보\"에서 고칠 수 있습니다."));
 }
+
+const headerSaver = new HeaderSaver(
+  (detail) => { if (setup.inspection?.id === detail.id) setup.inspection.header = detail.header; },
+  (message) => notify("setupNotice", `검사 정보를 저장하지 못했습니다: ${message}`, "error"),
+);
 
 function timeField(key, label, title, optional) {
   const value = setup.settings[key];

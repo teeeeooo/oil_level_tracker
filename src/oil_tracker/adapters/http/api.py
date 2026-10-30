@@ -42,7 +42,13 @@ from oil_tracker.application.videos import OpenedVideo, UnknownVideo, VideoSessi
 from oil_tracker.domain.edits import Decision, Dropped, Edits, GlassEdits, Memo, Stretch
 from oil_tracker.domain.enums import JudgmentMode, SampleOrigin, Verdict
 from oil_tracker.domain.geometry import Ellipse
-from oil_tracker.domain.inspection import AnalysisSettings, Inspection, needs_compressor_start
+from oil_tracker.domain.inspection import (
+    AnalysisSettings,
+    Inspection,
+    ReportHeader,
+    needs_compressor_start,
+    report_header,
+)
 from oil_tracker.domain.line import Line
 from oil_tracker.domain.problems import Problem
 from oil_tracker.domain.recipe import Glass, JudgmentRule, Recipe
@@ -197,6 +203,7 @@ def inspection_detail(inspection: Inspection) -> dict[str, Any]:
     return {
         "id": inspection.id,
         "name": inspection.name,
+        "header": header_json(inspection.header),
         "created_at": inspection.created_at,
         "state": inspection.state.value,
         "failure": inspection.failure,
@@ -220,6 +227,10 @@ def inspection_detail(inspection: Inspection) -> dict[str, Any]:
             "sample_count": settings.sample_count,
         },
     }
+
+
+def header_json(header: ReportHeader) -> dict[str, Any]:
+    return {"compressor_model": header.compressor_model, "test_type": header.test_type}
 
 
 def analysis_json(stored: StoredAnalysis) -> dict[str, Any]:
@@ -335,9 +346,15 @@ def parse_setup(body: Any) -> InspectionSetup:
                 None if compressor is None else _number(compressor),
             ),
             name=_optional_text(body.get("name")),
+            header=parse_header(body.get("header") or {}),
         )
     except (KeyError, TypeError, ValueError, AttributeError) as failure:
         raise BadRequest(f"검사 설정 요청 형식이 올바르지 않습니다: {failure}") from failure
+
+
+def parse_header(body: Any) -> ReportHeader:
+    """The two header fields as typed; a missing one is blank. Raises ValueError for a long one."""
+    return report_header(_optional_text(body.get("compressor_model")), _optional_text(body.get("test_type")))
 
 
 def parse_edits(body: Any) -> Edits:
@@ -585,6 +602,16 @@ def routes(ctx: ApiContext) -> list[Route]:
     def get_inspection(_query, _body, inspection_id) -> Response:
         return json_response(inspection_detail(inspections.load(inspection_id)))
 
+    def set_header(_query, body, inspection_id) -> Response:
+        try:
+            header = parse_header(body)
+        except (TypeError, ValueError, AttributeError) as failure:
+            raise BadRequest(str(failure)) from failure
+        running = jobs.running()
+        if running is not None and running["inspection_id"] == inspection_id:
+            raise JobsBusy("이 검사를 다시 분석하는 중에는 검사 정보를 고칠 수 없습니다.")
+        return json_response(inspection_detail(inspections.set_header(inspection_id, header)))
+
     def get_analysis(_query, _body, inspection_id) -> Response:
         stored = inspections.result(inspection_id)
         if stored is None:
@@ -651,6 +678,7 @@ def routes(ctx: ApiContext) -> list[Route]:
         ("POST", re.compile(r"/api/inspections/check"), check_setup),
         ("POST", re.compile(r"/api/inspections/start"), start_analysis),
         ("GET", re.compile(rf"/api/inspections/{segment}"), get_inspection),
+        ("POST", re.compile(rf"/api/inspections/{segment}/header"), set_header),
         ("GET", re.compile(rf"/api/inspections/{segment}/analysis"), get_analysis),
         ("POST", re.compile(rf"/api/inspections/{segment}/video"), open_inspection_video),
         ("GET", re.compile(rf"/api/inspections/{segment}/edits"), open_edits),

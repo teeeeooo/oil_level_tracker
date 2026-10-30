@@ -1,6 +1,7 @@
 # Inspection Folder
 
-**Status:** `ACTIVE`. Schema version 1, 2026-10-29.
+**Status:** `ACTIVE`. Schema version 1, 2026-10-29; `edits.json` and
+`inspection.json` schema 2, 2026-10-30 (V2-4).
 
 This document owns the inspection folder and its files. The contents and
 the rules come from the [Product SSOT](../10-product/product.md) §3, §4
@@ -59,7 +60,7 @@ UTF-8 JSON:
 ```json
 {
   "format": "oil-level-tracker-inspection",
-  "schema_version": 1,
+  "schema_version": 2,
   "id": "<uuid>",
   "name": "1차 냉각",
   "created_at": "2026-10-29T05:06:07+00:00",
@@ -75,7 +76,8 @@ UTF-8 JSON:
   },
   "settings": {"start_sec": 0.0, "end_sec": 4104.6, "compressor_start_sec": 532.0},
   "state": "NOT_ANALYSED",
-  "failure": null
+  "failure": null,
+  "report_header": {"compressor_model": "GB-2 R410A", "test_type": null}
 }
 ```
 
@@ -86,6 +88,13 @@ UTF-8 JSON:
   video's SHA-256 differs (Product SSOT A9).
 - `state` is `NOT_ANALYSED`, `ANALYSED` or `FAILED`; `failure` gives the
   reason of a `FAILED` one.
+- `report_header` is what the user enters for the report header (Product
+  SSOT §7): each field trimmed, `null` when blank, at most 60 characters.
+  A new inspection's comes from the setup with "분석 시작"; afterwards the
+  setup's and the editor's 검사 정보 rewrite this file at once, apart from
+  `edits.json` (V2-4).
+- **Schema 2** (V2-4) added `report_header`. Schema 1 files still read,
+  with an empty header; the next write makes them schema 2.
 
 ## `cache\analysis.json`
 
@@ -169,6 +178,6 @@ re-analysis then rewrites it with the edits merged onto the new times.
 ## Reading rules
 
 - A file with another `format`, or a `schema_version` other than 1 (2 or
-  1 for `edits.json`), is refused with the reason.
+  1 for `edits.json` and `inspection.json`), is refused with the reason.
 - Values are type-checked strictly; a wrong type refuses the file.
 - There is no reader for v1 result bundles.

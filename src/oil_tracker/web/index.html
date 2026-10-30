@@ -57,7 +57,7 @@
     </section>
     <aside class="right-col">
       <div class="section">
-        <div class="phead">검사 이름 <span class="right">선택</span></div>
+        <div class="phead">검사 정보 <span class="right">보고서 머리글</span></div>
         <div class="body" id="nameField"></div>
       </div>
       <div class="section">
@@ -202,6 +202,13 @@
           <div class="row" id="checkRow"><button class="btn primary small" id="checkGlass">이 Glass 확인</button><span class="caption" id="checkLeft"></span></div>
           <div class="row checked" id="checkedRow" hidden><span id="checkedText"></span><button class="btn small subtle" id="uncheckGlass">확인 풀기</button></div>
           <span class="caption">확인한 뒤 이 Glass의 Oil 선이나 판단 불가, 압축기 기동을 고치면 확인이 풀립니다.</span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="phead">검사 정보 <span class="right">보고서 머리글</span></div>
+        <div class="body">
+          <div id="editorHeader"></div>
+          <span class="caption">분석 설정에서 검사 이름과 함께 넣은 값입니다. 고치면 바로 저장되고, 제출 전까지 고칠 수 있습니다.</span>
         </div>
       </div>
       <div class="section">
@@ -388,6 +395,7 @@
       <h3>분석</h3>
       <table class="keys">
         <tr><td>검사 이름</td><td>검사 목록에 보이고, 검사 폴더 이름이 됩니다. 비우면 만든 시각과 영상 이름으로 정합니다. 폴더를 만든 뒤에는 바꿀 수 없습니다.</td></tr>
+        <tr><td>압축기 모델 · 시험 종류</td><td>보고서 머리글에 나옵니다. 비워 두어도 됩니다. 검사 폴더를 만든 뒤에는 고치면 바로 저장되고, 제출 전까지 편집기의 "검사 정보"에서도 고칠 수 있습니다.</td></tr>
         <tr><td>"분석 시작"</td><td>검사 폴더와 Recipe 사본을 만들고 분석합니다. 문제가 남아 있으면 시작하지 않습니다.</td></tr>
         <tr><td>"취소"</td><td>설정은 남기고, 만들던 분석 결과는 지웁니다.</td></tr>
         <tr><td><kbd>F1</kbd> <kbd>?</kbd></td><td>이 도움말</td></tr>
@@ -410,6 +418,7 @@
         <tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> · <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td><td>실행 취소 · 다시 실행</td></tr>
         <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>저장. 저장하지 않고 검사 목록으로 나가거나 창을 닫으면 먼저 묻습니다.</td></tr>
       </table>
+      <p>"검사 정보"의 압축기 모델과 시험 종류는 보고서 머리글에 나옵니다. 고치면 바로 저장되며, 편집의 "저장"과는 따로입니다.</p>
       <p>"범위 바꿔 다시 분석…"은 저장한 편집을 새 분석으로 옮깁니다. 새 범위와 겹치는 편집은 남고, 새로 생긴 범위만 초안으로 채웁니다. 새 범위 밖의 편집은 사라지므로 시작하기 전에 알려 줍니다.</p>
       <p>편집기를 열 때마다 원본 영상이 분석할 때와 같은지 확인합니다. 다르거나 찾을 수 없으면 툴바 아래에 경고가 나옵니다. 영상을 되돌려 놓았다면 "다시 확인"을 누릅니다.</p>
       <h3>보기</h3>

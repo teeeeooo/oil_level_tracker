@@ -47,8 +47,10 @@ src/oil_tracker/
                    frame view and Glass editing, shared by the Recipe
                    screen and the analysis setup); recipe.js,
                    inspections.js, editor.js (the screens); lines.js
-                   (line operations, the snap and undo) and player.js
-                   (the editor's video); render.js (shared by the
+                   (line operations, the snap and undo), player.js
+                   (the editor's video) and header.js (the report
+                   header's fields, shared by the setup and the
+                   editor); render.js (shared by the
                    editor and the report). Plain JavaScript modules, no
                    build step.
   bootstrap.py     Builds the concrete adapters and hands them to the use

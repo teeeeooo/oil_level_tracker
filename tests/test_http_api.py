@@ -228,10 +228,12 @@ def test_an_inspection_from_its_video_to_the_analysis(app, video):
 
     setup = setup_json(opened, recipe)
     setup["name"] = "1차 냉각"
+    setup["header"] = {"compressor_model": " GB-2 R410A ", "test_type": ""}
     status, started, _ = call(running, "POST", "/api/inspections/start", setup)
     assert status == 200, started
     inspection_id = started["inspection"]["id"]
     assert started["inspection"]["name"] == "1차 냉각"
+    assert started["inspection"]["header"] == {"compressor_model": "GB-2 R410A", "test_type": None}
     assert (tmp_path / "data" / "Inspections" / "1차 냉각" / "inspection.json").is_file()
     assert started["inspection"]["state"] == "NOT_ANALYSED" and started["job"]["inspection_id"] == inspection_id
     assert wait_for_job(running, started["job"]["id"])["state"] == "finished"
@@ -259,6 +261,17 @@ def test_an_inspection_from_its_video_to_the_analysis(app, video):
 
     status, reopened, _ = call(running, "POST", f"/api/inspections/{inspection_id}/video")
     assert status == 200 and reopened["name"] == "sample.avi"
+
+    # the header stays editable after the analysis, saved at once and apart from the edits
+    header = {"compressor_model": "GB-3", "test_type": "냉각 on/off"}
+    status, changed, _ = call(running, "POST", f"/api/inspections/{inspection_id}/header", header)
+    assert status == 200 and changed["header"] == header
+    assert call(running, "GET", f"/api/inspections/{inspection_id}")[1]["header"] == header
+    assert not (tmp_path / "data" / "Inspections" / "1차 냉각" / "edits.json").exists()
+    status, refused, _ = call(running, "POST", f"/api/inspections/{inspection_id}/header", {"compressor_model": "x" * 61})
+    assert status == 400 and refused["error"] == "압축기 모델은 60자 이하여야 합니다."
+    assert call(running, "POST", f"/api/inspections/{inspection_id}/header", {"test_type": 3})[0] == 400
+    assert call(running, "POST", "/api/inspections/missing/header", header)[0] == 404
 
 
 def test_inspection_errors(app, video):

@@ -2,6 +2,7 @@
 // pointer and keys into line operations (lines.js) and draws through render.js. What follows from
 // the lines (FULL/EMPTY, the empty stretches, the coverage) comes from the API after each change.
 import * as api from "./api.js";
+import { HeaderSaver, headerFields } from "./header.js";
 import * as lines from "./lines.js";
 import * as nav from "./nav.js";
 import * as player from "./player.js";
@@ -55,6 +56,10 @@ let deriveAgain = false;
 let unsavedSent = Promise.resolve();  // the window's flag goes out in order (setDirty)
 let previewing = false;    // the point line's preview request in flight
 let previewAgain = false;
+const headerSaver = new HeaderSaver(
+  () => {},
+  (message) => notify("editorNotice", `검사 정보를 저장하지 못했습니다: ${message}`, "error"),
+);
 
 // ---- opening and leaving -----------------------------------------------------------------------
 
@@ -78,6 +83,7 @@ export async function open(inspectionId) {
   state.playhead = state.analysis.times[0] ?? 0;
   checkSource().catch(() => {});
   renderHeader();
+  renderReportHeader();
   renderTools();
   try {
     await player.open(inspectionId, { time: onPlayerTime, overlay, repeat: () => state.selection });
@@ -102,8 +108,9 @@ function release() {
   $("sourceWarning").hidden = true;
 }
 
-function leave() {
+async function leave() {
   if (state.dirty && !confirm("저장하지 않은 편집이 있습니다. 저장하지 않고 나갈까요?")) return;
+  await headerSaver.flush();
   release();
   backToList();
 }
@@ -114,6 +121,7 @@ async function reanalyse() {
   if (!state.detail) return;
   if (state.dirty && !confirm("다시 분석하기 전에 편집을 저장합니다. 저장하고 분석 설정으로 갈까요?")) return;
   if (state.dirty && !(await save())) return;
+  await headerSaver.flush();  // the setup reads the stored header
   const id = state.detail.id;
   release();
   toSetup(id);
@@ -990,6 +998,15 @@ function renderHeader() {
     ["원본 SHA-256", d.video.sha256 ?? "-"],
   ];
   $("editorFacts").replaceChildren(...rows.map(([k, v]) => el("tr", {}, el("th", {}, k), el("td", { class: k.includes("SHA") ? "mono" : "" }, v))));
+}
+
+/** 검사 정보: the report header, saved at once (header.js). */
+function renderReportHeader() {
+  const d = state.detail;
+  $("editorHeader").replaceChildren(headerFields(d.header, (key, text) => {
+    d.header[key] = text;
+    headerSaver.change(d.id, d.header);
+  }, () => headerSaver.flush()));
 }
 
 function compressorText() {

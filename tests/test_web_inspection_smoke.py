@@ -131,6 +131,8 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         page.get_by_text("검사 이름은 60자 이하여야 합니다.").wait_for()
         name.fill("스모크: 1차")
         page.wait_for_function("document.getElementById('setupProblemCount').textContent === ''")
+        field(page, "압축기 모델").fill(" GB-2 R410A ")  # the report header goes with the start
+        assert field(page, "시험 종류").get_attribute("maxlength") == "60"
         shot(page, "i3-name")
 
         # a Glass correction goes into this inspection's copy only, and can be undone
@@ -165,10 +167,18 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         inspection = json.loads((folder / "inspection.json").read_text(encoding="utf-8"))
         assert inspection["state"] == "ANALYSED"
         assert inspection["settings"] == {"start_sec": 0.0, "end_sec": 4.0, "compressor_start_sec": 1.0}
+        assert inspection["report_header"] == {"compressor_model": "GB-2 R410A", "test_type": None}
 
+        # the editor's 검사 정보 saves at once, apart from the edits; leaving sends what was typed
+        header = page.locator("#editorHeader")
+        assert header.get_by_label("압축기 모델").input_value() == "GB-2 R410A"
+        header.get_by_label("시험 종류").fill("냉각 on/off")
         page.get_by_role("button", name="검사 목록").click()
         listed = page.locator("#inspectionRows tr", has_text="level.avi")
         listed.wait_for()
+        inspection = json.loads((folder / "inspection.json").read_text(encoding="utf-8"))
+        assert inspection["report_header"] == {"compressor_model": "GB-2 R410A", "test_type": "냉각 on/off"}
+        assert not (folder / "edits.json").exists()
         assert "분석 완료" in listed.inner_text() and folder.name in listed.inner_text()
         assert listed.inner_text().startswith("스모크: 1차")
         shot(page, "i5-list")
@@ -400,18 +410,23 @@ def test_reanalysis_from_the_editor(tmp_path, video, browser_page):
         box = page.locator("#graph").bounding_box()
         drag(page, (box["x"] + box["width"] * 0.8, box["y"] + 100), (box["x"] + box["width"] * 0.95, box["y"] + 110))
         page.get_by_text("저장 안 함").wait_for()
+        page.locator("#editorHeader").get_by_label("시험 종류").fill("편집기에서")  # sent before the setup reads it
         asked = []
         page.once("dialog", lambda dialog: (asked.append(dialog.message), dialog.accept()))
         page.get_by_role("button", name="범위 바꿔 다시 분석…").click()
         page.locator("#setupView").wait_for()
         assert "저장" in asked[0]
+        assert field(page, "시험 종류").input_value() == "편집기에서"
         assert (data / "Inspections" / "다시" / "edits.json").exists()
         assert page.locator("#setupBack").inner_text() == "편집기"
         assert page.locator("#startAnalysis").inner_text() == "다시 분석"
 
-        # "← 편집기" goes back without analysing
+        # once the folder exists the setup saves the report header at once; "← 편집기" goes back
+        # without analysing, and the header is there
+        field(page, "시험 종류").fill("재분석")
         page.locator("#setupBack").click()
         page.get_by_text("저장함").wait_for()
+        assert page.locator("#editorHeader").get_by_label("시험 종류").input_value() == "재분석"
         page.get_by_role("button", name="범위 바꿔 다시 분석…").click()
         page.locator("#setupView").wait_for()
 
@@ -432,6 +447,8 @@ def test_reanalysis_from_the_editor(tmp_path, video, browser_page):
         assert "5개" in page.locator("#editorFacts").inner_text()  # 0 to 2 s, two a second
         saved = json.loads((data / "Inspections" / "다시" / "edits.json").read_text(encoding="utf-8"))
         assert len(saved["times"]) == 5
+        stored = json.loads((data / "Inspections" / "다시" / "inspection.json").read_text(encoding="utf-8"))
+        assert stored["report_header"]["test_type"] == "재분석"  # the re-analysis keeps it
         assert errors == []
     finally:
         running.close()
@@ -771,6 +788,8 @@ def test_the_judgment_the_users_verdict_and_the_check(tmp_path, video, browser_p
         page.wait_for_function("t => document.getElementById('verdictBadge').textContent === t", arg=computed)
         assert page.locator("#reasonBox").is_hidden() and page.locator("#checkRow").is_visible()
         shot(page, "j1-judgment")
+        page.locator("#editorHeader").scroll_into_view_if_needed()
+        shot(page, "j2-inspection-info")
         assert errors == []
     finally:
         running.close()

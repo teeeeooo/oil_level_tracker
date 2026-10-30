@@ -20,7 +20,15 @@ from oil_tracker.application.ports import GlassImages, InspectionNotFound, Store
 from oil_tracker.domain.edits import Decision, Edits, GlassEdits, Memo, Stretch, empty_line
 from oil_tracker.domain.enums import InspectionState, SampleOrigin, Verdict
 from oil_tracker.domain.geometry import Ellipse
-from oil_tracker.domain.inspection import Analysis, AnalysisSettings, GlassDraft, Inspection, SourceVideo
+from oil_tracker.domain.inspection import (
+    Analysis,
+    AnalysisSettings,
+    GlassDraft,
+    Inspection,
+    ReportHeader,
+    SourceVideo,
+    report_header,
+)
 from oil_tracker.domain.line import Line
 from oil_tracker.domain.recipe import Glass, Recipe, ReferenceFrame
 
@@ -64,6 +72,31 @@ def test_a_file_written_before_names_reads_without_one():
     assert data["name"] is None
     del data["name"]
     assert inspection_from_json(json.dumps(data), recipe_to_json(RECIPE)).name is None
+
+
+def test_the_report_header_round_trips_and_schema_1_reads_without_one(tmp_path):
+    headed = replace(make_inspection(), header=ReportHeader("GB-2 R410A", None))
+    data = json.loads(inspection_to_json(headed))
+    assert data["schema_version"] == 2
+    assert data["report_header"] == {"compressor_model": "GB-2 R410A", "test_type": None}
+    assert inspection_from_json(json.dumps(data), recipe_to_json(RECIPE)) == headed
+    first = {k: v for k, v in data.items() if k != "report_header"} | {"schema_version": 1}  # V2-3's files
+    assert inspection_from_json(json.dumps(first), recipe_to_json(RECIPE)).header == ReportHeader()
+    folders = InspectionFolders(tmp_path)
+    name = folders.create(make_inspection())
+    (tmp_path / name / "inspection.json").write_text(json.dumps(first), encoding="utf-8")
+    assert folders.list_inspections().unreadable == ()
+    with pytest.raises(UnreadableInspection):
+        inspection_from_json(json.dumps({**data, "report_header": {"compressor_model": 7, "test_type": None}}), recipe_to_json(RECIPE))
+
+
+def test_the_report_header_is_trimmed_and_limited():
+    assert report_header("  GB-2 ", "   ") == ReportHeader("GB-2", None)
+    ReportHeader("x" * 60, "y" * 60)
+    with pytest.raises(ValueError, match="압축기 모델은 60자"):
+        ReportHeader("x" * 61)
+    with pytest.raises(ValueError, match="시험 종류는 60자"):
+        report_header(None, "y" * 61)
 
 
 def test_create_list_load_and_save(tmp_path):
@@ -111,7 +144,7 @@ def test_the_formats_refuse_other_files_and_versions():
     recipe = recipe_to_json(RECIPE)
     data = json.loads(inspection_to_json(make_inspection()))
     assert inspection_from_json(json.dumps(data), recipe) == make_inspection()
-    for change in ({"format": "x"}, {"schema_version": 2}):
+    for change in ({"format": "x"}, {"schema_version": 3}):
         with pytest.raises(UnreadableInspection):
             inspection_from_json(json.dumps({**data, **change}), recipe)
     with pytest.raises(UnreadableInspection):

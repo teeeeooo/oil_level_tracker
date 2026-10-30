@@ -193,8 +193,21 @@ panel (computed result, override, reason).
      The check comes off when the history records, undoes or redoes a
      change to that Glass's Oil line or "cannot judge" stretches, or to
      the compressor start (`History.listener`). 제출 stays disabled.
-4. **The report header:** 압축기 모델 and 시험 종류 in the setup's 검사
-   정보 and the editor's, kept per inspection.
+4. **The report header — done** (2026-10-30):
+   - `inspection.json` schema 2 adds `report_header` (`compressor_model`,
+     `test_type`; trimmed, `null` when blank, at most 60 characters);
+     schema 1 files read with an empty header
+     ([inspection-folder.md](../20-architecture/inspection-folder.md)).
+   - The setup's 검사 정보 has 검사 이름, 압축기 모델 and 시험 종류; the
+     editor's has the two header fields (`web/header.js`, shared). A new
+     inspection's header goes with "분석 시작"; once the folder exists, a
+     change is saved at once through `POST /api/inspections/<id>/header`,
+     apart from the edits' "저장", and is sent before leaving the editor
+     or the setup. A re-analysis keeps it.
+   - **Agent's choices, to show the user:** saving at once (the open
+     question of the handoff); the 60-character limit; the editor's fields
+     side by side, as in the setup. Nothing locks the header yet: step 5
+     does, on submitting.
 5. **Submitting and versions:** the submit dialog; `versions\NNN\` with
    the edits, the judgment and the report; a submitted version read-only;
    "고쳐서 다시 제출"; the list's states.

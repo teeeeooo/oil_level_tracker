@@ -13,6 +13,7 @@ from .recipe import Recipe, recipe_problems
 ANALYSIS_RATE = 2.0        # samples per second, fixed in the first version (Product SSOT §3)
 MINIMUM_RANGE_SEC = 1.0
 MAXIMUM_NAME_LENGTH = 60   # an inspection name; it names the folder, which must stay inside Windows' path limit
+MAXIMUM_HEADER_LENGTH = 60  # each report header field; agent's choice (2026-10-30), to fit the report's header grid
 
 
 @dataclass(frozen=True)
@@ -64,6 +65,19 @@ class Analysis:
 
 
 @dataclass(frozen=True)
+class ReportHeader:
+    """What the user enters for the report header, per inspection (Product SSOT §7); None where blank."""
+
+    compressor_model: str | None = None
+    test_type: str | None = None
+
+    def __post_init__(self) -> None:
+        for label, value in (("압축기 모델은", self.compressor_model), ("시험 종류는", self.test_type)):
+            if value is not None and len(value) > MAXIMUM_HEADER_LENGTH:
+                raise ValueError(f"{label} {MAXIMUM_HEADER_LENGTH}자 이하여야 합니다.")
+
+
+@dataclass(frozen=True)
 class Inspection:
     id: str
     created_at: str
@@ -73,6 +87,7 @@ class Inspection:
     state: InspectionState = InspectionState.NOT_ANALYSED
     failure: str | None = None
     name: str | None = None  # the user's name for it, which names its folder; None names it by time and video (§8)
+    header: ReportHeader = ReportHeader()  # editable until submitting (DESIGN.md §5)
 
 
 def sample_indices(fps: float, frame_count: int, start_sec: float, end_sec: float, rate: float) -> list[int]:
@@ -96,6 +111,11 @@ def inspection_name(text: str | None) -> str | None:
     """The name the user typed, without surrounding spaces; None when it is blank."""
     name = (text or "").strip()
     return name or None
+
+
+def report_header(compressor_model: str | None, test_type: str | None) -> ReportHeader:
+    """The header as typed, trimmed like the name."""
+    return ReportHeader(inspection_name(compressor_model), inspection_name(test_type))
 
 
 def needs_compressor_start(recipe: Recipe) -> bool:

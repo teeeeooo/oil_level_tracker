@@ -23,7 +23,14 @@ from oil_tracker.application.ports import (
 )
 from oil_tracker.domain.edits import Decision, Edits, GlassEdits, Memo, Stretch
 from oil_tracker.domain.enums import InspectionState, SampleOrigin, Verdict
-from oil_tracker.domain.inspection import Analysis, AnalysisSettings, GlassDraft, Inspection, SourceVideo
+from oil_tracker.domain.inspection import (
+    Analysis,
+    AnalysisSettings,
+    GlassDraft,
+    Inspection,
+    ReportHeader,
+    SourceVideo,
+)
 from oil_tracker.domain.line import Line
 
 from .files import atomic_write_text
@@ -34,7 +41,9 @@ INSPECTION_FORMAT = "oil-level-tracker-inspection"
 ANALYSIS_FORMAT = "oil-level-tracker-analysis"
 EDITS_FORMAT = "oil-level-tracker-edits"
 SCHEMA_VERSION = 1
+INSPECTION_SCHEMA_VERSION = 2  # 2 adds the report header (V2-4); 1 still reads, with an empty header
 EDITS_SCHEMA_VERSION = 2  # 2 adds each Glass's decision (V2-4); 1 still reads, as undecided
+INSPECTION_VERSIONS = (1, INSPECTION_SCHEMA_VERSION)
 INSPECTION_FILE = "inspection.json"
 RECIPE_FILE = "recipe.json"
 CACHE = "cache"
@@ -56,7 +65,7 @@ def inspection_to_json(inspection: Inspection) -> str:
     video, settings = inspection.video, inspection.settings
     data = {
         "format": INSPECTION_FORMAT,
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": INSPECTION_SCHEMA_VERSION,
         "id": inspection.id,
         "name": inspection.name,
         "created_at": inspection.created_at,
@@ -77,12 +86,16 @@ def inspection_to_json(inspection: Inspection) -> str:
         },
         "state": inspection.state.value,
         "failure": inspection.failure,
+        "report_header": {
+            "compressor_model": inspection.header.compressor_model,
+            "test_type": inspection.header.test_type,
+        },
     }
     return json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
 
 
 def inspection_from_json(inspection_text: str, recipe_text: str) -> Inspection:
-    data = _document(inspection_text, INSPECTION_FORMAT, "검사", UnreadableInspection)
+    data = _document(inspection_text, INSPECTION_FORMAT, "검사", UnreadableInspection, INSPECTION_VERSIONS)
     try:
         recipe = recipe_from_json(recipe_text)
     except UnreadableRecipe as error:
@@ -111,9 +124,14 @@ def inspection_from_json(inspection_text: str, recipe_text: str) -> Inspection:
             state=InspectionState(data["state"]),
             failure=optional(text, data["failure"]),
             name=optional(text, data.get("name")),  # absent in files written before names
+            header=ReportHeader() if data["schema_version"] == 1 else _header_from(data["report_header"]),
         )
     except (KeyError, TypeError, ValueError) as error:
         raise UnreadableInspection(f"검사 내용이 올바르지 않습니다: {error}") from error
+
+
+def _header_from(raw: Any) -> ReportHeader:
+    return ReportHeader(optional(text, raw["compressor_model"]), optional(text, raw["test_type"]))
 
 
 # ---- cache/analysis.json --------------------------------------------------------------------
@@ -354,7 +372,7 @@ class InspectionFolders:
         for path in sorted(p for p in self.folder.iterdir() if p.is_dir() and not p.name.startswith(".")):
             try:
                 inspection_text = (path / INSPECTION_FILE).read_text(encoding="utf-8")
-                _document(inspection_text, INSPECTION_FORMAT, "검사", UnreadableInspection)  # its reason first
+                _document(inspection_text, INSPECTION_FORMAT, "검사", UnreadableInspection, INSPECTION_VERSIONS)  # its reason first
                 recipe_text = (path / RECIPE_FILE).read_text(encoding="utf-8")
                 found.append((path, inspection_from_json(inspection_text, recipe_text)))
             except UnreadableInspection as error:

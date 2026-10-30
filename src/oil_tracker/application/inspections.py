@@ -18,6 +18,7 @@ from oil_tracker.domain.inspection import (
     Analysis,
     AnalysisSettings,
     Inspection,
+    ReportHeader,
     SourceVideo,
     analysis_times,
     inspection_name,
@@ -71,6 +72,7 @@ class InspectionSetup:
     positions: tuple[GlassPosition, ...]   # every Glass of that Recipe, corrected for this inspection only
     settings: AnalysisSettings
     name: str | None = None                # a new inspection's name as typed; an existing one keeps its own
+    header: ReportHeader = ReportHeader()  # a new inspection's; an existing one's is saved by set_header
 
 
 @dataclass(frozen=True)
@@ -151,7 +153,9 @@ class Inspections:
         if problems:
             return SetupResult(None, tuple(problems))
         if existing is None:
-            inspection = Inspection(self._new_id(), self._now(), video, recipe, setup.settings, name=name)
+            inspection = Inspection(
+                self._new_id(), self._now(), video, recipe, setup.settings, name=name, header=setup.header
+            )
             self.store.create(inspection)
         else:
             inspection = replace(
@@ -160,6 +164,12 @@ class Inspections:
             if existing.state is not InspectionState.ANALYSED:
                 self.store.save(inspection)
         return SetupResult(inspection)
+
+    def set_header(self, inspection_id: str, header: ReportHeader) -> Inspection:
+        """Save the report header at once, apart from the edits (DESIGN.md §5, 검사 정보)."""
+        changed = replace(self.store.load(inspection_id), header=header)
+        self.store.save(changed)
+        return changed
 
     def analyse(
         self,
