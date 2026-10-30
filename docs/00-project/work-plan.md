@@ -166,8 +166,18 @@ panel (computed result, override, reason).
      versions live in `versions\NNN\` with the edits, the judgment and
      `report.html`; a HOLD mode's longest violation is `--violation-band`;
      the first Glass shares page 1 with the header.
-2. **`domain`, the judgment** (§5) — in progress: the computed result
-   per Glass from the edited Oil line, with fixed-case unit tests (A3).
+2. **`domain`, the judgment** (§5) — done: `domain/judgment.py`,
+   `judge(times, glass edits, Glass, compressor start)` gives 합격, 불합격
+   or 검토 필요 with a Korean reason, the coverage, the recovery (RECOVERY)
+   or the longest violation (the HOLD modes); 22 fixed cases in
+   `tests/test_domain_judgment.py` (A3). Written anew: v1's
+   `domain/judgment.py` measured a violation from the first violating
+   sample to the last, which §5 drops.
+   - **Agent's choices where §5 is silent,** to show the user: invalid
+     samples inside a recovery's hold are passed over (as in v1); an
+     invalid sample ends a violation run; a run lasts its sample count ×
+     0.5 s; the HOLD modes ignore the compressor start; the measures are
+     still found when the valid share is too low.
 3. The rest follows the decisions: the application and API, the panel,
    submitting and versions, the report, then a Windows run.
 
@@ -176,10 +186,10 @@ panel (computed result, override, reason).
 **V2-3 closed** after its re-check passed every row (S1, S2, C1–C12, T,
 R1–R3). After it: the upright stroke (`ca7d3ee`) and the point line's 8 px
 band (`9eea291`). V2-4's start decisions and mock-ups are confirmed (step 1
-above); step 2, the judgment in `domain`, is next.
+above); step 2, the judgment in `domain`, is done; step 3 is next.
 
 **Resume:** read this file, the Product SSOT §3, §5 and §7, DESIGN.md §2.4
-and §5, and the three mock-ups, then continue step 2.
+and §5, and the three mock-ups, then continue with step 3.
 Earlier editor work is in the two V2-3 results and in Git.
 
 **Agent's choices in V2-3 to show the user if asked:**
@@ -336,4 +346,5 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done:** V2-3 (2026-10-30): the workstation run and its re-check pass;
   the upright stroke and the point line's 8 px band followed.
-- **Now:** V2-4 step 2, the judgment in `domain`.
+- **Next:** V2-4 step 3: the judgment through the application and the
+  API, then the panel, the check and the override.
