@@ -61,3 +61,4 @@
 | 2026-10-29 | [2026-10-29-v2-2-analysis-timing-windows-result.md](60-evidence/2026-10-29-v2-2-analysis-timing-windows-result.md) | V2-2 분석 시간(A4) Windows 결과 판정 |
 | 2026-10-29 | [2026-10-29-v2-2-draft-comparison-windows-result.md](60-evidence/2026-10-29-v2-2-draft-comparison-windows-result.md) | V2-2 Oil 초안 방식 비교 Windows 결과 |
 | 2026-10-29 | [2026-10-29-v2-2-slowest-pc-timing-windows-result.md](60-evidence/2026-10-29-v2-2-slowest-pc-timing-windows-result.md) | V2-2 최저 사양 PC 분석 시간(A4) 결과 판정 |
+| 2026-10-30 | [2026-10-30-v2-3-editor-slowest-pc-windows-result.md](60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md) | V2-3 최저 사양 PC 편집기 측정(A5·A6, 중앙값 비교) 결과 판정 |

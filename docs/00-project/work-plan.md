@@ -180,30 +180,24 @@ the undo depth and the shortcuts.
      about 0.5 ms; SPL#1 on the slowest PC is step 6.
    - **Not yet in the editor** (step 7): the point line. Its toolbar
      button is there, disabled.
-6. **A5 and A6 on the slowest PC — request sent, waiting on the user:**
-   [the request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md),
-   commit `8a96b22`, `source=1da92bcf0279 files=54`, criteria fixed in it.
-   (Re-pinned before the run: from `4086e54`, whose seek clicks could land
-   on the time axis's range numbers; then for the faster draft search and
-   the key-frame spacing line; then for the median comparison, stage 5.)
-   - The result also gives SPL#1's key-frame spacing (for the PyAV
-     decision) and the analysis time through the app's server, now with
-     the faster draft search.
-   - `scripts/measure_editor.py` analyses SPL#1 through the app's server,
-     then drives the editor in **Microsoft Edge** (WebView2's engine) with
-     Playwright, so that PC needs no pywebview or pythonnet (it runs
-     Python 3.15). The packaged app is judged in V2-5.
-   - It times each lines redraw during pencil strokes and grab-and-drags
-     (the spike's measure), the frame intervals beside them, exact frames
-     at 40 random times, the `<video>`'s own seeks, and 60 s of 1×
-     playback; it also reports SPL#1's codec and whether Edge plays it.
-   - **Exact frames are cropped** to the region the video panel shows (the
-     frame API took a crop). On macOS with an H.264 sample, an exact frame
-     took about 60–80 ms, nearly all of it OpenCV seeking and decoding;
-     the `<video>`'s own seek took about 33 ms. If exact frames miss
-     100 ms there, the request's criteria route the choice to the user.
-   - On macOS (sample7, 1,600 × 900) the lines redraw took 0.9 ms at the
-     median and 2.3 ms at most.
+6. **A5 and A6 on the slowest PC — done** (2026-10-30):
+   [the result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md),
+   judged against
+   [the request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md)'s
+   fixed criteria.
+   - **A5 passes:** the lines redraw takes 5.9 ms at the median and 23.9 ms
+     at most with three lines over SPL#1's 8,210 samples. The drawing needs
+     no lightening.
+   - **1× playback passes** in the `<video>`; SPL#1 is H.264, which Edge
+     plays.
+   - **The exact frame fails (A6-s):** 230 ms at the median, 413 ms at most,
+     against 100 ms; the `<video>`'s seek is slower (352 ms). SPL#1 has a
+     key frame every 250 frames, and a seek decodes from the previous one
+     (1.6–1.8 ms a frame there). By the criteria, making the frame reading
+     faster comes first. **The way is put to the user** (see Next).
+   - **The cheaper median passes (A4-m2):** the `uint8` partition is in
+     `_Band.median` (`908f624`), with identical values.
+   - The analysis through the app's server took 163.0 s.
 7. **`web`, the rest:** the point line, the snap, "cannot judge", Foam and
    reference lines, memos, the compressor marker, re-analysis, the save
    question and the SHA-256 warning.
@@ -236,51 +230,34 @@ the undo depth and the shortcuts.
      - **Memos** (`fdd9d9f`): the memo tool (M), numbered pins on the
        graph (`render.memoPinAt`), the memo dialog and the memo list;
        undoable like the stretches.
-   - **Left, after the result:** the point line with its preview. It
-     redraws the lines layer as points are placed, so it waits for A5.
+   - **Left:** the point line with its preview. A5 passed, so the drawing
+     allows it; the criteria put the frame reading (A6-s) first.
 8. **Checks:** unit and API tests, macOS smoke checks, and a Windows run.
    It also covers the V2-2 follow-up, and the window-close question in
    the real window (WinForms), which macOS tests cannot reach.
 
 ## Session handoff — 2026-10-30
 
-**The session closed after `8bec4fb`,** with this handoff commit on top.
-The working tree is clean, and `main` and the remote are in sync.
-- V2-3 steps 1 to 5 are done; step 7 is done but for the point line.
-- **Step 6 waits on the user:** they run the
-  [A5/A6 request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md)
-  on the slowest PC (no agent there), pinned to `8a96b22`,
-  `source=1da92bcf0279 files=54`. Later commits do not change that ZIP.
+**The A5/A6 result arrived on 2026-10-30** and is judged in
+[its result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md).
+- V2-3 steps 1 to 6 are done; step 7 is done but for the point line.
+- **Waiting on the user:** the way to make the exact frame faster (A6-s),
+  from the options in Next.
 
-**Resume:** read this file, then
-- the A5/A6 request: its fixed criteria (M1–M3, A5, A5-f, A6-s, A6-p,
-  A6-c, A4-m1, A4-m2) decide what comes next;
-- [product.md](../10-product/product.md) §4 and §6,
-  [DESIGN.md](../../DESIGN.md) §2.7 and §5 ("Editor window", the
-  re-analysis setup) and
-  [architecture.md](../20-architecture/architecture.md) ("During a drag",
-  the editor's video, the point line, `/media/`, the desktop port);
-- the code: `web/editor.js` (screen, pointer, keys, memos, the source
-  check, the unsaved flag), `web/lines.js` (operations, snap, stretches,
-  undo history), `web/player.js`, `web/render.js` (layers, memo pins),
-  `web/inspections.js` (setup, re-analysis), `application/editing.py`,
-  `app.py` (the close question), `scripts/measure_editor.py` and
-  `scripts/compare_medians.py`.
+**Resume:** read this file and the result, then
+- [product.md](../10-product/product.md) §2 (A6), §4 and §6,
+  [DESIGN.md](../../DESIGN.md) §2.7 and §5 ("Editor window") and
+  [architecture.md](../20-architecture/architecture.md) (the editor's
+  video, the point line, `/media/`);
+- the code: `adapters/video/frames.py` (`OpenCvVideo.frame_at`, the read-on
+  limit), `web/player.js` (`seek`, frame steps, the `<video>`),
+  `web/editor.js`, `web/lines.js`, `web/render.js`,
+  `application/editing.py` and `scripts/measure_editor.py`.
 
-**When the A5/A6 result comes:** judge it row by row against the request,
-write `60-evidence/<the day it arrives>-v2-3-editor-slowest-pc-windows-result.md`
-and add it to the catalog.
-- A5 fails: make the drawing lighter before the point line.
-- A6-s or A6-c fails: put the choice to the user, as the criteria say.
-- A4-m2 passes: put that way into `_Band.median`
-  (`adapters/video/context.py`); the values are identical, so the tests
-  and the pictures stay as they are.
-- Also read: the key-frame spacing line (how much PyAV's skipping could
-  save) and the analysis time (the app's share; the draft search is now
-  about 7 s faster there).
-- Then the point line (step 7), then step 8: the checks and a Windows run,
-  which also covers the V2-2 follow-up and the close question in the real
-  window.
+**After the A6-s choice:** build it, measure it on macOS, and if it changes
+the frame path, re-measure on the slowest PC. Then the point line (step 7),
+then step 8: the checks and a Windows run, which also covers the V2-2
+follow-up and the close question in the real window.
 
 **Done before the result, with the user's leave** (2026-10-29 evening and
 2026-10-30): the review fixes (`890b5ea`), the draft search (`ae4873c`),
@@ -329,7 +306,9 @@ memo pins on the graph only, and the memo dialog. All are in DESIGN.md §5.
   `retrieve` 45 s).
   - **The draft search — done** (`ae4873c`): about 10× faster, the same
     best path. Exact ties (a saturated edge) now take the upper row.
-  - **Cheaper medians:** the A5/A6 request's stage 5 decides (A4-m2).
+  - **Cheaper medians — done** (`908f624`): the `uint8` partition, 2.46×
+    less worker time on that PC with identical values; about 11 s less
+    over SPL#1 by the two-minute pass (an estimate, to confirm in a run).
   - **Facts measured on macOS, 2026-10-29 evening:**
     - OpenCV cannot skip to a key frame: its seek decodes from the
       previous one (~59 ms, like ~90 frames in order).
@@ -342,10 +321,11 @@ memo pins on the graph only, and the memo dialog. All are in DESIGN.md §5.
       slower). Its colours differ from OpenCV's by up to 2.6 levels. It
       ships a second FFmpeg (macOS warns about the duplicate libraries).
       Band-only conversion works. A new dependency is the user's decision.
-- **What the app adds:** 60.6 s in the app against 46.4 s for the adapter
-  on the workstation. The user traced the gap to a RAG chunking job at
-  about 50 % CPU during the run. Confirm the app's own share on a quiet
-  PC when the app is timed on the slowest PC.
+- **What the app adds:** through the app's server the analysis took
+  163.0 s on the slowest PC (2026-10-30), about what the adapter alone
+  should take after the faster draft search. So the server adds little;
+  the workstation's 60.6 s against 46.4 s was the other job. The window
+  (pywebview) is timed in V2-5.
 
 **The next Windows run** also covers the V2-2 follow-up above, as the
 V2-2 run covered the V2-1 follow-up.
@@ -375,8 +355,8 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `fdd9d9f`: `188 passed, 3 skipped` on macOS, so
-  `187 passed, 4 skipped` on Windows when its venv has no Playwright.
+  test. At `908f624`: `199 passed, 3 skipped` on macOS, so
+  `198 passed, 4 skipped` on Windows when its venv has no Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -389,11 +369,11 @@ V2-2 run covered the V2-1 follow-up.
   by typing. At that height its chord is a point under the edge handle.
 - There is no Recipe deletion in the first version (user, 2026-10-29).
 - The PyInstaller build (V2-5) must ship `src/oil_tracker/web/` as data.
-- **A4 has about 10 s to spare on the slowest PC** (169.7 s for the
-  adapter), before what the app adds. See the open items.
-- **A5 and A6 are not yet measured on the slowest PC.** They must hold
-  there too (Product SSOT §2). The spike's redraw median was 13.4 ms on
-  the workstation against 16 ms, so V2-3 measures the editor on that PC.
+- **A4 has about 17 s to spare on the slowest PC** (163.0 s through the
+  app's server), before the `uint8` medians and the window. See the open
+  items.
+- **The exact frame misses A6 on the slowest PC** (230 ms against 100 ms):
+  see step 6 and Next.
 
 ## Local environment (macOS)
 
@@ -415,21 +395,22 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done today:** V2-1 and V2-2 closed, each with its Windows run; the
-  V2-2 follow-up; V2-3 started.
-- **Done today also:** V2-3 steps 1 to 5 (the confirmed mock-up, the edit
-  document, `edits.json`, the editor's use cases and routes, the editor's
-  web core).
-- **Waiting on the user:** the slowest-PC run of
-  [the A5/A6 request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md).
-  Judge its result against the request's fixed criteria and write it to
-  `60-evidence/`.
-- **Done meanwhile (allowed by the user):** the median comparison, in the
-  A5/A6 request; the window-close question, the SHA-256 warning,
-  re-analysis from the editor and "cannot judge"; then (2026-10-30) the
-  compressor marker and memos (step 7).
-- **Then:** the point line, the last of step 7, after that result: the
-  user decided that A5 and A6 are measured before the other tools are
-  built. If A5 fails, the
-  drawing gets lighter first; A6-s and A6-c route their choices to the
-  user, as the request's criteria say.
+- **Done:** V2-3 steps 1 to 6 and step 7 but for the point line. The A5/A6
+  result passed A5, playback and the median comparison; the `uint8`
+  medians are in the app.
+- **Waiting on the user: how to make the exact frame faster (A6-s).** The
+  cost is the source's key-frame spacing (250 frames), not the app's code,
+  so each way trades something the user owns:
+  1. **A shorter key-frame interval at the recorder** (about 1 s): exact
+     frames near 25 ms on that PC with no app change, for new videos only.
+  2. **Exact frames prepared during the analysis** at the sample times,
+     with clicks on the graph landing on a sample: instant there, but more
+     analysis time (A4) and much more disk per inspection.
+  3. **PyAV** (a new dependency), which can skip frames no other frame
+     needs; whether SPL#1 has such frames is unknown, so it may gain
+     nothing.
+  4. **A changed A6**, e.g. the median over frame steps and nearby clicks
+     rather than random times (a change to the acceptance criteria).
+  - The agent can add, in any case: keeping the frames decoded on the
+    way to a seek, so stepping back and clicking nearby are instant.
+- **Then:** the point line (step 7), then step 8.
