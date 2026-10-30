@@ -117,10 +117,15 @@ its toolbar.
    (§5). The user may override it per Glass, with a required reason that is
    saved.
 6. **Submit.**
-   - Every Glass must be checked first.
+   - Every Glass must be checked first: the user presses "확인" on each
+     Glass's judgment. Changing that Glass's lines, its "cannot judge"
+     stretches or the compressor start after that takes the check off
+     (user, 2026-10-30, at the V2-4 start).
    - Submitting locks that version.
    - To resubmit, open the submitted inspection, edit, and save a new
-     version.
+     version. The versions stay in the same inspection folder, one
+     subfolder each; the list keeps one row per inspection (user,
+     2026-10-30).
 
 The detector is not part of the v2 flow.
 
@@ -258,7 +263,9 @@ Each Glass in a Recipe has one rule.
 ## 7. Report
 
 - **Header:**
-  - entered by the user: compressor model and test type;
+  - entered by the user: compressor model and test type, with the
+    inspection name in the analysis setup, per inspection (user,
+    2026-10-30);
   - filled in automatically: video file name, Recipe name, date-time and
     report version.
 - **Body:**

@@ -7,6 +7,8 @@
 <!--
   Static layout mock-up for user confirmation (V2-2 step 3): the inspection list, the Recipe
   picker, the analysis setup and the analysis progress. Synthetic data only; not product code.
+  2026-10-30 (V2-4 step 1): the report header in the setup (검사 정보) and the submitted versions in
+  the list. Waiting on the user's confirmation.
   Tokens follow DESIGN.md §2–§6.
 -->
 <style>
@@ -145,6 +147,8 @@ tr.off td { color:var(--fg-disabled); }
       <table>
         <thead><tr><th>영상</th><th style="width:22%">Recipe</th><th style="width:170px">만든 시각</th><th style="width:26%">상태</th><th style="width:88px"></th></tr></thead>
         <tbody>
+          <tr><td>1차 냉각<span class="sub">SPL#4_Cooling_onoff_#2.mp4</span></td><td>SPL#4_test1_607bccb</td><td>2026-10-30 13:50</td><td><span class="badge">v1 제출함</span> <span class="caption">BASE 합격 · Accum 불합격(덮어씀)</span></td><td><button class="btn small">열기</button></td></tr>
+          <tr><td>2차 가열<span class="sub">SPL#1_Heating_coldstart.mp4</span></td><td>SPL#1_test1_607bccb</td><td>2026-10-29 19:13</td><td><span class="badge">v2 고치는 중</span> <span class="caption">v1 제출함 10-29 20:05</span></td><td><button class="btn small">열기</button></td></tr>
           <tr class="sel"><td>2호기_냉각_1029.mp4<span class="sub mono">20261029-1405_2호기_냉각_1029</span></td><td>2호기 냉각</td><td>2026-10-29 14:05</td><td><span class="badge">분석 완료</span></td><td><button class="btn small">열기</button></td></tr>
           <tr><td>1호기_가열_1028.mp4<span class="sub mono">20261028-1642_1호기_가열_1028</span></td><td>1호기 가열</td><td>2026-10-28 16:42</td><td><span class="badge">분석 안 됨</span> <span class="caption">취소함</span></td><td><button class="btn small" data-go="setup">열기</button></td></tr>
           <tr><td>2호기_냉각_1027.mp4<span class="sub mono">20261027-0913_2호기_냉각_1027</span></td><td>2호기 냉각</td><td>2026-10-27 09:13</td><td><span class="badge">분석 실패</span> <span class="err">영상을 끝까지 읽지 못했습니다 (31:02.5)</span></td><td><button class="btn small">열기</button></td></tr>
@@ -194,6 +198,17 @@ tr.off td { color:var(--fg-disabled); }
       </div>
     </section>
     <aside class="right-col">
+      <div class="section">
+        <div class="phead">검사 정보 <span class="right">보고서 머리글 · V2-4 확인 요청</span></div>
+        <div class="body">
+          <div class="field"><span class="label">검사 이름</span><div class="input"><input placeholder="비우면 만든 시각_영상 이름" value="1차 냉각"></div></div>
+          <div class="grid2">
+            <div class="field"><span class="label">압축기 모델</span><div class="input"><input value="GB-2 R410A"></div></div>
+            <div class="field"><span class="label">시험 종류</span><div class="input"><input value="냉각 on/off"></div></div>
+          </div>
+          <span class="caption">이름은 검사 목록과 폴더 이름이 되고, 폴더를 만든 뒤에는 바꿀 수 없습니다. 압축기 모델과 시험 종류는 보고서 머리글에 나오고, 제출 전까지 편집기의 "검사 정보"에서 고칠 수 있습니다. 비워 두어도 됩니다.</span>
+        </div>
+      </div>
       <div class="section">
         <div class="phead">Recipe <span class="right"><button class="btn small subtle" data-go="pick">바꾸기</button></span></div>
         <div class="body">
@@ -286,8 +301,9 @@ tr.off td { color:var(--fg-disabled); }
     <button data-go="setup">분석 설정</button><button data-go="progress">분석 중</button>
     <button data-go="problem">설정 오류 예</button>
   </div>
-  <p><b>검사 목록</b>은 앱의 첫 화면입니다. Recipe 목록은 툴바의 "Recipe"로 갑니다. 상태는 분석 완료 · 분석 안 됨 · 분석 실패이고, V2-3·V2-4에서 편집 중 · 제출됨이 붙습니다. "분석 안 됨"을 열면 분석 설정으로 갑니다.</p>
+  <p><b>검사 목록</b>은 앱의 첫 화면입니다. Recipe 목록은 툴바의 "Recipe"로 갑니다. 상태는 분석 완료 · 분석 안 됨 · 분석 실패이고, V2-4에서 제출 상태가 붙습니다(확인 요청, 2026-10-30): "v1 제출함"과 Glass별 최종 판정, 다시 고치는 중이면 "v2 고치는 중". 버전은 같은 검사 폴더 안에 쌓이고 목록은 검사당 한 줄입니다. "분석 안 됨"을 열면 분석 설정으로 갑니다.</p>
   <p><b>새 검사</b>: 파일 대화상자에서 영상을 고르면 Recipe 고르기가 뜹니다. 해상도가 다른 Recipe는 이유와 함께 흐리게 보이고 고를 수 없습니다.</p>
+  <p><b>검사 정보</b> (V2-4 확인 요청): 검사 이름과 함께 보고서 머리글의 압축기 모델과 시험 종류를 넣습니다. 검사마다 따로입니다.</p>
   <p><b>분석 설정</b>: 영상은 Recipe 화면처럼 넘겨 보고 재생합니다. 막대 위에 분석 범위(시작·끝)와 압축기 기동 표시가 있습니다. "지금"은 화면의 시각을 넣습니다(키 <b>[</b> <b>]</b>: 범위 시작·끝. 한글 입력 상태에서도 바뀌지 않는 키라서 고름).
   Glass는 Recipe 화면과 같은 방식으로 끌어서 고치고, 이 검사의 사본에만 저장됩니다. BASE를 6 px 옮긴 상태입니다.</p>
   <p><b>분석 중</b>: 분석 시작을 누르면 검사 폴더와 Recipe 사본을 만들고 진행률과 남은 시간을 보여 줍니다. 끝나면 읽기 전용 결과 화면(확정된 편집기 배치)이 열립니다.</p>

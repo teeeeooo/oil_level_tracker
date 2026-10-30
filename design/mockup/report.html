@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v2 보고서 목업 (V2-4)</title>
+<!--
+  Static layout mock-up for user confirmation. Synthetic data only; not product code.
+  2026-10-30 (V2-4 step 1): the report, A4 landscape (DESIGN.md §5): the header block, the judgment,
+  then one page per Glass with the graph, the context image, the criteria and key-time tables and the
+  memos. Waiting on the user's confirmation.
+  Tokens follow DESIGN.md §2–§6. Ctrl+P prints it as the PDF would look.
+-->
+<style>
+:root {
+  --bg-1:#FFFFFF; --bg-2:#FAFAFA; --bg-3:#F5F5F5; --bg-4:#F0F0F0;
+  --fg-1:#242424; --fg-2:#424242; --fg-3:#616161;
+  --stroke-1:#D1D1D1; --stroke-2:#E0E0E0; --stroke-3:#F0F0F0;
+  --oil:#1F77D0; --foam:#E8710A; --reference:#616161; --line-halo:rgba(255,255,255,0.9);
+  --full-band:rgba(31,119,208,0.10); --empty-band:rgba(97,97,97,0.10);
+  --cannot-judge:#8A8A8A; --compressor:#8764B8; --memo:#C19C00; --empty-mark:#E37D80;
+  --pass:#0E700E; --pass-bg:#F1FAF1; --fail:#C50F1F; --fail-bg:#FDF3F4; --review:#BC4B09; --review-bg:#FFF9F5;
+  --font:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+}
+* { box-sizing:border-box; }
+body { margin:0; background:#E6E6E6; color:var(--fg-1); font:400 14px/20px var(--font); }
+.page { width:297mm; height:210mm; margin:16px auto; background:var(--bg-1); padding:9mm 12mm 7mm; display:flex; flex-direction:column; gap:6px; overflow:hidden; box-shadow:0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.14); }
+@page { size:A4 landscape; margin:0; }
+@media print {
+  body { background:#fff; }
+  .page { margin:0; box-shadow:none; break-after:page; }
+  .note { display:none; }
+}
+.head { display:flex; align-items:flex-start; gap:16px; border-bottom:2px solid var(--fg-1); padding-bottom:8px; }
+.head h1 { margin:0; font-size:24px; line-height:32px; font-weight:600; }
+.head .sub { color:var(--fg-3); font-size:12px; line-height:16px; }
+.head .ver { margin-left:auto; text-align:right; }
+.head .ver b { font-size:20px; line-height:28px; }
+.strip { display:flex; gap:16px; border-bottom:1px solid var(--stroke-1); padding-bottom:4px; font-size:12px; line-height:16px; color:var(--fg-3); }
+.strip b { color:var(--fg-1); }
+.strip .right { margin-left:auto; }
+.fields { display:grid; grid-template-columns:repeat(4, 1fr); gap:4px 16px; }
+.fields div { display:flex; flex-direction:column; }
+.fields span { color:var(--fg-3); font-size:12px; line-height:16px; }
+h2 { margin:4px 0 0; font-size:16px; line-height:22px; font-weight:600; display:flex; align-items:center; gap:8px; }
+h2 .mode { font-weight:400; color:var(--fg-3); font-size:14px; }
+.badge { display:inline-flex; align-items:center; height:20px; padding:0 6px; border-radius:4px; font-size:12px; line-height:16px; font-weight:600; }
+.badge.big { height:28px; padding:0 10px; font-size:20px; line-height:28px; }
+.pass { color:var(--pass); background:var(--pass-bg); }
+.fail { color:var(--fail); background:var(--fail-bg); }
+.review { color:var(--review); background:var(--review-bg); }
+table { border-collapse:collapse; width:100%; }
+th, td { text-align:left; padding:3px 8px; border-bottom:1px solid var(--stroke-2); font-size:13px; line-height:18px; vertical-align:top; }
+th { background:var(--bg-3); font-weight:600; }
+td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
+.plots { display:flex; flex-direction:column; border:1px solid var(--stroke-1); }
+.plots .label { font-size:12px; line-height:16px; color:var(--fg-3); padding:2px 8px; background:var(--bg-3); border-bottom:1px solid var(--stroke-1); display:flex; gap:12px; }
+.plots .label i { display:inline-block; width:14px; height:2px; vertical-align:middle; margin-right:4px; }
+.plot { position:relative; }
+.plot svg, .plot canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.two { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.memos { display:flex; flex-direction:column; gap:2px; font-size:13px; line-height:18px; }
+.memo { display:flex; gap:8px; align-items:flex-start; }
+.pin { flex:none; width:18px; height:18px; border-radius:50%; background:var(--memo); color:#fff; font-size:12px; line-height:18px; text-align:center; font-weight:600; }
+.memo .t { color:var(--fg-3); font-variant-numeric:tabular-nums; width:56px; flex:none; }
+.reason { font-size:12px; line-height:16px; color:var(--fg-2); }
+.foot { margin-top:auto; display:flex; font-size:12px; line-height:16px; color:var(--fg-3); }
+.foot span:last-child { margin-left:auto; }
+.note { position:fixed; right:16px; bottom:16px; width:380px; background:var(--bg-1); border:1px solid var(--stroke-1); border-radius:8px; padding:12px; font-size:12px; line-height:16px; color:var(--fg-2); box-shadow:0 0 2px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.14); }
+.note b { color:var(--fg-1); }
+.note ol { margin:6px 0 0; padding-left:18px; }
+.note .close { float:right; border:0; background:transparent; cursor:pointer; color:var(--fg-3); }
+</style>
+</head>
+<body>
+
+<section class="page">
+  <div class="head">
+    <div>
+      <h1>오일 레벨 검사 보고서</h1>
+      <div class="sub">1차 냉각 · Oil Level Tracker</div>
+    </div>
+    <div class="ver"><b>v1</b><div class="sub">제출 2026-10-30 14:22</div></div>
+  </div>
+  <div class="fields">
+    <div><span>압축기 모델</span>GB-2 R410A</div>
+    <div><span>시험 종류</span>냉각 on/off</div>
+    <div><span>영상 파일</span>SPL#4_Cooling_onoff_#2.mp4</div>
+    <div><span>Recipe</span>SPL#4_test1_607bccb</div>
+    <div><span>분석 범위</span>00:00.0 – 05:00.0 (초당 2 샘플)</div>
+    <div><span>압축기 기동</span>00:30.0</div>
+    <div><span>검사 이름</span>1차 냉각</div>
+    <div><span>작성</span>2026-10-30 14:22</div>
+  </div>
+  <h2>판정</h2>
+  <table>
+    <tr><th style="width:110px">Glass</th><th style="width:150px">판정 규칙</th><th style="width:170px">최종 판정</th><th style="width:110px">자동 판정</th><th>덮어쓴 이유</th></tr>
+    <tr><td>BASE</td><td>기준점 회복</td><td><span class="badge pass">합격</span></td><td>합격</td><td></td></tr>
+    <tr><td>Accum</td><td>기준점 위 유지</td><td><span class="badge review">불합격 · 덮어씀</span></td><td>합격</td><td class="reason">01:40 부근 거품이 유면을 가려 위반 길이를 믿을 수 없음. 재시험 필요.</td></tr>
+  </table>
+  <h2>BASE <span class="mode">기준점 회복</span> <span class="badge big pass">합격</span></h2>
+  <div class="plots" data-glass="base">
+    <div class="label"><b style="color:var(--fg-1)">그래프</b><span><i style="background:var(--oil)"></i>Oil</span><span><i style="background:var(--foam)"></i>Foam</span><span><i style="border-top:1.5px dashed var(--reference);height:0"></i>참조</span><span>세로: 0선 기준 높이 (px)</span></div>
+    <div class="plot" style="height:118px"><svg class="graph"></svg></div>
+    <div class="label"><b style="color:var(--fg-1)">맥락 이미지</b></div>
+    <div class="plot" style="height:76px"><canvas class="ctx"></canvas><svg class="ctxOver"></svg></div>
+    <div class="plot" style="height:20px"><svg class="axis"></svg></div>
+  </div>
+  <div class="two">
+    <table>
+      <tr><th>판정 기준</th><th class="n">기준</th><th class="n">결과</th></tr>
+      <tr><td>회복 한도 (기동 후)</td><td class="n">120 s 이내</td><td class="n">87.6 s</td></tr>
+      <tr><td>회복 뒤 유지</td><td class="n">5 s 이상</td><td class="n">끝까지 유지</td></tr>
+      <tr><td>유효 비율</td><td class="n">70 % 이상</td><td class="n">81 %</td></tr>
+    </table>
+    <table>
+      <tr><th>주요 시각</th><th class="n">시각</th><th>내용</th></tr>
+      <tr><td>압축기 기동</td><td class="n">00:30.0</td><td></td></tr>
+      <tr><td>0선 회복</td><td class="n">01:57.6</td><td>기동 후 87.6 s</td></tr>
+      <tr><td>FULL</td><td class="n">03:30.0</td><td>36.0 s 동안</td></tr>
+    </table>
+  </div>
+  <div class="memos">
+    <div class="memo"><span class="pin">1</span><span class="t">01:02.0</span>거품 발생, 유면 식별 어려움</div>
+    <div class="memo"><span class="pin">2</span><span class="t">03:32.0</span>FULL 도달 확인</div>
+  </div>
+  <div class="foot"><span>1차 냉각 · v1</span><span>1 / 2</span></div>
+</section>
+
+<section class="page">
+  <div class="strip"><b>오일 레벨 검사 보고서</b><span>1차 냉각</span><span>GB-2 R410A · 냉각 on/off</span><span class="right">v1 · 제출 2026-10-30 14:22</span></div>
+  <h2>Accum <span class="mode">기준점 위 유지</span> <span class="badge big review">불합격 · 덮어씀</span></h2>
+  <div class="reason"><b>덮어쓴 이유:</b> 01:40 부근 거품이 유면을 가려 위반 길이를 믿을 수 없음. 재시험 필요. <span style="color:var(--fg-3)">(자동 판정: 합격)</span></div>
+  <div class="plots" data-glass="accum">
+    <div class="label"><b style="color:var(--fg-1)">그래프</b><span><i style="background:var(--oil)"></i>Oil</span><span><i style="background:var(--foam)"></i>Foam</span><span>세로: 0선 기준 높이 (px)</span></div>
+    <div class="plot" style="height:220px"><svg class="graph"></svg></div>
+    <div class="label"><b style="color:var(--fg-1)">맥락 이미지</b></div>
+    <div class="plot" style="height:140px"><canvas class="ctx"></canvas><svg class="ctxOver"></svg></div>
+    <div class="plot" style="height:20px"><svg class="axis"></svg></div>
+  </div>
+  <div class="two">
+    <table>
+      <tr><th>판정 기준</th><th class="n">기준</th><th class="n">결과</th></tr>
+      <tr><td>0선 아래로 내려간 최장 시간</td><td class="n">5 s 이하 (허용 0 px)</td><td class="n">3.5 s</td></tr>
+      <tr><td>유효 비율</td><td class="n">70 % 이상</td><td class="n">92 %</td></tr>
+    </table>
+    <table>
+      <tr><th>주요 시각</th><th class="n">시각</th><th>내용</th></tr>
+      <tr><td>압축기 기동</td><td class="n">00:30.0</td><td></td></tr>
+      <tr><td>위반 (가장 긺)</td><td class="n">01:41.0 – 01:44.5</td><td>3.5 s, 최대 0선 아래 6 px</td></tr>
+    </table>
+  </div>
+  <div class="memos"><div class="memo"><span class="pin">1</span><span class="t">01:40.0</span>거품이 유면을 가림</div></div>
+  <div class="foot"><span>1차 냉각 · v1</span><span>2 / 2</span></div>
+</section>
+
+<div class="note"><button class="close" onclick="this.parentNode.remove()">닫기 ✕</button>
+  <b>V2-4 보고서 목업 (가짜 데이터, 확인 요청)</b>
+  <ol>
+    <li>A4 가로. 첫 쪽에 머리글과 Glass별 판정 요약, 그 뒤 Glass마다 그래프·맥락 이미지·판정 기준표·주요 시각표·메모 (DESIGN.md §5 순서).</li>
+    <li>머리글: 압축기 모델과 시험 종류(분석 설정에서 입력)에 영상·Recipe·작성 일시·<b>버전</b>을 자동으로.</li>
+    <li>덮어쓴 Glass는 --review 색 "덮어씀"과 이유, 자동 판정을 함께 적습니다.</li>
+    <li>파일: 검사 폴더의 versions\001\report.html. 한 파일로 오프라인에서 열리고 Ctrl+P로 PDF가 됩니다(A7: 5 MB 이하).</li>
+    <li>편집 기록과 v1의 검출기 그래프는 넣지 않습니다(§7).</li>
+  </ol>
+</div>
+
+<script>
+(() => {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const T = 300, DT = 0.5, TOP = 200, START = 30;
+  const PAD = { l: 44, r: 12, t: 8, b: 6 };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const smooth = (a, b, x0, x1, x) => { const u = clamp((x - x0) / (x1 - x0), 0, 1); return a + (b - a) * (u * u * (3 - 2 * u)); };
+  const GLASSES = {
+    base: { zero: 60, oil: t => t < START ? 150 : t < 72 ? smooth(150, 38, START, 72, t) : t < 210 ? smooth(38, 200, 90, 210, t) : t < 270 ? 200 : smooth(200, 168, 270, 300, t),
+            foam: t => (t >= 40 && t <= 128) ? 1 : null, empty: [], cannot: [[130, 150]], memos: [[62, 1], [212, 2]], full: [[210, 246]] },
+    accum: { zero: 90, oil: t => 120 + 12 * Math.sin(t / 20) - (t > 101 && t < 104.5 ? 36 : 0) * smooth(0, 1, 100, 102, t) * smooth(1, 0, 103, 105, t),
+             foam: t => (t >= 90 && t <= 115) ? 1 : null, empty: [], cannot: [], memos: [[100, 1]], full: [], violation: [[101, 104.5]] },
+  };
+  function scales(w, h) { return { x: t => PAD.l + (t / T) * (w - PAD.l - PAD.r), y: r => PAD.t + (1 - r / TOP) * (h - PAD.t - PAD.b) }; }
+  function path(fn, s, t0 = 0, t1 = T) {
+    let d = "", pen = false;
+    for (let t = t0; t <= t1 + 1e-9; t += DT) { const v = fn(t); if (v == null) { pen = false; continue; } d += (pen ? "L" : "M") + s.x(t).toFixed(1) + "," + s.y(v).toFixed(1); pen = true; }
+    return d;
+  }
+  const hatch = `<defs><pattern id="h" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="rgba(138,138,138,0.12)"/><line x1="0" y1="0" x2="0" y2="6" stroke="${css('--cannot-judge')}"/></pattern></defs>`;
+  function marks(g, s, h, labels) {
+    let out = "";
+    for (const [a, b] of g.cannot) out += `<rect x="${s.x(a)}" y="${PAD.t}" width="${s.x(b) - s.x(a)}" height="${h - PAD.t - PAD.b}" fill="url(#h)"/>`;
+    for (const [a, b] of g.full) out += `<rect x="${s.x(a)}" y="${PAD.t}" width="${s.x(b) - s.x(a)}" height="${h - PAD.t - PAD.b}" fill="${css('--full-band')}"/>`;
+    for (const [a, b] of g.violation ?? []) out += `<rect x="${s.x(a)}" y="${PAD.t}" width="${s.x(b) - s.x(a)}" height="${h - PAD.t - PAD.b}" fill="rgba(197,15,31,0.10)"/>` +
+      (labels ? `<text x="${s.x(b) + 4}" y="${PAD.t + 12}" font-size="11" fill="${css('--fail')}" font-weight="600">위반 3.5 s</text>` : "");
+    out += `<line x1="${s.x(START)}" x2="${s.x(START)}" y1="${PAD.t}" y2="${h - PAD.b}" stroke="${css('--compressor')}" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+    if (labels) out += `<text x="${s.x(START) + 4}" y="${PAD.t + 10}" font-size="11" fill="${css('--compressor')}" font-weight="600">기동</text>`;
+    return out;
+  }
+  function lines(g, s, halo) {
+    const oil = path(g.oil, s), foam = path(t => g.foam(t) ? Math.min(TOP, g.oil(t) + 18) : null, s);
+    const under = halo ? [oil, foam].map(d => `<path d="${d}" stroke="${css('--line-halo')}" stroke-width="4" fill="none"/>`).join("") : "";
+    return under + `<path d="${foam}" stroke="${css('--foam')}" stroke-width="1.5" fill="none"/><path d="${oil}" stroke="${css('--oil')}" stroke-width="1.5" fill="none"/>`;
+  }
+  for (const box of document.querySelectorAll(".plots")) {
+    const g = GLASSES[box.dataset.glass];
+    const gs = box.querySelector(".graph"), gw = gs.parentNode.clientWidth, gh = gs.parentNode.clientHeight, s = scales(gw, gh);
+    let out = hatch;
+    for (let k = -10; k <= 10; k++) {
+      const r = g.zero + 20 * k, y = s.y(r), major = k % 2 === 0;
+      if (r < 0 || r > TOP) continue;
+      out += `<line x1="${PAD.l}" x2="${gw - PAD.r}" y1="${y}" y2="${y}" stroke="${css(major ? '--stroke-2' : '--stroke-3')}"/>`;
+      if (major) out += `<text x="${PAD.l - 6}" y="${y + 4}" text-anchor="end" font-size="11" fill="${css('--fg-3')}">${r - g.zero}</text>`;
+    }
+    out += `<line x1="${PAD.l}" x2="${gw - PAD.r}" y1="${s.y(g.zero)}" y2="${s.y(g.zero)}" stroke="${css('--reference')}" stroke-dasharray="6 4"/>`;
+    out += marks(g, s, gh, true) + lines(g, s, false);
+    for (const [t, n] of g.memos) {
+      const cx = s.x(t), base = s.y(g.oil(t)), cy = base - 16 < PAD.t + 8 ? base + 16 : base - 16;  // below it near the top
+      out += `<line x1="${cx}" x2="${cx}" y1="${cy}" y2="${base}" stroke="${css('--memo')}"/><circle cx="${cx}" cy="${cy}" r="8" fill="${css('--memo')}"/><text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">${n}</text>`;
+    }
+    gs.setAttribute("viewBox", `0 0 ${gw} ${gh}`); gs.innerHTML = out;
+
+    const cv = box.querySelector(".ctx"), cw = cv.parentNode.clientWidth, ch = cv.parentNode.clientHeight, cs = scales(cw, ch), dpr = 2;
+    cv.width = cw * dpr; cv.height = ch * dpr;
+    const c = cv.getContext("2d"); c.scale(dpr, dpr);
+    const N = T / DT, img = c.createImageData(N, TOP); let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < N; i++) {
+      const t = i * DT, oil = g.oil(t), foam = g.foam(t) ? oil + 18 : oil;
+      for (let r = 0; r < TOP; r++) {
+        let R, G, B;
+        if (r < oil) { R = 160; G = 112; B = 38; } else if (r < foam) { R = 226; G = 220; B = 204; } else { R = 70; G = 82; B = 92; }
+        const n = (rnd() - 0.5) * 16, p = ((TOP - 1 - r) * N + i) * 4;
+        img.data[p] = R + n; img.data[p + 1] = G + n; img.data[p + 2] = B + n; img.data[p + 3] = 255;
+      }
+    }
+    const tmp = document.createElement("canvas"); tmp.width = N; tmp.height = TOP; tmp.getContext("2d").putImageData(img, 0, 0);
+    c.drawImage(tmp, cs.x(0), cs.y(TOP), cs.x(T) - cs.x(0), cs.y(0) - cs.y(TOP));
+    const over = box.querySelector(".ctxOver");
+    over.setAttribute("viewBox", `0 0 ${cw} ${ch}`); over.innerHTML = hatch + marks(g, cs, ch, false) + lines(g, cs, true);
+
+    const ax = box.querySelector(".axis"), aw = ax.parentNode.clientWidth, as = scales(aw, 20);
+    let a = "";
+    for (let t = 0; t <= T; t += 30) a += `<line x1="${as.x(t)}" x2="${as.x(t)}" y1="0" y2="4" stroke="${css('--stroke-1')}"/><text x="${as.x(t)}" y="16" text-anchor="${t === T ? "end" : t === 0 ? "start" : "middle"}" font-size="11" fill="${css('--fg-3')}">${String(Math.floor(t / 60)).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}</text>`;
+    ax.setAttribute("viewBox", `0 0 ${aw} 20`); ax.innerHTML = a;
+  }
+})();
+</script>
+</body>
+</html>

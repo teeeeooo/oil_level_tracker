@@ -130,17 +130,38 @@ DESIGN.md §5 keeps a place in the editor's right column for the judgment
 panel (computed result, override, reason).
 
 **Steps:**
-1. **Start decisions and a mock-up — waiting on the user.** Open:
-   - what "every Glass checked" means before submitting (opened, judged,
-     or confirmed one by one);
-   - versions: where they live in the inspection folder, and whether an
-     earlier version (or its report) can be opened;
-   - the report header (compressor model, test type): entered when, and
-     kept per inspection or per version;
-   - where the report is written and how it is named, and whether
-     submitting writes it;
-   - the judgment panel and the report layout, as a mock-up for the user
-     to confirm.
+1. **Start decisions — done; the mock-ups wait on the user.**
+   - **The user's decisions** (2026-10-30, Product SSOT §3 and §7):
+     - each Glass is checked with its own "확인" on the judgment; changing
+       that Glass's lines afterwards takes the check off;
+     - a resubmission's version stays in the same inspection folder (one
+       subfolder each); the list keeps one row per inspection;
+     - the report header (compressor model, test type) is entered with the
+       inspection name in the analysis setup, per inspection;
+     - the mock-ups come first.
+   - **No report is written yet:** there is no `adapters/report`, and the
+     editor's "제출" is disabled. The folder layout reserves the versions
+     and their report ([inspection-folder.md](../20-architecture/inspection-folder.md)).
+   - **The mock-ups, for the user to confirm:**
+     - [editor.html](../../design/mockup/editor.html) `#judge`,
+       `#override`, `#checked`, `#submit`, `#locked`: the judgment panel
+       (the computed result and its grounds, the override with a required
+       reason, "이 Glass 확인"), the Glass picker's badges, the submit
+       dialog, and a submitted version (read-only, an info bar with "보고서
+       열기", "고쳐서 다시 제출 (v2)…" and the version picker);
+     - [report.html](../../design/mockup/report.html): A4 landscape, the
+       header and the judgment summary on page 1, then a page per Glass;
+     - [inspection.html](../../design/mockup/inspection.html): "검사 정보"
+       in the setup (name, compressor model, test type) and the submitted
+       state in the list ("v1 제출함", "v2 고치는 중").
+   - **The agent's proposals inside them, to confirm with the mock-ups:**
+     the check also comes off when that Glass's "cannot judge" stretches
+     or the compressor start change (they change the judgment); the
+     header stays editable in the editor's "검사 정보" until submitting;
+     the override is a 자동/합격/불합격 choice; the versions live in
+     `versions\NNN\` with the edits, the judgment and `report.html`; a
+     violation stretch is marked with `--fail` at 10 % (a token to add to
+     DESIGN.md once confirmed); BASE shares page 1 with the header.
 2. **`domain`, the judgment** (§5): it needs none of the open decisions
    and can start once the user agrees.
 3. The rest follows the decisions: the application and API, the panel,
@@ -149,12 +170,14 @@ panel (computed result, override, reason).
 ## Session handoff — 2026-10-30 (fourth)
 
 **V2-3 closed** after its re-check passed every row (S1, S2, C1–C12, T,
-R1–R3). `ca7d3ee` fixed the re-check's C4 note after the run. V2-4 is
-started and waits on the user's start decisions (step 1 above).
+R1–R3). After it: the upright stroke (`ca7d3ee`) and the point line's 8 px
+band (`9eea291`). V2-4's start decisions are in; its mock-ups wait on the
+user (step 1 above).
 
-**Resume:** read this file, the Product SSOT §3, §5 and §7, and DESIGN.md
-§5's judgment panel, then ask the step 1 questions if the user has not
-answered them. Earlier editor work is in the two V2-3 results and in Git.
+**Resume:** read this file, the Product SSOT §3, §5 and §7, DESIGN.md §2.4
+and §5, and the three mock-ups. Once the user confirms them (or asks for
+changes), write the confirmed layout into DESIGN.md §5 and start step 2.
+Earlier editor work is in the two V2-3 results and in Git.
 
 **Agent's choices in V2-3 to show the user if asked:**
 - **Views:** "전체 보기" in the graph header; the selected range kept
@@ -310,4 +333,4 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done:** V2-3 (2026-10-30): the workstation run and its re-check pass;
   the upright stroke and the point line's 8 px band followed.
-- **Waiting on the user:** V2-4's start decisions (V2-4 step 1).
+- **Waiting on the user:** the V2-4 mock-ups (V2-4 step 1).
