@@ -189,6 +189,7 @@ export class History {
   constructor() {
     this.done = [];
     this.undone = [];
+    this.listener = null;  // told of each change recorded, undone or redone: (entry) => {}
   }
 
   /** Record what changed in `line` since `base`, a copy taken before the change. False when nothing did. */
@@ -222,6 +223,7 @@ export class History {
     this.done.push(entry);
     if (this.done.length > UNDO_DEPTH) this.done.shift();
     this.undone = [];
+    this.listener?.(entry);
   }
 
   /** Undo the last change; `edits` gives `lineOf(glassId, kind)`, `setList(glassId, kind, list)`
@@ -231,6 +233,7 @@ export class History {
     if (!entry) return null;
     restore(edits, entry, entry.before);
     this.undone.push(entry);
+    this.listener?.(entry);
     return entry;
   }
 
@@ -239,6 +242,7 @@ export class History {
     if (!entry) return null;
     restore(edits, entry, entry.after);
     this.done.push(entry);
+    this.listener?.(entry);
     return entry;
   }
 

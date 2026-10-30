@@ -306,8 +306,20 @@ def test_editing_through_the_api(app, video):
             "levels": [{"state": "EMPTY_NO_INTERFACE", "first": 0, "end": 2}],
             "empty": [],
             "coverage": {"total": 4, "empty": 0, "cannot_judge": 1, "valid": 3, "valid_ratio": 0.75},
+            "judgment": {
+                "computed": "FAIL", "verdict": "FAIL", "reason": "기동 뒤 0선 이상에서 5초를 유지한 구간이 없습니다.",
+                "recovery": None, "violation": None,
+            },
         }
     ]
+
+    # the user's own verdict, with its reason and the check (Product SSOT §3)
+    assert glass["decision"] == {"override": None, "reason": "", "checked_at": None}
+    glass["decision"] = {"override": "PASS", "reason": "", "checked_at": "2026-10-30T05:00:00+00:00"}
+    assert call(running, "POST", f"{base}/edits/states", {"edits": edits})[0] == 400  # checked without a reason
+    glass["decision"]["reason"] = "거품 아래 유면이 0선 위"
+    judged = call(running, "POST", f"{base}/edits/states", {"edits": edits})[1]["glasses"][0]["judgment"]
+    assert (judged["computed"], judged["verdict"]) == ("FAIL", "PASS")
 
     status, saved, _ = call(running, "POST", f"{base}/edits", {"edits": edits})
     assert status == 200 and saved["saved_at"]

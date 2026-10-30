@@ -31,6 +31,14 @@ class LineKind(StrEnum):
     REFERENCE = "REFERENCE"
 
 
+class Verdict(StrEnum):
+    """A Glass's judgment (Product SSOT §5)."""
+
+    PASS = "PASS"      # 합격
+    FAIL = "FAIL"      # 불합격
+    REVIEW = "REVIEW"  # 검토 필요: too few valid samples, or no compressor start for RECOVERY
+
+
 class LevelState(StrEnum):
     """Where an Oil sample at the Glass top or bottom puts the level (Product SSOT §4)."""
 

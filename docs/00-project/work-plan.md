@@ -178,18 +178,41 @@ panel (computed result, override, reason).
      invalid sample ends a violation run; a run lasts its sample count ×
      0.5 s; the HOLD modes ignore the compressor start; the measures are
      still found when the valid share is too low.
-3. The rest follows the decisions: the application and API, the panel,
-   submitting and versions, the report, then a Windows run.
+3. **The judgment in the editor — done** (2026-10-30):
+   - **API:** each Glass's states carry its judgment (`computed`,
+     `verdict`, `reason`, `recovery` or `violation`); the edits carry each
+     Glass's `decision` (`override`, `reason`, `checked_at`).
+   - **`edits.json` schema 2** adds the decision; schema 1 files from
+     V2-3, which the workstation keeps, read as undecided
+     ([inspection-folder.md](../20-architecture/inspection-folder.md)).
+     Re-analysis keeps the override and reason and clears the check.
+   - **The panel** (DESIGN.md §5): the final badge, "직접 판정 · 자동 판정은
+     …", the computed reason, the grounds, 자동/합격/불합격 with the
+     required reason, "이 Glass 확인" and "확인 풀기"; the Glass picker
+     shows "확인 전" or the final judgment; the Glass panel's 편집 기록.
+     The check comes off when the history records, undoes or redoes a
+     change to that Glass's Oil line or "cannot judge" stretches, or to
+     the compressor start (`History.listener`). 제출 stays disabled.
+4. **The report header:** 압축기 모델 and 시험 종류 in the setup's 검사
+   정보 and the editor's, kept per inspection.
+5. **Submitting and versions:** the submit dialog; `versions\NNN\` with
+   the edits, the judgment and the report; a submitted version read-only;
+   "고쳐서 다시 제출"; the list's states.
+6. **The report:** `adapters/report`, self-contained HTML from
+   `web/render.js` (A7: ≤ 5 MB, A4 landscape print).
+7. A Windows run of V2-4, with the V2-3 follow-ups (the upright stroke,
+   the point line's 8 px band).
 
 ## Session handoff — 2026-10-30 (fourth)
 
 **V2-3 closed** after its re-check passed every row (S1, S2, C1–C12, T,
 R1–R3). After it: the upright stroke (`ca7d3ee`) and the point line's 8 px
 band (`9eea291`). V2-4's start decisions and mock-ups are confirmed (step 1
-above); step 2, the judgment in `domain`, is done; step 3 is next.
+above); steps 2 and 3 (the judgment in `domain` and in the editor) are
+done; step 4 is next.
 
 **Resume:** read this file, the Product SSOT §3, §5 and §7, DESIGN.md §2.4
-and §5, and the three mock-ups, then continue with step 3.
+and §5, and the three mock-ups, then continue with step 4.
 Earlier editor work is in the two V2-3 results and in Git.
 
 **Agent's choices in V2-3 to show the user if asked:**
@@ -346,5 +369,5 @@ The three v1 remote branches that v1 docs cite stay.
 
 - **Done:** V2-3 (2026-10-30): the workstation run and its re-check pass;
   the upright stroke and the point line's 8 px band followed.
-- **Next:** V2-4 step 3: the judgment through the application and the
-  API, then the panel, the check and the override.
+- **Next:** V2-4 step 4, the report header; then submitting and versions,
+  and the report.

@@ -10,7 +10,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, replace
 
-from .enums import LevelState, SampleOrigin
+from .enums import LevelState, SampleOrigin, Verdict
 from .inspection import ANALYSIS_RATE, Analysis, GlassDraft
 from .line import Line
 from .recipe import Glass
@@ -18,6 +18,7 @@ from .recipe import Glass
 LEVEL_TOLERANCE_PX = 1.0     # an Oil sample this close to the Glass top or bottom is FULL or EMPTY
 TIME_TOLERANCE_SEC = 0.5 / ANALYSIS_RATE  # two analyses' samples within half a step are the same time
 MAXIMUM_MEMO_LENGTH = 500
+MAXIMUM_REASON_LENGTH = 500
 
 
 @dataclass(frozen=True)
@@ -50,6 +51,24 @@ class Memo:
 
 
 @dataclass(frozen=True)
+class Decision:
+    """The user's part of a Glass's judgment (Product SSOT §3): their own verdict with its reason,
+    and the check that submitting needs. The report prints the reason as "판정 사유" (§7)."""
+
+    override: Verdict | None = None  # PASS or FAIL; None keeps the computed verdict
+    reason: str = ""
+    checked_at: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.override is Verdict.REVIEW:
+            raise ValueError("A Glass is judged 합격 or 불합격 by the user, not 검토 필요.")
+        if len(self.reason) > MAXIMUM_REASON_LENGTH:
+            raise ValueError(f"A reason has at most {MAXIMUM_REASON_LENGTH} characters.")
+        if self.checked_at is not None and self.override is not None and not self.reason.strip():
+            raise ValueError("A Glass judged by the user needs a reason before it is checked.")
+
+
+@dataclass(frozen=True)
 class GlassEdits:
     glass_id: str
     oil: Line
@@ -57,6 +76,7 @@ class GlassEdits:
     reference: Line
     cannot_judge: tuple[Stretch, ...] = ()
     memos: tuple[Memo, ...] = ()
+    decision: Decision = Decision()
 
 
 @dataclass(frozen=True)
@@ -210,6 +230,7 @@ def merge_reanalysis(old: Edits, analysis: Analysis, compressor_start_sec: float
             _carry(previous.reference, matches, empty_line(len(times))),
             stretches,
             memos,
+            replace(previous.decision, checked_at=None),  # new lines: check them again
         ))
         dropped = replace(
             dropped,

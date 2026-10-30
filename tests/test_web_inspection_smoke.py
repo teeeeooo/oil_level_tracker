@@ -150,7 +150,7 @@ def test_new_inspection_from_video_to_result(tmp_path, video, browser_page):
         page.wait_for_function("document.querySelectorAll('#context image').length === 1")
         assert page.locator("#editorTitle").inner_text() == "스모크: 1차"
         assert page.locator("#graph path[data-kind=oil]").count() == 1
-        assert page.locator("#editorGlass option").all_inner_texts() == ["BASE"]
+        assert page.locator("#editorGlass option").all_inner_texts() == ["BASE · 확인 전"]
         page.get_by_text("배경 제거 보기", exact=True).click()
         assert page.locator("#backgroundToggle").is_checked()
         page.wait_for_function("document.querySelectorAll('#context image').length === 1")
@@ -701,6 +701,76 @@ def test_the_pencil_lock(tmp_path, video, browser_page):
         upright = drawn()
         assert len(upright) == 2 and upright[0] == level[0]  # from the pressed height
         assert upright[1] > upright[0]  # to the pointer's, lower on the screen: a larger source y
+        assert errors == []
+    finally:
+        running.close()
+
+
+def test_the_judgment_the_users_verdict_and_the_check(tmp_path, video, browser_page):
+    # Product SSOT §3 and §5; DESIGN.md §5 (the judgment panel)
+    page, errors = browser_page
+    data = tmp_path / "data"
+    write_recipes(data / "Recipes")
+    running = bootstrap.start(data_folder=data)
+    try:
+        analysed_inspection(running, video, "판정")
+        page.goto(running.url)
+        page.locator("#inspectionRows tr", has_text="판정").get_by_role("button", name="열기", exact=True).click()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        badge, picker = page.locator("#verdictBadge"), page.locator("#editorGlass option")
+        page.wait_for_function("document.getElementById('verdictBadge').textContent !== ''")
+        computed = badge.inner_text()
+        assert computed in ("합격", "불합격", "검토 필요")
+        assert page.locator("#verdictNote").inner_text() == "자동 판정"
+        assert page.locator("#judgmentReason").inner_text() != ""
+        assert page.locator("#editorSubmit").is_disabled()
+        assert "남은 Glass: BASE" in page.locator("#editorSubmit").get_attribute("title")
+
+        # the user's own verdict needs a reason before the check
+        own = "합격" if computed != "합격" else "불합격"
+        page.locator(f"#overrideKind button[data-override={'PASS' if own == '합격' else 'FAIL'}]").click()
+        page.locator("#reasonBox").wait_for()
+        page.wait_for_function("t => document.getElementById('verdictBadge').textContent === t", arg=own)
+        assert page.locator("#verdictNote").inner_text() == f"직접 판정 · 자동 판정은 {computed}"
+        page.get_by_role("button", name="이 Glass 확인").click()
+        page.get_by_text("직접 판정한 Glass는 이유를 써야 확인할 수 있습니다.").wait_for()
+        assert page.locator("#checkedRow").is_hidden()
+        page.locator("#overrideReason").fill("거품 아래 유면을 영상으로 확인함")
+        page.get_by_role("button", name="이 Glass 확인").click()
+        page.locator("#checkedRow").wait_for()
+        assert picker.all_inner_texts() == [f"BASE · {own}"]
+        assert "제출은 다음 단계" in page.locator("#editorSubmit").get_attribute("title")
+
+        # a Foam stroke keeps the check; an Oil change takes it off, and its undo too
+        page.keyboard.press("p")
+        page.locator("#lineKind button[data-kind=foam]").click()
+        box = page.locator("#graph").bounding_box()
+        drag(page, (box["x"] + box["width"] * 0.3, box["y"] + 40), (box["x"] + box["width"] * 0.4, box["y"] + 40))
+        page.get_by_text("저장 안 함").wait_for()
+        assert page.locator("#checkedRow").is_visible()
+        page.locator("#lineKind button[data-kind=oil]").click()
+        drag(page, (box["x"] + box["width"] * 0.6, box["y"] + 60), (box["x"] + box["width"] * 0.7, box["y"] + 60))
+        page.locator("#checkRow").wait_for()
+        assert picker.all_inner_texts() == ["BASE · 확인 전"]
+        page.get_by_role("button", name="이 Glass 확인").click()
+        page.keyboard.press("Control+z")
+        page.locator("#checkRow").wait_for()
+
+        # saved with the edits; the verdict and the reason come back, the check as it was
+        page.get_by_role("button", name="이 Glass 확인").click()
+        page.keyboard.press("Control+s")
+        page.get_by_text("저장함").wait_for()
+        decision = json.loads((data / "Inspections" / "판정" / "edits.json").read_text(encoding="utf-8"))["glasses"][0]["decision"]
+        assert decision["override"] == {"합격": "PASS", "불합격": "FAIL"}[own]
+        assert decision["reason"] == "거품 아래 유면을 영상으로 확인함" and decision["checked_at"]
+        page.reload()
+        page.locator("#inspectionRows tr", has_text="판정").get_by_role("button", name="열기", exact=True).click()
+        page.locator("#checkedRow").wait_for()
+        assert page.locator("#overrideReason").input_value() == "거품 아래 유면을 영상으로 확인함"
+        page.locator("#overrideKind button[data-override='']").click()  # back to the computed verdict
+        page.wait_for_function("t => document.getElementById('verdictBadge').textContent === t", arg=computed)
+        assert page.locator("#reasonBox").is_hidden() and page.locator("#checkRow").is_visible()
+        shot(page, "j1-judgment")
         assert errors == []
     finally:
         running.close()

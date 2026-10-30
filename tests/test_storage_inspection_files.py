@@ -17,8 +17,8 @@ from oil_tracker.adapters.storage.inspection_files import (
 )
 from oil_tracker.adapters.storage.recipe_files import recipe_to_json
 from oil_tracker.application.ports import GlassImages, InspectionNotFound, StoredEdits, UnreadableAnalysis, UnreadableEdits
-from oil_tracker.domain.edits import Edits, GlassEdits, Memo, Stretch, empty_line
-from oil_tracker.domain.enums import InspectionState, SampleOrigin
+from oil_tracker.domain.edits import Decision, Edits, GlassEdits, Memo, Stretch, empty_line
+from oil_tracker.domain.enums import InspectionState, SampleOrigin, Verdict
 from oil_tracker.domain.geometry import Ellipse
 from oil_tracker.domain.inspection import Analysis, AnalysisSettings, GlassDraft, Inspection, SourceVideo
 from oil_tracker.domain.line import Line
@@ -169,6 +169,7 @@ def make_edits() -> Edits:
         "0b7c-base", oil, foam, empty_line(3),
         cannot_judge=(Stretch(0.5, 1.0),),
         memos=(Memo("m1", 0.5, 380.0, "거품 \"많음\""), Memo("m2", 1.0, None, "")),
+        decision=Decision(Verdict.FAIL, "거품이 유면을 가림", "2026-10-30T05:00:00+00:00"),
     )
     return Edits((0.0, 0.5, 1.0), (glass,), 31.5)
 
@@ -191,9 +192,21 @@ def test_the_edits_format_refuses_other_files_and_broken_contents():
     assert edits_from_json(json.dumps(good)).edits == make_edits()
     for change, reason in (
         ({"format": "oil-level-tracker-analysis"}, "편집 파일이 아닙니다."),
-        ({"schema_version": 2}, "지원하지 않는 편집 파일 버전입니다: 2"),
+        ({"schema_version": 3}, "지원하지 않는 편집 파일 버전입니다: 3"),
+        ({"schema_version": True}, "지원하지 않는 편집 파일 버전입니다: True"),
         ({"times": [0.0, 0.5]}, "편집 내용이 올바르지 않습니다"),
         ({"compressor_start_sec": "31.5"}, "편집 내용이 올바르지 않습니다"),
     ):
         with pytest.raises(UnreadableEdits, match=reason):
             edits_from_json(json.dumps({**good, **change}))
+
+
+def test_edits_of_schema_1_read_as_undecided():
+    # V2-3 wrote schema 1, without decisions; the workstation keeps such files
+    good = json.loads(edits_to_json(make_edits(), "t"))
+    assert good["schema_version"] == 2 and good["glasses"][0]["decision"] == {
+        "override": "FAIL", "reason": "거품이 유면을 가림", "checked_at": "2026-10-30T05:00:00+00:00"}
+    first = {**good, "schema_version": 1, "glasses": [{k: v for k, v in g.items() if k != "decision"} for g in good["glasses"]]}
+    assert edits_from_json(json.dumps(first)).edits.glasses[0].decision == Decision()
+    with pytest.raises(UnreadableEdits):
+        edits_from_json(json.dumps({**good, "glasses": [{**good["glasses"][0], "decision": {"override": "REVIEW", "reason": "", "checked_at": None}}]}))

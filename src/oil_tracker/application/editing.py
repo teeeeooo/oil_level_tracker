@@ -1,6 +1,6 @@
 """Editor use cases: the edits, what follows from them, the point line and the source check.
 
-Product SSOT §4, §6 and A9; DESIGN.md §5 ("Editor window"). The judgment comes with V2-4.
+Product SSOT §4, §5, §6 and A9; DESIGN.md §5 ("Editor window").
 """
 
 from __future__ import annotations
@@ -23,8 +23,9 @@ from oil_tracker.domain.edits import (
     merge_reanalysis,
     runs,
 )
-from oil_tracker.domain.enums import InspectionState, LevelState
+from oil_tracker.domain.enums import InspectionState, LevelState, Verdict
 from oil_tracker.domain.inspection import Analysis, Inspection
+from oil_tracker.domain.judgment import Judgment, final_verdict, judge
 from oil_tracker.domain.recipe import Glass
 
 from .ports import Desktop, EdgeTracer, InspectionStore, SourceHasher, StoredAnalysis
@@ -47,12 +48,15 @@ class OpenedEdits:
 
 @dataclass(frozen=True)
 class GlassState:
-    """What follows from one Glass's lines: the bands and the Glass panel (architecture.md)."""
+    """What follows from one Glass's lines: the bands, the Glass panel and the judgment
+    (architecture.md)."""
 
     glass_id: str
     levels: tuple[Run[LevelState], ...]  # FULL and EMPTY, by sample index
     empty: tuple[Run[bool], ...]         # Oil samples still to be drawn
     coverage: Coverage
+    judgment: Judgment                   # computed from the Oil line (§5)
+    verdict: Verdict                     # the final one: the user's, where they judged the Glass
 
 
 @dataclass(frozen=True)
@@ -112,7 +116,7 @@ class Editing:
         glasses = {glass.id: glass for glass in self.store.load(inspection_id).recipe.glasses}
         if any(g.glass_id not in glasses for g in edits.glasses):
             raise InvalidEdits("이 검사에 없는 Glass의 편집입니다.")
-        return tuple(glass_state(edits.times, g, glasses[g.glass_id]) for g in edits.glasses)
+        return tuple(glass_state(edits.times, g, glasses[g.glass_id], edits.compressor_start_sec) for g in edits.glasses)
 
     def save(self, inspection_id: str, edits: Edits) -> str:
         """Replace the saved edits; return the time they were saved."""
@@ -194,9 +198,17 @@ class Editing:
         return inspection, stored
 
 
-def glass_state(times: tuple[float, ...], edits: GlassEdits, glass: Glass) -> GlassState:
+def glass_state(times: tuple[float, ...], edits: GlassEdits, glass: Glass, compressor_start_sec: float | None) -> GlassState:
     empty = tuple(True if flag else None for flag in empty_samples(times, edits))
-    return GlassState(edits.glass_id, runs(level_states(edits.oil, glass)), runs(empty), coverage(times, edits))
+    judgment = judge(times, edits, glass, compressor_start_sec)
+    return GlassState(
+        edits.glass_id,
+        runs(level_states(edits.oil, glass)),
+        runs(empty),
+        coverage(times, edits),
+        judgment,
+        final_verdict(judgment, edits.decision),
+    )
 
 
 def _fits(edits: Edits, analysis: Analysis) -> bool:

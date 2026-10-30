@@ -10,6 +10,7 @@ import { $, MODES, clock, el, localDate, notify, parseClock, typing } from "./ui
 
 const TOOL_KEYS = { KeyG: "grab", KeyP: "pencil", KeyL: "point", KeyR: "range", KeyM: "memo", KeyH: "pan" };
 const KIND_NAMES = { oil: "Oil", foam: "Foam", reference: "참조" };
+const VERDICTS = { PASS: ["합격", "pass"], FAIL: ["불합격", "fail"], REVIEW: ["검토 필요", "review"] };  // text, badge
 const HIT_PX = 8;          // how near a line a press grabs it
 const EDGE_PX = 5;         // how near a selection edge or the compressor marker a press moves it
 const DRAG_PX = 3;         // the movement that makes a press a drag
@@ -997,7 +998,101 @@ function compressorText() {
   return t === set ? clock(t) : `${clock(t)} (설정 ${clock(set)}에서 옮김)`;
 }
 
+// ---- the judgment (Product SSOT §3 and §5; DESIGN.md §5) -------------------------------------------
+// The API computes each Glass's judgment with its states. The user's decision lives in the edits:
+// their own verdict with a reason, and the check that submitting needs.
+
+/** A change to what a judgment reads takes the check off: that Glass's Oil line or "cannot judge"
+ * stretches, or the compressor start for every Glass (user, 2026-10-30). Foam, reference lines and
+ * memos leave it. */
+function takeCheckOff(entry) {
+  const glasses = entry.kind === "compressor" ? state.edits.glasses
+    : ["oil", "cannot_judge"].includes(entry.kind) ? [editsOf(entry.glassId)] : [];
+  for (const glass of glasses) glass.decision.checked_at = null;
+}
+
+function decide(change) {
+  Object.assign(editsOf().decision, change);
+  changed();
+  renderJudgment();
+}
+
+function setOverride(value) {
+  const decision = editsOf().decision;
+  if ((decision.override ?? "") === value) return;
+  decide({ override: value || null, checked_at: null });  // another verdict: check it again
+  if (value) $("overrideReason").focus();
+}
+
+function checkGlass() {
+  const decision = editsOf().decision;
+  if (decision.override && !decision.reason.trim()) {
+    notify("editorNotice", "직접 판정한 Glass는 이유를 써야 확인할 수 있습니다.", "error");
+    $("overrideReason").focus();
+    return;
+  }
+  decide({ checked_at: new Date().toISOString() });
+}
+
+function renderJudgment() {
+  if (!state.edits) return;
+  const glass = recipeGlass(), rule = glass.judgment_rule, decision = editsOf().decision;
+  const judgment = state.derived.get(state.glassId)?.judgment;
+  $("judgmentHead").textContent = `판정 · ${glass.name}`;
+  $("judgmentMode").textContent = MODES[rule.mode];
+  for (const button of document.querySelectorAll("#overrideKind button")) {
+    button.classList.toggle("on", button.dataset.override === (decision.override ?? ""));
+  }
+  $("reasonBox").hidden = !decision.override;
+  if (document.activeElement !== $("overrideReason")) $("overrideReason").value = decision.reason;
+  $("checkRow").hidden = Boolean(decision.checked_at);
+  $("checkedRow").hidden = !decision.checked_at;
+  $("checkedText").textContent = decision.checked_at ? `✓ 확인함 ${localDate(decision.checked_at).slice(11)}` : "";
+  const left = state.edits.glasses.filter((g) => !g.decision.checked_at).map((g) => recipeGlass(g.glass_id).name);
+  $("checkLeft").textContent = left.length ? `남은 Glass: ${left.join(", ")}` : "";
+  renderGlassPicker();
+  if (!judgment) return;
+  const [text, tone] = VERDICTS[judgment.verdict];
+  $("verdictBadge").textContent = text;
+  $("verdictBadge").className = `badge big ${tone}`;
+  $("verdictNote").textContent = decision.override ? `직접 판정 · 자동 판정은 ${VERDICTS[judgment.computed][0]}` : "자동 판정";
+  $("judgmentReason").textContent = judgment.reason;
+  const times = state.edits.times, s = (v) => `${Number(v.toFixed(1))} s`;
+  const caption = (t) => el("span", { class: "caption" }, t);
+  const cover = state.derived.get(state.glassId).coverage;
+  const rows = [["압축기 기동", [compressorText()]]];
+  if (rule.mode === "RECOVERY") {
+    const r = judgment.recovery;
+    rows.push(["0선 회복", r ? [clock(times[r.index]), " ", caption(`기동 후 ${s(r.after_sec)} (한도 ${s(rule.recovery_limit_sec)})`)] : ["없음"]]);
+    rows.push(["회복 뒤 유지", [caption(`기준 ${s(rule.stable_hold_sec)} 이상`)]]);
+  } else {
+    const v = judgment.violation;
+    rows.push(["가장 긴 위반", v
+      ? [s(v.seconds), " ", caption(`(허용 ${s(rule.allowed_sec)}) ${clock(times[v.first])}–${clock(times[v.end - 1] + 0.5)} · 최대 ${v.worst_px.toFixed(1)} px`)]
+      : ["없음"]]);
+    rows.push(["허용 높이", [`${rule.allowed_px} px`]]);
+  }
+  rows.push(["유효 비율", [`${Math.floor(100 * cover.valid_ratio)} %`, " ", caption(`(기준 ${Math.round(100 * rule.minimum_valid_coverage_ratio)} % 이상)`)]]);
+  $("judgmentFacts").replaceChildren(...rows.map(([k, v]) => el("tr", {}, el("th", {}, k), el("td", {}, ...v))));
+}
+
+/** Each Glass in the picker with its state: "확인 전" until checked, then its final judgment. */
+function renderGlassPicker() {
+  const picker = $("editorGlass");
+  for (const option of picker.options) {
+    const decision = state.edits.glasses.find((g) => g.glass_id === option.value)?.decision;
+    const verdict = state.derived.get(option.value)?.judgment?.verdict;
+    const status = decision?.checked_at && verdict ? VERDICTS[verdict][0] : "확인 전";
+    option.textContent = `${recipeGlass(option.value).name} · ${status}`;
+  }
+  const left = state.edits.glasses.filter((g) => !g.decision.checked_at).map((g) => recipeGlass(g.glass_id).name);
+  $("editorSubmit").title = left.length
+    ? `모든 Glass를 확인해야 제출할 수 있습니다 (남은 Glass: ${left.join(", ")})`
+    : "제출은 다음 단계에서 만듭니다";
+}
+
 function renderGlassPanel() {
+  renderJudgment();
   const glass = recipeGlass();
   const derived = state.derived.get(state.glassId);
   $("glassHead").textContent = `Glass · ${glass.name}`;
@@ -1009,7 +1104,10 @@ function renderGlassPanel() {
   const levels = (name) => count(derived.levels.filter((r) => r.state === name));
   const minimum = glass.judgment_rule.minimum_valid_coverage_ratio;
   const stretches = editsOf().cannot_judge.length;
+  const origins = editsOf().oil.origins;
+  const edited = origins.filter((o) => o === "EDITED").length, drawn = origins.filter((o) => o === "DRAWN").length;
   const rows = [
+    ["편집 기록", [`초안 고침 ${edited.toLocaleString()} · 직접 그림 ${drawn.toLocaleString()} 샘플`, " ", el("span", { class: "caption" }, `(전체 ${origins.length.toLocaleString()})`)]],
     ["빈 구간", derived.empty.length ? [el("span", { class: "empty-text" }, `${count(derived.empty)} · ${pct(c.empty)}`), " ", el("span", { class: "caption" }, "그리기 전까지 무효")] : ["없음"]],
     ["판단 불가", [stretches ? `${stretches}곳 · ${pct(c.cannot_judge)}` : "없음"]],
     ["유효 비율", [`${Math.floor(100 * c.valid_ratio)} %`, " ", el("span", { class: "caption" }, `(기준 ${Math.round(100 * minimum)} % 이상)`)]],
@@ -1193,6 +1291,16 @@ export function init(toList, openSetup) {
     if (state.edits) showGlass(false);
   });
   $("eraseSelection").addEventListener("click", eraseSelection);
+  for (const button of document.querySelectorAll("#overrideKind button")) {
+    button.addEventListener("click", () => setOverride(button.dataset.override));
+  }
+  $("overrideReason").addEventListener("input", () => {
+    const reason = $("overrideReason").value, decision = editsOf().decision;
+    decide({ reason, checked_at: decision.override && !reason.trim() ? null : decision.checked_at });
+  });
+  $("checkGlass").addEventListener("click", checkGlass);
+  $("uncheckGlass").addEventListener("click", () => decide({ checked_at: null }));
+  state.history.listener = takeCheckOff;
   $("fitWhole").addEventListener("click", fitWhole);
   $("prevEmpty").addEventListener("click", () => jumpToEmpty(-1));
   $("nextEmpty").addEventListener("click", () => jumpToEmpty(1));

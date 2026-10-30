@@ -118,7 +118,7 @@ its toolbar.
    saved.
 6. **Submit.**
    - Every Glass must be checked first: the user presses "확인" on each
-     Glass's judgment. Changing that Glass's lines, its "cannot judge"
+     Glass's judgment. Changing that Glass's Oil line, its "cannot judge"
      stretches or the compressor start after that takes the check off
      (user, 2026-10-30, at the V2-4 start).
    - Submitting locks that version.

@@ -127,7 +127,7 @@ re-analysis then rewrites it with the edits merged onto the new times.
 ```json
 {
   "format": "oil-level-tracker-edits",
-  "schema_version": 1,
+  "schema_version": 2,
   "saved_at": "2026-10-29T06:00:00+00:00",
   "times": [0.0, 0.5, 1.0],
   "compressor_start_sec": 532.0,
@@ -138,7 +138,8 @@ re-analysis then rewrites it with the edits merged onto the new times.
       "foam": {"ys": [null, 420.0, null], "origins": ["DRAFT", "DRAWN", "DRAFT"]},
       "reference": {"ys": [null, null, null], "origins": ["DRAFT", "DRAFT", "DRAFT"]},
       "cannot_judge": [{"start_sec": 0.5, "end_sec": 1.0}],
-      "memos": [{"id": "<uuid>", "time_sec": 0.5, "y": 420.0, "text": "거품"}]
+      "memos": [{"id": "<uuid>", "time_sec": 0.5, "y": 420.0, "text": "거품"}],
+      "decision": {"override": "FAIL", "reason": "거품이 유면을 가림", "checked_at": "2026-10-30T05:00:00+00:00"}
     }
   ]
 }
@@ -154,11 +155,20 @@ re-analysis then rewrites it with the edits merged onto the new times.
   alone. A memo's text has at most 500 characters.
 - `compressor_start_sec` starts as the setup's value and follows the marker
   the user drags.
-- FULL and EMPTY are not stored; they follow from the Oil line.
+- FULL and EMPTY are not stored; they follow from the Oil line, as does
+  the computed judgment.
+- `decision` is the user's part of the judgment (V2-4, Product SSOT §3):
+  `override` is `"PASS"`, `"FAIL"` or `null` (the computed verdict
+  stands); `reason` is required (non-blank) once a Glass with an override
+  is checked, and at most 500 characters; `checked_at` is when the user
+  checked the Glass, or `null`. Re-analysis keeps the override and the
+  reason and clears the check.
+- **Schema 2** (V2-4) added `decision`. Schema 1 files (V2-3) still read,
+  with every Glass undecided; a save writes schema 2.
 
 ## Reading rules
 
-- A file with another `format`, or a `schema_version` other than 1, is
-  refused with the reason.
+- A file with another `format`, or a `schema_version` other than 1 (2 or
+  1 for `edits.json`), is refused with the reason.
 - Values are type-checked strictly; a wrong type refuses the file.
 - There is no reader for v1 result bundles.

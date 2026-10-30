@@ -21,8 +21,8 @@ from oil_tracker.application.ports import (
     UnreadableAnalysis,
     UnreadableEdits,
 )
-from oil_tracker.domain.edits import Edits, GlassEdits, Memo, Stretch
-from oil_tracker.domain.enums import InspectionState, SampleOrigin
+from oil_tracker.domain.edits import Decision, Edits, GlassEdits, Memo, Stretch
+from oil_tracker.domain.enums import InspectionState, SampleOrigin, Verdict
 from oil_tracker.domain.inspection import Analysis, AnalysisSettings, GlassDraft, Inspection, SourceVideo
 from oil_tracker.domain.line import Line
 
@@ -34,6 +34,7 @@ INSPECTION_FORMAT = "oil-level-tracker-inspection"
 ANALYSIS_FORMAT = "oil-level-tracker-analysis"
 EDITS_FORMAT = "oil-level-tracker-edits"
 SCHEMA_VERSION = 1
+EDITS_SCHEMA_VERSION = 2  # 2 adds each Glass's decision (V2-4); 1 still reads, as undecided
 INSPECTION_FILE = "inspection.json"
 RECIPE_FILE = "recipe.json"
 CACHE = "cache"
@@ -159,7 +160,7 @@ def analysis_from_json(analysis_text: str) -> StoredAnalysis:
 def edits_to_json(edits: Edits, saved_at: str) -> str:
     data = {
         "format": EDITS_FORMAT,
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": EDITS_SCHEMA_VERSION,
         "saved_at": saved_at,
         "times": list(edits.times),
         "compressor_start_sec": edits.compressor_start_sec,
@@ -169,6 +170,7 @@ def edits_to_json(edits: Edits, saved_at: str) -> str:
                 **{key: _line_json(getattr(glass, key)) for key in LINE_KEYS},
                 "cannot_judge": [{"start_sec": s.start_sec, "end_sec": s.end_sec} for s in glass.cannot_judge],
                 "memos": [{"id": m.id, "time_sec": m.time_sec, "y": m.y, "text": m.text} for m in glass.memos],
+                "decision": _decision_json(glass.decision),
             }
             for glass in edits.glasses
         ],
@@ -177,7 +179,8 @@ def edits_to_json(edits: Edits, saved_at: str) -> str:
 
 
 def edits_from_json(edits_text: str) -> StoredEdits:
-    data = _document(edits_text, EDITS_FORMAT, "편집", UnreadableEdits)
+    data = _document(edits_text, EDITS_FORMAT, "편집", UnreadableEdits, (1, EDITS_SCHEMA_VERSION))
+    first = data["schema_version"] == 1
     try:
         glasses = tuple(
             GlassEdits(
@@ -188,6 +191,7 @@ def edits_from_json(edits_text: str) -> StoredEdits:
                     Memo(text(m["id"]), number(m["time_sec"]), optional(number, m["y"]), text(m["text"]))
                     for m in raw["memos"]
                 ),
+                decision=Decision() if first else _decision_from(raw["decision"]),
             )
             for raw in data["glasses"]
         )
@@ -195,6 +199,15 @@ def edits_from_json(edits_text: str) -> StoredEdits:
         return StoredEdits(edits, text(data["saved_at"]))
     except (KeyError, TypeError, ValueError) as error:
         raise UnreadableEdits(f"편집 내용이 올바르지 않습니다: {error}") from error
+
+
+def _decision_json(decision: Decision) -> dict[str, Any]:
+    override = None if decision.override is None else decision.override.value
+    return {"override": override, "reason": decision.reason, "checked_at": decision.checked_at}
+
+
+def _decision_from(raw: Any) -> Decision:
+    return Decision(optional(lambda v: Verdict(text(v)), raw["override"]), text(raw["reason"]), optional(text, raw["checked_at"]))
 
 
 def _line_json(line: Line) -> dict[str, Any]:
@@ -205,7 +218,9 @@ def _line_from(raw: Any) -> Line:
     return Line(tuple(optional(number, y) for y in raw["ys"]), tuple(SampleOrigin(o) for o in raw["origins"]))
 
 
-def _document(raw: str, expected_format: str, label: str, failure: type[ValueError]) -> dict[str, Any]:
+def _document(
+    raw: str, expected_format: str, label: str, failure: type[ValueError], versions: tuple[int, ...] = (SCHEMA_VERSION,)
+) -> dict[str, Any]:
     try:
         data = json.loads(raw)
     except json.JSONDecodeError as error:
@@ -213,7 +228,7 @@ def _document(raw: str, expected_format: str, label: str, failure: type[ValueErr
     if not isinstance(data, dict) or data.get("format") != expected_format:
         raise failure(f"{label} 파일이 아닙니다.")
     version = data.get("schema_version")
-    if version != SCHEMA_VERSION:
+    if type(version) is not int or version not in versions:
         raise failure(f"지원하지 않는 {label} 파일 버전입니다: {version!r}")
     return data
 

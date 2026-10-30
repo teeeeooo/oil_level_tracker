@@ -332,8 +332,9 @@ Do not use sizes outside this ramp.
           prints it as "판정 사유";
         - "이 Glass 확인" (primary, small) with the Glasses still to check;
           once checked, "✓ 확인함 HH:MM" in `--pass` with "확인 풀기".
-          Changing that Glass's lines, its "cannot judge" stretches or the
-          compressor start takes the check off;
+          Changing that Glass's Oil line, its "cannot judge" stretches or
+          the compressor start takes the check off (Foam, reference lines
+          and memos do not feed the judgment);
       - **검사 정보, "보고서 머리글":** the compressor model and the test
         type as text fields, editable until submitting;
       - **메모:** the Glass's memos in time order, each a 20 px numbered

@@ -3,9 +3,10 @@
 import pytest
 
 from oil_tracker.domain.edits import GlassEdits, Stretch, empty_line
-from oil_tracker.domain.enums import JudgmentMode, SampleOrigin
+from oil_tracker.domain.edits import Decision
+from oil_tracker.domain.enums import JudgmentMode, SampleOrigin, Verdict
 from oil_tracker.domain.geometry import Ellipse
-from oil_tracker.domain.judgment import Verdict, judge
+from oil_tracker.domain.judgment import final_verdict, judge
 from oil_tracker.domain.line import Line
 from oil_tracker.domain.recipe import Glass, JudgmentRule
 
@@ -166,3 +167,23 @@ def test_foam_never_affects_the_judgment():
     foam = Line(tuple(ZERO - 50 for _ in times), (SampleOrigin.DRAWN,) * 60)  # far above zero
     glass = Glass("g1", "BASE", Ellipse(50, 100, 40, 90), ZERO, JudgmentRule(mode=JudgmentMode.HOLD_BELOW_ZERO))
     assert judge(times, GlassEdits("g1", oil, foam, empty_line(60)), glass, None).verdict is Verdict.PASS
+
+
+# ---- the user's decision (Product SSOT §3): their own verdict with a reason, and the check ----
+
+
+def test_the_users_verdict_wins():
+    computed = case(secs(30, 5), compressor=0.0)
+    assert final_verdict(computed, Decision()) is Verdict.PASS
+    assert final_verdict(computed, Decision(Verdict.FAIL, "거품이 유면을 가림")) is Verdict.FAIL
+
+
+def test_a_decision_is_checked_only_with_its_reason():
+    Decision(Verdict.FAIL, "", None)  # a reason may be typed after choosing
+    Decision(None, "", "2026-10-30T05:00:00+00:00")  # the computed verdict needs no reason
+    with pytest.raises(ValueError):
+        Decision(Verdict.FAIL, "  ", "2026-10-30T05:00:00+00:00")
+    with pytest.raises(ValueError):
+        Decision(Verdict.REVIEW)
+    with pytest.raises(ValueError):
+        Decision(Verdict.FAIL, "x" * 501)

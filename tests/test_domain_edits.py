@@ -2,6 +2,7 @@ import pytest
 
 from oil_tracker.domain.edits import (
     Coverage,
+    Decision,
     Dropped,
     Edits,
     GlassEdits,
@@ -17,7 +18,7 @@ from oil_tracker.domain.edits import (
     merge_reanalysis,
     runs,
 )
-from oil_tracker.domain.enums import LevelState, SampleOrigin
+from oil_tracker.domain.enums import LevelState, SampleOrigin, Verdict
 from oil_tracker.domain.geometry import Ellipse
 from oil_tracker.domain.inspection import Analysis, GlassDraft
 from oil_tracker.domain.line import Line
@@ -112,3 +113,10 @@ def test_reanalysis_drafts_a_new_glass_and_reports_a_lost_one():
     assert dropped_by_reanalysis(old, (0.0, 0.5), ("g2",)) == dropped
     same, nothing = merge_reanalysis(merged, analysis([0.0, 0.5], ("g2", line(7.0, 8.0))), None)
     assert same.glass("g2").oil == line(5.0, 6.0) and not nothing.anything
+
+
+def test_reanalysis_keeps_the_users_verdict_but_takes_the_check_off():
+    decided = Decision(Verdict.FAIL, "거품이 유면을 가림", "2026-10-30T05:00:00+00:00")
+    old = Edits((0.0, 0.5), (GlassEdits("g1", line(1.0, 2.0), empty_line(2), empty_line(2), decision=decided),), None)
+    merged, _ = merge_reanalysis(old, analysis([0.0, 0.5], ("g1", line(5.0, 6.0))), None)
+    assert merged.glass("g1").decision == Decision(Verdict.FAIL, "거품이 유면을 가림", None)  # new lines: check again

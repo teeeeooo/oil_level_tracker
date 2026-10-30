@@ -39,8 +39,8 @@ from oil_tracker.application.recipes import (
     VideoDoesNotFit,
 )
 from oil_tracker.application.videos import OpenedVideo, UnknownVideo, VideoSessions
-from oil_tracker.domain.edits import Dropped, Edits, GlassEdits, Memo, Stretch
-from oil_tracker.domain.enums import JudgmentMode, SampleOrigin
+from oil_tracker.domain.edits import Decision, Dropped, Edits, GlassEdits, Memo, Stretch
+from oil_tracker.domain.enums import JudgmentMode, SampleOrigin, Verdict
 from oil_tracker.domain.geometry import Ellipse
 from oil_tracker.domain.inspection import AnalysisSettings, Inspection, needs_compressor_start
 from oil_tracker.domain.line import Line
@@ -255,6 +255,11 @@ def edits_json(edits: Edits) -> dict[str, Any]:
                 **{key: line_json(getattr(glass, key)) for key in LINE_KEYS},
                 "cannot_judge": [{"start_sec": s.start_sec, "end_sec": s.end_sec} for s in glass.cannot_judge],
                 "memos": [{"id": m.id, "time_sec": m.time_sec, "y": m.y, "text": m.text} for m in glass.memos],
+                "decision": {
+                    "override": None if glass.decision.override is None else glass.decision.override.value,
+                    "reason": glass.decision.reason,
+                    "checked_at": glass.decision.checked_at,
+                },
             }
             for glass in edits.glasses
         ],
@@ -273,6 +278,21 @@ def glass_state_json(state: GlassState) -> dict[str, Any]:
             "cannot_judge": cover.cannot_judge,
             "valid": cover.valid,
             "valid_ratio": cover.valid_ratio,
+        },
+        "judgment": judgment_json(state),
+    }
+
+
+def judgment_json(state: GlassState) -> dict[str, Any]:
+    judgment = state.judgment
+    recovery, violation = judgment.recovery, judgment.violation
+    return {
+        "computed": judgment.verdict.value,
+        "verdict": state.verdict.value,
+        "reason": judgment.reason,
+        "recovery": None if recovery is None else {"index": recovery.first, "after_sec": recovery.after_sec},
+        "violation": None if violation is None else {
+            "first": violation.first, "end": violation.end, "seconds": violation.seconds, "worst_px": violation.worst_px,
         },
     }
 
@@ -332,6 +352,7 @@ def parse_edits(body: Any) -> Edits:
                     Memo(_text(m["id"]), _number(m["time_sec"]), _optional_number(m["y"]), _text(m["text"]))
                     for m in glass["memos"]
                 ),
+                decision=_decision(glass["decision"]),
             )
             for glass in raw["glasses"]
         )
@@ -401,6 +422,11 @@ def _text(value: Any) -> str:
     if not isinstance(value, str):
         raise TypeError("expected text")
     return value
+
+
+def _decision(raw: Any) -> Decision:
+    override = _optional_text(raw["override"])
+    return Decision(None if override is None else Verdict(override), _text(raw["reason"]), _optional_text(raw["checked_at"]))
 
 
 def _optional_text(value: Any) -> str | None:

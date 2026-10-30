@@ -112,7 +112,7 @@
     <div class="spacer"></div>
     <span class="notice" id="editorNotice"></span>
     <button class="btn" id="editorSave" title="저장 (Ctrl+S)">저장</button>
-    <button class="btn primary" disabled title="판정과 제출은 V2-4에서">제출</button>
+    <button class="btn primary" id="editorSubmit" disabled>제출</button>
     <button class="btn icon-btn help-open" title="도움말 (F1)" aria-label="도움말"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M7.8 7.9a2.2 2.2 0 1 1 3 2.05c-.5.2-.8.6-.8 1.15v.4"/><path d="M10 13.6v.4"/></svg></button>
   </header>
   <div class="message-bar" id="sourceWarning" role="alert" hidden>
@@ -186,8 +186,23 @@
           <div class="row"><button class="btn small" id="prevEmpty">◀ 이전 빈 구간</button><button class="btn small" id="nextEmpty">다음 빈 구간 ▶</button><span class="caption"><kbd>N</kbd></span></div>
         </div>
       </div>
-      <div class="section">
-        <div class="phead">판정 <span class="right">V2-4에서 추가</span></div>
+      <div class="section" id="judgmentSection">
+        <div class="phead"><span id="judgmentHead">판정</span><span class="right" id="judgmentMode"></span></div>
+        <div class="body">
+          <div class="verdict"><span class="badge big" id="verdictBadge"></span><span class="caption" id="verdictNote"></span></div>
+          <span class="caption" id="judgmentReason"></span>
+          <table class="kv" id="judgmentFacts"></table>
+          <div class="row"><span class="label wide">덮어쓰기</span>
+            <span class="seg" id="overrideKind"><button data-override="">자동</button><button data-override="PASS">합격</button><button data-override="FAIL">불합격</button></span></div>
+          <div class="field" id="reasonBox" hidden>
+            <span class="label">덮어쓴 이유 (필수)</span>
+            <textarea id="overrideReason" rows="2" maxlength="500" aria-label="덮어쓴 이유"></textarea>
+            <span class="caption">보고서에는 최종 판정과 이 이유가 "판정 사유"로 나옵니다. 자동 판정은 이 검사의 기록으로만 남습니다.</span>
+          </div>
+          <div class="row" id="checkRow"><button class="btn primary small" id="checkGlass">이 Glass 확인</button><span class="caption" id="checkLeft"></span></div>
+          <div class="row checked" id="checkedRow" hidden><span id="checkedText"></span><button class="btn small subtle" id="uncheckGlass">확인 풀기</button></div>
+          <span class="caption">확인한 뒤 이 Glass의 Oil 선이나 판단 불가, 압축기 기동을 고치면 확인이 풀립니다.</span>
+        </div>
       </div>
       <div class="section">
         <div class="phead">메모 <span class="right">메모 도구로 그래프를 클릭해 추가</span></div>

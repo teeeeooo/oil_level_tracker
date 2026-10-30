@@ -15,21 +15,14 @@ Agent's choices where §5 is silent (2026-10-30):
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import StrEnum
 
-from .edits import Coverage, GlassEdits, cannot_judge_flags, coverage
-from .enums import JudgmentMode
+from .edits import Coverage, Decision, GlassEdits, cannot_judge_flags, coverage
+from .enums import JudgmentMode, Verdict
 from .inspection import ANALYSIS_RATE
 from .recipe import Glass
 
 STEP_SEC = 1.0 / ANALYSIS_RATE
 EPSILON = 1e-9
-
-
-class Verdict(StrEnum):
-    PASS = "PASS"      # 합격
-    FAIL = "FAIL"      # 불합격
-    REVIEW = "REVIEW"  # 검토 필요: too few valid samples, or no compressor start for RECOVERY
 
 
 @dataclass(frozen=True)
@@ -93,6 +86,11 @@ def judge(times: tuple[float, ...], edits: GlassEdits, glass: Glass, compressor_
         return Judgment(Verdict.PASS, reason, cover, violation=violation)
     reason = f"가장 긴 위반 {_s(violation.seconds)}초가 허용 {_s(rule.allowed_sec)}초를 넘었습니다."
     return Judgment(Verdict.FAIL, reason, cover, violation=violation)
+
+
+def final_verdict(judgment: Judgment, decision: Decision) -> Verdict:
+    """The user's verdict where they judged the Glass themselves, else the computed one (§3)."""
+    return decision.override or judgment.verdict
 
 
 def find_recovery(
