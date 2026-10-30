@@ -245,7 +245,12 @@ the undo depth and the shortcuts.
      the last placed point off; Esc, another tool or another Glass cancels.
 8. **Checks — the Windows run is requested, waiting on the user:**
    [the request](../40-operations/2026-10-30-v2-3-editor-windows-request.md),
-   pinned to `3ac76ce` (`checked=86`), criteria fixed in it.
+   pinned to `3cbe46e` (`checked=86`), criteria fixed in it.
+   - **First try (2026-10-30) stopped at the tests:** `2 failed` on Windows
+     only. The range-serving test deleted the source while its frame
+     session held it open (WinError 32); the source-check test keyed a fake
+     by a POSIX path string. Both fixed in `3cbe46e`; the request was
+     re-pinned there, the app and the measure script unchanged.
    - **On macOS:** 208 tests pass, the editor's smoke checks among them.
    - **The run, on the workstation with its agent:**
      - the tests (`198 passed, 4 skipped`);
@@ -270,7 +275,8 @@ The user then moved the time limits to the workstation (Product SSOT §2).
 - V2-3 steps 1 to 7 are done; the point line closed step 7 (`9aa6382`).
 - **Waiting on the user:** the workstation run of
   [the V2-3 editor request](../40-operations/2026-10-30-v2-3-editor-windows-request.md),
-  pinned to `3ac76ce`. Later commits do not change that ZIP.
+  re-pinned to `3cbe46e` after the first try stopped at two Windows-only
+  test failures. Later commits do not change that ZIP.
 
 **When the result comes:** judge it row by row against the request's fixed
 criteria, write `60-evidence/<the day it arrives>-v2-3-editor-windows-result.md`
@@ -296,6 +302,9 @@ a point replaces it, the snap settles a point as it does a drag, and
 straight dotted guides until a path arrives.
 
 **Learned these sessions:**
+- Tests that pass on macOS can fail on Windows: an open file cannot be
+  deleted or renamed there (close every video session first), and
+  `str(Path)` uses backslashes (compare paths as `Path`).
 - zsh does not split an unquoted variable: a re-pin wrote
   `source=766d5e5886c9 52 files=` until it was caught. Grep pinned values
   after writing them.
@@ -381,7 +390,7 @@ V2-2 run covered the V2-1 follow-up.
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `3ac76ce`: `199 passed, 3 skipped` on macOS, so
+  test. At `3cbe46e`: `199 passed, 3 skipped` on macOS, so
   `198 passed, 4 skipped` on Windows when its venv has no Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.

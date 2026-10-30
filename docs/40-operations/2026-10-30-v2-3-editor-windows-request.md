@@ -5,6 +5,7 @@
 > - **[사용자]** 표시: 사용자가 앱 창에서 직접 조작하고 판단한다.
 > - **통과 기준**은 아래 "통과 기준" 절에 있고, 실행 전에 고정됐다.
 > - 결과 파일은 Windows에 남기고, 맨 아래 **결과 양식**만 텍스트로 돌려준다.
+> - **재고정 (2026-10-30):** 첫 실행이 2절에서 멈췄다(`2 failed`, Windows에서만 깨지는 테스트 둘). 테스트를 고친 커밋 `3cbe46e`로 다시 고정했다. 앱 코드와 측정 스크립트는 그대로다(4절의 `source=` 값도 같다). **0절부터 새 폴더로 다시 한다.** 1절의 venv도 새 폴더에 다시 만든다. 이전 폴더는 지워도 된다.
 
 ## 무엇을 확인하나
 
@@ -22,8 +23,8 @@ V2-2에서 만든 검사 3개(SPL#4 하나, SPL#1 둘)가 문서 폴더의 `OilL
 ## 0. 소스 확인 [에이전트]
 
 1. **커밋 하나로 고정된 ZIP**을 받는다:
-   `https://github.com/teeeeooo/oil_level_tracker/archive/3ac76cec347e4b89fc56a9b61a8a809cfb18eeb8.zip`
-   압축을 푼 폴더(`oil_level_tracker-3ac76cec…`)를 저장소 루트로 쓴다. 이전 실행의 폴더는 쓰지 않는다.
+   `https://github.com/teeeeooo/oil_level_tracker/archive/3cbe46e0d0c94d6b8e208fe3e5f2db457fff9873.zip`
+   압축을 푼 폴더(`oil_level_tracker-3cbe46e0…`)를 저장소 루트로 쓴다. 이전 실행의 폴더는 쓰지 않는다.
 2. 저장소 루트에서 아래를 그대로 실행한다. 마지막 줄이 `checked=86 mismatched=0`이면 된다. `MISMATCH` 줄이 있으면 그 줄을 전부 원문으로 적는다.
 
 ```powershell
@@ -89,7 +90,7 @@ $expected = @{
   'src/oil_tracker/web/tokens.css' = 'dbada0057157414b04dd82e31ca33b85de506f097ba376885f234f2875242eb0'
   'src/oil_tracker/web/ui.js' = '1711ee95e43b48e79e7e6cdd34457a21fb0549d338fd28bbb1732ed458f641ce'
   'tests/test_app.py' = '51fd947f25dc46ff49d0247a08bec15cb8fc0c26db9ddac717c99776346c265f'
-  'tests/test_application_editing.py' = '04f52e659da7a847595c0dc2d7f83fe3b2ad611bfbcc72733eb019469917468a'
+  'tests/test_application_editing.py' = '36a804d6c7f9dc3f7ea4a7488e4a90e195ae9c5b5a1c0ba86bdfb89b2ad9ec17'
   'tests/test_application_inspections.py' = 'ac15efb2959bde624eafb135dcad9f95285afd597030da03706bedee18e8dd4c'
   'tests/test_application_recipes.py' = '154b61e3cf6e4aa81a68e2165f51e569eb7a78889207e617b273136f1c16cde8'
   'tests/test_architecture.py' = '42910fb569bd010342747d081d1c0cac7aa8c9f2641af24da92a2f4ab5317288'
@@ -98,7 +99,7 @@ $expected = @{
   'tests/test_domain_edits.py' = '90fa950cad5ffe15e5939d3c2823e4df1c9ec31e3214468718b64035ba2eba30'
   'tests/test_domain_inspection.py' = '7306a9937e74a6dfecf1a2eae238f68128fba6b3545fb30e77fad317759e19aa'
   'tests/test_domain_recipe.py' = 'f916f1e77ef9f0559c7e3cee1dcab400a08dac94d1254cdefcb71dc91ad98b80'
-  'tests/test_http_api.py' = '0d5b5954768462df277c4e0b825897225aaf790c41e53039894379fd95e5d434'
+  'tests/test_http_api.py' = 'd9fd24cab4bb59616cb82cce98adb1eea10263c68f92fdf2f043b503b802662a'
   'tests/test_http_jobs.py' = 'fd538c2d448228f847ac1d201b47e133026bf66c9fb104a4cc11049f724c2d33'
   'tests/test_inspection_summary_script.py' = '0e75aeb07dc40e873e07310dbfbf29ea0e9d3e3113ad6fd337889285ac4e157a'
   'tests/test_measure_editor_script.py' = '430c3960fc8e93f33b5b3dd6d3a684baf89df2768f71aca0dd211f36b65fd281'
