@@ -1,7 +1,8 @@
 # Current Work Plan
 
-**Current milestone:** `V2-3 — Editor` / `ACTIVE` (started 2026-10-29).
-**Last completed:** `V2-2 — Analysis` / `DONE` (2026-10-29).
+**Current milestone:** `V2-4 — Judgment and report` / `ACTIVE` (started
+2026-10-30; its start decisions wait on the user).
+**Last completed:** `V2-3 — Editor` / `DONE` (2026-10-30).
 
 This is the sole owner of the current state, authorization and next action.
 Rewrite it; do not append to it.
@@ -65,8 +66,8 @@ Rewrite it; do not append to it.
     SHA-256 values are in the result.
   - The web screens share `web/frame.js` (frame view and Glass editing)
     and `web/render.js` (drawing, also for the report).
-- **V2-2 follow-up** (user, 2026-10-29, after the Windows run; not yet seen
-  on Windows):
+- **V2-2 follow-up** (user, 2026-10-29, after the Windows run; seen on
+  Windows in the V2-3 run):
   - the analysis range band on the scrub bar is yellow (`--range-fill`,
     `--range-edge`);
   - a time field shows a typed value as `mm:ss.s` once entered;
@@ -76,6 +77,25 @@ Rewrite it; do not append to it.
   - **fixed:** the local server's listen queue was 5, so a page load
     sometimes lost a JavaScript module to a reset connection and stayed
     blank (seen as a flaky browser smoke test). It is now 64.
+- **V2-3 result:** the editor passed on the workstation in
+  [the run](../60-evidence/2026-10-30-v2-3-editor-windows-result.md) and
+  [its re-check](../60-evidence/2026-10-30-v2-3-editor-recheck-windows-result.md).
+  - **The time limits pass there:** A4 39.3 s for SPL#1, A5 2.8 / 8.9 ms,
+    the exact frame 56 ms, 1× playback in the `<video>` (SPL#1 is H.264).
+    The slowest PC is reference only (Product SSOT §2).
+  - **The editor:** `web/editor.js`, `lines.js`, `player.js`, with
+    `render.js` drawing in layers (back, lines, marks) so a drag redraws
+    only the lines. Edits are `edits.json` beside `inspection.json`
+    ([inspection-folder.md](../20-architecture/inspection-folder.md)),
+    saved on "저장"; leaving or closing the window with unsaved edits asks
+    (WinForms on Windows). Re-analysis keeps the edits inside the new
+    range. The SHA-256 warning (A9) checks the source on each open.
+  - **The user's decisions of 2026-10-30** (Product SSOT §6): Delete
+    empties the line chosen in "그릴 선"; the point line follows the snap
+    (along the edges, or straight); the pencil's "수평·수직" switch; the
+    view stays inside the analysed range, with "전체 보기".
+  - **Not yet seen on Windows:** the upright stroke as a vertical step
+    (`ca7d3ee`, from the re-check's C4 note).
 - **Documentation:** the v1 conventions, per [docs/README.md](../README.md).
   - numbered folders;
   - the date catalog and its pre-push check;
@@ -86,246 +106,70 @@ Rewrite it; do not append to it.
   - v1 local evidence is at `~/Developer/oil_level_tracker-v1-evidence/`.
   - Branch `spike/webui` is kept for porting.
 
-## V2-3 — Editor
+## V2-4 — Judgment and report
 
-**Scope** (roadmap; Product SSOT §4 and §6): editing on the result screen.
-- grab-and-drag, the pencil, range delete and the point line, with a snap
-  that can be switched off;
-- "cannot judge" stretches, Foam and reference lines, memos;
-- zoom, pan and time-axis input;
-- the video, cropped to the Glass with the lines over it;
-- the compressor-start marker; re-analysis; saving and resuming;
-- the warning when a reopened video's SHA-256 differs (A9).
-The judgment, the override, the report and submitting are V2-4.
+**Scope** (roadmap; Product SSOT §3 steps 5–6, §5 and §7):
+- the judgment per Glass, computed from the edited Oil line by the Recipe's
+  rule (§5), recomputed when the lines or the compressor start change;
+  A3 asks for unit tests with fixed cases;
+- the override per Glass, with a required reason that is saved;
+- submitting: every Glass checked first; submitting locks that version; to
+  resubmit, open it, edit and save a new version;
+- the report: self-contained HTML that works offline and prints to PDF,
+  drawn by the editor's drawing module (`render.js`), with the contents
+  §7 lists.
 
-**Start decisions** (user, 2026-10-29), in the Product SSOT §6:
-- **re-analysis after editing** keeps the edited lines where the new range
-  overlaps the old one, drafts only the new stretches, and says first which
-  edits will be dropped;
-- **saving:** the "저장" button, and a question before leaving the editor
-  or closing the window with unsaved changes;
-- **A5 and A6 on the slowest PC** are measured as soon as grab-and-drag,
-  the pencil and the video work, before the other tools are built.
-
-**Left to the agent** (2026-10-28 interview): the edit document's schema,
-the undo depth and the shortcuts.
+**Already decided:** the rule and its modes (§5, user, 2026-10-29), the
+coverage threshold, Foam never counting, and the report's contents (§7).
+DESIGN.md §5 keeps a place in the editor's right column for the judgment
+panel (computed result, override, reason).
 
 **Steps:**
-1. **Mock-up — confirmed by the user** (2026-10-29):
-   [editor.html](../../design/mockup/editor.html), written into DESIGN.md
-   §2, §4 and §5 and the Product SSOT §6.
-   - the snap is on by default and reaches 8 source px;
-   - one range tool: Delete empties the Oil line, U marks "cannot judge";
-   - the grab shape is smooth, or pointed with Alt (the "corner");
-   - empty stretches are `--empty-mark` bars on the time axis, with
-     "다음 빈 구간" (N); a selected range is `--selection-band`;
-   - the tool buttons carry their names: the user could not find the
-     range tool among icons alone.
-2. **`domain` — done** (`domain/edits.py`): the edit document (an Oil,
-   a Foam and a reference line per Glass, as samples with their origins;
-   "cannot judge" stretches; memos; the compressor start), FULL and EMPTY
-   from the line position (1 px from the Glass top or bottom), the
-   coverage, and the re-analysis merge. The merge keeps every old sample
-   whose time the new range still has (within half a step) and reports
-   what falls outside, for the warning.
-3. **`adapters/storage` — done:** `edits.json` beside `inspection.json`,
-   written atomically on "저장", with its format in
-   [inspection-folder.md](../20-architecture/inspection-folder.md). It lies
-   outside `cache\`, so the cache swap of a re-analysis leaves it alone.
-   The port gained `save_edits` and `load_edits`.
-4. **`application` and `adapters/http` — done:**
-   - **`application/editing.py`:** opening the edits (the saved ones, or
-     the drafts), saving, and what follows from any edits, saved or not:
-     the FULL/EMPTY runs, the empty runs and the coverage.
-   - **Re-analysis:** an analysed inspection can be set up again.
-     - The check also returns what the saved edits would lose
-       (`dropped`), from the times the new range will have
-       (`domain.inspection.analysis_times`).
-     - The previous analysis and setup stay until the new analysis is
-       stored, so a cancel, a failure or closing the app leaves the
-       inspection as it was (agent's choice, for A9). Then the edits are
-       merged and saved.
-   - **The point line:** `adapters/video/trace.py`, the draft's path pinned
-     through the user's points. The edge strength is kept for two Glasses.
-     At SPL#1's size on macOS, the first click takes 0.16 s and later
-     ones 0.03 s per 100 columns.
-   - **The snap stays in the browser,** on the context image's luma, as in
-     the spike (architecture.md).
-   - **The source video:** `/media/inspections/<id>/source?token=…`, with
-     HTTP Range.
-   - **A9:** `source-check` hashes the source on a thread.
-   - **Routes,** under `/api/inspections/<id>/`: `edits` (GET to open, POST
-     to save; refused while that inspection is re-analysed),
-     `edits/states`, `point-line` and `source-check` (GET reads, POST
-     checks again).
-   - **Not known yet: the codec of SPL#1 and SPL#4.** The videos are only on
-     Windows. WebView2 plays H.264, but not necessarily HEVC. Step 6's
-     request checks the codec.
-5. **`web`, the core — done:** the result screen became the editor
-   (`editor.js`, `lines.js`, `player.js`; `render.js` draws in layers, so a
-   drag redraws only the lines).
-   - grab-and-drag (smooth or pointed with Alt; the grab width with `[`
-     `]`), the pencil, the range tool with Delete; the snap on the context
-     luma; undo and redo;
-   - zoom (wheel; Shift+wheel for height), pan (the pan tool, Shift-drag or
-     the middle button), the time-axis numbers, the playhead; "다음/이전 빈
-     구간" (N);
-   - after each change the API returns FULL/EMPTY, the empty stretches and
-     the coverage for the bands, the axis bars and the Glass panel;
-   - "저장" (Ctrl+S), and a question before leaving with unsaved changes
-     through "검사 목록". The window close comes in step 7.
-   - **The video:** `<video>` over HTTP Range for playback; a paused frame
-     is the exact OpenCV frame. A file the `<video>` cannot decode plays as
-     exact frames (the smoke video, MJPG AVI, does).
-   - **Agent's choices:** undo keeps 200 changes, each the samples it
-     replaced; the snap needs a luma step of 6 to settle; a press within
-     8 px of a drawn line grabs it.
-   - On macOS with an H.264 sample, a lines redraw while dragging took
-     about 0.5 ms; SPL#1 on the slowest PC is step 6.
-   - The point line came in step 7.
-6. **A5 and A6 on the slowest PC — done** (2026-10-30):
-   [the result](../60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md),
-   judged against
-   [the request](../40-operations/2026-10-29-v2-3-editor-slowest-pc-windows-request.md)'s
-   fixed criteria.
-   - **A5 passes:** the lines redraw takes 5.9 ms at the median and 23.9 ms
-     at most with three lines over SPL#1's 8,210 samples. The drawing needs
-     no lightening.
-   - **1× playback passes** in the `<video>`; SPL#1 is H.264, which Edge
-     plays.
-   - **The exact frame took 230 ms** at the median (413 ms at most), over
-     the 100 ms limit; the `<video>`'s seek is slower (352 ms). SPL#1 has a
-     key frame every 250 frames, and a seek decodes from the previous one
-     (1.6–1.8 ms a frame there). On the workstation, which decodes about
-     7.5× faster, the same path should take about 30 ms (not measured).
-     **The user's call** (2026-10-30): usable, so reference only; the time
-     limits are judged on the workstation (Product SSOT §2). Nothing waits
-     on it.
-   - **The cheaper median passes (A4-m2):** the `uint8` partition is in
-     `_Band.median` (`908f624`), with identical values.
-   - The analysis through the app's server took 163.0 s.
-7. **`web`, the rest:** the point line, the snap, "cannot judge", Foam and
-   reference lines, memos, the compressor marker, re-analysis, the save
-   question and the SHA-256 warning.
-   - **Done before the A5/A6 result** (user, 2026-10-29: the parts that do
-     not depend on the drawing or the video):
-     - **The window-close question** (`117f98b`): the editor tells the API
-       when it holds unsaved edits (`POST /api/editor/unsaved`); `Editing`
-       passes it to the `Desktop` port and app.py sets pywebview's
-       `confirm_close`, with the question in Korean through pywebview's
-       localization. Not yet seen on Windows (WinForms shows it with OK and
-       Cancel).
-     - **The SHA-256 warning (A9)** (`a79f8f2`): each time the editor opens
-       it checks the source again in the background; DIFFERENT, MISSING and
-       UNREADABLE show a message bar under the toolbar with "다시 확인"
-       (DESIGN.md §2.7 and §5).
-     - **Re-analysis from the editor** (`a6f7fcb`): "범위 바꿔 다시 분석…"
-       saves unsaved edits after asking, opens the setup with "← 편집기"
-       and "다시 분석", shows what the new range drops and asks before it
-       starts, and opens the editor again.
-     - **"Cannot judge"** (`0d7ae43`): U and "판단 불가 풀기" on the
-       selected range; stretches join where they meet and split when
-       cleared; the undo history records them.
-   - **Also done before the result** (user, 2026-10-30: they leave the
-     lines layer alone, which A5 measures):
-     - **The compressor marker** (`8ec20d4`): the grab tool drags it when
-       no line is under the pointer, in 0.1 s steps inside the analysis
-       range. It moves to the marks while dragged. Undo covers it; the 분석
-       panel shows the time it was moved from; a re-analysis starts from
-       the moved time. The judgment it recomputes is V2-4.
-     - **Memos** (`fdd9d9f`): the memo tool (M), numbered pins on the
-       graph (`render.memoPinAt`), the memo dialog and the memo list;
-       undoable like the stretches.
-   - **The point line** (`9aa6382`, 2026-10-30): L; points on the context
-     image **or the graph** (user, 2026-10-30, Product SSOT §6); the path
-     between them from the API, dashed on the marks layer, so the lines
-     layer is not redrawn; the preview shows the joins a click at the
-     pointer would add. Enter writes the path into the chosen line from
-     the first point to the last as one undoable change; Backspace takes
-     the last placed point off; Esc, another tool or another Glass cancels.
-8. **Checks — the workstation run is done; a re-check is requested,
-   waiting on the user:**
-   - **The run (2026-10-30):**
-     [the result](../60-evidence/2026-10-30-v2-3-editor-windows-result.md),
-     judged against
-     [the request](../40-operations/2026-10-30-v2-3-editor-windows-request.md)
-     (pinned to `3cbe46e` after a first try stopped at two Windows-only
-     test failures).
-     - **The time limits pass on the workstation:** A4 39.3 s, A5 2.8 /
-       8.9 ms, the exact frame 56 ms, 1× playback in the `<video>`.
-     - E1–E17, N1–N11, R1, R3 and R4 pass; WinForms asks before closing
-       with unsaved edits, and N9 showed no video session holds the file.
-     - **R2 fails:** no drawn Oil sample and no "cannot judge" stretch in
-       the saved SPL#1 edits. No code path loses them; the run most likely
-       did (Delete emptied only Oil, over the drawings; "판단 불가 풀기"
-       with the whole stretch still selected). The re-check shows it.
-     - **The console row fails:** Windows reports a dropped video range as
-       `ConnectionAbortedError`, which printed a traceback. Fixed
-       (`9bd9f9c`).
-   - **The user's notes and decisions** (2026-10-30, Product SSOT §6),
-     done in `8c9ea35`: the view stays inside the analysed range and
-     "전체 보기" returns to all of it; Delete empties the line chosen in
-     "그릴 선"; another tool lets the range go, and its buttons wrap; the
-     point line follows the snap (straight with it off); the pencil's
-     "수평·수직" switch; the list does not repeat a name that is also the
-     folder.
-   - **On macOS:** 212 tests pass, the editor's smoke checks among them;
-     the view and wrap checks were run without their fix and failed;
-     the others check controls and behaviour that did not exist.
-   - **The re-check:**
-     [the request](../40-operations/2026-10-30-v2-3-editor-recheck-windows-request.md),
-     pinned to `8c9ea35` (`checked=86`), criteria fixed in it: the tests
-     (`201 passed, 4 skipped`), C1–C12 on the SPL#1 edit inspection, no
-     `Traceback` in the console, and R1–R3 from the summary. No timing.
-   - If it passes, V2-3 closes.
+1. **Start decisions and a mock-up — waiting on the user.** Open:
+   - what "every Glass checked" means before submitting (opened, judged,
+     or confirmed one by one);
+   - versions: where they live in the inspection folder, and whether an
+     earlier version (or its report) can be opened;
+   - the report header (compressor model, test type): entered when, and
+     kept per inspection or per version;
+   - where the report is written and how it is named, and whether
+     submitting writes it;
+   - the judgment panel and the report layout, as a mock-up for the user
+     to confirm.
+2. **`domain`, the judgment** (§5): it needs none of the open decisions
+   and can start once the user agrees.
+3. The rest follows the decisions: the application and API, the panel,
+   submitting and versions, the report, then a Windows run.
 
-## Session handoff — 2026-10-30 (third)
+## Session handoff — 2026-10-30 (fourth)
 
-**Where it stands:** V2-3 steps 1 to 7 are done; step 8's workstation run
-came back with R2 and the console row failing, both handled above, and the
-user's notes are in (`9bd9f9c`, `8c9ea35`).
-- **Waiting on the user:** the
-  [re-check](../40-operations/2026-10-30-v2-3-editor-recheck-windows-request.md),
-  pinned to `8c9ea35`, in a new folder with the app venv only.
+**V2-3 closed** after its re-check passed every row (S1, S2, C1–C12, T,
+R1–R3). `ca7d3ee` fixed the re-check's C4 note after the run. V2-4 is
+started and waits on the user's start decisions (step 1 above).
 
-**When the result comes:** judge it row by row against the re-check's
-fixed criteria (S1, S2, C, T, R1–R3), write
-`60-evidence/<the day it arrives>-v2-3-editor-recheck-windows-result.md`
-and add it to the catalog. If everything passes, close V2-3 (roadmap and
-this file) and start V2-4. A failed row gets a fix and a re-check of what
-it touches only.
-- **R2 reads the summary's `edits glass` line** of
-  `20261029-1913_SPL#1_Heating_coldstart`: `oil=draft/edited/drawn/empty`
-  needs drawn ≥ 1, `foam` edited ≥ 1 (Delete on Foam marks even empty
-  samples `EDITED`), `cannot_judge` ≥ 1, and the memos and compressor as
-  in §3 of that run.
-- If R2 fails again, the run's sequence is no longer the explanation: look
-  at the save and the history (`lines.History`, `editor.js` `save`).
-- The user's notes may ask for more: inside the decided scope they go to a
-  fix; anything that changes a decision goes to the user.
+**Resume:** read this file, the Product SSOT §3, §5 and §7, and DESIGN.md
+§5's judgment panel, then ask the step 1 questions if the user has not
+answered them. Earlier editor work is in the two V2-3 results and in Git.
 
-**Done before the result, with the user's leave** (2026-10-29 evening and
-2026-10-30): the review fixes (`890b5ea`), the draft search (`ae4873c`),
-the median comparison in the request (`8a96b22`), and in step 7 the close
-question, the SHA-256 warning, re-analysis from the editor, "cannot
-judge", the compressor marker and memos (step 7 above lists the commits).
-A closing review found three ordering bugs in the unsaved state and fixed
-them (`8bec4fb`): an edit made while a save ran was marked saved; the
-window flag's calls could arrive swapped; a reload left the flag set.
-
-**Agent's choices to show the user if asked:** "전체 보기" in the graph
-header, the pencil switch in the 편집 panel (no key), an upright stroke
-moving only the pressed sample, the straight point line interpolated in
-time, and the selected range kept while the range tool stays (the
-video's range repeat uses it). Earlier: the source-warning bar
-(DESIGN.md §2.7 tokens), the source check on every editor open (about 5 s
-of background hashing on the slowest PC), the compressor in 0.1 s steps,
-memo pins on the graph only, and the memo dialog. All are in DESIGN.md §5.
-The point line's: points kept in time order, a click at a sample that has
-a point replaces it, the snap settles a point as it does a drag, and
-straight dotted guides until a path arrives.
+**Agent's choices in V2-3 to show the user if asked:**
+- **Views:** "전체 보기" in the graph header; the selected range kept
+  while the range tool stays (the video's range repeat uses it).
+- **Pencil:** its switch in the 편집 panel, with no key; an upright stroke
+  joins two neighbouring samples.
+- **Point line:** straight joins interpolated in time; points kept in time
+  order; a click at a sample that has a point replaces it; the snap
+  settles a point as it does a drag; straight dotted guides until a path
+  arrives.
+- **Elsewhere:** the source-warning bar (DESIGN.md §2.7 tokens); the
+  source check on every editor open (about 5 s of background hashing on
+  the slowest PC); the compressor in 0.1 s steps; memo pins on the graph
+  only; the memo dialog.
+- DESIGN.md §5 lists them all.
 
 **Learned these sessions:**
+- A Windows agent's account of the code can be wrong: it told the user the
+  draft does not follow the point line's edges, when both use the same
+  edge strength. Check the code before relaying such an answer.
 - A request's steps must not undo what its criteria count: E7 told the
   user to Delete "몇 초" anywhere, and R2 then counted drawn Oil. Say where
   each step acts when a later criterion reads its result.
@@ -392,8 +236,8 @@ workstation since 2026-10-30; these are simple speed-ups, never blockers):
   frames). A cheap gain if wanted: keep the frames decoded on the way to
   a seek, so stepping back a frame and clicking nearby are instant.
 
-**The next Windows run** also covers the V2-2 follow-up above, as the
-V2-2 run covered the V2-1 follow-up.
+**The next Windows run** also covers the upright stroke (`ca7d3ee`), as
+each run covered the previous follow-up.
 
 **Small facts:**
 - `AnalysisSettings.sample_count` counts to `end_sec`, but the analysis
@@ -458,10 +302,6 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done:** V2-3 steps 1 to 7, and step 8's workstation run: the time
-  limits pass there; R2 and the console row failed, the console fixed and
-  R2 traced to the run's sequence; the user's notes are in (`9bd9f9c`,
-  `8c9ea35`).
-- **Waiting on the user:** the
-  [re-check](../40-operations/2026-10-30-v2-3-editor-recheck-windows-request.md)
-  on the workstation. Its result closes V2-3 or names what to fix.
+- **Done:** V2-3 (2026-10-30): the workstation run and its re-check pass;
+  the upright stroke followed (`ca7d3ee`).
+- **Waiting on the user:** V2-4's start decisions (V2-4 step 1).
