@@ -381,7 +381,8 @@ def test_the_source_video_is_served_in_ranges(app, video):
     running, tmp_path = app
     source = tmp_path / "source.avi"
     shutil.copyfile(video, source)
-    inspection_id, _, _ = analysed_inspection(running, source)
+    inspection_id, opened, _ = analysed_inspection(running, source)
+    assert call(running, "DELETE", f"/api/videos/{opened['id']}")[0] == 200  # as the setup does after its analysis
     data = source.read_bytes()
     size = len(data)
     path = f"/media/inspections/{inspection_id}/source?token={running.token}"
@@ -400,7 +401,7 @@ def test_the_source_video_is_served_in_ranges(app, video):
     assert call(running, "GET", f"/media/inspections/{inspection_id}/source")[0] == 403  # the header is not enough
     assert call(running, "GET", f"/media/inspections/{inspection_id}/source?token=wrong", token=False)[0] == 403
     assert call(running, "GET", f"/media/inspections/missing/source?token={running.token}", token=False)[0] == 404
-    source.unlink()
+    source.unlink()  # Windows refuses while a frame session still holds the file open
     status, body, _ = call(running, "GET", path, token=False)
     assert status == 404 and "source.avi" in body["error"]
 

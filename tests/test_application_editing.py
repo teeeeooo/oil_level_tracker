@@ -24,6 +24,7 @@ D = SampleOrigin.DRAFT
 GLASS = Glass("g1", "BASE", Ellipse(640, 300, 80, 200), 380)  # top y 100, bottom y 500
 RECIPE = Recipe("r1", "2호기", ReferenceFrame(1280, 720, "SPL4.mp4", 0.0, b"jpeg"), (GLASS,), "c", "u")
 VIDEO = SourceVideo("/videos/SPL4.mp4", "SPL4.mp4", 5_000, 1280, 720, 10.0, 100, sha256="abc123")
+SOURCE = Path(VIDEO.path)  # compared as a path: str() spells it with "\\" on Windows
 INSPECTION = Inspection("i1", "t0", VIDEO, RECIPE, AnalysisSettings(0.0, 2.5, 1.0), InspectionState.ANALYSED)
 TIMES = (0.0, 0.5, 1.0, 1.5, 2.0, 2.5)
 DRAFT = Line((100.0, 100.5, None, 300.0, 499.5, None), (D,) * 6)
@@ -87,10 +88,10 @@ def desktop():
 
 @pytest.fixture
 def world(desktop):
-    store, tracer, hashes = FakeStore(), FakeTracer(), {"/videos/SPL4.mp4": "abc123"}
+    store, tracer, hashes = FakeStore(), FakeTracer(), {SOURCE: "abc123"}
 
     def hasher(path):
-        found = hashes[str(path)]
+        found = hashes[Path(path)]
         if isinstance(found, Exception):
             raise found
         return found
@@ -196,18 +197,18 @@ def settled(editing, inspection_id):
 def test_the_source_check_compares_the_sha256_with_the_analysis(world):
     editing, _, _, hashes = world
     assert settled(editing, "i1").state is SourceState.SAME
-    hashes["/videos/SPL4.mp4"] = "changed"
+    hashes[SOURCE] = "changed"
     assert settled(editing, "i1").state is SourceState.SAME  # a finished check stands until asked again
     editing.check_source("i1")
     different = settled(editing, "i1")
     assert different.state is SourceState.DIFFERENT and different.message
-    hashes["/videos/SPL4.mp4"] = FileNotFoundError(2, "No such file")
+    hashes[SOURCE] = FileNotFoundError(2, "No such file")
     editing.check_source("i1")
     assert settled(editing, "i1").state is SourceState.MISSING
-    hashes["/videos/SPL4.mp4"] = PermissionError(13, "Permission denied")
+    hashes[SOURCE] = PermissionError(13, "Permission denied")
     editing.check_source("i1")
     assert settled(editing, "i1").state is SourceState.UNREADABLE
-    assert editing.source_file("i1") == Path("/videos/SPL4.mp4")
+    assert editing.source_file("i1") == SOURCE
 
 
 def test_unsaved_edits_make_the_window_ask_before_closing(world, desktop):
