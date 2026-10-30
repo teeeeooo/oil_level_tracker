@@ -198,16 +198,22 @@ Each Glass in a Recipe has one rule.
 - **Editing:**
   - **Grab-and-drag:** grab a line anywhere; nearby parts follow smoothly,
     within a width the user adjusts.
-  - **Pencil:** redraw a time range, replacing that stretch.
+  - **Pencil:** redraw a time range, replacing that stretch. A
+    "수평·수직" switch (user, 2026-10-30, as Shift in Paint) draws only a
+    level stroke at the pressed height, or an upright one at the pressed
+    time, by the way the pointer moves.
   - **Range:** the range tool selects a time range by dragging across the
-    graph or the context image. Delete then empties the Oil line there
-    (§4), and U marks it "cannot judge". One tool serves both (user,
-    2026-10-29).
+    graph or the context image. Delete then empties the line chosen to
+    draw, Oil, Foam or reference (user, 2026-10-30; before, the Oil line
+    only); an empty Oil line counts as §4 says. U marks the range "cannot
+    judge". One tool serves both (user, 2026-10-29). Another tool lets the
+    range go (user, 2026-10-30).
   - **Point line:** click points on the context image or on the graph
     (user, 2026-10-30: on the graph to join line pieces, or to draw roughly
-    while looking at the picture). Each pair of neighbouring points is
-    joined by a path that follows the edges between them: the draft's
-    dynamic programming, pinned to the user's points.
+    while looking at the picture). With the snap on, each pair of
+    neighbouring points is joined by a path that follows the edges between
+    them: the draft's dynamic programming, pinned to the user's points.
+    With the snap off they are joined straight (user, 2026-10-30).
   - The draft is kept as dense samples. Points are not edited one by one.
 - **Curve shape:** grab-and-drag bends the line smoothly, with no
   overshoot. Holding Alt, or choosing the pointed shape, bends it to a
@@ -225,7 +231,9 @@ Each Glass in a Recipe has one rule.
   - wheel zoom;
   - panning only with the pan tool or Shift-drag; a plain drag on empty
     space does nothing;
-  - click a time-axis number and type a value to set the visible range.
+  - click a time-axis number and type a value to set the visible range;
+  - the view stays inside the analysed range, and "전체 보기" returns to
+    all of it (user, 2026-10-30).
 - **Video:**
   - the source file plays in the built-in player, cropped to the Glass, with
     the lines drawn over it;

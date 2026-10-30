@@ -254,9 +254,25 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         page.goto(running.url)
         row = page.locator("#inspectionRows tr", has_text="편집")
         row.get_by_text("분석 완료").wait_for()
+        assert row.locator(".sub.mono").count() == 0  # the folder is named as the inspection: not repeated
         row.get_by_role("button", name="열기", exact=True).click()
         page.wait_for_function("document.querySelectorAll('#context image').length === 1")
         assert page.locator("#editorState").inner_text().startswith("초안 그대로")
+
+        # the view keeps to the analysed range: panned past the start and narrowed by the end number,
+        # the axis shows no time before the start. "전체 보기" brings the whole range back.
+        whole = page.locator("#axisTo").input_value()
+        box = page.locator("#graph").bounding_box()
+        page.keyboard.down("Shift")
+        drag(page, (box["x"] + box["width"] * 0.3, box["y"] + 60), (box["x"] + box["width"] * 0.8, box["y"] + 60))
+        page.keyboard.up("Shift")
+        page.locator("#axisTo").fill("2")
+        page.locator("#axisTo").press("Enter")
+        page.wait_for_function("document.getElementById('axisTo').value === '00:02.0'")
+        labels = page.evaluate("[...document.querySelectorAll('#axis text')].map((t) => t.textContent)")
+        assert labels and not any("-" in label for label in labels)
+        page.get_by_role("button", name="전체 보기").click()
+        page.wait_for_function("v => document.getElementById('axisTo').value === v", arg=whole)
 
         # grab-and-drag moves the Oil line; undo puts it back, redo again
         before = oil_path(page)
@@ -304,6 +320,15 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         page.locator("#axis rect").wait_for()
         page.keyboard.press("u")
         hatch.wait_for()
+        selbox, clear = page.locator("#selectionBox").bounding_box(), page.locator("#clearSelection").bounding_box()
+        assert clear["x"] + clear["width"] <= selbox["x"] + selbox["width"]  # wrapped, not out of the panel
+        page.locator("#lineKind button[data-kind=foam]").click()
+        assert page.locator("#eraseKind").inner_text() == "Foam"  # "Foam 선 지우기"
+        page.keyboard.press("Delete")  # empties the Foam line, not the Oil line
+        page.locator("#lineKind button[data-kind=oil]").click()
+        page.keyboard.press("g")
+        page.locator("#selectionBox").wait_for(state="hidden")
+        assert page.locator("#selectionText").inner_text() == "없음"
         joined, split = page.evaluate("""async () => {
             const l = await import("/web/lines.js");
             const s = (a, b) => ({ start_sec: a, end_sec: b });
@@ -327,6 +352,8 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         saved = json.loads((folder / "edits.json").read_text(encoding="utf-8"))
         assert None in saved["glasses"][0]["oil"]["ys"] and "EDITED" in saved["glasses"][0]["oil"]["origins"]
         assert len(saved["glasses"][0]["cannot_judge"]) == 1
+        foam = saved["glasses"][0]["foam"]
+        assert "EDITED" in foam["origins"] and all(foam["ys"][k] is None for k, o in enumerate(foam["origins"]) if o == "EDITED")
 
         # leaving with unsaved changes asks first
         page.keyboard.press("p")
@@ -576,8 +603,10 @@ def test_the_point_line(tmp_path, video, browser_page):
         before = oil_path(page)
         points = page.locator("#graph circle[data-point]")
         text = page.locator("#pointText")
+        asked = []
+        page.on("request", lambda request: asked.append(request.url) if request.url.endswith("/point-line") else None)
 
-        page.keyboard.press("s")  # the snap off: the points stay where they are clicked
+        page.keyboard.press("s")  # the snap off: the points stay where they are clicked, joined straight
         page.keyboard.press("l")
         assert page.locator("#editorView button[data-tool=point]").get_attribute("aria-pressed") == "true"
         assert page.locator("#pointBox").is_visible() and text.inner_text() == "점 0개 · Oil"
@@ -587,12 +616,18 @@ def test_the_point_line(tmp_path, video, browser_page):
         assert text.inner_text() == "점 1개 · Oil"
         page.mouse.move(*point_in(page, "graph", 0.6, 20))
         page.wait_for_function("document.querySelector('#graph path[style*=\"2 3\"]')")  # the preview, dotted
-        # a point on the graph: the path between the two comes from the API, dashed on both plots
+        # a point on the graph: the path between the two, dashed on both plots, straight
         page.mouse.click(*point_in(page, "graph", 0.85, 20))
         assert text.inner_text() == "점 2개 · Oil"
         page.wait_for_function("document.querySelector('#context path[style*=\"5 3\"]')")
         assert points.count() == 2 and page.locator("#context circle[data-point]").count() == 2
+        assert asked == []  # the snap is off: no edges to follow
         shot(page, "p1-point-line")
+        # the snap on joins the same points along the edges, from the API; off again, straight
+        page.keyboard.press("s")
+        wait_until(lambda: len(asked) >= 1)
+        page.wait_for_function("document.querySelector('#context path[style*=\"5 3\"]')")
+        page.keyboard.press("s")
 
         # Backspace takes the last point off; a click puts it back. The line is untouched so far.
         page.keyboard.press("Backspace")
@@ -616,6 +651,8 @@ def test_the_point_line(tmp_path, video, browser_page):
         oil = json.loads((data / "Inspections" / "점 잇기" / "edits.json").read_text(encoding="utf-8"))["glasses"][0]["oil"]
         drawn_at = [k for k, origin in enumerate(oil["origins"]) if origin == "DRAWN"]
         assert len(drawn_at) >= 2 and drawn_at == list(range(drawn_at[0], drawn_at[-1] + 1))  # one stretch
+        ys = [oil["ys"][k] for k in drawn_at]  # straight: the samples are evenly spaced in time
+        assert all(abs(ys[k + 1] - 2 * ys[k] + ys[k - 1]) < 1e-6 for k in range(1, len(ys) - 1))
 
         # Esc cancels points not yet joined; changing the tool does too
         page.mouse.click(*point_in(page, "graph", 0.3, 10))
@@ -627,6 +664,42 @@ def test_the_point_line(tmp_path, video, browser_page):
         page.wait_for_function("document.querySelectorAll('#graph circle[data-point]').length === 0")
         assert page.locator("#pointBox").is_hidden()
         assert oil_path(page) == drawn
+        assert errors == []
+    finally:
+        running.close()
+
+
+def test_the_pencil_lock(tmp_path, video, browser_page):
+    # "수평·수직" (user, 2026-10-30): a stroke mostly across draws level at the pressed height;
+    # mostly up or down, it moves only the pressed sample
+    page, errors = browser_page
+    data = tmp_path / "data"
+    write_recipes(data / "Recipes")
+    running = bootstrap.start(data_folder=data)
+    try:
+        analysed_inspection(running, video, "직선")
+        page.goto(running.url)
+        page.locator("#inspectionRows tr", has_text="직선").get_by_role("button", name="열기", exact=True).click()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        page.keyboard.press("s")  # the snap off: the pressed height stays
+        page.get_by_text("수평·수직", exact=True).click()
+        page.keyboard.press("p")
+        box = page.locator("#graph").bounding_box()
+        left, top = box["x"] + box["width"] * 0.2, box["y"] + box["height"] * 0.4
+
+        def drawn():
+            page.keyboard.press("Control+s")
+            page.get_by_text("저장함").wait_for()
+            oil = json.loads((data / "Inspections" / "직선" / "edits.json").read_text(encoding="utf-8"))["glasses"][0]["oil"]
+            return [y for y, origin in zip(oil["ys"], oil["origins"]) if origin == "DRAWN"]
+
+        drag(page, (left, top), (left + box["width"] * 0.5, top + 40))  # across, wandering down
+        level = drawn()
+        assert len(level) > 3 and len(set(level)) == 1
+        page.keyboard.press("Control+z")
+        drag(page, (left, top), (left + 4, top + 60))  # up or down: one sample, at the pointer
+        upright = drawn()
+        assert len(upright) == 1 and upright[0] > level[0]  # lower on the screen: a larger source y
         assert errors == []
     finally:
         running.close()

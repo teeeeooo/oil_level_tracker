@@ -31,6 +31,7 @@ const state = {
   width: 30,               // the grab width, seconds
   shape: "smooth",
   snap: true,
+  lock: false,             // the pencil draws only level or upright strokes (user, 2026-10-30)
   background: false,
   view: null,
   selection: null,         // { t0, t1 }
@@ -243,6 +244,7 @@ function draw() {
   pending = { back: false, lines: false, marks: false };
   if ($("editorView").hidden || !state.edits || !state.glassId) return;
   const began = performance.now();
+  state.view = inRange(state.view);
   const data = panel();
   const view = state.view;
   const plots = [["graph", "graphBox", false], ["context", "contextBox", true]];
@@ -396,7 +398,8 @@ function onPointerDown(event) {
     const line = lineOf(state.glassId, state.kind);
     const y = zero() - at.h;
     state.drag = { ...start, type: "pencil", kind: state.kind, base: lines.copyLine(line), last: { t: at.t, y } };
-    lines.pencil(line, state.edits.times, at.t, y, at.t, y, settle);
+    const [first] = lines.pencil(line, state.edits.times, at.t, y, at.t, y, settle);
+    if (state.lock) Object.assign(state.drag, { anchor: { t: at.t, y: line.ys[first] }, touched: [first, first + 1] });
     requestDraw({ lines: true });
   }
 }
@@ -431,6 +434,10 @@ function onPointerMove(event) {
     const target = settle(drag.index, drag.base.ys[drag.index] + (zero() - at.h) - drag.y0);
     lines.grab(line, drag.base, state.edits.times, drag.index, target, state.width, event.altKey ? "pointed" : state.shape);
     requestDraw({ lines: true });
+  } else if (drag.type === "pencil" && drag.anchor) {
+    lockedStroke(drag, at, event);
+    setPlayhead(Math.min(state.edits.times.at(-1), Math.max(state.edits.times[0], at.t)), true);
+    requestDraw({ lines: true });
   } else if (drag.type === "pencil") {
     const line = lineOf(state.glassId, drag.kind);
     const y = zero() - at.h;
@@ -439,6 +446,23 @@ function onPointerMove(event) {
     setPlayhead(Math.min(state.edits.times.at(-1), Math.max(state.edits.times[0], at.t)), true);
     requestDraw({ lines: true });
   }
+}
+
+/** The pencil with "수평·수직" on, like Shift in Paint: from the press, a level stroke at the pressed
+ * height when the pointer has moved more across than up or down, else the pressed sample moved to the
+ * pointer's height. Each move redraws the stroke from the line as it was. */
+function lockedStroke(drag, at, event) {
+  const line = lineOf(state.glassId, drag.kind);
+  const [from, to] = drag.touched;
+  for (let i = from; i < to; i++) {
+    line.ys[i] = drag.base.ys[i];
+    line.origins[i] = drag.base.origins[i];
+  }
+  const { t, y } = drag.anchor;
+  const level = Math.abs(event.clientX - drag.x) >= Math.abs(event.clientY - drag.y);
+  drag.touched = level
+    ? lines.pencil(line, state.edits.times, t, y, at.t, y)
+    : lines.pencil(line, state.edits.times, t, zero() - at.h, t, zero() - at.h);
 }
 
 function onPointerUp() {
@@ -501,7 +525,7 @@ function onWheel(event) {
     const ratio = (at.h - v.h0) / (v.h1 - v.h0);
     state.view = { ...v, h0: at.h - ratio * span, h1: at.h - ratio * span + span };
   } else {
-    const span = Math.min((whole.t1 - whole.t0) * 1.5, Math.max(MIN_SPAN_SEC, (v.t1 - v.t0) * factor));
+    const span = Math.min(whole.t1 - whole.t0, Math.max(MIN_SPAN_SEC, (v.t1 - v.t0) * factor));
     const ratio = (at.t - v.t0) / (v.t1 - v.t0);
     state.view = { ...v, t0: at.t - ratio * span, t1: at.t - ratio * span + span };
   }
@@ -577,13 +601,15 @@ function undo(redo = false) {
   renderMemos();
 }
 
+/** Delete: empty the line chosen in "그릴 선" over the selected range (user, 2026-10-30; before, the
+ * Oil line only). */
 function eraseSelection() {
   if (!state.selection) return;
-  const line = lineOf(state.glassId, "oil");
+  const line = lineOf(state.glassId, state.kind);
   const base = lines.copyLine(line);
   const [first, end] = lines.indexRange(state.edits.times, state.selection.t0, state.selection.t1);
   lines.erase(line, first, end);
-  if (state.history.record(state.glassId, "oil", base, line)) changed();
+  if (state.history.record(state.glassId, state.kind, base, line)) changed();
   requestDraw({ lines: true });
 }
 
@@ -669,8 +695,10 @@ function tracePoints() {
   requestDraw({ marks: true });
 }
 
-/** The API's path through `points`: { first, ys }, or null after an error (told unless quiet). */
+/** The path through `points`: { first, ys }, or null after an error (told unless quiet). Along the
+ * edges from the API with the snap on; straight with it off (user, 2026-10-30). */
 async function askPath(glassId, points, quiet = false) {
+  if (!state.snap) return lines.straight(state.edits.times, points);
   const id = encodeURIComponent(state.detail.id);
   const body = { glass_id: glassId, points: points.map((p) => ({ index: p.index, y: p.y })) };
   const result = await api.call("POST", `/api/inspections/${id}/point-line`, body);
@@ -840,6 +868,22 @@ function renderMemos() {
   $("memoItems").replaceChildren(...(items.length ? items : [el("span", { class: "caption" }, "메모 없음")]));
 }
 
+/** The view with its times inside the analysed range: no time before the first sample or after the
+ * last (user, 2026-10-30), at most the whole range wide. The heights are left as they are. */
+function inRange(view) {
+  const whole = render.fitView({ times: state.edits.times });
+  const span = Math.min(view.t1 - view.t0, whole.t1 - whole.t0);
+  const t0 = Math.min(Math.max(view.t0, whole.t0), whole.t1 - span);
+  return { ...view, t0, t1: t0 + span };
+}
+
+/** "전체 보기" (user, 2026-10-30): the whole time range and the Glass's height again. */
+function fitWhole() {
+  if (!state.edits) return;
+  state.view = render.fitView(panel());
+  requestDraw({ back: true });
+}
+
 /** Bring time t into view, keeping the zoom. */
 function reveal(t) {
   const v = state.view;
@@ -913,9 +957,10 @@ function renderRangeNumbers() {
 
 function applyRangeNumber(input, edge) {
   const t = parseClock(input.value);
-  const other = edge === "t0" ? state.view.t1 : state.view.t0;
+  const view = inRange(state.view);  // the other edge as shown
+  const other = edge === "t0" ? view.t1 : view.t0;
   if (t !== null && (edge === "t0" ? other - t : t - other) >= MIN_SPAN_SEC) {
-    state.view = { ...state.view, [edge]: t };
+    state.view = inRange({ ...view, [edge]: t });
     requestDraw({ back: true });
   }
   renderRangeNumbers();
@@ -984,6 +1029,7 @@ function renderTools() {
   $("grabWidth").value = String(index);
   $("grabWidthText").textContent = `${state.width} s`;
   $("snapToggle").checked = state.snap;
+  $("lockToggle").checked = state.lock;
   for (const id of ["graph", "context"]) $(id).dataset.mode = state.tool;  // its cursor
   renderSelection();
   renderPointBox();
@@ -995,6 +1041,7 @@ function renderSelection() {
   const s = state.selection;
   $("selectionText").textContent = s ? `${clock(s.t0)} – ${clock(s.t1)} · ${(s.t1 - s.t0).toFixed(1)} s` : "없음";
   $("eraseSelection").disabled = !s;
+  $("eraseKind").textContent = KIND_NAMES[state.kind];
   $("markSelection").disabled = !s;
   const marked = state.edits ? editsOf()?.cannot_judge ?? [] : [];
   $("clearSelection").disabled = !s || !marked.some((c) => c.end_sec > s.t0 && c.start_sec < s.t1);
@@ -1002,11 +1049,23 @@ function renderSelection() {
 
 function setTool(tool) {
   if (tool !== "point" && state.point) cancelPoint();
+  if (tool !== "range") state.selection = null;  // another tool lets the range go (user, 2026-10-30)
   state.tool = tool;
   state.hot = null;
   for (const id of ["graph", "context"]) $(id).style.cursor = "";
   renderTools();
-  requestDraw({ lines: true });
+  requestDraw({ lines: true, marks: true });
+}
+
+/** The snap also decides how the point line joins its points, so a point line in progress is joined
+ * again. */
+function setSnap(on) {
+  state.snap = on;
+  if (state.point) {
+    state.point.preview = null;
+    tracePoints();
+  }
+  renderTools();
 }
 
 function stepWidth(direction) {
@@ -1036,8 +1095,7 @@ function onKey(event) {
   } else if (event.code === "BracketLeft" || event.code === "BracketRight") {
     stepWidth(event.code === "BracketLeft" ? -1 : 1);
   } else if (event.code === "KeyS") {
-    state.snap = !state.snap;
-    renderTools();
+    setSnap(!state.snap);
   } else if (event.code === "KeyN") {
     jumpToEmpty(event.shiftKey ? -1 : 1);
   } else if (state.point && event.key === "Enter") {
@@ -1128,12 +1186,14 @@ export function init(toList, openSetup) {
     state.width = lines.GRAB_WIDTHS[Number($("grabWidth").value)];
     renderTools();
   });
-  $("snapToggle").addEventListener("change", () => { state.snap = $("snapToggle").checked; });
+  $("snapToggle").addEventListener("change", () => setSnap($("snapToggle").checked));
+  $("lockToggle").addEventListener("change", () => { state.lock = $("lockToggle").checked; });
   $("backgroundToggle").addEventListener("change", () => {
     state.background = $("backgroundToggle").checked;
     if (state.edits) showGlass(false);
   });
   $("eraseSelection").addEventListener("click", eraseSelection);
+  $("fitWhole").addEventListener("click", fitWhole);
   $("prevEmpty").addEventListener("click", () => jumpToEmpty(-1));
   $("nextEmpty").addEventListener("click", () => jumpToEmpty(1));
   for (const [id, edge] of [["axisFrom", "t0"], ["axisTo", "t1"]]) {

@@ -163,6 +163,7 @@ button.memo:hover { background: var(--bg-4); }
 .memo .t { display: block; color: var(--fg-3); font-variant-numeric: tabular-nums; }
 .memo .text { white-space: pre-wrap; overflow-wrap: anywhere; }
 .selbox { border: 1px solid var(--brand); border-radius: 4px; background: var(--brand-tint); padding: 8px; display: flex; flex-direction: column; gap: 8px; }
+.selbox .row { flex-wrap: wrap; }  /* the range buttons stay inside the panel */
 .selbox .head { display: flex; align-items: center; gap: 8px; font-size: 12px; line-height: 16px; color: var(--brand); font-weight: 600; }
 .empty-text { color: var(--error); font-weight: 600; }
 .video { position: relative; height: 240px; flex: none; overflow: hidden; background: var(--frame-bg); }

@@ -74,7 +74,7 @@ export async function showList() {
     const reason = item.failure ? el("span", { class: "err" }, ` ${item.failure}`) : null;
     rows.append(el("tr", { "data-id": item.id, ondblclick: open, onclick: (e) => selectRow(e.currentTarget) },
       el("td", {}, item.name ?? item.video_name, item.name ? el("span", { class: "sub" }, item.video_name) : null,
-        el("span", { class: "sub mono" }, item.folder)),
+        item.folder !== item.name ? el("span", { class: "sub mono" }, item.folder) : null),  // a named folder repeats the name
       el("td", {}, item.recipe_name),
       el("td", {}, localDate(item.created_at)),
       el("td", {}, el("span", { class: "badge pending" }, STATES[item.state] ?? item.state), reason),

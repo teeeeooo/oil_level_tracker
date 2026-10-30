@@ -279,7 +279,9 @@ Do not use sizes outside this ramp.
         numbers. Empty stretches of the Oil line show as `--empty-mark`
         bars along its top edge.
       - The graph and the image always share the same time scale and
-        horizontal scroll.
+        horizontal scroll, which stay inside the analysed range. "전체
+        보기" (small) in the graph's header returns to the whole range and
+        the Glass's height (user, 2026-10-30).
       - A selected range is a `--selection-band` over both, with 1 px
         `--brand` edges that can be dragged.
     - **Right column, 360 px:**
@@ -288,10 +290,12 @@ Do not use sizes outside this ramp.
         the time);
       - **편집:** the line kind the pencil and the point line draw (Oil,
         Foam, 참조); the grab width with `[` `]`; the grab shape
-        (부드럽게, 뾰족하게, or Alt while dragging); the snap switch with its
-        reach. Below them, the selected range with "선 지우기 (Delete)",
-        "판단 불가 (U)" and "판단 불가 풀기", or the point line in progress
-        with its keys;
+        (부드럽게, 뾰족하게, or Alt while dragging); the pencil's "수평·수직"
+        switch; the snap switch with its reach. Below them, the selected
+        range with "<line> 선 지우기 (Delete)" naming the chosen line,
+        "판단 불가 (U)" and "판단 불가 풀기", wrapping inside the column, or
+        the point line in progress with its keys. Another tool lets the
+        range go;
       - **Glass:** the empty stretches, "cannot judge", the valid share
         against the Recipe's minimum, FULL and EMPTY, and "이전/다음 빈
         구간" (N);

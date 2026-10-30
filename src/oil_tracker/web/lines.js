@@ -81,6 +81,20 @@ export function erase(line, first, end) {
   }
 }
 
+/** The point line with the snap off (user, 2026-10-30): straight between neighbouring points, as
+ * the API's path is, { first, ys } from the first point to the last. Points are { index, y } in time
+ * order. */
+export function straight(times, points) {
+  const ys = [points[0].y];
+  for (let k = 1; k < points.length; k++) {
+    const a = points[k - 1], b = points[k];
+    for (let i = a.index + 1; i <= b.index; i++) {
+      ys.push(a.y + ((b.y - a.y) * (times[i] - times[a.index])) / (times[b.index] - times[a.index]));
+    }
+  }
+  return { first: points[0].index, ys };
+}
+
 /** Write drawn samples (the point line) from `first`. */
 export function place(line, first, ys) {
   for (let k = 0; k < ys.length; k++) {
