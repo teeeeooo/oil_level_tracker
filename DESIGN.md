@@ -85,10 +85,14 @@ Nothing else may reuse them.
 |---|---|---|---|
 | `--pass` | `#0E700E` | `#F1FAF1` | PASS |
 | `--fail` | `#C50F1F` | `#FDF3F4` | FAIL |
-| `--review` | `#BC4B09` | `#FFF9F5` | needs review, or overridden (the badge also says "덮어씀") |
+| `--review` | `#BC4B09` | `#FFF9F5` | needs review |
 | `--pending` | `#616161` | `#F5F5F5` | Glass not checked yet |
 
 A status is always shown as text plus colour, never colour alone.
+
+An overridden judgment shows its final status like any other. The app
+records the override beside it ("직접 판정", the computed result and the
+reason); the report shows only the final judgment (user, 2026-10-30).
 
 ### 2.5 Frame chrome
 

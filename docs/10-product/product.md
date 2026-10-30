@@ -274,7 +274,11 @@ Each Glass in a Recipe has one rule.
   - the judgment-criteria table;
   - the key-time table: compressor start, recovery and violations;
   - memos, as numbered pins with a list below.
-- **Left out:** the v1 detector graph and the edit history.
+- **Left out:** the v1 detector graph and the edit history. The report
+  shows only the final judgment: whether it was overridden, the computed
+  result, the reason and how much of the draft was changed stay in the
+  inspection as the user's record, shown in the app (user, 2026-10-30: a
+  reader could take an override for tampered data).
 - **Format:** self-contained HTML that works offline and prints to PDF. It
   uses the editor's drawing module and the [DESIGN.md](../../DESIGN.md) colour
   roles.

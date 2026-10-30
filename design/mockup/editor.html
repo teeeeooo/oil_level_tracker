@@ -188,7 +188,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
       <span class="more">▾</span>
       <div class="menu" data-show="checked">
         <div class="on"><b>BASE</b><span class="badge pass">합격</span></div>
-        <div><b>Accum</b><span class="badge review">불합격 · 덮어씀</span></div>
+        <div><b>Accum</b><span class="badge fail">불합격</span><span class="caption">직접 판정</span></div>
       </div>
     </div>
     <div class="spacer"></div>
@@ -266,6 +266,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
             <tr><th>판단 불가</th><td>1곳 · 6.7 %</td></tr>
             <tr><th>유효 비율</th><td>81 % <span class="caption">(기준 70 % 이상)</span></td></tr>
             <tr><th>FULL / EMPTY</th><td>FULL 1곳 · EMPTY 없음 <span class="caption">(선 위치로 자동)</span></td></tr>
+            <tr><th>편집 기록</th><td>초안 고침 312 · 직접 그림 48 샘플 <span class="caption">(전체 600)</span></td></tr>
           </table>
           <div class="row"><button class="btn small">◀ 이전 빈 구간</button><button class="btn small">다음 빈 구간 ▶</button><span class="caption"><kbd>N</kbd></span></div>
         </div>
@@ -276,9 +277,9 @@ table.list th { background:var(--bg-3); font-weight:600; }
         <div class="body">
           <div class="verdict">
             <span class="badge pass" data-show="grab range point judge checked submit locked">합격</span>
-            <span class="badge review" data-show="override">불합격 · 덮어씀</span>
+            <span class="badge fail" data-show="override">불합격</span>
             <span class="caption" data-show="grab range point judge checked submit locked">자동 판정</span>
-            <span class="caption" data-show="override">자동 판정은 합격</span>
+            <span class="caption" data-show="override">직접 판정 · 자동 판정은 합격</span>
           </div>
           <table class="kv">
             <tr><th>압축기 기동</th><td>00:30.0</td></tr>
@@ -291,7 +292,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
           <div data-show="override" style="display:flex;flex-direction:column;gap:4px">
             <span class="label" style="width:auto">덮어쓴 이유 (필수)</span>
             <div class="textarea">01:40 부근 거품이 유면을 가려 회복 시각을 믿을 수 없음. 재시험 필요.</div>
-            <span class="caption">이유는 판정과 함께 저장되고 보고서에 나옵니다.</span>
+            <span class="caption">자동 판정과 이유는 이 검사의 기록으로 남습니다. 보고서에는 최종 판정만 나옵니다.</span>
           </div>
           <div class="row" data-show="grab range point judge override"><button class="btn primary small">이 Glass 확인</button><span class="caption">남은 Glass: BASE, Accum</span></div>
           <div class="checked" data-show="checked submit"><span>✓ 확인함 14:20</span><button class="btn small subtle">확인 풀기</button></div>
@@ -338,7 +339,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
     <table class="list">
       <tr><th>Glass</th><th>판정</th><th>확인</th></tr>
       <tr><td>BASE</td><td><span class="badge pass">합격</span></td><td>14:20</td></tr>
-      <tr><td>Accum</td><td><span class="badge review">불합격 · 덮어씀</span> <span class="caption">거품이 유면을 가림…</span></td><td>14:21</td></tr>
+      <tr><td>Accum</td><td><span class="badge fail">불합격</span> <span class="caption">직접 판정 (자동: 합격)</span></td><td>14:21</td></tr>
     </table>
     <table class="kv">
       <tr><th>압축기 모델</th><td>GB-2 R410A</td></tr>
@@ -577,8 +578,8 @@ table.list th { background:var(--bg-3); font-weight:600; }
     grab: "<b>잡아끌기 중</b>: 01:35 근처에서 Oil 선을 잡은 상태. 옅은 띠가 끌기 폭(30 s)이고, 그 안이 부드럽게 따라옵니다. 스냅이 켜져 있어 잡은 지점이 가까운 경계(점선)에 붙습니다. 놓으면 FULL/EMPTY 띠와 빈 구간 수가 새로 계산됩니다.",
     range: "<b>범위 선택</b>: 툴바의 <b>범위</b>(R)를 누르고, 그래프나 맥락 이미지 위를 03:56에서 04:22까지 가로로 끌어 고른 상태. 양 끝(파란 세로선)을 끌어 넓히거나 줄이고, Esc로 풉니다. 오른쪽 \"편집\"에 선 지우기(Delete), 판단 불가(U)가 나옵니다. 구간 반복을 켜면 이 범위를 되풀이 재생합니다.",
     judge: "<b>판정</b>: 오른쪽 \"판정 · BASE\"에 자동 판정(합격)과 그 근거가 나옵니다. 선을 고칠 때마다 다시 계산됩니다. \"이 Glass 확인\"을 Glass마다 눌러야 제출할 수 있고, 그 전에는 제출 단추가 꺼져 있습니다.",
-    override: "<b>덮어쓰기</b>: 자동 판정과 다르게 정하려면 합격/불합격을 고르고 이유를 씁니다(필수). 배지는 --review 색에 \"덮어씀\"을 붙입니다. 이유가 비어 있으면 확인할 수 없습니다.",
-    checked: "<b>확인함</b>: BASE를 확인한 상태. Glass 고르기 메뉴에 Glass마다 최종 판정이 보입니다(Accum은 덮어써서 불합격). 모든 Glass를 확인하면 제출이 켜집니다. 확인한 뒤 선을 고치면 확인이 풀립니다.",
+    override: "<b>덮어쓰기</b>: 자동 판정과 다르게 정하려면 합격/불합격을 고르고 이유를 씁니다(필수). 배지는 최종 판정 그대로이고, 옆에 \"직접 판정 · 자동 판정은 합격\"이 기록으로 보입니다. 이 기록과 Glass 칸의 \"편집 기록\"은 앱 안에만 남고 보고서에는 나오지 않습니다(사용자, 2026-10-30). 이유가 비어 있으면 확인할 수 없습니다.",
+    checked: "<b>확인함</b>: BASE를 확인한 상태. Glass 고르기 메뉴에 Glass마다 최종 판정이 보입니다(Accum은 직접 판정한 불합격). 모든 Glass를 확인하면 제출이 켜집니다. 확인한 뒤 선을 고치면 확인이 풀립니다.",
     submit: "<b>제출 창</b>: Glass별 최종 판정과 머리글을 보여 주고 한 번 더 묻습니다. 제출하면 v1이 잠기고 보고서가 검사 폴더 versions\\001에 생깁니다.",
     locked: "<b>제출 뒤</b>: 편집 도구가 꺼지고 읽기만 됩니다. 위 막대에서 보고서를 열거나, \"고쳐서 다시 제출 (v2)\"로 v1을 이어받은 새 작업본을 엽니다. 예전 버전은 버전 고르기로 읽기 전용으로 엽니다. 검사 목록은 검사당 한 줄에 최신 버전을 보여 줍니다.",
     point: "<b>점 잇기 중</b>: 빈 구간 02:30–02:52 위 맥락 이미지에 점 3개를 찍은 상태. 점 사이는 경계를 따라 이어지고(점선), 마지막 점에서 커서까지 미리 보기가 이어집니다. Enter로 확정하면 그 구간의 Oil 선이 됩니다.",

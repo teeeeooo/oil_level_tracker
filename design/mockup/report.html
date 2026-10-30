@@ -94,9 +94,9 @@ td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
   </div>
   <h2>판정</h2>
   <table>
-    <tr><th style="width:110px">Glass</th><th style="width:150px">판정 규칙</th><th style="width:170px">최종 판정</th><th style="width:110px">자동 판정</th><th>덮어쓴 이유</th></tr>
-    <tr><td>BASE</td><td>기준점 회복</td><td><span class="badge pass">합격</span></td><td>합격</td><td></td></tr>
-    <tr><td>Accum</td><td>기준점 위 유지</td><td><span class="badge review">불합격 · 덮어씀</span></td><td>합격</td><td class="reason">01:40 부근 거품이 유면을 가려 위반 길이를 믿을 수 없음. 재시험 필요.</td></tr>
+    <tr><th style="width:160px">Glass</th><th style="width:220px">판정 규칙</th><th>판정</th></tr>
+    <tr><td>BASE</td><td>기준점 회복</td><td><span class="badge pass">합격</span></td></tr>
+    <tr><td>Accum</td><td>기준점 위 유지</td><td><span class="badge fail">불합격</span></td></tr>
   </table>
   <h2>BASE <span class="mode">기준점 회복</span> <span class="badge big pass">합격</span></h2>
   <div class="plots" data-glass="base">
@@ -129,8 +129,7 @@ td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
 
 <section class="page">
   <div class="strip"><b>오일 레벨 검사 보고서</b><span>1차 냉각</span><span>GB-2 R410A · 냉각 on/off</span><span class="right">v1 · 제출 2026-10-30 14:22</span></div>
-  <h2>Accum <span class="mode">기준점 위 유지</span> <span class="badge big review">불합격 · 덮어씀</span></h2>
-  <div class="reason"><b>덮어쓴 이유:</b> 01:40 부근 거품이 유면을 가려 위반 길이를 믿을 수 없음. 재시험 필요. <span style="color:var(--fg-3)">(자동 판정: 합격)</span></div>
+  <h2>Accum <span class="mode">기준점 위 유지</span> <span class="badge big fail">불합격</span></h2>
   <div class="plots" data-glass="accum">
     <div class="label"><b style="color:var(--fg-1)">그래프</b><span><i style="background:var(--oil)"></i>Oil</span><span><i style="background:var(--foam)"></i>Foam</span><span>세로: 0선 기준 높이 (px)</span></div>
     <div class="plot" style="height:220px"><svg class="graph"></svg></div>
@@ -159,7 +158,7 @@ td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
   <ol>
     <li>A4 가로. 첫 쪽에 머리글과 Glass별 판정 요약, 그 뒤 Glass마다 그래프·맥락 이미지·판정 기준표·주요 시각표·메모 (DESIGN.md §5 순서).</li>
     <li>머리글: 압축기 모델과 시험 종류(분석 설정에서 입력)에 영상·Recipe·작성 일시·<b>버전</b>을 자동으로.</li>
-    <li>덮어쓴 Glass는 --review 색 "덮어씀"과 이유, 자동 판정을 함께 적습니다.</li>
+    <li>판정은 최종 판정만 적습니다. 직접 판정했는지, 자동 판정, 이유, 초안을 얼마나 고쳤는지는 앱 안의 기록으로만 남깁니다(사용자, 2026-10-30).</li>
     <li>파일: 검사 폴더의 versions\001\report.html. 한 파일로 오프라인에서 열리고 Ctrl+P로 PDF가 됩니다(A7: 5 MB 이하).</li>
     <li>편집 기록과 v1의 검출기 그래프는 넣지 않습니다(§7).</li>
   </ol>

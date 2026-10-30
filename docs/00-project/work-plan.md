@@ -138,7 +138,11 @@ panel (computed result, override, reason).
        subfolder each); the list keeps one row per inspection;
      - the report header (compressor model, test type) is entered with the
        inspection name in the analysis setup, per inspection;
-     - the mock-ups come first.
+     - the mock-ups come first;
+     - **the report shows only the final judgment;** an override (the
+       computed result, the reason) and how much of the draft was changed
+       are the user's record in the app (Product SSOT §7, DESIGN.md §2.4).
+       "덮어씀" on the report could read as tampered data.
    - **No report is written yet:** there is no `adapters/report`, and the
      editor's "제출" is disabled. The folder layout reserves the versions
      and their report ([inspection-folder.md](../20-architecture/inspection-folder.md)).
