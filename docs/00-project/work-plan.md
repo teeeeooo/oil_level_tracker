@@ -245,8 +245,13 @@ panel (computed result, override, reason).
      default browser; printing makes an A4 landscape PDF, in colour.
    - The editor's graph also shows a HOLD mode's longest violation.
    - Agent's choices: DESIGN.md §5 "Report".
-7. **A Windows run of V2-4, with the V2-3 follow-ups — waiting on the
-   user's run.** The request, pinned to `95de064`:
+7. **A Windows run of V2-4, with the V2-3 follow-ups — run 2026-10-30;
+   U1 and R2 open** ([result](../60-evidence/2026-10-30-v2-4-judgment-report-windows-result.md)):
+   the upright stroke is still a slant (a 0.5 s riser and a spike back),
+   and a v3 working copy, most likely from "고쳐서 다시 제출", left
+   `edits.json` after v2. The user's notes (the right column, the memo
+   list, the report's first page) and U1's meaning wait on the user.
+   Earlier text of this step: The request, pinned to `95de064`:
    [2026-10-30-v2-4-judgment-report-windows-request.md](../40-operations/2026-10-30-v2-4-judgment-report-windows-request.md).
    It backs the Inspections folder up first (submitting cannot be undone),
    then judges, submits twice and opens the reports on the SPL#4

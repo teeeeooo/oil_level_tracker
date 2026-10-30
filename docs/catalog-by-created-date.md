@@ -67,3 +67,4 @@
 | 2026-10-30 | [2026-10-30-v2-3-editor-slowest-pc-windows-result.md](60-evidence/2026-10-30-v2-3-editor-slowest-pc-windows-result.md) | V2-3 최저 사양 PC 편집기 측정(A5·A6, 중앙값 비교) 결과 판정 |
 | 2026-10-30 | [2026-10-30-v2-3-editor-windows-result.md](60-evidence/2026-10-30-v2-3-editor-windows-result.md) | V2-3 편집기 워크스테이션 확인 결과 판정(A4–A6 통과, R2·콘솔 실패) |
 | 2026-10-30 | [2026-10-30-v2-3-editor-recheck-windows-result.md](60-evidence/2026-10-30-v2-3-editor-recheck-windows-result.md) | V2-3 편집기 재확인 결과 판정(전 항목 통과, V2-3 종료) |
+| 2026-10-30 | [2026-10-30-v2-4-judgment-report-windows-result.md](60-evidence/2026-10-30-v2-4-judgment-report-windows-result.md) | V2-4 판정·제출·보고서 워크스테이션 확인 결과 판정(U1·R2 미충족, 사용자 소감 2건) |
