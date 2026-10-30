@@ -270,7 +270,8 @@ the undo depth and the shortcuts.
      "수평·수직" switch; the list does not repeat a name that is also the
      folder.
    - **On macOS:** 212 tests pass, the editor's smoke checks among them;
-     each new check fails without its fix.
+     the view and wrap checks were run without their fix and failed;
+     the others check controls and behaviour that did not exist.
    - **The re-check:**
      [the request](../40-operations/2026-10-30-v2-3-editor-recheck-windows-request.md),
      pinned to `8c9ea35` (`checked=86`), criteria fixed in it: the tests
