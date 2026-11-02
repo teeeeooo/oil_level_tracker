@@ -69,7 +69,7 @@ def test_a_recipe_of_another_frame_size_is_refused():
     small = replace(VIDEO, width=1280, height=720)
     problems = setup_problems(small, make_recipe(), AnalysisSettings(0, 60, 10))
     assert [(p.field, p.message) for p in problems] == [
-        ("recipe", "영상 해상도 1280×720가 이 Recipe의 1920×1080와 다릅니다.")
+        ("recipe", "영상 해상도(1280×720)가 이 Recipe의 해상도(1920×1080)와 다릅니다.")
     ]
 
 

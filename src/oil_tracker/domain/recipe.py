@@ -85,7 +85,7 @@ class Recipe:
         if self.matches_frame_size(width, height):
             return None
         frame = self.reference_frame
-        return f"영상 해상도 {width}×{height}가 이 Recipe의 {frame.width}×{frame.height}와 다릅니다."
+        return f"영상 해상도({width}×{height})가 이 Recipe의 해상도({frame.width}×{frame.height})와 다릅니다."
 
 
 def recipe_problems(recipe: Recipe) -> list[Problem]:
