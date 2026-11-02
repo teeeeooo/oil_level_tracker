@@ -26,3 +26,6 @@ inspections/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Intro video inputs made by scripts/render_intro.py
+design/intro/assets/

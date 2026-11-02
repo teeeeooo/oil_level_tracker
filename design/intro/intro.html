@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Oil Level Tracker — intro</title>
+<!-- P-1 introduction video (docs/40-operations/intro-video.md). Not product code.
+     seek(t) draws the frame at t seconds; scripts/render_intro.py captures it 30 times a second.
+     Open with ?t=12.5 to see one moment, or ?play to watch it in real time.
+     assets/ is made by scripts/render_intro.py (ignored by Git). -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --bg-1: #FFFFFF; --bg-2: #FAFAFA; --bg-3: #F5F5F5;
+    --fg-1: #242424; --fg-2: #424242; --fg-3: #616161;
+    --stroke-2: #E0E0E0; --stroke-3: #F0F0F0;
+    --brand: #0F6CBD; --brand-tint: #EBF3FC;
+    --oil: #1F77D0; --foam: #E8710A; --compressor: #8764B8;
+    --pass: #0E700E; --pass-tint: #F1FAF1;
+  }
+  html, body { margin: 0; background: #DADADA; }
+  #stage {
+    position: relative; width: 1920px; height: 1080px; overflow: hidden;
+    background: var(--bg-1); color: var(--fg-1);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    letter-spacing: -0.02em;
+  }
+  .abs { position: absolute; left: 0; top: 0; will-change: transform, opacity; }
+  .line { white-space: nowrap; }
+  .word { display: inline-block; margin-right: 0.26em; }
+  .lead { font-size: 40px; font-weight: 500; color: var(--fg-3); }
+  .big { font-size: 80px; font-weight: 700; }
+  .title { font-size: 64px; font-weight: 700; }
+  .center { width: 1920px; text-align: center; }
+  svg { overflow: visible; }
+  #ctxBox { left: 260px; top: 330px; width: 1400px; height: 480px; border-radius: 6px; overflow: hidden; }
+  #ctxImg { width: 1400px; height: 480px; display: block; }
+  #ctxCover { position: absolute; top: 0; right: 0; height: 100%; background: var(--bg-1); }
+  #thumb { width: 209px; height: 200px; border-radius: 8px; overflow: hidden; box-shadow: 0 6px 24px rgba(0,0,0,0.16); }
+  #thumb img { width: 100%; height: 100%; display: block; object-fit: cover; }
+  #thumbBand { position: absolute; left: 50%; top: 0; width: 18px; margin-left: -9px; height: 100%;
+               border: 2px solid #FFFFFF; box-sizing: border-box; box-shadow: 0 0 0 1px rgba(0,0,0,0.25); }
+  .chip { display: inline-flex; align-items: center; gap: 18px; padding: 18px 28px; border-radius: 14px;
+          background: var(--bg-1); box-shadow: 0 10px 32px rgba(0,0,0,0.14); }
+  .chip b { font-size: 44px; color: var(--pass); background: var(--pass-tint); padding: 4px 16px; border-radius: 8px; }
+  .chip span { font-size: 26px; color: var(--fg-2); }
+  .tag { font-size: 22px; font-weight: 600; padding: 6px 14px; border-radius: 6px; color: #FFFFFF; }
+  #cards { left: 0; top: 0; width: 1920px; height: 1080px; perspective: 1800px; }
+  .card { position: absolute; left: 960px; top: 540px; border-radius: 14px; overflow: hidden;
+          box-shadow: 0 18px 60px rgba(0,0,0,0.18); background: #FFFFFF; transform-origin: center; }
+  .card img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
+  #note { left: auto; right: 48px; top: auto; bottom: 36px; font-size: 20px; color: var(--fg-3); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- scene 1 -->
+  <div id="dot" class="abs" style="width:18px;height:18px;border-radius:9px;background:var(--fg-1)"></div>
+  <div id="s1" class="abs center" style="top:430px">
+    <div class="line lead" id="s1a">유면 확인은</div>
+    <div class="line big" id="s1b" style="margin-top:18px"></div>
+  </div>
+
+  <!-- scenes 2-3: the sight glass and the graph -->
+  <svg id="art" class="abs" width="1920" height="1080" viewBox="0 0 1920 1080">
+    <defs>
+      <clipPath id="glassClip"><ellipse id="glassClipE" cx="0" cy="0" rx="150" ry="235"/></clipPath>
+      <filter id="halo" x="-5%" y="-5%" width="110%" height="110%">
+        <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/>
+        <feFlood flood-color="#FFFFFF" flood-opacity="0.95"/><feComposite in2="d" operator="in" result="w"/>
+        <feMerge><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <g id="grid"></g>
+    <g id="glass">
+      <ellipse cx="0" cy="0" rx="150" ry="235" fill="var(--brand-tint)"/>
+      <g clip-path="url(#glassClip)">
+        <rect id="foamR" x="-200" y="0" width="400" height="36" fill="var(--foam)"/>
+        <rect id="oilR" x="-200" y="0" width="400" height="600" fill="var(--oil)"/>
+      </g>
+      <ellipse id="glassRim" cx="0" cy="0" rx="150" ry="235" fill="none" stroke="var(--fg-1)" stroke-width="10"/>
+      <g id="ticks" stroke="var(--fg-1)" stroke-width="7" stroke-linecap="round">
+        <line x1="182" y1="-110" x2="204" y2="-110"/><line x1="182" y1="0" x2="214" y2="0"/>
+        <line x1="182" y1="110" x2="204" y2="110"/>
+      </g>
+    </g>
+    <line id="link" stroke="var(--oil)" stroke-width="3" stroke-dasharray="6 6"/>
+    <path id="trace" fill="none" stroke="var(--oil)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle id="head" r="12" fill="var(--oil)" stroke="#FFFFFF" stroke-width="4"/>
+  </svg>
+  <div id="s2" class="abs" style="left:260px;top:150px">
+    <div class="line lead" id="s2a">오르내리는 유면을</div>
+    <div class="line title" id="s2b" style="margin-top:8px">하나의 선으로</div>
+  </div>
+
+  <!-- scenes 4-5: the context image -->
+  <div id="ctxBox" class="abs"><img id="ctxImg" src="assets/context.png" alt=""><div id="ctxCover"></div></div>
+  <svg id="over" class="abs" width="1920" height="1080" viewBox="0 0 1920 1080">
+    <line id="zero" stroke="#FFFFFF" stroke-width="2.5" stroke-dasharray="10 8"/>
+    <path id="draft" fill="none" stroke="var(--oil)" stroke-width="6" stroke-dasharray="14 10" filter="url(#halo)"/>
+    <path id="drawn" fill="none" stroke="var(--oil)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" filter="url(#halo)"/>
+    <g id="pencil">
+      <g transform="rotate(35)"><path d="M0 0 L-9 -22 L-9 -86 L9 -86 L9 -22 Z" fill="var(--fg-1)"/><path d="M-9 -22 L9 -22 L0 0 Z" fill="#E8C9A0"/><rect x="-9" y="-96" width="18" height="10" rx="2" fill="var(--fg-3)"/></g>
+      <circle r="9" fill="var(--oil)" stroke="#FFFFFF" stroke-width="3"/>
+    </g>
+  </svg>
+  <div id="thumb" class="abs"><img id="thumbImg" src="assets/frame-00.jpg" alt=""><div id="thumbBand"></div></div>
+  <div id="s4" class="abs" style="left:260px;top:150px">
+    <div class="line lead" id="s4a">영상 전체를</div>
+    <div class="line title" id="s4b" style="margin-top:8px">한 장의 그림으로</div>
+  </div>
+  <div id="tagDraft" class="abs tag" style="background:var(--fg-3)">자동 초안</div>
+  <div id="tagDrawn" class="abs tag" style="background:var(--oil)">검사자</div>
+  <div id="s5" class="abs" style="left:260px;top:150px">
+    <div class="line lead" id="s5a">초안은 앱이,</div>
+    <div class="line title" id="s5b" style="margin-top:8px">판단은 검사자가</div>
+  </div>
+  <div id="verdict" class="abs chip"><b>합격</b><span>기동 후 11.0초에 0선 회복</span></div>
+
+  <!-- scene 6 -->
+  <div id="cards" class="abs"></div>
+  <div id="s6glow" class="abs" style="left:460px;top:400px;width:1000px;height:280px;border-radius:140px;background:radial-gradient(closest-side,rgba(255,255,255,0.97),rgba(255,255,255,0.85) 60%,rgba(255,255,255,0))"></div>
+  <div id="s6" class="abs center" style="top:480px">
+    <div class="line title" id="s6a"></div>
+  </div>
+
+  <!-- scene 7 -->
+  <svg id="logo" class="abs" width="256" height="256" viewBox="0 0 256 256">
+    <defs><clipPath id="lg"><ellipse cx="120" cy="128" rx="60" ry="94"/></clipPath></defs>
+    <rect x="8" y="8" width="240" height="240" rx="52" fill="#0F6CBD"/>
+    <ellipse cx="120" cy="128" rx="60" ry="94" fill="#EBF3FC"/>
+    <g clip-path="url(#lg)">
+      <rect id="lgFoam" x="40" y="120" width="160" height="16" fill="#E8710A"/>
+      <rect id="lgOil" x="40" y="136" width="160" height="100" fill="#1F77D0"/>
+    </g>
+    <ellipse cx="120" cy="128" rx="60" ry="94" fill="none" stroke="#FFFFFF" stroke-width="14"/>
+    <g stroke="#FFFFFF" stroke-width="9" stroke-linecap="round">
+      <line x1="200" y1="84" x2="218" y2="84"/><line x1="200" y1="128" x2="224" y2="128"/><line x1="200" y1="172" x2="218" y2="172"/>
+    </g>
+  </svg>
+  <div id="s7" class="abs center" style="top:640px">
+    <div class="line" id="s7a" style="font-size:84px;font-weight:700;letter-spacing:-0.03em">Oil Level Tracker</div>
+    <div class="line lead" id="s7b" style="margin-top:14px;font-size:34px">사이트글라스 영상으로 유면을 판정합니다</div>
+  </div>
+
+  <div id="note" class="abs">화면 속 영상은 예시입니다 (유리컵)</div>
+</div>
+
+<script>
+"use strict";
+const FPS = 30, DURATION = 40;
+const $ = (id) => document.getElementById(id);
+
+// ---- easing and timing ----
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lin = (t, a, b) => clamp((t - a) / (b - a));
+const outCubic = (x) => 1 - (1 - x) ** 3;
+const inOutCubic = (x) => (x < 0.5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2);
+const outBack = (x) => 1 + 2.2 * (x - 1) ** 3 + 1.2 * (x - 1) ** 2;
+const ease = (t, a, b, f = outCubic) => f(lin(t, a, b));
+const mix = (a, b, k) => a + (b - a) * k;
+// visible between in-start and out-end, fading over the given lengths
+const life = (t, a, b, fadeIn = 0.5, fadeOut = 0.5) => Math.min(ease(t, a, a + fadeIn), 1 - ease(t, b - fadeOut, b));
+
+function show(el, alpha, extra = "") {
+  el.style.opacity = alpha;
+  el.style.visibility = alpha <= 0.001 ? "hidden" : "visible";
+  if (extra !== null) el.style.transform = extra;
+}
+
+// words that rise into place one after another
+function wordsInto(el, text) {
+  el.innerHTML = text.split(" ").map((w) => `<span class="word">${w}</span>`).join("");
+  return [...el.children];
+}
+function rise(words, t, start, step, length = 0.55) {
+  words.forEach((w, i) => {
+    const k = ease(t, start + i * step, start + i * step + length);
+    w.style.opacity = k;
+    w.style.transform = `translateY(${mix(28, 0, k)}px)`;
+    w.style.filter = `blur(${mix(8, 0, k)}px)`;
+  });
+}
+
+// ---- data: the inspection of sample7 ----
+let LINE = null;
+const BOX = { x: 260, y: 330, w: 1400, h: 480 };
+const colX = (i) => BOX.x + ((i + 0.5) / LINE.ys.length) * BOX.w;
+const rowY = (y) => BOX.y + ((y - LINE.top) / (LINE.bottom - LINE.top)) * BOX.h;
+function pathOf(points) {
+  return points.map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
+}
+// the line up to a fractional column, as points
+function upTo(ys, f, from = 0) {
+  const pts = [];
+  for (let i = from; i < ys.length && i <= f; i++) if (ys[i] != null) pts.push([colX(i), rowY(ys[i])]);
+  const i = Math.floor(f);
+  if (i + 1 < ys.length && ys[i] != null && ys[i + 1] != null && f > i) {
+    const k = f - i;
+    pts.push([mix(colX(i), colX(i + 1), k), rowY(mix(ys[i], ys[i + 1], k))]);
+  }
+  return pts;
+}
+
+const frames = [];
+let s1b, s6a, cards = [];
+
+function setup() {
+  s1b = wordsInto($("s1b"), "영상을 끝까지 지켜보는 일이었습니다");
+  s6a = wordsInto($("s6a"), "분석 · 편집 · 판정 · 보고서");
+  for (let i = 0; i < 48; i++) {
+    const img = new Image();
+    img.src = `assets/frame-${String(i).padStart(2, "0")}.jpg`;
+    frames.push(img);
+  }
+  const grid = $("grid");
+  for (let k = 0; k <= 4; k++) {
+    const y = BOX.y + (k * BOX.h) / 4;
+    grid.insertAdjacentHTML("beforeend", `<line x1="${BOX.x}" x2="${BOX.x + BOX.w}" y1="${y}" y2="${y}" stroke="var(--stroke-2)" stroke-width="1.5"/>`);
+  }
+  // the screen cards: [image, width, height, start x, start y, z, drift]
+  const spec = [
+    ["editor.png", 880, 495, -560, -190, -260, 1],
+    ["report-crop.png", 620, 436, 590, -170, -380, -1],
+    ["verdict-crop.png", 380, 364, 600, 250, -120, 1],
+    ["graph-crop.png", 640, 430, -600, 250, -420, -1],
+    ["report.png", 460, 259, 60, -360, -900, 1],
+    ["editor.png", 420, 236, -40, 370, -950, -1],
+  ];
+  const holder = $("cards");
+  cards = spec.map(([src, w, h, x, y, z, d]) => {
+    const el = document.createElement("div");
+    el.className = "card";
+    el.style.width = `${w}px`; el.style.height = `${h}px`;
+    el.style.marginLeft = `${-w / 2}px`; el.style.marginTop = `${-h / 2}px`;
+    el.innerHTML = `<img src="assets/${src}" alt="">`;
+    holder.appendChild(el);
+    return { el, x, y, z, d };
+  });
+}
+
+// ---- the scenes ----
+function seek(t) {
+  // 1 · 0-5 s: a dot, then the sentence
+  const dotIn = ease(t, 0.1, 0.6, outBack), dotOut = ease(t, 1.0, 1.4);
+  show($("dot"), (t < 1.4 ? dotIn : 0) * (1 - dotOut), `translate(${951 + 470 * dotOut}px, 531px) scale(${dotIn})`);
+  const s1 = 1 - ease(t, 4.3, 4.9);
+  show($("s1"), s1, `translateY(${mix(0, -30, 1 - s1)}px)`);
+  $("s1").style.filter = `blur(${(1 - s1) * 10}px)`;
+  const lead = ease(t, 0.7, 1.3);
+  $("s1a").style.opacity = lead;
+  $("s1a").style.transform = `translateY(${mix(20, 0, lead)}px)`;
+  rise(s1b, t, 1.3, 0.32);
+
+  // 2 · 5-11 s: the sight glass, its level going up and down
+  // 3 · 11-17 s: the glass moves aside, and its level draws the graph
+  const glassIn = ease(t, 5.0, 6.0);
+  const toSide = ease(t, 10.4, 11.6, inOutCubic);
+  const gx = mix(960, 150, toSide), gy = mix(600, 570, toSide), gs = mix(1, 0.62, toSide);
+  const glassAlpha = glassIn * (1 - ease(t, 16.6, 17.2));
+  show($("glass"), glassAlpha, null);
+  $("glass").setAttribute("transform", `translate(${gx} ${gy}) scale(${gs * mix(0.9, 1, glassIn)})`);
+  const rimLen = 2 * Math.PI * Math.sqrt((150 ** 2 + 235 ** 2) / 2);
+  $("glassRim").style.strokeDasharray = rimLen;
+  $("glassRim").style.strokeDashoffset = rimLen * (1 - ease(t, 5.0, 6.2, inOutCubic));
+  $("ticks").style.opacity = ease(t, 5.9, 6.4);
+
+  // the graph's head: column f of the line, drawn from 12.0 to 16.0 s
+  const n = LINE.ys.length;
+  const f = ease(t, 12.0, 16.0, (x) => x) * (n - 1);
+  const drawnTrace = upTo(LINE.ys, f);
+  // the level in the glass, as a fraction of the glass height (0 bottom, 1 top)
+  let level;
+  if (t < 11.6) level = 0.42 + 0.2 * Math.sin((t - 5.6) * 1.9) * ease(t, 5.6, 6.6) + 0.07 * Math.sin((t - 5.6) * 4.3) * ease(t, 6.0, 7.0);
+  else {
+    const i = Math.min(n - 1, Math.floor(f));
+    const y = LINE.ys[i] ?? LINE.bottom;
+    const fromLine = 1 - (y - LINE.top) / (LINE.bottom - LINE.top);
+    level = mix(0.42 + 0.2 * Math.sin((11.6 - 5.6) * 1.9), fromLine, ease(t, 11.6, 12.2));
+  }
+  const surface = 235 - level * 470;
+  $("oilR").setAttribute("y", surface);
+  $("foamR").setAttribute("y", surface - 36 * clamp(1 - Math.abs(level - 0.5)));
+  $("foamR").setAttribute("height", 36 * clamp(1 - Math.abs(level - 0.5)));
+
+  const graph = ease(t, 11.4, 12.0) * (1 - ease(t, 16.6, 17.4));
+  $("grid").style.opacity = graph * 0.9;
+  $("trace").setAttribute("d", drawnTrace.length > 1 ? pathOf(drawnTrace) : "");
+  $("trace").style.opacity = graph;
+  const head = drawnTrace.length ? drawnTrace[drawnTrace.length - 1] : [BOX.x, BOX.y + BOX.h];
+  const headOn = t >= 12.0 && t < 17.4 && drawnTrace.length > 0;
+  show($("head"), headOn ? graph : 0, null);
+  $("head").setAttribute("cx", head[0]); $("head").setAttribute("cy", head[1]);
+  const surfaceY = gy + surface * gs;
+  $("link").setAttribute("x1", gx + 150 * gs); $("link").setAttribute("y1", surfaceY);
+  $("link").setAttribute("x2", head[0]); $("link").setAttribute("y2", head[1]);
+  $("link").style.opacity = headOn ? graph * 0.7 : 0;
+
+  const s2 = life(t, 6.6, 16.8, 0.6, 0.6);
+  show($("s2"), s2, `translateY(${mix(16, 0, ease(t, 6.6, 7.2))}px)`);
+  $("s2a").style.opacity = ease(t, 6.6, 7.2);
+  $("s2b").style.opacity = ease(t, 11.6, 12.2);
+  $("s2b").style.transform = `translateY(${mix(24, 0, ease(t, 11.6, 12.3))}px)`;
+
+  // 4 · 17-23 s: frames become the context image, column by column
+  const ctxAlpha = ease(t, 17.2, 17.6) * (1 - ease(t, 28.8, 29.6));
+  const reveal = ease(t, 17.8, 22.4, (x) => x);
+  show($("ctxBox"), ctxAlpha, `scale(${mix(1, 0.92, ease(t, 28.8, 29.6))})`);
+  $("ctxCover").style.width = `${(1 - reveal) * BOX.w}px`;
+  const edge = BOX.x + reveal * BOX.w;
+  const thumbAlpha = ease(t, 17.4, 17.9) * (1 - ease(t, 22.4, 22.9));
+  show($("thumb"), thumbAlpha, `translate(${edge - 104}px, ${840}px)`);
+  const fi = Math.min(47, Math.round(reveal * 47));
+  if (frames[fi] && $("thumbImg").getAttribute("src") !== frames[fi].src) $("thumbImg").src = frames[fi].src;
+  const s4 = life(t, 17.6, 22.9, 0.6, 0.5);
+  show($("s4"), s4, `translateY(${mix(16, 0, ease(t, 17.6, 18.2))}px)`);
+  $("s4b").style.opacity = ease(t, 18.0, 18.6);
+
+  // 5 · 23-29 s: the draft, then the inspector's line, then the verdict
+  const overAlpha = 1 - ease(t, 28.8, 29.6);
+  $("over").style.opacity = overAlpha;
+  $("zero").setAttribute("x1", BOX.x); $("zero").setAttribute("x2", BOX.x + BOX.w);
+  $("zero").setAttribute("y1", rowY(LINE.zero)); $("zero").setAttribute("y2", rowY(LINE.zero));
+  $("zero").style.opacity = ease(t, 23.0, 23.5) * 0.9;
+  const draftLen = ease(t, 23.2, 24.2, (x) => x) * (n - 1);
+  const pen = ease(t, 24.8, 27.2, inOutCubic);
+  const firstDrawn = LINE.ys.findIndex((v) => v != null && v < LINE.bottom - 1);
+  const lastWrong = LINE.draft.findLastIndex((v, i) => v != null && Math.abs(v - LINE.ys[i]) > 12);
+  const penCol = mix(Math.max(0, firstDrawn - 1), lastWrong + 1, pen);
+  // the draft fades where the pencil has passed
+  const draftPts = upTo(LINE.draft, draftLen).filter(([x]) => t < 24.8 || x > colX(penCol));
+  $("draft").setAttribute("d", draftPts.length > 1 ? pathOf(draftPts) : "");
+  $("draft").style.opacity = ease(t, 23.2, 23.5) * (1 - ease(t, 27.6, 28.2) * 0.0);
+  const drawnPts = t >= 24.8 ? upTo(LINE.ys, penCol, Math.max(0, firstDrawn - 1)) : [];
+  // after the pencil, the inspector's line joins the draft's good part
+  const rest = t >= 27.2 ? upTo(LINE.ys, n - 1, Math.floor(penCol)) : [];
+  $("drawn").setAttribute("d", [drawnPts, rest].filter((p) => p.length > 1).map(pathOf).join(" "));
+  const penAlpha = life(t, 24.5, 27.6, 0.3, 0.4);
+  show($("pencil"), penAlpha, null);
+  const tip = drawnPts.length ? drawnPts[drawnPts.length - 1] : [colX(firstDrawn), rowY(LINE.ys[firstDrawn])];
+  $("pencil").setAttribute("transform", `translate(${tip[0]} ${tip[1]})`);
+
+  const lastDraftCol = LINE.draft.length - 1;
+  show($("tagDraft"), life(t, 23.6, 25.2, 0.3, 0.4),
+       `translate(${colX(Math.round((firstDrawn + lastWrong) / 2)) - 60}px, ${rowY(LINE.draft[lastWrong]) - 56}px)`);
+  show($("tagDrawn"), life(t, 25.4, 28.6, 0.3, 0.5),
+       `translate(${colX(Math.round(firstDrawn + (lastWrong - firstDrawn) * 0.45)) + 18}px, ${rowY(LINE.ys[Math.round(firstDrawn + (lastWrong - firstDrawn) * 0.45)]) + 18}px)`);
+  const s5 = life(t, 23.2, 29.0, 0.6, 0.5);
+  show($("s5"), s5, `translateY(${mix(16, 0, ease(t, 23.2, 23.8))}px)`);
+  $("s5b").style.opacity = ease(t, 25.0, 25.6);
+  const v = ease(t, 27.4, 28.0, outBack);
+  show($("verdict"), Math.min(ease(t, 27.4, 27.7), 1 - ease(t, 28.8, 29.4)), `translate(${1660 - 560}px, ${BOX.y + 40}px) scale(${mix(0.7, 1, v)})`);
+  void lastDraftCol;
+
+  // 6 · 29-35 s: screen cards drift in space, then gather
+  const gather = ease(t, 33.9, 35.0, inOutCubic);
+  cards.forEach((c, i) => {
+    const appear = ease(t, 29.2 + i * 0.12, 30.0 + i * 0.12);
+    const drift = (t - 29) * 22 * c.d;
+    const x = mix(c.x * mix(1.25, 1, appear) + drift, 0, gather);
+    const y = mix(c.y * mix(1.25, 1, appear), 0, gather);
+    const z = mix(c.z, 0, gather);
+    const ry = mix(c.d * 14, 0, gather), rx = mix(-6, 0, gather);
+    const scale = mix(1, 0.08, gather);
+    show(c.el, appear * (1 - ease(t, 34.6, 35.1)),
+         `translate3d(${x}px, ${y}px, ${z}px) rotateY(${ry}deg) rotateX(${rx}deg) scale(${scale})`);
+  });
+  const s6 = life(t, 30.0, 34.2, 0.5, 0.5);
+  show($("s6"), s6, null);
+  show($("s6glow"), s6, null);
+  rise(s6a, t, 30.0, 0.22);
+
+  // 7 · 35-40 s: the icon and the name
+  const logoIn = ease(t, 34.8, 35.7, outBack);
+  show($("logo"), ease(t, 34.8, 35.2), `translate(${960 - 128}px, ${330 - 128 + 128}px) scale(${mix(0.2, 1, logoIn)})`);
+  const lv = 0.5 + 0.12 * Math.sin((t - 35) * 2.2) * (1 - ease(t, 36.5, 38));
+  $("lgOil").setAttribute("y", 136 + (0.5 - lv) * 120);
+  $("lgFoam").setAttribute("y", 120 + (0.5 - lv) * 120);
+  show($("s7"), ease(t, 35.6, 36.3), `translateY(${mix(24, 0, ease(t, 35.6, 36.4))}px)`);
+  $("s7b").style.opacity = ease(t, 36.2, 36.9);
+
+  show($("note"), life(t, 17.4, 35.0, 0.5, 0.5) * 0.9, null);
+}
+
+async function ready() {
+  LINE = await (await fetch("assets/line.json")).json();
+  setup();
+  const images = [...document.images, ...frames];
+  await Promise.all(images.map((img) => (img.complete ? null : new Promise((r) => { img.onload = img.onerror = r; }))));
+  await document.fonts.ready;
+  seek(0);
+  return { fps: FPS, duration: DURATION };
+}
+
+window.intro = { ready: ready(), seek };
+window.intro.ready.then(() => {
+  const query = new URLSearchParams(location.search);
+  if (query.has("t")) seek(Number(query.get("t")));
+  if (query.has("play")) {
+    const began = performance.now();
+    const tick = () => { const t = (performance.now() - began) / 1000; seek(t % DURATION); requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  }
+});
+</script>
+</body>
+</html>
