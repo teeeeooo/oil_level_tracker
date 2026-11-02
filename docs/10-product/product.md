@@ -223,6 +223,15 @@ Each Glass in a Recipe has one rule.
     and straight where no edge lies there (user, 2026-10-30: free to
     follow the strongest edges, it ran to the image's top or bottom). With
     the snap off they are joined straight (user, 2026-10-30).
+  - **Copy and paste** (user, 2026-11-02, for tests that cycle the
+    compressor on and off, where Oil and Foam repeat nearly the same
+    pattern): the range tool's selection copies the Oil and Foam lines in
+    it (not the reference line, nor "cannot judge"). The user pastes it
+    either by repeating it over a stretch or at places picked one by one;
+    the user chooses which, and where each copy goes. Nothing ties a copy
+    to the compressor start. A pasted stretch keeps its copied heights,
+    with no snap. For the judgment and the check, a paste counts as
+    drawing a new line.
   - The draft is kept as dense samples. Points are not edited one by one.
 - **Curve shape:** grab-and-drag bends the line smoothly, with no
   overshoot. Holding Alt, or choosing the pointed shape, bends it to a
@@ -248,7 +257,11 @@ Each Glass in a Recipe has one rule.
     the lines drawn over it;
   - the graph playhead follows;
   - speed control and range repeat;
-  - a paused frame is exact.
+  - a paused frame is exact;
+  - **a full-size view** (user, 2026-11-02): a button on the editor's
+    video opens the source at full size in a window of its own, apart
+    from the app's window, so it can sit on a second monitor. Its play
+    position and the editor's time follow each other.
 - **Compressor start:** a marker the user can drag. Dragging it recomputes
   the judgment. Changing the analysis range means re-analysis.
 - **Re-analysis after editing** (user, 2026-10-29): the edited lines are

@@ -1,8 +1,8 @@
 # Current Work Plan
 
-**Current milestone:** `V2-4 — Judgment and report` / `ACTIVE` (started
-2026-10-30; built; its Windows re-check waits on the user).
-**Last completed:** `V2-3 — Editor` / `DONE` (2026-10-30).
+**Current milestone:** `V2-4b — Video window and pattern copy` / `ACTIVE`
+(started 2026-11-02; decisions taken, mock-ups next).
+**Last completed:** `V2-4 — Judgment and report` / `DONE` (2026-11-02).
 
 This is the sole owner of the current state, authorization and next action.
 Rewrite it; do not append to it.
@@ -101,6 +101,42 @@ Rewrite it; do not append to it.
   - **Not yet seen on Windows:** the upright stroke as a vertical step
     (`ca7d3ee`, from the re-check's C4 note) and the point line's 8 px
     band.
+- **V2-4 result:** the judgment, the override, submitting and versions,
+  and the report passed on the workstation in
+  [the run](../60-evidence/2026-10-30-v2-4-judgment-report-windows-result.md)
+  and [its re-check](../60-evidence/2026-11-02-v2-4-recheck-windows-result.md)
+  (2026-11-02, on `b66f387`).
+  - **The judgment:** `domain/judgment.py`, with 22 fixed cases in
+    `tests/test_domain_judgment.py` (A3). Where §5 is silent (agent's
+    choices): invalid samples inside a recovery's hold are passed over;
+    an invalid sample ends a violation run; a run lasts its sample count ×
+    0.5 s; the HOLD modes ignore the compressor start.
+  - **Saved data** ([inspection-folder.md](../20-architecture/inspection-folder.md)):
+    `edits.json` schema 2 holds each Glass's decision (`override`,
+    `reason`, `checked_at`); `inspection.json` schema 2 holds
+    `report_header`; `versions\NNN\` holds a submitted version, locked by
+    the app (`Editing.is_locked`, 409).
+  - **The report:** `adapters/report` (`HtmlReports`) writes
+    `versions\NNN\report.html` on submitting, drawn by `web/render.js`
+    with `web/report.js`; 379,159 bytes for 68 minutes (A7).
+  - **The user's rules** (2026-10-30): the report shows the final
+    judgment only, and a Glass the user judged gets one line "판정 사유:
+    <reason>", never "덮어씀"; versions stay in the inspection folder; the
+    header is entered in the setup and checked in the submit dialog; the
+    right column reads 원본 영상, 편집, 판정, Glass, 분석; memos live in
+    the toolbar's list; the report's page 1 holds the facts, the
+    judgments and every Glass's graph, then a page per Glass; the
+    pencil's lock is "수평" only.
+  - **Agent's choices, in DESIGN.md §5:** the header saves at once and
+    holds 60 characters; revising keeps each Glass's decision and check; a
+    submitted version hides the editing panels; an older version a later
+    re-analysis no longer fits offers its report; the report embeds the
+    context image at most 2,000 × 360 px as JPEG and prints in colour;
+    "보고서 열기" uses the default browser; a HOLD mode's longest
+    violation is banded.
+  - **Left on the workstation:** 1907 (SPL#4) with v1–v3 submitted; 1913
+    (SPL#1) with v1–v2 submitted; 1910 (SPL#1) and `V2-3 확인` untouched
+    by V2-4. Backups `C:\olt-v24-backup` and `C:\olt-v24b-backup`.
 - **Documentation:** the v1 conventions, per [docs/README.md](../README.md).
   - numbered folders;
   - the date catalog and its pre-push check;
@@ -111,232 +147,86 @@ Rewrite it; do not append to it.
   - v1 local evidence is at `~/Developer/oil_level_tracker-v1-evidence/`.
   - Branch `spike/webui` is kept for porting.
 
-## V2-4 — Judgment and report
+## V2-4b — Video window and pattern copy
 
-**Scope** (roadmap; Product SSOT §3 steps 5–6, §5 and §7):
-- the judgment per Glass, computed from the edited Oil line by the Recipe's
-  rule (§5), recomputed when the lines or the compressor start change;
-  A3 asks for unit tests with fixed cases;
-- the override per Glass, with a required reason that is saved;
-- submitting: every Glass checked first; submitting locks that version; to
-  resubmit, open it, edit and save a new version;
-- the report: self-contained HTML that works offline and prints to PDF,
-  drawn by the editor's drawing module (`render.js`), with the contents
-  §7 lists.
+**Why:** after the V2-4 re-check the user asked for two features, both for
+the first version, before V2-5 (user, 2026-11-02), so that A1–A9 are
+judged once on the final build.
 
-**Already decided:** the rule and its modes (§5, user, 2026-10-29), the
-coverage threshold, Foam never counting, and the report's contents (§7).
-DESIGN.md §5 keeps a place in the editor's right column for the judgment
-panel (computed result, override, reason).
+**Scope** (Product SSOT §6, 2026-11-02):
+- **the full-size view:** a button on the editor's video opens the source
+  at full size in a window of its own (a second OS window, not inside the
+  app's, for a second monitor); its play position and the editor's time
+  follow each other;
+- **copy and paste:** the range tool's selection copies the Oil and Foam
+  lines (not the reference line, nor "cannot judge"); the user pastes by
+  repeating over a stretch or at places picked one by one, chosen each
+  time; the user picks where, with no tie to the compressor start; the
+  pasted stretch keeps its heights, with no snap; for the judgment and
+  the check a paste counts as drawing a new line.
 
 **Steps:**
-1. **Start decisions and mock-ups — done** (2026-10-30).
-   - **The user's decisions** (2026-10-30, Product SSOT §3 and §7):
-     - each Glass is checked with its own "확인" on the judgment; changing
-       that Glass's lines afterwards takes the check off;
-     - a resubmission's version stays in the same inspection folder (one
-       subfolder each); the list keeps one row per inspection;
-     - the report header (compressor model, test type) is entered with the
-       inspection name in the analysis setup, per inspection;
-     - the mock-ups come first;
-     - **the report shows the final judgment,** and for a Glass the user
-       judged, one line "판정 사유: <reason>", never "덮어씀"; the computed
-       result and how much of the draft was changed are the user's record
-       in the app (Product SSOT §7, DESIGN.md §2.4).
-   - **No report is written yet:** there is no `adapters/report`, and the
-     editor's "제출" is disabled. The folder layout reserves the versions
-     and their report ([inspection-folder.md](../20-architecture/inspection-folder.md)).
-   - **The mock-ups, confirmed by the user** and written into DESIGN.md
-     §2.3, §2.4 and §5:
-     - [editor.html](../../design/mockup/editor.html) `#judge`,
-       `#override`, `#checked`, `#submit`, `#locked`: the judgment panel
-       (the computed result and its grounds, the override with a required
-       reason, "이 Glass 확인"), the Glass picker's badges, the submit
-       dialog, and a submitted version (read-only, an info bar with "보고서
-       열기", "고쳐서 다시 제출 (v2)…" and the version picker);
-     - [report.html](../../design/mockup/report.html): A4 landscape, the
-       header and the judgment summary on page 1, then a page per Glass;
-     - [inspection.html](../../design/mockup/inspection.html): "검사 정보"
-       in the setup (name, compressor model, test type) and the submitted
-       state in the list ("v1 제출함", "v2 고치는 중").
-   - **The agent's choices inside them,** confirmed with the mock-ups: the
-     check also comes off when that Glass's "cannot judge" stretches or the
-     compressor start change; the header stays editable in the editor
-     until submitting; the override is a 자동/합격/불합격 choice; the
-     versions live in `versions\NNN\` with the edits, the judgment and
-     `report.html`; a HOLD mode's longest violation is `--violation-band`;
-     the first Glass shares page 1 with the header.
-2. **`domain`, the judgment** (§5) — done: `domain/judgment.py`,
-   `judge(times, glass edits, Glass, compressor start)` gives 합격, 불합격
-   or 검토 필요 with a Korean reason, the coverage, the recovery (RECOVERY)
-   or the longest violation (the HOLD modes); 22 fixed cases in
-   `tests/test_domain_judgment.py` (A3). Written anew: v1's
-   `domain/judgment.py` measured a violation from the first violating
-   sample to the last, which §5 drops.
-   - **Agent's choices where §5 is silent,** to show the user: invalid
-     samples inside a recovery's hold are passed over (as in v1); an
-     invalid sample ends a violation run; a run lasts its sample count ×
-     0.5 s; the HOLD modes ignore the compressor start; the measures are
-     still found when the valid share is too low.
-3. **The judgment in the editor — done** (2026-10-30):
-   - **API:** each Glass's states carry its judgment (`computed`,
-     `verdict`, `reason`, `recovery` or `violation`); the edits carry each
-     Glass's `decision` (`override`, `reason`, `checked_at`).
-   - **`edits.json` schema 2** adds the decision; schema 1 files from
-     V2-3, which the workstation keeps, read as undecided
-     ([inspection-folder.md](../20-architecture/inspection-folder.md)).
-     Re-analysis keeps the override and reason and clears the check.
-   - **The panel** (DESIGN.md §5): the final badge, "직접 판정 · 자동 판정은
-     …", the computed reason, the grounds, 자동/합격/불합격 with the
-     required reason, "이 Glass 확인" and "확인 풀기"; the Glass picker
-     shows "확인 전" or the final judgment; the Glass panel's 편집 기록.
-     The check comes off when the history records, undoes or redoes a
-     change to that Glass's Oil line or "cannot judge" stretches, or to
-     the compressor start (`History.listener`). 제출 stays disabled.
-4. **The report header — done** (2026-10-30):
-   - `inspection.json` schema 2 adds `report_header` (`compressor_model`,
-     `test_type`; trimmed, `null` when blank, at most 60 characters);
-     schema 1 files read with an empty header
-     ([inspection-folder.md](../20-architecture/inspection-folder.md)).
-   - The setup's 검사 정보 has 검사 이름, 압축기 모델 and 시험 종류; the
-     editor's has the two header fields (`web/header.js`, shared). A new
-     inspection's header goes with "분석 시작"; once the folder exists, a
-     change is saved at once through `POST /api/inspections/<id>/header`,
-     apart from the edits' "저장", and is sent before leaving the editor
-     or the setup. A re-analysis keeps it.
-   - **Agent's choices, to show the user:** saving at once (the open
-     question of the handoff); the 60-character limit; the editor's fields
-     side by side, as in the setup. Nothing locks the header yet: step 5
-     does, on submitting.
-5. **Submitting and versions — done** (2026-10-30), without the report:
-   - **Format** ([inspection-folder.md](../20-architecture/inspection-folder.md)
-     "Versions"): `versions\NNN\` holds `version.json` (each Glass's
-     final and computed judgment, the user's decision and check),
-     `edits.json`, and copies of `inspection.json` and `recipe.json`,
-     written through `NNN.partial\`; then the working `edits.json` is
-     removed. The state follows from the folder: versions without
-     `edits.json` are locked; with it, the next version is being edited.
-   - **Code:** `domain/version.py`; `Editing.submit`, `.revise` and
-     `.open(version)`; `is_locked` refuses saving, submitting, the report
-     header and re-analysis (`Locked`, 409); API `POST …/submit`,
-     `POST …/revise`, `GET …/edits?version=N` and the list's `submitted`
-     and `revising`.
-   - **Screens:** the submit dialog; a submitted version read-only under
-     a `--brand-tint` bar with the version picker and "고쳐서 다시 제출
-     (v<N+1>)…"; the list's "v<N> 제출함" with each Glass's judgment, or
-     "v<N+1> 고치는 중".
-   - **Agent's choices, to show the user:** revising keeps each Glass's
-     decision and check (a change takes a check off as before); the bar
-     stays while the next version is edited; on a submitted version the
-     editing panels are hidden; an older version that a later
-     re-analysis no longer fits opens only as its report; the app sets no
-     read-only file attributes (the lock is the app's).
-6. **The report — done** (2026-10-30):
-   - `adapters/report` (`HtmlReports`) writes `versions\NNN\report.html`
-     on submitting: Python writes the text and the tables (header,
-     judgment summary, then per Glass the final badge, "판정 사유" for a
-     Glass the user judged, the criteria and key-time tables and the
-     memos); `web/render.js` with `web/report.js`, inlined, draws the
-     graph, the context image and the axis on opening. The context image
-     is joined from the cache, scaled to at most 2,000 × 360 px and
-     embedded as JPEG; a 68-minute video with three Glasses and noise
-     images stays under 5 MB (A7, `tests/test_report.py`).
-   - "보고서 열기" (`POST …/versions/<n>/report/open`) opens it in the
-     default browser; printing makes an A4 landscape PDF, in colour.
-   - The editor's graph also shows a HOLD mode's longest violation.
-   - Agent's choices: DESIGN.md §5 "Report".
-7. **A Windows run of V2-4, with the V2-3 follow-ups — run 2026-10-30;
-   U1 and R2 open** ([result](../60-evidence/2026-10-30-v2-4-judgment-report-windows-result.md)):
-   the upright stroke is still a slant (a 0.5 s riser and a spike back),
-   and a v3 working copy, most likely from "고쳐서 다시 제출", left
-   `edits.json` after v2. The user's notes (the right column, the memo
-   list, the report's first page) and U1's meaning wait on the user.
-   - **The user's decisions** (2026-10-30, after the run): the upright
-     stroke goes, leaving "수평"; the report header is entered in the
-     setup and checked in the submit dialog, not in the right column;
-     the memos move to a list under the toolbar's "메모" (추가, 삭제 of
-     picked memos); the right column reads 원본 영상, 편집, 판정, Glass,
-     분석; the report's page 1 holds the facts, the judgments and every
-     Glass's graph, then a page per Glass. R2's working copy came from
-     the user's "고쳐서 다시 제출 (v3)…": as designed.
-   - **Done** the same day; also, a closed dialog no longer keeps the
-     focus (Esc on the memo dialog left the editor's keys off).
-     The re-check, pinned to `b66f387`, waits on the user's run:
-     [2026-10-30-v2-4-recheck-windows-request.md](../40-operations/2026-10-30-v2-4-recheck-windows-request.md).
-   Earlier text of this step: The request, pinned to `95de064`:
-   [2026-10-30-v2-4-judgment-report-windows-request.md](../40-operations/2026-10-30-v2-4-judgment-report-windows-request.md).
-   It backs the Inspections folder up first (submitting cannot be undone),
-   then judges, submits twice and opens the reports on the SPL#4
-   inspection, and on the V2-3 SPL#1 inspection (schema 1 files) checks
-   the upright stroke and the point line's 8 px band and submits a
-   68-minute report (A7). Expected tests on Windows: `242 passed, 4
-   skipped`. `scripts/inspection_summary.py` now lists the report header,
-   the versions and each Glass's decision.
+1. **Start decisions — done** (2026-11-02, above). **Mock-ups — next:**
+   the button and the window in `design/mockup/editor.html` and a new
+   `design/mockup/video-window.html`; the copy and the two pastes in
+   `editor.html`. **The agent's choices to show in them** (the user
+   confirms or changes them with the mock-ups):
+   - **The window:** a "크게 보기" button at the video's top-right corner;
+     one window at a time (pressing again brings it forward); it closes
+     when the editor closes or changes inspection. It shows the whole
+     source frame, fitted to the window and at most 100 % ("원본 크기" /
+     "창에 맞춤"), with the chosen Glass's ellipse and lines drawn as in
+     the small view. It has its own play/pause, time bar and speed; play,
+     pause, seek and speed in either window move the other. The editor
+     stays the master: its playhead is the one time, and the big window's
+     `<video>` follows it, re-seeking past a small drift. A paused frame
+     is exact in both. To weigh: two `<video>` decoders at once on the
+     slowest PC.
+   - **Copy:** with a range selected, "복사" (Ctrl+C) copies the current
+     Glass's Oil and Foam in it exactly, empty samples included. The copy
+     lives until the editor closes, and pastes only into the Glass it came
+     from (heights are that Glass's pixels).
+   - **Paste at places:** "붙여넣기" (Ctrl+V) shows the copy as a ghost
+     that follows the pointer on the graph; each click puts its start
+     there; Esc ends.
+   - **Repeat:** "반복 붙여넣기…" asks for the first start (default: right
+     after the copy), the period (default: the copy's length) and the end
+     (default: the analysed range's end), shows the ghosts, then pastes.
+   - **Both pastes:** a copy overwrites both lines where it lands, empty
+     samples too; a later copy wins over an earlier one where they
+     overlap; what falls outside the analysed range is cut; "cannot judge"
+     stretches stay as they are; the samples become drawn; one paste (a
+     whole repeat too) is one undo step.
+2. **The full-size view** — after the mock-ups: a second pywebview
+   window (`adapters/desktop`, wired in `app.py`), a page of its own, a
+   full-frame exact frame from the existing frame session, and the sync
+   between the two pages.
+3. **Copy and paste** — after the mock-ups: `web/lines.js` (the copy and
+   paste on samples, with unit checks), `web/editor.js` (the tools, the
+   ghosts, the repeat dialog), the history and the check as for the
+   pencil.
+4. **A Windows run of V2-4b**, with the V2-1 items never seen on Windows
+   (a Recipe saved at a frame other than the first, a redirected
+   Documents folder, the resolution refusal's wording).
 
-## Session handoff — 2026-10-30 (sixth)
+## V2-5 preparation — recorded, on hold
 
-**The session closed after `b24849c`** (and this handoff). The working
-tree is clean, and `main` and the remote are in sync. 255 tests pass on
-macOS (Windows expects `242 passed, 4 skipped`).
+The user holds the parallel start (2026-11-02); these wait for V2-4b:
+- **Frozen paths:** find `web/` inside the build (`sys._MEIPASS`), shipped
+  as data; check that nothing is written inside the package folder
+  (Product SSOT §8).
+- **Logs:** `%LOCALAPPDATA%\OilLevelTracker\` (Product SSOT §8), so a
+  windowed build still records a traceback; there is none yet.
+- **The spec:** PyInstaller one-folder, no console, `OilLevelTracker.exe`
+  (user, 2026-11-02); trim OpenCV, NumPy and pywebview for A8's 200 MB; a
+  build script; tests for the paths and the log.
+- **An icon:** the user asked for one (2026-11-02). Show two or three
+  candidates in DESIGN.md's colours first.
+- **The V2-5 request:** build on the workstation; A1–A9 on that build;
+  A8's PC with only the WebView2 runtime is the slowest PC (user,
+  2026-11-02); time the window (pywebview), still untimed.
 
-**Where it stands:** V2-4 is `ACTIVE`. Steps 1–6 are done (the judgment,
-the report header, submitting and versions, the report). Step 7, the
-Windows run, ran once
-([result](../60-evidence/2026-10-30-v2-4-judgment-report-windows-result.md)):
-everything passed but U1 (the upright stroke) and R2 (a v3 working copy
-the user started). The user's decisions after it are done in `b66f387`
-(step 7 above). **Waiting on the user:** the re-check,
-[2026-10-30-v2-4-recheck-windows-request.md](../40-operations/2026-10-30-v2-4-recheck-windows-request.md),
-pinned to `b66f387`. When its result comes, judge it against its fixed
-criteria, write the result under `60-evidence/`, and close V2-4 if every
-row passes (then the roadmap's next milestone).
-
-**State left on the workstation** (before the re-check):
-- `20261029-1907_SPL#4_Cooling_onoff_#2`: v1 and v2 submitted, v3 being
-  edited; header `V24-모델` / `V24-시험2`.
-- `20261029-1913_SPL#1_Heating_coldstart`: v1 submitted (locked, the old
-  report layout).
-- `20261029-1910_SPL#1_Heating_coldstart` and `V2-3 확인`: untouched by
-  V2-4 (schema 1 files, empty header).
-- Backups: `C:\olt-v24-backup` (before the first V2-4 run); the re-check
-  makes `C:\olt-v24b-backup`.
-
-**Resume:** read this file (V2-4 step 7), the re-check request, the
-result above, the Product SSOT §3, §6 and §7, DESIGN.md §5 (editor,
-submit dialog, memo list, report) and
-[inspection-folder.md](../20-architecture/inspection-folder.md)
-("Versions"). Code to know:
-- `domain/version.py`; `application/editing.py` (`submit`, `revise`,
-  `open(version)`, `open_report`, `is_locked`, `Locked`);
-- `adapters/report/__init__.py` (`HtmlReports`) with `web/report.html`,
-  `report.css`, `report.js` (joined after `render.js`);
-- `adapters/storage/inspection_files.py` (`inspection.json` schema 2,
-  `versions\NNN\`, `submit`, `versions`, `report_path`);
-- `web/header.js` (`HeaderSaver`), `web/editor.js` ("submitting and
-  versions": `renderVersion`, `openSubmit`, `revise`, `pickVersion`; the
-  memo list: `renderMemos`, `showMemoList`, `removePickedMemos`);
-- `scripts/inspection_summary.py` (header, versions, decisions).
-
-**The user's rules that shape V2-4** (2026-10-30):
-- the report shows the final judgment only; a Glass the user judged gets
-  one line "판정 사유: <reason>", never "덮어씀";
-- versions stay in the same inspection folder;
-- the report header is entered in the setup and checked in the submit
-  dialog; the editor's right column reads 원본 영상, 편집, 판정, Glass,
-  분석; memos live in the toolbar's list;
-- the report's page 1 holds the facts, the judgments and every Glass's
-  graph; then a page per Glass;
-- the pencil's lock is "수평" only;
-- reply to the user in Korean (saved in memory).
-
-**Agent's choices in V2-4 to show the user if asked** (all in DESIGN.md
-§5 and step 7): the header saves at once and holds 60 characters; revising
-keeps each Glass's decision and check; a submitted version hides the
-editing panels; an older version a later re-analysis no longer fits
-offers its report; the report embeds the context image at most 2,000 ×
-360 px as JPEG and prints in colour; "보고서 열기" uses the default
-browser; the HOLD modes' longest violation is banded in the editor and
-the report.
+## Session notes
 
 **Learned these sessions:**
 - A request whose agent's quick O/X was wrong once (the console row) is
@@ -388,6 +278,9 @@ the report.
   `typing()` stays true; let go of it on "cancel" (at once) and "close".
 - A report's page that shares a fixed height should let its plots flex
   (`flex: 1`): fixed heights left a squeezed page 1 and an empty page 2.
+- A value in a result that differs from the step's text, where the same
+  path worked in another row, is most likely what the user typed: ask
+  before calling it a defect (R3 of the V2-4 re-check, 2026-11-02).
 
 ## Open items
 
@@ -421,9 +314,6 @@ workstation since 2026-10-30; these are simple speed-ups, never blockers):
 - **Exact frames** took 230 ms on the slowest PC (key frames every 250
   frames). A cheap gain if wanted: keep the frames decoded on the way to
   a seek, so stepping back a frame and clicking nearby are instant.
-
-**The next Windows run** also covers the upright stroke (`ca7d3ee`) and
-the point line's 8 px band, as each run covered the previous follow-up.
 
 **Small facts:**
 - `AnalysisSettings.sample_count` counts to `end_sec`, but the analysis
@@ -488,8 +378,6 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done:** V2-3 (2026-10-30). V2-4 steps 1–6 and the changes after its
-  first Windows run (2026-10-30).
-- **Next:** the user's V2-4 re-check on Windows
-  ([request](../40-operations/2026-10-30-v2-4-recheck-windows-request.md));
-  judge it, then close V2-4 or fix what fails.
+- **Done:** V2-4 (2026-11-02).
+- **Next:** the V2-4b mock-ups (step 1), for the user to confirm before
+  any code.
