@@ -1,8 +1,8 @@
 # Current Work Plan
 
 **Current milestone:** `V2-5 — Windows acceptance` / `ACTIVE`
-(started 2026-11-02; the icon, the log, the stutter fix and the spec are
-done; next: the Windows request).
+(started 2026-11-02; built and checked on macOS; the acceptance run waits
+on the user).
 **Last completed:** `V2-4b — Video window and pattern copy` / `DONE`
 (2026-11-02).
 
@@ -250,9 +250,30 @@ Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
   by `tests/test_app_icon.py`; the spec points at it.
 - **The big window's stutter at a higher speed — done** (user, 2026-11-02:
   in V2-5); see Open items.
-- **The V2-5 request:** build on the workstation; A1–A9 on that build;
-  A8's PC with only the WebView2 runtime is the slowest PC (user,
-  2026-11-02); time the window (pywebview), still untimed.
+- **Measuring the build — done:** `measure_editor.py --app` starts the
+  built exe with WebView2's debugging port
+  (`WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS`), analyses through its API
+  (the token from its page's address) and measures A5/A6 in its window,
+  with the time until the window shows the list. Checked on macOS with a
+  stand-in app (Chrome with the same port). It found a page bug, fixed:
+  a resize while an inspection opened drew before the view was set. The
+  app also logs `window: page loaded … s after start`. **Unproven on
+  Windows:** that WebView2 honours the variable under pywebview; the
+  request falls back to Edge with the source if not.
+- **The V2-5 request — waits on the user:**
+  [2026-11-02-v2-5-acceptance-windows-request.md](../40-operations/2026-11-02-v2-5-acceptance-windows-request.md),
+  pinned to `7dc38e7` (`checked=108`). On the workstation: tests
+  (`260 passed, 4 skipped`), the build (`package=PASS`, ≤ 200 MB), the
+  ZIP for the slowest PC, A4–A6 measured in the build, the pre-run
+  lists, then the user in the build: Recipes `V25 SPL#4` (at ~01:00) and
+  `V25 SPL#1` (at ~10:00), the resolution refusal (a 1280×720 file the
+  agent makes), new inspections `V25 SPL#4 인수` (save, restart, resume,
+  judge, submit v1, report PDF, resubmit v2) and `V25 SPL#1 인수` (1×
+  play, the big window at 4×, submit, 68-min PDF), and the source warning
+  on `V2-3 확인` (one byte appended, then the length restored). The
+  slowest PC (user, 2026-11-02): the built ZIP moved and run only, no
+  build there; A8's "runs with only WebView2" is judged there, its times
+  are reference. The four existing inspections are not submitted.
 
 ## Session state — 2026-11-02
 
@@ -435,6 +456,8 @@ The three v1 remote branches that v1 docs cite stay.
 ## Next
 
 - **Done:** V2-4b (2026-11-02).
-- **Next:** the V2-5 Windows request: build on the workstation with
-  `scripts/build_package.py`, then A1–A9 on that build, and the build on
-  the slowest PC with only the WebView2 runtime (A8).
+- **Next:** the user's V2-5 run
+  ([request](../40-operations/2026-11-02-v2-5-acceptance-windows-request.md)),
+  on the workstation and then the slowest PC; judge both result blocks
+  against the fixed criteria, then close V2-5 (and the first version) if
+  every row passes.

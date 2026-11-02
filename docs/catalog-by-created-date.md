@@ -50,6 +50,7 @@
 | 2026-10-30 | [2026-10-30-v2-4-judgment-report-windows-request.md](40-operations/2026-10-30-v2-4-judgment-report-windows-request.md) | V2-4 판정·제출·보고서와 V2-3 후속(세로선, 점 잇기 8 px) Windows 확인 요청 |
 | 2026-10-30 | [2026-10-30-v2-4-recheck-windows-request.md](40-operations/2026-10-30-v2-4-recheck-windows-request.md) | V2-4 재확인(연필 수평, 메모 목록, 오른쪽 칸, 제출 창 머리글, 보고서 1쪽) Windows 요청 |
 | 2026-11-02 | [2026-11-02-v2-4b-windows-request.md](40-operations/2026-11-02-v2-4b-windows-request.md) | V2-4b 원본 영상 창·복사·붙여넣기 Windows 확인 요청 |
+| 2026-11-02 | [2026-11-02-v2-5-acceptance-windows-request.md](40-operations/2026-11-02-v2-5-acceptance-windows-request.md) | V2-5 인수 확인 요청(워크스테이션 빌드와 A1–A9, 최저 사양 PC에서 옮긴 빌드 실행) |
 
 ## docs/50-diagnostics/
 
