@@ -275,7 +275,8 @@ function draw() {
   frameRequested = false;
   const parts = pending;
   pending = { back: false, lines: false, marks: false };
-  if ($("editorView").hidden || !state.edits || !state.glassId) return;
+  // no view yet: an inspection is opening (a resize can ask for a frame before showGlass sets it)
+  if ($("editorView").hidden || !state.edits || !state.glassId || !state.view) return;
   const began = performance.now();
   state.view = inRange(state.view);
   const data = panel();
