@@ -1,10 +1,8 @@
 # Current Work Plan
 
-**Current milestone:** `V2-5 — Windows acceptance` / `ACTIVE`
-(started 2026-11-02; the workstation part passed; the slowest PC and the
-user's notes are open).
-**Last completed:** `V2-4b — Video window and pattern copy` / `DONE`
-(2026-11-02).
+**Current milestone:** none. **The first version is accepted**
+(2026-11-02): V2-5 passed every row on the workstation and the slowest PC.
+**Last completed:** `V2-5 — Windows acceptance` / `DONE` (2026-11-02).
 
 This is the sole owner of the current state, authorization and next action.
 Rewrite it; do not append to it.
@@ -285,12 +283,15 @@ Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
 
 ## Session state — 2026-11-02
 
-V2-4b closed after its Windows run; `V2-3 확인` now holds the copy and
-paste edits (saved, BASE unchecked, nothing submitted). The other three
-inspections are as before the run; the big window's place is saved in
-`%LOCALAPPDATA%\OilLevelTracker\video-window.json` (a second monitor).
-The V2-4b decisions and code are in the V2-4b section above, the Product
-SSOT §6 and DESIGN.md §5.
+The first version is accepted on the one-folder build of `8448e79`
+(`OilLevelTracker.exe`, 159.6 MB). On the workstation the data folder now
+holds seven inspections: the four earlier ones unchanged, `V25 SPL#4 인수`
+(v1, v2 submitted), `20261102-1521_SPL#1_Heating_coldstart` (Recipe
+`V25 SPL#1`, v1 submitted) and `V25b 선택 확인` (saved, both Glasses
+checked, not submitted); Recipes `V25 SPL#4` and `V25 SPL#1` beside the
+two earlier ones. Backups: `C:\olt-v25c-backup`, `C:\olt-v25d-backup`.
+The slowest PC holds the moved build in `C:\olt-v25\OilLevelTracker` and
+one submitted SPL#1 inspection.
 
 ## Session notes
 
@@ -463,54 +464,15 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done:** V2-4b (2026-11-02).
-- **V2-5 workstation part — passed** (2026-11-02,
-  [result](../60-evidence/2026-11-02-v2-5-acceptance-workstation-windows-result.md)):
-  every row on the `daf381a` build, A4–A6 in its window over Remote
-  Desktop (36.0 s; 2.8 / 7.4 ms; 50 ms; 59.6 s, 0 dropped), 159.6 MB.
-- **After the workstation run — the user's decisions** (2026-11-02):
-  the refusal wording is fixed (`810b15e`: "영상 해상도(1280×720)가 이
-  Recipe의 해상도(1920×1080)와 다릅니다."); the three notes go in the
-  first version (Product SSOT §6 "Select", "FULL and EMPTY made easy"):
-  "선택" is the default tool; Delete on a picked line empties it inside
-  the range if one is selected, else the whole joined line; FULL/EMPTY by
-  both an edge pull while drawing and "FULL로" / "EMPTY로" on a range.
-  The SPL#1 inspection's missing name was the user's omission.
-- **Mock-ups — confirmed** (user, 2026-11-02):
-  [editor.html](../../design/mockup/editor.html) `#select`, `#selrange`,
-  `#edge`; in DESIGN.md §5 ("select", "FULL and EMPTY"). Agent's choices in
-  them: the tool is "선택" (V), first in the
-  toolbar, an arrow; a picked line is drawn thicker over a light band of
-  its colour and sets "그릴 선" to its kind; the panel's "고른 선" box
-  names it and its span; Esc lets the line go before the range; with a
-  picked line and a range the range box's own delete hides; "FULL로" /
-  "EMPTY로" always act on Oil, as drawn samples (taking the check off);
-  the edge pull is 6 screen px, shown by the Glass edge turning Oil blue
-  with "FULL에 붙음" / "EMPTY에 붙음", for Oil, Foam and reference alike.
-- **Slowest PC — every row passes** (2026-11-02,
-  [result](../60-evidence/2026-11-02-v2-5-acceptance-slowest-pc-windows-result.md)):
-  the moved build ran the whole flow; analysis 156.0 s, window 6.6 s by
-  the log; the ZIP's SHA-256 came afterwards and matches.
-  The user missed the header field: it is in the setup and the "제출"
-  dialog (no editor section since V2-4b); the request's "검사 정보에"
-  was wrong.
-- **Built** (2026-11-02): `editor.js` sections "select" (`pickAt`,
-  `erasePicked`, `pickedCut`, `renderPicked`) and "FULL and EMPTY"
-  (`pull`, `settleOffEdges`, `fillSelection`); `lines.js` `fill`,
-  `edgePull`, `holdEdges`, `EDGE_PULL_PX`; `render.js` marks `picked` and
-  `edge`. Compressor-marker drags stay with grab. Smoke test
-  `test_select_delete_and_full_empty`; 280 tests pass on macOS.
-- **L-zip closed:** the slowest PC's line reads
-  `e1a4464b64ba209fc5d98510…2a109d` (shortened in the relay), the
-  workstation's start and end.
-- **The header (user, 2026-11-02):** editable while editing in the "제출"
-  dialog, as it already is; no change.
-- **The re-check request — waits on the user:**
-  [2026-11-02-v2-5-recheck-windows-request.md](../40-operations/2026-11-02-v2-5-recheck-windows-request.md),
-  pinned to `8448e79` (`checked=108`), workstation only: tests
-  (`261 passed, 4 skipped`), the build, A4–A6 in its window, then N1–N13
-  on a new inspection `V25b 선택 확인` (SPL#4, `V25 SPL#4`; saved, not
-  submitted; the "제출" dialog opened and cancelled), and the refusal
-  wording. Backup `C:\olt-v25d-backup`.
-- **Next:** judge the re-check; if every row passes, V2-5 and the first
-  version close.
+- **Done:** V2-5 (2026-11-02), and with it the first version:
+  - [workstation run](../60-evidence/2026-11-02-v2-5-acceptance-workstation-windows-result.md)
+    on `daf381a`: A1–A9, A4–A6 in the build's window;
+  - [slowest PC](../60-evidence/2026-11-02-v2-5-acceptance-slowest-pc-windows-result.md):
+    the moved build ran the whole flow with only the WebView2 runtime;
+  - after the user's notes (select tool, deleting a picked line,
+    FULL/EMPTY made easy, the refusal wording; Product SSOT §6),
+    [re-check](../60-evidence/2026-11-02-v2-5-recheck-windows-result.md)
+    on `8448e79`: every row, A5 2.2 / 9.3 ms.
+- **Next:** nothing is authorized beyond the first version. The open
+  items above (speed-ups on the slowest PC, small facts) stay for
+  reference; a next milestone needs the user.

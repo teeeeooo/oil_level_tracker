@@ -28,13 +28,13 @@ This document is the milestone-order and milestone-state SSOT.
 | V2-3 — Editor | `DONE` | Grab/pencil, "cannot judge", lines, memos, zoom/pan/axis input, frame and video |
 | V2-4 — Judgment and report | `DONE` | Judgment, override with reason, report, submit/lock, versions |
 | V2-4b — Video window and pattern copy | `DONE` | The user's additions for the first version (2026-11-02): the source video at full size in its own window; copying and pasting a stretch of the Oil and Foam lines |
-| V2-5 — Windows acceptance | `ACTIVE` | One-folder package and the Product SSOT §2 criteria A1–A9 on target Windows |
+| V2-5 — Windows acceptance | `DONE` | One-folder package and the Product SSOT §2 criteria A1–A9 on target Windows |
 
 ## Current sequence
 
-`v1 SUPERSEDED` → `V2-0 DONE` → `V2-1 DONE` → `V2-2 DONE` → `V2-3 DONE` → `V2-4 DONE` → `V2-4b DONE` → `V2-5 ACTIVE`.
+`v1 SUPERSEDED` → `V2-0 DONE` → `V2-1 DONE` → `V2-2 DONE` → `V2-3 DONE` → `V2-4 DONE` → `V2-4b DONE` → `V2-5 DONE`.
 
-The first version is accepted only at V2-5, against the Product SSOT §2.
+The first version is accepted only at V2-5, against the Product SSOT §2. **It was accepted on 2026-11-02** ([re-check](../60-evidence/2026-11-02-v2-5-recheck-windows-result.md), on the build of `8448e79`).
 
 ## Detail routers
 
