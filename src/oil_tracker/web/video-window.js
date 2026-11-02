@@ -6,9 +6,9 @@ import * as api from "./api.js";
 import { SPEED_PRESETS, parseSpeed } from "./frame.js";
 import * as render from "./render.js";
 import { $, clock, el } from "./ui.js";
+import { catchUp } from "./videolink.js";
 
 const ME = "window";
-const DRIFT_SEC = 0.25;     // how far the <video> may run from the editor's time before it jumps
 const SEEK_SEND_MS = 100;   // scrubbing sends at most this often
 const RETRY_MS = 1000;
 
@@ -108,8 +108,10 @@ function follow(message) {
         state.fallback = true;  // the codec, most likely
         requestAnimationFrame(tick);
       });
-    } else if (Math.abs(video.currentTime - expected) > DRIFT_SEC) {
-      video.currentTime = expected;
+    } else {
+      const { jump, rate } = catchUp(video.currentTime - expected, message.speed);
+      if (jump) video.currentTime = expected;
+      video.playbackRate = rate;
     }
     requestAnimationFrame(tick);
   } else {

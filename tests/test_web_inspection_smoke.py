@@ -938,6 +938,18 @@ def test_the_full_size_video_window(tmp_path, video, browser_page):
         popup.locator("#vwLines").evaluate("box => box.click()")
         assert popup.locator("#vwOverlay").inner_html() == ""
         shot(popup, "video-window")
+        # a small drift is made up by the rate, a large one jumps (V2-4b Windows run: seeking at
+        # every small drift stalled the picture at 4x)
+        rules = popup.evaluate("""async () => {
+            const { catchUp } = await import("/web/videolink.js");
+            return [[0.02, 1], [0.4, 4], [-0.4, 4], [10, 4], [3, 4], [1.5, 1]].map(([d, s]) => catchUp(d, s));
+        }""")
+        assert rules[0] == {"jump": False, "rate": 1}
+        assert rules[1]["jump"] is False and 3.6 <= rules[1]["rate"] < 4
+        assert rules[2]["jump"] is False and 4 < rules[2]["rate"] <= 4.4
+        assert rules[3]["jump"] is True and rules[3]["rate"] == 4
+        assert rules[4]["jump"] is False
+        assert rules[5]["jump"] is True
 
         with popup.expect_event("close"):
             page.locator("#editorBack").click()  # leaving the editor closes the window

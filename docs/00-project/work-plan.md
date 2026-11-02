@@ -223,8 +223,12 @@ Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
 - **Frozen paths:** find `web/` inside the build (`sys._MEIPASS`), shipped
   as data; check that nothing is written inside the package folder
   (Product SSOT §8).
-- **Logs:** `%LOCALAPPDATA%\OilLevelTracker\` (Product SSOT §8), so a
-  windowed build still records a traceback; there is none yet.
+- **Logs — done:** `app.start_log` writes `app.log` in
+  `%LOCALAPPDATA%\OilLevelTracker\` (Product SSOT §8): the error stream
+  (tracebacks, pywebview's log) goes to the console when there is one and
+  to the log always; `faulthandler` adds a crash's stack. Over 1 MB it
+  becomes `app.1.log` at the next start. A folder that cannot be written
+  leaves the app running without a log.
 - **The spec:** PyInstaller one-folder, no console, `OilLevelTracker.exe`
   (user, 2026-11-02); trim OpenCV, NumPy and pywebview for A8's 200 MB; a
   build script; tests for the paths and the log.
@@ -233,8 +237,8 @@ Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
   DESIGN.md §4 "App icon". `packaging/OilLevelTracker.ico` is made by
   `scripts/make_icon.py` (Playwright and Chrome, on the Mac) and checked
   by `tests/test_app_icon.py`; the spec points at it.
-- **The big window's stutter at a higher speed:** fix it in V2-5 (user,
-  2026-11-02); see Open items.
+- **The big window's stutter at a higher speed — done** (user, 2026-11-02:
+  in V2-5); see Open items.
 - **The V2-5 request:** build on the workstation; A1–A9 on that build;
   A8's PC with only the WebView2 runtime is the slowest PC (user,
   2026-11-02); time the window (pywebview), still untimed.
@@ -346,12 +350,15 @@ workstation since 2026-10-30; these are simple speed-ups, never blockers):
   frames). A cheap gain if wanted: keep the frames decoded on the way to
   a seek, so stepping back a frame and clicking nearby are instant.
 
-**The big window stutters at a higher speed** (V2-4b run, W6): it seeks
-whenever it drifts more than `DRIFT_SEC = 0.25` s of video time from the
-editor, which at 4× is about 60 ms of wall time; each seek decodes from a
-key frame. Fix: nudge `playbackRate` for small drift and seek only on a
-large one; check it on Windows in the V2-5 run. Fixed in V2-5 (user,
-2026-11-02).
+**The big window stuttered at a higher speed** (V2-4b run, W6): it sought
+whenever it drifted more than 0.25 s of video time from the editor, about
+60 ms of wall time at 4×, and each seek decodes from a key frame. **Fixed
+in V2-5:** `videolink.catchUp` makes up a small drift with the playback
+rate (±10 %) and jumps only past 1 s of wall time. A probe on macOS (two
+`<video>`s of a 250 s 720p file, the window following by the editor's
+messages every 500 ms): the old rule sought 23–24 times in 12 s and fell
+behind; the new one sought once (the start) and stayed within 0.06 s, at
+1× and 4×. To see on Windows in the V2-5 run.
 
 **Small facts:**
 - `AnalysisSettings.sample_count` counts to `end_sec`, but the analysis
@@ -417,5 +424,5 @@ The three v1 remote branches that v1 docs cite stay.
 ## Next
 
 - **Done:** V2-4b (2026-11-02).
-- **Next:** V2-5 (the steps above): frozen paths and logs, the stutter
-  fix, then the spec and its build script.
+- **Next:** V2-5 (the steps above): the spec and its build script, with
+  a one-folder build on macOS to check the frozen paths.

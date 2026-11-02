@@ -3,15 +3,32 @@
 // page opens it itself. The two pages share no browser channel, so they talk through the server's
 // relay. The editor stays the master: the window sends commands (play, step, seek, speed), the
 // editor carries them out and sends its state; while playing it sends its time twice a second.
+// catchUp() is the rule by which the window keeps to that time.
 import * as api from "./api.js";
 
 const ME = "editor";
 const TICK_MS = 500;       // the time while playing, for the window to correct drift
 const LINES_DELAY_MS = 300;
+const JUMP_SEC = 1.0;      // wall-clock seconds of drift past which the window jumps
+const STEADY_SEC = 0.04;   // wall-clock seconds of drift the window lets be
+const CATCH_SEC = 2.0;     // the window makes up a drift over about this long
+const RATE_BAND = 0.1;     // ...playing at most 10 % faster or slower than the editor
 
 let link = null;           // { id, channel, seq, hooks, popup, alive, pages }
 let tick = 0;
 let linesTimer = 0;
+
+/** How the window's playing <video> keeps to the editor: drift is its time less the editor's, in
+ * video seconds. A seek decodes from a key frame, so a jump at every small drift stalls the picture,
+ * worst at a high speed (V2-4b Windows run): a small drift is made up by playing a little faster or
+ * slower, and only a drift of over JUMP_SEC of wall time jumps. */
+export function catchUp(drift, speed) {
+  const wall = drift / speed;
+  if (Math.abs(wall) > JUMP_SEC) return { jump: true, rate: speed };
+  if (Math.abs(wall) <= STEADY_SEC) return { jump: false, rate: speed };
+  const change = Math.max(-RATE_BAND, Math.min(RATE_BAND, -wall / CATCH_SEC));
+  return { jump: false, rate: speed * (1 + change) };
+}
 
 /** Open the window for this inspection, or bring it forward. hooks: { state(), lines(), command(message) },
  * where state() is { time, playing, speed, glass, range } and lines() { glass_id, times, ys }. */
