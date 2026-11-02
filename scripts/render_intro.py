@@ -169,7 +169,7 @@ def make_assets(video: Path) -> None:
             report = next((data / "Inspections").glob("*/versions/001/report.html"))
             page.goto(report.as_uri())
             page.wait_for_timeout(1500)
-            page.screenshot(path=str(ASSETS / "report-crop.png"), clip={"x": 300, "y": 20, "width": 1400, "height": 990})
+            page.locator("section.page.first").screenshot(path=str(ASSETS / "report-crop.png"))  # its first page, whole
             browser.close()
         finally:
             server.close()

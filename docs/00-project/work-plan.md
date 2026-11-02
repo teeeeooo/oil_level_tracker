@@ -1,8 +1,8 @@
 # Current Work Plan
 
-**Current milestone:** `P-1 — Introduction video` / `ACTIVE`: a 30–45 s
-motion-design introduction ([scenes](../40-operations/intro-video.md));
-style frames come first, for the user's word. **The first version is accepted**
+**Current milestone:** `P-1 — Introduction video` / `ACTIVE`: a 55 s
+kinetic-type introduction ([scenes](../40-operations/intro-video.md));
+draft 2 is with the user, whose remaining notes come next session. **The first version is accepted**
 (2026-11-02): V2-5 passed every row on the workstation and the slowest PC.
 **After P-1** (user, 2026-11-02): P-2 user manual, P-3 field-use fixes.
 **Last completed:** `V2-5 — Windows acceptance` / `DONE` (2026-11-02).
@@ -467,7 +467,8 @@ behind; the new one sought once (the start) and stayed within 0.06 s, at
 ## Local environment (macOS)
 
 - `.venv` is the old v1 venv.
-  - It now also has `pywebview==6.2.1` and `playwright` 1.64.1.
+  - It now also has `pywebview==6.2.1`, `playwright` 1.64.1 and
+    `imageio-ffmpeg` 0.8.0 (the intro video's ffmpeg).
   - The v2 package is not installed in it. Run the app with
     `PYTHONPATH=src .venv/bin/python -m oil_tracker`; pytest finds `src`
     through `pyproject.toml`.
@@ -493,73 +494,65 @@ The three v1 remote branches that v1 docs cite stay.
     FULL/EMPTY made easy, the refusal wording; Product SSOT §6),
     [re-check](../60-evidence/2026-11-02-v2-5-recheck-windows-result.md)
     on `8448e79`: every row, A5 2.2 / 9.3 ms.
-- **Now, P-1 — an introduction video** of the app. Settled with the user
-  (2026-11-02):
-  - an **introduction, not a how-to**: a 30–45 s motion-design video like
-    the user's example (kinetic type, symbolic pictures, screen cards that
-    gather into the logo);
-  - **no music** (no Suno); simple sound effects synthesised by the script;
-  - real app screens captured from an inspection of `sample/sample7.mp4`
-    (public, milk poured into a glass), marked as an example; Korean text;
-    the video file outside Git;
-  - made as `design/intro/intro.html` (a `seek(t)` page) rendered frame by
-    frame by `scripts/render_intro.py` (`pip install -e .[intro]`), with
-    the sound synthesised from the page's cues;
-  - the earlier walkthrough storyboard moves to P-2 as short clips;
-  - after the first style frames (user, 2026-11-02): kinetic type is the
-    point, not the white tone; the app-icon SVG stays out of the video.
-  None of the compressor samples fit (sample4's glass is small and flat,
-  sample2 moves, base_sample_1 is short and overlaid, public_miso is cut
-  clips). After draft 1 (user, 2026-11-02): no outline letters (they
-  showed the overlapping strokes), the draft pulled into place by the
-  inspector with the judgment card kept at 합격, and the screens assembled
-  in one front-on editor; music from the user's Suno track (internal use),
-  edited to 55 s on its bars. **Now:** draft 2 is with the user.
+- **Now, P-1 — an introduction video** of the app; the
+  [scene and making document](../40-operations/intro-video.md) holds the
+  decisions. In short (user, 2026-11-02):
+  - an **introduction, not a how-to**, in kinetic type; any tone; no
+    app-icon SVG in the video. The earlier walkthrough storyboard moves to
+    P-2 as short clips;
+  - real app screens from an inspection of `sample/sample7.mp4` (public,
+    milk poured into a glass; none of the compressor samples fit), marked
+    as an example; Korean text; the video file outside Git;
+  - music: the user's Suno track (free account, internal use), cut on its
+    bars to 55 s; a few synthesised effects under it.
+  **Now:** draft 2 (55 s) is with the user; they asked for the report's
+  cut-off left edge to be fixed (done) and continue with the rest of their
+  notes in the next session.
 - **Then, in order** (user, 2026-11-02):
   1. **P-2 — a user manual**, as HTML or another fitting form;
   2. **P-3 — fixes for problems found in field use.**
   The open items above (speed-ups on the slowest PC, small facts) stay
   for reference until P-3 picks any up.
 
-## Session handoff — 2026-11-02 (after V2-5)
+## Session handoff — 2026-11-02 (P-1, draft 2)
 
-**Where it stands:** the first version is accepted on the one-folder
-build of `8448e79` (`OilLevelTracker.exe`, 159.6 MB, icon in
-`packaging/`). `main` is clean and in sync with the remote. 280 tests pass
-on macOS; Windows expects `261 passed, 4 skipped` (no Playwright in its
-venv). The workstation and the slowest PC hold the data listed in
-"Session state" above.
+**Where it stands:** the first version is accepted (`8448e79`); P-1 is
+`ACTIVE`. `main` is clean and in sync with the remote. 280 tests pass on
+macOS; Windows expects `261 passed, 4 skipped`.
 
-**Start P-1 by asking the user** (none of this is decided):
-- what the video is for and who watches it (inspectors, managers), its
-  length and language (Korean by default for the app's users);
-- how it is made: a screen recording on the Windows workstation by the
-  user, or one the agent scripts and records (on macOS with Playwright,
-  or on Windows with the app-mode hook below), with captions or a voice;
-- which inspections it shows (the V25 inspections on the workstation,
-  or synthetic data, which shows nothing real);
-- where the source and the result live (a video is large: likely
-  outside Git, with only a script or a storyboard in the repository).
-Then a storyboard for the user's confirmation before recording.
+**The video so far:**
+- `design/intro/intro.html` draws each moment with `seek(t)` and holds the
+  timeline (bars of the music: `bar(n)`) and the sound cues;
+  `scripts/render_intro.py` makes its assets (an inspection of sample7
+  analysed through this folder's server, the Oil line taken from the
+  context image, the screens), captures the frames and muxes the MP4.
+  The page checks that its live judgment matches the app's.
+- Outside Git, in `~/Movies/OilLevelTracker/`: the user's track
+  `music-test_2.mp3`, `intro-draft2.mp4` (55 MB, CRF 20) and
+  `intro-draft2-small.mp4` (16 MB, CRF 25, the one sent). Both drafts
+  include the fix for the report's cut-off left edge.
+- To render again (about 1.5 min; `--skip-assets` reuses the assets):
+
+  ```bash
+  PYTHONPATH=src .venv/bin/python scripts/render_intro.py --music ~/Movies/OilLevelTracker/music-test_2.mp3 --out ~/Movies/OilLevelTracker/intro-draft3.mp4
+  ```
+
+  `--stills 25.2,47.8` captures single moments into a `stills/` folder
+  beside `--out`; look at those before a full render.
+
+**Next session:** ask the user for the rest of their notes on draft 2
+(they reviewed it and stopped after the report fix). Unchecked by the
+agent, who cannot hear: the music splice at 40.0 s and the effects'
+level. Then P-2, then P-3 (the order above).
 
 **Then P-2:** settle with the user its readers, form (one offline HTML
 file that opens in Edge, like the report, is the natural fit, perhaps
 opened from the app's help) and language; it follows the screens as
 built (DESIGN.md §5, the help dialog's tables in `web/index.html`) and
-the flow in Product SSOT §3. Where it lives decides whether it ships in
-the build (`web/`, which the spec already packs) or beside it.
+the flow in Product SSOT §3, and can use the walkthrough storyboard moved
+from P-1 (in the intro document). A manual is a new kind of document:
+route it through [docs/README.md](../README.md) first.
 
-**P-3** starts from the user's reports; each fix follows the usual path
-(decision, mock-up when visible, test, Windows run).
-
-**What helps for recording and screenshots:**
-- `measure_editor.py --app` shows how to drive the built app's own window
-  through Playwright on Windows (`OLT_WEBVIEW_DEBUG_PORT`, connect after
-  `/json/list` lists the page).
-- On macOS, the smoke tests write screenshots when `OLT_SMOKE_SHOTS`
-  names a folder; `design/mockup/` holds the confirmed screens.
-- `scripts/build_package.py` rebuilds and checks the package.
-
-**Read first:** this file, the roadmap, Product SSOT §1–§3 and §6,
-DESIGN.md §5, [docs/README.md](../README.md) before adding a document
-(a manual is a new kind of document: route it there first).
+**Read first:** this file, the roadmap,
+[intro-video.md](../40-operations/intro-video.md), then
+`design/intro/intro.html`.
