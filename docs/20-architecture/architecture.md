@@ -163,6 +163,15 @@ app.py ──▶ bootstrap.py
     The local Host check still applies.
   - Reopening an inspection hashes the source on a thread and warns when
     it differs (A9).
+- **The build** (V2-5) is PyInstaller one-folder,
+  `packaging/OilLevelTracker.spec`, made and checked by
+  `scripts/build_package.py`.
+  - The code finds `web/` beside its own modules
+    (`bootstrap.WEB_FOLDER`), so the spec ships it as `oil_tracker/web`.
+  - The app writes only to the data folder and the settings folder,
+    never inside the package; the build check confirms it.
+  - `app.start_log` keeps the error stream in the settings folder's
+    `app.log`, since a windowed build has no console.
 
 ## What v2 does not take from v1
 

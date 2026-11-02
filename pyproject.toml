@@ -15,6 +15,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "playwright>=1.50"]
+package = ["pyinstaller==6.21.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

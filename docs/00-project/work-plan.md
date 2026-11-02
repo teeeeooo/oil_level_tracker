@@ -1,8 +1,8 @@
 # Current Work Plan
 
 **Current milestone:** `V2-5 — Windows acceptance` / `ACTIVE`
-(started 2026-11-02; the icon is done; next: frozen paths, logs, the
-spec).
+(started 2026-11-02; the icon, the log, the stutter fix and the spec are
+done; next: the Windows request).
 **Last completed:** `V2-4b — Video window and pattern copy` / `DONE`
 (2026-11-02).
 
@@ -220,18 +220,29 @@ judged once on the final build.
 ## V2-5 — the steps
 
 Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
-- **Frozen paths:** find `web/` inside the build (`sys._MEIPASS`), shipped
-  as data; check that nothing is written inside the package folder
-  (Product SSOT §8).
+- **Frozen paths — done, no code change:** PyInstaller sets a frozen
+  module's `__file__` inside the build, so `bootstrap.WEB_FOLDER` finds
+  `web/` where the spec ships it (`oil_tracker/web`). Checked by a macOS
+  one-folder build (below).
 - **Logs — done:** `app.start_log` writes `app.log` in
   `%LOCALAPPDATA%\OilLevelTracker\` (Product SSOT §8): the error stream
   (tracebacks, pywebview's log) goes to the console when there is one and
   to the log always; `faulthandler` adds a crash's stack. Over 1 MB it
   becomes `app.1.log` at the next start. A folder that cannot be written
   leaves the app running without a log.
-- **The spec:** PyInstaller one-folder, no console, `OilLevelTracker.exe`
-  (user, 2026-11-02); trim OpenCV, NumPy and pywebview for A8's 200 MB; a
-  build script; tests for the paths and the log.
+- **The spec and the build script — done:**
+  [OilLevelTracker.spec](../../packaging/OilLevelTracker.spec) (one
+  folder, no console, `OilLevelTracker.exe`, the icon on Windows; other
+  window toolkits and test tools left out) and
+  `scripts/build_package.py` (PyInstaller 6.21.0, the `package` extra):
+  builds into `build/dist/OilLevelTracker`, reports the size against A8,
+  starts the built app without a window, asks for four pages, and checks
+  that nothing in the package folder changed; ends in `package=PASS`.
+  - **macOS build** (2026-11-02, PyInstaller 6.21.0): 239 files, 141.9 MB,
+    pages served from the frozen `web/`, the package folder unchanged,
+    `app.log` written with "(build)"; the windowed build ran with nothing
+    in the log. The Windows size is unknown until the workstation builds
+    it: trimming waits for that number (the spike's build was 152 MB).
 - **An icon — done** (2026-11-02): the user chose candidate A of three
   ([design/icon/](../../design/icon/candidates.html)), the sight glass;
   DESIGN.md §4 "App icon". `packaging/OilLevelTracker.ico` is made by
@@ -424,5 +435,6 @@ The three v1 remote branches that v1 docs cite stay.
 ## Next
 
 - **Done:** V2-4b (2026-11-02).
-- **Next:** V2-5 (the steps above): the spec and its build script, with
-  a one-folder build on macOS to check the frozen paths.
+- **Next:** the V2-5 Windows request: build on the workstation with
+  `scripts/build_package.py`, then A1–A9 on that build, and the build on
+  the slowest PC with only the WebView2 runtime (A8).
