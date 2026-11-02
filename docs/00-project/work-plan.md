@@ -1,8 +1,7 @@
 # Current Work Plan
 
 **Current milestone:** `V2-4b — Video window and pattern copy` / `ACTIVE`
-(started 2026-11-02; mock-ups confirmed, the video window built, copy
-and paste next).
+(started 2026-11-02; built; its Windows run next).
 **Last completed:** `V2-4 — Judgment and report` / `DONE` (2026-11-02).
 
 This is the sole owner of the current state, authorization and next action.
@@ -197,10 +196,16 @@ judged once on the final build.
      **Not yet seen on Windows:** WebView2's second window, bringing it
      forward, the saved place with display scaling, and two decoders at
      once on the slowest PC.
-3. **Copy and paste** — next: `web/lines.js` (the copy and
-   paste on samples, with unit checks), `web/editor.js` (the tools, the
-   ghosts, the repeat dialog), the history and the check as for the
-   pencil.
+3. **Copy and paste — done** (2026-11-02): `web/lines.js`
+   (`copyStretch`, `pasteAt`, `repeatStarts`, `History.recordLines`: one
+   undo step over Oil and Foam, an entry of kind `lines`) and
+   `web/editor.js` ("copy and paste": Ctrl+C, Ctrl+V with the ghost under
+   the pointer, "반복 붙여넣기…" with its three time fields, Enter, Esc, and
+   dragging the first ghost); `render.js` draws the ghosts in the marks
+   layer. A paste writes heights as `DRAWN` and empty samples as
+   `EDITED` (as a delete does), so it takes the check off when it touches
+   Oil. At most 1,000 copies in one repeat (agent's choice). Checked by
+   an in-page unit check and a browser smoke test on macOS.
 4. **A Windows run of V2-4b**, with the V2-1 items never seen on Windows
    (a Recipe saved at a frame other than the first, a redirected
    Documents folder, the resolution refusal's wording).
@@ -375,5 +380,4 @@ The three v1 remote branches that v1 docs cite stay.
 ## Next
 
 - **Done:** V2-4 (2026-11-02).
-- **Next:** V2-4b step 3, copy and paste; then the Windows request
-  (step 4).
+- **Next:** the V2-4b Windows request (step 4).

@@ -16,7 +16,8 @@
 // back (grid, bands, picture), lines, and marks ({ playhead, selection, grab, compressor, memos,
 // point }); the compressor start moves to the marks while it is dragged. Memos are
 // [{ n, t, h or null }]. The point line in progress is { kind, points: [{ t, h }], path, preview,
-// guides: [[{ t, h }, { t, h }]] }, where path and preview are { times, hs } or null.
+// guides: [[{ t, h }, { t, h }]] }, where path and preview are { times, hs } or null. Copies about to
+// be pasted are paste: [{ t0, t1, label, times, hs: { oil, foam } }] (DESIGN.md §5 "copy and paste").
 
 export const INSET = { left: 52, right: 16, top: 14, bottom: 10 };  // DESIGN.md §7: no line clipped at the edge
 export const KINDS = ["reference", "foam", "oil"];                  // drawing order: Oil on top
@@ -309,11 +310,29 @@ export function marksSvg(marks, view, width, height, id) {
   }
   for (const memo of marks.memos ?? []) parts.push(memoPin(memo, s));
   if (marks.point) parts.push(pointLine(marks.point, s, view));
+  for (const ghost of marks.paste ?? []) parts.push(pasteGhost(ghost, s, view, height));
   if (marks.playhead !== null && marks.playhead !== undefined) {
     const x = s.sx(marks.playhead);
     parts.push(`<line x1="${x}" x2="${x}" y1="0" y2="${height}" style="stroke:var(--playhead);stroke-width:1"/>`);
   }
   parts.push("</g>");
+  return parts.join("");
+}
+
+/** A copy about to be pasted: a band from a dashed start line, its Oil and Foam dashed. */
+function pasteGhost(ghost, s, view, height) {
+  const x = s.sx(ghost.t0);
+  const parts = [
+    vband(s, ghost.t0, ghost.t1, height, "fill:var(--selection-band);fill-opacity:0.6"),
+    `<line data-ghost x1="${x}" x2="${x}" y1="0" y2="${height}" style="stroke:var(--brand);stroke-width:1;stroke-dasharray:4 3"/>`,
+  ];
+  for (const kind of ["foam", "oil"]) {
+    const d = linePath(ghost.times, ghost.hs[kind], s.sx, s.sy, view);
+    if (d) parts.push(`<path d="${d}" style="stroke:var(--${kind});stroke-width:2;stroke-opacity:0.75;stroke-dasharray:5 3;${SHAPE}"/>`);
+  }
+  if (ghost.label) {
+    parts.push(`<text x="${x + 6}" y="${INSET.top + 4}" style="${TEXT};fill:var(--brand);font-weight:600">${ghost.label}</text>`);
+  }
   return parts.join("");
 }
 

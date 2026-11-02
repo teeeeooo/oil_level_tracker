@@ -944,3 +944,90 @@ def test_the_full_size_video_window(tmp_path, video, browser_page):
         assert errors == []
     finally:
         running.close()
+
+
+def test_copy_and_paste(tmp_path, video, browser_page):
+    # Product SSOT §6 (user, 2026-11-02): a range's Oil and Foam are copied and pasted at places or
+    # repeated, as copied, with no snap; a paste counts as drawing (DESIGN.md §5 "copy and paste")
+    page, errors = browser_page
+    data = tmp_path / "data"
+    write_recipes(data / "Recipes")
+    running = bootstrap.start(data_folder=data)
+    try:
+        call = analysed_inspection(running, video, "복사")
+        inspection_id = call("GET", "/api/inspections")["inspections"][0]["id"]
+        first = call("GET", f"/api/inspections/{inspection_id}/edits")["edits"]
+        times, oil0 = first["times"], first["glasses"][0]["oil"]["ys"]
+        assert times == [k * 0.5 for k in range(8)] and None not in oil0[:3]
+
+        page.goto(running.url)
+        unit = page.evaluate("""async () => {
+            const l = await import("/web/lines.js");
+            const line = { ys: [1, 2, 3, 4, 5], origins: Array(5).fill("DRAFT") };
+            const foam = { ys: [null, 9, null, null, null], origins: Array(5).fill("DRAFT") };
+            const copy = l.copyStretch("g", { oil: line, foam }, 0, 2);
+            const base = [l.copyLine(line), l.copyLine(foam)];
+            const span = l.pasteAt(line, copy.ys.oil, 4);  // cut at the end
+            l.pasteAt(foam, copy.ys.foam, 3);
+            const h = new l.History();
+            const grouped = h.recordLines("g", [{ kind: "oil", base: base[0], line }, { kind: "foam", base: base[1], line: foam }]);
+            const after = [line.ys.slice(), foam.ys.slice(), foam.origins.slice()];
+            h.undo({ lineOf: (g, kind) => (kind === "oil" ? line : foam) });
+            return { copy, span, grouped, kinds: h.undone[0].kinds, after, undone: [line.ys, foam.ys],
+                     starts: l.repeatStarts([0, 0.5, 1, 1.5, 2, 2.5, 3], 0.6, 1, 3), none: l.repeatStarts([0], 0, 0, 1) };
+        }""")
+        assert unit["copy"] == {"glassId": "g", "first": 0, "length": 2, "ys": {"oil": [1, 2], "foam": [None, 9]}}
+        assert unit["span"] == [4, 5] and unit["grouped"] and unit["kinds"] == ["oil", "foam"]
+        assert unit["after"] == [[1, 2, 3, 4, 1], [None, 9, None, None, 9], ["DRAFT", "DRAFT", "DRAFT", "EDITED", "DRAWN"]]
+        assert unit["undone"] == [[1, 2, 3, 4, 5], [None, 9, None, None, None]]  # one undo for both lines
+        assert unit["starts"] == [1, 3, 5] and unit["none"] is None
+
+        page.locator("#inspectionRows tr", has_text="복사").get_by_role("button", name="열기", exact=True).click()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        box = page.locator("#graph").bounding_box()
+
+        def x_at(t):  # the whole view: 0.25 s either side of the samples (render.fitView, INSET 52/16)
+            return box["x"] + 52 + (t + 0.25) / 4 * (box["width"] - 68)
+
+        def saved_oil():
+            page.keyboard.press("Control+s")
+            page.get_by_text("저장함").wait_for()
+            oil = json.loads((data / "Inspections" / "복사" / "edits.json").read_text(encoding="utf-8"))["glasses"][0]["oil"]
+            return oil["ys"], oil["origins"]
+
+        page.locator("#checkGlass").click()  # checked: a paste takes it off
+        page.keyboard.press("r")
+        mid = box["y"] + box["height"] / 2
+        drag(page, (x_at(0.3), mid), (x_at(1.2), mid))
+        page.keyboard.press("Control+c")
+        assert page.locator("#copyText").inner_text() == "00:00.5 – 00:01.5 · 1.0 s"
+        page.keyboard.press("Control+v")
+        page.locator("#pasteNow").wait_for()
+        page.mouse.move(x_at(2.5), mid)
+        page.locator("#graph [data-ghost]").wait_for(state="attached")
+        shot(page, "copy-places")
+        page.mouse.click(x_at(2.5), mid)
+        page.get_by_text("1곳 붙임", exact=False).wait_for()
+        page.keyboard.press("Escape")
+        page.locator("#copyActions").wait_for()
+        page.wait_for_function("document.querySelectorAll('#graph [data-ghost]').length === 0")
+        ys, origins = saved_oil()
+        assert ys[5:7] == oil0[1:3] and origins[5:7] == ["DRAWN", "DRAWN"] and ys[3:5] == oil0[3:5]
+        assert page.locator("#editorGlass option").all_inner_texts() == ["BASE · 확인 전"]
+
+        page.get_by_role("button", name="반복 붙여넣기…").click()
+        page.locator("#repeatBox").wait_for()
+        assert [page.locator(f"#{i}").input_value() for i in ("repeatFirst", "repeatPeriod", "repeatEnd")] == ["00:01.5", "00:01.0", "00:03.9"]
+        assert page.locator("#repeatCaption").inner_text().startswith("3개 붙습니다: 00:01.5, 00:02.5, 00:03.5. 마지막 것은 분석 범위 끝(00:03.9)에서 잘립니다.")
+        page.wait_for_function("document.querySelectorAll('#graph [data-ghost]').length === 3")  # drawn on the next frame
+        shot(page, "copy-repeat")
+        page.keyboard.press("Enter")  # in the first field
+        page.locator("#repeatBox").wait_for(state="hidden")
+        ys, origins = saved_oil()
+        assert ys[3:8] == [oil0[1], oil0[2], oil0[1], oil0[2], oil0[1]] and origins[3:8] == ["DRAWN"] * 5
+        page.keyboard.press("Control+z")  # the whole repeat is one step
+        ys, _ = saved_oil()
+        assert ys[3:5] == oil0[3:5] and ys[5:7] == oil0[1:3] and ys[7] == oil0[7]
+        assert errors == []
+    finally:
+        running.close()

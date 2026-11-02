@@ -7,6 +7,8 @@ export const SNAP_REACH = 8;      // source px (user, 2026-10-29)
 export const SNAP_MIN_STEP = 6;   // luma step below which there is no edge to settle on
 export const UNDO_DEPTH = 200;    // the spike's depth; the undo depth is the agent's choice
 export const GRAB_WIDTHS = [2, 5, 10, 20, 30, 60, 120, 300, 600];  // seconds, stepped with [ and ]
+export const COPY_KINDS = ["oil", "foam"];  // what a copy holds (user, 2026-11-02)
+export const MAX_REPEATS = 1000;            // a repeat paste's copies, at most
 
 /** The sample nearest to t. */
 export function nearestIndex(times, t) {
@@ -104,6 +106,37 @@ export function place(line, first, ys) {
   return [first, first + ys.length];
 }
 
+/** Copy and paste (Product SSOT §6, user, 2026-11-02): the Oil and Foam samples in [first, end) of
+ * a Glass, empty ones included: { glassId, first, length, ys: { oil, foam } }. */
+export function copyStretch(glassId, glass, first, end) {
+  return { glassId, first, length: end - first, ys: Object.fromEntries(COPY_KINDS.map((kind) => [kind, glass[kind].ys.slice(first, end)])) };
+}
+
+/** Paste copied samples so the first lands on sample `at`, up to (not including) `stop`: as copied,
+ * with no snap. A height is drawn; an empty sample empties the line there, as a delete does.
+ * Returns the samples written as [first, end). */
+export function pasteAt(line, ys, at, stop = line.ys.length) {
+  const first = Math.max(0, at), end = Math.min(stop, line.ys.length, at + ys.length);
+  for (let i = first; i < end; i++) {
+    const y = ys[i - at];
+    line.ys[i] = y;
+    line.origins[i] = y === null ? "EDITED" : "DRAWN";
+  }
+  return [first, Math.max(first, end)];
+}
+
+/** A repeat paste's starts: the samples nearest to first, first + period, … while before `end`
+ * (seconds); null when the period is not positive or there would be more than MAX_REPEATS. */
+export function repeatStarts(times, first, period, end) {
+  if (!(period > 0)) return null;
+  const starts = [];
+  for (let k = 0; first + k * period < end; k++) {
+    if (starts.length === MAX_REPEATS) return null;
+    starts.push(nearestIndex(times, first + k * period));
+  }
+  return starts;
+}
+
 /** The snap (user, 2026-10-29): the row within SNAP_REACH of `y` where the luma steps most, in
  * one column of the context image; `y` itself when no step there is an edge. */
 export function snap(luma, column, y, y0) {
@@ -144,8 +177,6 @@ export async function lumaOf(urls) {
   return { data, width, height };
 }
 
-/** Undo and redo. An entry changes samples of one line: { glassId, kind, first, before, after },
- * where before and after are { ys, origins } for [first, first + length). */
 /** The "cannot judge" stretches with [t0, t1) added, joined where they meet or overlap. */
 export function markStretch(stretches, t0, t1) {
   const all = [...stretches, { start_sec: t0, end_sec: t1 }].sort((a, b) => a.start_sec - b.start_sec);
@@ -174,6 +205,9 @@ export function clearStretch(stretches, t0, t1) {
 
 const LISTS = ["cannot_judge", "memos"];
 
+/** Undo and redo. An entry changes samples of one line: { glassId, kind, first, before, after },
+ * where before and after are { ys, origins } for [first, first + length); or several lines of one
+ * Glass at once: { glassId, kind: "lines", kinds, entries }; or a list, or the compressor start. */
 export class History {
   constructor() {
     this.done = [];
@@ -183,13 +217,21 @@ export class History {
 
   /** Record what changed in `line` since `base`, a copy taken before the change. False when nothing did. */
   record(glassId, kind, base, line) {
-    const differs = (i) => base.ys[i] !== line.ys[i] || base.origins[i] !== line.origins[i];
-    let first = 0, end = line.ys.length;
-    while (first < end && !differs(first)) first++;
-    while (end > first && !differs(end - 1)) end--;
-    if (first === end) return false;
-    const slice = (l) => ({ ys: l.ys.slice(first, end), origins: l.origins.slice(first, end) });
-    this.push({ glassId, kind, first, before: slice(base), after: slice(line) });
+    const entry = diff(glassId, kind, base, line);
+    if (entry) this.push(entry);
+    return entry !== null;
+  }
+
+  /** Record changes to several lines of one Glass as one step (a paste writes Oil and Foam):
+   * changes are [{ kind, base, line }]. False when nothing changed. */
+  recordLines(glassId, changes) {
+    const entries = [];
+    for (const { kind, base, line } of changes) {
+      const entry = diff(glassId, kind, base, line);
+      if (entry) entries.push(entry);
+    }
+    if (!entries.length) return false;
+    this.push(entries.length === 1 ? entries[0] : { glassId, kind: "lines", kinds: entries.map((e) => e.kind), entries });
     return true;
   }
 
@@ -220,7 +262,7 @@ export class History {
   undo(edits) {
     const entry = this.done.pop();
     if (!entry) return null;
-    restore(edits, entry, entry.before);
+    restore(edits, entry, "before");
     this.undone.push(entry);
     this.listener?.(entry);
     return entry;
@@ -229,7 +271,7 @@ export class History {
   redo(edits) {
     const entry = this.undone.pop();
     if (!entry) return null;
-    restore(edits, entry, entry.after);
+    restore(edits, entry, "after");
     this.done.push(entry);
     this.listener?.(entry);
     return entry;
@@ -241,8 +283,22 @@ export class History {
   }
 }
 
-function restore(edits, entry, part) {
-  if (LISTS.includes(entry.kind)) edits.setList(entry.glassId, entry.kind, part.map((item) => ({ ...item })));
+/** What changed in `line` since `base`, as a history entry; null when nothing did. */
+function diff(glassId, kind, base, line) {
+  const differs = (i) => base.ys[i] !== line.ys[i] || base.origins[i] !== line.origins[i];
+  let first = 0, end = line.ys.length;
+  while (first < end && !differs(first)) first++;
+  while (end > first && !differs(end - 1)) end--;
+  if (first === end) return null;
+  const slice = (l) => ({ ys: l.ys.slice(first, end), origins: l.origins.slice(first, end) });
+  return { glassId, kind, first, before: slice(base), after: slice(line) };
+}
+
+/** Put back one side ("before" or "after") of an entry. */
+function restore(edits, entry, side) {
+  const part = entry[side];
+  if (entry.kind === "lines") for (const inner of entry.entries) restore(edits, inner, side);
+  else if (LISTS.includes(entry.kind)) edits.setList(entry.glassId, entry.kind, part.map((item) => ({ ...item })));
   else if (entry.kind === "compressor") edits.setCompressor(part);
   else apply(edits.lineOf(entry.glassId, entry.kind), entry.first, part);
 }

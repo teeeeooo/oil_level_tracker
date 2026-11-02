@@ -253,3 +253,8 @@ kbd { display: inline-block; min-width: 20px; height: 20px; padding: 0 6px; bord
 .vw-sync i { width: 8px; height: 8px; border-radius: 50%; background: var(--fg-3); }
 .vw-sync.on { color: var(--pass); }
 .vw-sync.on i { background: var(--pass); }
+
+/* copy and paste (DESIGN.md §5) */
+.paste-now { color: var(--fg-1); }
+.repeat-fields .field { flex: 1; }
+.repeat-fields .input { height: 32px; }

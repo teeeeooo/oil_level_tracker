@@ -49,6 +49,8 @@ const state = {
   memo: null,              // the memo in the dialog: { glassId, id or null for a new one, time, y }; set on open
   point: null,             // the point line in progress (see "the point line" below)
   submission: null,        // { versions, showing, editable } (API); showing a version means read-only
+  clipboard: null,         // the copy (see "copy and paste" below)
+  paste: null,             // pasting in progress
 };
 let backToList = () => {};
 let toSetup = () => {};
@@ -112,7 +114,7 @@ function release() {
   memoPicked.clear();
   $("memoPop").hidden = true;
   if ($("memoDialog").open) $("memoDialog").close();
-  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null, memo: null, point: null, submission: null });
+  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null, memo: null, point: null, submission: null, clipboard: null, paste: null });
   setDirty(false);
   for (const id of ["graph", "context"]) for (const layer of $(id).children) layer.replaceChildren();
   $("axis").replaceChildren();
@@ -174,6 +176,8 @@ async function showGlass(fit) {
   player.seek(state.playhead);
   videolink.stateChanged();  // the window draws this Glass now
   videolink.linesChanged();
+  state.paste = null;  // a copy pastes only into its own Glass
+  renderPaste();
   renderGlassPanel();
   renderMemos();
   requestDraw({ back: true, lines: true, marks: true });
@@ -255,7 +259,7 @@ function marks() {
     ? { t0: state.edits.times[drag.index] - state.width, t1: state.edits.times[drag.index] + state.width, kind: drag.kind }
     : null;
   const compressor = drag?.type === "compressor" ? drag.time : null;
-  return { playhead: state.playhead, selection: state.selection, grab, compressor, memos: memoMarks(), point: pointMarks() };
+  return { playhead: state.playhead, selection: state.selection, grab, compressor, memos: memoMarks(), point: pointMarks(), paste: pasteMarks() };
 }
 
 // ---- drawing ------------------------------------------------------------------------------------
@@ -386,6 +390,10 @@ function onPointerDown(event) {
     state.drag = { ...start, type: "pan", view: { ...state.view } };
     return;
   }
+  if (state.paste) {
+    if (event.button === 0) pastePointerDown(at, start);
+    return;
+  }
   if (state.tool === "point") {
     if (event.button === 0) addPoint(at);
     return;
@@ -448,6 +456,11 @@ function onPointerMove(event) {
   } else if (drag.type === "edge") {
     state.selection = { ...state.selection, [drag.edge]: at.t };
     renderSelection();
+    requestDraw({ marks: true });
+  } else if (drag.type === "repeatFirst") {
+    const times = state.edits.times;
+    state.paste.first = times[lines.nearestIndex(times, drag.first + at.t - drag.at.t)];
+    renderPaste();
     requestDraw({ marks: true });
   } else if (drag.type === "compressor" && drag.moved) {
     drag.time = compressorAt(at.t);
@@ -512,6 +525,11 @@ function onPointerUp() {
 }
 
 function hover(event) {
+  if (state.paste?.mode === "places" && state.edits) {
+    state.paste.at = lines.nearestIndex(state.edits.times, pointer(event.currentTarget, event).t);
+    requestDraw({ marks: true });
+    return;
+  }
   if (state.tool === "point" && state.edits) {
     previewTo(pointer(event.currentTarget, event));
     return;
@@ -647,6 +665,151 @@ function judgeSelection(cannot) {
   changed();
   requestDraw({ back: true });
   renderSelection();
+}
+
+// ---- copy and paste -------------------------------------------------------------------------------
+// Product SSOT §6 (user, 2026-11-02), DESIGN.md §5 "copy and paste". state.clipboard is the copy,
+// { glassId, first, length, ys: { oil, foam } }, kept until the editor closes; it pastes only into its
+// own Glass. state.paste while pasting: { mode: "places", count, at: the sample under the pointer or
+// null } or { mode: "repeat", first, period, end } in seconds.
+
+/** Ctrl+C: the Oil and Foam in the selected range, empty samples included. */
+function copySelection() {
+  const s = state.selection;
+  if (!s || locked()) return;
+  const [first, end] = lines.indexRange(state.edits.times, s.t0, s.t1);
+  if (first === end) return;
+  state.clipboard = lines.copyStretch(state.glassId, editsOf(), first, end);
+  state.paste = null;
+  renderPaste();
+  requestDraw({ marks: true });
+  notify("editorNotice", "복사했습니다.");
+}
+
+function canPaste() {
+  return state.clipboard !== null && state.clipboard.glassId === state.glassId && !locked();
+}
+
+/** "붙여넣기" (places) or "반복 붙여넣기…" (repeat). */
+function startPaste(mode) {
+  if (!canPaste()) return;
+  if (state.point) cancelPoint();
+  const times = state.edits.times, c = state.clipboard;
+  state.paste = mode === "places"
+    ? { mode, count: 0, at: null }
+    : { mode, first: times[Math.min(times.length - 1, c.first + c.length)], period: c.length * render.step(times), end: analysisEnd() };
+  renderPaste();
+  requestDraw({ marks: true });
+  if (mode === "repeat") $("repeatFirst").focus();
+}
+
+function endPaste() {
+  state.paste = null;
+  renderPaste();
+  requestDraw({ marks: true });
+}
+
+function analysisEnd() {
+  return state.detail.settings?.end_sec ?? state.edits.times.at(-1);
+}
+
+/** Write the copy at each start, up to the sample `stop`, as one undo step; later copies win. */
+function pasteCopies(starts, stop) {
+  const glass = editsOf(), c = state.clipboard;
+  const changes = lines.COPY_KINDS.map((kind) => ({ kind, base: lines.copyLine(glass[kind]), line: glass[kind] }));
+  for (const at of starts) for (const { kind, line } of changes) lines.pasteAt(line, c.ys[kind], at, stop);
+  if (state.history.recordLines(state.glassId, changes)) changed();
+  requestDraw({ lines: true, marks: true });
+}
+
+function pastePointerDown(at, start) {
+  const times = state.edits.times;
+  if (state.paste.mode === "places") {
+    pasteCopies([lines.nearestIndex(times, at.t)], times.length);
+    state.paste.count += 1;
+    renderPaste();
+    return;
+  }
+  const ghost = pasteMarks()[0];  // the first copy moves the first start
+  if (ghost && at.t >= ghost.t0 && at.t <= ghost.t1) state.drag = { ...start, type: "repeatFirst", first: state.paste.first };
+}
+
+/** The repeat's starts and where its copies are cut; starts is null when they cannot be made. */
+function repeatPlan() {
+  const p = state.paste, times = state.edits.times;
+  return { starts: lines.repeatStarts(times, p.first, p.period, p.end), stop: render.lowerBound(times, p.end + 1e-9) };
+}
+
+function applyRepeat() {
+  if (state.paste?.mode !== "repeat") return;
+  const { starts, stop } = repeatPlan();
+  if (!starts?.length) return;
+  pasteCopies(starts, stop);
+  endPaste();
+}
+
+function readRepeatField(input) {
+  if (state.paste?.mode !== "repeat") return;
+  const key = { repeatFirst: "first", repeatPeriod: "period", repeatEnd: "end" }[input.id];
+  const value = parseClock(input.value);
+  if (value !== null) state.paste[key] = value;
+  renderPaste();
+  requestDraw({ marks: true });
+}
+
+/** The copies about to be pasted, for the marks layer. */
+function pasteMarks() {
+  const p = state.paste, c = state.clipboard;
+  if (!p || !canPaste()) return [];
+  const times = state.edits.times, z = zero(), dt = render.step(times);
+  let starts = [], stop = times.length;
+  if (p.mode === "places") starts = p.at === null ? [] : [p.at];
+  else ({ starts, stop } = repeatPlan());
+  return (starts ?? []).flatMap((at, k) => {
+    const end = Math.min(stop, at + c.length);
+    if (end <= at) return [];
+    const hs = Object.fromEntries(lines.COPY_KINDS.map((kind) => [kind, c.ys[kind].slice(0, end - at).map((y) => (y === null ? null : z - y))]));
+    const label = p.mode === "repeat" ? String(k + 1) : "클릭하면 여기서 시작";
+    return [{ t0: times[at] - dt / 2, t1: times[end - 1] + dt / 2, label, times: times.slice(at, end), hs }];
+  });
+}
+
+function renderPaste() {
+  const c = state.clipboard, p = state.paste;
+  $("copyBox").hidden = !c || p?.mode === "repeat" || locked();
+  $("repeatBox").hidden = p?.mode !== "repeat";
+  if (!c || !state.edits) return;
+  const times = state.edits.times, dt = render.step(times);
+  const t0 = times[c.first], seconds = c.length * dt;
+  const span = `${clock(t0)} – ${clock(t0 + seconds)} · ${seconds.toFixed(1)} s`;
+  $("copyText").textContent = span;
+  const from = recipeGlass(c.glassId)?.name ?? c.glassId;
+  $("copyCaption").textContent = c.glassId === state.glassId
+    ? `${from}의 Oil과 Foam (빈 샘플 포함). 이 Glass에만 붙여 넣을 수 있습니다.`
+    : `${from}에서 복사했습니다. ${from}을(를) 고르면 붙여 넣을 수 있습니다.`;
+  $("pasteStart").disabled = $("repeatStart").disabled = !canPaste();
+  $("copyActions").hidden = p?.mode === "places";
+  $("pasteNow").hidden = p?.mode !== "places";
+  if (p?.mode === "places") {
+    $("pasteNow").innerHTML = `<b>붙여넣는 중 · ${p.count}곳 붙임.</b> 그래프나 맥락 이미지를 클릭하면 그 시각에서 복사본이 시작합니다. 높이는 복사한 그대로입니다. <kbd>Esc</kbd>로 끝냅니다.`;
+  }
+  if (p?.mode !== "repeat") return;
+  $("repeatText").textContent = `${span}를`;
+  for (const [id, key] of [["repeatFirst", "first"], ["repeatPeriod", "period"], ["repeatEnd", "end"]]) {
+    if (document.activeElement !== $(id)) $(id).value = clock(p[key]);
+  }
+  const { starts } = repeatPlan();
+  let caption;
+  if (starts === null) caption = p.period > 0 ? `복사본이 ${lines.MAX_REPEATS}개를 넘습니다. 주기를 늘리거나 끝을 당기세요.` : "주기는 0보다 커야 합니다.";
+  else if (!starts.length) caption = "붙을 자리가 없습니다. 첫 시작이 끝보다 앞이어야 합니다.";
+  else {
+    const shown = starts.slice(0, 6).map((at) => clock(times[at]).replace(/\.0$/, "")).join(", ") + (starts.length > 6 ? ", …" : "");
+    const lastEnd = times[starts.at(-1)] + seconds;
+    const cut = lastEnd > p.end + dt / 2 ? ` 마지막 것은 ${p.end >= analysisEnd() ? "분석 범위 " : ""}끝(${clock(p.end).replace(/\.0$/, "")})에서 잘립니다.` : "";
+    caption = `${starts.length}개 붙습니다: ${shown}.${cut} 그래프의 첫 복사본을 끌어 첫 시작을 옮길 수도 있습니다.`;
+  }
+  $("repeatCaption").textContent = caption;
+  $("repeatApply").disabled = !starts?.length;
 }
 
 // ---- the point line -------------------------------------------------------------------------------
@@ -1240,8 +1403,9 @@ function compressorText() {
  * stretches, or the compressor start for every Glass (user, 2026-10-30). Foam, reference lines and
  * memos leave it. */
 function takeCheckOff(entry) {
+  const kinds = entry.kind === "lines" ? entry.kinds : [entry.kind];  // a paste writes Oil and Foam
   const glasses = entry.kind === "compressor" ? state.edits.glasses
-    : ["oil", "cannot_judge"].includes(entry.kind) ? [editsOf(entry.glassId)] : [];
+    : kinds.some((kind) => ["oil", "cannot_judge"].includes(kind)) ? [editsOf(entry.glassId)] : [];
   for (const glass of glasses) glass.decision.checked_at = null;
 }
 
@@ -1368,6 +1532,7 @@ function renderTools() {
   for (const id of ["graph", "context"]) $(id).dataset.mode = state.tool;  // its cursor
   renderSelection();
   renderPointBox();
+  renderPaste();
 }
 
 function renderSelection() {
@@ -1378,12 +1543,14 @@ function renderSelection() {
   $("eraseSelection").disabled = !s;
   $("eraseKind").textContent = KIND_NAMES[state.kind];
   $("markSelection").disabled = !s;
+  $("copySelection").disabled = !s;
   const marked = state.edits ? editsOf()?.cannot_judge ?? [] : [];
   $("clearSelection").disabled = !s || !marked.some((c) => c.end_sec > s.t0 && c.start_sec < s.t1);
 }
 
 function setTool(tool) {
   if (tool !== "point" && state.point) cancelPoint();
+  if (state.paste) endPaste();
   if (tool !== "range") state.selection = null;  // another tool lets the range go (user, 2026-10-30)
   state.tool = tool;
   state.hot = null;
@@ -1424,6 +1591,10 @@ function onKey(event) {
   } else if (ctrl && event.code === "KeyS") {
     event.preventDefault();
     save();
+  } else if (ctrl && event.code === "KeyC") {
+    copySelection();
+  } else if (ctrl && event.code === "KeyV") {
+    startPaste("places");
   } else if (ctrl || event.altKey) {
     return;
   } else if (event.code === "KeyM") {
@@ -1436,6 +1607,8 @@ function onKey(event) {
     setSnap(!state.snap);
   } else if (event.code === "KeyN") {
     jumpToEmpty(event.shiftKey ? -1 : 1);
+  } else if (state.paste?.mode === "repeat" && event.key === "Enter") {
+    applyRepeat();
   } else if (state.point && event.key === "Enter") {
     commitPoint();
   } else if (state.point && event.key === "Backspace") {
@@ -1446,6 +1619,7 @@ function onKey(event) {
     judgeSelection(true);
   } else if (event.key === "Escape") {
     if (!$("videoSpeedMenu").hidden) player.toggleSpeedMenu(false);
+    else if (state.paste) endPaste();
     else if (!$("memoPop").hidden) showMemoList(false);
     else if (state.point) cancelPoint();
     else {
@@ -1556,6 +1730,26 @@ export function init(toList, openSetup) {
     if (state.edits) showGlass(false);
   });
   $("eraseSelection").addEventListener("click", eraseSelection);
+  $("copySelection").addEventListener("click", copySelection);
+  $("pasteStart").addEventListener("click", () => startPaste("places"));
+  $("repeatStart").addEventListener("click", () => startPaste("repeat"));
+  $("repeatApply").addEventListener("click", applyRepeat);
+  $("repeatCancel").addEventListener("click", endPaste);
+  for (const id of ["repeatFirst", "repeatPeriod", "repeatEnd"]) {
+    const input = $(id);
+    input.addEventListener("change", () => readRepeatField(input));
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        readRepeatField(input);
+        input.blur();
+        applyRepeat();
+      } else if (event.key === "Escape") {
+        input.blur();
+        endPaste();
+      }
+      event.stopPropagation();
+    });
+  }
   for (const button of document.querySelectorAll("#overrideKind button")) {
     button.addEventListener("click", () => setOverride(button.dataset.override));
   }
