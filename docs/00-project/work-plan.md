@@ -1,7 +1,9 @@
 # Current Work Plan
 
-**Current milestone:** none. **The first version is accepted**
+**Current milestone:** none started. **The first version is accepted**
 (2026-11-02): V2-5 passed every row on the workstation and the slowest PC.
+**Next, in order** (user, 2026-11-02): P-1 introduction video, P-2 user
+manual, P-3 field-use fixes (roadmap).
 **Last completed:** `V2-5 — Windows acceptance` / `DONE` (2026-11-02).
 
 This is the sole owner of the current state, authorization and next action.
@@ -357,6 +359,23 @@ one submitted SPL#1 inspection.
 - macOS reports a window's position as floats; round before saving.
 - Playwright calls a zero-width SVG line "hidden": wait for
   `state="attached"`, and wait for marks drawn on the next frame.
+- WebView2 under pywebview ignores `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS`
+  (pywebview sets the browser arguments itself); its debugging port comes
+  from pywebview's `REMOTE_DEBUGGING_PORT` (the app's
+  `OLT_WEBVIEW_DEBUG_PORT`). A CDP connection made before WebView2 has
+  navigated to the app sees only `about:blank` and never the app page:
+  connect once `/json/list` lists it (the user's diagnosis agreed,
+  2026-11-02). Playwright's `close()` on such a connection only
+  disconnects.
+- macOS's first start of a fresh build takes about 30 s (the system
+  checks the new binaries); later starts take under a second.
+- Over Remote Desktop, frame intervals are about 31 ms (the remote
+  display's rate); redraw times do not change. Note RDP in a result.
+- A request copied from an older one can point at UI that has moved: the
+  V2-5 request said "검사 정보에" after V2-4b had removed that section.
+  Check each step against the current screen.
+- A result block's "before" list can be taken after the run: compare it
+  with the previous run's final list and the backup's file count.
 
 ## Open items
 
@@ -473,6 +492,52 @@ The three v1 remote branches that v1 docs cite stay.
     FULL/EMPTY made easy, the refusal wording; Product SSOT §6),
     [re-check](../60-evidence/2026-11-02-v2-5-recheck-windows-result.md)
     on `8448e79`: every row, A5 2.2 / 9.3 ms.
-- **Next:** nothing is authorized beyond the first version. The open
-  items above (speed-ups on the slowest PC, small facts) stay for
-  reference; a next milestone needs the user.
+- **Next, in order** (user, 2026-11-02):
+  1. **P-1 — an introduction video** of the app;
+  2. **P-2 — a user manual**, as HTML or another fitting form;
+  3. **P-3 — fixes for problems found in field use.**
+  The open items above (speed-ups on the slowest PC, small facts) stay
+  for reference until P-3 picks any up.
+
+## Session handoff — 2026-11-02 (after V2-5)
+
+**Where it stands:** the first version is accepted on the one-folder
+build of `8448e79` (`OilLevelTracker.exe`, 159.6 MB, icon in
+`packaging/`). `main` is clean and in sync with the remote. 280 tests pass
+on macOS; Windows expects `261 passed, 4 skipped` (no Playwright in its
+venv). The workstation and the slowest PC hold the data listed in
+"Session state" above.
+
+**Start P-1 by asking the user** (none of this is decided):
+- what the video is for and who watches it (inspectors, managers), its
+  length and language (Korean by default for the app's users);
+- how it is made: a screen recording on the Windows workstation by the
+  user, or one the agent scripts and records (on macOS with Playwright,
+  or on Windows with the app-mode hook below), with captions or a voice;
+- which inspections it shows (the V25 inspections on the workstation,
+  or synthetic data, which shows nothing real);
+- where the source and the result live (a video is large: likely
+  outside Git, with only a script or a storyboard in the repository).
+Then a storyboard for the user's confirmation before recording.
+
+**Then P-2:** settle with the user its readers, form (one offline HTML
+file that opens in Edge, like the report, is the natural fit, perhaps
+opened from the app's help) and language; it follows the screens as
+built (DESIGN.md §5, the help dialog's tables in `web/index.html`) and
+the flow in Product SSOT §3. Where it lives decides whether it ships in
+the build (`web/`, which the spec already packs) or beside it.
+
+**P-3** starts from the user's reports; each fix follows the usual path
+(decision, mock-up when visible, test, Windows run).
+
+**What helps for recording and screenshots:**
+- `measure_editor.py --app` shows how to drive the built app's own window
+  through Playwright on Windows (`OLT_WEBVIEW_DEBUG_PORT`, connect after
+  `/json/list` lists the page).
+- On macOS, the smoke tests write screenshots when `OLT_SMOKE_SHOTS`
+  names a folder; `design/mockup/` holds the confirmed screens.
+- `scripts/build_package.py` rebuilds and checks the package.
+
+**Read first:** this file, the roadmap, Product SSOT §1–§3 and §6,
+DESIGN.md §5, [docs/README.md](../README.md) before adding a document
+(a manual is a new kind of document: route it there first).
