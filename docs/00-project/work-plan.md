@@ -505,6 +505,12 @@ The three v1 remote branches that v1 docs cite stay.
   workstation's start and end.
 - **The header (user, 2026-11-02):** editable while editing in the "제출"
   dialog, as it already is; no change.
-- **Next:** a Windows re-check of these on a new build: the three
-  features, the refusal wording, and A5 measured again in the build.
-  Then V2-5 closes.
+- **The re-check request — waits on the user:**
+  [2026-11-02-v2-5-recheck-windows-request.md](../40-operations/2026-11-02-v2-5-recheck-windows-request.md),
+  pinned to `8448e79` (`checked=108`), workstation only: tests
+  (`261 passed, 4 skipped`), the build, A4–A6 in its window, then N1–N13
+  on a new inspection `V25b 선택 확인` (SPL#4, `V25 SPL#4`; saved, not
+  submitted; the "제출" dialog opened and cancelled), and the refusal
+  wording. Backup `C:\olt-v25d-backup`.
+- **Next:** judge the re-check; if every row passes, V2-5 and the first
+  version close.
