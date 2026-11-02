@@ -1,8 +1,8 @@
 # Current Work Plan
 
-**Current milestone:** `P-1 — Introduction video` / `ACTIVE`: the
-[storyboard](../40-operations/intro-video.md) waits for the user's word;
-nothing is recorded until then. **The first version is accepted**
+**Current milestone:** `P-1 — Introduction video` / `ACTIVE`: a 30–45 s
+motion-design introduction ([scenes](../40-operations/intro-video.md));
+style frames come first, for the user's word. **The first version is accepted**
 (2026-11-02): V2-5 passed every row on the workstation and the slowest PC.
 **After P-1** (user, 2026-11-02): P-2 user manual, P-3 field-use fixes.
 **Last completed:** `V2-5 — Windows acceptance` / `DONE` (2026-11-02).
@@ -494,17 +494,21 @@ The three v1 remote branches that v1 docs cite stay.
     [re-check](../60-evidence/2026-11-02-v2-5-recheck-windows-result.md)
     on `8448e79`: every row, A5 2.2 / 9.3 ms.
 - **Now, P-1 — an introduction video** of the app. Settled with the user
-  (2026-11-02): for inspectors, an overview of 2–3 minutes; recorded by a
-  script on macOS (Playwright driving this folder's server in Chrome);
-  `sample/sample7.mp4` (public, milk poured into a glass), marked as an
-  example; Korean captions, no voice; the video file outside Git. None of
-  the compressor samples fit (sample4's glass is small and flat, sample2
-  moves, base_sample_1 is short and overlaid, public_miso is cut clips).
-  A trial analysis showed the draft following the glass's top for
-  0:10–0:31, so the storyboard makes correcting it with the pencil its
-  centre. **Next step:** the user confirms or changes the
-  [storyboard](../40-operations/intro-video.md); then
-  `scripts/record_intro.py` and ffmpeg for MP4.
+  (2026-11-02):
+  - an **introduction, not a how-to**: a 30–45 s motion-design video like
+    the user's example (kinetic type, symbolic pictures, screen cards that
+    gather into the logo);
+  - **no music** (no Suno); simple sound effects synthesised by the script;
+  - real app screens captured from an inspection of `sample/sample7.mp4`
+    (public, milk poured into a glass), marked as an example; Korean text;
+    the video file outside Git;
+  - made as `design/intro/intro.html` (a `seek(t)` page) rendered frame by
+    frame by `scripts/render_intro.py`, muxed with `imageio-ffmpeg`;
+  - the earlier walkthrough storyboard moves to P-2 as short clips.
+  None of the compressor samples fit (sample4's glass is small and flat,
+  sample2 moves, base_sample_1 is short and overlaid, public_miso is cut
+  clips). **Next step:** style frames of the seven scenes for the user;
+  then the render, the sound and the MP4.
 - **Then, in order** (user, 2026-11-02):
   1. **P-2 — a user manual**, as HTML or another fitting form;
   2. **P-3 — fixes for problems found in field use.**

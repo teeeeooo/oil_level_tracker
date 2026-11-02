@@ -52,7 +52,7 @@
 | 2026-11-02 | [2026-11-02-v2-4b-windows-request.md](40-operations/2026-11-02-v2-4b-windows-request.md) | V2-4b 원본 영상 창·복사·붙여넣기 Windows 확인 요청 |
 | 2026-11-02 | [2026-11-02-v2-5-recheck-windows-request.md](40-operations/2026-11-02-v2-5-recheck-windows-request.md) | V2-5 재확인 요청(선택 도구, 고른 선 지우기, FULL/EMPTY, 새 빌드로 A4–A6) |
 | 2026-11-02 | [2026-11-02-v2-5-acceptance-windows-request.md](40-operations/2026-11-02-v2-5-acceptance-windows-request.md) | V2-5 인수 확인 요청(워크스테이션 빌드와 A1–A9, 최저 사양 PC에서 옮긴 빌드 실행) |
-| 2026-11-02 | [intro-video.md](40-operations/intro-video.md) | P-1 앱 소개 영상 스토리보드와 녹화 방법(sample7, macOS 스크립트 녹화) |
+| 2026-11-02 | [intro-video.md](40-operations/intro-video.md) | P-1 앱 소개 모션 영상의 장면 구성과 만드는 방법(합성 효과음, sample7), P-2로 넘긴 사용법 녹화안 |
 
 ## docs/50-diagnostics/
 
