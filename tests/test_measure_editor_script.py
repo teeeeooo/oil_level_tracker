@@ -137,3 +137,46 @@ def recipe_from(path):
     from oil_tracker.adapters.storage.recipe_files import recipe_from_json
 
     return recipe_from_json(path.read_text(encoding="utf-8"))
+
+
+def test_the_targets_are_written_without_the_token():
+    targets = [{"type": "page", "url": "http://127.0.0.1:5000/?token=secret"}, {"type": "service_worker", "url": "x"}]
+    assert script.targets_text(targets) == "page http://127.0.0.1:5000/; service_worker x"
+    assert script.targets_text(None) == "포트가 답하지 않음"
+    assert script.targets_text([]) == "대상 없음"
+
+
+def test_a_page_playwright_cannot_see_falls_back_to_the_apps_server(tmp_path, monkeypatch):
+    # The V2-5 Windows run: WebView2's port listed the app's page, but Playwright showed no page.
+    # The script then keeps the page's address (with the token) for a browser to open.
+    from playwright.sync_api import sync_playwright
+
+    binary = next((c for c in [Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
+                               Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe")] if c.exists()), None)
+    if binary is None:
+        pytest.skip("no Chrome binary to stand in for WebView2")
+    fake = tmp_path / "fake_app.py"
+    fake.write_text(FAKE_APP, encoding="utf-8")
+    monkeypatch.setattr(script, "APP_START_SEC", 8.0)
+
+    class Blind:
+        contexts = []
+
+        def close(self):
+            pass
+
+    class Playwright:
+        class chromium:  # noqa: N801
+            connect_over_cdp = staticmethod(lambda endpoint: Blind())
+
+    with sync_playwright():
+        pass
+    data = tmp_path / "data"
+    (data / "Recipes").mkdir(parents=True)
+    server = script.AppServer([sys.executable, str(fake), str(ROOT / "src"), str(binary)], data, Playwright())
+    try:
+        assert server.page is None and "token=" in server.url
+        assert server.call("GET", "/api/inspections")["inspections"] == []
+        assert "page http://127.0.0.1:" in server.unseen and "token" not in server.unseen
+    finally:
+        server.close()

@@ -44,6 +44,7 @@ import time
 import traceback
 from datetime import datetime
 from pathlib import Path
+import urllib.request
 from urllib.parse import parse_qs, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -61,6 +62,23 @@ NAME = "A5A6 측정"
 PAUSE_MS = 8  # between mouse moves: a 125 Hz mouse
 CODECS = {"h264": 'video/mp4; codecs="avc1.640028"', "hevc": 'video/mp4; codecs="hvc1.1.6.L120.90"'}
 APP_START_SEC = 120.0
+RECONNECT_SEC = 5.0  # connected, the port lists the page, Playwright does not: connect again
+
+
+def cdp_targets(port: int) -> list[dict] | None:
+    """What the debugging port lists (/json/list), or None while it does not answer."""
+    try:
+        with urllib.request.urlopen(f"http://127.0.0.1:{port}/json/list", timeout=2) as response:
+            return json.loads(response.read())
+    except (OSError, ValueError):
+        return None
+
+
+def targets_text(targets: list[dict] | None) -> str:
+    """The targets for the result file, each address without its query (the token)."""
+    if targets is None:
+        return "포트가 답하지 않음"
+    return "; ".join(f"{t.get('type', '?')} {str(t.get('url', '')).split('?')[0]}" for t in targets) or "대상 없음"
 
 
 def api_call(port: int, token: str, method: str, path: str, body: object = None) -> dict:
@@ -102,37 +120,56 @@ class AppServer:
         began = time.perf_counter()
         self.process = subprocess.Popen([*command, "--data-folder", str(data)], env=env)
         self.browser = None
+        self.app_url = None  # the app page's address, as the port lists it
         try:
             self.page = self._window_page(playwright, debug_port, began)
-            self.page.wait_for_selector("#inspectionRows", state="attached", timeout=APP_START_SEC * 1000)
+            if self.page is not None:
+                self.page.wait_for_selector("#inspectionRows", state="attached", timeout=APP_START_SEC * 1000)
         except BaseException:
             self.close()
             raise
         self.window_sec = time.perf_counter() - began
-        self.url = self.page.url
+        self.url = self.page.url if self.page is not None else self.app_url
         address = urlsplit(self.url)
         self.port = address.port
         self.token = parse_qs(address.query)["token"][0]
 
     def _window_page(self, playwright, debug_port: int, began: float):
+        """The app's page. Playwright is connected only once the port lists that page: a connection
+        made before WebView2 created it did not see it (V2-5 Windows run). None when the port lists
+        the page but Playwright never shows it: the caller measures the app's server in a browser."""
+        targets, connected = None, 0.0
         while True:
             if self.process.poll() is not None:
                 raise RuntimeError(f"앱이 끝났습니다 (exit code {self.process.returncode})")
             if time.perf_counter() - began > APP_START_SEC:
-                where = ("디버깅 포트에는 붙었지만 앱 페이지가 없습니다" if self.browser is not None
-                         else f"디버깅 포트 {debug_port}에 붙지 못했습니다")
-                raise RuntimeError(f"{APP_START_SEC:.0f}초 안에 앱 창을 찾지 못했습니다: {where}")
+                self.unseen = targets_text(targets)
+                if self.app_url is not None:
+                    return None
+                where = "붙었지만 Playwright에 앱 페이지가 없음" if self.browser is not None else "붙지 못함"
+                raise RuntimeError(f"{APP_START_SEC:.0f}초 안에 앱 창을 찾지 못했습니다: 디버깅 포트 {debug_port}에 "
+                                   f"{where}; 포트의 대상: {self.unseen}")
+            targets = cdp_targets(debug_port)
+            listed = [str(t.get("url", "")) for t in targets or [] if "token=" in str(t.get("url", ""))]
+            if not listed:
+                time.sleep(0.25)
+                continue
+            self.app_url = listed[0]
             if self.browser is None:
                 try:
                     self.browser = playwright.chromium.connect_over_cdp(f"http://127.0.0.1:{debug_port}")
-                except Exception:  # noqa: BLE001 - not listening yet
+                    connected = time.perf_counter()
+                except Exception:  # noqa: BLE001 - try again
                     time.sleep(0.5)
                     continue
             for context in self.browser.contexts:
                 for page in context.pages:
                     if "token=" in page.url:
                         return page
-            time.sleep(0.2)
+            if time.perf_counter() - connected > RECONNECT_SEC:
+                self.browser.close()
+                self.browser = None
+            time.sleep(0.25)
 
     def call(self, method: str, path: str, body: object = None) -> dict:
         return api_call(self.port, self.token, method, path, body)
@@ -466,10 +503,14 @@ def measure_with(args, app: list[str] | None, data: Path, recipe, size: tuple[in
             if app:
                 print("  앱을 띄운다 (창이 열린다)", flush=True)
                 server = AppServer(app, data, p)
-                facts["window_sec"] = server.window_sec
-                facts["browser_version"] = server.browser.version
                 page = server.page
-                print(f"  앱 창: {server.window_sec:.1f}초", flush=True)
+                if page is not None:
+                    facts["window_sec"] = server.window_sec
+                if page is None:  # the window's page could not be driven: the app's server in a browser
+                    facts["browser"] = f"{args.browser} (빌드한 앱의 서버; 앱 창에는 붙지 못함: {server.unseen})"
+                else:
+                    facts["browser_version"] = server.browser.version
+                print(f"  앱 창: {server.window_sec:.1f}초 ({'붙음' if page is not None else '붙지 못함'})", flush=True)
             else:
                 server = Server(data)
             where = "빌드한 앱으로" if app else "앱 서버로"
@@ -482,7 +523,7 @@ def measure_with(args, app: list[str] | None, data: Path, recipe, size: tuple[in
         if server is not None and not errors:
             print(f"[4/5] 편집기 측정: {facts['browser'] if app else args.browser}", flush=True)
             try:
-                if app:
+                if app and page is not None:
                     facts["size"] = "x".join(str(n) for n in page.evaluate("[innerWidth, innerHeight]"))
                 else:
                     browser = p.chromium.launch(channel=args.browser, headless=False)
