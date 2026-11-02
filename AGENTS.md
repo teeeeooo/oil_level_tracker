@@ -47,4 +47,5 @@ only repository-specific routing and invariants.
 | `tests/` | pytest suite |
 | `scripts/` | repository checks and helpers |
 | `design/` | design mock-ups; not product code |
+| `packaging/` | the Windows build's inputs (the app icon) |
 | `sample/` | local videos and old sample files; ignored by Git, not product input |

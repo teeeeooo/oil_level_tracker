@@ -259,6 +259,17 @@ Do not use sizes outside this ramp.
   - header row `--bg-3`, Body 1 Strong;
   - rows separated by `--stroke-2`;
   - numbers right-aligned.
+- **App icon** (`OilLevelTracker.exe`; user's choice of candidate A,
+  2026-11-02): a sight glass on a `--brand` tile with 52/256 corners. The
+  glass is `--brand-tint` inside a white rim, filled with `--oil` under a
+  band of `--foam`; three white scale marks stand to its right.
+  - The drawings: `packaging/app-icon.svg` (32 px and up) and
+    `packaging/app-icon-small.svg` (16–24 px: no scale marks, a heavier
+    rim, a full tile).
+  - `scripts/make_icon.py` draws each size from them into
+    `packaging/OilLevelTracker.ico` (16, 20, 24, 32, 40, 48, 64, 256 px).
+  - The icon is the one place where `--oil` and `--foam` appear outside
+    the data: it shows what the app measures.
 
 ## 5. Layout Principles
 

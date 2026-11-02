@@ -1,7 +1,8 @@
 # Current Work Plan
 
 **Current milestone:** `V2-5 — Windows acceptance` / `ACTIVE`
-(started 2026-11-02; first step: icon candidates for the user).
+(started 2026-11-02; the icon is done; next: frozen paths, logs, the
+spec).
 **Last completed:** `V2-4b — Video window and pattern copy` / `DONE`
 (2026-11-02).
 
@@ -227,8 +228,13 @@ Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
 - **The spec:** PyInstaller one-folder, no console, `OilLevelTracker.exe`
   (user, 2026-11-02); trim OpenCV, NumPy and pywebview for A8's 200 MB; a
   build script; tests for the paths and the log.
-- **An icon:** the user asked for one (2026-11-02). Show two or three
-  candidates in DESIGN.md's colours first.
+- **An icon — done** (2026-11-02): the user chose candidate A of three
+  ([design/icon/](../../design/icon/candidates.html)), the sight glass;
+  DESIGN.md §4 "App icon". `packaging/OilLevelTracker.ico` is made by
+  `scripts/make_icon.py` (Playwright and Chrome, on the Mac) and checked
+  by `tests/test_app_icon.py`; the spec points at it.
+- **The big window's stutter at a higher speed:** fix it in V2-5 (user,
+  2026-11-02); see Open items.
 - **The V2-5 request:** build on the workstation; A1–A9 on that build;
   A8's PC with only the WebView2 runtime is the slowest PC (user,
   2026-11-02); time the window (pywebview), still untimed.
@@ -344,8 +350,8 @@ workstation since 2026-10-30; these are simple speed-ups, never blockers):
 whenever it drifts more than `DRIFT_SEC = 0.25` s of video time from the
 editor, which at 4× is about 60 ms of wall time; each seek decodes from a
 key frame. Fix: nudge `playbackRate` for small drift and seek only on a
-large one; check it on Windows in the V2-5 run. The user's decision on
-when.
+large one; check it on Windows in the V2-5 run. Fixed in V2-5 (user,
+2026-11-02).
 
 **Small facts:**
 - `AnalysisSettings.sample_count` counts to `end_sec`, but the analysis
@@ -411,6 +417,5 @@ The three v1 remote branches that v1 docs cite stay.
 ## Next
 
 - **Done:** V2-4b (2026-11-02).
-- **Next:** V2-5 (the steps above), starting with two or three icon
-  candidates for the user; the big window's stutter at a higher speed
-  waits on the user's word on when (Open items).
+- **Next:** V2-5 (the steps above): frozen paths and logs, the stutter
+  fix, then the spec and its build script.
