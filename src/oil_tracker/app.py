@@ -175,8 +175,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def main(argv: list[str] | None = None) -> int:
+    began = time.perf_counter()
     args = parse_args(argv)
-    start_log(bootstrap.settings_folder())  # before pywebview, whose logger keeps the stream it finds
+    log = start_log(bootstrap.settings_folder())  # before pywebview, whose logger keeps the stream it finds
     if args.no_window:
         running = bootstrap.start(data_folder=args.data_folder, port=args.port)
         print(running.url, flush=True)
@@ -214,6 +215,8 @@ def main(argv: list[str] | None = None) -> int:
         "Oil Level Tracker", running.url, width=1440, height=900, min_size=(1280, 800), localization=CLOSE_QUESTION
     )
     holder["window"].events.closed += video_window.close  # the app ends with its main window
+    if log is not None:  # how long the window takes (V2-5), counted from main(), after Python started
+        holder["window"].events.loaded += lambda: log.write(f"window: page loaded {time.perf_counter() - began:.1f} s after start\n")
     try:
         webview.start()
     finally:

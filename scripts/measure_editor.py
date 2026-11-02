@@ -14,25 +14,36 @@ Stages:
 5. for A4, ways to take the context's row medians (scripts/compare_medians.py).
 It writes the result file (Markdown) and a data folder for the inspection, and prints the text.
 
+With --app (V2-5), stages 3 and 4 run in the built app instead: OilLevelTracker.exe on the data
+folder, its WebView2 opened to Playwright through a debugging port, its API called with the token in
+its page's address. The time until its window shows the inspection list is recorded; stage 5 is
+left out (it measures this folder's code, not the build).
+
 Usage: python scripts/measure_editor.py --video VIDEO --recipe RECIPE.recipe.json
-           [--browser msedge] [--size 1920x1040] [--drags 8] [--seeks 40] [--play-sec 60] [--out RESULT.md]
+           [--app OilLevelTracker.exe] [--browser msedge] [--size 1920x1040] [--drags 8] [--seeks 40]
+           [--play-sec 60] [--out RESULT.md]
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import http.client
 import json
 import math
+import os
 import platform
 import random
 import shutil
+import socket
 import statistics
+import subprocess
 import sys
 import time
 import traceback
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))  # this folder's code, even where another copy is installed
@@ -48,25 +59,101 @@ from time_analysis import package_version, pc_inventory, source_digest, video_fa
 NAME = "A5A6 측정"
 PAUSE_MS = 8  # between mouse moves: a 125 Hz mouse
 CODECS = {"h264": 'video/mp4; codecs="avc1.640028"', "hevc": 'video/mp4; codecs="hvc1.1.6.L120.90"'}
+APP_START_SEC = 120.0
+
+
+def api_call(port: int, token: str, method: str, path: str, body: object = None) -> dict:
+    connection = http.client.HTTPConnection("127.0.0.1", port, timeout=60)
+    headers = {"X-OLT-Token": token, "Content-Type": "application/json"}
+    connection.request(method, path, None if body is None else json.dumps(body).encode(), headers)
+    response = connection.getresponse()
+    data = json.loads(response.read() or b"{}")
+    connection.close()
+    if response.status >= 400:
+        raise RuntimeError(f"{method} {path}: HTTP {response.status} {data}")
+    return data
 
 
 class Server:
+    """This folder's code, served in this process."""
+
     def __init__(self, data: Path) -> None:
         self.running = bootstrap.start(data_folder=data)
+        self.url = self.running.url
 
     def call(self, method: str, path: str, body: object = None) -> dict:
-        connection = http.client.HTTPConnection("127.0.0.1", self.running.server.server_address[1], timeout=60)
-        headers = {"X-OLT-Token": self.running.token, "Content-Type": "application/json"}
-        connection.request(method, path, None if body is None else json.dumps(body).encode(), headers)
-        response = connection.getresponse()
-        data = json.loads(response.read() or b"{}")
-        connection.close()
-        if response.status >= 400:
-            raise RuntimeError(f"{method} {path}: HTTP {response.status} {data}")
-        return data
+        return api_call(self.running.server.server_address[1], self.running.token, method, path, body)
 
     def close(self) -> None:
         self.running.close()
+
+
+class AppServer:
+    """The built app on the data folder, its window's page opened through WebView2's debugging port,
+    which WebView2 takes from WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS. command is the app and its
+    arguments before --data-folder."""
+
+    def __init__(self, command: list[str], data: Path, playwright) -> None:
+        with socket.socket() as probe:
+            probe.bind(("127.0.0.1", 0))
+            debug_port = probe.getsockname()[1]
+        env = dict(os.environ, WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=f"--remote-debugging-port={debug_port}")
+        began = time.perf_counter()
+        self.process = subprocess.Popen([*command, "--data-folder", str(data)], env=env)
+        self.browser = None
+        try:
+            self.page = self._window_page(playwright, debug_port, began)
+            self.page.wait_for_selector("#inspectionRows", state="attached", timeout=APP_START_SEC * 1000)
+        except BaseException:
+            self.close()
+            raise
+        self.window_sec = time.perf_counter() - began
+        self.url = self.page.url
+        address = urlsplit(self.url)
+        self.port = address.port
+        self.token = parse_qs(address.query)["token"][0]
+
+    def _window_page(self, playwright, debug_port: int, began: float):
+        while True:
+            if self.process.poll() is not None:
+                raise RuntimeError(f"앱이 끝났습니다 (exit code {self.process.returncode})")
+            if time.perf_counter() - began > APP_START_SEC:
+                raise RuntimeError(f"{APP_START_SEC:.0f}초 안에 앱 창을 찾지 못했습니다")
+            if self.browser is None:
+                try:
+                    self.browser = playwright.chromium.connect_over_cdp(f"http://127.0.0.1:{debug_port}")
+                except Exception:  # noqa: BLE001 - not listening yet
+                    time.sleep(0.5)
+                    continue
+            for context in self.browser.contexts:
+                for page in context.pages:
+                    if "token=" in page.url:
+                        return page
+            time.sleep(0.2)
+
+    def call(self, method: str, path: str, body: object = None) -> dict:
+        return api_call(self.port, self.token, method, path, body)
+
+    def close(self) -> None:
+        if self.browser is not None:
+            try:
+                self.browser.close()  # only the connection: the app's window stays its own
+            except Exception:  # noqa: BLE001
+                pass
+        if self.process.poll() is None:
+            self.process.terminate()
+            try:
+                self.process.wait(timeout=30)
+            except subprocess.TimeoutExpired:
+                self.process.kill()
+
+
+def file_digest(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        while chunk := handle.read(1 << 20):
+            digest.update(chunk)
+    return digest.hexdigest()[:12]
 
 
 def fourcc(path: Path) -> str:
@@ -318,8 +405,14 @@ def markdown(facts: dict, found: dict, errors: list[tuple[str, str]]) -> str:
         f"/ 최대 {facts['keys']['max']} 프레임",
         f"- Recipe: `{facts['recipe']}`, Glass {facts['glass_count']}개; 창 {facts['size']}",
     ]
+    if "app" in facts:
+        app = facts["app"]
+        lines.append(f"- 빌드한 앱: `{app['name']}`, {app['bytes']} bytes, sha256 `{app['sha256']}`")
+    if "window_sec" in facts:
+        lines.append(f"- 앱 창이 검사 목록을 보이기까지: **{facts['window_sec']:.1f}초**")
     if "analysis_sec" in facts:
-        lines.append(f"- 분석(앱 서버로, 창 없이): **{facts['analysis_sec']:.1f}초**, 샘플 {found.get('samples', '?')}개")
+        where = "빌드한 앱으로" if "app" in facts else "앱 서버로, 창 없이"
+        lines.append(f"- 분석({where}): **{facts['analysis_sec']:.1f}초**, 샘플 {found.get('samples', '?')}개")
     if "can_play" in found:
         lines.append(f"- 브라우저가 재생할 수 있다는 코덱: H.264 `{found['can_play']['h264']}`, HEVC `{found['can_play']['hevc']}`")
     if "a5" in found:
@@ -357,10 +450,58 @@ def markdown(facts: dict, found: dict, errors: list[tuple[str, str]]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def measure_with(args, app: list[str] | None, data: Path, recipe, size: tuple[int, int], facts: dict,
+                 errors: list[tuple[str, str]]) -> dict:
+    """Stages 3 and 4, with this folder's server and a browser, or in the built app (app: its command)."""
+    from playwright.sync_api import sync_playwright
+
+    found: dict = {}
+    with sync_playwright() as p:
+        server = None
+        browser = None
+        try:
+            if app:
+                print("  앱을 띄운다 (창이 열린다)", flush=True)
+                server = AppServer(app, data, p)
+                facts["window_sec"] = server.window_sec
+                facts["browser_version"] = server.browser.version
+                page = server.page
+                print(f"  앱 창: {server.window_sec:.1f}초", flush=True)
+            else:
+                server = Server(data)
+            where = "빌드한 앱으로" if app else "앱 서버로"
+            print(f"[3/5] 분석 ({where}, 진행 상황은 30초마다 표시)", flush=True)
+            _, facts["analysis_sec"] = analyse(server, args.video, recipe)
+            print(f"  끝: {facts['analysis_sec']:.1f}초", flush=True)
+        except Exception:
+            errors.append(("분석", traceback.format_exc()))
+            print(errors[-1][1], flush=True)
+        if server is not None and not errors:
+            print(f"[4/5] 편집기 측정: {facts['browser'] if app else args.browser}", flush=True)
+            try:
+                if app:
+                    facts["size"] = "x".join(str(n) for n in page.evaluate("[innerWidth, innerHeight]"))
+                else:
+                    browser = p.chromium.launch(channel=args.browser, headless=False)
+                    facts["browser_version"] = browser.version
+                    page = browser.new_page(viewport={"width": size[0], "height": size[1]})
+                page.on("pageerror", lambda error: errors.append(("페이지", error.stack or str(error))))
+                found = measure(page, server.url, args.drags, args.seeks, args.play_sec)
+            except Exception:
+                errors.append(("편집기 측정", traceback.format_exc()))
+                print(errors[-1][1], flush=True)
+        if browser is not None:
+            browser.close()
+        if server is not None:
+            server.close()
+    return found
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--video", type=Path, required=True)
     parser.add_argument("--recipe", type=Path, required=True)
+    parser.add_argument("--app", type=Path, help="the built app (OilLevelTracker.exe), measured in its own window")
     parser.add_argument("--browser", default="msedge", help="the Playwright channel: msedge on Windows, chrome on macOS")
     parser.add_argument("--size", default="1920x1040", help="the page size, as a maximised window on a 1080p screen")
     parser.add_argument("--drags", type=int, default=8, help="grab-and-drags per view")
@@ -395,43 +536,25 @@ def main(argv: list[str] | None = None) -> int:
     print("[2/5] 소스 확인", flush=True)
     facts["source"] = source_digest(scripts=("measure_editor.py", "time_analysis.py", "compare_medians.py"))
     print(f"  source={facts['source'][0]} files={facts['source'][1]}", flush=True)
+    if args.app:
+        facts["app"] = {"name": args.app.name, "bytes": args.app.stat().st_size, "sha256": file_digest(args.app)}
+        facts["browser"] = "WebView2 (앱 창)"
+        print(f"  app={args.app.name} sha256={facts['app']['sha256']}", flush=True)
 
     found: dict = {}
     errors: list[tuple[str, str]] = []
     (data / "Recipes").mkdir(parents=True)
     shutil.copyfile(args.recipe, data / "Recipes" / args.recipe.name)
-    server = Server(data)
-    try:
-        print("[3/5] 분석 (앱 서버로, 진행 상황은 30초마다 표시)", flush=True)
+    found = measure_with(args, [str(args.app)] if args.app else None, data, recipe, (width, height), facts, errors)
+    if args.app:
+        print("[5/5] 중앙값 비교: --app에서는 하지 않음", flush=True)
+    else:
+        print("[5/5] 중앙값 비교 (A4)", flush=True)
         try:
-            _, facts["analysis_sec"] = analyse(server, args.video, recipe)
-            print(f"  끝: {facts['analysis_sec']:.1f}초", flush=True)
+            found["medians"] = compare_medians(args.video, [g.ellipse for g in recipe.glasses])
         except Exception:
-            errors.append(("분석", traceback.format_exc()))
+            errors.append(("중앙값 비교", traceback.format_exc()))
             print(errors[-1][1], flush=True)
-        if not errors:
-            print(f"[4/5] 편집기 측정: {args.browser}", flush=True)
-            try:
-                from playwright.sync_api import sync_playwright
-
-                with sync_playwright() as p:
-                    browser = p.chromium.launch(channel=args.browser, headless=False)
-                    facts["browser_version"] = browser.version
-                    page = browser.new_page(viewport={"width": width, "height": height})
-                    page.on("pageerror", lambda error: errors.append(("페이지", str(error))))
-                    found = measure(page, server.running.url, args.drags, args.seeks, args.play_sec)
-                    browser.close()
-            except Exception:
-                errors.append(("편집기 측정", traceback.format_exc()))
-                print(errors[-1][1], flush=True)
-    finally:
-        server.close()
-    print("[5/5] 중앙값 비교 (A4)", flush=True)
-    try:
-        found["medians"] = compare_medians(args.video, [g.ellipse for g in recipe.glasses])
-    except Exception:
-        errors.append(("중앙값 비교", traceback.format_exc()))
-        print(errors[-1][1], flush=True)
 
     text = markdown(facts, found, errors)
     out.write_text(text, encoding="utf-8")
