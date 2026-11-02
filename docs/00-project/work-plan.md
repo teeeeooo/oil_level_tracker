@@ -251,19 +251,24 @@ Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
 - **The big window's stutter at a higher speed — done** (user, 2026-11-02:
   in V2-5); see Open items.
 - **Measuring the build — done:** `measure_editor.py --app` starts the
-  built exe with WebView2's debugging port
-  (`WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS`), analyses through its API
+  built exe with WebView2's debugging port (the app's
+  `OLT_WEBVIEW_DEBUG_PORT`, handed to pywebview's `REMOTE_DEBUGGING_PORT`;
+  WebView2's own `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS` is not read under
+  pywebview, which sets the arguments itself: the first Windows attempt
+  on `7dc38e7` never reached the window), analyses through its API
   (the token from its page's address) and measures A5/A6 in its window,
   with the time until the window shows the list. Checked on macOS with a
   stand-in app (Chrome with the same port). It found a page bug, fixed:
   a resize while an inspection opened drew before the view was set. The
   app also logs `window: page loaded … s after start`. **Unproven on
-  Windows:** that WebView2 honours the variable under pywebview; the
-  request falls back to Edge with the source if not.
+  Windows:** the port through pywebview; the request falls back to Edge
+  with the source if it fails.
 - **The V2-5 request — waits on the user:**
   [2026-11-02-v2-5-acceptance-windows-request.md](../40-operations/2026-11-02-v2-5-acceptance-windows-request.md),
-  pinned to `7dc38e7` (`checked=108`). On the workstation: tests
-  (`260 passed, 4 skipped`), the build (`package=PASS`, ≤ 200 MB), the
+  revised after the first attempt and pinned to `5bb9025`
+  (`checked=108`), run again from §0 in a new folder (backup
+  `C:\olt-v25b-backup`). On the workstation: tests
+  (`261 passed, 4 skipped`), the build (`package=PASS`, ≤ 200 MB), the
   ZIP for the slowest PC, A4–A6 measured in the build, the pre-run
   lists, then the user in the build: Recipes `V25 SPL#4` (at ~01:00) and
   `V25 SPL#1` (at ~10:00), the resolution refusal (a 1280×720 file the
