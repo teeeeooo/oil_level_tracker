@@ -11,9 +11,13 @@
   the point line, the snap), the speed field and help (DESIGN.md §4), empty stretches, the line kinds,
   re-analysis and the save state. Confirmed by the user on 2026-10-29, with labelled tool buttons.
   2026-10-30 (V2-4 step 1): the judgment panel, the Glass check, the override, submitting and a
-  submitted (locked) version, with the user's start decisions. Waiting on the user's confirmation.
+  submitted (locked) version, with the user's start decisions. Confirmed by the user on 2026-10-30.
+  2026-11-02 (V2-4b step 1): the right column in the order the user set after the V2-4 run (원본
+  영상, 편집, 판정, Glass, 분석; memos in the toolbar's list); the "크게 보기" button on the video
+  (its window is video-window.html); copying a range and the two pastes, on synthetic on-off
+  cycles. Waiting on the user's confirmation.
   Tokens follow DESIGN.md §2–§6. Open with #grab, #range, #point, #judge, #override, #checked,
-  #submit or #locked to show one state.
+  #submit, #locked, #bigview, #copy, #paste or #repeat to show one state.
 -->
 <style>
 :root {
@@ -122,6 +126,14 @@ table.kv th { color:var(--fg-3); font-weight:400; width:96px; }
 .memo .t { color:var(--fg-3); font-variant-numeric:tabular-nums; }
 .collapsed { color:var(--fg-disabled); font-weight:400; font-size:12px; }
 
+/* V2-4b: the full-size view, copy and paste */
+.vbtn { position:absolute; right:8px; top:8px; height:28px; padding:0 8px; display:inline-flex; align-items:center; gap:6px; border:0; border-radius:4px; background:rgba(0,0,0,.55); color:#fff; font:12px/16px var(--font); cursor:pointer; }
+.vbtn svg { width:16px; height:16px; }
+.vbtn.hot { background:rgba(0,0,0,.8); outline:2px solid #fff; outline-offset:-2px; }
+.field { display:flex; flex-direction:column; gap:2px; flex:1; min-width:0; }
+.field .input { flex:none; font-variant-numeric:tabular-nums; }
+.field .input.focus { border-bottom:2px solid var(--brand); }
+
 /* V2-4: judgment, check, submit */
 .badge.pass { color:var(--pass); background:var(--pass-bg); }
 .badge.fail { color:var(--fail); background:var(--fail-bg); }
@@ -167,7 +179,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
     <div class="sep"></div>
     <div class="title">
       <b>1차 냉각</b>
-      <span data-show="grab range point judge override checked submit"><span class="dirty">저장 안 함</span> · SPL#4_Cooling_onoff_#2.mp4</span>
+      <span data-show="grab range point judge override checked submit bigview copy paste repeat"><span class="dirty">저장 안 함</span> · SPL#4_Cooling_onoff_#2.mp4</span>
       <span data-show="locked">v1 제출함 10-30 14:22 · SPL#4_Cooling_onoff_#2.mp4</span>
     </div>
     <div class="sep"></div>
@@ -183,7 +195,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
     <div class="spacer"></div>
     <div class="picker" title="Glass 선택" style="position:relative">
       <span class="caption">Glass</span><span class="name">BASE</span>
-      <span class="badge pending" data-show="grab range point judge override">확인 전</span>
+      <span class="badge pending" data-show="grab range point judge override bigview copy paste repeat">확인 전</span>
       <span class="badge pass" data-show="checked submit locked">합격</span>
       <span class="more">▾</span>
       <div class="menu" data-show="checked">
@@ -192,8 +204,8 @@ table.list th { background:var(--bg-3); font-weight:600; }
       </div>
     </div>
     <div class="spacer"></div>
-    <button class="btn" title="저장 (Ctrl+S)" data-show="grab range point judge override checked submit">저장</button>
-    <button class="btn primary" disabled title="모든 Glass를 확인해야 제출할 수 있습니다 (남은 Glass: BASE, Accum)" data-show="grab range point judge override">제출</button>
+    <button class="btn" title="저장 (Ctrl+S)" data-show="grab range point judge override checked submit bigview copy paste repeat">저장</button>
+    <button class="btn primary" disabled title="모든 Glass를 확인해야 제출할 수 있습니다 (남은 Glass: BASE, Accum)" data-show="grab range point judge override bigview copy paste repeat">제출</button>
     <button class="btn primary" title="v1 제출" data-show="checked submit">제출</button>
     <button class="btn" data-show="locked">보고서 열기</button>
     <button class="btn icon-btn" title="도움말 (F1)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M7.8 7.9a2.2 2.2 0 1 1 3 2.05c-.5.2-.8.6-.8 1.15v.4"/><path d="M10 13.6v.4"/></svg></button>
@@ -222,7 +234,9 @@ table.list th { background:var(--bg-3); font-weight:600; }
 
     <aside class="right-col">
       <div class="phead">원본 영상 <span class="right">BASE 확대 · 선 겹쳐 보기</span></div>
-      <div class="video"><canvas id="video"></canvas></div>
+      <div class="video"><canvas id="video"></canvas>
+        <button class="vbtn" id="bigBtn" title="크게 보기: 원본 영상을 따로 띄운 창에서 원본 크기로 봅니다"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.5 2.5h4v4M13.5 2.5L9 7M6.5 13.5h-4v-4M2.5 13.5L7 9"/></svg>크게 보기</button>
+      </div>
       <div class="transport">
         <button class="tool" title="이전 프레임 (,)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4h2v12H5zM16 4v12L8 10z"/></svg></button>
         <button class="tool" title="재생 (Space)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4l10 6-10 6z"/></svg></button>
@@ -243,18 +257,67 @@ table.list th { background:var(--bg-3); font-weight:600; }
             <span class="seg"><button class="on">부드럽게</button><button>뾰족하게</button></span><span class="caption"><kbd>Alt</kbd>+끌기</span></div>
           <div class="row"><span class="label">스냅 <kbd>S</kbd></span><span class="toggle"><span class="switch on"></span>켬</span><span class="caption">8 px 안의 경계에 붙음</span></div>
           <div class="selbox" id="selbox" hidden>
-            <div class="head">선택한 범위 <span class="num">03:56.0 – 04:22.0 · 26.0 s</span></div>
+            <div class="head">선택한 범위 <span class="num" id="selText">03:56.0 – 04:22.0 · 26.0 s</span></div>
             <div class="caption">범위 도구로 그래프나 맥락 이미지를 가로로 끌어 고릅니다. 양 끝을 끌어 조정하고, <kbd>Esc</kbd>로 풉니다.</div>
             <div class="row" style="flex-wrap:wrap">
               <button class="btn small">선 지우기 <kbd>Delete</kbd></button>
               <button class="btn small">판단 불가 <kbd>U</kbd></button>
               <button class="btn small">판단 불가 풀기</button>
+              <button class="btn small">복사 <kbd>Ctrl+C</kbd></button>
             </div>
+          </div>
+          <div class="selbox" data-show="copy paste">
+            <div class="head">복사한 구간 <span class="num">00:30.0 – 01:30.0 · 60.0 s</span></div>
+            <div class="caption">BASE의 Oil과 Foam (빈 샘플 포함). 이 Glass에만 붙여 넣을 수 있습니다.</div>
+            <div class="row" style="flex-wrap:wrap" data-show="copy">
+              <button class="btn small">붙여넣기 <kbd>Ctrl+V</kbd></button>
+              <button class="btn small">반복 붙여넣기…</button>
+            </div>
+            <div class="caption" data-show="paste" style="color:var(--fg-1)"><b>붙여넣는 중 · 1곳 붙임.</b> 그래프나 맥락 이미지를 클릭하면 그 시각에서 복사본이 시작합니다. 높이는 복사한 그대로입니다. <kbd>Esc</kbd>로 끝냅니다.</div>
+          </div>
+          <div class="selbox" data-show="repeat">
+            <div class="head">반복 붙여넣기 <span class="num">00:30.0 – 01:30.0 · 60.0 s를</span></div>
+            <div class="row">
+              <span class="field"><span class="label">첫 시작</span><span class="input focus">01:30.0</span></span>
+              <span class="field"><span class="label">주기</span><span class="input">01:00.0</span></span>
+              <span class="field"><span class="label">끝</span><span class="input">05:00.0</span></span>
+            </div>
+            <div class="caption">4개 붙습니다: 01:30, 02:30, 03:30, 04:30. 마지막 것은 분석 범위 끝(05:00)에서 잘립니다. 그래프의 첫 복사본을 끌어 첫 시작을 옮길 수도 있습니다.</div>
+            <div class="row"><button class="btn primary small">붙여넣기</button><button class="btn small">취소</button><span class="caption"><kbd>Enter</kbd> · <kbd>Esc</kbd></span></div>
           </div>
           <div class="selbox" id="pointbox" hidden>
             <div class="head">점 잇기 · 점 3개 · Oil</div>
             <div class="caption">맥락 이미지를 클릭해 점을 더합니다. 점 사이는 경계를 따라 이어집니다. <kbd>Enter</kbd> 확정 · <kbd>Esc</kbd> 취소 · <kbd>Backspace</kbd> 마지막 점 빼기</div>
           </div>
+        </div>
+      </div>
+
+      <div class="section" id="judgment">
+        <div class="phead">판정 · BASE <span class="right">기준점 회복</span></div>
+        <div class="body">
+          <div class="verdict">
+            <span class="badge pass" data-show="grab range point judge checked submit locked bigview copy paste repeat">합격</span>
+            <span class="badge fail" data-show="override">불합격</span>
+            <span class="caption" data-show="grab range point judge checked submit locked bigview copy paste repeat">자동 판정</span>
+            <span class="caption" data-show="override">직접 판정 · 자동 판정은 합격</span>
+          </div>
+          <table class="kv">
+            <tr><th>압축기 기동</th><td>00:30.0</td></tr>
+            <tr><th>0선 회복</th><td>01:57.6 <span class="caption">기동 후 87.6 s (한도 120 s)</span></td></tr>
+            <tr><th>회복 뒤 유지</th><td>계속 유지 <span class="caption">(기준 5 s 이상)</span></td></tr>
+            <tr><th>유효 비율</th><td>81 % <span class="caption">(기준 70 % 이상)</span></td></tr>
+          </table>
+          <div class="row" data-show="grab range point judge override checked submit bigview copy paste repeat"><span class="label">덮어쓰기</span>
+            <span class="seg"><button class="on" data-show="grab range point judge checked submit bigview copy paste repeat">자동</button><button data-show="override">자동</button><button>합격</button><button class="on" data-show="override">불합격</button><button data-show="grab range point judge checked submit bigview copy paste repeat">불합격</button></span></div>
+          <div data-show="override" style="display:flex;flex-direction:column;gap:4px">
+            <span class="label" style="width:auto">덮어쓴 이유 (필수)</span>
+            <div class="textarea">01:40 부근 거품이 유면을 가려 회복 시각을 믿을 수 없음. 재시험 필요.</div>
+            <span class="caption">보고서에는 최종 판정과 이 이유가 "판정 사유"로 나옵니다. 자동 판정은 이 검사의 기록으로만 남습니다.</span>
+          </div>
+          <div class="row" data-show="grab range point judge override bigview copy paste repeat"><button class="btn primary small">이 Glass 확인</button><span class="caption">남은 Glass: BASE, Accum</span></div>
+          <div class="checked" data-show="checked submit"><span>✓ 확인함 14:20</span><button class="btn small subtle">확인 풀기</button></div>
+          <div class="checked" data-show="locked"><span>✓ 확인함 14:20 · v1에 제출됨</span></div>
+          <span class="caption" data-show="grab range point judge override checked submit bigview copy paste repeat">확인한 뒤 이 Glass의 선이나 판단 불가, 압축기 기동을 고치면 확인이 풀립니다.</span>
         </div>
       </div>
 
@@ -269,52 +332,6 @@ table.list th { background:var(--bg-3); font-weight:600; }
             <tr><th>편집 기록</th><td>초안 고침 312 · 직접 그림 48 샘플 <span class="caption">(전체 600)</span></td></tr>
           </table>
           <div class="row"><button class="btn small">◀ 이전 빈 구간</button><button class="btn small">다음 빈 구간 ▶</button><span class="caption"><kbd>N</kbd></span></div>
-        </div>
-      </div>
-
-      <div class="section" id="judgment">
-        <div class="phead">판정 · BASE <span class="right">기준점 회복</span></div>
-        <div class="body">
-          <div class="verdict">
-            <span class="badge pass" data-show="grab range point judge checked submit locked">합격</span>
-            <span class="badge fail" data-show="override">불합격</span>
-            <span class="caption" data-show="grab range point judge checked submit locked">자동 판정</span>
-            <span class="caption" data-show="override">직접 판정 · 자동 판정은 합격</span>
-          </div>
-          <table class="kv">
-            <tr><th>압축기 기동</th><td>00:30.0</td></tr>
-            <tr><th>0선 회복</th><td>01:57.6 <span class="caption">기동 후 87.6 s (한도 120 s)</span></td></tr>
-            <tr><th>회복 뒤 유지</th><td>계속 유지 <span class="caption">(기준 5 s 이상)</span></td></tr>
-            <tr><th>유효 비율</th><td>81 % <span class="caption">(기준 70 % 이상)</span></td></tr>
-          </table>
-          <div class="row" data-show="grab range point judge override checked submit"><span class="label">덮어쓰기</span>
-            <span class="seg"><button class="on" data-show="grab range point judge checked submit">자동</button><button data-show="override">자동</button><button>합격</button><button class="on" data-show="override">불합격</button><button data-show="grab range point judge checked submit">불합격</button></span></div>
-          <div data-show="override" style="display:flex;flex-direction:column;gap:4px">
-            <span class="label" style="width:auto">덮어쓴 이유 (필수)</span>
-            <div class="textarea">01:40 부근 거품이 유면을 가려 회복 시각을 믿을 수 없음. 재시험 필요.</div>
-            <span class="caption">보고서에는 최종 판정과 이 이유가 "판정 사유"로 나옵니다. 자동 판정은 이 검사의 기록으로만 남습니다.</span>
-          </div>
-          <div class="row" data-show="grab range point judge override"><button class="btn primary small">이 Glass 확인</button><span class="caption">남은 Glass: BASE, Accum</span></div>
-          <div class="checked" data-show="checked submit"><span>✓ 확인함 14:20</span><button class="btn small subtle">확인 풀기</button></div>
-          <div class="checked" data-show="locked"><span>✓ 확인함 14:20 · v1에 제출됨</span></div>
-          <span class="caption" data-show="grab range point judge override checked submit">확인한 뒤 이 Glass의 선이나 판단 불가, 압축기 기동을 고치면 확인이 풀립니다.</span>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="phead">검사 정보 <span class="right">보고서 머리글</span></div>
-        <div class="body">
-          <div class="row"><span class="label">압축기 모델</span><span class="input" data-show="grab range point judge override checked submit">GB-2 R410A</span><span class="input locked" data-show="locked">GB-2 R410A</span></div>
-          <div class="row"><span class="label">시험 종류</span><span class="input" data-show="grab range point judge override checked submit">냉각 on/off</span><span class="input locked" data-show="locked">냉각 on/off</span></div>
-          <span class="caption" data-show="grab range point judge override checked submit">분석 설정에서 검사 이름과 함께 넣은 값. 제출 전까지 고칠 수 있습니다.</span>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="phead">메모 <span class="right">메모 도구로 그래프를 클릭해 추가</span></div>
-        <div class="body">
-          <div class="memo"><span class="pin">1</span><div><div class="t">01:02.0</div>거품 발생, 유면 식별 어려움</div></div>
-          <div class="memo"><span class="pin">2</span><div><div class="t">03:32.0</div>FULL 도달 확인</div></div>
         </div>
       </div>
 
@@ -351,7 +368,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
 </div>
 
 <div class="note" id="note"><button class="close" onclick="this.parentNode.remove()">닫기 ✕</button>
-  <b>V2-3 편집 화면 목업 (가짜 데이터)</b>
+  <b>편집 화면 목업 (가짜 데이터)</b>
   <div class="states">
     <button class="btn small" data-state="grab">잡아끌기 중</button>
     <button class="btn small" data-state="range">범위 선택</button>
@@ -364,6 +381,13 @@ table.list th { background:var(--bg-3); font-weight:600; }
     <button class="btn small" data-state="checked">확인함</button>
     <button class="btn small" data-state="submit">제출 창</button>
     <button class="btn small" data-state="locked">제출 뒤</button>
+  </div>
+  <b>V2-4b (확인 요청, 2026-11-02)</b>
+  <div class="states" style="flex-wrap:wrap">
+    <button class="btn small" data-state="bigview">크게 보기</button>
+    <button class="btn small" data-state="copy">복사</button>
+    <button class="btn small" data-state="paste">한 곳씩 붙여넣기</button>
+    <button class="btn small" data-state="repeat">반복 붙여넣기</button>
   </div>
   <div id="stateText"></div>
   <b style="display:block;margin-top:8px">확정 (사용자, 2026-10-29)</b>
@@ -383,9 +407,12 @@ table.list th { background:var(--bg-3); font-weight:600; }
   const TOP = 200, ZERO = 60;                      // Glass rows; FULL at TOP, EMPTY at 0; zero line row
   const START = 30, PLAY = 95;
   const PAD = { l: 52, r: 16, t: 14, b: 10 };
-  const EMPTY = [[150, 172], [246, 258]];          // draft stretches left empty
-  const CANNOT = [[130, 150]];
-  const SELECT = [236, 262];
+  let EMPTY = [[150, 172], [246, 258]];            // draft stretches left empty
+  let CANNOT = [[130, 150]];
+  let SELECT = [236, 262];
+  // V2-4b: an on-off test, one 60 s cycle from the compressor start; the user drew 30-90 and copies it
+  const CYCLE = 60, SOURCE = [30, 90], PLACED = [90], GHOST_AT = 150, REPEATS = [90, 150, 210, 270];
+  let cyc = false;
   const POINTS = [146, 158, 166];                  // point line in progress; the cursor at 176
   let state = (location.hash || "#grab").slice(1);
 
@@ -399,9 +426,27 @@ table.list th { background:var(--bg-3); font-weight:600; }
     if (t < 270) return 200;
     return smooth(200, 168, 270, 300, t);
   }
-  const oilAt = t => (within(EMPTY, t) || within(CANNOT, t)) ? null : trueOil(t);
-  const foamAt = t => (t >= 40 && t <= 128) ? Math.min(TOP, trueOil(t) + smooth(0, 34, 40, 60, t) * smooth(1, 0, 110, 128, t)) : null;
-  const refAt = t => (t >= 20 && t <= 120) ? 118 : null;
+  function cycOil(t) {                             // the true Oil level in the on-off test
+    if (t < START) return 150;
+    const u = (t - START) % CYCLE;
+    return u < 14 ? smooth(150, 72, 0, 14, u) : smooth(72, 150, 20, 46, u);
+  }
+  function cycFoam(t) {                            // Foam above the Oil while the level falls and rises
+    if (t < START) return null;
+    const u = (t - START) % CYCLE;
+    return u > 3 && u < 34 ? Math.min(TOP, cycOil(t) + smooth(0, 38, 3, 10, u) * smooth(1, 0, 24, 34, u)) : null;
+  }
+  const isPasted = t => (state === "paste" && PLACED.some(a => t >= a && t < a + CYCLE));
+  const isSource = t => t >= SOURCE[0] && t < SOURCE[1];
+  // the draft outside the drawn cycle: it follows the Foam top where there is Foam, and is empty in places
+  const draftOil = t => within(EMPTY, t) ? null : (cycFoam(t) ?? cycOil(t)) + 4 * Math.sin(t / 3);
+  const oilAt = t => cyc ? (isSource(t) || isPasted(t) || t < START ? cycOil(t) : draftOil(t))
+                         : (within(EMPTY, t) || within(CANNOT, t)) ? null : trueOil(t);
+  const foamAt = t => cyc ? (isSource(t) || isPasted(t) ? cycFoam(t) : null)
+                          : (t >= 40 && t <= 128) ? Math.min(TOP, trueOil(t) + smooth(0, 34, 40, 60, t) * smooth(1, 0, 110, 128, t)) : null;
+  const refAt = t => (!cyc && t >= 20 && t <= 120) ? 118 : null;
+  const levelAt = t => cyc ? cycOil(t) : trueOil(t);
+  const foamTop = t => cyc ? cycFoam(t) : foamAt(t);
 
   const scales = (w, h) => ({
     x: t => PAD.l + (t / T) * (w - PAD.l - PAD.r),
@@ -427,7 +472,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
            (labels ? `<text x="${(s.x(a) + s.x(b)) / 2}" y="${PAD.t + 14}" text-anchor="middle" font-size="12" fill="${css('--fg-3')}">판단 불가</text>` : "");
     if (labels) for (const [a, b] of EMPTY)
       g += `<text x="${(s.x(a) + s.x(b)) / 2}" y="${h - PAD.b - 6}" text-anchor="middle" font-size="12" font-weight="600" fill="#B5373B">빈 구간</text>`;
-    if (state === "range")
+    if (state === "range" || state === "copy")
       g += `<rect x="${s.x(SELECT[0])}" y="0" width="${s.x(SELECT[1]) - s.x(SELECT[0])}" height="${h}" fill="${css('--selection-band')}"/>
             <line x1="${s.x(SELECT[0])}" x2="${s.x(SELECT[0])}" y1="0" y2="${h}" stroke="${css('--brand')}"/>
             <line x1="${s.x(SELECT[1])}" x2="${s.x(SELECT[1])}" y1="0" y2="${h}" stroke="${css('--brand')}"/>`;
@@ -438,7 +483,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
     return g;
   }
   function lines(s, halo) {
-    const oil = path(oilAt, s), foam = path(foamAt, s, 40, 128), ref = path(refAt, s, 20, 120);
+    const oil = path(oilAt, s), foam = cyc ? path(foamAt, s) : path(foamAt, s, 40, 128), ref = path(refAt, s, 20, 120);
     const under = halo ? [oil, foam].map(d => `<path d="${d}" stroke="${css('--line-halo')}" stroke-width="5" fill="none" stroke-linejoin="round"/>`).join("") : "";
     return under + `<path d="${ref}" stroke="${css('--reference')}" stroke-width="1.5" stroke-dasharray="6 4" fill="none"/>
       <path d="${foam}" stroke="${css('--foam')}" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
@@ -453,6 +498,25 @@ table.list th { background:var(--bg-3); font-weight:600; }
       g += `<line x1="${s.x(PLAY) - 14}" x2="${s.x(PLAY) + 14}" y1="${y}" y2="${y}" stroke="${css('--brand')}" stroke-width="1" stroke-dasharray="2 2"/>`;
       g += `<circle cx="${s.x(PLAY)}" cy="${y}" r="5" fill="#fff" stroke="${css('--oil')}" stroke-width="2"/>`;
       g += `<text x="${s.x(PLAY) + 10}" y="${y - 8}" font-size="12" fill="${css('--brand')}" font-weight="600">스냅</text>`;
+    }
+    if (cyc) {
+      const h = s.y(0) - s.y(TOP) + PAD.t + PAD.b;
+      const shift = (a, fn) => t => fn(t - a + SOURCE[0]);
+      const ghost = (a, n) => {
+        const b = Math.min(T, a + CYCLE);
+        let d = `<rect x="${s.x(a)}" y="0" width="${s.x(b) - s.x(a)}" height="${h}" fill="${css('--selection-band')}" fill-opacity="0.6"/>
+                 <line x1="${s.x(a)}" x2="${s.x(a)}" y1="0" y2="${h}" stroke="${css('--brand')}" stroke-dasharray="4 3"/>`;
+        for (const [fn, col] of [[cycFoam, '--foam'], [cycOil, '--oil']])
+          d += `<path d="${path(shift(a, fn), s, a, b - DT)}" stroke="${css(col)}" stroke-width="2" stroke-opacity="0.75" stroke-dasharray="5 3" fill="none"/>`;
+        if (n) d += `<text x="${s.x(a) + 6}" y="${PAD.t + 4}" font-size="12" font-weight="600" fill="${css('--brand')}">${n}</text>`;
+        return d;
+      };
+      if (state === "copy") g += `<text x="${s.x(SOURCE[0]) + 6}" y="${PAD.t + 4}" font-size="12" font-weight="600" fill="${css('--brand')}" dy="22">복사함 · 60.0 s</text>`;
+      if (state === "paste") {
+        for (const a of PLACED) g += `<line x1="${s.x(a)}" x2="${s.x(a)}" y1="0" y2="${h}" stroke="${css('--brand')}" stroke-opacity="0.5"/>`;
+        g += ghost(GHOST_AT, "") + `<text x="${s.x(GHOST_AT) + 6}" y="${PAD.t + 4}" font-size="12" font-weight="600" fill="${css('--brand')}">클릭하면 여기서 시작</text>`;
+      }
+      if (state === "repeat") REPEATS.forEach((a, i) => { g += ghost(a, String(i + 1)); });
     }
     if (state === "point") {
       const ys = { 146: trueOil(146) - 6, 158: trueOil(158) + 4, 166: trueOil(166) - 3 };
@@ -469,7 +533,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
     const box = document.getElementById("graphBox"), svg = document.getElementById("graph");
     const w = box.clientWidth, h = box.clientHeight, s = scales(w, h);
     let g = hatchDef;
-    g += `<rect x="${s.x(210)}" y="${PAD.t}" width="${s.x(246) - s.x(210)}" height="${h - PAD.t - PAD.b}" fill="${css('--full-band')}"/>
+    if (!cyc) g += `<rect x="${s.x(210)}" y="${PAD.t}" width="${s.x(246) - s.x(210)}" height="${h - PAD.t - PAD.b}" fill="${css('--full-band')}"/>
           <text x="${(s.x(210) + s.x(246)) / 2}" y="${h - PAD.b - 22}" text-anchor="middle" font-size="12" font-weight="600" fill="${css('--oil')}">FULL</text>`;
     for (let r = 0; r <= TOP; r += 20) {
       const y = s.y(r), major = (r - ZERO) % 40 === 0;
@@ -483,7 +547,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
           <text x="${w - PAD.r - 4}" y="${s.y(ZERO) - 4}" text-anchor="end" font-size="12" fill="${css('--fg-3')}">0선</text>
           <line x1="${PAD.l}" x2="${w - PAD.r}" y1="${s.y(0)}" y2="${s.y(0)}" stroke="${css('--stroke-1')}"/>`;
     g += marks(s, w, h, true) + lines(s, false) + overlay(s);
-    for (const [n, t, dy] of [[1, 62, -22], [2, 212, 22]]) {
+    for (const [n, t, dy] of cyc ? [] : [[1, 62, -22], [2, 212, 22]]) {
       const cx = s.x(t), base = s.y(trueOil(t)), cy = base + dy;
       g += `<line x1="${cx}" x2="${cx}" y1="${cy}" y2="${base}" stroke="${css('--memo')}"/>
             <circle cx="${cx}" cy="${cy}" r="10" fill="${css('--memo')}"/>
@@ -502,7 +566,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
     c.fillStyle = css('--bg-1'); c.fillRect(0, 0, w, h);
     const img = c.createImageData(N, TOP); seed = 7;
     for (let i = 0; i < N; i++) {
-      const t = i * DT, oil = trueOil(t), foam = foamAt(t) ?? oil, glare = within(CANNOT, t);
+      const t = i * DT, oil = levelAt(t), foam = foamTop(t) ?? oil, glare = within(CANNOT, t);
       for (let r = 0; r < TOP; r++) {
         let R, G, B;
         if (r < oil) { const k = 0.75 + 0.25 * (r / TOP); R = 168 * k; G = 118 * k; B = 40 * k; }
@@ -553,7 +617,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
     const yOf = r => cy + ry - (r / TOP) * 2 * ry;
     c.save(); c.beginPath(); c.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); c.clip();
     c.fillStyle = "#465058"; c.fillRect(cx - rx, cy - ry, 2 * rx, 2 * ry);
-    const oil = trueOil(PLAY), foam = foamAt(PLAY) ?? oil;
+    const oil = levelAt(PLAY), foam = foamTop(PLAY) ?? oil;
     c.fillStyle = "#e2dccb"; c.fillRect(cx - rx, yOf(foam), 2 * rx, yOf(oil) - yOf(foam));
     c.fillStyle = "#a8762a"; c.fillRect(cx - rx, yOf(oil), 2 * rx, cy + ry - yOf(oil));
     c.fillStyle = "rgba(255,255,255,0.18)"; c.fillRect(cx - rx + 10, cy - ry, 8, 2 * ry);
@@ -582,17 +646,27 @@ table.list th { background:var(--bg-3); font-weight:600; }
     checked: "<b>확인함</b>: BASE를 확인한 상태. Glass 고르기 메뉴에 Glass마다 최종 판정이 보입니다(Accum은 직접 판정한 불합격). 모든 Glass를 확인하면 제출이 켜집니다. 확인한 뒤 선을 고치면 확인이 풀립니다.",
     submit: "<b>제출 창</b>: Glass별 최종 판정과 머리글을 보여 주고 한 번 더 묻습니다. 제출하면 v1이 잠기고 보고서가 검사 폴더 versions\\001에 생깁니다.",
     locked: "<b>제출 뒤</b>: 편집 도구가 꺼지고 읽기만 됩니다. 위 막대에서 보고서를 열거나, \"고쳐서 다시 제출 (v2)\"로 v1을 이어받은 새 작업본을 엽니다. 예전 버전은 버전 고르기로 읽기 전용으로 엽니다. 검사 목록은 검사당 한 줄에 최신 버전을 보여 줍니다.",
+    bigview: "<b>크게 보기</b> (V2-4b): 원본 영상 오른쪽 위의 <b>크게 보기</b>가 원본 영상을 앱 밖의 따로 띄운 창으로 엽니다. 듀얼 모니터의 다른 화면에 둘 수 있습니다. 창 모습은 <a href=\"video-window.html\">video-window.html</a>. 두 창의 재생 위치는 늘 같습니다: 어느 쪽에서 재생·정지·이동·배속을 바꿔도 다른 쪽이 따라옵니다. 이 단추를 다시 누르면 열린 창을 앞으로 가져옵니다.",
+    copy: "<b>복사</b> (V2-4b): 압축기를 60 s마다 켜고 끄는 시험. 00:30–01:30의 한 주기를 손으로 그린 뒤 범위 도구로 골라 <b>복사</b>(Ctrl+C). 이 Glass의 Oil과 Foam이 빈 샘플까지 그대로 복사됩니다(참조 선과 판단 불가는 빼고). 뒤쪽은 아직 초안이라 Foam 위쪽을 따라가거나 비어 있습니다.",
+    paste: "<b>한 곳씩 붙여넣기</b> (V2-4b): <b>붙여넣기</b>(Ctrl+V)를 누르면 복사본이 커서를 따라다니는 점선으로 보이고, 클릭한 시각에서 시작해 붙습니다. 01:30에 하나를 붙였고, 다음 것이 02:30에서 기다리는 상태. 높이는 복사한 그대로이고 스냅은 쓰지 않습니다. Esc로 끝냅니다.",
+    repeat: "<b>반복 붙여넣기</b> (V2-4b): 첫 시작, 주기, 끝을 넣으면 붙을 자리가 점선으로 미리 보이고(1–4), <b>붙여넣기</b>로 한 번에 붙습니다. 기본값은 첫 시작 = 복사한 구간 바로 뒤, 주기 = 복사한 길이, 끝 = 분석 범위 끝입니다. 분석 범위 밖은 잘립니다.",
     point: "<b>점 잇기 중</b>: 빈 구간 02:30–02:52 위 맥락 이미지에 점 3개를 찍은 상태. 점 사이는 경계를 따라 이어지고(점선), 마지막 점에서 커서까지 미리 보기가 이어집니다. Enter로 확정하면 그 구간의 Oil 선이 됩니다.",
   };
   function setState(next) {
     state = next;
-    const tool = { grab: "grab", range: "range", point: "point" }[state] ?? (state === "locked" ? null : "grab");
+    cyc = ["copy", "paste", "repeat"].includes(state);
+    EMPTY = cyc ? [[205, 218], [262, 276]] : [[150, 172], [246, 258]];
+    CANNOT = cyc ? [] : [[130, 150]];
+    SELECT = cyc ? SOURCE : [236, 262];
+    document.getElementById("bigBtn").classList.toggle("hot", state === "bigview");
+    const tool = { grab: "grab", range: "range", point: "point", copy: "range", paste: "range", repeat: "range" }[state] ?? (state === "locked" ? null : "grab");
     document.querySelectorAll("[data-tool]").forEach(b => { b.setAttribute("aria-pressed", String(b.dataset.tool === tool)); b.disabled = state === "locked"; });
     document.querySelectorAll("[data-show]").forEach(e => { e.hidden = !e.dataset.show.split(" ").includes(state); });
     document.querySelector(".app").classList.toggle("with-bar", state === "locked");
     if (["judge", "override", "checked", "locked"].includes(state)) document.getElementById("judgment").scrollIntoView({ block: "start" });
     document.querySelectorAll("[data-state]").forEach(b => b.classList.toggle("primary", b.dataset.state === state));
-    document.getElementById("selbox").hidden = state !== "range";
+    document.getElementById("selbox").hidden = !["range", "copy"].includes(state);
+    document.getElementById("selText").textContent = cyc ? "00:30.0 – 01:30.0 · 60.0 s" : "03:56.0 – 04:22.0 · 26.0 s";
     document.getElementById("pointbox").hidden = state !== "point";
     document.getElementById("stateText").innerHTML = TEXT[state];
     draw();

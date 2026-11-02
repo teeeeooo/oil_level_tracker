@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>원본 영상 창 목업 (V2-4b)</title>
+<!--
+  Static layout mock-up for user confirmation. Synthetic data only; not product code.
+  2026-11-02 (V2-4b step 1): the full-size view the editor's "크게 보기" opens, a second OS window
+  apart from the app's (Product SSOT §6). The strip at the top stands for the Windows title bar.
+  Waiting on the user's confirmation. Tokens follow DESIGN.md §2–§6. Open with #fit or #actual.
+-->
+<style>
+:root {
+  --bg-1:#FFFFFF; --bg-2:#FAFAFA; --bg-3:#F5F5F5; --bg-4:#F0F0F0;
+  --fg-1:#242424; --fg-2:#424242; --fg-3:#616161; --fg-disabled:#BDBDBD;
+  --stroke-1:#D1D1D1; --stroke-2:#E0E0E0;
+  --brand:#0F6CBD; --brand-tint:#EBF3FC;
+  --range-fill:#FFE07A; --range-edge:#8F6A00;
+  --oil:#1F77D0; --foam:#E8710A; --line-halo:rgba(255,255,255,0.9); --playhead:#242424;
+  --glass-outline:rgba(255,255,255,0.9); --glass-shadow:rgba(0,0,0,0.5);
+  --pass:#0E700E;
+  --font:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+}
+* { box-sizing:border-box; }
+html, body { margin:0; height:100%; }
+body { background:var(--bg-2); color:var(--fg-1); font:400 14px/20px var(--font); }
+.win { display:grid; grid-template-rows:32px 40px 1fr 48px; height:100vh; min-width:960px; min-height:600px; }
+.os { display:flex; align-items:center; gap:8px; padding-left:12px; background:#F3F3F3; border-bottom:1px solid var(--stroke-2); font-size:12px; color:var(--fg-2); }
+.os .ctl { margin-left:auto; display:flex; }
+.os .ctl span { width:46px; height:32px; display:inline-flex; align-items:center; justify-content:center; color:var(--fg-2); }
+.bar { display:flex; align-items:center; gap:12px; padding:0 12px; background:var(--bg-3); border-bottom:1px solid var(--stroke-1); }
+.bar b { font-weight:600; }
+.caption { color:var(--fg-3); font-size:12px; line-height:16px; }
+.spacer { flex:1; }
+.seg { display:inline-flex; border:1px solid var(--stroke-1); border-radius:4px; overflow:hidden; }
+.seg button { white-space:nowrap; border:0; background:var(--bg-1); font:12px/16px var(--font); padding:0 10px; height:24px; color:var(--fg-2); }
+.seg button + button { border-left:1px solid var(--stroke-1); }
+.seg button.on { background:var(--brand-tint); color:var(--brand); font-weight:600; }
+.toggle { display:inline-flex; align-items:center; gap:6px; color:var(--fg-2); font-size:12px; }
+.switch { width:28px; height:16px; border-radius:8px; border:1px solid var(--brand); position:relative; background:var(--brand); }
+.switch::after { content:""; position:absolute; top:2px; left:14px; width:10px; height:10px; border-radius:50%; background:#fff; }
+.stage { position:relative; background:#1b1f23; overflow:hidden; min-height:0; }
+.stage canvas { position:absolute; display:block; }
+.stage .cap { position:absolute; left:8px; top:8px; font-size:12px; color:#fff; background:rgba(0,0,0,.45); padding:0 6px; border-radius:4px; }
+.stage .sb { position:absolute; background:rgba(255,255,255,.35); border-radius:4px; }
+.transport { display:flex; align-items:center; gap:4px; padding:0 8px; background:var(--bg-1); border-top:1px solid var(--stroke-1); }
+.tool { width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; border:0; border-radius:4px; background:transparent; color:var(--fg-2); padding:0; }
+.tool svg { width:20px; height:20px; }
+.speed { display:inline-flex; align-items:center; width:80px; height:32px; border:1px solid var(--stroke-1); border-bottom-color:var(--fg-3); border-radius:4px; padding:0 4px 0 8px; font-variant-numeric:tabular-nums; }
+.speed span { flex:1; text-align:right; }
+.speed .unit { flex:none; color:var(--fg-3); margin:0 4px 0 2px; }
+.speed svg { width:16px; height:16px; color:var(--fg-2); }
+.scrub { position:relative; flex:1; height:32px; margin:0 12px; }
+.scrub .track { position:absolute; left:0; right:0; top:14px; height:4px; border-radius:2px; background:var(--stroke-1); }
+.scrub .done { position:absolute; left:0; top:14px; height:4px; border-radius:2px; background:var(--brand); }
+.scrub .thumb { position:absolute; top:8px; width:16px; height:16px; margin-left:-8px; border-radius:50%; background:#fff; border:1px solid var(--stroke-1); box-shadow:0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.14); }
+.time { white-space:nowrap; font-size:12px; font-variant-numeric:tabular-nums; color:var(--fg-2); }
+.sync { display:inline-flex; align-items:center; gap:6px; margin-left:12px; font-size:12px; color:var(--pass); white-space:nowrap; }
+.sync i { width:8px; height:8px; border-radius:50%; background:var(--pass); }
+.note { position:fixed; right:16px; bottom:64px; width:420px; background:var(--bg-1); border:1px solid var(--stroke-1); border-radius:8px; padding:12px; font-size:12px; line-height:16px; color:var(--fg-2); box-shadow:0 0 2px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.14); z-index:5; }
+.note b { color:var(--fg-1); }
+.note ol { margin:6px 0 0; padding-left:18px; }
+.note li { margin:2px 0; }
+.note .states { display:flex; gap:4px; margin:8px 0; }
+.note .states button { height:24px; padding:0 8px; font:12px var(--font); border:1px solid var(--stroke-1); border-radius:4px; background:var(--bg-1); cursor:pointer; }
+.note .states button.on { background:var(--brand); border-color:var(--brand); color:#fff; }
+.note .close { float:right; border:0; background:transparent; cursor:pointer; color:var(--fg-3); }
+</style>
+</head>
+<body>
+<div class="win">
+  <div class="os">
+    <svg viewBox="0 0 16 16" width="16" height="16"><rect x="1" y="1" width="14" height="14" rx="3" fill="#0F6CBD"/></svg>
+    원본 영상 — 1차 냉각 · SPL#4_Cooling_onoff_#2.mp4
+    <span class="ctl"><span>—</span><span>☐</span><span>✕</span></span>
+  </div>
+  <div class="bar">
+    <b>BASE</b><span class="caption">편집기에서 고른 Glass의 선을 겹쳐 그림 · 1920 × 1080</span>
+    <span class="spacer"></span>
+    <span class="toggle"><span class="switch"></span>선 겹쳐 보기</span>
+    <span class="seg"><button id="fitBtn">창에 맞춤</button><button id="actualBtn">원본 크기</button></span>
+    <span class="caption" id="zoomText" style="width:40px;text-align:right">63 %</span>
+  </div>
+  <div class="stage" id="stage"><canvas id="frame"></canvas><span class="cap">01:35.0 · 일시정지 · 정확한 프레임</span></div>
+  <div class="transport">
+    <button class="tool" title="이전 프레임 (,)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4h2v12H5zM16 4v12L8 10z"/></svg></button>
+    <button class="tool" title="재생 (Space)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4l10 6-10 6z"/></svg></button>
+    <button class="tool" title="다음 프레임 (.)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 4h2v12h-2zM4 4v12l8-6z"/></svg></button>
+    <span class="speed" title="재생 배속"><span>1</span><span class="unit">×</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg></span>
+    <div class="scrub" title="분석 범위 안에서 재생 위치를 옮깁니다"><div class="track"></div><div class="done" style="width:31.7%"></div><div class="thumb" style="left:31.7%"></div></div>
+    <span class="time">01:35.0 / 05:00.0</span>
+    <span class="sync" title="편집기와 재생 위치가 같습니다"><i></i>편집기와 같은 위치</span>
+  </div>
+</div>
+
+<div class="note"><button class="close" onclick="this.parentNode.remove()">닫기 ✕</button>
+  <b>원본 영상 창 목업 (V2-4b, 확인 요청 2026-11-02)</b>
+  <div class="states"><button data-state="fit">창에 맞춤</button><button data-state="actual">원본 크기</button></div>
+  <div id="stateText"></div>
+  <b style="display:block;margin-top:8px">사용자 결정 (2026-11-02)</b>
+  <ol>
+    <li>편집기 원본 영상의 <b>크게 보기</b> 단추로 엽니다.</li>
+    <li>앱 창 안이 아니라 <b>따로 띄운 창</b>이라 다른 모니터로 옮길 수 있습니다.</li>
+    <li>이 창의 재생 위치와 편집기의 시각은 <b>서로 따라갑니다</b>.</li>
+  </ol>
+  <b style="display:block;margin-top:8px">에이전트 제안 (확인 요청)</b>
+  <ol>
+    <li>원본 프레임 전체를 보여 주고, 기본은 창에 맞춤(최대 100 %). "원본 크기"는 100 %로 보여 주고 끌어서 둘러봅니다.</li>
+    <li>편집기에서 고른 Glass의 타원·0선·Oil·Foam을 작은 화면처럼 겹쳐 그립니다. Glass를 바꾸면 따라 바뀝니다. "선 겹쳐 보기"로 끌 수 있습니다.</li>
+    <li>재생, 일시정지, 프레임 이동, 배속, 이동 막대를 이 창에도 둡니다. 어느 창에서 바꿔도 다른 창이 따라옵니다. 이동 막대는 편집기처럼 분석 범위만 다룹니다.</li>
+    <li>일시정지한 프레임은 편집기처럼 정확한 프레임입니다.</li>
+    <li>창은 하나만 엽니다. 편집기에서 단추를 다시 누르면 이 창을 앞으로 가져옵니다. 편집기를 나가거나 다른 검사를 열면 닫힙니다. 창 위치와 크기는 다음에 열 때 그대로입니다.</li>
+    <li>이 창에서도 Space, 쉼표, 마침표 단축키가 듣습니다. 편집 도구는 없습니다.</li>
+  </ol>
+</div>
+
+<script>
+(() => {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const W = 1920, H = 1080;
+  const BASE = { cx: 617, cy: 552, rx: 59, ry: 242, zero: 481 }, ACCUM = { cx: 1415, cy: 421, rx: 150, ry: 149 };
+  const OIL = 420, FOAM = 372;                       // source rows at 01:35
+  let state = (location.hash || "#fit").slice(1);
+  const TEXT = {
+    fit: "<b>창에 맞춤</b>: 1920 × 1080 프레임 전체가 창 크기에 맞춰 보입니다(이 창에서 63 %). 창을 크게 하면 최대 100 %까지 커집니다.",
+    actual: "<b>원본 크기</b>: 100 %로 보여 줍니다. 처음에는 고른 Glass(BASE)가 보이는 자리에서 시작하고, 영상을 끌어 둘러봅니다. 스크롤 막대가 보이는 부분을 알려 줍니다.",
+  };
+
+  function picture(c) {                             // a synthetic frame: the compressor and its two sight glasses
+    const bg = c.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, "#3b4148"); bg.addColorStop(1, "#24282c");
+    c.fillStyle = bg; c.fillRect(0, 0, W, H);
+    c.fillStyle = "#555d64"; c.fillRect(380, 180, 1340, 760);
+    c.fillStyle = "#4a5157"; c.fillRect(380, 180, 1340, 40); c.fillRect(380, 900, 1340, 40);
+    for (const g of [BASE, ACCUM]) {
+      c.fillStyle = "#2e3338"; c.beginPath(); c.ellipse(g.cx, g.cy, g.rx + 26, g.ry + 26, 0, 0, Math.PI * 2); c.fill();
+    }
+    c.save(); c.beginPath(); c.ellipse(BASE.cx, BASE.cy, BASE.rx, BASE.ry, 0, 0, Math.PI * 2); c.clip();
+    c.fillStyle = "#465058"; c.fillRect(0, 0, W, H);
+    c.fillStyle = "#e2dccb"; c.fillRect(0, FOAM, W, OIL - FOAM);
+    c.fillStyle = "#a8762a"; c.fillRect(0, OIL, W, H);
+    c.fillStyle = "rgba(255,255,255,0.18)"; c.fillRect(BASE.cx - 40, 0, 10, H);
+    c.restore();
+    c.save(); c.beginPath(); c.ellipse(ACCUM.cx, ACCUM.cy, ACCUM.rx, ACCUM.ry, 0, 0, Math.PI * 2); c.clip();
+    c.fillStyle = "#465058"; c.fillRect(0, 0, W, H);
+    c.fillStyle = "#a8762a"; c.fillRect(0, 455, W, H);
+    c.restore();
+  }
+  function overlay(c, k) {                          // the chosen Glass's ellipse, zero line and lines
+    const g = BASE, lw = 1 / k;
+    for (const [col, off] of [[css('--glass-shadow'), 1 / k], [css('--glass-outline'), 0]]) {
+      c.strokeStyle = col; c.lineWidth = lw; c.setLineDash([4 / k, 3 / k]);
+      c.beginPath(); c.ellipse(g.cx + off, g.cy + off, g.rx, g.ry, 0, 0, Math.PI * 2); c.stroke();
+      c.beginPath(); c.moveTo(g.cx - g.rx - 20 + off, g.zero + off); c.lineTo(g.cx + g.rx + 20 + off, g.zero + off); c.stroke();
+    }
+    c.setLineDash([]);
+    for (const [r, col] of [[FOAM, css('--foam')], [OIL, css('--oil')]]) {
+      c.strokeStyle = css('--line-halo'); c.lineWidth = 5 / k; c.beginPath(); c.moveTo(g.cx - g.rx - 14, r); c.lineTo(g.cx + g.rx + 14, r); c.stroke();
+      c.strokeStyle = col; c.lineWidth = 2 / k; c.beginPath(); c.moveTo(g.cx - g.rx - 14, r); c.lineTo(g.cx + g.rx + 14, r); c.stroke();
+    }
+    c.fillStyle = "#fff"; c.font = `${12 / k}px ${css('--font')}`;
+    c.fillText("0선", g.cx + g.rx + 26, g.zero + 4 / k);
+    c.fillText("BASE", g.cx - g.rx, g.cy - g.ry - 34);
+  }
+  function draw() {
+    const stage = document.getElementById("stage"), cv = document.getElementById("frame");
+    stage.querySelectorAll(".sb").forEach(e => e.remove());
+    const sw = stage.clientWidth, sh = stage.clientHeight, dpr = window.devicePixelRatio || 1;
+    const k = state === "actual" ? 1 : Math.min(1, sw / W, sh / H);
+    const w = W * k, h = H * k;
+    let x = (sw - w) / 2, y = (sh - h) / 2;
+    if (state === "actual") { x = Math.min(0, sw / 2 - BASE.cx); y = Math.min(0, Math.max(sh - H, sh / 2 - BASE.cy)); }
+    cv.style.left = x + "px"; cv.style.top = y + "px"; cv.style.width = w + "px"; cv.style.height = h + "px";
+    cv.width = w * dpr; cv.height = h * dpr;
+    const c = cv.getContext("2d"); c.scale(dpr * k, dpr * k);
+    picture(c); overlay(c, k);
+    if (state === "actual") {
+      const hb = document.createElement("div"); hb.className = "sb";
+      Object.assign(hb.style, { left: (-x / W * sw) + "px", width: (sw / W * sw) + "px", bottom: "2px", height: "6px" });
+      const vb = document.createElement("div"); vb.className = "sb";
+      Object.assign(vb.style, { top: (-y / H * sh) + "px", height: (sh / H * sh) + "px", right: "2px", width: "6px" });
+      stage.append(hb, vb);
+    }
+    document.getElementById("zoomText").textContent = Math.round(k * 100) + " %";
+    document.getElementById("fitBtn").classList.toggle("on", state === "fit");
+    document.getElementById("actualBtn").classList.toggle("on", state === "actual");
+    document.querySelectorAll("[data-state]").forEach(b => b.classList.toggle("on", b.dataset.state === state));
+    document.getElementById("stateText").innerHTML = TEXT[state];
+  }
+  const set = s => { state = s; draw(); };
+  document.querySelectorAll("[data-state]").forEach(b => b.addEventListener("click", () => set(b.dataset.state)));
+  document.getElementById("fitBtn").addEventListener("click", () => set("fit"));
+  document.getElementById("actualBtn").addEventListener("click", () => set("actual"));
+  window.addEventListener("resize", draw);
+  set(TEXT[state] ? state : "fit");
+})();
+</script>
+</body>
+</html>
