@@ -486,7 +486,13 @@ The three v1 remote branches that v1 docs cite stay.
   "EMPTY로" always act on Oil, as drawn samples (taking the check off);
   the edge pull is 6 screen px, shown by the Glass edge turning Oil blue
   with "FULL에 붙음" / "EMPTY에 붙음", for Oil, Foam and reference alike.
-- **Next:** the user's word on the mock-ups, then build the three, then a
-  Windows re-check on a new build (the editor rows and A5); the slowest
-  PC's result (§10 of the request) is still to come. V2-5 closes after
-  both.
+- **Slowest PC — A8's run passes** (2026-11-02,
+  [result](../60-evidence/2026-11-02-v2-5-acceptance-slowest-pc-windows-result.md)):
+  the moved build ran the whole flow; analysis 156.0 s, window 6.6 s by
+  the log. **L-zip open:** the ZIP's SHA-256 line did not come back.
+  The user missed the header field: it is in the setup and the "제출"
+  dialog (no editor section since V2-4b); the request's "검사 정보에"
+  was wrong.
+- **Next:** the ZIP's SHA-256 line from the slowest PC; the user's word
+  on the mock-ups, then build the three, then a Windows re-check on a new
+  build (the editor rows and A5). V2-5 closes after both.
