@@ -70,7 +70,7 @@ sys.path.insert(0, sys.argv[1])
 from oil_tracker import bootstrap
 chrome, data = sys.argv[2], sys.argv[4]
 running = bootstrap.start(data_folder=__import__("pathlib").Path(data))
-port = os.environ["WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS"].split("=")[1]
+port = os.environ["OLT_WEBVIEW_DEBUG_PORT"]
 profile = tempfile.mkdtemp()
 window = subprocess.Popen([chrome, "--headless=new", f"--remote-debugging-port={port}", f"--user-data-dir={profile}",
                            "--no-first-run", "--window-size=1440,900", running.url],
@@ -83,7 +83,7 @@ while True:
 
 def test_the_built_app_is_measured_in_its_own_window(tmp_path, capsys):
     # The app mode (V2-5) on macOS: a stand-in for OilLevelTracker.exe serves this folder's code and
-    # opens Chrome with the debugging port the script asks WebView2 for.
+    # opens Chrome with the debugging port the script asks the app for.
     from playwright.sync_api import sync_playwright
 
     with sync_playwright() as p:

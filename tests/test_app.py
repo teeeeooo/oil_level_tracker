@@ -74,3 +74,10 @@ def test_no_log_when_the_folder_cannot_be_written(tmp_path, monkeypatch):
     monkeypatch.setattr(app.sys, "stderr", console)
     assert app.start_log(tmp_path / "file" / "settings") is None
     assert app.sys.stderr is console
+
+
+def test_the_debugging_port_only_when_asked():
+    assert app.debug_port({}) is None
+    assert app.debug_port({app.DEBUG_PORT_VARIABLE: "9333"}) == 9333
+    assert app.debug_port({app.DEBUG_PORT_VARIABLE: "x"}) is None
+    assert app.debug_port({app.DEBUG_PORT_VARIABLE: "70000"}) is None

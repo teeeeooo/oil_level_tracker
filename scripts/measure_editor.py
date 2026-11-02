@@ -15,7 +15,8 @@ Stages:
 It writes the result file (Markdown) and a data folder for the inspection, and prints the text.
 
 With --app (V2-5), stages 3 and 4 run in the built app instead: OilLevelTracker.exe on the data
-folder, its WebView2 opened to Playwright through a debugging port, its API called with the token in
+folder, its WebView2 opened to Playwright through a debugging port (the app's OLT_WEBVIEW_DEBUG_PORT,
+which it hands to pywebview), its API called with the token in
 its page's address. The time until its window shows the inspection list is recorded; stage 5 is
 left out (it measures this folder's code, not the build).
 
@@ -90,14 +91,14 @@ class Server:
 
 class AppServer:
     """The built app on the data folder, its window's page opened through WebView2's debugging port,
-    which WebView2 takes from WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS. command is the app and its
+    asked for with the app's OLT_WEBVIEW_DEBUG_PORT (app.debug_port). command is the app and its
     arguments before --data-folder."""
 
     def __init__(self, command: list[str], data: Path, playwright) -> None:
         with socket.socket() as probe:
             probe.bind(("127.0.0.1", 0))
             debug_port = probe.getsockname()[1]
-        env = dict(os.environ, WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=f"--remote-debugging-port={debug_port}")
+        env = dict(os.environ, OLT_WEBVIEW_DEBUG_PORT=str(debug_port))
         began = time.perf_counter()
         self.process = subprocess.Popen([*command, "--data-folder", str(data)], env=env)
         self.browser = None
@@ -118,7 +119,9 @@ class AppServer:
             if self.process.poll() is not None:
                 raise RuntimeError(f"앱이 끝났습니다 (exit code {self.process.returncode})")
             if time.perf_counter() - began > APP_START_SEC:
-                raise RuntimeError(f"{APP_START_SEC:.0f}초 안에 앱 창을 찾지 못했습니다")
+                where = ("디버깅 포트에는 붙었지만 앱 페이지가 없습니다" if self.browser is not None
+                         else f"디버깅 포트 {debug_port}에 붙지 못했습니다")
+                raise RuntimeError(f"{APP_START_SEC:.0f}초 안에 앱 창을 찾지 못했습니다: {where}")
             if self.browser is None:
                 try:
                     self.browser = playwright.chromium.connect_over_cdp(f"http://127.0.0.1:{debug_port}")

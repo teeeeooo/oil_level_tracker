@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import faulthandler
 import json
+import os
 import platform
 import sys
 import threading
@@ -25,6 +26,7 @@ CLOSE_QUESTION = {
 }
 
 
+DEBUG_PORT_VARIABLE = "OLT_WEBVIEW_DEBUG_PORT"  # set by scripts/measure_editor.py --app, never by users
 LOG_FILE = "app.log"  # in the settings folder (Product SSOT §8)
 LOG_OLD = "app.1.log"
 LOG_ROLL_BYTES = 1_000_000
@@ -166,6 +168,17 @@ def start_log(folder: Path) -> TextIO | None:
     return log
 
 
+def debug_port(environ: dict[str, str]) -> int | None:
+    """The window's debugging port, for measuring the build (V2-5): pywebview passes it to WebView2,
+    which listens on 127.0.0.1. pywebview sets WebView2's browser arguments itself, so WebView2's own
+    variable for them is not read."""
+    try:
+        port = int(environ.get(DEBUG_PORT_VARIABLE, ""))
+    except ValueError:
+        return None
+    return port if 0 < port < 65536 else None
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog="oil_tracker", description="Oil Level Tracker v2")
     parser.add_argument("--data-folder", type=Path, default=None, help="default: Documents/OilLevelTracker")
@@ -190,6 +203,9 @@ def main(argv: list[str] | None = None) -> int:
             running.close()
 
     import webview  # imported late so --no-window runs without pywebview
+
+    if (port := debug_port(dict(os.environ))) is not None:
+        webview.settings["REMOTE_DEBUGGING_PORT"] = port
 
     holder: dict[str, Any] = {}
     video_window = VideoWindow(webview, lambda: holder["running"].origin, bootstrap.settings_folder() / VIDEO_WINDOW_FILE)
