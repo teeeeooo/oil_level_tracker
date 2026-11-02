@@ -233,6 +233,79 @@ The user holds the parallel start (2026-11-02); these wait for V2-4b:
   A8's PC with only the WebView2 runtime is the slowest PC (user,
   2026-11-02); time the window (pywebview), still untimed.
 
+## Session handoff — 2026-11-02
+
+**The session closed after `afccf11`** (and this handoff). The working
+tree is clean, and `main` and the remote are in sync. 263 tests pass on
+macOS (Windows expects `248 passed, 4 skipped`).
+
+**Where it stands:** V2-4 is `DONE` (re-check passed,
+[result](../60-evidence/2026-11-02-v2-4-recheck-windows-result.md)).
+V2-4b is `ACTIVE`: steps 1–3 are done (mock-ups confirmed, the video
+window, copy and paste). **Waiting on the user:** the Windows run,
+[2026-11-02-v2-4b-windows-request.md](../40-operations/2026-11-02-v2-4b-windows-request.md),
+pinned to `f2d6850`. When its result comes, judge it against its fixed
+criteria (S1, B, S2, C, T, R1–R4), write the result under `60-evidence/`
+with a catalog row, and close V2-4b if every row passes; then V2-5 starts
+from "V2-5 preparation" above (the user held it until then, and asked
+for icon candidates first).
+
+**State left on the workstation** (before the V2-4b run): 1907 (SPL#4)
+v1–v3 submitted; 1913 (SPL#1) v1–v2 submitted; 1910 (SPL#1) and
+`V2-3 확인` (SPL#4) with no submission. The run reads 1910 without saving
+and saves copy-and-paste edits into `V2-3 확인`; it backs up to
+`C:\olt-v24b-window-backup` and writes
+`%LOCALAPPDATA%\OilLevelTracker\video-window.json`.
+
+**Resume:** read this file (V2-4b, V2-5 preparation), the request, the
+Product SSOT §6 ("Copy and paste", "a full-size view"), DESIGN.md §5
+("copy and paste", "Video window") and
+[architecture.md](../20-architecture/architecture.md) (the relay). Code
+to know:
+- the window: `app.py` (`VideoWindow`, `load_place`, `save_place`),
+  `adapters/desktop` (`show_video_window`, `close_video_window`),
+  `Editing.show_video_window` (the title), `adapters/http/relay.py`
+  (`Relay`; `/api/relay/<channel>`, a page joins with `after=-1`) and
+  the routes `POST /api/inspections/<id>/video-window`,
+  `POST /api/video-window/close`; `adapters/storage/locations.py`
+  `settings_folder()`;
+- the pages: `web/videolink.js` (the editor's side: joins the relay
+  before opening, `hello`/`bye` carry a page id, state twice a second
+  while playing, lines 300 ms after a change), `web/video.html` with
+  `video-window.js` (follows the state, jumps past 0.25 s of drift,
+  exact frame when paused, sends commands), `player.js` (`changed` hook,
+  `status()`, `setSpeed` exported), `render.videoOverlay`;
+- copy and paste: `lines.js` (`copyStretch`, `pasteAt`, `repeatStarts`,
+  `MAX_REPEATS`, `History.recordLines` with entries of kind `lines`,
+  `restore` by side), `editor.js` section "copy and paste"
+  (`state.clipboard`, `state.paste`, `pasteMarks`, `renderPaste`),
+  `render.js` `pasteGhost`; `takeCheckOff` reads a `lines` entry's kinds.
+- Tests: `tests/test_http_relay.py`, `test_app.py` (the place),
+  `test_http_api.py::test_the_full_size_video_window`,
+  `test_web_inspection_smoke.py::test_the_full_size_video_window` and
+  `::test_copy_and_paste`.
+
+**The user's decisions this session** (2026-11-02): both features go in
+the first version, before V2-5; the window opens from a button, as a
+separate OS window (dual monitors), with the play position and the
+editor's time following each other; the copy holds Oil and Foam only,
+picked with the range tool; both pastes (repeat and one by one), placed
+where the user picks, never tied to the compressor start, kept as
+copied with no snap, counting as a new line for the judgment and the
+check; the parallel V2-5 start is held, only recorded; the exe is
+`OilLevelTracker.exe` with an icon to design; A8's PC with only WebView2
+is the slowest PC; R3 of the V2-4 re-check was the user's typing.
+
+**Agent's choices, confirmed with the mock-ups** (DESIGN.md §5): the
+window fits the frame (at most 100 %) or shows 100 % and pans; it draws
+the chosen Glass; its scrub bar covers the analysed range; one window,
+closed with the editor, placed where it was left; a copy includes empty
+samples and pastes only into its own Glass; repeat defaults (right
+after the copy, its length, the range's end); a later copy wins; the
+range cuts; "cannot judge" stays; one undo step per paste. Not in the
+mock-ups: at most 1,000 copies per repeat; a saved place that no screen
+shows is dropped.
+
 ## Session notes
 
 **Learned these sessions:**
@@ -288,6 +361,15 @@ The user holds the parallel start (2026-11-02); these wait for V2-4b:
 - A value in a result that differs from the step's text, where the same
   path worked in another row, is most likely what the user typed: ask
   before calling it a defect (R3 of the V2-4 re-check, 2026-11-02).
+- The server serves the web files only under `/web/`: a page path of
+  `/video.html` was a 404 (caught by the smoke test).
+- Two pywebview windows share no browser channel (WKWebView and WebView2
+  windows each get their own store in private mode), so pages talk
+  through the server; a page must join the relay before the other side
+  can answer, or its first message is lost.
+- macOS reports a window's position as floats; round before saving.
+- Playwright calls a zero-width SVG line "hidden": wait for
+  `state="attached"`, and wait for marks drawn on the next frame.
 
 ## Open items
 
