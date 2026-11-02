@@ -468,8 +468,25 @@ The three v1 remote branches that v1 docs cite stay.
   [result](../60-evidence/2026-11-02-v2-5-acceptance-workstation-windows-result.md)):
   every row on the `daf381a` build, A4–A6 in its window over Remote
   Desktop (36.0 s; 2.8 / 7.4 ms; 50 ms; 59.6 s, 0 dropped), 159.6 MB.
-- **Next:** the slowest PC's result (§10 of the request); the user's word
-  on the refusal wording (particles) and on the three notes (line
-  selection and delete for every kind, drawing FULL/EMPTY, a tool that
-  changes nothing): first version or later. Close V2-5 when those are
-  settled.
+- **After the workstation run — the user's decisions** (2026-11-02):
+  the refusal wording is fixed (`810b15e`: "영상 해상도(1280×720)가 이
+  Recipe의 해상도(1920×1080)와 다릅니다."); the three notes go in the
+  first version (Product SSOT §6 "Select", "FULL and EMPTY made easy"):
+  "선택" is the default tool; Delete on a picked line empties it inside
+  the range if one is selected, else the whole joined line; FULL/EMPTY by
+  both an edge pull while drawing and "FULL로" / "EMPTY로" on a range.
+  The SPL#1 inspection's missing name was the user's omission.
+- **Mock-ups — wait on the user:**
+  [editor.html](../../design/mockup/editor.html) `#select`, `#selrange`,
+  `#edge`. Agent's choices in them: the tool is "선택" (V), first in the
+  toolbar, an arrow; a picked line is drawn thicker over a light band of
+  its colour and sets "그릴 선" to its kind; the panel's "고른 선" box
+  names it and its span; Esc lets the line go before the range; with a
+  picked line and a range the range box's own delete hides; "FULL로" /
+  "EMPTY로" always act on Oil, as drawn samples (taking the check off);
+  the edge pull is 6 screen px, shown by the Glass edge turning Oil blue
+  with "FULL에 붙음" / "EMPTY에 붙음", for Oil, Foam and reference alike.
+- **Next:** the user's word on the mock-ups, then build the three, then a
+  Windows re-check on a new build (the editor rows and A5); the slowest
+  PC's result (§10 of the request) is still to come. V2-5 closes after
+  both.

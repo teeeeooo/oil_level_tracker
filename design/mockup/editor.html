@@ -15,9 +15,13 @@
   2026-11-02 (V2-4b step 1): the right column in the order the user set after the V2-4 run (원본
   영상, 편집, 판정, Glass, 분석; memos in the toolbar's list); the "크게 보기" button on the video
   (its window is video-window.html); copying a range and the two pastes, on synthetic on-off
-  cycles. Waiting on the user's confirmation.
+  cycles. Confirmed by the user on 2026-11-02.
+  2026-11-02 (V2-5, after the workstation run): the "선택" tool, the default (a click moves the
+  playhead and picks a line; nothing changes), deleting a picked line (inside the range when there is
+  one, else the whole connected line), and FULL/EMPTY made easy (drawing near the Glass top or bottom
+  lands on it; "FULL로" / "EMPTY로" on a range). Waiting on the user's confirmation.
   Tokens follow DESIGN.md §2–§6. Open with #grab, #range, #point, #judge, #override, #checked,
-  #submit, #locked, #bigview, #copy, #paste or #repeat to show one state.
+  #submit, #locked, #bigview, #copy, #paste, #repeat, #select, #selrange or #edge to show one state.
 -->
 <style>
 :root {
@@ -169,6 +173,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
 .note ol { margin:6px 0 0; padding-left:18px; }
 .note li { margin:2px 0; }
 .note .states { display:flex; gap:4px; margin:8px 0; }
+.swatch-inline { display:inline-block; width:10px; height:3px; border-radius:1px; vertical-align:middle; margin-right:4px; }
 .note .close { float:right; border:0; background:transparent; cursor:pointer; color:var(--fg-3); }
 </style>
 </head>
@@ -179,10 +184,11 @@ table.list th { background:var(--bg-3); font-weight:600; }
     <div class="sep"></div>
     <div class="title">
       <b>1차 냉각</b>
-      <span data-show="grab range point judge override checked submit bigview copy paste repeat"><span class="dirty">저장 안 함</span> · SPL#4_Cooling_onoff_#2.mp4</span>
+      <span data-show="grab range point judge override checked submit bigview copy paste repeat select selrange edge"><span class="dirty">저장 안 함</span> · SPL#4_Cooling_onoff_#2.mp4</span>
       <span data-show="locked">v1 제출함 10-30 14:22 · SPL#4_Cooling_onoff_#2.mp4</span>
     </div>
     <div class="sep"></div>
+    <button class="tool labeled" data-tool="select" title="선택 (V): 클릭하면 그 시각으로 가고, 선을 클릭하면 이어진 선을 고릅니다. 선은 바뀌지 않습니다"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l10 6.5-4.5 1L13 16l-2 1-2.5-5.5L5 15z" stroke-linejoin="round"/></svg>선택</button>
     <button class="tool labeled" data-tool="grab" title="잡아끌기 (G)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 13c3-6 6 2 9-3s3-4 5-5"/><circle cx="10" cy="11" r="2.5" fill="currentColor" stroke="none"/></svg>잡아끌기</button>
     <button class="tool labeled" data-tool="pencil" title="연필 (P)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l1-4 8-8 3 3-8 8z"/><path d="M11.5 5.5l3 3"/></svg>연필</button>
     <button class="tool labeled" data-tool="point" title="점 잇기 (L): 맥락 이미지에 점을 찍으면 점 사이를 경계를 따라 잇습니다"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 14c2-1 3-6 6-6s3 4 6 2"/><circle cx="4" cy="14" r="1.8" fill="currentColor"/><circle cx="10" cy="8" r="1.8" fill="currentColor"/><circle cx="16" cy="10" r="1.8" fill="currentColor"/></svg>점 잇기</button>
@@ -195,7 +201,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
     <div class="spacer"></div>
     <div class="picker" title="Glass 선택" style="position:relative">
       <span class="caption">Glass</span><span class="name">BASE</span>
-      <span class="badge pending" data-show="grab range point judge override bigview copy paste repeat">확인 전</span>
+      <span class="badge pending" data-show="grab range point judge override bigview copy paste repeat select selrange edge">확인 전</span>
       <span class="badge pass" data-show="checked submit locked">합격</span>
       <span class="more">▾</span>
       <div class="menu" data-show="checked">
@@ -204,8 +210,8 @@ table.list th { background:var(--bg-3); font-weight:600; }
       </div>
     </div>
     <div class="spacer"></div>
-    <button class="btn" title="저장 (Ctrl+S)" data-show="grab range point judge override checked submit bigview copy paste repeat">저장</button>
-    <button class="btn primary" disabled title="모든 Glass를 확인해야 제출할 수 있습니다 (남은 Glass: BASE, Accum)" data-show="grab range point judge override bigview copy paste repeat">제출</button>
+    <button class="btn" title="저장 (Ctrl+S)" data-show="grab range point judge override checked submit bigview copy paste repeat select selrange edge">저장</button>
+    <button class="btn primary" disabled title="모든 Glass를 확인해야 제출할 수 있습니다 (남은 Glass: BASE, Accum)" data-show="grab range point judge override bigview copy paste repeat select selrange edge">제출</button>
     <button class="btn primary" title="v1 제출" data-show="checked submit">제출</button>
     <button class="btn" data-show="locked">보고서 열기</button>
     <button class="btn icon-btn" title="도움말 (F1)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M7.8 7.9a2.2 2.2 0 1 1 3 2.05c-.5.2-.8.6-.8 1.15v.4"/><path d="M10 13.6v.4"/></svg></button>
@@ -256,15 +262,25 @@ table.list th { background:var(--bg-3); font-weight:600; }
           <div class="row"><span class="label">끌기 모양</span>
             <span class="seg"><button class="on">부드럽게</button><button>뾰족하게</button></span><span class="caption"><kbd>Alt</kbd>+끌기</span></div>
           <div class="row"><span class="label">스냅 <kbd>S</kbd></span><span class="toggle"><span class="switch on"></span>켬</span><span class="caption">8 px 안의 경계에 붙음</span></div>
+          <div class="selbox" id="linebox" hidden>
+            <div class="head">고른 선 <span class="num"><i class="swatch-inline" style="background:var(--oil)"></i>Oil · 02:52.0 – 04:06.0 · 74.0 s</span></div>
+            <div class="caption" data-show="select">선택 도구로 클릭한 곳에서 끊김 없이 이어진 선입니다. "그릴 선"도 Oil로 바뀝니다. <kbd>Esc</kbd>로 풉니다.</div>
+            <div class="row"><button class="btn small" data-show="select">고른 선 지우기 <kbd>Delete</kbd></button><button class="btn small" data-show="selrange">고른 선을 범위 안만 지우기 <kbd>Delete</kbd></button><span class="caption" data-show="select">범위를 함께 고르면 범위 안만 지웁니다</span></div>
+          </div>
           <div class="selbox" id="selbox" hidden>
             <div class="head">선택한 범위 <span class="num" id="selText">03:56.0 – 04:22.0 · 26.0 s</span></div>
             <div class="caption">범위 도구로 그래프나 맥락 이미지를 가로로 끌어 고릅니다. 양 끝을 끌어 조정하고, <kbd>Esc</kbd>로 풉니다.</div>
             <div class="row" style="flex-wrap:wrap">
-              <button class="btn small">선 지우기 <kbd>Delete</kbd></button>
+              <button class="btn small" data-show="range copy">Oil 선 지우기 <kbd>Delete</kbd></button>
               <button class="btn small">판단 불가 <kbd>U</kbd></button>
               <button class="btn small">판단 불가 풀기</button>
               <button class="btn small">복사 <kbd>Ctrl+C</kbd></button>
             </div>
+            <div class="row" style="flex-wrap:wrap"><span class="label">Oil을</span><button class="btn small">FULL로</button><button class="btn small">EMPTY로</button><span class="caption">범위 안 Oil을 Glass 맨 위 / 맨 아래로</span></div>
+          </div>
+          <div class="selbox" data-show="edge">
+            <div class="head">연필 · Oil</div>
+            <div class="caption" style="color:var(--fg-1)">Glass 맨 위나 맨 아래에서 <b>6 px 안</b>을 그리면 정확히 맨 위(FULL) / 맨 아래(EMPTY)에 붙습니다. 연필, 점 잇기, 잡아끌기 모두 같습니다.</div>
           </div>
           <div class="selbox" data-show="copy paste">
             <div class="head">복사한 구간 <span class="num">00:30.0 – 01:30.0 · 60.0 s</span></div>
@@ -296,9 +312,9 @@ table.list th { background:var(--bg-3); font-weight:600; }
         <div class="phead">판정 · BASE <span class="right">기준점 회복</span></div>
         <div class="body">
           <div class="verdict">
-            <span class="badge pass" data-show="grab range point judge checked submit locked bigview copy paste repeat">합격</span>
+            <span class="badge pass" data-show="grab range point judge checked submit locked bigview copy paste repeat select selrange edge">합격</span>
             <span class="badge fail" data-show="override">불합격</span>
-            <span class="caption" data-show="grab range point judge checked submit locked bigview copy paste repeat">자동 판정</span>
+            <span class="caption" data-show="grab range point judge checked submit locked bigview copy paste repeat select selrange edge">자동 판정</span>
             <span class="caption" data-show="override">직접 판정 · 자동 판정은 합격</span>
           </div>
           <table class="kv">
@@ -307,17 +323,17 @@ table.list th { background:var(--bg-3); font-weight:600; }
             <tr><th>회복 뒤 유지</th><td>계속 유지 <span class="caption">(기준 5 s 이상)</span></td></tr>
             <tr><th>유효 비율</th><td>81 % <span class="caption">(기준 70 % 이상)</span></td></tr>
           </table>
-          <div class="row" data-show="grab range point judge override checked submit bigview copy paste repeat"><span class="label">덮어쓰기</span>
-            <span class="seg"><button class="on" data-show="grab range point judge checked submit bigview copy paste repeat">자동</button><button data-show="override">자동</button><button>합격</button><button class="on" data-show="override">불합격</button><button data-show="grab range point judge checked submit bigview copy paste repeat">불합격</button></span></div>
+          <div class="row" data-show="grab range point judge override checked submit bigview copy paste repeat select selrange edge"><span class="label">덮어쓰기</span>
+            <span class="seg"><button class="on" data-show="grab range point judge checked submit bigview copy paste repeat select selrange edge">자동</button><button data-show="override">자동</button><button>합격</button><button class="on" data-show="override">불합격</button><button data-show="grab range point judge checked submit bigview copy paste repeat select selrange edge">불합격</button></span></div>
           <div data-show="override" style="display:flex;flex-direction:column;gap:4px">
             <span class="label" style="width:auto">덮어쓴 이유 (필수)</span>
             <div class="textarea">01:40 부근 거품이 유면을 가려 회복 시각을 믿을 수 없음. 재시험 필요.</div>
             <span class="caption">보고서에는 최종 판정과 이 이유가 "판정 사유"로 나옵니다. 자동 판정은 이 검사의 기록으로만 남습니다.</span>
           </div>
-          <div class="row" data-show="grab range point judge override bigview copy paste repeat"><button class="btn primary small">이 Glass 확인</button><span class="caption">남은 Glass: BASE, Accum</span></div>
+          <div class="row" data-show="grab range point judge override bigview copy paste repeat select selrange edge"><button class="btn primary small">이 Glass 확인</button><span class="caption">남은 Glass: BASE, Accum</span></div>
           <div class="checked" data-show="checked submit"><span>✓ 확인함 14:20</span><button class="btn small subtle">확인 풀기</button></div>
           <div class="checked" data-show="locked"><span>✓ 확인함 14:20 · v1에 제출됨</span></div>
-          <span class="caption" data-show="grab range point judge override checked submit bigview copy paste repeat">확인한 뒤 이 Glass의 선이나 판단 불가, 압축기 기동을 고치면 확인이 풀립니다.</span>
+          <span class="caption" data-show="grab range point judge override checked submit bigview copy paste repeat select selrange edge">확인한 뒤 이 Glass의 선이나 판단 불가, 압축기 기동을 고치면 확인이 풀립니다.</span>
         </div>
       </div>
 
@@ -389,6 +405,12 @@ table.list th { background:var(--bg-3); font-weight:600; }
     <button class="btn small" data-state="paste">한 곳씩 붙여넣기</button>
     <button class="btn small" data-state="repeat">반복 붙여넣기</button>
   </div>
+  <b>V2-5 (확인 요청, 2026-11-02)</b>
+  <div class="states" style="flex-wrap:wrap">
+    <button class="btn small" data-state="select">선택</button>
+    <button class="btn small" data-state="selrange">고른 선 + 범위</button>
+    <button class="btn small" data-state="edge">맨 위에 붙기</button>
+  </div>
   <div id="stateText"></div>
   <b style="display:block;margin-top:8px">확정 (사용자, 2026-10-29)</b>
   <ol>
@@ -405,7 +427,9 @@ table.list th { background:var(--bg-3); font-weight:600; }
   const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
   const T = 300, DT = 0.5, N = T / DT;            // 0.5 s columns
   const TOP = 200, ZERO = 60;                      // Glass rows; FULL at TOP, EMPTY at 0; zero line row
-  const START = 30, PLAY = 95;
+  const START = 30;
+  let PLAY = 95;
+  const PIECE = [172, 246], CLICK = 200, CUT = [200, 230];   // V2-5: the picked Oil line, the click, the range
   const PAD = { l: 52, r: 16, t: 14, b: 10 };
   let EMPTY = [[150, 172], [246, 258]];            // draft stretches left empty
   let CANNOT = [[130, 150]];
@@ -440,7 +464,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
   const isSource = t => t >= SOURCE[0] && t < SOURCE[1];
   // the draft outside the drawn cycle: it follows the Foam top where there is Foam, and is empty in places
   const draftOil = t => within(EMPTY, t) ? null : (cycFoam(t) ?? cycOil(t)) + 4 * Math.sin(t / 3);
-  const oilAt = t => cyc ? (isSource(t) || isPasted(t) || t < START ? cycOil(t) : draftOil(t))
+  const oilAt = t => (state === "edge" && t >= 176 && t < 246) ? null : cyc ? (isSource(t) || isPasted(t) || t < START ? cycOil(t) : draftOil(t))
                          : (within(EMPTY, t) || within(CANNOT, t)) ? null : trueOil(t);
   const foamAt = t => cyc ? (isSource(t) || isPasted(t) ? cycFoam(t) : null)
                           : (t >= 40 && t <= 128) ? Math.min(TOP, trueOil(t) + smooth(0, 34, 40, 60, t) * smooth(1, 0, 110, 128, t)) : null;
@@ -472,7 +496,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
            (labels ? `<text x="${(s.x(a) + s.x(b)) / 2}" y="${PAD.t + 14}" text-anchor="middle" font-size="12" fill="${css('--fg-3')}">판단 불가</text>` : "");
     if (labels) for (const [a, b] of EMPTY)
       g += `<text x="${(s.x(a) + s.x(b)) / 2}" y="${h - PAD.b - 6}" text-anchor="middle" font-size="12" font-weight="600" fill="#B5373B">빈 구간</text>`;
-    if (state === "range" || state === "copy")
+    if (state === "range" || state === "copy" || state === "selrange")
       g += `<rect x="${s.x(SELECT[0])}" y="0" width="${s.x(SELECT[1]) - s.x(SELECT[0])}" height="${h}" fill="${css('--selection-band')}"/>
             <line x1="${s.x(SELECT[0])}" x2="${s.x(SELECT[0])}" y1="0" y2="${h}" stroke="${css('--brand')}"/>
             <line x1="${s.x(SELECT[1])}" x2="${s.x(SELECT[1])}" y1="0" y2="${h}" stroke="${css('--brand')}"/>`;
@@ -517,6 +541,22 @@ table.list th { background:var(--bg-3); font-weight:600; }
         g += ghost(GHOST_AT, "") + `<text x="${s.x(GHOST_AT) + 6}" y="${PAD.t + 4}" font-size="12" font-weight="600" fill="${css('--brand')}">클릭하면 여기서 시작</text>`;
       }
       if (state === "repeat") REPEATS.forEach((a, i) => { g += ghost(a, String(i + 1)); });
+    }
+    if (state === "select" || state === "selrange") {
+      g += `<path d="${path(oilAt, s, PIECE[0], PIECE[1] - DT)}" stroke="${css('--oil')}" stroke-opacity="0.18" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+      g += `<path d="${path(oilAt, s, PIECE[0], PIECE[1] - DT)}" stroke="${css('--oil')}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+      if (state === "selrange")
+        g += `<path d="${path(oilAt, s, CUT[0], CUT[1])}" stroke="#fff" stroke-width="3" stroke-dasharray="3 3" fill="none"/>
+              <text x="${(s.x(CUT[0]) + s.x(CUT[1])) / 2}" y="${s.y(oilAt(215)) + 22}" text-anchor="middle" font-size="12" font-weight="600" fill="${css('--brand')}">지울 부분</text>`;
+      else g += `<circle cx="${s.x(CLICK)}" cy="${s.y(oilAt(CLICK))}" r="4" fill="#fff" stroke="${css('--oil')}" stroke-width="2"/>`;
+    }
+    if (state === "edge") {
+      const top = s.y(TOP);
+      g += `<line x1="${PAD.l}" x2="${s.x(T)}" y1="${top}" y2="${top}" stroke="${css('--oil')}" stroke-width="2"/>`;
+      g += `<path d="M${s.x(176)},${s.y(trueOil(176))} C${s.x(186)},${s.y(196)} ${s.x(190)},${top} ${s.x(196)},${top} L${s.x(238)},${top}" stroke="${css('--line-halo')}" stroke-width="5" fill="none"/>`;
+      g += `<path d="M${s.x(176)},${s.y(trueOil(176))} C${s.x(186)},${s.y(196)} ${s.x(190)},${top} ${s.x(196)},${top} L${s.x(238)},${top}" stroke="${css('--oil')}" stroke-width="2.5" fill="none"/>`;
+      g += `<circle cx="${s.x(238)}" cy="${top + 4}" r="4" fill="none" stroke="${css('--fg-1')}" stroke-width="1.5"/>
+            <text x="${s.x(240)}" y="${top + 18}" font-size="12" font-weight="600" fill="${css('--oil')}">FULL에 붙음</text>`;
     }
     if (state === "point") {
       const ys = { 146: trueOil(146) - 6, 158: trueOil(158) + 4, 166: trueOil(166) - 3 };
@@ -635,7 +675,7 @@ table.list th { background:var(--bg-3); font-weight:600; }
     c.fillStyle = "#fff"; c.font = "12px " + css('--font');
     c.fillText("0선", cx + rx + 18, yOf(ZERO) + 4);
     c.fillStyle = "rgba(0,0,0,0.45)"; c.fillRect(8, 8, 92, 20);
-    c.fillStyle = "#fff"; c.fillText("01:35.0 · 일시정지", 14, 22);
+    c.fillStyle = "#fff"; c.fillText(`${PLAY === CLICK ? "03:20.0" : "01:35.0"} · 일시정지`, 14, 22);
   }
 
   const TEXT = {
@@ -650,6 +690,9 @@ table.list th { background:var(--bg-3); font-weight:600; }
     copy: "<b>복사</b> (V2-4b): 압축기를 60 s마다 켜고 끄는 시험. 00:30–01:30의 한 주기를 손으로 그린 뒤 범위 도구로 골라 <b>복사</b>(Ctrl+C). 이 Glass의 Oil과 Foam이 빈 샘플까지 그대로 복사됩니다(참조 선과 판단 불가는 빼고). 뒤쪽은 아직 초안이라 Foam 위쪽을 따라가거나 비어 있습니다.",
     paste: "<b>한 곳씩 붙여넣기</b> (V2-4b): <b>붙여넣기</b>(Ctrl+V)를 누르면 복사본이 커서를 따라다니는 점선으로 보이고, 클릭한 시각에서 시작해 붙습니다. 01:30에 하나를 붙였고, 다음 것이 02:30에서 기다리는 상태. 높이는 복사한 그대로이고 스냅은 쓰지 않습니다. Esc로 끝냅니다.",
     repeat: "<b>반복 붙여넣기</b> (V2-4b): 첫 시작, 주기, 끝을 넣으면 붙을 자리가 점선으로 미리 보이고(1–4), <b>붙여넣기</b>로 한 번에 붙습니다. 기본값은 첫 시작 = 복사한 구간 바로 뒤, 주기 = 복사한 길이, 끝 = 분석 범위 끝입니다. 분석 범위 밖은 잘립니다.",
+    select: "<b>선택</b> (V2-5, 기본 도구): 03:20의 Oil 선을 클릭한 상태. 재생 위치가 03:20으로 가고 원본 영상이 그 프레임을 보여 줍니다. 클릭한 곳에서 끊김 없이 이어진 선(02:52–04:06, 앞뒤의 빈 구간까지)이 굵게 골라지고, \"그릴 선\"이 Oil로 바뀝니다. 끌어도 선이나 보기는 바뀌지 않습니다(보기 이동은 Shift-드래그·휠). Delete는 이 선 전체를 지웁니다. 빈 곳을 클릭하면 재생 위치만 옮기고 고른 선을 풉니다. 참조 선도 같은 방법으로 고르고 지웁니다.",
+    selrange: "<b>고른 선 + 범위</b> (V2-5): 범위 도구로 03:20–03:50을 고른 뒤, 선택 도구로 Oil 선을 클릭한 상태. 이때 Delete는 <b>고른 선의 범위 안만</b> 지웁니다(흰 점선 부분). 같은 범위의 Foam이나 참조는 그대로입니다. 범위 칸의 <b>FULL로 / EMPTY로</b>는 범위 안 Oil을 Glass 맨 위 / 맨 아래로 한 번에 그립니다(직접 그린 선으로 칩니다).",
+    edge: "<b>맨 위에 붙기</b> (V2-5): 연필로 Glass 맨 위 근처를 그리는 중. 포인터가 맨 위에서 2 px 아래에 있어도 선은 정확히 맨 위에 그려지고, 맨 위 선이 Oil 색으로 강조되며 \"FULL에 붙음\"이 보입니다. 맨 아래(EMPTY)도 같습니다. 붙는 거리는 화면에서 6 px입니다.",
     point: "<b>점 잇기 중</b>: 빈 구간 02:30–02:52 위 맥락 이미지에 점 3개를 찍은 상태. 점 사이는 경계를 따라 이어지고(점선), 마지막 점에서 커서까지 미리 보기가 이어집니다. Enter로 확정하면 그 구간의 Oil 선이 됩니다.",
   };
   function setState(next) {
@@ -657,16 +700,18 @@ table.list th { background:var(--bg-3); font-weight:600; }
     cyc = ["copy", "paste", "repeat"].includes(state);
     EMPTY = cyc ? [[205, 218], [262, 276]] : [[150, 172], [246, 258]];
     CANNOT = cyc ? [] : [[130, 150]];
-    SELECT = cyc ? SOURCE : [236, 262];
+    SELECT = cyc ? SOURCE : state === "selrange" ? CUT : [236, 262];
     document.getElementById("bigBtn").classList.toggle("hot", state === "bigview");
-    const tool = { grab: "grab", range: "range", point: "point", copy: "range", paste: "range", repeat: "range" }[state] ?? (state === "locked" ? null : "grab");
+    const tool = { grab: "grab", range: "range", point: "point", copy: "range", paste: "range", repeat: "range", select: "select", selrange: "select", edge: "pencil" }[state] ?? (state === "locked" ? null : "select");
+    PLAY = ["select", "selrange"].includes(state) ? CLICK : 95;
     document.querySelectorAll("[data-tool]").forEach(b => { b.setAttribute("aria-pressed", String(b.dataset.tool === tool)); b.disabled = state === "locked"; });
     document.querySelectorAll("[data-show]").forEach(e => { e.hidden = !e.dataset.show.split(" ").includes(state); });
     document.querySelector(".app").classList.toggle("with-bar", state === "locked");
     if (["judge", "override", "checked", "locked"].includes(state)) document.getElementById("judgment").scrollIntoView({ block: "start" });
     document.querySelectorAll("[data-state]").forEach(b => b.classList.toggle("primary", b.dataset.state === state));
-    document.getElementById("selbox").hidden = !["range", "copy"].includes(state);
-    document.getElementById("selText").textContent = cyc ? "00:30.0 – 01:30.0 · 60.0 s" : "03:56.0 – 04:22.0 · 26.0 s";
+    document.getElementById("selbox").hidden = !["range", "copy", "selrange"].includes(state);
+    document.getElementById("linebox").hidden = !["select", "selrange"].includes(state);
+    document.getElementById("selText").textContent = cyc ? "00:30.0 – 01:30.0 · 60.0 s" : state === "selrange" ? "03:20.0 – 03:50.0 · 30.0 s" : "03:56.0 – 04:22.0 · 26.0 s";
     document.getElementById("pointbox").hidden = state !== "point";
     document.getElementById("stateText").innerHTML = TEXT[state];
     draw();

@@ -232,6 +232,18 @@ Each Glass in a Recipe has one rule.
     to the compressor start. A pasted stretch keeps its copied heights,
     with no snap. For the judgment and the check, a paste counts as
     drawing a new line.
+  - **Select** (user, 2026-11-02, after the V2-5 workstation run): a tool
+    that changes nothing, the editor's default. A click on the graph or
+    the context image moves the playhead there (the video shows that
+    frame); a click on a line, Oil, Foam or reference, picks the line
+    joined to that point without a break. Delete then empties the picked
+    line: only inside the range when one is selected, else the whole
+    joined line.
+  - **FULL and EMPTY made easy** (user, 2026-11-02, same run): drawing
+    within a few screen pixels of the Glass top or bottom, with the
+    pencil, the point line or grab-and-drag, lands exactly on it; and a
+    selected range can set its Oil line to the Glass top ("FULL로") or
+    bottom ("EMPTY로") at once.
   - The draft is kept as dense samples. Points are not edited one by one.
 - **Curve shape:** grab-and-drag bends the line smoothly, with no
   overshoot. Holding Alt, or choosing the pointed shape, bends it to a
