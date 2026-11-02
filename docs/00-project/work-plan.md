@@ -503,12 +503,16 @@ The three v1 remote branches that v1 docs cite stay.
     (public, milk poured into a glass), marked as an example; Korean text;
     the video file outside Git;
   - made as `design/intro/intro.html` (a `seek(t)` page) rendered frame by
-    frame by `scripts/render_intro.py`, muxed with `imageio-ffmpeg`;
-  - the earlier walkthrough storyboard moves to P-2 as short clips.
+    frame by `scripts/render_intro.py` (`pip install -e .[intro]`), with
+    the sound synthesised from the page's cues;
+  - the earlier walkthrough storyboard moves to P-2 as short clips;
+  - after the first style frames (user, 2026-11-02): kinetic type is the
+    point, not the white tone; the app-icon SVG stays out of the video.
   None of the compressor samples fit (sample4's glass is small and flat,
   sample2 moves, base_sample_1 is short and overlaid, public_miso is cut
-  clips). **Next step:** style frames of the seven scenes for the user;
-  then the render, the sound and the MP4.
+  clips). **Now:** draft 1 (dark, letters as sight glasses; 40 s; the
+  render takes about 10 min on this Mac) is with the user; their notes
+  come next.
 - **Then, in order** (user, 2026-11-02):
   1. **P-2 — a user manual**, as HTML or another fitting form;
   2. **P-3 — fixes for problems found in field use.**

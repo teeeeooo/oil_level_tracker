@@ -3,146 +3,131 @@
 <head>
 <meta charset="utf-8">
 <title>Oil Level Tracker — intro</title>
-<!-- P-1 introduction video (docs/40-operations/intro-video.md). Not product code.
-     seek(t) draws the frame at t seconds; scripts/render_intro.py captures it 30 times a second.
-     Open with ?t=12.5 to see one moment, or ?play to watch it in real time.
+<!-- P-1 introduction video (docs/40-operations/intro-video.md). Not product code, and not an app
+     screen: a motion piece with its own dark palette; the app's colours appear as the data colours.
+     seek(t) draws the frame at t seconds; scripts/render_intro.py captures it 30 times a second and
+     synthesises the sound effects listed in CUES. Open with ?t=12.5 for one moment, ?play to watch.
      assets/ is made by scripts/render_intro.py (ignored by Git). -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
   :root {
-    --bg-1: #FFFFFF; --bg-2: #FAFAFA; --bg-3: #F5F5F5;
-    --fg-1: #242424; --fg-2: #424242; --fg-3: #616161;
-    --stroke-2: #E0E0E0; --stroke-3: #F0F0F0;
-    --brand: #0F6CBD; --brand-tint: #EBF3FC;
-    --oil: #1F77D0; --foam: #E8710A; --compressor: #8764B8;
-    --pass: #0E700E; --pass-tint: #F1FAF1;
+    --night: #070D14; --night-2: #0E1A27;
+    --ink: #F2F5F8; --ink-dim: #8796A7; --ink-faint: rgba(242,245,248,0.10);
+    --oil: #1F77D0; --oil-glow: #4AA3FF; --foam: #F08A2E; --pass: #3CC46A;
   }
-  html, body { margin: 0; background: #DADADA; }
+  html, body { margin: 0; background: #000; }
   #stage {
-    position: relative; width: 1920px; height: 1080px; overflow: hidden;
-    background: var(--bg-1); color: var(--fg-1);
-    font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-    letter-spacing: -0.02em;
+    position: relative; width: 1920px; height: 1080px; overflow: hidden; color: var(--ink);
+    background: radial-gradient(1400px 900px at 50% 45%, var(--night-2), var(--night) 70%);
+    font-family: "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo", sans-serif;
+    letter-spacing: -0.025em;
   }
   .abs { position: absolute; left: 0; top: 0; will-change: transform, opacity; }
-  .line { white-space: nowrap; }
-  .word { display: inline-block; margin-right: 0.26em; }
-  .lead { font-size: 40px; font-weight: 500; color: var(--fg-3); }
-  .big { font-size: 80px; font-weight: 700; }
-  .title { font-size: 64px; font-weight: 700; }
   .center { width: 1920px; text-align: center; }
+  .mono { font-family: "SF Mono", "JetBrains Mono", Menlo, monospace; letter-spacing: 0; }
+  .lead { font-size: 40px; font-weight: 300; color: var(--ink-dim); }
+  .head { font-size: 76px; font-weight: 750; }
+  .word { display: inline-block; margin-right: 0.25em; }
+  /* letters that hold a liquid: the stroke is the glass, the background the level */
+  .vessel { display: inline-block; color: transparent; -webkit-text-stroke: 1.6px rgba(242,245,248,0.55);
+            -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat; }
+  .space { display: inline-block; width: 0.28em; }
   svg { overflow: visible; }
-  #ctxBox { left: 260px; top: 330px; width: 1400px; height: 480px; border-radius: 6px; overflow: hidden; }
-  #ctxImg { width: 1400px; height: 480px; display: block; }
-  #ctxCover { position: absolute; top: 0; right: 0; height: 100%; background: var(--bg-1); }
-  #thumb { width: 209px; height: 200px; border-radius: 8px; overflow: hidden; box-shadow: 0 6px 24px rgba(0,0,0,0.16); }
-  #thumb img { width: 100%; height: 100%; display: block; object-fit: cover; }
-  #thumbBand { position: absolute; left: 50%; top: 0; width: 18px; margin-left: -9px; height: 100%;
-               border: 2px solid #FFFFFF; box-sizing: border-box; box-shadow: 0 0 0 1px rgba(0,0,0,0.25); }
-  .chip { display: inline-flex; align-items: center; gap: 18px; padding: 18px 28px; border-radius: 14px;
-          background: var(--bg-1); box-shadow: 0 10px 32px rgba(0,0,0,0.14); }
-  .chip b { font-size: 44px; color: var(--pass); background: var(--pass-tint); padding: 4px 16px; border-radius: 8px; }
-  .chip span { font-size: 26px; color: var(--fg-2); }
-  .tag { font-size: 22px; font-weight: 600; padding: 6px 14px; border-radius: 6px; color: #FFFFFF; }
-  #cards { left: 0; top: 0; width: 1920px; height: 1080px; perspective: 1800px; }
-  .card { position: absolute; left: 960px; top: 540px; border-radius: 14px; overflow: hidden;
-          box-shadow: 0 18px 60px rgba(0,0,0,0.18); background: #FFFFFF; transform-origin: center; }
+  .card { position: absolute; border-radius: 16px; overflow: hidden; background: #fff;
+          box-shadow: 0 30px 90px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08); }
   .card img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
-  #note { left: auto; right: 48px; top: auto; bottom: 36px; font-size: 20px; color: var(--fg-3); }
+  #grain { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; opacity: 0.07;
+           mix-blend-mode: screen; pointer-events: none; }
+  #vignette { position: absolute; inset: 0; pointer-events: none;
+              background: radial-gradient(closest-side at 50% 50%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.45)); }
 </style>
 </head>
 <body>
 <div id="stage">
-  <!-- scene 1 -->
-  <div id="dot" class="abs" style="width:18px;height:18px;border-radius:9px;background:var(--fg-1)"></div>
-  <div id="s1" class="abs center" style="top:430px">
-    <div class="line lead" id="s1a">유면 확인은</div>
-    <div class="line big" id="s1b" style="margin-top:18px"></div>
+  <!-- 1 · the long watch -->
+  <div id="tc" class="abs mono" style="left:160px;top:120px;font-size:26px;color:var(--ink-dim)"></div>
+  <div id="tcBar" class="abs" style="left:160px;top:166px;height:2px;background:var(--ink)"></div>
+  <div id="s1" class="abs center" style="top:420px">
+    <div id="s1a" class="lead">유면 확인은</div>
+    <div id="s1b" class="head" style="margin-top:22px;font-size:92px;font-weight:800"></div>
   </div>
 
-  <!-- scenes 2-3: the sight glass and the graph -->
-  <svg id="art" class="abs" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <!-- 2-3 · letters that rise and fall, then one line -->
+  <div id="s2" class="abs center" style="top:410px">
+    <div id="s2a" style="font-size:200px;font-weight:850;line-height:1.1"></div>
+  </div>
+  <svg id="graph" class="abs" width="1920" height="1080" viewBox="0 0 1920 1080">
     <defs>
-      <clipPath id="glassClip"><ellipse id="glassClipE" cx="0" cy="0" rx="150" ry="235"/></clipPath>
-      <filter id="halo" x="-5%" y="-5%" width="110%" height="110%">
-        <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/>
-        <feFlood flood-color="#FFFFFF" flood-opacity="0.95"/><feComposite in2="d" operator="in" result="w"/>
-        <feMerge><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge>
+      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="7" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
+      <linearGradient id="sweep" x1="0" x2="1"><stop offset="0" stop-color="var(--oil-glow)" stop-opacity="0"/>
+        <stop offset="0.5" stop-color="var(--oil-glow)"/><stop offset="1" stop-color="var(--oil-glow)" stop-opacity="0"/></linearGradient>
     </defs>
-    <g id="grid"></g>
-    <g id="glass">
-      <ellipse cx="0" cy="0" rx="150" ry="235" fill="var(--brand-tint)"/>
-      <g clip-path="url(#glassClip)">
-        <rect id="foamR" x="-200" y="0" width="400" height="36" fill="var(--foam)"/>
-        <rect id="oilR" x="-200" y="0" width="400" height="600" fill="var(--oil)"/>
-      </g>
-      <ellipse id="glassRim" cx="0" cy="0" rx="150" ry="235" fill="none" stroke="var(--fg-1)" stroke-width="10"/>
-      <g id="ticks" stroke="var(--fg-1)" stroke-width="7" stroke-linecap="round">
-        <line x1="182" y1="-110" x2="204" y2="-110"/><line x1="182" y1="0" x2="214" y2="0"/>
-        <line x1="182" y1="110" x2="204" y2="110"/>
-      </g>
-    </g>
-    <line id="link" stroke="var(--oil)" stroke-width="3" stroke-dasharray="6 6"/>
-    <path id="trace" fill="none" stroke="var(--oil)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle id="head" r="12" fill="var(--oil)" stroke="#FFFFFF" stroke-width="4"/>
+    <g id="axes"></g>
+    <line id="flat" stroke="url(#sweep)" stroke-width="4" filter="url(#glow)"/>
+    <path id="trace" fill="none" stroke="var(--oil-glow)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" filter="url(#glow)"/>
+    <circle id="head" r="11" fill="#fff" filter="url(#glow)"/>
+    <text id="readout" class="mono" font-size="24" fill="var(--ink)"></text>
   </svg>
-  <div id="s2" class="abs" style="left:260px;top:150px">
-    <div class="line lead" id="s2a">오르내리는 유면을</div>
-    <div class="line title" id="s2b" style="margin-top:8px">하나의 선으로</div>
+  <div id="s3" class="abs" style="left:160px;top:150px">
+    <div id="s3a" class="lead">오르내리는 유면을</div>
+    <div id="s3b" class="head" style="margin-top:6px"></div>
   </div>
 
-  <!-- scenes 4-5: the context image -->
-  <div id="ctxBox" class="abs"><img id="ctxImg" src="assets/context.png" alt=""><div id="ctxCover"></div></div>
+  <!-- 4-5 · the context image, slice by slice; the draft and the inspector -->
+  <div id="frameCard" class="card abs" style="width:542px;height:520px">
+    <img id="frameImg" src="assets/frame-00.jpg" alt="">
+    <div id="band" style="position:absolute;top:0;left:262px;width:18px;height:100%;
+         box-shadow:0 0 0 2px #fff, 0 0 24px 4px rgba(74,163,255,0.8)"></div>
+  </div>
+  <div id="ctx" class="abs" style="overflow:hidden;border-radius:10px">
+    <img id="ctxImg" src="assets/context.png" alt="" style="position:absolute;left:0;top:0;width:100%;height:100%">
+    <div id="ctxCover" style="position:absolute;top:0;right:0;height:100%;background:var(--night)"></div>
+  </div>
+  <div id="strips"></div>
   <svg id="over" class="abs" width="1920" height="1080" viewBox="0 0 1920 1080">
-    <line id="zero" stroke="#FFFFFF" stroke-width="2.5" stroke-dasharray="10 8"/>
-    <path id="draft" fill="none" stroke="var(--oil)" stroke-width="6" stroke-dasharray="14 10" filter="url(#halo)"/>
-    <path id="drawn" fill="none" stroke="var(--oil)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" filter="url(#halo)"/>
+    <line id="zero" stroke="#fff" stroke-width="2" stroke-dasharray="10 8" opacity="0.8"/>
+    <path id="draft" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="3 11" stroke-linecap="round"/>
+    <path id="drawn" fill="none" stroke="var(--oil-glow)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" filter="url(#glow)"/>
     <g id="pencil">
-      <g transform="rotate(35)"><path d="M0 0 L-9 -22 L-9 -86 L9 -86 L9 -22 Z" fill="var(--fg-1)"/><path d="M-9 -22 L9 -22 L0 0 Z" fill="#E8C9A0"/><rect x="-9" y="-96" width="18" height="10" rx="2" fill="var(--fg-3)"/></g>
-      <circle r="9" fill="var(--oil)" stroke="#FFFFFF" stroke-width="3"/>
+      <circle r="26" fill="none" stroke="var(--oil-glow)" stroke-width="2" opacity="0.6"/>
+      <circle r="9" fill="#fff"/>
     </g>
+    <g id="stamp">
+      <circle id="ring" r="120" fill="none" stroke="var(--pass)" stroke-width="3"/>
+      <rect x="-150" y="-62" width="300" height="124" rx="22" fill="rgba(7,13,20,0.82)" stroke="var(--pass)" stroke-width="5"/>
+      <text text-anchor="middle" y="28" font-size="78" font-weight="800" fill="var(--pass)" style="letter-spacing:0.08em">합격</text>
+    </g>
+    <text id="stampNote" font-size="28" fill="var(--ink)" text-anchor="middle"></text>
   </svg>
-  <div id="thumb" class="abs"><img id="thumbImg" src="assets/frame-00.jpg" alt=""><div id="thumbBand"></div></div>
-  <div id="s4" class="abs" style="left:260px;top:150px">
-    <div class="line lead" id="s4a">영상 전체를</div>
-    <div class="line title" id="s4b" style="margin-top:8px">한 장의 그림으로</div>
+  <div id="s4" class="abs" style="left:160px;top:150px">
+    <div id="s4a" class="lead">영상 전체를</div>
+    <div id="s4b" class="head" style="margin-top:6px">한 장의 그림으로</div>
   </div>
-  <div id="tagDraft" class="abs tag" style="background:var(--fg-3)">자동 초안</div>
-  <div id="tagDrawn" class="abs tag" style="background:var(--oil)">검사자</div>
-  <div id="s5" class="abs" style="left:260px;top:150px">
-    <div class="line lead" id="s5a">초안은 앱이,</div>
-    <div class="line title" id="s5b" style="margin-top:8px">판단은 검사자가</div>
-  </div>
-  <div id="verdict" class="abs chip"><b>합격</b><span>기동 후 11.0초에 0선 회복</span></div>
-
-  <!-- scene 6 -->
-  <div id="cards" class="abs"></div>
-  <div id="s6glow" class="abs" style="left:460px;top:400px;width:1000px;height:280px;border-radius:140px;background:radial-gradient(closest-side,rgba(255,255,255,0.97),rgba(255,255,255,0.85) 60%,rgba(255,255,255,0))"></div>
-  <div id="s6" class="abs center" style="top:480px">
-    <div class="line title" id="s6a"></div>
+  <div id="s5" class="abs" style="left:160px;top:150px">
+    <div id="s5a" class="lead mono" style="font-size:36px"></div>
+    <div id="s5b" class="head" style="margin-top:10px">판단은 검사자가</div>
   </div>
 
-  <!-- scene 7 -->
-  <svg id="logo" class="abs" width="256" height="256" viewBox="0 0 256 256">
-    <defs><clipPath id="lg"><ellipse cx="120" cy="128" rx="60" ry="94"/></clipPath></defs>
-    <rect x="8" y="8" width="240" height="240" rx="52" fill="#0F6CBD"/>
-    <ellipse cx="120" cy="128" rx="60" ry="94" fill="#EBF3FC"/>
-    <g clip-path="url(#lg)">
-      <rect id="lgFoam" x="40" y="120" width="160" height="16" fill="#E8710A"/>
-      <rect id="lgOil" x="40" y="136" width="160" height="100" fill="#1F77D0"/>
-    </g>
-    <ellipse cx="120" cy="128" rx="60" ry="94" fill="none" stroke="#FFFFFF" stroke-width="14"/>
-    <g stroke="#FFFFFF" stroke-width="9" stroke-linecap="round">
-      <line x1="200" y1="84" x2="218" y2="84"/><line x1="200" y1="128" x2="224" y2="128"/><line x1="200" y1="172" x2="218" y2="172"/>
-    </g>
+  <!-- 6 · four words, four screens -->
+  <div id="cards" class="abs" style="width:1920px;height:1080px;perspective:2000px"></div>
+  <div id="s6" class="abs" style="left:160px;top:250px"></div>
+  <div id="s6line" class="abs center head" style="top:490px"></div>
+
+  <!-- 7 · the name fills -->
+  <div id="s7" class="abs center" style="top:410px">
+    <div id="s7a" style="font-size:150px;font-weight:850;letter-spacing:-0.035em"></div>
+    <div id="s7b" class="lead" style="margin-top:26px;font-size:36px">사이트글라스 영상으로 유면을 판정합니다</div>
+  </div>
+  <svg id="gauge" class="abs" width="1920" height="1080" viewBox="0 0 1920 1080">
+    <line id="gaugeLine" stroke="var(--oil-glow)" stroke-width="3" filter="url(#glow)"/>
   </svg>
-  <div id="s7" class="abs center" style="top:640px">
-    <div class="line" id="s7a" style="font-size:84px;font-weight:700;letter-spacing:-0.03em">Oil Level Tracker</div>
-    <div class="line lead" id="s7b" style="margin-top:14px;font-size:34px">사이트글라스 영상으로 유면을 판정합니다</div>
-  </div>
 
-  <div id="note" class="abs">화면 속 영상은 예시입니다 (유리컵)</div>
+  <div id="note" class="abs" style="left:auto;right:56px;top:auto;bottom:40px;font-size:20px;color:var(--ink-dim)">화면 속 영상은 예시입니다 (유리컵)</div>
+  <canvas id="grain" width="480" height="270"></canvas>
+  <div id="vignette"></div>
 </div>
 
 <script>
@@ -150,235 +135,318 @@
 const FPS = 30, DURATION = 40;
 const $ = (id) => document.getElementById(id);
 
+// sound effects, synthesised by scripts/render_intro.py: [time, kind, gain]
+const CUES = [];
+const cue = (t, kind, gain = 1) => CUES.push([t, kind, gain]);
+
 // ---- easing and timing ----
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lin = (t, a, b) => clamp((t - a) / (b - a));
 const outCubic = (x) => 1 - (1 - x) ** 3;
+const outQuint = (x) => 1 - (1 - x) ** 5;
 const inOutCubic = (x) => (x < 0.5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2);
-const outBack = (x) => 1 + 2.2 * (x - 1) ** 3 + 1.2 * (x - 1) ** 2;
+const inCubic = (x) => x ** 3;
+const outBack = (x) => 1 + 2.4 * (x - 1) ** 3 + 1.4 * (x - 1) ** 2;
 const ease = (t, a, b, f = outCubic) => f(lin(t, a, b));
 const mix = (a, b, k) => a + (b - a) * k;
-// visible between in-start and out-end, fading over the given lengths
-const life = (t, a, b, fadeIn = 0.5, fadeOut = 0.5) => Math.min(ease(t, a, a + fadeIn), 1 - ease(t, b - fadeOut, b));
-
-function show(el, alpha, extra = "") {
+const life = (t, a, b, fi = 0.5, fo = 0.5) => Math.min(ease(t, a, a + fi), 1 - ease(t, b - fo, b));
+function show(el, alpha, transform) {
   el.style.opacity = alpha;
   el.style.visibility = alpha <= 0.001 ? "hidden" : "visible";
-  if (extra !== null) el.style.transform = extra;
+  if (transform != null) el.style.transform = transform;
 }
 
-// words that rise into place one after another
-function wordsInto(el, text) {
+// ---- type ----
+function words(el, text) {
   el.innerHTML = text.split(" ").map((w) => `<span class="word">${w}</span>`).join("");
   return [...el.children];
 }
-function rise(words, t, start, step, length = 0.55) {
-  words.forEach((w, i) => {
-    const k = ease(t, start + i * step, start + i * step + length);
+function rise(list, t, start, step, length = 0.6, dy = 34) {
+  list.forEach((w, i) => {
+    const k = ease(t, start + i * step, start + i * step + length, outQuint);
     w.style.opacity = k;
-    w.style.transform = `translateY(${mix(28, 0, k)}px)`;
-    w.style.filter = `blur(${mix(8, 0, k)}px)`;
+    w.style.transform = `translateY(${mix(dy, 0, k)}px)`;
+    w.style.filter = `blur(${mix(10, 0, k)}px)`;
   });
 }
-
-// ---- data: the inspection of sample7 ----
-let LINE = null;
-const BOX = { x: 260, y: 330, w: 1400, h: 480 };
-const colX = (i) => BOX.x + ((i + 0.5) / LINE.ys.length) * BOX.w;
-const rowY = (y) => BOX.y + ((y - LINE.top) / (LINE.bottom - LINE.top)) * BOX.h;
-function pathOf(points) {
-  return points.map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
+// letters as vessels; level and foam as fractions of the letter height
+function vessels(el, text) {
+  el.innerHTML = [...text].map((c) => (c === " " ? '<span class="space"></span>' : `<span class="vessel">${c}</span>`)).join("");
+  return [...el.querySelectorAll(".vessel")];
 }
-// the line up to a fractional column, as points
-function upTo(ys, f, from = 0) {
+function fill(v, level, foam, liquid, cap = "var(--foam)") {
+  const a = clamp(level) * 100, b = clamp(level + foam) * 100;
+  v.style.backgroundImage =
+    `linear-gradient(to top, ${liquid} 0%, ${liquid} ${a}%, ${cap} ${a}%, ${cap} ${b}%, transparent ${b}%)`;
+}
+
+// ---- the inspection of sample7 ----
+let LINE = null;
+const G = { x: 160, y: 360, w: 1600, h: 520 };  // the graph
+let C = { x: 780, y: 330, w: 980, h: 520 };    // the context image, moved in scene 5
+const gx = (i) => G.x + ((i + 0.5) / LINE.ys.length) * G.w;
+const gy = (y) => G.y + ((y - LINE.top) / (LINE.bottom - LINE.top)) * G.h;
+const cx = (i) => C.x + ((i + 0.5) / LINE.ys.length) * C.w;
+const cy = (y) => C.y + ((y - LINE.top) / (LINE.bottom - LINE.top)) * C.h;
+const pathOf = (pts) => pts.map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
+function upTo(ys, f, X, Y, from = 0) {
   const pts = [];
-  for (let i = from; i < ys.length && i <= f; i++) if (ys[i] != null) pts.push([colX(i), rowY(ys[i])]);
-  const i = Math.floor(f);
-  if (i + 1 < ys.length && ys[i] != null && ys[i + 1] != null && f > i) {
-    const k = f - i;
-    pts.push([mix(colX(i), colX(i + 1), k), rowY(mix(ys[i], ys[i + 1], k))]);
-  }
+  for (let i = from; i < ys.length && i <= f; i++) if (ys[i] != null) pts.push([X(i), Y(ys[i])]);
+  const i = Math.floor(f), k = f - i;
+  if (k > 0 && i + 1 < ys.length && ys[i] != null && ys[i + 1] != null) pts.push([mix(X(i), X(i + 1), k), Y(mix(ys[i], ys[i + 1], k))]);
   return pts;
 }
 
 const frames = [];
-let s1b, s6a, cards = [];
+let s1b, s3b, s2v, s7v, strips = [], cards = [], s6words = [], s6line;
+const S6 = [["01", "분석", "setup.png", 1.6], ["02", "편집", "graph.png", 1.6], ["03", "판정", "judgment.png", 0.9], ["04", "보고서", "report-crop.png", 1.42]];
 
 function setup() {
-  s1b = wordsInto($("s1b"), "영상을 끝까지 지켜보는 일이었습니다");
-  s6a = wordsInto($("s6a"), "분석 · 편집 · 판정 · 보고서");
+  s1b = vessels($("s1b"), "영상을 끝까지 지켜보는 일이었습니다");
+  s2v = vessels($("s2a"), "오르내리는 유면을");
+  s3b = words($("s3b"), "하나의 선으로");
+  s7v = vessels($("s7a"), "Oil Level Tracker");
   for (let i = 0; i < 48; i++) {
     const img = new Image();
     img.src = `assets/frame-${String(i).padStart(2, "0")}.jpg`;
     frames.push(img);
   }
-  const grid = $("grid");
+  const axes = $("axes");
   for (let k = 0; k <= 4; k++) {
-    const y = BOX.y + (k * BOX.h) / 4;
-    grid.insertAdjacentHTML("beforeend", `<line x1="${BOX.x}" x2="${BOX.x + BOX.w}" y1="${y}" y2="${y}" stroke="var(--stroke-2)" stroke-width="1.5"/>`);
+    const y = G.y + (k * G.h) / 4;
+    axes.insertAdjacentHTML("beforeend", `<line x1="${G.x}" x2="${G.x + G.w}" y1="${y}" y2="${y}" stroke="rgba(242,245,248,0.08)" stroke-width="1.5"/>`);
   }
-  // the screen cards: [image, width, height, start x, start y, z, drift]
-  const spec = [
-    ["editor.png", 880, 495, -560, -190, -260, 1],
-    ["report-crop.png", 620, 436, 590, -170, -380, -1],
-    ["verdict-crop.png", 380, 364, 600, 250, -120, 1],
-    ["graph-crop.png", 640, 430, -600, 250, -420, -1],
-    ["report.png", 460, 259, 60, -360, -900, 1],
-    ["editor.png", 420, 236, -40, 370, -950, -1],
-  ];
-  const holder = $("cards");
-  cards = spec.map(([src, w, h, x, y, z, d]) => {
+  const duration = LINE.times[LINE.times.length - 1];
+  for (let s = 0; s <= duration; s += 10) {
+    const x = G.x + (s / duration) * G.w;
+    axes.insertAdjacentHTML("beforeend", `<text x="${x}" y="${G.y + G.h + 44}" font-size="22" fill="var(--ink-dim)" text-anchor="middle" class="mono">00:${String(s).padStart(2, "0")}</text>`);
+  }
+  const holder = $("strips");
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement("div");
+    el.className = "abs";
+    el.style.backgroundImage = "url(assets/context.png)";
+    el.style.backgroundRepeat = "no-repeat";
+    el.style.boxShadow = "0 0 18px rgba(74,163,255,0.7)";
+    holder.appendChild(el);
+    strips.push(el);
+  }
+  const cardHolder = $("cards");
+  cards = S6.map(([, , src, ratio]) => {
     const el = document.createElement("div");
     el.className = "card";
-    el.style.width = `${w}px`; el.style.height = `${h}px`;
-    el.style.marginLeft = `${-w / 2}px`; el.style.marginTop = `${-h / 2}px`;
+    const h = ratio > 1.2 ? 600 : 700;
+    el.style.width = `${Math.round(h * ratio)}px`; el.style.height = `${h}px`;
     el.innerHTML = `<img src="assets/${src}" alt="">`;
-    holder.appendChild(el);
-    return { el, x, y, z, d };
+    cardHolder.appendChild(el);
+    return { el, w: Math.round(h * ratio), h };
   });
+  $("s6").innerHTML = S6.map(([n, w]) =>
+    `<div class="s6w" style="display:flex;align-items:baseline;gap:28px;height:150px">
+       <span class="mono" style="font-size:28px;color:var(--oil-glow)">${n}</span>
+       <span style="font-size:112px;font-weight:800">${w}</span></div>`).join("");
+  s6words = [...$("s6").children];
+  s6line = words($("s6line"), "분석 · 편집 · 판정 · 보고서");
+
+  // the cues, in the order the scenes run
+  s1b.forEach((_, i) => i % 3 === 0 && cue(1.0 + i * 0.1, "tick", 0.5));
+  cue(4.3, "tok", 0.8);
+  cue(5.4, "riser", 0.9);
+  cue(11.3, "whoosh", 0.8);
+  cue(12.0, "glide", 0.5);
+  cue(17.0, "whoosh", 0.9);
+  for (let k = 0; k < 89; k += 4) cue(stripTime(k) + 0.35, "tick", 0.35);
+  cue(22.9, "whoosh", 0.5);
+  [..."초안은 앱이,"].forEach((c, i) => c !== " " && cue(23.5 + i * 0.09, "type", 0.6));
+  cue(24.8, "scribble", 0.7);
+  cue(27.4, "stamp", 1.0);
+  cue(27.45, "chime", 0.9);
+  S6.forEach((_, i) => { cue(29.1 + i * 1.3, "whoosh", 0.6); cue(29.3 + i * 1.3, "tok", 0.7); });
+  cue(34.2, "whoosh", 0.7);
+  cue(35.0, "boom", 1.0);
+  cue(37.0, "shimmer", 0.6);
+}
+const stripTime = (k) => 17.9 + (k / 89) * 4.4;
+
+// film grain: a seeded noise per frame
+function grain(t) {
+  const canvas = $("grain"), g = canvas.getContext("2d");
+  const img = g.createImageData(canvas.width, canvas.height);
+  let s = (Math.floor(t * FPS) * 2654435761) >>> 0;
+  for (let i = 0; i < img.data.length; i += 4) {
+    s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0;
+    const v = s & 255;
+    img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255;
+  }
+  g.putImageData(img, 0, 0);
 }
 
 // ---- the scenes ----
 function seek(t) {
-  // 1 · 0-5 s: a dot, then the sentence
-  const dotIn = ease(t, 0.1, 0.6, outBack), dotOut = ease(t, 1.0, 1.4);
-  show($("dot"), (t < 1.4 ? dotIn : 0) * (1 - dotOut), `translate(${951 + 470 * dotOut}px, 531px) scale(${dotIn})`);
-  const s1 = 1 - ease(t, 4.3, 4.9);
-  show($("s1"), s1, `translateY(${mix(0, -30, 1 - s1)}px)`);
-  $("s1").style.filter = `blur(${(1 - s1) * 10}px)`;
-  const lead = ease(t, 0.7, 1.3);
-  $("s1a").style.opacity = lead;
-  $("s1a").style.transform = `translateY(${mix(20, 0, lead)}px)`;
-  rise(s1b, t, 1.3, 0.32);
-
-  // 2 · 5-11 s: the sight glass, its level going up and down
-  // 3 · 11-17 s: the glass moves aside, and its level draws the graph
-  const glassIn = ease(t, 5.0, 6.0);
-  const toSide = ease(t, 10.4, 11.6, inOutCubic);
-  const gx = mix(960, 150, toSide), gy = mix(600, 570, toSide), gs = mix(1, 0.62, toSide);
-  const glassAlpha = glassIn * (1 - ease(t, 16.6, 17.2));
-  show($("glass"), glassAlpha, null);
-  $("glass").setAttribute("transform", `translate(${gx} ${gy}) scale(${gs * mix(0.9, 1, glassIn)})`);
-  const rimLen = 2 * Math.PI * Math.sqrt((150 ** 2 + 235 ** 2) / 2);
-  $("glassRim").style.strokeDasharray = rimLen;
-  $("glassRim").style.strokeDashoffset = rimLen * (1 - ease(t, 5.0, 6.2, inOutCubic));
-  $("ticks").style.opacity = ease(t, 5.9, 6.4);
-
-  // the graph's head: column f of the line, drawn from 12.0 to 16.0 s
   const n = LINE.ys.length;
-  const f = ease(t, 12.0, 16.0, (x) => x) * (n - 1);
-  const drawnTrace = upTo(LINE.ys, f);
-  // the level in the glass, as a fraction of the glass height (0 bottom, 1 top)
-  let level;
-  if (t < 11.6) level = 0.42 + 0.2 * Math.sin((t - 5.6) * 1.9) * ease(t, 5.6, 6.6) + 0.07 * Math.sin((t - 5.6) * 4.3) * ease(t, 6.0, 7.0);
+
+  // 1 · 0-5 s: a time code runs to 68 minutes while the sentence fills, letter by letter
+  const watch = ease(t, 1.0, 4.3, inOutCubic);
+  const secs = Math.round(watch * 68 * 60);
+  $("tc").textContent = `${String(Math.floor(secs / 3600)).padStart(2, "0")}:${String(Math.floor(secs / 60) % 60).padStart(2, "0")}:${String(secs % 60).padStart(2, "0")}  /  01:08:00`;
+  const s1 = life(t, 0.3, 5.0, 0.6, 0.6);
+  show($("tc"), s1 * 0.9, null);
+  show($("tcBar"), s1, null);
+  $("tcBar").style.width = `${watch * 420}px`;
+  show($("s1"), s1, `scale(${mix(1, 1.04, ease(t, 4.4, 5.0))})`);
+  $("s1").style.filter = `blur(${ease(t, 4.4, 5.0) * 12}px)`;
+  const lead = ease(t, 0.4, 1.0);
+  $("s1a").style.opacity = lead;
+  s1b.forEach((v, i) => {
+    const k = ease(t, 0.7 + i * 0.05, 1.2 + i * 0.05, outQuint);
+    v.style.opacity = k;
+    v.style.transform = `translateY(${mix(30, 0, k)}px)`;
+    const level = clamp(watch * 1.35 - (i / s1b.length) * 0.35);
+    fill(v, level, 0, "var(--ink)", "var(--ink)");
+  });
+
+  // 2 · 5-11 s: each letter holds a level that rises and falls
+  // 3 · 11-17 s: the levels meet in one line, which becomes the graph
+  const s2in = ease(t, 5.0, 5.9);
+  const meet = ease(t, 10.3, 11.3, inOutCubic);
+  const gone = ease(t, 11.3, 11.8);
+  show($("s2"), s2in * (1 - gone), `translateY(${mix(40, 0, s2in) - gone * 30}px)`);
+  $("s2").style.filter = `blur(${gone * 14}px)`;
+  s2v.forEach((v, i) => {
+    const wave = 0.5 + 0.28 * Math.sin((t - 5) * 2.1 - i * 0.7) + 0.08 * Math.sin((t - 5) * 5.3 + i * 1.3);
+    const level = mix(mix(0, wave, ease(t, 5.2, 6.4)), 0.42, meet);
+    fill(v, level, 0.07 * (1 - meet * 0.6), "var(--oil)");
+  });
+  // the meeting line, at the letters' level: 42 % up the 200 px type, whose box starts at 410 px
+  const flatY = 410 + 220 * 0.5 + 100 * 0.5 - 0.42 * 200 + 26;
+  const flatIn = ease(t, 10.9, 11.5), flatOut = ease(t, 12.0, 13.0);
+  $("flat").setAttribute("x1", mix(960, 0, flatIn)); $("flat").setAttribute("x2", mix(960, 1920, flatIn));
+  const graphY = mix(flatY, gy(LINE.bottom), ease(t, 11.6, 12.2, inOutCubic));
+  $("flat").setAttribute("y1", graphY); $("flat").setAttribute("y2", graphY);
+  $("flat").style.opacity = flatIn * (1 - flatOut);
+
+  const graphAlpha = ease(t, 11.6, 12.2) * (1 - ease(t, 16.5, 17.2));
+  $("axes").style.opacity = graphAlpha;
+  const f = ease(t, 12.1, 16.1, (x) => x) * (n - 1);
+  const trace = upTo(LINE.ys, f, gx, gy);
+  $("trace").setAttribute("d", trace.length > 1 ? pathOf(trace) : "");
+  $("trace").style.opacity = graphAlpha;
+  const tip = trace.length ? trace[trace.length - 1] : [G.x, gy(LINE.bottom)];
+  const tipOn = t > 12.1 && t < 17.2;
+  show($("head"), tipOn ? graphAlpha : 0, null);
+  $("head").setAttribute("cx", tip[0]); $("head").setAttribute("cy", tip[1]);
+  const height = Math.round(LINE.zero - (LINE.ys[Math.min(n - 1, Math.floor(f))] ?? LINE.bottom));
+  $("readout").textContent = `${height >= 0 ? "+" : "−"}${Math.abs(height)} px`;
+  $("readout").setAttribute("x", tip[0] + 22); $("readout").setAttribute("y", tip[1] - 22);
+  $("readout").style.opacity = tipOn ? graphAlpha : 0;
+  show($("s3"), life(t, 11.4, 16.9, 0.5, 0.6), null);
+  $("s3a").style.opacity = ease(t, 11.4, 12.0);
+  rise(s3b, t, 11.8, 0.14);
+
+  // 4 · 17-23 s: the middle band of each frame flies into the context image
+  if (t < 23.0) C = { x: 780, y: 330, w: 980, h: 520 };
   else {
-    const i = Math.min(n - 1, Math.floor(f));
-    const y = LINE.ys[i] ?? LINE.bottom;
-    const fromLine = 1 - (y - LINE.top) / (LINE.bottom - LINE.top);
-    level = mix(0.42 + 0.2 * Math.sin((11.6 - 5.6) * 1.9), fromLine, ease(t, 11.6, 12.2));
+    const k = ease(t, 23.0, 23.9, inOutCubic);
+    C = { x: mix(780, 160, k), y: 330, w: mix(980, 1600, k), h: 520 };
   }
-  const surface = 235 - level * 470;
-  $("oilR").setAttribute("y", surface);
-  $("foamR").setAttribute("y", surface - 36 * clamp(1 - Math.abs(level - 0.5)));
-  $("foamR").setAttribute("height", 36 * clamp(1 - Math.abs(level - 0.5)));
+  const ctxAlpha = ease(t, 17.3, 17.8) * (1 - ease(t, 28.9, 29.4));
+  const ctx = $("ctx");
+  show(ctx, ctxAlpha, null);
+  Object.assign(ctx.style, { left: `${C.x}px`, top: `${C.y}px`, width: `${C.w}px`, height: `${C.h}px` });
+  const landed = clamp(Math.floor((t - 17.9 - 0.35) / 4.4 * 89) + 1, 0, n);
+  $("ctxCover").style.width = `${t < 23 ? (1 - landed / n) * 100 : 0}%`;
+  const frameIn = ease(t, 17.0, 17.6, outQuint), frameOut = ease(t, 22.6, 23.2);
+  show($("frameCard"), frameIn * (1 - frameOut), `translate(${160 - frameOut * 120}px, ${330 + mix(40, 0, frameIn)}px)`);
+  const playing = Math.min(47, Math.max(0, Math.round(((t - 17.9) / 4.4) * 47)));
+  if ($("frameImg").getAttribute("src") !== frames[playing].getAttribute("src")) $("frameImg").src = frames[playing].getAttribute("src");
+  const bandX = 160 + 262, bandW = 18;
+  let used = 0;
+  for (let k = 0; k < n && used < strips.length; k++) {
+    const t0 = stripTime(k), p = (t - t0) / 0.35;
+    if (p < 0 || p >= 1 || t >= 23) continue;
+    const e = inOutCubic(p), el = strips[used++];
+    const w = C.w / n;
+    const x = mix(bandX, C.x + k * w, e), wNow = mix(bandW, w, e);
+    Object.assign(el.style, {
+      left: `${x}px`, top: `${C.y}px`, width: `${wNow}px`, height: `${C.h}px`,
+      backgroundSize: `${C.w * (wNow / w)}px ${C.h}px`, backgroundPosition: `${-k * wNow}px 0px`,
+    });
+    show(el, 1, `translateY(${Math.sin(e * Math.PI) * -36}px)`);
+  }
+  for (; used < strips.length; used++) show(strips[used], 0, null);
+  show($("s4"), life(t, 17.4, 22.9, 0.5, 0.5), null);
+  $("s4b").style.opacity = ease(t, 17.8, 18.4);
+  $("s4b").style.transform = `translateY(${mix(26, 0, ease(t, 17.8, 18.5, outQuint))}px)`;
 
-  const graph = ease(t, 11.4, 12.0) * (1 - ease(t, 16.6, 17.4));
-  $("grid").style.opacity = graph * 0.9;
-  $("trace").setAttribute("d", drawnTrace.length > 1 ? pathOf(drawnTrace) : "");
-  $("trace").style.opacity = graph;
-  const head = drawnTrace.length ? drawnTrace[drawnTrace.length - 1] : [BOX.x, BOX.y + BOX.h];
-  const headOn = t >= 12.0 && t < 17.4 && drawnTrace.length > 0;
-  show($("head"), headOn ? graph : 0, null);
-  $("head").setAttribute("cx", head[0]); $("head").setAttribute("cy", head[1]);
-  const surfaceY = gy + surface * gs;
-  $("link").setAttribute("x1", gx + 150 * gs); $("link").setAttribute("y1", surfaceY);
-  $("link").setAttribute("x2", head[0]); $("link").setAttribute("y2", head[1]);
-  $("link").style.opacity = headOn ? graph * 0.7 : 0;
-
-  const s2 = life(t, 6.6, 16.8, 0.6, 0.6);
-  show($("s2"), s2, `translateY(${mix(16, 0, ease(t, 6.6, 7.2))}px)`);
-  $("s2a").style.opacity = ease(t, 6.6, 7.2);
-  $("s2b").style.opacity = ease(t, 11.6, 12.2);
-  $("s2b").style.transform = `translateY(${mix(24, 0, ease(t, 11.6, 12.3))}px)`;
-
-  // 4 · 17-23 s: frames become the context image, column by column
-  const ctxAlpha = ease(t, 17.2, 17.6) * (1 - ease(t, 28.8, 29.6));
-  const reveal = ease(t, 17.8, 22.4, (x) => x);
-  show($("ctxBox"), ctxAlpha, `scale(${mix(1, 0.92, ease(t, 28.8, 29.6))})`);
-  $("ctxCover").style.width = `${(1 - reveal) * BOX.w}px`;
-  const edge = BOX.x + reveal * BOX.w;
-  const thumbAlpha = ease(t, 17.4, 17.9) * (1 - ease(t, 22.4, 22.9));
-  show($("thumb"), thumbAlpha, `translate(${edge - 104}px, ${840}px)`);
-  const fi = Math.min(47, Math.round(reveal * 47));
-  if (frames[fi] && $("thumbImg").getAttribute("src") !== frames[fi].src) $("thumbImg").src = frames[fi].src;
-  const s4 = life(t, 17.6, 22.9, 0.6, 0.5);
-  show($("s4"), s4, `translateY(${mix(16, 0, ease(t, 17.6, 18.2))}px)`);
-  $("s4b").style.opacity = ease(t, 18.0, 18.6);
-
-  // 5 · 23-29 s: the draft, then the inspector's line, then the verdict
-  const overAlpha = 1 - ease(t, 28.8, 29.6);
+  // 5 · 23-29 s: the draft (dotted), the inspector's line, the verdict
+  const overAlpha = ease(t, 23.6, 24.0) * (1 - ease(t, 28.9, 29.4));
   $("over").style.opacity = overAlpha;
-  $("zero").setAttribute("x1", BOX.x); $("zero").setAttribute("x2", BOX.x + BOX.w);
-  $("zero").setAttribute("y1", rowY(LINE.zero)); $("zero").setAttribute("y2", rowY(LINE.zero));
-  $("zero").style.opacity = ease(t, 23.0, 23.5) * 0.9;
-  const draftLen = ease(t, 23.2, 24.2, (x) => x) * (n - 1);
-  const pen = ease(t, 24.8, 27.2, inOutCubic);
+  $("zero").setAttribute("x1", C.x); $("zero").setAttribute("x2", C.x + C.w);
+  $("zero").setAttribute("y1", cy(LINE.zero)); $("zero").setAttribute("y2", cy(LINE.zero));
   const firstDrawn = LINE.ys.findIndex((v) => v != null && v < LINE.bottom - 1);
   const lastWrong = LINE.draft.findLastIndex((v, i) => v != null && Math.abs(v - LINE.ys[i]) > 12);
-  const penCol = mix(Math.max(0, firstDrawn - 1), lastWrong + 1, pen);
-  // the draft fades where the pencil has passed
-  const draftPts = upTo(LINE.draft, draftLen).filter(([x]) => t < 24.8 || x > colX(penCol));
+  const draftLen = ease(t, 23.9, 24.7, (x) => x) * (n - 1);
+  const pen = ease(t, 24.9, 27.2, inOutCubic);
+  const penCol = mix(firstDrawn - 1, lastWrong + 1, pen);
+  const draftPts = upTo(LINE.draft, draftLen, cx, cy).filter(([x]) => t < 24.9 || x > cx(penCol) + 4);
   $("draft").setAttribute("d", draftPts.length > 1 ? pathOf(draftPts) : "");
-  $("draft").style.opacity = ease(t, 23.2, 23.5) * (1 - ease(t, 27.6, 28.2) * 0.0);
-  const drawnPts = t >= 24.8 ? upTo(LINE.ys, penCol, Math.max(0, firstDrawn - 1)) : [];
-  // after the pencil, the inspector's line joins the draft's good part
-  const rest = t >= 27.2 ? upTo(LINE.ys, n - 1, Math.floor(penCol)) : [];
-  $("drawn").setAttribute("d", [drawnPts, rest].filter((p) => p.length > 1).map(pathOf).join(" "));
-  const penAlpha = life(t, 24.5, 27.6, 0.3, 0.4);
-  show($("pencil"), penAlpha, null);
-  const tip = drawnPts.length ? drawnPts[drawnPts.length - 1] : [colX(firstDrawn), rowY(LINE.ys[firstDrawn])];
-  $("pencil").setAttribute("transform", `translate(${tip[0]} ${tip[1]})`);
+  const drawn = t >= 24.9 ? upTo(LINE.ys, penCol, cx, cy, firstDrawn - 1) : [];
+  const after = t >= 27.2 ? upTo(LINE.ys, n - 1, cx, cy, Math.floor(penCol)) : [];
+  $("drawn").setAttribute("d", [drawn, after].filter((p) => p.length > 1).map(pathOf).join(" "));
+  const nib = drawn.length ? drawn[drawn.length - 1] : [cx(firstDrawn), cy(LINE.ys[firstDrawn])];
+  show($("pencil"), life(t, 24.6, 27.6, 0.3, 0.4), null);
+  $("pencil").setAttribute("transform", `translate(${nib[0]} ${nib[1]}) scale(${1 + 0.15 * Math.sin(t * 12)})`);
+  const typed = "초안은 앱이,".slice(0, Math.max(0, Math.floor((t - 23.5) / 0.09) + 1));
+  $("s5a").textContent = t >= 23.5 ? typed + (Math.floor(t * 2.4) % 2 ? "▍" : " ") : "";
+  show($("s5"), life(t, 23.3, 29.0, 0.3, 0.5), null);
+  $("s5b").style.opacity = ease(t, 25.4, 26.0);
+  $("s5b").style.transform = `translateY(${mix(26, 0, ease(t, 25.4, 26.1, outQuint))}px)`;
+  const st = ease(t, 27.4, 27.75, outBack), stampX = C.x + C.w - 250, stampY = C.y + 150;
+  show($("stamp"), Math.min(ease(t, 27.4, 27.55), 1 - ease(t, 28.8, 29.3)), null);
+  $("stamp").setAttribute("transform", `translate(${stampX} ${stampY}) rotate(${mix(-14, -6, st)}) scale(${mix(1.8, 1, st)})`);
+  const ring = ease(t, 27.5, 28.4, outCubic);
+  $("ring").setAttribute("r", mix(90, 260, ring)); $("ring").style.opacity = 1 - ring;
+  $("stampNote").textContent = "기동 후 11.0초에 0선 회복";
+  $("stampNote").setAttribute("x", stampX); $("stampNote").setAttribute("y", stampY + 112);
+  show($("stampNote"), Math.min(ease(t, 27.8, 28.2), 1 - ease(t, 28.8, 29.3)), null);
 
-  const lastDraftCol = LINE.draft.length - 1;
-  show($("tagDraft"), life(t, 23.6, 25.2, 0.3, 0.4),
-       `translate(${colX(Math.round((firstDrawn + lastWrong) / 2)) - 60}px, ${rowY(LINE.draft[lastWrong]) - 56}px)`);
-  show($("tagDrawn"), life(t, 25.4, 28.6, 0.3, 0.5),
-       `translate(${colX(Math.round(firstDrawn + (lastWrong - firstDrawn) * 0.45)) + 18}px, ${rowY(LINE.ys[Math.round(firstDrawn + (lastWrong - firstDrawn) * 0.45)]) + 18}px)`);
-  const s5 = life(t, 23.2, 29.0, 0.6, 0.5);
-  show($("s5"), s5, `translateY(${mix(16, 0, ease(t, 23.2, 23.8))}px)`);
-  $("s5b").style.opacity = ease(t, 25.0, 25.6);
-  const v = ease(t, 27.4, 28.0, outBack);
-  show($("verdict"), Math.min(ease(t, 27.4, 27.7), 1 - ease(t, 28.8, 29.4)), `translate(${1660 - 560}px, ${BOX.y + 40}px) scale(${mix(0.7, 1, v)})`);
-  void lastDraftCol;
-
-  // 6 · 29-35 s: screen cards drift in space, then gather
-  const gather = ease(t, 33.9, 35.0, inOutCubic);
-  cards.forEach((c, i) => {
-    const appear = ease(t, 29.2 + i * 0.12, 30.0 + i * 0.12);
-    const drift = (t - 29) * 22 * c.d;
-    const x = mix(c.x * mix(1.25, 1, appear) + drift, 0, gather);
-    const y = mix(c.y * mix(1.25, 1, appear), 0, gather);
-    const z = mix(c.z, 0, gather);
-    const ry = mix(c.d * 14, 0, gather), rx = mix(-6, 0, gather);
-    const scale = mix(1, 0.08, gather);
-    show(c.el, appear * (1 - ease(t, 34.6, 35.1)),
-         `translate3d(${x}px, ${y}px, ${z}px) rotateY(${ry}deg) rotateX(${rx}deg) scale(${scale})`);
+  // 6 · 29-35 s: four words, each with its screen
+  s6words.forEach((el, i) => {
+    const a = 29.2 + i * 1.3;
+    const k = ease(t, a, a + 0.5, outQuint);
+    const current = t >= a && t < a + 1.3;
+    const out = ease(t, 34.0, 34.4);
+    show(el, k * (current || i === 3 && t < 34.4 ? 1 : 0.28) * (1 - out), `translateX(${mix(-60, 0, k)}px)`);
   });
-  const s6 = life(t, 30.0, 34.2, 0.5, 0.5);
-  show($("s6"), s6, null);
-  show($("s6glow"), s6, null);
-  rise(s6a, t, 30.0, 0.22);
+  cards.forEach((c, i) => {
+    const a = 29.2 + i * 1.3;
+    const k = ease(t, a, a + 0.7, outQuint), o = ease(t, a + 1.3, a + 1.9, inOutCubic);
+    const last = i === 3 ? ease(t, 34.0, 34.5) : 0;
+    const x = 1020 + mix(500, 0, k) - o * 420, y = 540;
+    const ry = mix(-28, -14, k) - o * 10, z = -o * 400 - last * 300;
+    show(c.el, k * (1 - (i < 3 ? o : last)),
+         `translate3d(${x - c.w / 2}px, ${y - c.h / 2}px, ${z}px) rotateY(${ry}deg) scale(${mix(0.9, 1, k) + (t - a) * 0.012})`);
+  });
+  rise(s6line, t, 34.25, 0.09, 0.4, 20);
+  show($("s6line"), life(t, 34.2, 35.0, 0.2, 0.35), null);
 
-  // 7 · 35-40 s: the icon and the name
-  const logoIn = ease(t, 34.8, 35.7, outBack);
-  show($("logo"), ease(t, 34.8, 35.2), `translate(${960 - 128}px, ${330 - 128 + 128}px) scale(${mix(0.2, 1, logoIn)})`);
-  const lv = 0.5 + 0.12 * Math.sin((t - 35) * 2.2) * (1 - ease(t, 36.5, 38));
-  $("lgOil").setAttribute("y", 136 + (0.5 - lv) * 120);
-  $("lgFoam").setAttribute("y", 120 + (0.5 - lv) * 120);
-  show($("s7"), ease(t, 35.6, 36.3), `translateY(${mix(24, 0, ease(t, 35.6, 36.4))}px)`);
-  $("s7b").style.opacity = ease(t, 36.2, 36.9);
+  // 7 · 35-40 s: the name fills like a sight glass, under a level line
+  const s7in = ease(t, 34.9, 35.5);
+  show($("s7"), s7in, `translateY(${mix(30, 0, s7in)}px)`);
+  const rising = ease(t, 35.3, 38.0, inOutCubic);
+  s7v.forEach((v, i) => {
+    const wobble = 0.03 * Math.sin(t * 3.2 - i * 0.6) * (1 - ease(t, 38.0, 39.2));
+    fill(v, rising * 0.86 + wobble, 0.1 * (1 - ease(t, 38.4, 39.4)), "var(--oil-glow)");
+  });
+  $("s7b").style.opacity = ease(t, 37.4, 38.2);
+  const lineY = 410 + 165 - rising * 0.86 * 140;
+  $("gaugeLine").setAttribute("x1", mix(960, 330, ease(t, 35.3, 36.0)));
+  $("gaugeLine").setAttribute("x2", mix(960, 1590, ease(t, 35.3, 36.0)));
+  $("gaugeLine").setAttribute("y1", lineY); $("gaugeLine").setAttribute("y2", lineY);
+  $("gaugeLine").style.opacity = life(t, 35.3, 38.6, 0.4, 0.6) * 0.9;
 
-  show($("note"), life(t, 17.4, 35.0, 0.5, 0.5) * 0.9, null);
+  show($("note"), life(t, 17.4, 34.4, 0.5, 0.4) * 0.85, null);
+  grain(t);
 }
 
 async function ready() {
@@ -388,7 +456,7 @@ async function ready() {
   await Promise.all(images.map((img) => (img.complete ? null : new Promise((r) => { img.onload = img.onerror = r; }))));
   await document.fonts.ready;
   seek(0);
-  return { fps: FPS, duration: DURATION };
+  return { fps: FPS, duration: DURATION, cues: CUES };
 }
 
 window.intro = { ready: ready(), seek };
@@ -397,7 +465,7 @@ window.intro.ready.then(() => {
   if (query.has("t")) seek(Number(query.get("t")));
   if (query.has("play")) {
     const began = performance.now();
-    const tick = () => { const t = (performance.now() - began) / 1000; seek(t % DURATION); requestAnimationFrame(tick); };
+    const tick = () => { seek(((performance.now() - began) / 1000) % DURATION); requestAnimationFrame(tick); };
     requestAnimationFrame(tick);
   }
 });
