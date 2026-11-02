@@ -1,8 +1,9 @@
 # Current Work Plan
 
-**Current milestone:** `V2-4b — Video window and pattern copy` / `ACTIVE`
-(started 2026-11-02; built; its Windows run waits on the user).
-**Last completed:** `V2-4 — Judgment and report` / `DONE` (2026-11-02).
+**Current milestone:** `V2-5 — Windows acceptance` / `ACTIVE`
+(started 2026-11-02; first step: icon candidates for the user).
+**Last completed:** `V2-4b — Video window and pattern copy` / `DONE`
+(2026-11-02).
 
 This is the sole owner of the current state, authorization and next action.
 Rewrite it; do not append to it.
@@ -206,19 +207,18 @@ judged once on the final build.
    `EDITED` (as a delete does), so it takes the check off when it touches
    Oil. At most 1,000 copies in one repeat (agent's choice). Checked by
    an in-page unit check and a browser smoke test on macOS.
-4. **A Windows run of V2-4b — waits on the user:**
-   [2026-11-02-v2-4b-windows-request.md](../40-operations/2026-11-02-v2-4b-windows-request.md),
-   pinned to `f2d6850` (`checked=100`). The window on the untouched SPL#1
-   inspection 1910 (not saved; W1–W12, with a restart of the app for the
-   saved place), copy and paste on `V2-3 확인` (SPL#4, the on-off test;
-   saved; P1–P9). Expected tests on Windows: `248 passed, 4 skipped`. No
-   submitting anywhere. The V2-1 items never seen on Windows (a Recipe
-   saved at another frame, a redirected Documents folder, the resolution
-   refusal's wording) move to the V2-5 acceptance run.
+4. **A Windows run of V2-4b — done, every row passes** (2026-11-02,
+   [result](../60-evidence/2026-11-02-v2-4b-windows-result.md); request
+   pinned to `f2d6850`). The user: built as asked; copy and paste is
+   useful for the on-off tests; **the big window stutters when playing
+   at a higher speed** (see Open items). The V2-1 items never seen on
+   Windows (a Recipe saved at another frame, a redirected Documents
+   folder, the resolution refusal's wording) move to the V2-5 acceptance
+   run.
 
-## V2-5 preparation — recorded, on hold
+## V2-5 — the steps
 
-The user holds the parallel start (2026-11-02); these wait for V2-4b:
+Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
 - **Frozen paths:** find `web/` inside the build (`sys._MEIPASS`), shipped
   as data; check that nothing is written inside the package folder
   (Product SSOT §8).
@@ -233,78 +233,14 @@ The user holds the parallel start (2026-11-02); these wait for V2-4b:
   A8's PC with only the WebView2 runtime is the slowest PC (user,
   2026-11-02); time the window (pywebview), still untimed.
 
-## Session handoff — 2026-11-02
+## Session state — 2026-11-02
 
-**The session closed after `afccf11`** (and this handoff). The working
-tree is clean, and `main` and the remote are in sync. 263 tests pass on
-macOS (Windows expects `248 passed, 4 skipped`).
-
-**Where it stands:** V2-4 is `DONE` (re-check passed,
-[result](../60-evidence/2026-11-02-v2-4-recheck-windows-result.md)).
-V2-4b is `ACTIVE`: steps 1–3 are done (mock-ups confirmed, the video
-window, copy and paste). **Waiting on the user:** the Windows run,
-[2026-11-02-v2-4b-windows-request.md](../40-operations/2026-11-02-v2-4b-windows-request.md),
-pinned to `f2d6850`. When its result comes, judge it against its fixed
-criteria (S1, B, S2, C, T, R1–R4), write the result under `60-evidence/`
-with a catalog row, and close V2-4b if every row passes; then V2-5 starts
-from "V2-5 preparation" above (the user held it until then, and asked
-for icon candidates first).
-
-**State left on the workstation** (before the V2-4b run): 1907 (SPL#4)
-v1–v3 submitted; 1913 (SPL#1) v1–v2 submitted; 1910 (SPL#1) and
-`V2-3 확인` (SPL#4) with no submission. The run reads 1910 without saving
-and saves copy-and-paste edits into `V2-3 확인`; it backs up to
-`C:\olt-v24b-window-backup` and writes
-`%LOCALAPPDATA%\OilLevelTracker\video-window.json`.
-
-**Resume:** read this file (V2-4b, V2-5 preparation), the request, the
-Product SSOT §6 ("Copy and paste", "a full-size view"), DESIGN.md §5
-("copy and paste", "Video window") and
-[architecture.md](../20-architecture/architecture.md) (the relay). Code
-to know:
-- the window: `app.py` (`VideoWindow`, `load_place`, `save_place`),
-  `adapters/desktop` (`show_video_window`, `close_video_window`),
-  `Editing.show_video_window` (the title), `adapters/http/relay.py`
-  (`Relay`; `/api/relay/<channel>`, a page joins with `after=-1`) and
-  the routes `POST /api/inspections/<id>/video-window`,
-  `POST /api/video-window/close`; `adapters/storage/locations.py`
-  `settings_folder()`;
-- the pages: `web/videolink.js` (the editor's side: joins the relay
-  before opening, `hello`/`bye` carry a page id, state twice a second
-  while playing, lines 300 ms after a change), `web/video.html` with
-  `video-window.js` (follows the state, jumps past 0.25 s of drift,
-  exact frame when paused, sends commands), `player.js` (`changed` hook,
-  `status()`, `setSpeed` exported), `render.videoOverlay`;
-- copy and paste: `lines.js` (`copyStretch`, `pasteAt`, `repeatStarts`,
-  `MAX_REPEATS`, `History.recordLines` with entries of kind `lines`,
-  `restore` by side), `editor.js` section "copy and paste"
-  (`state.clipboard`, `state.paste`, `pasteMarks`, `renderPaste`),
-  `render.js` `pasteGhost`; `takeCheckOff` reads a `lines` entry's kinds.
-- Tests: `tests/test_http_relay.py`, `test_app.py` (the place),
-  `test_http_api.py::test_the_full_size_video_window`,
-  `test_web_inspection_smoke.py::test_the_full_size_video_window` and
-  `::test_copy_and_paste`.
-
-**The user's decisions this session** (2026-11-02): both features go in
-the first version, before V2-5; the window opens from a button, as a
-separate OS window (dual monitors), with the play position and the
-editor's time following each other; the copy holds Oil and Foam only,
-picked with the range tool; both pastes (repeat and one by one), placed
-where the user picks, never tied to the compressor start, kept as
-copied with no snap, counting as a new line for the judgment and the
-check; the parallel V2-5 start is held, only recorded; the exe is
-`OilLevelTracker.exe` with an icon to design; A8's PC with only WebView2
-is the slowest PC; R3 of the V2-4 re-check was the user's typing.
-
-**Agent's choices, confirmed with the mock-ups** (DESIGN.md §5): the
-window fits the frame (at most 100 %) or shows 100 % and pans; it draws
-the chosen Glass; its scrub bar covers the analysed range; one window,
-closed with the editor, placed where it was left; a copy includes empty
-samples and pastes only into its own Glass; repeat defaults (right
-after the copy, its length, the range's end); a later copy wins; the
-range cuts; "cannot judge" stays; one undo step per paste. Not in the
-mock-ups: at most 1,000 copies per repeat; a saved place that no screen
-shows is dropped.
+V2-4b closed after its Windows run; `V2-3 확인` now holds the copy and
+paste edits (saved, BASE unchecked, nothing submitted). The other three
+inspections are as before the run; the big window's place is saved in
+`%LOCALAPPDATA%\OilLevelTracker\video-window.json` (a second monitor).
+The V2-4b decisions and code are in the V2-4b section above, the Product
+SSOT §6 and DESIGN.md §5.
 
 ## Session notes
 
@@ -404,6 +340,13 @@ workstation since 2026-10-30; these are simple speed-ups, never blockers):
   frames). A cheap gain if wanted: keep the frames decoded on the way to
   a seek, so stepping back a frame and clicking nearby are instant.
 
+**The big window stutters at a higher speed** (V2-4b run, W6): it seeks
+whenever it drifts more than `DRIFT_SEC = 0.25` s of video time from the
+editor, which at 4× is about 60 ms of wall time; each seek decodes from a
+key frame. Fix: nudge `playbackRate` for small drift and seek only on a
+large one; check it on Windows in the V2-5 run. The user's decision on
+when.
+
 **Small facts:**
 - `AnalysisSettings.sample_count` counts to `end_sec`, but the analysis
   stops at the last frame, so it can be one more than the analysis gives
@@ -467,7 +410,7 @@ The three v1 remote branches that v1 docs cite stay.
 
 ## Next
 
-- **Done:** V2-4 (2026-11-02).
-- **Next:** the user's V2-4b Windows run
-  ([request](../40-operations/2026-11-02-v2-4b-windows-request.md)); judge
-  it, then close V2-4b and start V2-5 (its preparation is recorded above).
+- **Done:** V2-4b (2026-11-02).
+- **Next:** V2-5 (the steps above), starting with two or three icon
+  candidates for the user; the big window's stutter at a higher speed
+  waits on the user's word on when (Open items).
