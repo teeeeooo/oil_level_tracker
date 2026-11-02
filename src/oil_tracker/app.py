@@ -3,14 +3,18 @@
 from __future__ import annotations
 
 import argparse
+import faulthandler
 import json
+import platform
+import sys
 import threading
 import time
 from collections.abc import Callable
+from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, TextIO
 
-from oil_tracker import bootstrap
+from oil_tracker import __version__, bootstrap
 
 VIDEO_TYPES = ("영상 (*.mp4;*.avi;*.mov;*.mkv;*.m4v)", "모든 파일 (*.*)")
 # pywebview's own close question, asked while the editor holds unsaved edits (Product SSOT §6)
@@ -20,6 +24,10 @@ CLOSE_QUESTION = {
     "global.cancel": "취소",
 }
 
+
+LOG_FILE = "app.log"  # in the settings folder (Product SSOT §8)
+LOG_OLD = "app.1.log"
+LOG_ROLL_BYTES = 1_000_000
 
 VIDEO_WINDOW_FILE = "video-window.json"  # where the video window was left, in the settings folder
 VIDEO_WINDOW_SIZE = (1280, 800)
@@ -111,6 +119,53 @@ def save_place(path: Path, place: dict[str, int]) -> None:
         pass  # the next window opens where the system puts it
 
 
+class Tee:
+    """Text for the console, written also to the log. A windowed build has no console (None)."""
+
+    def __init__(self, *streams: TextIO | None) -> None:
+        self._streams = [s for s in streams if s is not None]
+
+    def write(self, text: str) -> int:
+        for stream in self._streams:
+            try:
+                stream.write(text)
+            except (OSError, ValueError):
+                pass  # a closed console or log loses the line, not the app
+        return len(text)
+
+    def flush(self) -> None:
+        for stream in self._streams:
+            try:
+                stream.flush()
+            except (OSError, ValueError):
+                pass
+
+    def isatty(self) -> bool:
+        return False
+
+
+def start_log(folder: Path) -> TextIO | None:
+    """The log in the settings folder: what goes to the console's error stream (the tracebacks), and a
+    crash's stack, kept for a windowed build that has no console. Once it grows past LOG_ROLL_BYTES it
+    becomes app.1.log at the next start. None when the folder cannot be written; the app runs on."""
+    try:
+        folder.mkdir(parents=True, exist_ok=True)
+        path = folder / LOG_FILE
+        if path.exists() and path.stat().st_size > LOG_ROLL_BYTES:
+            path.replace(folder / LOG_OLD)
+        log = path.open("a", encoding="utf-8", errors="backslashreplace", buffering=1)
+    except OSError:
+        return None
+    build = "build" if getattr(sys, "frozen", False) else "source"
+    log.write(
+        f"--- {datetime.now().astimezone().isoformat(timespec='seconds')} start: {__version__} ({build}), "
+        f"Python {platform.python_version()}, {platform.platform()}\n"
+    )
+    sys.stderr = Tee(sys.stderr, log)
+    faulthandler.enable(log)
+    return log
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog="oil_tracker", description="Oil Level Tracker v2")
     parser.add_argument("--data-folder", type=Path, default=None, help="default: Documents/OilLevelTracker")
@@ -121,6 +176,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    start_log(bootstrap.settings_folder())  # before pywebview, whose logger keeps the stream it finds
     if args.no_window:
         running = bootstrap.start(data_folder=args.data_folder, port=args.port)
         print(running.url, flush=True)
