@@ -1,9 +1,10 @@
 # Current Work Plan
 
-**Current milestone:** none started. **The first version is accepted**
+**Current milestone:** `P-1 — Introduction video` / `ACTIVE`: the
+[storyboard](../40-operations/intro-video.md) waits for the user's word;
+nothing is recorded until then. **The first version is accepted**
 (2026-11-02): V2-5 passed every row on the workstation and the slowest PC.
-**Next, in order** (user, 2026-11-02): P-1 introduction video, P-2 user
-manual, P-3 field-use fixes (roadmap).
+**After P-1** (user, 2026-11-02): P-2 user manual, P-3 field-use fixes.
 **Last completed:** `V2-5 — Windows acceptance` / `DONE` (2026-11-02).
 
 This is the sole owner of the current state, authorization and next action.
@@ -492,10 +493,21 @@ The three v1 remote branches that v1 docs cite stay.
     FULL/EMPTY made easy, the refusal wording; Product SSOT §6),
     [re-check](../60-evidence/2026-11-02-v2-5-recheck-windows-result.md)
     on `8448e79`: every row, A5 2.2 / 9.3 ms.
-- **Next, in order** (user, 2026-11-02):
-  1. **P-1 — an introduction video** of the app;
-  2. **P-2 — a user manual**, as HTML or another fitting form;
-  3. **P-3 — fixes for problems found in field use.**
+- **Now, P-1 — an introduction video** of the app. Settled with the user
+  (2026-11-02): for inspectors, an overview of 2–3 minutes; recorded by a
+  script on macOS (Playwright driving this folder's server in Chrome);
+  `sample/sample7.mp4` (public, milk poured into a glass), marked as an
+  example; Korean captions, no voice; the video file outside Git. None of
+  the compressor samples fit (sample4's glass is small and flat, sample2
+  moves, base_sample_1 is short and overlaid, public_miso is cut clips).
+  A trial analysis showed the draft following the glass's top for
+  0:10–0:31, so the storyboard makes correcting it with the pencil its
+  centre. **Next step:** the user confirms or changes the
+  [storyboard](../40-operations/intro-video.md); then
+  `scripts/record_intro.py` and ffmpeg for MP4.
+- **Then, in order** (user, 2026-11-02):
+  1. **P-2 — a user manual**, as HTML or another fitting form;
+  2. **P-3 — fixes for problems found in field use.**
   The open items above (speed-ups on the slowest PC, small facts) stay
   for reference until P-3 picks any up.
 
