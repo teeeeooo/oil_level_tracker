@@ -8,7 +8,10 @@
 > - **통과 기준**은 아래 "통과 기준" 절에 있고, 실행 전에 고정됐다. 판정은 이 문서를 만든 쪽이 한다.
 > - 결과 파일은 Windows에 남기고, 맨 아래 **결과 양식** 두 개(워크스테이션, 최저 사양 PC)만 텍스트로 돌려준다.
 >
-> **개정 (2026-11-02, 첫 시도 뒤):** 첫 시도(`7dc38e7`)에서 5절의 스크립트가 빌드한 앱 창에 붙지 못했다. pywebview가 WebView2의 브라우저 인자를 직접 정해서, 스크립트가 쓰던 WebView2 환경 변수가 읽히지 않았다. `5bb9025`에서 앱이 디버깅 포트를 pywebview에 넘기도록 고쳤다. **0절부터 새 폴더에서 다시 한다.** 첫 시도는 문서 폴더의 데이터를 바꾸지 않았다(측정은 따로 만든 데이터 폴더를 썼다). 첫 시도의 `C:\olt-v25-backup`과 `C:\olt-v25\OilLevelTracker-7dc38e7.zip`은 그대로 두고, 이번 백업은 `C:\olt-v25b-backup`에 만든다.
+> **개정 (2026-11-02, 두 번째 시도 뒤):** 5절의 스크립트가 빌드한 앱 창에 붙지 못했다.
+> - 첫 시도(`7dc38e7`): pywebview가 WebView2의 브라우저 인자를 직접 정해서 스크립트가 쓰던 WebView2 환경 변수가 읽히지 않았다. `5bb9025`에서 앱이 디버깅 포트를 pywebview에 넘기게 고쳤다.
+> - 두 번째 시도(`5bb9025`): 포트에는 붙었지만 Playwright에 앱 페이지가 없었다. WebView2가 페이지를 만들기 전에 붙은 것으로 본다. `daf381a`에서 포트가 앱 페이지를 보일 때까지 기다렸다가 붙고, 그래도 안 보이면 다시 붙는다. 끝내 안 되면 **빌드한 앱의 서버를 Edge에서** 재고, 결과의 브라우저 줄에 그렇게 적는다(포트의 대상 목록도 함께).
+> - **0절부터 새 폴더에서 다시 한다.** 앞의 두 시도는 문서 폴더의 데이터를 바꾸지 않았다. 앞의 백업(`C:\olt-v25-backup`, `C:\olt-v25b-backup`)과 ZIP은 그대로 두고, 이번 백업은 `C:\olt-v25c-backup`에 만든다.
 
 ## 무엇을 확인하나
 
@@ -26,8 +29,8 @@
 ## 0. 소스 확인 [에이전트]
 
 1. **커밋 하나로 고정된 ZIP**을 받는다:
-   `https://github.com/teeeeooo/oil_level_tracker/archive/5bb90251ee1d627ce28fe82a27eb172a06e6cf27.zip`
-   **새 폴더**에 압축을 풀고(`oil_level_tracker-5bb9025…`) 그 폴더를 저장소 루트로 쓴다. 이전 실행의 폴더는 쓰지 않는다.
+   `https://github.com/teeeeooo/oil_level_tracker/archive/daf381ad19598cb76a79afb53bbc381e6fb7f374.zip`
+   **새 폴더**에 압축을 풀고(`oil_level_tracker-daf381a…`) 그 폴더를 저장소 루트로 쓴다. 이전 실행의 폴더는 쓰지 않는다.
 2. 저장소 루트에서 아래를 그대로 실행한다. 마지막 줄이 `checked=108 mismatched=0`이면 된다. `MISMATCH` 줄이 있으면 그 줄을 전부 원문으로 적는다.
 
 ```powershell
@@ -45,7 +48,7 @@ $expected = @{
   'scripts/inspection_summary.py' = '97fcb09ec75385f2f742ff7cdf56d6039fc3731accafaacdd0087fc6c0925318'
   'scripts/install_git_hooks.sh' = '762c1e1a4e38a99c086447b548ca071f84d29ac8e0aa0f26e8a717eb4e865008'
   'scripts/make_icon.py' = '5e7f29d28acdd8270f9892c727a60c12dc92e99e72dc10c4da354eae0649e5c4'
-  'scripts/measure_editor.py' = '3afc7817c559030949ef73f6249bb6d06252c56a64284aa6e36aacaf81a3d75d'
+  'scripts/measure_editor.py' = '3436a7dab0dc9c5d56f5f7022e9e21d56b78c0b492fb39081b96c9dfc4c2e740'
   'scripts/recipe_summary.py' = '5e7e4960cfd659e1a9e887b9d0d17fd3517381b2ccd78b8e3a0f6f4968e5a8b3'
   'scripts/time_analysis.py' = '72079e4a094f43ac97a896098eaed749628b06a7bc5e28eb1f530410506a751d'
   'src/oil_tracker/__init__.py' = '44b73c09a8a5c67a64bc97f0b0edc9aa6779d1fa5ddefafd61d89bb0d13ca615'
@@ -126,7 +129,7 @@ $expected = @{
   'tests/test_http_jobs.py' = 'fd538c2d448228f847ac1d201b47e133026bf66c9fb104a4cc11049f724c2d33'
   'tests/test_http_relay.py' = '236ec206ad92ad23eb1c20d4c23e8b11f03355b9344fddbfee050fdeb0160e8a'
   'tests/test_inspection_summary_script.py' = 'b95e84e4e704fd053e8e89ee252d0906c95ae87fea03b5a4cb68860f8fd19bc2'
-  'tests/test_measure_editor_script.py' = '02b131474e8893bc2f074d87c05eb5ed1cbd59baccc8e8125b9c6f1a4c95d186'
+  'tests/test_measure_editor_script.py' = 'd193a60fc745b51ba74d5977a993d561fc64350aed96e126ba7a96245ff83543'
   'tests/test_package.py' = '8d458fbb772dcd6a825e060c8fdcdad2eb7716a8f72ef6df8c3d437026f063f8'
   'tests/test_recipe_summary_script.py' = 'f90b3adff4b1fb43ae28ae2aead9c56c55f7dc22c09b10f8bf030e1a9598748b'
   'tests/test_report.py' = '567f0e045473ad96055ebd5e2555cf3339e51225fb518bad1fddfadfbb06a798'
@@ -166,8 +169,8 @@ py -3.14 -m venv .venv-measure
 
 ```powershell
 $src = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'OilLevelTracker'
-Copy-Item -LiteralPath $src -Destination 'C:\olt-v25b-backup\OilLevelTracker' -Recurse
-"files_src=$((Get-ChildItem -LiteralPath $src -Recurse -File).Count) files_backup=$((Get-ChildItem -LiteralPath 'C:\olt-v25b-backup\OilLevelTracker' -Recurse -File).Count)"
+Copy-Item -LiteralPath $src -Destination 'C:\olt-v25c-backup\OilLevelTracker' -Recurse
+"files_src=$((Get-ChildItem -LiteralPath $src -Recurse -File).Count) files_backup=$((Get-ChildItem -LiteralPath 'C:\olt-v25c-backup\OilLevelTracker' -Recurse -File).Count)"
 ```
 
 앱 로그가 이미 있는지 보고, 있으면 줄 수를 적어 둔다(9절에서 이번 실행의 줄만 본다).
@@ -202,8 +205,8 @@ $logStart = if (Test-Path -LiteralPath $log) { (Get-Content -LiteralPath $log).C
 
 ```powershell
 New-Item -ItemType Directory -Force -Path 'C:\olt-v25' | Out-Null
-Compress-Archive -Path 'build\dist\OilLevelTracker' -DestinationPath 'C:\olt-v25\OilLevelTracker-5bb9025.zip' -Force
-$zip = Get-Item 'C:\olt-v25\OilLevelTracker-5bb9025.zip'
+Compress-Archive -Path 'build\dist\OilLevelTracker' -DestinationPath 'C:\olt-v25\OilLevelTracker-daf381a.zip' -Force
+$zip = Get-Item 'C:\olt-v25\OilLevelTracker-daf381a.zip'
 "zip_bytes=$($zip.Length) zip_sha256=$((Get-FileHash -Algorithm SHA256 -LiteralPath $zip.FullName).Hash.ToLower())"
 ```
 
@@ -219,7 +222,8 @@ $zip = Get-Item 'C:\olt-v25\OilLevelTracker-5bb9025.zip'
 - 스크립트가 **빌드한 앱을 띄운다.** 앱은 측정용 데이터 폴더(`a5a6-data-…`)를 쓰므로 문서 폴더의 검사는 건드리지 않는다.
 - **[사용자]:** 앱 창이 뜨면 **최대화**한다. `[3/5]` 분석(약 1분) 동안 해 두면 된다. 그 뒤 `[4/5]`부터 앱 창이 **저절로 움직인다**(선 그리기, 끌기, 확대, 프레임 넘기기, 60초 재생, 약 5분). 이 동안 **마우스와 키보드를 건드리지 않고**, 앱 창을 최소화하거나 가리지 않는다.
 - 끝나면 앱은 저절로 닫힌다. 결과 표가 출력되고 `결과 파일: …\a5a6-editor-YYYYMMDD-HHMM.md` 경로가 나온다. **결과 파일의 내용 전체**를 원문으로 적는다.
-- **앱 창을 찾지 못해** 결과 끝에 `앱 창을 찾지 못했습니다` 또는 `앱이 끝났습니다`가 있으면, 그 결과를 그대로 적은 뒤 `--app …` 부분만 빼고 같은 명령을 한 번 더 실행해(Edge에서 소스로 잰다) 그 결과 파일도 전부 적는다.
+- 앱 창에 붙지 못하면 스크립트가 **Edge 창을 하나 더 열어** 빌드한 앱의 서버로 잰다. 이때는 앱 창 대신 **Edge 창을 최대화하지 않고 그대로 둔다**(창 크기는 스크립트가 정한다). 결과의 브라우저 줄이 `msedge (빌드한 앱의 서버; …)`가 된다.
+- 결과 끝에 `앱 창을 찾지 못했습니다` 또는 `앱이 끝났습니다`가 있으면, 그 결과를 그대로 적은 뒤 `--app …` 부분만 빼고 같은 명령을 한 번 더 실행해(Edge에서 소스로 잰다) 그 결과 파일도 전부 적는다.
 
 ## 6. 실행 전 목록 [에이전트]
 
@@ -320,15 +324,15 @@ Get-ChildItem 'C:\olt-v25\*.pdf' | ForEach-Object { "$($_.Name) bytes=$($_.Lengt
 그 PC에는 에이전트가 없다. PowerShell 명령 몇 줄과 앱 조작만 한다. **빌드하지 않는다.** Python이 깔려 있어도 빌드한 앱은 쓰지 않는다(앱 안에 들어 있다).
 
 **준비:**
-1. 워크스테이션의 `C:\olt-v25\OilLevelTracker-5bb9025.zip`을 USB로 옮겨 `C:\olt-v25\`에 둔다(네트워크 드라이브에 두지 않는다).
+1. 워크스테이션의 `C:\olt-v25\OilLevelTracker-daf381a.zip`을 USB로 옮겨 `C:\olt-v25\`에 둔다(네트워크 드라이브에 두지 않는다).
 2. 지난번 `C:\a4\`에 둔 `SPL#1_Heating_coldstart.mp4`와 `SPL#1_test1_607bccb.recipe.json`을 그대로 쓴다. 지웠다면 워크스테이션에서 다시 복사한다.
 3. 다른 프로그램을 닫는다.
 
 **PowerShell**(시작 메뉴에서 "PowerShell")에 아래를 한 줄씩 붙여넣는다. ZIP의 SHA-256을 확인하고, 풀고, Recipe를 앱의 Recipe 폴더에 넣는다.
 
 ```powershell
-(Get-FileHash -Algorithm SHA256 'C:\olt-v25\OilLevelTracker-5bb9025.zip').Hash.ToLower()
-Expand-Archive -Path 'C:\olt-v25\OilLevelTracker-5bb9025.zip' -DestinationPath 'C:\olt-v25' -Force
+(Get-FileHash -Algorithm SHA256 'C:\olt-v25\OilLevelTracker-daf381a.zip').Hash.ToLower()
+Expand-Archive -Path 'C:\olt-v25\OilLevelTracker-daf381a.zip' -DestinationPath 'C:\olt-v25' -Force
 $recipes = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'OilLevelTracker\Recipes'; New-Item -ItemType Directory -Force -Path $recipes | Out-Null
 Copy-Item 'C:\a4\SPL#1_test1_607bccb.recipe.json' $recipes
 (Get-ChildItem 'C:\olt-v25\OilLevelTracker' -Recurse -File | Measure-Object Length -Sum).Sum
@@ -365,7 +369,7 @@ Get-Content -LiteralPath (Join-Path $env:LOCALAPPDATA 'OilLevelTracker\app.log')
 | A4 | 5절 결과의 분석 줄이 "빌드한 앱으로"이고 **180.0초 이하**, `샘플 8210개` |
 | A5 | 5절 A5 표 **전체** 줄의 중앙값이 **16 ms 이하**, 최대가 **50 ms 이하** |
 | A6 | 5절 정확한 프레임(서버) 중앙값이 **100 ms 이하**; 1배 재생이 `<video>`이고 진행이 60초 중 **59.0초 이상**, waiting·stalled **0**, 버린 프레임이 전체의 **1% 이하**; 8절 U14가 O |
-| M | 5절 결과의 빌드한 앱 줄이 `OilLevelTracker.exe`이고, 결과 끝이 `오류: 없음` (앱 창이 뜬 시간은 기록만) |
+| M | 5절 결과의 빌드한 앱 줄이 `OilLevelTracker.exe`이고, 결과 끝이 `오류: 없음`. 브라우저 줄이 `WebView2 (앱 창)`이면 빌드의 창에서 잰 것이고, `msedge (빌드한 앱의 서버; …)`이면 빌드의 서버를 같은 엔진(Edge)에서 잰 것으로 기록한다 (앱 창이 뜬 시간은 기록만) |
 | A1 | 8절 U1–U17이 모두 O이고, 9절의 검사 목록에 `V25 SPL#4 인수`(Glass 2개)와 `V25 SPL#1 인수`(Glass 1개)가 있고 둘 다 `version v=1` 줄이 있다 |
 | A2 | U8, U16이 O |
 | A3 | 2절 S2 통과(판정 규칙의 단위 테스트 포함); 9절의 두 검사 모든 `version glass` 줄이 `verdict=`와 `computed=`가 같거나, 다르면 `override=`가 `-`가 아니고 `reason_chars`가 1 이상; U9가 O |

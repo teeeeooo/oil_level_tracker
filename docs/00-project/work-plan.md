@@ -265,9 +265,12 @@ Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
   with the source if it fails.
 - **The V2-5 request — waits on the user:**
   [2026-11-02-v2-5-acceptance-windows-request.md](../40-operations/2026-11-02-v2-5-acceptance-windows-request.md),
-  revised after the first attempt and pinned to `5bb9025`
-  (`checked=108`), run again from §0 in a new folder (backup
-  `C:\olt-v25b-backup`). On the workstation: tests
+  revised twice and pinned to `daf381a` (`checked=108`), run again from
+  §0 in a new folder (backup `C:\olt-v25c-backup`). Second attempt
+  (`5bb9025`): the port answered but Playwright showed no page, taken as
+  a connection made before WebView2 created it; the script now waits for
+  `/json/list` to show the page, reconnects, and failing that measures
+  the build's server in Edge (marked in the result). On the workstation: tests
   (`261 passed, 4 skipped`), the build (`package=PASS`, ≤ 200 MB), the
   ZIP for the slowest PC, A4–A6 measured in the build, the pre-run
   lists, then the user in the build: Recipes `V25 SPL#4` (at ~01:00) and
