@@ -1,7 +1,8 @@
 # Current Work Plan
 
 **Current milestone:** `V2-4b — Video window and pattern copy` / `ACTIVE`
-(started 2026-11-02; decisions taken, mock-ups next).
+(started 2026-11-02; mock-ups confirmed, the video window built, copy
+and paste next).
 **Last completed:** `V2-4 — Judgment and report` / `DONE` (2026-11-02).
 
 This is the sole owner of the current state, authorization and next action.
@@ -166,42 +167,37 @@ judged once on the final build.
   the check a paste counts as drawing a new line.
 
 **Steps:**
-1. **Start decisions — done** (2026-11-02, above). **Mock-ups — next:**
-   the button and the window in `design/mockup/editor.html` and a new
-   `design/mockup/video-window.html`; the copy and the two pastes in
-   `editor.html`. **The agent's choices to show in them** (the user
-   confirms or changes them with the mock-ups):
-   - **The window:** a "크게 보기" button at the video's top-right corner;
-     one window at a time (pressing again brings it forward); it closes
-     when the editor closes or changes inspection. It shows the whole
-     source frame, fitted to the window and at most 100 % ("원본 크기" /
-     "창에 맞춤"), with the chosen Glass's ellipse and lines drawn as in
-     the small view. It has its own play/pause, time bar and speed; play,
-     pause, seek and speed in either window move the other. The editor
-     stays the master: its playhead is the one time, and the big window's
-     `<video>` follows it, re-seeking past a small drift. A paused frame
-     is exact in both. To weigh: two `<video>` decoders at once on the
-     slowest PC.
-   - **Copy:** with a range selected, "복사" (Ctrl+C) copies the current
-     Glass's Oil and Foam in it exactly, empty samples included. The copy
-     lives until the editor closes, and pastes only into the Glass it came
-     from (heights are that Glass's pixels).
-   - **Paste at places:** "붙여넣기" (Ctrl+V) shows the copy as a ghost
-     that follows the pointer on the graph; each click puts its start
-     there; Esc ends.
-   - **Repeat:** "반복 붙여넣기…" asks for the first start (default: right
-     after the copy), the period (default: the copy's length) and the end
-     (default: the analysed range's end), shows the ghosts, then pastes.
-   - **Both pastes:** a copy overwrites both lines where it lands, empty
-     samples too; a later copy wins over an earlier one where they
-     overlap; what falls outside the analysed range is cut; "cannot judge"
-     stretches stay as they are; the samples become drawn; one paste (a
-     whole repeat too) is one undo step.
-2. **The full-size view** — after the mock-ups: a second pywebview
-   window (`adapters/desktop`, wired in `app.py`), a page of its own, a
-   full-frame exact frame from the existing frame session, and the sync
-   between the two pages.
-3. **Copy and paste** — after the mock-ups: `web/lines.js` (the copy and
+1. **Start decisions and mock-ups — done** (2026-11-02). The user
+   confirmed [editor.html](../../design/mockup/editor.html) `#bigview`,
+   `#copy`, `#paste`, `#repeat` and
+   [video-window.html](../../design/mockup/video-window.html) with the
+   agent's choices in them; they are in DESIGN.md §5 ("copy and paste",
+   "Video window"). New tokens: `--frame-button-bg`, `--frame-button-hover`.
+2. **The full-size view — done** (2026-11-02):
+   - `app.py` `VideoWindow`: a second pywebview window, one at a time,
+     brought forward when shown again, closed with the editor or the
+     app's window; its place is kept in
+     `%LOCALAPPDATA%\OilLevelTracker\video-window.json` and dropped when
+     no screen shows it. `Desktop.show_video_window` /
+     `close_video_window`; `POST /api/inspections/<id>/video-window`
+     answers the page's path and whether a window opened (in a browser the
+     page opens a popup instead).
+   - **Sync:** the two WebView windows share no browser channel, so
+     `adapters/http/relay.py` passes long-polled messages
+     (`/api/relay/<channel>`). The editor is the master
+     (`web/videolink.js`): it sends its state (time, playing, speed, the
+     Glass, the range) on each change and twice a second while playing,
+     and the chosen Glass's lines; the window (`web/video.html`,
+     `video-window.js`) plays its own `<video>`, jumps past 0.25 s of
+     drift, shows the exact frame when paused, and sends its transport as
+     commands. `render.videoOverlay` draws the Glass for both videos.
+   - Checked on macOS: unit and API tests, a browser smoke test (the
+     popup follows and moves the editor, closes on leaving), and a probe
+     of the pywebview window (open, re-point, close, place saved).
+     **Not yet seen on Windows:** WebView2's second window, bringing it
+     forward, the saved place with display scaling, and two decoders at
+     once on the slowest PC.
+3. **Copy and paste** — next: `web/lines.js` (the copy and
    paste on samples, with unit checks), `web/editor.js` (the tools, the
    ghosts, the repeat dialog), the history and the check as for the
    pencil.
@@ -379,5 +375,5 @@ The three v1 remote branches that v1 docs cite stay.
 ## Next
 
 - **Done:** V2-4 (2026-11-02).
-- **Next:** the V2-4b mock-ups (step 1), for the user to confirm before
-  any code.
+- **Next:** V2-4b step 3, copy and paste; then the Windows request
+  (step 4).

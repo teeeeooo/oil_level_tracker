@@ -105,6 +105,8 @@ Used around and on top of video frames (Recipe screen, editor video).
 |---|---|---|
 | `--frame-bg` | `#1B1F23` | area behind a frame that does not fill its box |
 | `--frame-caption-bg` | `rgba(0,0,0,0.45)` | label chip on a frame (Glass name, "0"), white Caption 1 text |
+| `--frame-button-bg` | `rgba(0,0,0,0.55)` | a button on a frame ("크게 보기"), white Caption 1 text |
+| `--frame-button-hover` | `rgba(0,0,0,0.8)` | that button under the pointer |
 
 ### 2.6 Validation (Fluent palette red)
 
@@ -315,15 +317,40 @@ Do not use sizes outside this ramp.
     - **Right column, 360 px:**
       - the video, cropped to the Glass with the lines drawn over it, and
         its transport (frame steps, play, the speed field, range repeat,
-        the time);
+        the time). "크게 보기" sits on the video's top-right corner: a
+        28 px button, white Caption 1 on `--frame-button-bg`, which opens the
+        video window (below) or brings it forward (V2-4b, confirmed by the
+        user on 2026-11-02);
       - **편집:** the line kind the pencil and the point line draw (Oil,
         Foam, 참조); the grab width with `[` `]`; the grab shape
         (부드럽게, 뾰족하게, or Alt while dragging); the pencil's "수평"
         switch; the snap switch with its reach. Below them, the selected
         range with "<line> 선 지우기 (Delete)" naming the chosen line,
-        "판단 불가 (U)" and "판단 불가 풀기", wrapping inside the column, or
-        the point line in progress with its keys. Another tool lets the
-        range go;
+        "판단 불가 (U)", "판단 불가 풀기" and "복사 (Ctrl+C)", wrapping
+        inside the column, or the point line in progress with its keys.
+        Another tool lets the range go;
+      - **copy and paste** (V2-4b, confirmed by the user on 2026-11-02 in
+        [editor.html](design/mockup/editor.html) `#copy`, `#paste`,
+        `#repeat`):
+        - "복사한 구간" (a `selbox`) shows the copied stretch and its
+          length, that it holds the Glass's Oil and Foam with their empty
+          samples and pastes only into that Glass, and "붙여넣기
+          (Ctrl+V)" and "반복 붙여넣기…";
+        - while pasting at places, the copy follows the pointer as a
+          ghost: a `--selection-band` at 60 % from a dashed 1 px `--brand`
+          start line, with the Oil and Foam dashed (5 3) at 75 % opacity.
+          Each click pastes it from there; Esc ends. The box says how many
+          were pasted;
+        - "반복 붙여넣기" turns the box into three time fields side by side
+          (첫 시작, 주기, 끝; defaults: right after the copy, the copy's
+          length, the analysed range's end), a caption with the count and
+          the starts (and whether the last is cut), "붙여넣기" (primary)
+          and "취소" (Enter, Esc). The ghosts are numbered in `--brand`;
+          dragging the first moves the first start;
+        - a paste overwrites both lines where it lands, empty samples
+          too; a later copy wins where copies overlap; the analysed
+          range cuts it; "cannot judge" stays; the samples become drawn;
+          one paste, a whole repeat too, is one undo step;
       - **판정 · <Glass>** with the mode on the right (V2-4, confirmed by
         the user on 2026-10-30 in [editor.html](design/mockup/editor.html)):
         - the final judgment as a Subtitle 1 badge (§2.4); after an
@@ -371,6 +398,22 @@ Do not use sizes outside this ramp.
         `ew-resize`) drags it in 0.1 s steps inside the analysis range.
         The 분석 panel shows the time it was moved from. A re-analysis
         starts from the moved time.
+- **Video window** (V2-4b, confirmed by the user on 2026-11-02 in
+  [video-window.html](design/mockup/video-window.html)): a second OS
+  window titled "원본 영상 — <inspection> · <video>", minimum 960 × 600.
+  - **Bar, 40 px:** the chosen Glass's name and a caption (the frame
+    size); on the right, "선 겹쳐 보기", 창에 맞춤 / 원본 크기 and the
+    zoom in Caption 1.
+  - **The frame:** the whole source frame on `#1b1f23`, fitted (at most
+    100 %) or at 100 %, dragged to look around (starting where the chosen
+    Glass shows). The chosen Glass's ellipse, zero line, Oil and Foam are
+    drawn as in the editor's video.
+  - **Transport, 48 px:** frame steps, play, the speed field, a scrub bar
+    over the analysed range, the time, and "편집기와 같은 위치" in
+    `--pass`. Play, pause, seeking and speed in either window move the
+    other; a paused frame is exact. Space, `,` and `.` work here too.
+  - One window at a time; it closes with the editor and opens again
+    where it was left.
 - **Inspection list:** the first screen.
   - **Toolbar, 48 px:** the title "검사" on the left; "Recipe", "새 검사"
     (primary) and help on the right.

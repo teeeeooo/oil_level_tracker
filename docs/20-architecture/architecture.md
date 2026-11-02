@@ -40,12 +40,15 @@ src/oil_tracker/
                    JPEG. Reads the shipped web folder.
     http/          HTTP API on 127.0.0.1 (standard-library
                    ThreadingHTTPServer): routes to use cases, job
-                   progress, video file serving with HTTP Range.
-                   API calls need the per-launch token and a local Host.
-    desktop/       Operating-system integration: the native file dialog
-                   and the close question (both supplied by app.py from
-                   the pywebview window), opening a folder and opening a
-                   report in the default browser.
+                   progress, video file serving with HTTP Range, and
+                   the relay (long-polled messages between the editor
+                   and the full-size video window, two WebView windows
+                   that share no browser channel). API calls need the
+                   per-launch token and a local Host.
+    desktop/       Operating-system integration: the native file dialog,
+                   the close question and the full-size video window
+                   (supplied by app.py from pywebview), opening a folder
+                   and opening a report in the default browser.
   web/             index.html, tokens.css (copied from DESIGN.md; a test
                    checks it), app.css; main.js (entry), nav.js (views,
                    help, keys), ui.js (helpers), api.js; frame.js (the
@@ -53,14 +56,18 @@ src/oil_tracker/
                    screen and the analysis setup); recipe.js,
                    inspections.js, editor.js (the screens); lines.js
                    (line operations, the snap and undo), player.js
-                   (the editor's video) and header.js (the report
+                   (the editor's video), videolink.js (the editor's side
+                   of the full-size video window) and header.js (the report
                    header's fields, shared by the setup and the
                    editor); render.js (shared by the
-                   editor and the report). Plain JavaScript modules, no
-                   build step.
+                   editor, the video window and the report). video.html
+                   with video-window.js is the full-size video window's
+                   page. Plain JavaScript modules, no build step.
   bootstrap.py     Builds the concrete adapters and hands them to the use
                    cases. The only wiring point.
-  app.py           pywebview window; owns process lifetime.
+  app.py           pywebview windows (the app's and the full-size video
+                   window, placed where it was left); owns process
+                   lifetime.
 ```
 
 The modules are created as each work-order step needs them, not ahead of
@@ -98,7 +105,7 @@ app.py ──▶ bootstrap.py
   - report output;
   - progress and cancellation;
   - the desktop (file dialog, opening a folder, asking before the window
-    closes).
+    closes, the full-size video window).
 - Internal helpers get no port.
 - Use-case tests run with fake ports, without HTTP, files or OpenCV.
 

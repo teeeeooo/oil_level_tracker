@@ -8,11 +8,11 @@ import re
 import sys
 import traceback
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from typing import Any
-from urllib.parse import parse_qs, unquote, urlparse
+from urllib.parse import parse_qs, quote, unquote, urlparse
 
 from oil_tracker.application.editing import (
     Editing,
@@ -64,10 +64,12 @@ from oil_tracker.domain.version import Version
 from oil_tracker.domain.recipe import Glass, JudgmentRule, Recipe
 
 from .jobs import Jobs, JobsBusy, UnknownJob
+from .relay import Relay
 
 TOKEN_HEADER = "X-OLT-Token"
 MAX_BODY_BYTES = 16_000_000  # the edits of a 68-min video with three Glasses are about 2 MB
 COPY_CHUNK = 1 << 20
+RELAY_WAIT_SEC = 15.0  # a page's long poll; it asks again at once
 STATIC_TYPES = {
     ".html": "text/html; charset=utf-8",
     ".js": "text/javascript; charset=utf-8",
@@ -122,6 +124,7 @@ class ApiContext:
     jobs: Jobs
     web_folder: Path
     token: str
+    relay: Relay = field(default_factory=Relay)
 
 
 def json_response(value: Any, status: int = 200) -> Response:
@@ -726,6 +729,28 @@ def routes(ctx: ApiContext) -> list[Route]:
         editing.mark_unsaved(unsaved)
         return json_response({"ok": True})
 
+    def show_video_window(_query, _body, inspection_id) -> Response:
+        # the page's own path; without an app window the page opens it with window.open
+        path = f"/web/video.html?token={quote(ctx.token)}&inspection={quote(inspection_id, safe='')}"
+        return json_response({"path": path, "opened": editing.show_video_window(inspection_id, path)})
+
+    def close_video_window(_query, _body) -> Response:
+        editing.close_video_window()
+        return json_response({"ok": True})
+
+    def relay_post(_query, body, channel) -> Response:
+        if not isinstance(body, dict) or not isinstance(body.get("from"), str):
+            raise BadRequest("relay message needs a sender")
+        return json_response({"seq": ctx.relay.post(channel, body["from"], body.get("message"))})
+
+    def relay_wait(query, _body, channel) -> Response:
+        try:
+            after = int(query.get("after", ["-1"])[0])
+            seconds = min(RELAY_WAIT_SEC, max(0.0, float(query.get("wait", [str(RELAY_WAIT_SEC)])[0])))
+        except ValueError as failure:
+            raise BadRequest(str(failure)) from failure
+        return json_response(ctx.relay.wait(channel, after, seconds))
+
     def job_status(_query, _body, job_id) -> Response:
         return json_response(jobs.status(job_id))
 
@@ -758,6 +783,10 @@ def routes(ctx: ApiContext) -> list[Route]:
             image_piece,
         ),
         ("POST", re.compile(r"/api/editor/unsaved"), mark_unsaved),
+        ("POST", re.compile(rf"/api/inspections/{segment}/video-window"), show_video_window),
+        ("POST", re.compile(r"/api/video-window/close"), close_video_window),
+        ("POST", re.compile(rf"/api/relay/{segment}"), relay_post),
+        ("GET", re.compile(rf"/api/relay/{segment}"), relay_wait),
         ("GET", re.compile(rf"/api/jobs/{segment}"), job_status),
         ("POST", re.compile(rf"/api/jobs/{segment}/cancel"), cancel_job),
         ("GET", re.compile(r"/api/recipes"), list_recipes),

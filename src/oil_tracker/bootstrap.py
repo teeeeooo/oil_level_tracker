@@ -38,14 +38,23 @@ class Running:
     token: str
 
     @property
+    def origin(self) -> str:
+        return f"http://127.0.0.1:{self.server.server_address[1]}"
+
+    @property
     def url(self) -> str:
-        return f"http://127.0.0.1:{self.server.server_address[1]}/?token={self.token}"
+        return f"{self.origin}/?token={self.token}"
 
     def close(self) -> None:
         self.server.shutdown()
         self.server.server_close()
         self.jobs.stop_all(CLOSE_WAIT_SEC)
         self.videos.close_all()
+
+
+def settings_folder() -> Path:
+    """%LOCALAPPDATA%\\OilLevelTracker, for the app's own settings (Product SSOT §8)."""
+    return locations.settings_folder()
 
 
 def utc_now() -> str:
@@ -62,11 +71,12 @@ def start(
     port: int = 0,
     pick_video: Callable[[], Path | None] | None = None,
     ask_before_closing: Callable[[bool], None] | None = None,
+    video_window: tuple[Callable[[str, str], None], Callable[[], None]] | None = None,
     web_folder: Path = WEB_FOLDER,
 ) -> Running:
     data_folder = data_folder or locations.default_data_folder()
     videos = VideoSessions(open_video, new_id)
-    desktop = SystemDesktop(pick_video, ask_before_closing)
+    desktop = SystemDesktop(pick_video, ask_before_closing, video_window)
     recipe_store = RecipeFolder(data_folder / locations.RECIPES)
     recipes = Recipes(recipe_store, videos, desktop, utc_now, new_id)
     inspection_store = InspectionFolders(data_folder / locations.INSPECTIONS)

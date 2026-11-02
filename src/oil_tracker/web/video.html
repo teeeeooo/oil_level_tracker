@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>원본 영상</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/web/tokens.css">
+<link rel="stylesheet" href="/web/app.css">
+<script type="module" src="/web/video-window.js"></script>
+</head>
+<body>
+<!-- The full-size video window (Product SSOT §6; DESIGN.md §5 "Video window"), opened by the
+     editor's "크게 보기" as a second OS window. -->
+<div class="vw">
+  <header class="vw-bar">
+    <b id="vwGlass">—</b><span class="caption" id="vwCaption">편집기와 연결하는 중…</span>
+    <span class="spacer"></span>
+    <label class="toggle"><input type="checkbox" id="vwLines" role="switch" checked><span class="switch"></span>선 겹쳐 보기</label>
+    <span class="seg" id="vwZoom"><button data-zoom="fit">창에 맞춤</button><button data-zoom="actual">원본 크기</button></span>
+    <span class="caption vw-zoom" id="vwZoomText"></span>
+  </header>
+  <div class="vw-stage" id="vwStage">
+    <div class="vw-frame" id="vwFrame"><video id="vwVideo" muted playsinline preload="auto"></video><img id="vwImage" alt="" hidden><svg id="vwOverlay"></svg></div>
+    <span class="vw-cap" id="vwCap"></span>
+  </div>
+  <footer class="transport vw-transport">
+    <button class="btn icon-btn" id="vwPrev" title="이전 프레임 (,)" aria-label="이전 프레임"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4h2v12H5zM16 4v12L8 10z"/></svg></button>
+    <button class="btn icon-btn" id="vwPlay" title="재생 (Space)" aria-label="재생"><svg viewBox="0 0 20 20" fill="currentColor"><path id="vwPlayIcon" d="M6 4l10 6-10 6z"/></svg></button>
+    <button class="btn icon-btn" id="vwNext" title="다음 프레임 (.)" aria-label="다음 프레임"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 4h2v12h-2zM4 4v12l8-6z"/></svg></button>
+    <div class="input num speed" title="재생 배속 (0.1–16×)">
+      <input id="vwSpeed" inputmode="decimal" aria-label="재생 배속" value="1"><span class="unit">×</span>
+      <button class="chev" id="vwSpeedBtn" tabindex="-1" aria-label="배속 선택"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg></button>
+      <div class="menu" id="vwSpeedMenu" role="listbox" aria-label="배속" hidden></div>
+    </div>
+    <div class="scrub" id="vwScrub" title="분석 범위 안에서 재생 위치를 옮깁니다"><div class="track"></div><div class="done" id="vwDone"></div><div class="thumb" id="vwThumb"></div></div>
+    <span class="time" id="vwTime">--:--.- / --:--.-</span>
+    <span class="vw-sync" id="vwSync"><i></i><span id="vwSyncText">연결하는 중</span></span>
+  </footer>
+</div>
+</body>
+</html>

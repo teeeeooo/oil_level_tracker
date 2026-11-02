@@ -185,6 +185,9 @@ button.memo:hover { background: var(--bg-4); }
 .video-stage video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .video-stage img { position: absolute; display: block; }  /* placed where its region lies (player.js) */
 .video-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.video-big { position: absolute; right: 8px; top: 8px; height: 28px; padding: 0 8px; display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 4px; background: var(--frame-button-bg); color: #fff; font: 12px/16px var(--font); cursor: pointer; }
+.video-big:hover { background: var(--frame-button-hover); }
+.video-big svg { width: 16px; height: 16px; }
 .video-transport { height: 40px; flex: none; border-bottom: 1px solid var(--stroke-1); }
 .video-transport .speed { margin-left: 4px; }
 .video-transport .time { margin-left: auto; }
@@ -231,3 +234,22 @@ kbd { display: inline-block; min-width: 20px; height: 20px; padding: 0 6px; bord
 #editorView .title { max-width: 240px; }
 #editorView .title span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #editorView .picker select { min-width: 150px; }
+
+/* the full-size video window (DESIGN.md §5 "Video window") */
+.vw { display: grid; grid-template-rows: 40px 1fr 48px; height: 100vh; min-width: 960px; min-height: 552px; }
+.vw-bar { display: flex; align-items: center; gap: 12px; padding: 0 12px; background: var(--bg-3); border-bottom: 1px solid var(--stroke-1); }
+.vw-bar b { font-weight: 600; }
+.vw-zoom { width: 40px; text-align: right; }
+.vw-stage { position: relative; overflow: hidden; min-height: 0; background: var(--frame-bg); }
+.vw-stage.pan { cursor: grab; }
+.vw-stage.panning { cursor: grabbing; }
+.vw-frame { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.vw-frame video, .vw-frame img, .vw-frame svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.vw-frame svg { pointer-events: none; }
+.vw-cap { position: absolute; left: 8px; top: 8px; font-size: 12px; line-height: 20px; color: #fff; background: var(--frame-caption-bg); padding: 0 6px; border-radius: 4px; }
+.vw-transport { border-top: 1px solid var(--stroke-1); background: var(--bg-1); }
+.vw-transport .speed { margin-left: 4px; }
+.vw-sync { display: inline-flex; align-items: center; gap: 6px; margin-left: 12px; font-size: 12px; color: var(--fg-3); white-space: nowrap; }
+.vw-sync i { width: 8px; height: 8px; border-radius: 50%; background: var(--fg-3); }
+.vw-sync.on { color: var(--pass); }
+.vw-sync.on i { background: var(--pass); }

@@ -1,5 +1,5 @@
-"""Operating-system integration: the native file dialog, opening a folder or a report and the close
-question."""
+"""Operating-system integration: the native file dialog, opening a folder or a report, the close
+question and the full-size video window."""
 
 from __future__ import annotations
 
@@ -13,15 +13,18 @@ from oil_tracker.application.ports import DesktopUnavailable
 
 
 class SystemDesktop:
-    """Implements application.ports.Desktop. app.py supplies the window's file dialog and close question."""
+    """Implements application.ports.Desktop. app.py supplies the window's file dialog, close question
+    and video window."""
 
     def __init__(
         self,
         pick_video: Callable[[], Path | None] | None = None,
         ask_before_closing: Callable[[bool], None] | None = None,
+        video_window: tuple[Callable[[str, str], None], Callable[[], None]] | None = None,
     ) -> None:
         self._pick_video = pick_video
         self._ask_before_closing = ask_before_closing
+        self._video_window = video_window  # (show(path, title), close())
 
     def pick_video(self) -> Path | None:
         if self._pick_video is None:
@@ -31,6 +34,16 @@ class SystemDesktop:
     def ask_before_closing(self, ask: bool) -> None:
         if self._ask_before_closing is not None:
             self._ask_before_closing(ask)
+
+    def show_video_window(self, path: str, title: str) -> bool:
+        if self._video_window is None:
+            return False
+        self._video_window[0](path, title)
+        return True
+
+    def close_video_window(self) -> None:
+        if self._video_window is not None:
+            self._video_window[1]()
 
     def open_folder(self, folder: Path) -> None:
         folder.mkdir(parents=True, exist_ok=True)

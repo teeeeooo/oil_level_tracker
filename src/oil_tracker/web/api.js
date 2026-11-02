@@ -53,6 +53,13 @@ export async function getBlobUrl(path) {
   return { url: URL.createObjectURL(await response.blob()), headers: response.headers };
 }
 
+/** A call that still goes out while the page closes (fetch keepalive); nothing waits for it. */
+export function beacon(method, path, body) {
+  const headers = { "X-OLT-Token": token };
+  if (body !== undefined) headers["Content-Type"] = "application/json";
+  fetch(path, { method, headers, keepalive: true, body: body === undefined ? undefined : JSON.stringify(body) }).catch(() => {});
+}
+
 /** A URL the page's own elements can load (a <video> cannot send the token header). */
 export function mediaUrl(path) {
   return `${path}?token=${encodeURIComponent(token)}`;

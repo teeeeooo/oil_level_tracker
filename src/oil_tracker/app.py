@@ -3,8 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import json
+import threading
 import time
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 from oil_tracker import bootstrap
 
@@ -15,6 +19,96 @@ CLOSE_QUESTION = {
     "global.quit": "닫기",
     "global.cancel": "취소",
 }
+
+
+VIDEO_WINDOW_FILE = "video-window.json"  # where the video window was left, in the settings folder
+VIDEO_WINDOW_SIZE = (1280, 800)
+VIDEO_WINDOW_MIN = (960, 600)
+
+
+class VideoWindow:
+    """The full-size video window (Product SSOT §6; DESIGN.md §5): a second OS window, one at a
+    time, opened again where it was left."""
+
+    def __init__(self, webview: Any, origin: Callable[[], str], place_file: Path) -> None:
+        self._webview = webview
+        self._origin = origin
+        self._file = place_file
+        self._place = load_place(place_file)
+        self._window: Any = None
+        self._lock = threading.Lock()
+
+    def show(self, path: str, title: str) -> None:
+        url = self._origin() + path
+        with self._lock:
+            window = self._window
+            if window is None:
+                width, height = self._place.get("width", VIDEO_WINDOW_SIZE[0]), self._place.get("height", VIDEO_WINDOW_SIZE[1])
+                x, y = self._place.get("x"), self._place.get("y")
+                if not self._on_a_screen(x, y, width, height):
+                    x = y = None
+                window = self._webview.create_window(
+                    title, url, width=width, height=height, x=x, y=y, min_size=VIDEO_WINDOW_MIN
+                )
+                # macOS reports floats
+                window.events.moved += lambda x, y: self._place.update(x=round(x), y=round(y))
+                window.events.resized += lambda width, height: self._place.update(width=round(width), height=round(height))
+                window.events.closed += lambda: self._closed(window)
+                self._window = window
+                return
+        if window.get_current_url() != url:  # another inspection
+            window.load_url(url)
+        window.set_title(title)
+        window.restore()
+        window.show()
+        window.on_top = True  # brings it forward; pywebview has no call for that alone
+        window.on_top = False
+
+    def close(self) -> None:
+        with self._lock:
+            window = self._window
+        if window is not None:
+            window.destroy()
+
+    def _closed(self, window: Any) -> None:
+        with self._lock:
+            if self._window is window:
+                self._window = None
+        save_place(self._file, self._place)
+
+    def _on_a_screen(self, x: int | None, y: int | None, width: int, height: int) -> bool:
+        """Whether the saved place still shows on a screen (a second monitor may be gone)."""
+        if x is None or y is None:
+            return False
+        try:
+            screens = self._webview.screens
+        except Exception:  # noqa: BLE001 - no screen list: let the system place it
+            return False
+        return any(
+            x + 80 < s.x + s.width and s.x < x + width - 80 and s.y <= y < s.y + s.height - 40 for s in screens
+        )
+
+
+def load_place(path: Path) -> dict[str, int]:
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    if not isinstance(raw, dict):
+        return {}
+    place = {k: v for k, v in raw.items() if k in ("x", "y", "width", "height") and type(v) is int}
+    if place.get("width", VIDEO_WINDOW_MIN[0]) < VIDEO_WINDOW_MIN[0] or place.get("height", VIDEO_WINDOW_MIN[1]) < VIDEO_WINDOW_MIN[1]:
+        place.pop("width", None)
+        place.pop("height", None)
+    return place
+
+
+def save_place(path: Path, place: dict[str, int]) -> None:
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(place), encoding="utf-8")
+    except OSError:
+        pass  # the next window opens where the system puts it
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -40,7 +134,8 @@ def main(argv: list[str] | None = None) -> int:
 
     import webview  # imported late so --no-window runs without pywebview
 
-    holder: dict[str, webview.Window] = {}
+    holder: dict[str, Any] = {}
+    video_window = VideoWindow(webview, lambda: holder["running"].origin, bootstrap.settings_folder() / VIDEO_WINDOW_FILE)
 
     def pick_video() -> Path | None:
         chosen = holder["window"].create_file_dialog(
@@ -52,11 +147,17 @@ def main(argv: list[str] | None = None) -> int:
         holder["window"].confirm_close = ask  # read when the window is asked to close
 
     running = bootstrap.start(
-        data_folder=args.data_folder, port=args.port, pick_video=pick_video, ask_before_closing=ask_before_closing
+        data_folder=args.data_folder,
+        port=args.port,
+        pick_video=pick_video,
+        ask_before_closing=ask_before_closing,
+        video_window=(video_window.show, video_window.close),
     )
+    holder["running"] = running
     holder["window"] = webview.create_window(
         "Oil Level Tracker", running.url, width=1440, height=900, min_size=(1280, 800), localization=CLOSE_QUESTION
     )
+    holder["window"].events.closed += video_window.close  # the app ends with its main window
     try:
         webview.start()
     finally:

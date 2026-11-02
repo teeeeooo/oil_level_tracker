@@ -95,6 +95,28 @@ export function lowerBound(times, t) {
   return lo;
 }
 
+/** What a video shows over the picture, in source-frame coordinates: the Glass, its zero line and each
+ * line's height at time t (the editor's video and the full-size video window, Product SSOT §6).
+ * ys is { oil, foam, reference }: source-frame y per sample, or null where empty. */
+export function videoOverlay(glass, times, ys, t) {
+  const e = glass.ellipse;
+  const parts = [
+    `<ellipse cx="${e.center_x}" cy="${e.center_y}" rx="${e.radius_x}" ry="${e.radius_y}" style="fill:none;stroke:var(--glass-outline);stroke-width:1;stroke-dasharray:4 3" vector-effect="non-scaling-stroke"/>`,
+  ];
+  const chord = (y, style) => `<line x1="${e.center_x - e.radius_x - 12}" x2="${e.center_x + e.radius_x + 12}" y1="${y}" y2="${y}" style="${style}" vector-effect="non-scaling-stroke"/>`;
+  parts.push(chord(glass.zero_line_y, "stroke:var(--glass-outline);stroke-width:1;stroke-dasharray:6 4"));
+  if (!times.length) return parts.join("");
+  let i = lowerBound(times, t);
+  if (i >= times.length || (i > 0 && t - times[i - 1] <= times[i] - t)) i -= 1;
+  const near = Math.abs(times[i] - t) <= step(times);
+  const styles = { reference: "stroke:var(--reference);stroke-width:2;stroke-dasharray:6 4", foam: "stroke:var(--foam);stroke-width:2.5", oil: "stroke:var(--oil);stroke-width:2.5" };
+  for (const kind of KINDS) {
+    const y = near ? ys[kind]?.[i] ?? null : null;
+    if (y !== null) parts.push(chord(y, "stroke:var(--line-halo);stroke-width:5"), chord(y, styles[kind]));
+  }
+  return parts.join("");
+}
+
 /** An SVG path through the samples in view, broken where a sample is empty; a lone sample is a dot.
  * Where samples are denser than the pixels, each pixel column keeps its lowest and highest sample. */
 export function linePath(times, values, sx, sy, view) {

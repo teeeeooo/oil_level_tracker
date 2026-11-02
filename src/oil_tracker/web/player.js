@@ -10,6 +10,7 @@ const NO_HOOKS = {
   time: () => {},           // the shown time changed
   overlay: () => "",        // SVG in source-frame coordinates, drawn over the picture
   repeat: () => null,       // { t0, t1 } to repeat, or null
+  changed: () => {},        // played, stopped, moved or changed speed (status() tells the new state)
 };
 
 const state = {
@@ -103,6 +104,11 @@ export function isPlaying() {
   return state.playing;
 }
 
+/** What the full-size video window follows (Product SSOT §6). */
+export function status() {
+  return { time: state.time, playing: state.playing, speed: state.speed };
+}
+
 export function seekStats() {
   return state.seeks.slice();
 }
@@ -120,6 +126,7 @@ export function seek(t) {
   renderTime();
   drawOverlay();
   requestFrame(state.time);
+  hooks.changed();
 }
 
 function clamp(t) {
@@ -186,6 +193,7 @@ async function play() {
       }
       $("videoFrame").hidden = true;
       requestAnimationFrame(videoTick);
+      hooks.changed();
       return;
     } catch {
       state.fallback = true;  // the codec, most likely: play exact frames instead
@@ -194,6 +202,7 @@ async function play() {
   playStart = performance.now();
   playFrom = state.time;
   fallbackTick();
+  hooks.changed();
 }
 
 function videoTick() {
@@ -228,6 +237,7 @@ function advance(t, jump) {
   renderTime();
   drawOverlay();
   hooks.time(state.time);
+  if (range && t === range.t0) hooks.changed();  // the repeat jumped back
 }
 
 export function stop() {
@@ -241,6 +251,7 @@ export function stop() {
   }
   renderTransport();
   requestFrame(state.time);
+  hooks.changed();
 }
 
 /** One frame back or forward, paused. */
@@ -251,7 +262,7 @@ export function step(direction) {
   hooks.time(state.time);
 }
 
-function setSpeed(speed) {
+export function setSpeed(speed) {
   if (state.playing && state.fallback) {
     playFrom = state.time;
     playStart = performance.now();
@@ -259,6 +270,7 @@ function setSpeed(speed) {
   state.speed = speed;
   $("videoSpeed").value = String(speed);
   if (state.playing && !state.fallback) $("video").playbackRate = speed;
+  hooks.changed();
 }
 
 function commitSpeed() {

@@ -299,3 +299,12 @@ class Desktop(Protocol):
     def ask_before_closing(self, ask: bool) -> None:
         """While True, closing the window asks first. Without a window, nothing happens."""
         ...
+
+    def show_video_window(self, path: str, title: str) -> bool:
+        """Show the page at path (with its query) in the full-size video window, a second OS window,
+        opening it or bringing it forward (§6). False without a window: the page opens it itself."""
+        ...
+
+    def close_video_window(self) -> None:
+        """Close the full-size video window, if it is open."""
+        ...

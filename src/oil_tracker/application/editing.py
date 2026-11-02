@@ -191,6 +191,17 @@ class Editing:
         latest = self.store.versions(inspection_id)[-1].number
         self.store.save_edits(inspection_id, self.store.load_version_edits(inspection_id, latest).edits, self._now())
 
+    def show_video_window(self, inspection_id: str, path: str) -> bool:
+        """"크게 보기": the source at full size in a window of its own (§6). False when there is no
+        app window to open it from."""
+        inspection = self.store.load(inspection_id)
+        video = inspection.video.name
+        title = f"원본 영상 — {inspection.name} · {video}" if inspection.name else f"원본 영상 — {video}"
+        return self._desktop.show_video_window(path, title)
+
+    def close_video_window(self) -> None:
+        self._desktop.close_video_window()
+
     def mark_unsaved(self, unsaved: bool) -> None:
         """The editor holds edits it has not saved: closing the window asks first (§6)."""
         self._desktop.ask_before_closing(unsaved)

@@ -898,3 +898,49 @@ def test_submitting_locks_a_version_and_revising_starts_the_next(tmp_path, video
         assert errors == []
     finally:
         running.close()
+
+
+def test_the_full_size_video_window(tmp_path, video, browser_page):
+    # Product SSOT §6 (user, 2026-11-02): "크게 보기" opens the source in a window of its own that
+    # follows the editor and moves it. Without an app window the page opens it as a popup.
+    page, errors = browser_page
+    data = tmp_path / "data"
+    write_recipes(data / "Recipes")
+    running = bootstrap.start(data_folder=data)
+    try:
+        analysed_inspection(running, video, "창")
+        page.goto(running.url)
+        page.locator("#inspectionRows tr", has_text="창").get_by_role("button", name="열기", exact=True).click()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        with page.context.expect_page() as opened:
+            page.locator("#videoWindow").click()
+        popup = opened.value
+        popup.on("pageerror", lambda error: errors.append(f"window: {error}"))
+        popup.locator("#vwSync.on").wait_for()
+        assert popup.locator("#vwGlass").inner_text() == "BASE"
+        popup.wait_for_function("document.querySelectorAll('#vwOverlay line').length >= 2")  # the zero line and Oil
+        popup.wait_for_function("document.getElementById('vwImage').naturalWidth === 320")  # the exact frame, whole
+        assert popup.locator("#vwZoomText").inner_text() == "100 %"  # 320 × 240 fits: never above 100 %
+
+        page.locator("#graph").click(position={"x": 5, "y": 5})  # the editor's keys
+        page.keyboard.press("Period")
+        popup.wait_for_function("document.getElementById('vwTime').textContent.startsWith('00:00.1')")
+        popup.locator("#vwStage").click()
+        popup.keyboard.press("Period")  # the window moves the editor
+        page.wait_for_function("document.getElementById('videoTime').textContent.startsWith('00:00.2')")
+        popup.locator("#vwPlay").click()
+        page.wait_for_function("document.getElementById('videoPlayIcon').getAttribute('d').startsWith('M5')")
+        popup.wait_for_function("document.getElementById('vwPlayIcon').getAttribute('d').startsWith('M5')")
+        popup.locator("#vwPlay").click()
+        page.wait_for_function("document.getElementById('videoPlayIcon').getAttribute('d').startsWith('M6')")
+        popup.get_by_role("button", name="원본 크기").click()
+        assert popup.locator("#vwZoom button.on").inner_text() == "원본 크기"
+        popup.locator("#vwLines").evaluate("box => box.click()")
+        assert popup.locator("#vwOverlay").inner_html() == ""
+        shot(popup, "video-window")
+
+        with popup.expect_event("close"):
+            page.locator("#editorBack").click()  # leaving the editor closes the window
+        assert errors == []
+    finally:
+        running.close()

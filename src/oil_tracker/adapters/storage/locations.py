@@ -11,11 +11,21 @@ RECIPES = "Recipes"
 INSPECTIONS = "Inspections"
 
 _FOLDERID_DOCUMENTS = uuid.UUID("FDD39AD0-238F-46AF-ADB4-6C85480369C7")
+_FOLDERID_LOCAL_APP_DATA = uuid.UUID("F1B32785-6FBA-4FCF-9D55-7B8E7F157091")
 
 
 def default_data_folder() -> Path:
     """Documents\\OilLevelTracker, following a redirected Documents folder."""
     return documents_folder() / APP_FOLDER
+
+
+def settings_folder() -> Path:
+    """Settings and logs: %LOCALAPPDATA%\\OilLevelTracker on Windows (Product SSOT §8)."""
+    if sys.platform == "win32":
+        return _windows_known_folder(_FOLDERID_LOCAL_APP_DATA) / APP_FOLDER
+    if sys.platform == "darwin":
+        return Path.home() / "Library" / "Application Support" / APP_FOLDER
+    return Path.home() / ".local" / "state" / APP_FOLDER
 
 
 def documents_folder() -> Path:

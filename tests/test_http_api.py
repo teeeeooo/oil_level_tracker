@@ -505,3 +505,33 @@ def test_a_dropped_connection_prints_nothing(app, capsys, dropped):
     except ValueError:
         running.server.handle_error(None, ("127.0.0.1", 1))
     assert "Traceback" in capsys.readouterr().err
+
+
+def test_the_full_size_video_window(tmp_path, video):
+    # Product SSOT §6 (user, 2026-11-02): "크게 보기" opens a second OS window at the page's path; without
+    # an app window the page opens the path itself
+    shown, closed = [], []
+    running = bootstrap.start(data_folder=tmp_path / "data", video_window=(lambda *a: shown.append(a), lambda: closed.append(1)))
+    try:
+        inspection_id, _, _ = analysed_inspection(running, video)
+        status, data, _ = call(running, "POST", f"/api/inspections/{inspection_id}/video-window")
+        assert status == 200 and data["opened"] is True
+        assert data["path"].startswith("/web/video.html?token=") and data["path"].endswith(f"&inspection={inspection_id}")
+        assert shown == [(data["path"], "원본 영상 — sample.avi")]
+        assert call(running, "POST", "/api/video-window/close")[0] == 200 and closed == [1]
+        assert call(running, "POST", "/api/inspections/missing/video-window")[0] == 404
+        # the two pages' relay
+        seq = call(running, "GET", "/api/relay/video-x?after=-1")[1]["seq"]
+        assert call(running, "POST", "/api/relay/video-x", {"from": "window", "message": {"type": "hello"}})[0] == 200
+        status, found, _ = call(running, "GET", f"/api/relay/video-x?after={seq}&wait=1")
+        assert status == 200 and [m["message"] for m in found["messages"]] == [{"type": "hello"}]
+        assert call(running, "POST", "/api/relay/video-x", {"message": 1})[0] == 400
+        assert call(running, "GET", "/api/relay/video-x?after=x")[0] == 400
+    finally:
+        running.close()
+    without_window = bootstrap.start(data_folder=tmp_path / "data")
+    try:
+        status, data, _ = call(without_window, "POST", f"/api/inspections/{inspection_id}/video-window")
+        assert status == 200 and data["opened"] is False
+    finally:
+        without_window.close()

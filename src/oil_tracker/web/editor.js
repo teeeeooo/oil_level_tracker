@@ -7,6 +7,7 @@ import * as lines from "./lines.js";
 import * as nav from "./nav.js";
 import * as player from "./player.js";
 import * as render from "./render.js";
+import * as videolink from "./videolink.js";
 import { $, MODES, clock, el, localDate, notify, parseClock, typing } from "./ui.js";
 
 const TOOL_KEYS = { KeyG: "grab", KeyP: "pencil", KeyL: "point", KeyR: "range", KeyH: "pan" };  // M opens the memo list
@@ -69,6 +70,7 @@ const headerSaver = new HeaderSaver(
 /** Open the inspection's working edits, or a submitted version read-only; a locked inspection
  * shows its latest version. */
 export async function open(inspectionId, version = null) {
+  if (state.detail?.id !== inspectionId) videolink.close();  // another inspection; reopening keeps the window
   release();
   nav.show("editorView");
   const id = encodeURIComponent(inspectionId);
@@ -93,7 +95,7 @@ export async function open(inspectionId, version = null) {
   renderTools();
   renderVersion();
   try {
-    await player.open(inspectionId, { time: onPlayerTime, overlay, repeat: () => state.selection });
+    await player.open(inspectionId, { time: onPlayerTime, overlay, repeat: () => state.selection, changed: videolink.stateChanged });
   } catch (error) {
     notify("editorNotice", `영상을 열 수 없습니다: ${error.message}`, "error");
   }
@@ -124,6 +126,7 @@ function locked() {
 async function leave() {
   if (state.dirty && !confirm("저장하지 않은 편집이 있습니다. 저장하지 않고 나갈까요?")) return;
   await headerSaver.flush();
+  videolink.close();
   release();
   backToList();
 }
@@ -136,6 +139,7 @@ async function reanalyse() {
   if (state.dirty && !(await save())) return;
   await headerSaver.flush();  // the setup reads the stored header
   const id = state.detail.id;
+  videolink.close();
   release();
   toSetup(id);
 }
@@ -168,6 +172,8 @@ async function showGlass(fit) {
   state.view = fit || !state.view ? whole : { ...state.view, h0: bottom, h1: top };
   player.frameGlass(glass);
   player.seek(state.playhead);
+  videolink.stateChanged();  // the window draws this Glass now
+  videolink.linesChanged();
   renderGlassPanel();
   renderMemos();
   requestDraw({ back: true, lines: true, marks: true });
@@ -287,7 +293,10 @@ function draw() {
     $("axis").innerHTML = render.axisSvg(view, width, { times: state.edits.times, empty: data.empty, playhead: state.playhead });
     renderRangeNumbers();
   }
-  if (parts.lines || parts.back) player.drawOverlay();
+  if (parts.lines || parts.back) {
+    player.drawOverlay();
+    videolink.linesChanged();
+  }
   if (state.drag && parts.lines && !parts.back) {
     state.redraws.push(performance.now() - began);
     if (state.redraws.length > 2000) state.redraws.shift();
@@ -297,21 +306,12 @@ function draw() {
 /** What the video shows over the picture: the Glass and each line's height at that time. */
 function overlay(t) {
   if (!state.edits || !state.glassId) return "";
-  const glass = recipeGlass(), e = glass.ellipse;
-  const times = state.edits.times;
-  const i = lines.nearestIndex(times, t);
-  const near = Math.abs(times[i] - t) <= render.step(times);
-  const parts = [
-    `<ellipse cx="${e.center_x}" cy="${e.center_y}" rx="${e.radius_x}" ry="${e.radius_y}" style="fill:none;stroke:var(--glass-outline);stroke-width:1;stroke-dasharray:4 3" vector-effect="non-scaling-stroke"/>`,
-  ];
-  const chord = (y, style) => `<line x1="${e.center_x - e.radius_x - 12}" x2="${e.center_x + e.radius_x + 12}" y1="${y}" y2="${y}" style="${style}" vector-effect="non-scaling-stroke"/>`;
-  parts.push(chord(glass.zero_line_y, "stroke:var(--glass-outline);stroke-width:1;stroke-dasharray:6 4"));
-  const styles = { reference: "stroke:var(--reference);stroke-width:2;stroke-dasharray:6 4", foam: "stroke:var(--foam);stroke-width:2.5", oil: "stroke:var(--oil);stroke-width:2.5" };
-  for (const kind of render.KINDS) {
-    const y = near ? lineOf(state.glassId, kind).ys[i] : null;
-    if (y !== null) parts.push(chord(y, "stroke:var(--line-halo);stroke-width:5"), chord(y, styles[kind]));
-  }
-  return parts.join("");
+  return render.videoOverlay(recipeGlass(), state.edits.times, glassYs(), t);
+}
+
+/** The chosen Glass's lines as source-frame y per sample, for the videos. */
+function glassYs() {
+  return Object.fromEntries(render.KINDS.map((kind) => [kind, lineOf(state.glassId, kind).ys]));
 }
 
 // ---- pointer --------------------------------------------------------------------------------------
@@ -986,6 +986,49 @@ function setPlayhead(t, quiet = false) {
   requestDraw({ marks: true });
 }
 
+// ---- the full-size video window (Product SSOT §6) ------------------------------------------------
+
+const windowHooks = {
+  state: () => {
+    const glass = recipeGlass();
+    const times = state.analysis.times;
+    return {
+      ...player.status(),
+      glass: { name: glass.name, ellipse: glass.ellipse, zero_line_y: glass.zero_line_y },
+      range: { t0: times[0] ?? 0, t1: times[times.length - 1] ?? 0 },
+    };
+  },
+  lines: () => ({ glass_id: state.glassId, times: state.edits.times, ys: glassYs() }),
+  command: (message) => {  // the window's transport: the editor plays, and the window follows
+    if (!state.detail) return;
+    if (message.action === "toggle") player.toggle();
+    else if (message.action === "step") player.step(message.value < 0 ? -1 : 1);
+    else if (message.action === "speed" && Number.isFinite(message.value)) player.setSpeed(message.value);
+    else if (message.action === "seek" && Number.isFinite(message.value)) {
+      setPlayhead(message.value);
+      showPlayhead();
+    }
+  },
+};
+
+async function showVideoWindow() {
+  if (!state.detail) return;
+  try {
+    await videolink.show(state.detail.id, windowHooks);
+  } catch (error) {
+    notify("editorNotice", `영상 창을 열 수 없습니다: ${error.message}`, "error");
+  }
+}
+
+/** Scroll the view to the playhead when it is out of sight. */
+function showPlayhead() {
+  const t = state.playhead;
+  if (t >= state.view.t0 && t <= state.view.t1) return;
+  const span = state.view.t1 - state.view.t0;
+  state.view = { ...state.view, t0: t - span * 0.1, t1: t + span * 0.9 };
+  requestDraw({ back: true });
+}
+
 function onPlayerTime(t) {
   state.playhead = t;
   if (player.isPlaying() && (t < state.view.t0 || t > state.view.t1)) {  // keep the playhead in view
@@ -1440,6 +1483,7 @@ export function init(toList, openSetup) {
   nav.register("editorView", { title: "편집", onKey });
   player.wire();
   $("editorBack").addEventListener("click", leave);
+  $("videoWindow").addEventListener("click", showVideoWindow);
   $("sourceRecheck").addEventListener("click", () => checkSource().catch(() => {}));
   $("editorSave").addEventListener("click", save);
   $("editorSubmit").addEventListener("click", openSubmit);

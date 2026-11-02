@@ -51,6 +51,8 @@
   /* 2.5 Frame chrome */
   --frame-bg: #1B1F23;
   --frame-caption-bg: rgba(0,0,0,0.45);
+  --frame-button-bg: rgba(0,0,0,0.55);
+  --frame-button-hover: rgba(0,0,0,0.8);
   /* 2.6 Validation */
   --error: #BC2F32;
   --error-border: #D13438;
