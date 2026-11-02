@@ -1,7 +1,7 @@
 # Current Work Plan
 
 **Current milestone:** `V2-4b — Video window and pattern copy` / `ACTIVE`
-(started 2026-11-02; built; its Windows run next).
+(started 2026-11-02; built; its Windows run waits on the user).
 **Last completed:** `V2-4 — Judgment and report` / `DONE` (2026-11-02).
 
 This is the sole owner of the current state, authorization and next action.
@@ -206,9 +206,15 @@ judged once on the final build.
    `EDITED` (as a delete does), so it takes the check off when it touches
    Oil. At most 1,000 copies in one repeat (agent's choice). Checked by
    an in-page unit check and a browser smoke test on macOS.
-4. **A Windows run of V2-4b**, with the V2-1 items never seen on Windows
-   (a Recipe saved at a frame other than the first, a redirected
-   Documents folder, the resolution refusal's wording).
+4. **A Windows run of V2-4b — waits on the user:**
+   [2026-11-02-v2-4b-windows-request.md](../40-operations/2026-11-02-v2-4b-windows-request.md),
+   pinned to `f2d6850` (`checked=100`). The window on the untouched SPL#1
+   inspection 1910 (not saved; W1–W12, with a restart of the app for the
+   saved place), copy and paste on `V2-3 확인` (SPL#4, the on-off test;
+   saved; P1–P9). Expected tests on Windows: `248 passed, 4 skipped`. No
+   submitting anywhere. The V2-1 items never seen on Windows (a Recipe
+   saved at another frame, a redirected Documents folder, the resolution
+   refusal's wording) move to the V2-5 acceptance run.
 
 ## V2-5 preparation — recorded, on hold
 
@@ -380,4 +386,6 @@ The three v1 remote branches that v1 docs cite stay.
 ## Next
 
 - **Done:** V2-4 (2026-11-02).
-- **Next:** the V2-4b Windows request (step 4).
+- **Next:** the user's V2-4b Windows run
+  ([request](../40-operations/2026-11-02-v2-4b-windows-request.md)); judge
+  it, then close V2-4b and start V2-5 (its preparation is recorded above).
