@@ -1,8 +1,8 @@
 # Current Work Plan
 
 **Current milestone:** `V2-5 — Windows acceptance` / `ACTIVE`
-(started 2026-11-02; built and checked on macOS; the acceptance run waits
-on the user).
+(started 2026-11-02; the workstation part passed; the slowest PC and the
+user's notes are open).
 **Last completed:** `V2-4b — Video window and pattern copy` / `DONE`
 (2026-11-02).
 
@@ -464,8 +464,12 @@ The three v1 remote branches that v1 docs cite stay.
 ## Next
 
 - **Done:** V2-4b (2026-11-02).
-- **Next:** the user's V2-5 run
-  ([request](../40-operations/2026-11-02-v2-5-acceptance-windows-request.md)),
-  on the workstation and then the slowest PC; judge both result blocks
-  against the fixed criteria, then close V2-5 (and the first version) if
-  every row passes.
+- **V2-5 workstation part — passed** (2026-11-02,
+  [result](../60-evidence/2026-11-02-v2-5-acceptance-workstation-windows-result.md)):
+  every row on the `daf381a` build, A4–A6 in its window over Remote
+  Desktop (36.0 s; 2.8 / 7.4 ms; 50 ms; 59.6 s, 0 dropped), 159.6 MB.
+- **Next:** the slowest PC's result (§10 of the request); the user's word
+  on the refusal wording (particles) and on the three notes (line
+  selection and delete for every kind, drawing FULL/EMPTY, a tool that
+  changes nothing): first version or later. Close V2-5 when those are
+  settled.
