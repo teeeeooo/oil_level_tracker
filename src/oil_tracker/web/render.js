@@ -18,6 +18,9 @@
 // [{ n, t, h or null }]. The point line in progress is { kind, points: [{ t, h }], path, preview,
 // guides: [[{ t, h }, { t, h }]] }, where path and preview are { times, hs } or null. Copies about to
 // be pasted are paste: [{ t0, t1, label, times, hs: { oil, foam } }] (DESIGN.md §5 "copy and paste").
+// A line picked with the select tool is picked: { kind, times, hs, cut } with cut { times, hs } or
+// null, the part a Delete would empty; edge: { h, label } is the Glass edge a drawing landed on
+// (DESIGN.md §5 "select", "FULL and EMPTY").
 
 export const INSET = { left: 52, right: 16, top: 14, bottom: 10 };  // DESIGN.md §7: no line clipped at the edge
 export const KINDS = ["reference", "foam", "oil"];                  // drawing order: Oil on top
@@ -308,6 +311,15 @@ export function marksSvg(marks, view, width, height, id) {
   if (marks.compressor !== null && marks.compressor !== undefined) {
     parts.push(compressorLine(marks, s, height, id === "graph"));
   }
+  if (marks.picked) parts.push(pickedLine(marks.picked, s, view));
+  if (marks.edge) {
+    const y = s.sy(marks.edge.h);
+    parts.push(hline(y, INSET.left, width - INSET.right, "stroke:var(--oil);stroke-width:2"));
+    if (id === "graph") {
+      const below = marks.edge.label.startsWith("FULL");
+      parts.push(`<text x="${width - INSET.right - 4}" y="${below ? y + 16 : y - 6}" text-anchor="end" style="${TEXT};fill:var(--oil);font-weight:600">${marks.edge.label}</text>`);
+    }
+  }
   for (const memo of marks.memos ?? []) parts.push(memoPin(memo, s));
   if (marks.point) parts.push(pointLine(marks.point, s, view));
   for (const ghost of marks.paste ?? []) parts.push(pasteGhost(ghost, s, view, height));
@@ -316,6 +328,19 @@ export function marksSvg(marks, view, width, height, id) {
     parts.push(`<line x1="${x}" x2="${x}" y1="0" y2="${height}" style="stroke:var(--playhead);stroke-width:1"/>`);
   }
   parts.push("</g>");
+  return parts.join("");
+}
+
+/** The picked line: thicker, over a light band of its colour; the part a Delete would empty dashed
+ * white over it. */
+function pickedLine(picked, s, view) {
+  const parts = [];
+  const d = linePath(picked.times, picked.hs, s.sx, s.sy, view);
+  if (!d) return "";
+  parts.push(`<path d="${d}" style="stroke:var(--${picked.kind});stroke-opacity:0.18;stroke-width:12;${SHAPE}"/>`);
+  parts.push(`<path data-picked="${picked.kind}" d="${d}" style="stroke:var(--${picked.kind});stroke-width:3;${SHAPE}"/>`);
+  const cut = picked.cut && linePath(picked.cut.times, picked.cut.hs, s.sx, s.sy, view);
+  if (cut) parts.push(`<path data-cut d="${cut}" style="stroke:var(--bg-1);stroke-width:3;stroke-dasharray:3 3;${SHAPE}"/>`);
   return parts.join("");
 }
 

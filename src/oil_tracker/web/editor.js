@@ -10,7 +10,7 @@ import * as render from "./render.js";
 import * as videolink from "./videolink.js";
 import { $, MODES, clock, el, localDate, notify, parseClock, typing } from "./ui.js";
 
-const TOOL_KEYS = { KeyG: "grab", KeyP: "pencil", KeyL: "point", KeyR: "range", KeyH: "pan" };  // M opens the memo list
+const TOOL_KEYS = { KeyV: "select", KeyG: "grab", KeyP: "pencil", KeyL: "point", KeyR: "range", KeyH: "pan" };  // M opens the memo list
 const KIND_NAMES = { oil: "Oil", foam: "Foam", reference: "참조" };
 const VERDICTS = { PASS: ["합격", "pass"], FAIL: ["불합격", "fail"], REVIEW: ["검토 필요", "review"] };  // text, badge
 const HIT_PX = 8;          // how near a line a press grabs it
@@ -30,7 +30,7 @@ const state = {
   changes: 0,              // counts the changes, so a save knows whether more came while it ran
   derived: new Map(),      // glass id -> what follows from its lines (API)
   glassId: null,
-  tool: "grab",
+  tool: "select",          // the default: a click changes nothing (user, 2026-11-02)
   kind: "oil",             // the line the pencil and the point line draw
   width: 30,               // the grab width, seconds
   shape: "smooth",
@@ -42,6 +42,8 @@ const state = {
   playhead: 0,
   drag: null,
   hot: null,               // the line kind under the pointer
+  picked: null,            // the line picked with the select tool: { glassId, kind, first, end }, samples [first, end)
+  edge: null,              // the Glass edge a drawing landed on just now: "top", "bottom" or null
   history: new lines.History(),
   images: new Map(),       // "glass/kind" -> [{ url, width }]
   luma: new Map(),         // glass id -> the context image's luma
@@ -114,7 +116,7 @@ function release() {
   memoPicked.clear();
   $("memoPop").hidden = true;
   if ($("memoDialog").open) $("memoDialog").close();
-  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null, memo: null, point: null, submission: null, clipboard: null, paste: null });
+  Object.assign(state, { detail: null, analysis: null, edits: null, selection: null, drag: null, hot: null, picked: null, edge: null, memo: null, point: null, submission: null, clipboard: null, paste: null });
   setDirty(false);
   for (const id of ["graph", "context"]) for (const layer of $(id).children) layer.replaceChildren();
   $("axis").replaceChildren();
@@ -177,7 +179,9 @@ async function showGlass(fit) {
   videolink.stateChanged();  // the window draws this Glass now
   videolink.linesChanged();
   state.paste = null;  // a copy pastes only into its own Glass
+  state.picked = null;
   renderPaste();
+  renderPicked();
   renderGlassPanel();
   renderMemos();
   requestDraw({ back: true, lines: true, marks: true });
@@ -259,7 +263,10 @@ function marks() {
     ? { t0: state.edits.times[drag.index] - state.width, t1: state.edits.times[drag.index] + state.width, kind: drag.kind }
     : null;
   const compressor = drag?.type === "compressor" ? drag.time : null;
-  return { playhead: state.playhead, selection: state.selection, grab, compressor, memos: memoMarks(), point: pointMarks(), paste: pasteMarks() };
+  return {
+    playhead: state.playhead, selection: state.selection, grab, compressor, memos: memoMarks(), point: pointMarks(),
+    paste: pasteMarks(), picked: pickedMarks(), edge: edgeMark(),
+  };
 }
 
 // ---- drawing ------------------------------------------------------------------------------------
@@ -381,6 +388,123 @@ function settle(index, y) {
   return lines.snap(state.luma.get(state.glassId), index, y, layoutOf().y0);
 }
 
+// ---- FULL and EMPTY ---------------------------------------------------------------------------------
+// Product SSOT §6 (user, 2026-11-02), DESIGN.md §5 "FULL and EMPTY": a drawn height within
+// lines.EDGE_PULL_PX screen px of the Glass top or bottom lands on it, before the snap, which then
+// leaves it there; "FULL로" / "EMPTY로" draw a range's Oil line on it.
+
+/** The Glass top and bottom, source y. */
+function glassEdges() {
+  const e = recipeGlass().ellipse;
+  return { top: e.center_y - e.radius_y, bottom: e.center_y + e.radius_y };
+}
+
+/** A drawn height y (source px) on the plot `at` points in, pulled onto a Glass edge when near one;
+ * the edge it landed on is shown while drawing. */
+function pull(y, at) {
+  const { top, bottom } = glassEdges();
+  const perSource = Math.abs(at.s.sy(0) - at.s.sy(1));
+  const pulled = lines.edgePull(y, top, bottom, lines.EDGE_PULL_PX / perSource);
+  if (pulled.edge !== state.edge) {
+    state.edge = pulled.edge;
+    requestDraw({ marks: true });
+  }
+  return pulled.y;
+}
+
+/** The snap, but not for a height on a Glass edge. */
+function settleOffEdges(index, y) {
+  const { top, bottom } = glassEdges();
+  return y === top || y === bottom ? y : settle(index, y);
+}
+
+function pulledOrSettled(index, y, at) {
+  return settleOffEdges(index, pull(y, at));
+}
+
+function edgeMark() {
+  if (!state.edge || !state.edits) return null;
+  const { top, bottom } = glassEdges();
+  return state.edge === "top" ? { h: zero() - top, label: "FULL에 붙음" } : { h: zero() - bottom, label: "EMPTY에 붙음" };
+}
+
+/** "FULL로" / "EMPTY로": the selected range's Oil line on the Glass top or bottom, as drawn samples. */
+function fillSelection(edge) {
+  const s = state.selection;
+  if (!s || locked()) return;
+  const [first, end] = lines.indexRange(state.edits.times, s.t0, s.t1);
+  if (first === end) return;
+  const line = lineOf(state.glassId, "oil");
+  const base = lines.copyLine(line);
+  lines.fill(line, first, end, glassEdges()[edge]);
+  if (state.history.record(state.glassId, "oil", base, line)) changed();
+  requestDraw({ lines: true });
+}
+
+// ---- select -------------------------------------------------------------------------------------
+// Product SSOT §6 (user, 2026-11-02), DESIGN.md §5 "select": the default tool. A click moves the
+// playhead; on a line it picks the line joined to that point, which sets "그릴 선" to its kind.
+// Delete empties the picked line inside the range when there is one, else all of it.
+
+function pickAt(at) {
+  setPlayhead(at.t);
+  const hit = hitLine(at);
+  state.picked = hit ? { glassId: state.glassId, kind: hit.kind, ...piecePicked(hit) } : null;
+  if (hit) state.kind = hit.kind;
+  renderTools();
+  requestDraw({ lines: true, marks: true });
+}
+
+function piecePicked(hit) {
+  const [first, end] = lines.pieceAround(lineOf(state.glassId, hit.kind).ys, hit.index);
+  return { first, end };
+}
+
+/** The picked samples a Delete would empty: the range's share of the picked line, or all of it. */
+function pickedCut() {
+  const p = state.picked, s = state.selection;
+  if (!s) return [p.first, p.end];
+  const [first, end] = lines.indexRange(state.edits.times, s.t0, s.t1);
+  return [Math.max(first, p.first), Math.min(end, p.end)];
+}
+
+function erasePicked() {
+  const p = state.picked;
+  if (!p || locked()) return;
+  const [first, end] = pickedCut();
+  if (first >= end) {
+    notify("editorNotice", "고른 선이 고른 범위 안에 없습니다.");
+    return;
+  }
+  const line = lineOf(p.glassId, p.kind);
+  const base = lines.copyLine(line);
+  lines.erase(line, first, end);
+  if (state.history.record(p.glassId, p.kind, base, line)) changed();
+  requestDraw({ lines: true, marks: true });
+}
+
+function pickedMarks() {
+  const p = state.picked;
+  if (!p || p.glassId !== state.glassId) return null;
+  const times = state.edits.times, z = zero(), ys = lineOf(p.glassId, p.kind).ys;
+  const piece = (first, end) => ({ times: times.slice(first, end), hs: ys.slice(first, end).map((y) => (y === null ? null : z - y)) });
+  const [first, end] = pickedCut();
+  return { kind: p.kind, ...piece(p.first, p.end), cut: state.selection && first < end ? piece(first, end) : null };
+}
+
+function renderPicked() {
+  const p = state.picked;
+  $("pickedBox").hidden = !p;
+  $("eraseSelection").hidden = !!p;  // the picked line's own delete stands in
+  if (!p) return;
+  const times = state.edits.times;
+  const [t0, t1] = [times[p.first], times[p.end - 1]];
+  $("pickedSwatch").className = `swatch ${p.kind}`;
+  $("pickedText").textContent = `${KIND_NAMES[p.kind]} · ${clock(t0)} – ${clock(t1)} · ${(t1 - t0).toFixed(1)} s`;
+  $("erasePickedText").textContent = state.selection ? "고른 선을 범위 안만 지우기" : "고른 선 지우기";
+  $("erasePicked").disabled = locked();
+}
+
 function onPointerDown(event) {
   if (!state.edits || (event.button !== 0 && event.button !== 1)) return;
   const svg = event.currentTarget;
@@ -393,6 +517,10 @@ function onPointerDown(event) {
   }
   if (state.paste) {
     if (event.button === 0) pastePointerDown(at, start);
+    return;
+  }
+  if (state.tool === "select") {
+    state.drag = { ...start, type: "pick" };
     return;
   }
   if (state.tool === "point") {
@@ -428,9 +556,9 @@ function onPointerDown(event) {
   }
   if (state.tool === "pencil") {
     const line = lineOf(state.glassId, state.kind);
-    const y = zero() - at.h;
+    const y = pull(zero() - at.h, at);
     state.drag = { ...start, type: "pencil", kind: state.kind, base: lines.copyLine(line), last: { t: at.t, y } };
-    const [first] = lines.pencil(line, state.edits.times, at.t, y, at.t, y, settle);
+    const [first] = lines.pencil(line, state.edits.times, at.t, y, at.t, y, settleOffEdges);
     if (state.lock) Object.assign(state.drag, { anchor: { t: at.t, y: line.ys[first] }, touched: [first, first + 1] });
     requestDraw({ lines: true });
   }
@@ -468,7 +596,7 @@ function onPointerMove(event) {
     requestDraw({ marks: true });
   } else if (drag.type === "grab" && drag.moved) {
     const line = lineOf(state.glassId, drag.kind);
-    const target = settle(drag.index, drag.base.ys[drag.index] + (zero() - at.h) - drag.y0);
+    const target = pulledOrSettled(drag.index, drag.base.ys[drag.index] + (zero() - at.h) - drag.y0, at);
     lines.grab(line, drag.base, state.edits.times, drag.index, target, state.width, event.altKey ? "pointed" : state.shape);
     requestDraw({ lines: true });
   } else if (drag.type === "pencil" && drag.anchor) {
@@ -477,8 +605,8 @@ function onPointerMove(event) {
     requestDraw({ lines: true });
   } else if (drag.type === "pencil") {
     const line = lineOf(state.glassId, drag.kind);
-    const y = zero() - at.h;
-    lines.pencil(line, state.edits.times, drag.last.t, drag.last.y, at.t, y, settle);
+    const y = pull(zero() - at.h, at);
+    lines.pencil(line, state.edits.times, drag.last.t, drag.last.y, at.t, y, settleOffEdges);
     drag.last = { t: at.t, y };
     setPlayhead(Math.min(state.edits.times.at(-1), Math.max(state.edits.times[0], at.t)), true);
     requestDraw({ lines: true });
@@ -501,7 +629,9 @@ function lockedStroke(drag, at) {
 function onPointerUp() {
   const drag = state.drag;
   state.drag = null;
+  state.edge = null;
   if (!drag) return;
+  if (drag.type === "pick" && !drag.moved) pickAt(drag.at);
   if (["click", "pan", "select", "compressor", "memo"].includes(drag.type) && !drag.moved) {
     setPlayhead(drag.at.t);
   }
@@ -540,11 +670,12 @@ function hover(event) {
     event.currentTarget.style.cursor = over ? "pointer" : "";
     return;
   }
-  if (state.tool !== "grab" || !state.edits) return;
+  if ((state.tool !== "grab" && state.tool !== "select") || !state.edits) return;
   const at = pointer(event.currentTarget, event);
   const hit = hitLine(at);
   const hot = hit?.kind ?? null;
-  event.currentTarget.style.cursor = hot ? "ns-resize" : nearCompressor(at) ? "ew-resize" : "";
+  if (state.tool === "select") event.currentTarget.style.cursor = hot ? "pointer" : "";
+  else event.currentTarget.style.cursor = hot ? "ns-resize" : nearCompressor(at) ? "ew-resize" : "";
   if (hot !== state.hot) {
     state.hot = hot;
     requestDraw({ lines: true });
@@ -585,6 +716,8 @@ function tellWindow(unsaved) {
 }
 
 function changed() {
+  state.picked = null;  // its samples may have moved
+  renderPicked();
   state.changes += 1;
   setDirty(true);
   renderHeader();
@@ -823,7 +956,7 @@ function renderPaste() {
 /** The sample and source y the pointer points at, settled on a nearby edge when the snap is on. */
 function pointAt(at) {
   const index = lines.nearestIndex(state.edits.times, at.t);
-  return { index, y: settle(index, zero() - at.h) };
+  return { index, y: pulledOrSettled(index, zero() - at.h, at) };
 }
 
 /** The points a point at `index` would join: its neighbours in time, without one at that time. */
@@ -885,7 +1018,8 @@ async function askPath(glassId, points, quiet = false) {
   const id = encodeURIComponent(state.detail.id);
   const body = { glass_id: glassId, points: points.map((p) => ({ index: p.index, y: p.y })) };
   const result = await api.call("POST", `/api/inspections/${id}/point-line`, body);
-  if (result.ok) return result.data;
+  const { top, bottom } = glassEdges();
+  if (result.ok) return lines.holdEdges(result.data, points, top, bottom);
   if (!quiet) notify("editorNotice", result.data.error ?? `HTTP ${result.status}`, "error");
   return null;
 }
@@ -923,6 +1057,10 @@ async function askPreview() {
 }
 
 function leavePlot() {
+  if (state.edge && !state.drag) {
+    state.edge = null;
+    requestDraw({ marks: true });
+  }
   if (!state.point?.cursor) return;
   state.point.cursor = null;
   state.point.preview = null;
@@ -1545,14 +1683,19 @@ function renderSelection() {
   $("eraseKind").textContent = KIND_NAMES[state.kind];
   $("markSelection").disabled = !s;
   $("copySelection").disabled = !s;
+  $("fillFull").disabled = !s || locked();
+  $("fillEmpty").disabled = !s || locked();
   const marked = state.edits ? editsOf()?.cannot_judge ?? [] : [];
   $("clearSelection").disabled = !s || !marked.some((c) => c.end_sec > s.t0 && c.start_sec < s.t1);
+  renderPicked();  // its delete reads the range
 }
 
 function setTool(tool) {
   if (tool !== "point" && state.point) cancelPoint();
   if (state.paste) endPaste();
-  if (tool !== "range") state.selection = null;  // another tool lets the range go (user, 2026-10-30)
+  // another tool lets the range go (user, 2026-10-30), but select picks a line within it (2026-11-02)
+  if (tool !== "range" && tool !== "select") state.selection = null;
+  if (tool !== "select") state.picked = null;
   state.tool = tool;
   state.hot = null;
   for (const id of ["graph", "context"]) $(id).style.cursor = "";
@@ -1614,6 +1757,8 @@ function onKey(event) {
     commitPoint();
   } else if (state.point && event.key === "Backspace") {
     removeLastPoint();
+  } else if ((event.key === "Delete" || event.key === "Backspace") && state.picked) {
+    erasePicked();
   } else if (event.key === "Delete" || event.key === "Backspace") {
     eraseSelection();
   } else if (event.code === "KeyU") {
@@ -1623,7 +1768,11 @@ function onKey(event) {
     else if (state.paste) endPaste();
     else if (!$("memoPop").hidden) showMemoList(false);
     else if (state.point) cancelPoint();
-    else {
+    else if (state.picked) {
+      state.picked = null;
+      renderPicked();
+      requestDraw({ marks: true });
+    } else {
       state.selection = null;
       renderSelection();
       requestDraw({ marks: true });
@@ -1731,6 +1880,9 @@ export function init(toList, openSetup) {
     if (state.edits) showGlass(false);
   });
   $("eraseSelection").addEventListener("click", eraseSelection);
+  $("erasePicked").addEventListener("click", erasePicked);
+  $("fillFull").addEventListener("click", () => fillSelection("top"));
+  $("fillEmpty").addEventListener("click", () => fillSelection("bottom"));
   $("copySelection").addEventListener("click", copySelection);
   $("pasteStart").addEventListener("click", () => startPaste("places"));
   $("repeatStart").addEventListener("click", () => startPaste("repeat"));

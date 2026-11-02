@@ -1,11 +1,9 @@
 # V2-5 acceptance on the slowest PC — Windows result (2026-11-02)
 
-**Verdict:** A8's run part passes: the workstation's build, moved as a
-ZIP and run with nothing built there, opened and carried an inspection
-from analysis to a submitted report. **L-zip is open:** the result does
-not carry the ZIP's SHA-256 line (§10's first command), so that the
-package run is the workstation's (`zip_sha256=e1a4464b…a109d`) rests on
-the user's word until the line comes.
+**Verdict:** every slowest-PC row passes: the workstation's build, moved
+as a ZIP and run with nothing built there, opened and carried an
+inspection from analysis to a submitted report. The ZIP's SHA-256 came
+later (below).
 
 - **Request:** [§10](../40-operations/2026-11-02-v2-5-acceptance-windows-request.md),
   the ZIP of the `daf381a` build made on the workstation
@@ -17,7 +15,7 @@ the user's word until the line comes.
 
 | ID | Condition | Result |
 |---|---|---|
-| L-zip | §10's SHA-256 equals §4's `zip_sha256` | **open**: the line is not in the result |
+| L-zip | §10's SHA-256 equals §4's `zip_sha256` | **pass**, sent afterwards (user, 2026-11-02) as `e1a4464b64ba209fc5d98510...2a109d`, shortened in the relay; its first 24 and last 6 characters are the workstation's `e1a4464b64ba209fc5d98510ade15d10a1ed8b6ffb1392a8c4f3ed4a7e2a109d` |
 | A8-r | L1–L7 all O | **pass**: the app opened from the moved folder, analysed, edited, submitted and opened its report |
 | L-T | no `Traceback`; `(build)` | **pass**: one `start:` line, `(build)`, and `window: page loaded 6.6 s after start` |
 

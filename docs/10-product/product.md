@@ -213,7 +213,8 @@ Each Glass in a Recipe has one rule.
     draw, Oil, Foam or reference (user, 2026-10-30; before, the Oil line
     only); an empty Oil line counts as §4 says. U marks the range "cannot
     judge". One tool serves both (user, 2026-10-29). Another tool lets the
-    range go (user, 2026-10-30).
+    range go (user, 2026-10-30), except select, which picks a line inside
+    it (user, 2026-11-02).
   - **Point line:** click points on the context image or on the graph
     (user, 2026-10-30: on the graph to join line pieces, or to draw roughly
     while looking at the picture). With the snap on, each pair of

@@ -9,6 +9,7 @@ export const UNDO_DEPTH = 200;    // the spike's depth; the undo depth is the ag
 export const GRAB_WIDTHS = [2, 5, 10, 20, 30, 60, 120, 300, 600];  // seconds, stepped with [ and ]
 export const COPY_KINDS = ["oil", "foam"];  // what a copy holds (user, 2026-11-02)
 export const MAX_REPEATS = 1000;            // a repeat paste's copies, at most
+export const EDGE_PULL_PX = 6;              // screen px from the Glass top or bottom that land on it (V2-5)
 
 /** The sample nearest to t. */
 export function nearestIndex(times, t) {
@@ -73,6 +74,34 @@ export function pencil(line, times, t0, y0, t1, y1, settle = (i, y) => y) {
     line.origins[i] = "DRAWN";
   }
   return [first, end];
+}
+
+/** Draw the samples in [first, end) at one height, as "FULL로" and "EMPTY로" do (Product SSOT §6). */
+export function fill(line, first, end, y) {
+  for (let i = first; i < end; i++) {
+    line.ys[i] = y;
+    line.origins[i] = "DRAWN";
+  }
+}
+
+/** A drawn height `y` (source px) within `reach` of the Glass top or bottom lands on it (Product SSOT
+ * §6, user 2026-11-02): { y, edge } with edge "top", "bottom" or null. */
+export function edgePull(y, top, bottom, reach) {
+  if (Math.abs(y - top) <= reach) return { y: top, edge: "top" };
+  if (Math.abs(y - bottom) <= reach) return { y: bottom, edge: "bottom" };
+  return { y, edge: null };
+}
+
+/** A path between points: where two neighbouring points stand on the same Glass edge, the path
+ * between them stays on it, whatever the snap found. */
+export function holdEdges(path, points, top, bottom) {
+  const ys = [...path.ys];
+  for (let k = 1; k < points.length; k++) {
+    const a = points[k - 1], b = points[k];
+    if (a.y !== b.y || (a.y !== top && a.y !== bottom)) continue;
+    for (let i = Math.max(a.index, path.first); i <= b.index && i - path.first < ys.length; i++) ys[i - path.first] = a.y;
+  }
+  return { ...path, ys };
 }
 
 /** Empty the samples in [first, end): no line there until it is drawn (Product SSOT §4). */

@@ -73,5 +73,5 @@
 | 2026-10-30 | [2026-10-30-v2-4-judgment-report-windows-result.md](60-evidence/2026-10-30-v2-4-judgment-report-windows-result.md) | V2-4 판정·제출·보고서 워크스테이션 확인 결과 판정(U1·R2 미충족, 사용자 소감 2건) |
 | 2026-11-02 | [2026-11-02-v2-4-recheck-windows-result.md](60-evidence/2026-11-02-v2-4-recheck-windows-result.md) | V2-4 재확인 결과 판정(전 항목 통과, V2-4 종료, 추가 기능 요청 2건) |
 | 2026-11-02 | [2026-11-02-v2-4b-windows-result.md](60-evidence/2026-11-02-v2-4b-windows-result.md) | V2-4b 원본 영상 창·복사·붙여넣기 Windows 결과 판정(전 항목 통과, V2-4b 종료, 큰 창 배속 끊김) |
-| 2026-11-02 | [2026-11-02-v2-5-acceptance-slowest-pc-windows-result.md](60-evidence/2026-11-02-v2-5-acceptance-slowest-pc-windows-result.md) | V2-5 최저 사양 PC 결과 판정(옮긴 빌드 실행 통과, 분석 156.0초, ZIP SHA-256 줄 미수신) |
+| 2026-11-02 | [2026-11-02-v2-5-acceptance-slowest-pc-windows-result.md](60-evidence/2026-11-02-v2-5-acceptance-slowest-pc-windows-result.md) | V2-5 최저 사양 PC 결과 판정(옮긴 빌드 실행 통과, 분석 156.0초) |
 | 2026-11-02 | [2026-11-02-v2-5-acceptance-workstation-windows-result.md](60-evidence/2026-11-02-v2-5-acceptance-workstation-windows-result.md) | V2-5 워크스테이션 인수 결과 판정(빌드로 A1–A9 전 항목 통과, 사용자 소감 3건) |

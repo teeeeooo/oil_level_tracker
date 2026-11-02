@@ -215,7 +215,7 @@ def oil_path(page):
 
 
 def wait_for_oil(page, d):
-    page.wait_for_function("d => document.querySelector('#graph path[data-kind=oil]').getAttribute('d') === d", arg=d)
+    page.wait_for_function("d => document.querySelector('#graph path[data-kind=oil]')?.getAttribute('d') === d", arg=d)
 
 
 def point_on_oil(page, share):
@@ -277,7 +277,10 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         page.get_by_role("button", name="전체 보기").click()
         page.wait_for_function("v => document.getElementById('axisTo').value === v", arg=whole)
 
-        # grab-and-drag moves the Oil line; undo puts it back, redo again
+        # grab-and-drag moves the Oil line; undo puts it back, redo again. The editor opens on the
+        # select tool, which changes nothing (user, 2026-11-02)
+        assert page.locator('#editorView [data-tool="select"]').get_attribute("aria-pressed") == "true"
+        page.locator('#editorView [data-tool="grab"]').click()
         before = oil_path(page)
         start = point_on_oil(page, 0.5)
         drag(page, start, (start[0], start[1] + 40))
@@ -460,6 +463,7 @@ def test_the_compressor_marker_moves(tmp_path, video, browser_page):
         assert facts.locator("td").inner_text() == "00:01.0"
 
         # the grab tool drags the marker where no line is under the pointer
+        page.locator('#editorView [data-tool="grab"]').click()
         box = page.locator("#graph").bounding_box()
         x = box["x"] + float(page.locator("#graph line[style*=compressor]").get_attribute("x1"))
         y = box["y"] + 30
@@ -1040,6 +1044,111 @@ def test_copy_and_paste(tmp_path, video, browser_page):
         page.keyboard.press("Control+z")  # the whole repeat is one step
         ys, _ = saved_oil()
         assert ys[3:5] == oil0[3:5] and ys[5:7] == oil0[1:3] and ys[7] == oil0[7]
+        assert errors == []
+    finally:
+        running.close()
+
+
+def test_select_delete_and_full_empty(tmp_path, video, browser_page):
+    # Product SSOT §6 (user, 2026-11-02, after the V2-5 workstation run): the select tool changes
+    # nothing and picks a joined line, which Delete empties (inside the range if one is selected);
+    # drawing near the Glass top lands on it, and "FULL로" draws a range's Oil line there.
+    page, errors = browser_page
+    data = tmp_path / "data"
+    write_recipes(data / "Recipes")
+    running = bootstrap.start(data_folder=data)
+    try:
+        analysed_inspection(running, video, "선택")
+        page.goto(running.url)
+        page.locator("#inspectionRows tr", has_text="선택").get_by_role("button", name="열기", exact=True).click()
+        page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+        box = page.locator("#graph").bounding_box()
+        tool = lambda name: page.locator(f'#editorView [data-tool="{name}"]')
+        assert tool("select").get_attribute("aria-pressed") == "true"
+        pieces = lambda: (oil_path(page) or "").count("M") if page.locator("#graph path[data-kind=oil]").count() else 0
+
+        # a click on empty space moves the playhead and changes nothing
+        page.mouse.click(box["x"] + box["width"] * 0.9, box["y"] + box["height"] - 14)
+        assert page.locator("#editorState").inner_text().startswith("초안 그대로")
+        assert page.locator("#pickedBox").is_hidden()
+
+        # a click on the Oil line picks the joined line; Delete empties all of it; undo brings it back
+        before = oil_path(page)
+        page.mouse.click(*point_on_oil(page, 0.5))
+        assert page.locator("#pickedText").inner_text().startswith("Oil · ")
+        page.locator("#graph path[data-picked=oil]").wait_for(state="attached")  # drawn on the next frame
+        assert page.locator("#erasePickedText").inner_text() == "고른 선 지우기"
+        assert page.locator("#eraseSelection").is_hidden()
+        page.keyboard.press("Delete")
+        page.get_by_text("저장 안 함").wait_for()
+        page.wait_for_function("!document.querySelector('#graph path[data-kind=oil]')")
+        assert page.locator("#pickedBox").is_hidden()
+        page.keyboard.press("Control+z")
+        wait_for_oil(page, before)
+
+        # with a range kept from the range tool, Delete empties the picked line inside it only
+        tool("range").click()
+        y = box["y"] + box["height"] / 2
+        drag(page, (box["x"] + box["width"] * 0.42, y), (box["x"] + box["width"] * 0.62, y))
+        tool("select").click()
+        assert page.locator("#selectionBox").is_visible()  # the select tool keeps the range
+        page.mouse.click(*point_on_oil(page, 0.52))
+        assert page.locator("#erasePickedText").inner_text() == "고른 선을 범위 안만 지우기"
+        page.locator("#graph path[data-cut]").wait_for(state="attached")
+        shot(page, "select-picked-in-range")
+        page.keyboard.press("Delete")
+        page.wait_for_function("(document.querySelector('#graph path[data-kind=oil]')?.getAttribute('d').match(/M/g) || []).length >= 2")
+        assert pieces() >= 2
+        page.keyboard.press("Control+z")
+        wait_for_oil(page, before)
+        page.mouse.click(*point_on_oil(page, 0.52))  # a delete lets the picked line go: pick it again
+        page.keyboard.press("Escape")  # the picked line goes first
+        assert page.locator("#pickedBox").is_hidden() and page.locator("#selectionBox").is_visible()
+        page.keyboard.press("Escape")
+
+        # the reference line is picked and deleted the same way
+        page.locator("#lineKind button[data-kind=reference]").click()
+        tool("pencil").click()
+        drag(page, (box["x"] + box["width"] * 0.3, y + 20), (box["x"] + box["width"] * 0.7, y + 20))
+        page.wait_for_selector("#graph path[data-kind=reference]")
+        tool("select").click()
+        page.mouse.click(box["x"] + box["width"] * 0.5, y + 20)
+        assert page.locator("#pickedText").inner_text().startswith("참조 · ")
+        page.keyboard.press("Delete")
+        page.wait_for_function("!document.querySelector('#graph path[data-kind=reference]')")
+
+        # "FULL로" draws the range's Oil line on the Glass top: the FULL band follows
+        page.locator("#lineKind button[data-kind=oil]").click()
+        tool("range").click()
+        drag(page, (box["x"] + box["width"] * 0.2, y), (box["x"] + box["width"] * 0.8, y))
+        page.locator("#fillFull").click()
+        page.wait_for_function("[...document.querySelectorAll('#graph text')].some((t) => t.textContent === 'FULL')")
+        page.keyboard.press("Control+z")
+        page.wait_for_function("![...document.querySelectorAll('#graph text')].some((t) => t.textContent === 'FULL')")
+
+        # the pencil 3 px below the Glass top lands on it, shown while drawing
+        tool("pencil").click()
+        top = box["y"] + 14  # render.INSET.top: the fitted view's Glass top
+        page.mouse.move(box["x"] + box["width"] * 0.3, top + 3)
+        page.mouse.down()
+        for k in range(1, 9):
+            page.mouse.move(box["x"] + box["width"] * (0.3 + 0.05 * k), top + 3)
+        page.wait_for_function("[...document.querySelectorAll('#graph text')].some((t) => t.textContent === 'FULL에 붙음')")
+        shot(page, "full-pull")
+        page.mouse.up()
+        page.wait_for_function("[...document.querySelectorAll('#graph text')].some((t) => t.textContent === 'FULL')")
+        page.wait_for_function("![...document.querySelectorAll('#graph text')].some((t) => t.textContent === 'FULL에 붙음')")
+
+        unit = page.evaluate("""async () => {
+            const l = await import("/web/lines.js");
+            const line = { ys: [5, 6, 7], origins: ["DRAFT", "DRAFT", "DRAFT"] };
+            l.fill(line, 1, 3, 2);
+            const held = l.holdEdges({ first: 0, ys: [9, 7, 8, 9] }, [{ index: 0, y: 9 }, { index: 3, y: 9 }], 9, 90);
+            return { line, near: l.edgePull(12, 10, 90, 3), far: l.edgePull(20, 10, 90, 3), low: l.edgePull(88, 10, 90, 3), held: held.ys };
+        }""")
+        assert unit["line"] == {"ys": [5, 2, 2], "origins": ["DRAFT", "DRAWN", "DRAWN"]}
+        assert unit["near"] == {"y": 10, "edge": "top"} and unit["far"] == {"y": 20, "edge": None}
+        assert unit["low"] == {"y": 90, "edge": "bottom"} and unit["held"] == [9, 9, 9, 9]
         assert errors == []
     finally:
         running.close()

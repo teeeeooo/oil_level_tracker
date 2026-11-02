@@ -476,9 +476,10 @@ The three v1 remote branches that v1 docs cite stay.
   the range if one is selected, else the whole joined line; FULL/EMPTY by
   both an edge pull while drawing and "FULL로" / "EMPTY로" on a range.
   The SPL#1 inspection's missing name was the user's omission.
-- **Mock-ups — wait on the user:**
+- **Mock-ups — confirmed** (user, 2026-11-02):
   [editor.html](../../design/mockup/editor.html) `#select`, `#selrange`,
-  `#edge`. Agent's choices in them: the tool is "선택" (V), first in the
+  `#edge`; in DESIGN.md §5 ("select", "FULL and EMPTY"). Agent's choices in
+  them: the tool is "선택" (V), first in the
   toolbar, an arrow; a picked line is drawn thicker over a light band of
   its colour and sets "그릴 선" to its kind; the panel's "고른 선" box
   names it and its span; Esc lets the line go before the range; with a
@@ -486,13 +487,24 @@ The three v1 remote branches that v1 docs cite stay.
   "EMPTY로" always act on Oil, as drawn samples (taking the check off);
   the edge pull is 6 screen px, shown by the Glass edge turning Oil blue
   with "FULL에 붙음" / "EMPTY에 붙음", for Oil, Foam and reference alike.
-- **Slowest PC — A8's run passes** (2026-11-02,
+- **Slowest PC — every row passes** (2026-11-02,
   [result](../60-evidence/2026-11-02-v2-5-acceptance-slowest-pc-windows-result.md)):
   the moved build ran the whole flow; analysis 156.0 s, window 6.6 s by
-  the log. **L-zip open:** the ZIP's SHA-256 line did not come back.
+  the log; the ZIP's SHA-256 came afterwards and matches.
   The user missed the header field: it is in the setup and the "제출"
   dialog (no editor section since V2-4b); the request's "검사 정보에"
   was wrong.
-- **Next:** the ZIP's SHA-256 line from the slowest PC; the user's word
-  on the mock-ups, then build the three, then a Windows re-check on a new
-  build (the editor rows and A5). V2-5 closes after both.
+- **Built** (2026-11-02): `editor.js` sections "select" (`pickAt`,
+  `erasePicked`, `pickedCut`, `renderPicked`) and "FULL and EMPTY"
+  (`pull`, `settleOffEdges`, `fillSelection`); `lines.js` `fill`,
+  `edgePull`, `holdEdges`, `EDGE_PULL_PX`; `render.js` marks `picked` and
+  `edge`. Compressor-marker drags stay with grab. Smoke test
+  `test_select_delete_and_full_empty`; 280 tests pass on macOS.
+- **L-zip closed:** the slowest PC's line reads
+  `e1a4464b64ba209fc5d98510…2a109d` (shortened in the relay), the
+  workstation's start and end.
+- **The header (user, 2026-11-02):** editable while editing in the "제출"
+  dialog, as it already is; no change.
+- **Next:** a Windows re-check of these on a new build: the three
+  features, the refusal wording, and A5 measured again in the build.
+  Then V2-5 closes.

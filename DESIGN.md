@@ -339,7 +339,30 @@ Do not use sizes outside this ramp.
         range with "<line> 선 지우기 (Delete)" naming the chosen line,
         "판단 불가 (U)", "판단 불가 풀기" and "복사 (Ctrl+C)", wrapping
         inside the column, or the point line in progress with its keys.
-        Another tool lets the range go;
+        Another tool lets the range go, except 선택 (below);
+      - **select** (V2-5, confirmed by the user on 2026-11-02 in
+        [editor.html](design/mockup/editor.html) `#select`, `#selrange`):
+        - "선택" (V), an arrow, first in the toolbar and the editor's
+          default tool. A click moves the playhead; a click within the hit
+          distance of a line picks the line joined to that point and sets
+          "그릴 선" to its kind; a drag does nothing (Shift-drag and the
+          wheel still move the view); the pointer is a hand over a line;
+        - the picked line is drawn 3 px over a 12 px band of its colour at
+          18 %; with a range, the part a Delete would empty is dashed
+          `--bg-1` (3 3) over it;
+        - "고른 선" (a `selbox`, above the range's) names its kind, span and
+          length, with "고른 선 지우기 (Delete)", or "고른 선을 범위 안만
+          지우기" with a range, whose own delete then hides. Esc lets the
+          line go before the range; any change lets it go;
+      - **FULL and EMPTY** (V2-5, confirmed by the user on 2026-11-02 in
+        `#selrange`, `#edge`):
+        - the range box's second row, "Oil을" "FULL로" / "EMPTY로", draws
+          the range's Oil on the Glass top / bottom as drawn samples;
+        - a height the pencil, the point line or a grab draws within
+          6 screen px of the Glass top or bottom lands on it, before the
+          snap; meanwhile that edge is a 2 px `--oil` line labelled
+          "FULL에 붙음" / "EMPTY에 붙음" on the graph. Between two points on
+          the same edge, the point line stays on it;
       - **copy and paste** (V2-4b, confirmed by the user on 2026-11-02 in
         [editor.html](design/mockup/editor.html) `#copy`, `#paste`,
         `#repeat`):

@@ -98,6 +98,7 @@
     <div class="sep"></div>
     <div class="title"><b id="editorTitle"></b><span id="editorState"></span></div>
     <div class="sep"></div>
+    <button class="tool labeled" data-tool="select" title="선택 (V): 클릭하면 그 시각으로 가고, 선을 클릭하면 이어진 선을 고릅니다. 선은 바뀌지 않습니다"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l10 6.5-4.5 1L13 16l-2 1-2.5-5.5L5 15z" stroke-linejoin="round"/></svg>선택</button>
     <button class="tool labeled" data-tool="grab" title="잡아끌기 (G)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13c3 0 4-6 8-6s5 6 8 6"/><path d="M10 3v4M8 5l2-2 2 2"/></svg>잡아끌기</button>
     <button class="tool labeled" data-tool="pencil" title="연필 (P)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l1-4 8-8 3 3-8 8z"/><path d="M11 6l3 3"/></svg>연필</button>
     <button class="tool labeled" data-tool="point" title="점 잇기 (L): 맥락 이미지나 그래프에 점을 찍으면 점 사이를 잇습니다. 스냅을 켜면 곧은 선 8 px 안의 경계를 따라갑니다"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 14c2-1 3-6 6-6s3 4 6 2"/><circle cx="4" cy="14" r="1.8" fill="currentColor"/><circle cx="10" cy="8" r="1.8" fill="currentColor"/><circle cx="16" cy="10" r="1.8" fill="currentColor"/></svg>점 잇기</button>
@@ -184,6 +185,10 @@
             <span class="seg" id="grabShape"><button data-shape="smooth">부드럽게</button><button data-shape="pointed">뾰족하게</button></span><span class="caption"><kbd>Alt</kbd>+끌기</span></div>
           <div class="row"><span class="label wide">연필</span><label class="toggle"><input type="checkbox" id="lockToggle" role="switch"><span class="switch"></span>수평</label><span class="caption">누른 높이로 곧게</span></div>
           <div class="row"><span class="label wide">스냅 <kbd>S</kbd></span><label class="toggle"><input type="checkbox" id="snapToggle" role="switch"><span class="switch"></span>켬</label><span class="caption">8 px 안의 경계에 붙음</span></div>
+          <div class="selbox" id="pickedBox" hidden>
+            <div class="head">고른 선 <span class="num"><i class="swatch oil" id="pickedSwatch"></i><span id="pickedText"></span></span></div>
+            <div class="row"><button class="btn small" id="erasePicked"><span id="erasePickedText">고른 선 지우기</span> <kbd>Delete</kbd></button><span class="caption">범위를 함께 고르면 범위 안만 지웁니다 · <kbd>Esc</kbd>로 풂</span></div>
+          </div>
           <div class="selbox" id="selectionBox" hidden>
             <div class="head">선택한 범위 <span class="num" id="selectionText"></span></div>
             <div class="row">
@@ -192,6 +197,7 @@
               <button class="btn small" id="clearSelection">판단 불가 풀기</button>
               <button class="btn small" id="copySelection">복사 <kbd>Ctrl+C</kbd></button>
             </div>
+            <div class="row"><span class="label">Oil을</span><button class="btn small" id="fillFull">FULL로</button><button class="btn small" id="fillEmpty">EMPTY로</button><span class="caption">범위 안 Oil을 Glass 맨 위 / 맨 아래로</span></div>
           </div>
           <div class="selbox" id="copyBox" hidden>
             <div class="head">복사한 구간 <span class="num" id="copyText"></span></div>
@@ -450,11 +456,13 @@
     <section data-help="editorView">
       <h3>도구</h3>
       <table class="keys">
+        <tr><td><kbd>V</kbd> 선택</td><td>처음 켜져 있는 도구로, 아무것도 바꾸지 않습니다. 그래프나 맥락 이미지를 클릭하면 그 시각으로 가서 원본 영상이 그 프레임을 보여 줍니다. 선(Oil, Foam, 참조)을 클릭하면 끊김 없이 이어진 선이 골라지고 "그릴 선"도 그 선으로 바뀝니다. <kbd>Delete</kbd>는 고른 선을 지웁니다: 범위가 골라져 있으면 범위 안만, 아니면 이어진 선 전체. <kbd>Esc</kbd>로 풉니다.</td></tr>
         <tr><td><kbd>G</kbd> 잡아끌기</td><td>선을 잡아 위아래로 끕니다. 끌기 폭 안의 이웃이 부드럽게 따라옵니다. <kbd>Alt</kbd>를 누른 채 끌면 잡은 곳이 뾰족하게 꺾입니다.</td></tr>
         <tr><td><kbd>P</kbd> 연필</td><td>"그릴 선"을 끈 자리대로 다시 그립니다. 지나간 시간 범위가 바뀝니다. 오른쪽 "수평"을 켜면 누른 높이로 수평선만 그립니다.</td></tr>
         <tr><td><kbd>L</kbd> 점 잇기</td><td>맥락 이미지나 그래프를 클릭해 점을 찍으면, 스냅이 켜져 있을 때는 점 사이를 곧게 이은 선에서 8 px 안의 맥락 이미지 경계를 따라(경계가 없으면 곧게), 꺼져 있을 때는 곧게 잇습니다. 포인터 자리에 찍으면 생길 연결을 미리 보여 줍니다. <kbd>Enter</kbd>로 확정하면 첫 점부터 마지막 점까지 "그릴 선"이 됩니다. <kbd>Backspace</kbd>는 마지막에 찍은 점을 빼고, <kbd>Esc</kbd>는 취소합니다.</td></tr>
-        <tr><td><kbd>R</kbd> 범위</td><td>그래프나 맥락 이미지를 가로로 끌어 시간 범위를 고릅니다. 양 끝을 끌어 조정하고, <kbd>Esc</kbd>나 다른 도구로 풉니다.</td></tr>
-        <tr><td><kbd>Delete</kbd></td><td>고른 범위에서 "그릴 선"(Oil, Foam, 참조 중 고른 선)을 지웁니다. Oil 선을 지운 곳은 다시 그릴 때까지 빈 구간(무효)입니다.</td></tr>
+        <tr><td><kbd>R</kbd> 범위</td><td>그래프나 맥락 이미지를 가로로 끌어 시간 범위를 고릅니다. 양 끝을 끌어 조정하고, <kbd>Esc</kbd>나 다른 도구로 풉니다(선택 도구로 바꾸면 범위가 남습니다). "FULL로" / "EMPTY로"는 범위 안 Oil을 Glass 맨 위 / 맨 아래로 그립니다.</td></tr>
+        <tr><td>FULL · EMPTY</td><td>연필, 점 잇기, 잡아끌기로 Glass 맨 위나 맨 아래에서 화면 6 px 안을 그리면 정확히 맨 위(FULL) / 맨 아래(EMPTY)에 붙습니다. 붙는 동안 그 가장자리가 Oil 색으로 보입니다.</td></tr>
+        <tr><td><kbd>Delete</kbd></td><td>선택 도구로 고른 선이 있으면 그 선을, 없으면 고른 범위에서 "그릴 선"(Oil, Foam, 참조 중 고른 선)을 지웁니다. Oil 선을 지운 곳은 다시 그릴 때까지 빈 구간(무효)입니다.</td></tr>
         <tr><td><kbd>U</kbd> · "판단 불가 풀기"</td><td>고른 범위를 판단 불가로 표시합니다(빗금). 그 샘플은 유효하지도, 빈 구간도 아닙니다. "판단 불가 풀기"는 고른 범위만큼 표시를 지웁니다.</td></tr>
         <tr><td><kbd>Ctrl</kbd>+<kbd>C</kbd></td><td>고른 범위의 Oil과 Foam을 빈 샘플까지 그대로 복사합니다. 복사한 Glass에만 붙여 넣을 수 있습니다.</td></tr>
         <tr><td><kbd>Ctrl</kbd>+<kbd>V</kbd></td><td>붙여넣기: 복사본이 커서를 따라다니고, 클릭한 시각에서 시작해 붙습니다. 높이는 복사한 그대로이고 스냅은 쓰지 않습니다. <kbd>Esc</kbd>로 끝냅니다.</td></tr>
