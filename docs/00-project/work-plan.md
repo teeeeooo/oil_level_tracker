@@ -510,9 +510,11 @@ The three v1 remote branches that v1 docs cite stay.
     point, not the white tone; the app-icon SVG stays out of the video.
   None of the compressor samples fit (sample4's glass is small and flat,
   sample2 moves, base_sample_1 is short and overlaid, public_miso is cut
-  clips). **Now:** draft 1 (dark, letters as sight glasses; 40 s; the
-  render takes about 10 min on this Mac) is with the user; their notes
-  come next.
+  clips). After draft 1 (user, 2026-11-02): no outline letters (they
+  showed the overlapping strokes), the draft pulled into place by the
+  inspector with the judgment card kept at 합격, and the screens assembled
+  in one front-on editor; music from the user's Suno track (internal use),
+  edited to 55 s on its bars. **Now:** draft 2 is with the user.
 - **Then, in order** (user, 2026-11-02):
   1. **P-2 — a user manual**, as HTML or another fitting form;
   2. **P-3 — fixes for problems found in field use.**

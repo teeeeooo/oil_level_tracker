@@ -5,11 +5,11 @@ Stages:
    through this folder's server in a temporary data folder, its Oil line taken from the context image
    where the draft misses, the screens captured in Chrome, and frames of the video;
 2. the frames: design/intro/intro.html in Chrome, seek(t) and a screenshot every 1/30 s;
-3. the sound: the page's cues, synthesised here (no recorded sound, nothing to license);
+3. the sound: the music, edited to the video (MUSIC_EDIT), with the page's cues synthesised here on top;
 4. both muxed by imageio-ffmpeg's ffmpeg into an H.264 + AAC MP4.
 
-Usage: python scripts/render_intro.py [--video sample/sample7.mp4] [--out ~/Movies/OilLevelTracker/intro.mp4]
-           [--skip-assets] [--stills 3.5,20]
+Usage: python scripts/render_intro.py [--video sample/sample7.mp4] [--music TRACK.mp3]
+           [--out ~/Movies/OilLevelTracker/intro.mp4] [--skip-assets] [--stills 3.5,20]
 """
 
 from __future__ import annotations
@@ -141,8 +141,14 @@ def make_assets(video: Path) -> None:
             glass["oil"] = {"ys": ys, "origins": ["DRAWN"] * len(ys)}
             glass["decision"] = {"override": None, "reason": "", "checked_at": datetime.now(timezone.utc).isoformat()}
             server.call("POST", f"/api/inspections/{inspection}/edits", {"edits": edits})
-            (ASSETS / "line.json").write_text(json.dumps(
-                {"draft": draft, "ys": ys, "top": top, "bottom": bottom, "zero": ZERO_Y, "times": edits["times"]}))
+            recovery = {}  # the app's own judgment of each line, to check the page's
+            for key, line in (("draft", draft), ("ys", ys)):
+                trial = json.loads(json.dumps(edits))
+                trial["glasses"][0]["oil"] = {"ys": line, "origins": ["DRAWN"] * len(line)}
+                state = server.call("POST", f"/api/inspections/{inspection}/edits/states", {"edits": trial})["glasses"][0]
+                recovery[key] = state["judgment"]["recovery"]
+            line_facts = {"draft": draft, "ys": ys, "top": top, "bottom": bottom, "zero": ZERO_Y, "times": edits["times"],
+                          "compressor_sec": COMPRESSOR_SEC, "rule": RULE, "recovery": recovery}
 
             # the editor, then the submitted report
             page.goto(server.url)
@@ -152,6 +158,13 @@ def make_assets(video: Path) -> None:
             page.screenshot(path=str(ASSETS / "editor.png"))
             page.locator("#editorView .editor-left").screenshot(path=str(ASSETS / "graph.png"))
             page.locator("#judgmentSection").screenshot(path=str(ASSETS / "judgment.png"))
+            # where the editor's parts are, in its 1600 x 900 page, for the scene that assembles it
+            line_facts["editor"] = {
+                name: page.locator(selector).first.bounding_box() for name, selector in (
+                    ("toolbar", "#editorView header.toolbar"), ("graph", "#graphBox"), ("context", "#contextBox"),
+                    ("judgment", "#judgmentSection"), ("submit", "#editorSubmit"))
+            }
+            (ASSETS / "line.json").write_text(json.dumps(line_facts))
             server.call("POST", f"/api/inspections/{inspection}/submit", {"edits": edits})
             report = next((data / "Inspections").glob("*/versions/001/report.html"))
             page.goto(report.as_uri())
@@ -281,7 +294,7 @@ def reverb(x: np.ndarray) -> np.ndarray:
     return out
 
 
-def soundtrack(cues: list, duration: float) -> np.ndarray:
+def effects(cues: list, duration: float) -> np.ndarray:
     rng = np.random.default_rng(7)
     mix_ = np.zeros(int((duration + 1) * RATE))
     for at, kind, gain in cues:
@@ -289,9 +302,19 @@ def soundtrack(cues: list, duration: float) -> np.ndarray:
         start = int(at * RATE)
         end = min(len(mix_), start + len(clip))
         mix_[start:end] += clip[: end - start]
-    mix_ = reverb(mix_)[: int(duration * RATE)]
-    mix_ *= 0.5 / max(1e-9, np.abs(mix_).max())  # about -6 dBFS at the loudest
-    return mix_
+    return reverb(mix_)[: int(duration * RATE)]
+
+
+def soundtrack(cues: list, duration: float, music: Path | None) -> np.ndarray:
+    """Stereo: the music with the effects on top, or the effects alone; -1 dBFS at the loudest."""
+    sfx = effects(cues, duration)
+    if music is None:
+        mix_ = np.repeat(sfx[:, None] / max(1e-9, np.abs(sfx).max()) * 0.5, 2, axis=1)
+    else:
+        song = music_track(music, duration)
+        sfx *= 0.35 * np.abs(song).max() / max(1e-9, np.abs(sfx).max())  # under the music
+        mix_ = song + sfx[:, None]
+    return mix_ * (0.89 / max(1e-9, np.abs(mix_).max()))
 
 
 def write_wav(path: Path, samples: np.ndarray) -> None:
@@ -300,12 +323,44 @@ def write_wav(path: Path, samples: np.ndarray) -> None:
         out.setnchannels(2)
         out.setsampwidth(2)
         out.setframerate(RATE)
-        out.writeframes(np.repeat(pcm[:, None], 2, axis=1).tobytes())
+        out.writeframes(pcm.tobytes())
+
+
+# the music (user, 2026-11-02: a Suno track, for the department's own use): 108 BPM, bars of 2.222 s
+# from 0.034 s. The video keeps bars 0-17 (intro, build, the main section and its one-bar rest), then
+# jumps to bar 66, the last section, whose final hit (bar 70) and tail end the video: 55.0 s in all.
+# design/intro/intro.html times its scenes to these bars.
+BAR, FIRST_BEAT = 60 / 108 * 4, 0.034
+MUSIC_EDIT = ((0.0, FIRST_BEAT + 18 * BAR), (FIRST_BEAT + 66 * BAR, None))
+SPLICE_SEC = 0.03
+
+
+def music_track(path: Path, duration: float) -> np.ndarray:
+    """The edited music, stereo at RATE, duration seconds long."""
+    import imageio_ffmpeg
+
+    raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), "-loglevel", "error", "-i", str(path), "-vn",
+                          "-ac", "2", "-ar", str(RATE), "-f", "f32le", "-"], capture_output=True, check=True).stdout
+    audio = np.frombuffer(raw, "<f4").reshape(-1, 2).astype(float)
+    fade = int(SPLICE_SEC * RATE)
+    out = np.zeros((0, 2))
+    for start, end in MUSIC_EDIT:
+        piece = audio[int(start * RATE): None if end is None else int(end * RATE)].copy()
+        if len(out):
+            ramp = np.linspace(0, 1, fade)[:, None]
+            out[-fade:] = out[-fade:] * (1 - ramp) + piece[:fade] * ramp
+            piece = piece[fade:]
+        out = np.concatenate([out, piece])
+    total = int(duration * RATE)
+    out = np.pad(out, ((0, max(0, total - len(out))), (0, 0)))[:total]
+    tail = int(0.5 * RATE)
+    out[-tail:] *= np.linspace(1, 0, tail)[:, None]
+    return out
 
 
 # ---- 4. the MP4 ----
 
-def render(out: Path) -> None:
+def render(out: Path, music: Path | None) -> None:
     import imageio_ffmpeg
     from playwright.sync_api import sync_playwright
 
@@ -314,11 +369,11 @@ def render(out: Path) -> None:
         browser, page, meta, errors = open_page(playwright)
         fps, duration = meta["fps"], meta["duration"]
         audio = Path(temp) / "sound.wav"
-        write_wav(audio, soundtrack(meta["cues"], duration))
+        write_wav(audio, soundtrack(meta["cues"], duration, music))
         command = [
             imageio_ffmpeg.get_ffmpeg_exe(), "-y", "-loglevel", "error",
             "-f", "image2pipe", "-framerate", str(fps), "-i", "-", "-i", str(audio),
-            "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p",
+            "-c:v", "libx264", "-preset", "slow", "-crf", "20", "-pix_fmt", "yuv420p",
             "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(out),
         ]
         encoder = subprocess.Popen(command, stdin=subprocess.PIPE)
@@ -326,7 +381,7 @@ def render(out: Path) -> None:
         total = int(duration * fps)
         for i in range(total):
             page.evaluate(f"window.intro.seek({i / fps})")
-            encoder.stdin.write(page.screenshot(type="png"))
+            encoder.stdin.write(page.screenshot(type="jpeg", quality=95))
             if i % (fps * 5) == 0:
                 print(f"  frame {i}/{total} at {time.perf_counter() - began:.0f}s", flush=True)
         encoder.stdin.close()
@@ -356,6 +411,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--video", type=Path, default=ROOT / "sample" / "sample7.mp4")
     parser.add_argument("--out", type=Path, default=Path.home() / "Movies" / "OilLevelTracker" / "intro.mp4")
+    parser.add_argument("--music", type=Path, help="the music track; without it, the effects alone")
     parser.add_argument("--skip-assets", action="store_true", help="use design/intro/assets/ as it is")
     parser.add_argument("--stills", help="only screenshots at these times (comma-separated), beside --out")
     args = parser.parse_args()
@@ -364,7 +420,7 @@ def main() -> None:
     if args.stills:
         stills([float(s) for s in args.stills.split(",")], args.out.parent / "stills")
     else:
-        render(args.out.expanduser())
+        render(args.out.expanduser(), args.music)
 
 
 if __name__ == "__main__":
