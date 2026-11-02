@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- C: the video overlay. Dark frame tile (frame-bg), the Glass ellipse dashed in glass-outline,
+       the Oil level (oil) with its white halo (line-halo) and the liquid under it. -->
+  <defs><clipPath id="glass"><ellipse cx="128" cy="128" rx="66" ry="96"/></clipPath></defs>
+  <rect x="8" y="8" width="240" height="240" rx="52" fill="#1B1F23"/>
+  <rect x="40" y="144" width="176" height="90" fill="#1F77D0" fill-opacity="0.45" clip-path="url(#glass)"/>
+  <ellipse cx="128" cy="128" rx="66" ry="96" fill="none" stroke="#FFFFFF" stroke-opacity="0.9"
+           stroke-width="9" stroke-dasharray="20 13"/>
+  <line x1="56" y1="144" x2="200" y2="144" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="26" stroke-linecap="round"/>
+  <line x1="56" y1="144" x2="200" y2="144" stroke="#1F77D0" stroke-width="14" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>App icon candidates</title>
+<style>
+  body { margin: 0; padding: 24px; font: 14px "Segoe UI", system-ui, sans-serif; color: #242424; background: #FAFAFA; }
+  h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
+  p { margin: 0 0 20px; color: #616161; font-size: 12px; }
+  .row { display: grid; grid-template-columns: 220px 1fr 1fr; gap: 16px; align-items: center;
+         background: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+  .name { font-weight: 600; font-size: 16px; }
+  .name small { display: block; font-weight: 400; font-size: 12px; color: #616161; margin-top: 4px; }
+  .strip { display: flex; gap: 20px; align-items: flex-end; padding: 16px; border-radius: 6px; }
+  .light { background: #F3F3F3; }
+  .dark { background: #202020; }
+  .strip figure { margin: 0; text-align: center; font-size: 11px; color: #616161; }
+  .dark figure { color: #BDBDBD; }
+  .px { image-rendering: auto; display: block; margin: 0 auto 4px; }
+  .head { display: grid; grid-template-columns: 220px 1fr 1fr; gap: 16px; font-size: 12px; color: #616161; padding: 0 17px 6px; }
+</style>
+</head>
+<body>
+<h1>앱 아이콘 후보 (OilLevelTracker.exe)</h1>
+<p>DESIGN.md 색만 사용. 크기별 모습: 256 · 48 · 32 · 24 · 16 px (Windows 작업 표시줄은 보통 24–32 px, 탐색기 목록은 16 px).</p>
+<div class="head"><span></span><span>밝은 배경</span><span>어두운 배경 (작업 표시줄)</span></div>
+<div id="rows"></div>
+<script>
+  const icons = [
+    ["a-sight-glass.svg", "A. 사이트 글라스", "파란 바탕의 유리창 안에 Oil(파랑)과 그 위 Foam(주황). 오른쪽 눈금."],
+    ["b-level-trace.svg", "B. 레벨 그래프", "흰 바탕에 편집기 그래프: on-off 시험의 Oil 선과 Foam 선, 점선 기준선."],
+    ["c-frame-overlay.svg", "C. 영상 겹쳐 보기", "어두운 영상 바탕에 Glass 점선 타원과 Oil 높이 선(흰 테두리), 그 아래 액체."],
+  ];
+  const sizes = [256, 48, 32, 24, 16];
+  const strip = (src, cls) => `<div class="strip ${cls}">` + sizes.map((s) =>
+    `<figure><img class="px" src="${src}" width="${s === 256 ? 96 : s}" height="${s === 256 ? 96 : s}" alt="">${s}</figure>`).join("") + "</div>";
+  document.getElementById("rows").innerHTML = icons.map(([src, name, note]) =>
+    `<div class="row"><div class="name">${name}<small>${note}</small></div>${strip(src, "light")}${strip(src, "dark")}</div>`).join("");
+</script>
+</body>
+</html>

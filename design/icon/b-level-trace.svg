@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- B: the editor's graph. White tile (bg-1, stroke-1), grid (stroke-2), reference (reference),
+       an on-off Oil line (oil) with its Foam line (foam). -->
+  <rect x="9" y="9" width="238" height="238" rx="52" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="2"/>
+  <g stroke="#E0E0E0" stroke-width="4">
+    <line x1="40" y1="76" x2="216" y2="76"/>
+    <line x1="40" y1="124" x2="216" y2="124"/>
+  </g>
+  <line x1="40" y1="184" x2="216" y2="184" stroke="#616161" stroke-width="7" stroke-dasharray="16 11"/>
+  <path d="M40 68 H82 C94 68 96 120 108 120 H124 C136 120 138 68 150 68 H184 C196 68 198 120 210 120 H216"
+        fill="none" stroke="#E8710A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M40 96 H82 C94 96 96 156 108 156 H124 C136 156 138 96 150 96 H184 C196 96 198 156 210 156 H216"
+        fill="none" stroke="#1F77D0" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
