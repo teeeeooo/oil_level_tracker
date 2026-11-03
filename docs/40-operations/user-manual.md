@@ -118,9 +118,11 @@ PYTHONPATH=src .venv/bin/python scripts/render_manual.py
   - 화면에 들어온 클립만 재생된다.
 - 실제 앱 페이지에서 F1 → "사용 설명서"를 누르면 배포된
   `web/manual/index.html`이 열린다(브라우저를 띄우는 함수만 바꿔 확인).
-- **Windows에서 볼 것:** Windows 빌드에서 Edge로 열리는지. 보고서와 같은
-  `os.startfile` 경로다. 다음 마일스톤(P-2b, Windows 패키징과 배포 준비)의
-  빌드에서 함께 본다.
+- **Windows에서 확인함** (2026-11-03, P-2b의 2.0.0 빌드):
+  - 도움말의 "사용 설명서"로 Edge에서 열렸다. 워크스테이션과 최저 사양 PC
+    모두에서 그랬다;
+  - 그림이 보이고 클립이 재생됐다
+    ([결과](../60-evidence/2026-11-03-p2b-release-windows-result.md)).
 
 ## 찍다가 본 앱의 작은 문제 (고침)
 

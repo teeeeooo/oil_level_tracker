@@ -1,9 +1,11 @@
 # Current Work Plan
 
 **Current milestone:** `P-2b — Windows package and distribution` /
-`ACTIVE`: release 2.0.0 is built on macOS and waits on its Windows run
-(the user's interview of 2026-11-03;
-[decisions and making](../40-operations/distribution.md)).
+`ACTIVE`: release 2.0.0's Windows run passed every row except R, which
+waits on a read-only follow-up
+([result](../60-evidence/2026-11-03-p2b-release-windows-result.md)). The
+user asked for a shorter editor help; whether it goes into 2.0.0 is
+theirs to decide ([decisions and making](../40-operations/distribution.md)).
 **Last completed:** `P-2 — User manual` / `DONE` (2026-11-03): the user
 fixed the first draft, an offline page opened from the help
 ([decisions and making](../40-operations/user-manual.md)). Before it, P-1
@@ -524,42 +526,45 @@ The three v1 remote branches that v1 docs cite stay.
   entry, the report figure recaptured. 290 tests pass; the macOS build
   with `--release` passes.
 
-  **Waiting on the user:** the
-  [Windows request](../40-operations/2026-11-03-p2b-release-windows-request.md),
-  pinned to `008c13f` (`checked=154`):
-  - the workstation builds the ZIP and checks the exe version, the ZIP's
-    two top entries, the help's version, the manual in Edge (left over
-    from P-2) and a report's version. It submits `V25b 선택 확인` as v1;
-  - the slowest PC installs from the shared folder with only the guide,
-    as an inspector would, and opens the inspection made by the old
-    build.
+  **Windows run** ([request](../40-operations/2026-11-03-p2b-release-windows-request.md),
+  [result](../60-evidence/2026-11-03-p2b-release-windows-result.md), on
+  `008c13f`):
+  - every row passes except R;
+  - the manual opens in Edge on both PCs (closing P-2's open check);
+  - on the slowest PC the user installed with the guide alone;
+  - the ZIP went by hand, not through the shared folder.
 
-  **After the result:** judge it into `60-evidence/`. If it passes, tag
-  `008c13f` as `v2.0.0` and push the tag; P-2b is then `DONE` and the
-  user announces the ZIP. Feedback on the guide (L3) goes into
-  `packaging/install-guide.html`; a change to it makes a new ZIP but not
-  a new app build.
+  **Waiting on the user:**
+  - **R's follow-up:** a read-only diff of the two listings the agent
+    kept, in the result document;
+  - **the user's note:** the editor's F1 help is too long; the manual
+    holds the details, so condense it. Decide whether it goes into 2.0.0
+    (not yet announced) or a later version.
+
+  **To close P-2b:**
+  - R passes;
+  - the tag `v2.0.0` goes on the commit that is released: `008c13f`, or
+    a new one if the help change goes in. A new one needs a rebuild and a
+    short Windows check;
+  - the user announces the ZIP (template in distribution.md).
 - **After P-2b** (user, 2026-11-02): **P-3 — fixes for problems found in
   field use.** The open items above (speed-ups on the slowest PC, small
   facts) stay for reference until P-3 picks any up.
 
-## Session handoff — 2026-11-03 (P-2b waits on its Windows run)
+## Session handoff — 2026-11-03 (P-2b: R's follow-up and the help)
 
-**Where it stands:** release 2.0.0 is built on macOS. Its code is
-`008c13f`; the commits after it are docs only. The Windows request is
-with the user.
+**Where it stands:** release 2.0.0 (`008c13f`) passed its Windows run
+except R, whose listings were not relayed. The result is judged in
+`60-evidence/`. Nothing is tagged yet.
 
-**Next session:** wait for the Windows result. Then:
-- judge it against the request's fixed criteria;
-- record it as
-  `docs/60-evidence/2026-11-0X-p2b-release-windows-result.md`;
-- if it passes, tag and close P-2b ("Next" above).
-
-If a row fails, fix the code, pin a new commit, and rerun only what the
-change invalidates (execution policy).
+**Next session:**
+- judge R's follow-up when it comes back;
+- act on the user's choice about condensing the editor help. If it goes
+  into 2.0.0: change `web/index.html`'s editor help, then pin a new commit
+  for a short Windows check (tests, `--release`, the help, the ZIP);
+- then tag and close P-2b ("Next" above).
 
 **Read first:**
 - this file's "Next";
-- [distribution.md](../40-operations/distribution.md);
-- the request:
-  [2026-11-03-p2b-release-windows-request.md](../40-operations/2026-11-03-p2b-release-windows-request.md).
+- the [result](../60-evidence/2026-11-03-p2b-release-windows-result.md);
+- [distribution.md](../40-operations/distribution.md).
