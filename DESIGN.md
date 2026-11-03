@@ -218,6 +218,10 @@ Do not use sizes outside this ramp.
   - the button, F1 or `?` opens a modal dialog, 560 px wide, on
     `--backdrop`. It has a Subtitle 2 title, Body 1 Strong group headings,
     and two columns: the key or mouse action, and what it does;
+  - **it lists every key and mouse action, each in a few words that fit
+    one line;** the explanations live in the user manual (user,
+    2026-11-03, after the editor's help proved too long). A screen's help
+    may end with one line pointing to the manual;
   - Esc, "닫기" or a click outside closes it;
   - its footer also has "사용 설명서" on the left (P-2, user, 2026-11-03),
     which opens the user manual (§5) in the default browser, and the app
