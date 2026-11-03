@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "oil-level-tracker"
-version = "2.0.0.dev0"
+version = "2.0.0"
 description = "Compressor sight-glass oil inspection: context image, editable lines, judgment and report."
 requires-python = ">=3.14"
 dependencies = [

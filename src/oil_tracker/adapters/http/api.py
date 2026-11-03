@@ -126,6 +126,7 @@ class ApiContext:
     manual: Manual
     web_folder: Path
     token: str
+    version: str  # the app's, shown in the help (P-2b)
     relay: Relay = field(default_factory=Relay)
 
 
@@ -558,6 +559,9 @@ def routes(ctx: ApiContext) -> list[Route]:
         ctx.manual.open()
         return json_response({"ok": True})
 
+    def about(_query, _body) -> Response:
+        return json_response({"version": ctx.version})
+
     def pick_video(_query, _body) -> Response:
         path = recipes.pick_sample_video()
         return json_response({"path": None if path is None else str(path)})
@@ -800,6 +804,7 @@ def routes(ctx: ApiContext) -> list[Route]:
         ("POST", re.compile(r"/api/recipes/check"), check_recipe),
         ("POST", re.compile(r"/api/recipes/open-folder"), open_folder),
         ("POST", re.compile(r"/api/manual/open"), open_manual),
+        ("GET", re.compile(r"/api/about"), about),
         ("GET", re.compile(r"/api/defaults"), defaults),
         ("GET", re.compile(rf"/api/recipes/{segment}"), get_recipe),
         ("GET", re.compile(rf"/api/recipes/{segment}/reference\.jpg"), reference_jpeg),

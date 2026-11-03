@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from oil_tracker import __version__
 from oil_tracker.adapters.desktop import SystemDesktop
 from oil_tracker.adapters.http.api import ApiContext, make_handler
 from oil_tracker.adapters.http.jobs import Jobs
@@ -91,12 +92,13 @@ def start(
         utc_now,
         new_id,
     )
-    reports = HtmlReports(WEB_FOLDER)  # the shipped drawing module, whatever folder is served
+    reports = HtmlReports(WEB_FOLDER, __version__)  # the shipped drawing module, whatever folder is served
     manual = Manual(WEB_FOLDER / "manual" / "index.html", desktop)  # the shipped one, as the report
     editing = Editing(inspection_store, ContextEdgeTracer(), sha256_of, desktop, utc_now, reports)
     jobs = Jobs(new_id)
     token = secrets.token_urlsafe(24)
     server = start_server(
-        make_handler(ApiContext(recipes, inspections, editing, videos, jobs, manual, web_folder, token)), port
+        make_handler(ApiContext(recipes, inspections, editing, videos, jobs, manual, web_folder, token, __version__)),
+        port,
     )
     return Running(server, videos, jobs, token)

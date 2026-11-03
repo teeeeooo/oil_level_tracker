@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The install guide and release notes (P-2b; DESIGN.md §5 "Install guide"). scripts/build_package.py
+     --release fills the marked places and puts it beside the app folder in the release ZIP as
+     "설치 안내.html". Rewrite "바뀐 것" for each release. -->
+<title>Oil Level Tracker <!--VERSION--> 설치 안내</title>
+<style><!--STYLE--></style>
+</head>
+<body>
+<header class="top"><b>Oil Level Tracker 설치 안내</b><span>버전 <!--VERSION--></span></header>
+<main>
+<h1>Oil Level Tracker <!--VERSION--> 설치 안내</h1>
+<p>이 ZIP에는 앱 폴더 <code>OilLevelTracker</code>와 이 안내가 들어 있습니다. 설치 프로그램 없이 폴더를 풀어 두고 실행합니다. 관리자 권한은 필요 없습니다.</p>
+
+<h2 id="need">필요한 것</h2>
+<ul>
+  <li>Windows 10 또는 Windows 11 (64비트)</li>
+  <li>Microsoft Edge WebView2 런타임. Windows 11과 최신 Windows 10에는 이미 들어 있습니다.</li>
+  <li>앱 폴더를 둘 공간 약 170 MB</li>
+</ul>
+
+<h2 id="install">설치하기</h2>
+<ol>
+  <li>공유 폴더의 <code>OilLevelTracker-<!--VERSION-->.zip</code>을 내 PC로 복사합니다(예: 다운로드 폴더). 공유 폴더에서 바로 풀거나 실행하지 않습니다.</li>
+  <li>복사한 ZIP을 마우스 오른쪽 단추로 누르고 <b>모두 압축 풀기</b>를 고릅니다.</li>
+  <li>풀 위치를 고릅니다. 내 PC의 로컬 디스크라면 어디든 됩니다(예: <code>C:\Apps</code>). 고른 위치에 <code>OilLevelTracker</code> 폴더와 이 안내가 생깁니다.
+    <div class="caution"><p><b>피할 곳:</b> 네트워크 드라이브, 그리고 OneDrive로 동기화되는 폴더입니다. 문서와 바탕 화면 폴더가 OneDrive로 동기화되는 PC가 많습니다.</p></div>
+  </li>
+  <li><code>OilLevelTracker</code> 폴더 안의 <code>OilLevelTracker.exe</code>를 두 번 누르면 앱이 열립니다.
+    <div class="note"><p>처음 실행할 때 "Windows의 PC 보호" 창이 뜰 수 있습니다. 서명하지 않은 부서용 프로그램이라 그렇습니다. 배포 담당자가 공유 폴더에 둔 파일이 맞으면 <b>추가 정보</b>를 누른 뒤 <b>실행</b>을 누릅니다.</p></div>
+  </li>
+  <li>바로 가기를 만들어 두면 편합니다(선택). <code>OilLevelTracker.exe</code>를 마우스 오른쪽 단추로 누르고 <b>보내기 → 바탕 화면에 바로 가기 만들기</b>를 고릅니다. Windows 11에서는 먼저 <b>더 많은 옵션 표시</b>를 누릅니다. 앱이 열려 있을 때 작업 표시줄의 앱 아이콘을 오른쪽 단추로 눌러 <b>작업 표시줄에 고정</b>해도 됩니다.</li>
+</ol>
+
+<h2 id="data">데이터가 저장되는 곳</h2>
+<table>
+  <tbody>
+    <tr><th>Recipe와 검사</th><td><code>문서\OilLevelTracker</code>의 <code>Recipes</code>, <code>Inspections</code> 폴더</td></tr>
+    <tr><th>설정과 기록</th><td><code>%LOCALAPPDATA%\OilLevelTracker</code> (기록 파일 <code>app.log</code>)</td></tr>
+    <tr><th>앱 폴더</th><td>아무것도 저장하지 않습니다.</td></tr>
+  </tbody>
+</table>
+<p>그래서 앱 폴더를 지우거나 새 버전으로 바꿔도 Recipe와 검사는 그대로 남습니다.</p>
+
+<h2 id="update">새 버전으로 바꾸기</h2>
+<ol>
+  <li>앱을 닫습니다.</li>
+  <li>예전 <code>OilLevelTracker</code> 폴더를 지웁니다. Recipe와 검사는 문서 폴더에 있어 지워지지 않습니다.</li>
+  <li>새 ZIP을 같은 위치에 풉니다(설치하기 1–3). 위치가 같으면 바로 가기를 그대로 쓸 수 있습니다.</li>
+</ol>
+<p>지금 쓰는 버전은 앱의 도움말 창(<kbd>F1</kbd>) 아래에 "버전 <!--VERSION-->"처럼 보입니다.</p>
+
+<h2 id="manual">사용법</h2>
+<p>앱에서 <kbd>F1</kbd>을 누르고 <b>사용 설명서</b>를 누르면 사용 설명서가 브라우저로 열립니다. 지금 보려면 <a href="OilLevelTracker/_internal/oil_tracker/web/manual/index.html">사용 설명서</a>를 누릅니다(이 안내가 <code>OilLevelTracker</code> 폴더 옆에 있을 때 열립니다).</p>
+
+<h2 id="report">문제가 생기면</h2>
+<p><b>배포 담당자</b>에게 알려 주세요. 다음을 함께 보내 주시면 원인을 찾기 쉽습니다.</p>
+<ul>
+  <li>화면 캡처(<kbd>Windows</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>)</li>
+  <li>앱 버전(도움말 창 아래)</li>
+  <li>검사 이름과 무엇을 하던 중이었는지</li>
+  <li>기록 파일 <code>app.log</code>: 탐색기 주소 표시줄에 <code>%LOCALAPPDATA%\OilLevelTracker</code>를 붙여 넣고 <kbd>Enter</kbd>를 누르면 이 파일이 있는 폴더가 열립니다.</li>
+</ul>
+
+<h2 id="changes"><!--VERSION-->에서 바뀐 것</h2>
+<p>첫 배포 버전입니다. 이 버전으로 할 수 있는 일:</p>
+<ul>
+  <li><b>Recipe:</b> 영상에서 Glass 타원, 0선, 판정 규칙을 정해 저장합니다.</li>
+  <li><b>분석:</b> 영상을 한 번 훑어 Glass마다 맥락 이미지와 Oil 선 초안을 만듭니다.</li>
+  <li><b>편집:</b> 초안을 고칩니다. 범위로 지우기, 연필, 점 잇기, 잡아끌기, FULL·EMPTY, 판단 불가, 복사와 붙여넣기, 메모.</li>
+  <li><b>판정과 제출:</b> 판정을 확인하고 제출합니다. 제출한 버전은 잠기고, 고쳐서 다시 제출하면 다음 버전이 됩니다.</li>
+  <li><b>보고서:</b> 버전마다 HTML 보고서 하나. 브라우저에서 인쇄하면 PDF가 됩니다.</li>
+  <li><b>원본 영상 창:</b> 원본 영상을 큰 창에서 재생합니다.</li>
+  <li><b>사용 설명서:</b> 도움말 창에서 엽니다.</li>
+</ul>
+<p>알려진 제한:</p>
+<ul>
+  <li>Recipe를 지우는 기능은 아직 없습니다.</li>
+  <li>0선이 Glass 타원의 맨 위나 맨 아래에 있으면 끌어서 옮길 수 없습니다. 숫자를 입력해 옮깁니다.</li>
+</ul>
+</main>
+</body>
+</html>

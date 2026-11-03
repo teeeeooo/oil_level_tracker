@@ -50,6 +50,9 @@ export function wire() {
     const result = await api.call("POST", "/api/manual/open", {});
     if (!result.ok) notify("helpNotice", result.data.error ?? "사용 설명서를 열지 못했습니다.", "error");
   });
+  api.call("GET", "/api/about").then((result) => {  // the version to quote when reporting a problem (P-2b)
+    if (result.ok) $("helpVersion").textContent = `버전 ${result.data.version}`;
+  });
   help.addEventListener("click", (event) => {  // a click on the backdrop lands on the dialog itself
     const box = help.getBoundingClientRect();
     const inside = event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom;

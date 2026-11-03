@@ -45,8 +45,9 @@ VERDICTS = {Verdict.PASS: ("합격", "pass"), Verdict.FAIL: ("불합격", "fail"
 class HtmlReports:
     """Implements application.ports.ReportWriter from the web folder's drawing module and styles."""
 
-    def __init__(self, web_folder: Path) -> None:
+    def __init__(self, web_folder: Path, app_version: str) -> None:
         self._web = web_folder
+        self._app_version = app_version  # printed on page 1 (user, 2026-11-03: P-2b)
 
     def write(self, report: ReportInput) -> str:
         inspection, version, edits = report.inspection, report.version, report.edits
@@ -64,7 +65,7 @@ class HtmlReports:
                 f'<div class="foot"><span>{escape(title)} · v{version.number}</span><span>{number} / {total}</span></div></section>'
             )
 
-        pages = [page(1, _first_page(report, title, order) + _overview(order), first=True)]
+        pages = [page(1, _first_page(report, title, order, self._app_version) + _overview(order), first=True)]
         data = []
         for index, glass_edits in enumerate(edits.glasses):
             glass = glasses[glass_edits.glass_id]
@@ -88,7 +89,7 @@ class HtmlReports:
 # ---- the text --------------------------------------------------------------------------------------
 
 
-def _first_page(report: ReportInput, title: str, glasses: list[tuple[Glass, GlassVerdict]]) -> str:
+def _first_page(report: ReportInput, title: str, glasses: list[tuple[Glass, GlassVerdict]], app_version: str) -> str:
     inspection, version, edits = report.inspection, report.version, report.edits
     settings, header = inspection.settings, inspection.header
     fields = [
@@ -106,7 +107,7 @@ def _first_page(report: ReportInput, title: str, glasses: list[tuple[Glass, Glas
         for glass, decided in glasses
     )
     return (
-        f'<div class="head"><div><h1>{TITLE}</h1><div class="sub">{escape(title)} · Oil Level Tracker</div></div>'
+        f'<div class="head"><div><h1>{TITLE}</h1><div class="sub">{escape(title)} · Oil Level Tracker {escape(app_version)}</div></div>'
         f'<div class="ver"><b>v{version.number}</b><div class="sub">제출 {_local(version.submitted_at)}</div></div></div>'
         '<div class="fields">' + "".join(f"<div><span>{k}</span>{escape(v)}</div>" for k, v in fields) + "</div>"
         f'<h2>판정</h2><table class="summary"><tr><th>Glass</th><th>판정 규칙</th><th>판정</th></tr>{rows}</table>'

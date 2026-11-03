@@ -89,11 +89,12 @@ def data_of(html):
 
 
 def test_the_report_has_the_header_the_final_judgments_and_a_page_per_glass():
-    html = HtmlReports(WEB_FOLDER).write(report_input())
+    html = HtmlReports(WEB_FOLDER, "9.8.7").write(report_input())
     # page 1: the facts, the judgments and every Glass's graph; then a page per Glass (user, 2026-10-30)
     assert html.count('<section class="page') == 3 and html.count('class="page first"') == 1
     first = html[html.index('class="page first"'):html.index("</section>")]
     assert first.count('class="overview-glass"') == 2 and 'class="plot context"' not in first
+    assert "Oil Level Tracker 9.8.7" in first  # the app version that wrote it (user, 2026-11-03)
     for text in ("오일 레벨 검사 보고서", "GB-2 R410A", "냉각 on/off", "SPL#4_Cooling.mp4", "2호기 냉각", "00:00.0 – 04:59.5", "00:30.0"):
         assert text in html, text
     assert "Accum &lt;A&gt;" in html and "<A>" not in html
@@ -108,7 +109,7 @@ def test_the_report_has_the_header_the_final_judgments_and_a_page_per_glass():
 
 
 def test_typed_text_is_escaped_and_not_read_again():
-    html = HtmlReports(WEB_FOLDER).write(report_input())
+    html = HtmlReports(WEB_FOLDER, "9.8.7").write(report_input())
     assert "&lt;b&gt;거품&lt;/b&gt; &quot;/*DATA*/&quot; &lt;!--PAGES--&gt;" in html
     assert "<!--PAGES-->" not in html and "<!--SCRIPT-->" not in html
     data = data_of(html)
@@ -120,12 +121,12 @@ def test_typed_text_is_escaped_and_not_read_again():
 
 def test_a_68_minute_video_with_three_glasses_stays_under_5_mb():
     third = Glass("g3", "Disch", Ellipse(400, 300, 80, 200), 380)
-    html = HtmlReports(WEB_FOLDER).write(report_input(seconds=68 * 60, glasses=(BASE, ACCUM, third), noise=True))
+    html = HtmlReports(WEB_FOLDER, "9.8.7").write(report_input(seconds=68 * 60, glasses=(BASE, ACCUM, third), noise=True))
     assert len(html.encode("utf-8")) < 5_000_000  # A7, with noise, the worst a context image compresses
 
 
 def test_the_template_marks_are_all_filled():
-    html = HtmlReports(WEB_FOLDER).write(report_input(glasses=(BASE,)))
+    html = HtmlReports(WEB_FOLDER, "9.8.7").write(report_input(glasses=(BASE,)))
     assert re.search(r"<!--(TITLE|STYLE|PAGES|DATA|SCRIPT)-->", html) is None
     assert "<title>오일 레벨 검사 보고서 · 1차 냉각 · v1</title>" in html
     assert "--oil:" in html and "@page { size: A4 landscape" in html  # the tokens and the print page

@@ -11,6 +11,7 @@ import cv2
 import numpy as np
 import pytest
 
+import oil_tracker
 from oil_tracker import bootstrap
 
 
@@ -180,6 +181,11 @@ def test_the_help_opens_the_shipped_manual(app, monkeypatch):
     assert (status, body) == (200, {"ok": True})
     assert opened == [bootstrap.WEB_FOLDER / "manual" / "index.html"]  # not the served test folder
     assert opened[0].is_file()
+
+
+def test_the_help_shows_the_app_version(app):
+    running, _ = app
+    assert call(running, "GET", "/api/about")[:2] == (200, {"version": oil_tracker.__version__})
 
 
 def test_check_and_defaults(app, video):
@@ -400,6 +406,8 @@ def test_submitting_locks_a_version_until_revising(app, video):
     }
     folder = next((tmp_path / "data" / "Inspections").iterdir())
     assert (folder / "versions" / "001" / "version.json").is_file() and not (folder / "edits.json").exists()
+    report = (folder / "versions" / "001" / "report.html").read_text(encoding="utf-8")
+    assert f"Oil Level Tracker {oil_tracker.__version__}" in report  # the wiring hands the report the app version
 
     locked = call(running, "GET", f"{base}/edits")[1]
     assert (locked["submission"]["showing"], locked["submission"]["editable"]) == (1, False)

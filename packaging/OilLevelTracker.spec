@@ -1,12 +1,41 @@
 # -*- mode: python ; coding: utf-8 -*-
 # The Windows build (Product SSOT §2 A8, §9): PyInstaller one-folder, no console, OilLevelTracker.exe
 # (user, 2026-11-02). Run it through scripts/build_package.py, which also checks the result.
+import re
 import sys
+import tomllib
 from pathlib import Path
 
 ROOT = Path(SPECPATH).parent
 SRC = ROOT / "src"
 WINDOWS = sys.platform == "win32"
+VERSION = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
+
+
+def version_resource(version: str):
+    """What the exe's Properties > Details show (P-2b): the product name and the app version. Windows
+    only: the module needs pefile, which PyInstaller installs only there."""
+    from PyInstaller.utils.win32.versioninfo import (
+        FixedFileInfo, StringFileInfo, StringStruct, StringTable, VarFileInfo, VarStruct, VSVersionInfo,
+    )
+
+    numbers = tuple(int(part) for part in re.match(r"(\d+)\.(\d+)\.(\d+)", version).groups()) + (0,)
+    strings = [
+        StringStruct("FileDescription", "Oil Level Tracker"),
+        StringStruct("FileVersion", version),
+        StringStruct("InternalName", "OilLevelTracker"),
+        StringStruct("OriginalFilename", "OilLevelTracker.exe"),
+        StringStruct("ProductName", "Oil Level Tracker"),
+        StringStruct("ProductVersion", version),
+    ]
+    return VSVersionInfo(
+        ffi=FixedFileInfo(filevers=numbers, prodvers=numbers),
+        kids=[
+            StringFileInfo([StringTable("041204B0", strings)]),  # Korean, Unicode
+            VarFileInfo([VarStruct("Translation", [0x0412, 1200])]),
+        ],
+    )
+
 
 a = Analysis(
     [str(SRC / "oil_tracker" / "__main__.py")],
@@ -29,6 +58,7 @@ exe = EXE(
     exclude_binaries=True,
     name="OilLevelTracker",
     icon=[str(ROOT / "packaging" / "OilLevelTracker.ico")] if WINDOWS else None,
+    version=version_resource(VERSION) if WINDOWS else None,
     console=False,
     upx=False,
 )

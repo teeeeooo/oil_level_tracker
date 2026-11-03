@@ -12,6 +12,7 @@ import cv2
 import numpy as np
 import pytest
 
+import oil_tracker
 from oil_tracker import bootstrap
 
 playwright_api = pytest.importorskip("playwright.sync_api")
@@ -190,6 +191,8 @@ def test_speed_field_and_help(tmp_path, video, browser_page, monkeypatch):
         assert help_box.locator("#helpTitle").inner_text() == "도움말 · Recipe 목록"
         assert not help_box.get_by_text("타원 안쪽 끌기").is_visible()
         assert page.evaluate("document.activeElement.id") == "helpClose"  # Enter closes, as before
+        playwright_api.expect(help_box.locator("#helpVersion")).to_have_text(f"버전 {oil_tracker.__version__}")  # P-2b
+        shot(page, "5b-help")
         # "사용 설명서" opens the shipped manual in the default browser
         help_box.get_by_role("button", name="사용 설명서").click()
         page.wait_for_function("document.getElementById('helpNotice').textContent === ''")
