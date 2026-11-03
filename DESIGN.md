@@ -220,7 +220,9 @@ Do not use sizes outside this ramp.
     and two columns: the key or mouse action, and what it does;
   - Esc, "닫기" or a click outside closes it;
   - its footer also has "사용 설명서" on the left (P-2, user, 2026-11-03),
-    which opens the user manual (§5) in the default browser;
+    which opens the user manual (§5) in the default browser, and the app
+    version ("버전 2.0.0", Caption 1 in `--fg-3`) just before 닫기 (P-2b,
+    user, 2026-11-03);
   - **a screen shows a hint inline only when it must be read every time,**
     such as the save hint on the Recipe screen. Keys, mouse actions and
     tips go into the help.
@@ -537,7 +539,8 @@ Do not use sizes outside this ramp.
 - **Report:** A4 landscape, confirmed by the user on 2026-10-30
   ([report.html](design/mockup/report.html)). In order:
   1. **the header block:** the title "오일 레벨 검사 보고서" (Title 3)
-     with the inspection name below it and the version and submission
+     with the inspection name and "Oil Level Tracker <app version>" below
+     it (P-2b, user, 2026-11-03) and the version and submission
      time on the right, over a 2 px `--fg-1` rule; then a four-column
      grid: 압축기 모델, 시험 종류, 영상 파일, Recipe, 분석 범위, 압축기
      기동, 검사 이름, 작성;
@@ -582,6 +585,11 @@ Do not use sizes outside this ramp.
     drawn in. A click pauses or plays one.
   - **Notes:** a `--brand-tint` box for a tip; the message bar colours
     (§2.7) for a caution.
+- **Install guide** (P-2b, user, 2026-11-03): one self-contained page
+  beside the app folder in the release ZIP, `packaging/install-guide.html`.
+  It uses the user manual's styles, inlined, without the table of
+  contents: the top bar with the title and the version, then the text in
+  the 720 px column. Notes and cautions as in the manual.
 
 ## 6. Depth & Elevation
 

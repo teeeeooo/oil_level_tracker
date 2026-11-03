@@ -291,8 +291,9 @@ Each Glass in a Recipe has one rule.
   - entered by the user: compressor model and test type, with the
     inspection name in the analysis setup, per inspection (user,
     2026-10-30);
-  - filled in automatically: video file name, Recipe name, date-time and
-    report version.
+  - filled in automatically: video file name, Recipe name, date-time,
+    report version and the version of the app that wrote it (user,
+    2026-11-03: P-2b).
 - **Body:**
   - the graph and the context image with the edited lines;
   - the final judgment;
@@ -339,6 +340,18 @@ Each Glass in a Recipe has one rule.
     2026-10-28);
   - Fluent 2 visual language, light theme ([DESIGN.md](../../DESIGN.md));
   - a PyInstaller one-folder build for Windows.
+- **Distribution** (P-2b, user, 2026-11-03;
+  [how a release is made](../40-operations/distribution.md)):
+  - the first release is version 2.0.0; the help shows the version;
+  - one ZIP holds the app folder and a Korean install guide with the
+    release notes;
+  - the user puts it in a shared folder, and each inspector installs it
+    on their own PC, where they choose, without an installer or
+    administrator rights;
+  - problems go to the distributor, with a screenshot, the version and
+    `app.log`;
+  - the introduction video is shared apart from the app and is not
+    published in this public repository.
 - **Acceptance:** see §2.
 
 ## 10. Non-goals of the first version

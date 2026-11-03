@@ -1,7 +1,9 @@
 # Current Work Plan
 
 **Current milestone:** `P-2b — Windows package and distribution` /
-`PLANNED`, next: a short interview on its scope (user, 2026-11-03).
+`ACTIVE`: release 2.0.0 is built on macOS and waits on its Windows run
+(the user's interview of 2026-11-03;
+[decisions and making](../40-operations/distribution.md)).
 **Last completed:** `P-2 — User manual` / `DONE` (2026-11-03): the user
 fixed the first draft, an offline page opened from the help
 ([decisions and making](../40-operations/user-manual.md)). Before it, P-1
@@ -447,8 +449,8 @@ behind; the new one sought once (the start) and stayed within 0.06 s, at
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `e67f2b1`: `267 passed, 3 skipped` on macOS, so
-  `266 passed, 4 skipped` on Windows when its venv has no Playwright.
+  test. At `008c13f`: `272 passed, 3 skipped` on macOS, so
+  `271 passed, 4 skipped` on Windows when its venv has no Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -506,62 +508,58 @@ The three v1 remote branches that v1 docs cite stay.
   - the user's review changed only two captions ("우유" → "유체");
   - the doubled "영상을 열 수 없습니다:" notice found while making it is
     fixed in three places, with a smoke-test step.
-- **Next: P-2b — Windows package and distribution** (user, 2026-11-03).
-  It starts with a short interview. What it can build on:
-  - `scripts/build_package.py` and `packaging/OilLevelTracker.spec` (the
-    one-folder build, `package=PASS`, ≤ 200 MB; "Notes for Windows runs"
-    above);
-  - the ZIP the V2-5 run made for the slowest PC.
+- **Now: P-2b — Windows package and distribution** (user, 2026-11-03).
+  The interview settled it ([distribution.md](../40-operations/distribution.md)):
+  - version 2.0.0; a folder ZIP; the user puts it in a shared folder and
+    each inspector installs it on their own PC, where they choose;
+  - `설치 안내.html` beside the app folder in the ZIP: install, data,
+    updating, problem reports to "배포 담당자" (no name: the repository
+    is public), and the release notes;
+  - the version in the help and on the report's page 1;
+  - the introduction video is shared apart from the app, not in Git.
 
-  To settle in the interview:
-  - the version number (`pyproject.toml` says `2.0.0.dev0`);
-  - the form: the folder as a ZIP, or an installer;
-  - how it reaches the PCs, and who installs it;
-  - whether the introduction video goes with it. Its music is the
-    user's Suno free-account track, made for sharing inside the
-    department ([intro-video.md](../40-operations/intro-video.md));
-  - release notes.
+  Done on macOS (`008c13f`): the version resource, `GET /api/about`, the
+  report line, `packaging/install-guide.html`,
+  `build_package.py --release`, the manual's header and a problem-report
+  entry, the report figure recaptured. 290 tests pass; the macOS build
+  with `--release` passes.
 
-  The user manual already ships inside the build (`web/manual/`). The
-  build's first Windows run also checks that the help opens it in Edge;
-  P-2 left that to this run.
+  **Waiting on the user:** the
+  [Windows request](../40-operations/2026-11-03-p2b-release-windows-request.md),
+  pinned to `008c13f` (`checked=154`):
+  - the workstation builds the ZIP and checks the exe version, the ZIP's
+    two top entries, the help's version, the manual in Edge (left over
+    from P-2) and a report's version. It submits `V25b 선택 확인` as v1;
+  - the slowest PC installs from the shared folder with only the guide,
+    as an inspector would, and opens the inspection made by the old
+    build.
+
+  **After the result:** judge it into `60-evidence/`. If it passes, tag
+  `008c13f` as `v2.0.0` and push the tag; P-2b is then `DONE` and the
+  user announces the ZIP. Feedback on the guide (L3) goes into
+  `packaging/install-guide.html`; a change to it makes a new ZIP but not
+  a new app build.
 - **After P-2b** (user, 2026-11-02): **P-3 — fixes for problems found in
   field use.** The open items above (speed-ups on the slowest PC, small
   facts) stay for reference until P-3 picks any up.
 
-## Session handoff — 2026-11-03 (P-2 done; P-2b next)
+## Session handoff — 2026-11-03 (P-2b waits on its Windows run)
 
-**Where it stands:** `main` is clean and in sync with the remote at
-`e67f2b1`. The first version is accepted on the build of `8448e79`.
-Since then:
-- `f19b624`: the user manual, its help button and its capture script;
-- `e67f2b1`: the doubled "영상을 열 수 없습니다:" notice fixed (editor,
-  video window, setup); P-2 closed.
+**Where it stands:** release 2.0.0 is built on macOS. Its code is
+`008c13f`; the commits after it are docs only. The Windows request is
+with the user.
 
-No Windows build has these yet. 285 tests pass on macOS. Windows
-expects `266 passed, 4 skipped` (see "Notes for Windows runs").
+**Next session:** wait for the Windows result. Then:
+- judge it against the request's fixed criteria;
+- record it as
+  `docs/60-evidence/2026-11-0X-p2b-release-windows-result.md`;
+- if it passes, tag and close P-2b ("Next" above).
 
-**The last Windows builds** (V2-5, `8448e79`):
-- on the workstation: `OilLevelTracker.exe`, one folder, 159.6 MB. The
-  manual adds about 2.2 MB;
-- the slowest PC runs the moved build in `C:\olt-v25\OilLevelTracker`;
-- the data on both is in "Session state — 2026-11-02".
-
-`scripts/build_package.py` builds into `build/dist/OilLevelTracker` and
-ends in `package=PASS`. The V2-5 request made the ZIP for the slowest PC
-on the workstation.
-
-**Next session: start P-2b** with the short interview in "Next". Its
-answers decide the first Windows request: the version, the form,
-delivery, the intro video, release notes. Windows runs stay one-way:
-a Korean request document goes to the user, and the result comes back
-as text (execution policy).
+If a row fails, fix the code, pin a new commit, and rerun only what the
+change invalidates (execution policy).
 
 **Read first:**
-- this file: "Next", "Notes for Windows runs" and "V2-5 — the steps";
-- the [roadmap](roadmap.md);
-- the [execution policy](execution-policy.md);
-- `scripts/build_package.py` and `packaging/OilLevelTracker.spec`;
-- the latest model of a Windows request:
-  [2026-11-02-v2-5-recheck-windows-request.md](../40-operations/2026-11-02-v2-5-recheck-windows-request.md),
-  and before it the V2-5 acceptance request.
+- this file's "Next";
+- [distribution.md](../40-operations/distribution.md);
+- the request:
+  [2026-11-03-p2b-release-windows-request.md](../40-operations/2026-11-03-p2b-release-windows-request.md).

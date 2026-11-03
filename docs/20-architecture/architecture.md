@@ -177,6 +177,14 @@ app.py ──▶ bootstrap.py
     never inside the package; the build check confirms it.
   - `app.start_log` keeps the error stream in the settings folder's
     `app.log`, since a windowed build has no console.
+  - **The version** is `pyproject.toml`'s, matched by
+    `oil_tracker.__version__` (P-2b). `bootstrap.py` hands it to the HTTP
+    adapter (`GET /api/about`, shown in the help) and the report adapter;
+    adapters do not import the package root. The spec writes it into the
+    exe's version resource on Windows.
+  - `build_package.py --release` puts a package that passed into
+    `OilLevelTracker-<version>.zip`, beside the install guide made from
+    `packaging/install-guide.html`.
 
 ## What v2 does not take from v1
 
