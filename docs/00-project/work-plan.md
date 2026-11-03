@@ -1,7 +1,7 @@
 # Current Work Plan
 
-**Current milestone:** `P-2 — User manual` / `PLANNED`, next: it starts
-with a short interview with the user (readers, form, language).
+**Current milestone:** `P-2 — User manual` / `ACTIVE`, next: the user
+reviews the first draft ([decisions and making](../40-operations/user-manual.md)).
 **Last completed:** `P-1 — Introduction video` / `DONE` (2026-11-03): the
 user fixed draft 3, a 76 s light product film around the app's real screens
 ([scenes](../40-operations/intro-video.md)). **The first version is
@@ -432,6 +432,10 @@ behind; the new one sought once (the start) and stayed within 0.06 s, at
   running has not been timed there.
 - The slowest PC reported Python 3.15.2 instead of 3.14; the picture was
   identical.
+- When the source video is missing, the editor's notice repeats its
+  prefix: "영상을 열 수 없습니다: 영상을 열 수 없습니다: …"
+  (`web/editor.js` adds it to a server message that already has it).
+  Seen while making the manual (2026-11-03).
 
 ## Notes for Windows runs
 
@@ -501,56 +505,56 @@ The three v1 remote branches that v1 docs cite stay.
   `design/intro/intro.html` and `scripts/render_intro.py` (`157366b`). The
   video is outside Git: `~/Movies/OilLevelTracker/intro-draft3.mp4`
   (75.8 s, 19 MB).
-- **Next, in order** (user, 2026-11-02):
-  1. **P-2 — a user manual**, as HTML or another fitting form;
-  2. **P-3 — fixes for problems found in field use.**
-  The open items above (speed-ups on the slowest PC, small facts) stay
-  for reference until P-3 picks any up.
+- **Now: P-2, the user manual** (interview 2026-11-03). The first draft
+  is built:
+  - the page is `src/oil_tracker/web/manual/index.html`, nine chapters;
+  - it has 32 screenshots and 6 clips (about 2 MB), made by
+    `scripts/render_manual.py` from the real app on sample7;
+  - it opens from the help's "사용 설명서" button
+    (`application/manual.py`, `POST /api/manual/open`).
 
-## Session handoff — 2026-11-03 (P-1 done; P-2 next)
+  What is left:
+  1. **The user reviews the draft** (open the page in a browser) and
+     gives notes; the agent revises.
+  2. **A Windows look**, when the user next builds: the button opens the
+     manual in Edge from the one-folder build. This is the report's
+     `os.startfile` path, so it can ride along with the next build
+     rather than need a run of its own; the user decides.
+  3. **Close P-2.**
+- **After P-2** (user, 2026-11-02): **P-3 — fixes for problems found in
+  field use.** The open items above (speed-ups on the slowest PC, small
+  facts) stay for reference until P-3 picks any up.
 
-**Where it stands:** `main` is clean and in sync with the remote. The first
-version is accepted (`8448e79`); no app code changed since. 280 tests pass
-on macOS; Windows expects `261 passed, 4 skipped`.
+## Session handoff — 2026-11-03 (P-2 first draft)
 
-**P-1 as it ended:**
-- The user fixed draft 3. It is outside Git in `~/Movies/OilLevelTracker/`:
-  `intro-draft3.mp4` is the video. Beside it are the user's track
-  `music-test_2.mp3`, the music candidates the user chose by ear
-  (`music-candidates/`) and the dropped drafts `intro-draft2*.mp4`.
-- To render it again (assets about 3 min, frames about 2 min;
-  `--skip-assets` reuses the assets, `--stills 25.2,47.8` captures single
-  moments):
+**Where it stands:** the first version is accepted (`8448e79`). Since
+then the app has gained only the help's "사용 설명서" button and the
+manual. 285 tests pass on macOS.
+
+**P-2 so far:**
+- **Interview (2026-11-03):**
+  - readers: inspectors new to the app;
+  - form: offline HTML, shipped and opened from the help;
+  - language: Korean only;
+  - screens: screenshots, plus short clips for actions that move;
+  - example video: sample7;
+  - scope: a quick start, then every feature by task. Keys stay in F1.
+- **The draft:**
+  - chapters: before you start, quick start, Recipe, starting an
+    inspection, the editor, correcting lines, the judgment, submitting
+    and the report, troubleshooting;
+  - its design is in DESIGN.md §3 (Body 1 Reading), §4 (help) and §5
+    (user manual).
+- **Re-making the pictures** (about 2 min):
 
   ```bash
-  PYTHONPATH=src .venv/bin/python scripts/render_intro.py --music ~/Movies/OilLevelTracker/music-test_2.mp3 --out ~/Movies/OilLevelTracker/intro.mp4
+  PYTHONPATH=src .venv/bin/python scripts/render_manual.py
   ```
 
-- Lessons, in the intro document: the camera zooms about a fixed point and
-  fits each target only; music beats are measured from kick and snare
-  onsets, never the whole spectrum; a new music cut is offered to the user
-  as audio first, because the agent cannot hear.
+- **Lessons, in the manual document:**
+  - capture at the app's smallest window;
+  - put callout badges outside their targets;
+  - save and reopen before the clean "after" shots.
 
-**Next session: start P-2.** Settle with the user, in a short interview:
-- its readers (inspectors new to the app, or also managers);
-- its form: one offline HTML file that opens in Edge, like the report, is
-  the natural fit, perhaps opened from the app's help;
-- its language;
-- whether it has short clips of the app.
-
-What it can build on:
-- **Content:** it follows the screens as built (DESIGN.md §5, the help
-  dialog's tables in `web/index.html`) and the flow in Product SSOT §3.
-- **Storyboard:** "P-2로 넘긴 것" in the intro document has the walkthrough
-  moved from P-1.
-- **Clips:** `Clip` in `scripts/render_intro.py` can record any task in the
-  real app: a screenshot per frame, the pointer and keys kept for a page to
-  draw.
-
-A manual is a new kind of document: route it through
-[docs/README.md](../README.md) first, and add it to the date catalog in the
-same change.
-
-**Read first:** this file, the [roadmap](roadmap.md),
-[docs/README.md](../README.md), Product SSOT §3, DESIGN.md §5, then
-"P-2로 넘긴 것" in [intro-video.md](../40-operations/intro-video.md).
+**Next session:** take the user's notes on the draft. **Read first:** this
+file, then [user-manual.md](../40-operations/user-manual.md).
