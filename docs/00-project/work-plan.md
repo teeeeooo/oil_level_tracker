@@ -152,7 +152,8 @@ Rewrite it; do not append to it.
 - **The repository holds only v2.**
   - v1 is at tag `v1-final` and branch `archive/v1`.
   - v1 local evidence is at `~/Developer/oil_level_tracker-v1-evidence/`.
-  - Branch `spike/webui` is kept for porting.
+  - The web UI spike is at tag `spike/webui`. Its branch was deleted
+    once v2 shipped (user, 2026-11-03).
 
 ## V2-4b — Video window and pattern copy
 
@@ -500,7 +501,6 @@ behind; the new one sought once (the start) and stayed within 0.06 s, at
 ## Left to the user, with no deadline
 
 - deleting `~/Developer/oil_level_tracker-v1-evidence/`;
-- deleting branch `spike/webui` once the porting is done;
 - **handing out release 2.0.0:**
   - put the accepted ZIP in the shared folder and tell the inspectors,
     with the distributor's name and contact (template in

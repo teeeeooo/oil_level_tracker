@@ -202,7 +202,7 @@ the source path goes in the commit message. Expected sources, all into
 - `domain/recipe.py` (`JudgmentRule`);
 - `domain/enums.py`.
 
-Expected spike sources (branch `spike/webui`, `spikes/webui/`):
+Expected spike sources (tag `spike/webui`, `spikes/webui/`):
 - the context build in `context.py`, into `adapters/video/`;
 - the drawing code in `static/render.js`, into `web/`;
 - the local server binding fix in `server.py` (no reverse-DNS lookup on
