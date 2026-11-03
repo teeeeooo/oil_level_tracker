@@ -1,9 +1,12 @@
-"""Make the P-1 introduction video (docs/40-operations/intro-video.md). Not part of the app.
+"""Make the P-1 introduction video, draft 3 (docs/40-operations/intro-video.md). Not part of the app.
 
 Stages:
-1. assets, into design/intro/assets/ (ignored by Git): an inspection of the example video analysed
-   through this folder's server in a temporary data folder, its Oil line taken from the context image
-   where the draft misses, the screens captured in Chrome, and frames of the video;
+1. assets, into design/intro/assets/ (ignored by Git): the app itself, run from this folder's code on
+   a temporary data folder and driven in Chrome as an inspector would use it. Each action is a clip:
+   one screenshot per video frame, with where the pointer is (the page draws the pointer). The
+   Recipe is drawn on the example video, the inspection analysed, the draft corrected with the
+   pencil along the context image's milk edge, the Glass checked, the version submitted; then
+   stills of the editor, the judgment, the report and frames of the video;
 2. the frames: design/intro/intro.html in Chrome, seek(t) and a screenshot every 1/30 s;
 3. the sound: the music, edited to the video (MUSIC_EDIT), with the page's cues synthesised here on top;
 4. both muxed by imageio-ffmpeg's ffmpeg into an H.264 + AAC MP4.
@@ -15,17 +18,15 @@ Usage: python scripts/render_intro.py [--video sample/sample7.mp4] [--music TRAC
 from __future__ import annotations
 
 import argparse
-import base64
 import json
+import math
 import mimetypes
 import shutil
 import subprocess
 import sys
 import tempfile
 import time
-import uuid
 import wave
-from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,56 +37,317 @@ import cv2  # noqa: E402
 import numpy as np  # noqa: E402
 
 from measure_editor import Server  # noqa: E402
-from oil_tracker import bootstrap  # noqa: E402
 
 PAGE = ROOT / "design" / "intro"
 ASSETS = PAGE / "assets"
 ORIGIN = "http://intro.local/"
 RATE = 48_000
+FPS = 30
+APP = {"width": 1600, "height": 900}  # the app's window in the clips, captured at twice the pixels
 
-# the Glass on sample7, inside the cup's rim and thick base (a trial on 2026-11-02: with either
-# inside the ellipse the draft follows that edge instead)
-GLASS = {"center_x": 1125.0, "center_y": 632.0, "radius_x": 260.0, "radius_y": 222.0}
-ZERO_Y, COMPRESSOR_SEC = 700.0, 5.0
-RULE = {"mode": "RECOVERY", "recovery_limit_sec": 30.0, "stable_hold_sec": 5.0,
-        "minimum_valid_coverage_ratio": 0.7, "allowed_sec": 5.0, "allowed_px": 0.0}
+# the Glass on sample7 (user, 2026-11-03: not the cup's upper part, where the draft caught the
+# top): from the thick base up to just above the final level, inside the walls
+GLASS = {"center_x": 1125.0, "center_y": 675.0, "radius_x": 250.0, "radius_y": 175.0}
+ZERO_Y, LIMIT_SEC = 700.0, 30.0
 WHITE = 195  # the milk in the context image: every channel above this
 NAME, HEADER = "예시 검사", {"compressor_model": "예시 모델", "test_type": "예시 시험"}
+RECIPE = "예시 유리컵"
+EDGE_SEC = 31.5  # the pencil follows the milk's edge up to here; the draft is right after it
 
 
 # ---- 1. assets ----
 
-def write_recipe(data: Path, video: Path) -> None:
-    capture = cv2.VideoCapture(str(video))
-    capture.set(cv2.CAP_PROP_POS_MSEC, 40_000)
-    ok, frame = capture.read()
-    if not ok:
-        raise RuntimeError(f"영상을 읽지 못했습니다: {video}")
-    height, width = frame.shape[:2]
-    jpeg = cv2.imencode(".jpg", cv2.resize(frame, (width // 2, height // 2)), [cv2.IMWRITE_JPEG_QUALITY, 80])[1]
-    now = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    recipe = {
-        "format": "oil-level-tracker-recipe", "schema_version": 1, "id": str(uuid.uuid4()),
-        "name": "예시 유리컵", "created_at": now, "updated_at": now,
-        "reference_frame": {"width": width, "height": height, "source_name": video.name, "time_sec": 40.0,
-                            "jpeg_base64": base64.b64encode(jpeg).decode()},
-        "glasses": [{"id": str(uuid.uuid4()), "name": "GLASS", "ellipse": GLASS, "zero_line_y": ZERO_Y,
-                     "judgment_rule": RULE}],
-    }
-    folder = data / "Recipes"
-    folder.mkdir(parents=True)
-    (folder / "예시 유리컵.recipe.json").write_text(json.dumps(recipe, ensure_ascii=False), encoding="utf-8")
+def smooth(p: float) -> float:
+    return p * p * (3 - 2 * p)
 
 
-def boundary(context: np.ndarray, top: float, bottom: float) -> list[float]:
-    """The top of the milk per column (source-frame y), the Glass bottom where there is none."""
+class Clip:
+    """One action in the app as a clip: a screenshot per video frame and the pointer in each.
+
+    The pointer is Playwright's mouse; a frame whose screen cannot have changed reuses the last
+    screenshot. marks name frames the page times its scene to."""
+
+    def __init__(self, page, name: str, at: tuple[float, float]) -> None:
+        self.page, self.name = page, name
+        self.folder = ASSETS / "clips" / name
+        self.folder.mkdir(parents=True)
+        self.frames: list[list] = []  # [screenshot, x, y, pressed, pointer kind]
+        self.shots = 0
+        self.marks: dict[str, int] = {}
+        self.x, self.y = at
+        self.down, self.kind = False, "arrow"
+        page.mouse.move(self.x, self.y)
+
+    def settle(self, ms: int = 0) -> None:
+        if ms:
+            self.page.wait_for_timeout(ms)
+        self.page.evaluate("() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)))")
+
+    def frame(self, fresh: bool = True) -> None:
+        if fresh or not self.shots:
+            self.settle()
+            self.page.screenshot(path=str(self.folder / f"{self.shots:04d}.jpg"), type="jpeg", quality=88)
+            self.shots += 1
+        self.frames.append([self.shots - 1, round(self.x, 1), round(self.y, 1), self.down, self.kind])
+
+    def hold(self, frames: int, wait_ms: int = 0) -> None:
+        self.settle(wait_ms)
+        self.frame()
+        for _ in range(frames - 1):
+            self.frame(fresh=False)
+
+    def mark(self, name: str) -> None:
+        self.marks[name] = len(self.frames)
+
+    def move(self, x: float, y: float, frames: int, arc: float = 0.12) -> None:
+        """To (x, y) in a slight curve, easing in and out, as a hand moves a mouse."""
+        x0, y0 = self.x, self.y
+        nx, ny = -(y - y0), x - x0  # the curve bows to one side of the straight path
+        for k in range(1, frames + 1):
+            p = smooth(k / frames)
+            bow = arc * math.sin(math.pi * p)
+            self.x, self.y = x0 + (x - x0) * p + nx * bow, y0 + (y - y0) * p + ny * bow
+            self.page.mouse.move(self.x, self.y)
+            self.frame()
+
+    def path(self, points: list[tuple[float, float]], frames: int) -> None:
+        """Along points (the pencil), at an even pace along their length."""
+        lengths = np.r_[0, np.cumsum(np.hypot(*np.diff(np.array(points), axis=0).T))]
+        for k in range(1, frames + 1):
+            at = smooth(k / frames) * lengths[-1]
+            i = min(len(points) - 2, int(np.searchsorted(lengths, at, side="right")) - 1)
+            f = (at - lengths[i]) / max(1e-9, lengths[i + 1] - lengths[i])
+            self.x = points[i][0] + (points[i + 1][0] - points[i][0]) * f
+            self.y = points[i][1] + (points[i + 1][1] - points[i][1]) * f
+            self.page.mouse.move(self.x, self.y)
+            self.frame()
+
+    def press(self) -> None:
+        self.page.mouse.down()
+        self.down = True
+        self.frame()
+        self.frame()
+
+    def release(self, wait_ms: int = 0) -> None:
+        self.page.mouse.up()
+        self.down = False
+        self.settle(wait_ms)
+        self.frame()
+
+    def click(self, x: float, y: float, frames: int, wait_ms: int = 150) -> None:
+        self.move(x, y, frames)
+        self.press()
+        self.release(wait_ms)
+
+    def drag(self, x: float, y: float, frames: int, wait_ms: int = 0) -> None:
+        self.press()
+        self.move(x, y, frames, arc=0.04)
+        self.release(wait_ms)
+
+    def save(self) -> None:
+        facts = {"fps": FPS, "size": [APP["width"], APP["height"]], "frames": self.frames, "marks": self.marks}
+        (ASSETS / "clips" / f"{self.name}.json").write_text(json.dumps(facts))
+        print(f"  clip {self.name}: {len(self.frames)} frames, {self.shots} screenshots", flush=True)
+
+
+def centre(locator) -> tuple[float, float]:
+    box = locator.bounding_box()
+    return box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
+
+
+def relative(box: dict, origin: dict) -> dict:
+    return {"x": box["x"] - origin["x"], "y": box["y"] - origin["y"], "width": box["width"], "height": box["height"]}
+
+
+def field(scope, label: str):
+    return scope.locator(".field", has=scope.page.locator(".label", has_text=label)).locator("input")
+
+
+def frame_point(page, sx: float, sy: float) -> tuple[float, float]:
+    """A source-frame point on the Recipe screen's frame, in page pixels (frame.js layout(), zoom 1)."""
+    box = page.evaluate("""() => { const c = document.getElementById('frame').getBoundingClientRect();
+        const b = document.getElementById('frameBox'); return [c.left, c.top, b.clientWidth, b.clientHeight]; }""")
+    left, top, w, h = box
+    s = min(w / 1920, h / 1080)
+    return left + (w - 1920 * s) / 2 + sx * s, top + (h - 1080 * s) / 2 + sy * s
+
+
+def record_recipe(page) -> dict:
+    """The Recipe screen: add a Glass, move it onto the cup, size it to where the milk moves, set the
+    zero line, save. The rule's time limit is typed after the clip and saved again."""
+    page.locator("#toRecipes").click()
+    page.locator("#newRecipe").click()  # the path prompt answers with the video
+    page.locator("#editView").wait_for()
+    page.locator("#recipeName").fill(RECIPE)
+    scrub = page.locator("#scrub").bounding_box()
+    page.mouse.click(scrub["x"] + scrub["width"] * 40 / 44.4, scrub["y"] + scrub["height"] / 2)  # milk in the cup
+    page.mouse.move(1400, 600)
+    page.wait_for_timeout(1200)
+
+    clip = Clip(page, "recipe", (1430, 560))
+    clip.hold(6)
+    clip.click(*centre(page.locator("#addGlass")), 20)  # the default Glass: centre (960, 540), 230 x 292, zero 594
+    clip.mark("added")
+    clip.hold(4)
+    clip.move(*frame_point(page, 960, 520), 16)
+    clip.kind = "move"
+    clip.mark("move")
+    clip.drag(*frame_point(page, 1125, 655), 26)  # centre (1125, 675): box 895-1355 x 383-967, zero 729
+    clip.kind = "arrow"
+    clip.hold(3)
+    clip.move(*frame_point(page, 895, 383), 12)
+    clip.kind = "resize"
+    clip.mark("resize")
+    clip.drag(*frame_point(page, 875, 500), 20)
+    clip.kind = "arrow"
+    clip.move(*frame_point(page, 1355, 967), 14)
+    clip.kind = "resize"
+    clip.drag(*frame_point(page, 1375, 850), 20)
+    clip.kind = "arrow"
+    clip.hold(3)
+    zero = page.locator("#selBody").locator(".field", has=page.locator(".label", has_text="0선 Y")).locator("input")
+    zero_y = float(zero.input_value())
+    clip.move(*frame_point(page, 1210, zero_y), 12)
+    clip.kind = "zero"
+    clip.mark("zero")
+    clip.drag(*frame_point(page, 1210, ZERO_Y), 18)
+    clip.kind = "arrow"
+    clip.hold(4)
+    clip.mark("save")
+    clip.click(*centre(page.locator("#save")), 18, wait_ms=500)
+    clip.hold(16)
+    clip.save()
+
+    body = page.locator("#selBody")
+    glass = {key: float(field(body, label).input_value()) for key, label in (
+        ("center_x", "중심 X"), ("center_y", "중심 Y"), ("radius_x", "반지름 X"), ("radius_y", "반지름 Y"))}
+    zero_line = float(field(body, "0선 Y").input_value())
+    limit = field(body, "회복 제한 시간")
+    limit.fill(f"{LIMIT_SEC:g}")
+    limit.press("Enter")
+    page.wait_for_timeout(400)
+    page.locator("#save").click()
+    page.wait_for_function("document.getElementById('editNotice').textContent.includes('저장했습니다')")
+    return {"ellipse": glass, "zero": zero_line}
+
+
+def record_setup(page, server) -> str:
+    """The analysis setup, filled in; the clip clicks "분석 시작". The id of the analysed inspection."""
+    page.locator("#back").click()
+    page.locator("#recipesView").wait_for()
+    page.goto(server.url)
+    page.get_by_role("button", name="새 검사").click()
+    page.locator("#pickRows tr", has_text=RECIPE).click()
+    page.locator("#pickNext").click()
+    setup = page.locator("#setupView")
+    setup.wait_for()
+    setup.get_by_label("검사 이름").fill(NAME)
+    for label, value in (("기동 시각", "5"), ("압축기 모델", HEADER["compressor_model"]), ("시험 종류", HEADER["test_type"])):
+        box = field(setup, label)
+        box.fill(value)
+        box.press("Enter")
+    page.wait_for_function("document.getElementById('setupProblemCount').textContent === ''")
+    page.locator("#frame").focus()
+    page.mouse.move(900, 500)
+    page.wait_for_timeout(800)
+
+    clip = Clip(page, "setup", (980, 520))
+    clip.hold(4)
+    clip.click(*centre(page.locator("#startAnalysis")), 22)
+    clip.hold(2)
+    clip.save()
+    for _ in range(600):
+        listed = server.call("GET", "/api/inspections")["inspections"]
+        if listed and listed[0]["state"] == "ANALYSED":
+            return listed[0]["id"]
+        time.sleep(0.2)
+    raise RuntimeError("분석이 끝나지 않았습니다")
+
+
+def edge(context: np.ndarray, top: float, bottom: float) -> list[float]:
+    """The top of the milk per sample (source-frame y), the Glass bottom where there is none."""
     white = context.min(axis=2)
+    scale = (bottom - top) / context.shape[0]
     ys = []
     for column in white.T:
-        rows = np.flatnonzero(np.convolve(column[20:] > WHITE, np.ones(6), "valid") == 6)
-        ys.append(top + 20 + rows[0] if rows.size else bottom)
-    smooth = [float(np.median(ys[max(0, i - 2):i + 3])) if 0 < i < len(ys) - 1 else float(ys[i]) for i in range(len(ys))]
-    return smooth
+        rows = np.flatnonzero(np.convolve(column > WHITE, np.ones(6), "valid") == 6)
+        ys.append(top + rows[0] * scale if rows.size else bottom)
+    return [float(np.median(ys[max(0, i - 2):i + 3])) for i in range(len(ys))]
+
+
+def context_point(page, t: float, y: float, facts: dict) -> tuple[float, float]:
+    """A time and source-frame y on the editor's context image, in page pixels."""
+    box = page.locator("#context image").bounding_box()
+    t0, t1 = facts["view"]
+    return (box["x"] + (t - t0) / (t1 - t0) * box["width"],
+            box["y"] + (y - facts["top"]) / (facts["bottom"] - facts["top"]) * box["height"])
+
+
+def record_edit(page, facts: dict) -> None:
+    """The editor: the draft as it came, then the pencil along the milk's edge where the draft
+    missed it, a click that shows that moment in the video, the Glass checked."""
+    page.wait_for_function("document.querySelectorAll('#context image').length === 1")
+    page.mouse.move(800, 450)
+    page.wait_for_timeout(1500)
+    page.screenshot(path=str(ASSETS / "editor-draft.jpg"), type="jpeg", quality=92)
+    hide = page.add_style_tag(content="#graph [data-kind=oil], #context [data-kind=oil] { visibility: hidden }")
+    page.wait_for_timeout(200)
+    page.screenshot(path=str(ASSETS / "editor-noline.jpg"), type="jpeg", quality=92)
+    hide.evaluate("node => node.remove()")
+    facts["boxes"] = {name: page.locator(selector).first.bounding_box() for name, selector in (
+        ("graph", "#graphBox"), ("context", "#contextBox"), ("contextImage", "#context image"),
+        ("video", "#videoBox"), ("judgment", "#judgmentSection"), ("toolbar", "#editorView header.toolbar"),
+        ("pencil", "#editorView button[data-tool=pencil]"), ("submit", "#editorSubmit"))}
+
+    points = [context_point(page, t, y, facts) for t, y in zip(facts["times"], facts["edge"]) if t <= EDGE_SEC]
+    points.insert(0, context_point(page, 0.0, facts["bottom"] - 2, facts))  # from the Glass bottom: EMPTY
+
+    clip = Clip(page, "edit", (900, 420))
+    clip.hold(4)
+    clip.click(*centre(page.locator("#editorView button[data-tool=pencil]")), 20)
+    clip.hold(3)
+    clip.move(*points[0], 20)
+    clip.kind = "pencil"
+    clip.mark("stroke")
+    clip.press()
+    clip.path(points, 78)
+    clip.release(wait_ms=700)
+    clip.mark("stroked")
+    clip.hold(14, wait_ms=300)
+    clip.kind = "arrow"
+    clip.click(*centre(page.locator("#editorView button[data-tool=select]")), 18)
+    clip.mark("look")
+    clip.click(*context_point(page, 20.0, 760.0, facts), 22, wait_ms=900)
+    clip.hold(30, wait_ms=300)
+    clip.mark("check")
+    clip.click(*centre(page.locator("#checkGlass")), 24, wait_ms=700)
+    clip.hold(12)
+    clip.save()
+
+    page.mouse.move(800, 300)
+    page.wait_for_timeout(500)
+    page.screenshot(path=str(ASSETS / "editor-final.jpg"), type="jpeg", quality=92)
+    # the judgment, alone, and where its verdict and rows are in it
+    section = page.locator("#judgmentSection")
+    origin = section.bounding_box()
+    facts["judgmentRows"] = [
+        {"label": row.locator("th, td").first.inner_text(), "box": relative(row.bounding_box(), origin)}
+        for row in page.locator("#judgmentFacts tr").all()]
+    facts["verdict"] = relative(page.locator("#verdictBadge").bounding_box(), origin)
+    section.screenshot(path=str(ASSETS / "judgment.png"))
+    page.evaluate("for (const node of document.querySelectorAll('*')) if (node.scrollTop) node.scrollTop = 0")
+
+
+def record_submit(page) -> None:
+    clip = Clip(page, "submit", (1000, 300))
+    clip.hold(4)
+    clip.click(*centre(page.locator("#editorSubmit")), 22, wait_ms=500)
+    clip.mark("dialog")
+    clip.hold(10)
+    clip.click(*centre(page.locator("#submitConfirm")), 22, wait_ms=1200)
+    clip.mark("submitted")
+    clip.hold(24)
+    clip.save()
 
 
 def make_assets(video: Path) -> None:
@@ -96,91 +358,52 @@ def make_assets(video: Path) -> None:
     ASSETS.mkdir(parents=True)
     with tempfile.TemporaryDirectory() as temp, sync_playwright() as playwright:
         data = Path(temp) / "data"
-        write_recipe(data, video)
+        data.mkdir()
         server = Server(data)
         try:
             browser = playwright.chromium.launch(channel="chrome")
-            page = browser.new_page(viewport={"width": 1600, "height": 900}, device_scale_factor=2)
+            page = browser.new_page(viewport=APP, device_scale_factor=2)
             page.on("dialog", lambda dialog: dialog.accept(str(video)))  # no window: the path prompt
-
-            # the analysis setup, as the inspector fills it in
             page.goto(server.url)
-            page.get_by_role("button", name="새 검사").click()
-            page.locator("#pickDialog").get_by_role("button", name="다음").click()
-            page.locator("#setupView").wait_for()
-            setup = page.locator("#setupView")
-            setup.get_by_label("검사 이름").fill(NAME)
-            for label, value in (("기동 시각", "5"), ("압축기 모델", HEADER["compressor_model"]),
-                                 ("시험 종류", HEADER["test_type"])):
-                box = setup.locator(".field", has=page.locator(".label", has_text=label)).locator("input")
-                box.fill(value)
-                box.press("Enter")
-            page.wait_for_function("document.getElementById('setupProblemCount').textContent === ''")
-            page.locator("#frame").focus()
-            page.wait_for_timeout(800)
-            page.screenshot(path=str(ASSETS / "setup.png"))
-            page.get_by_role("button", name="분석 시작").click()
-            for _ in range(600):
-                listed = server.call("GET", "/api/inspections")["inspections"]
-                if listed and listed[0]["state"] == "ANALYSED":
-                    break
-                time.sleep(0.2)
-            else:
-                raise RuntimeError("분석이 끝나지 않았습니다")
-            inspection = listed[0]["id"]
+            page.wait_for_timeout(600)
 
-            # the Oil line from the context image, checked
-            context_png = next((data / "Inspections").glob("*/cache/*/context-000.png"))
-            context = cv2.imread(str(context_png))
+            drawn = record_recipe(page)
+            print(f"  Glass as drawn: {drawn}", flush=True)
+            inspection = record_setup(page, server)
+
+            # the facts the page's scenes are drawn from: the line as drafted and the milk's edge
+            context = cv2.imread(str(next((data / "Inspections").glob("*/cache/*/context-000.png"))))
             cv2.imwrite(str(ASSETS / "context.png"), context)
-            top, bottom = GLASS["center_y"] - GLASS["radius_y"], GLASS["center_y"] + GLASS["radius_y"]
+            e = drawn["ellipse"]
+            top, bottom = e["center_y"] - e["radius_y"], e["center_y"] + e["radius_y"]
             edits = server.call("GET", f"/api/inspections/{inspection}/edits")["edits"]
-            glass = edits["glasses"][0]
-            draft = list(glass["oil"]["ys"])
-            ys = boundary(context, top, bottom)
-            glass["oil"] = {"ys": ys, "origins": ["DRAWN"] * len(ys)}
-            glass["decision"] = {"override": None, "reason": "", "checked_at": datetime.now(timezone.utc).isoformat()}
-            server.call("POST", f"/api/inspections/{inspection}/edits", {"edits": edits})
-            recovery = {}  # the app's own judgment of each line, to check the page's
-            for key, line in (("draft", draft), ("ys", ys)):
-                trial = json.loads(json.dumps(edits))
-                trial["glasses"][0]["oil"] = {"ys": line, "origins": ["DRAWN"] * len(line)}
-                state = server.call("POST", f"/api/inspections/{inspection}/edits/states", {"edits": trial})["glasses"][0]
-                recovery[key] = state["judgment"]["recovery"]
-            line_facts = {"draft": draft, "ys": ys, "top": top, "bottom": bottom, "zero": ZERO_Y, "times": edits["times"],
-                          "compressor_sec": COMPRESSOR_SEC, "rule": RULE, "recovery": recovery}
+            times = edits["times"]
+            dt = (times[-1] - times[0]) / (len(times) - 1)
+            facts = {"glass": drawn, "top": top, "bottom": bottom, "times": times,
+                     "view": [times[0] - dt / 2, times[-1] + dt / 2],
+                     "draft": edits["glasses"][0]["oil"]["ys"], "edge": edge(context, top, bottom),
+                     "band": [e["center_x"] - 0.4 * e["radius_x"], e["center_x"] + 0.4 * e["radius_x"]]}
+            record_edit(page, facts)
+            record_submit(page)
+            (ASSETS / "facts.json").write_text(json.dumps(facts, ensure_ascii=False))
 
-            # the editor, then the submitted report
-            page.goto(server.url)
-            page.locator("#inspectionRows tr", has_text=NAME).get_by_role("button", name="열기", exact=True).click()
-            page.wait_for_function("document.querySelectorAll('#context image').length === 1")
-            page.wait_for_timeout(1500)
-            page.screenshot(path=str(ASSETS / "editor.png"))
-            page.locator("#editorView .editor-left").screenshot(path=str(ASSETS / "graph.png"))
-            page.locator("#judgmentSection").screenshot(path=str(ASSETS / "judgment.png"))
-            # where the editor's parts are, in its 1600 x 900 page, for the scene that assembles it
-            line_facts["editor"] = {
-                name: page.locator(selector).first.bounding_box() for name, selector in (
-                    ("toolbar", "#editorView header.toolbar"), ("graph", "#graphBox"), ("context", "#contextBox"),
-                    ("judgment", "#judgmentSection"), ("submit", "#editorSubmit"))
-            }
-            (ASSETS / "line.json").write_text(json.dumps(line_facts))
-            server.call("POST", f"/api/inspections/{inspection}/submit", {"edits": edits})
             report = next((data / "Inspections").glob("*/versions/001/report.html"))
             page.goto(report.as_uri())
             page.wait_for_timeout(1500)
-            page.locator("section.page.first").screenshot(path=str(ASSETS / "report-crop.png"))  # its first page, whole
+            for i, section in enumerate(page.locator("section.page").all()[:2]):
+                section.screenshot(path=str(ASSETS / f"report-{i}.png"))
             browser.close()
         finally:
             server.close()
 
+    # the cup at 24 moments, for the scene that builds the context image
     capture = cv2.VideoCapture(str(video))
     duration = capture.get(cv2.CAP_PROP_FRAME_COUNT) / capture.get(cv2.CAP_PROP_FPS)
-    for i in range(48):
-        capture.set(cv2.CAP_PROP_POS_MSEC, duration * 1000 * i / 47 * 0.999)
+    for i in range(24):
+        capture.set(cv2.CAP_PROP_POS_MSEC, duration * 1000 * i / 23 * 0.999)
         ok, frame = capture.read()
         crop = frame[300:1000, 760:1490]  # the cup
-        cv2.imwrite(str(ASSETS / f"frame-{i:02d}.jpg"), crop, [cv2.IMWRITE_JPEG_QUALITY, 88])
+        cv2.imwrite(str(ASSETS / f"cup-{i:02d}.jpg"), crop, [cv2.IMWRITE_JPEG_QUALITY, 88])
     print(f"assets: {ASSETS}")
 
 
@@ -230,6 +453,9 @@ def sound(kind: str, rng: np.random.Generator) -> np.ndarray:
     if kind == "tick":
         n = secs(0.03)
         return rng.standard_normal(n) * envelope(n, 0.0005, 0.004) * 0.5 + np.sin(2 * np.pi * 3200 * t(n)) * envelope(n, 0.0005, 0.006) * 0.3
+    if kind == "click":  # a mouse button
+        n = secs(0.04)
+        return rng.standard_normal(n) * envelope(n, 0.0003, 0.003) * 0.6 + np.sin(2 * np.pi * 2400 * t(n)) * envelope(n, 0.0003, 0.004) * 0.35
     if kind == "type":
         n = secs(0.05)
         body = np.sin(2 * np.pi * 1800 * t(n)) * envelope(n, 0.0005, 0.01)
@@ -250,11 +476,6 @@ def sound(kind: str, rng: np.random.Generator) -> np.ndarray:
         phase = 2 * np.pi * np.cumsum(freq) / RATE
         tone = np.sin(phase) + 0.35 * np.sin(2 * phase) + 0.15 * np.sin(3 * phase)
         return tone * (x / 2.4) ** 1.5 * np.exp(-np.maximum(0, x - 2.1) / 0.1) * 0.45
-    if kind == "glide":
-        n = secs(4.0)
-        x = t(n)
-        phase = 2 * np.pi * np.cumsum(330 * 2 ** (x / 4.0)) / RATE
-        return np.sin(phase) * np.sin(np.pi * x / 4.0) ** 2 * 0.18
     if kind == "scribble":
         n = secs(2.3)
         x = t(n)
@@ -274,11 +495,10 @@ def sound(kind: str, rng: np.random.Generator) -> np.ndarray:
             m = n - start
             out[start:] += np.sin(2 * np.pi * f * t(m)) * envelope(m, 0.003, 0.5 if kind == "chime" else 0.8)
         return out * (0.35 if kind == "chime" else 0.12)
-    if kind == "boom":
-        n = secs(3.5)
-        x = t(n)
-        body = np.sin(2 * np.pi * 52 * x) + 0.4 * np.sin(2 * np.pi * 104 * x)
-        return (body * envelope(n, 0.01, 1.1) + lowpass(rng.standard_normal(n), 400) * envelope(n, 0.005, 0.25)) * 0.6
+    if kind == "flip":  # a card turning over
+        n = secs(0.35)
+        x = t(n) / 0.35
+        return lowpass(rng.standard_normal(n), 1800 + 3000 * x) * np.sin(np.pi * x) ** 3 * 0.9
     raise ValueError(kind)
 
 
@@ -306,7 +526,8 @@ def effects(cues: list, duration: float) -> np.ndarray:
 
 
 def soundtrack(cues: list, duration: float, music: Path | None) -> np.ndarray:
-    """Stereo: the music with the effects on top, or the effects alone; -1 dBFS at the loudest."""
+    """Stereo: the music with the effects on top, or the effects alone; about -2 dBFS at the loudest
+    (the AAC encoder overshoots a mix at -1 dBFS)."""
     sfx = effects(cues, duration)
     if music is None:
         mix_ = np.repeat(sfx[:, None] / max(1e-9, np.abs(sfx).max()) * 0.5, 2, axis=1)
@@ -314,7 +535,7 @@ def soundtrack(cues: list, duration: float, music: Path | None) -> np.ndarray:
         song = music_track(music, duration)
         sfx *= 0.35 * np.abs(song).max() / max(1e-9, np.abs(sfx).max())  # under the music
         mix_ = song + sfx[:, None]
-    return mix_ * (0.89 / max(1e-9, np.abs(mix_).max()))
+    return mix_ * (0.78 / max(1e-9, np.abs(mix_).max()))
 
 
 def write_wav(path: Path, samples: np.ndarray) -> None:
@@ -327,11 +548,11 @@ def write_wav(path: Path, samples: np.ndarray) -> None:
 
 
 # the music (user, 2026-11-02: a Suno track, for the department's own use): 108 BPM, bars of 2.222 s
-# from 0.034 s. The video keeps bars 0-17 (intro, build, the main section and its one-bar rest), then
-# jumps to bar 66, the last section, whose final hit (bar 70) and tail end the video: 55.0 s in all.
-# design/intro/intro.html times its scenes to these bars.
+# from 0.034 s. The video keeps bars 0-33 (intro, build, the second section and the whole main
+# section), then jumps to bar 66, the last section, whose final hit (bar 70, the video's bar 38) and
+# tail end the video: 88.9 s in all. design/intro/intro.html times its scenes to these bars.
 BAR, FIRST_BEAT = 60 / 108 * 4, 0.034
-MUSIC_EDIT = ((0.0, FIRST_BEAT + 18 * BAR), (FIRST_BEAT + 66 * BAR, None))
+MUSIC_EDIT = ((0.0, FIRST_BEAT + 34 * BAR), (FIRST_BEAT + 66 * BAR, None))
 SPLICE_SEC = 0.03
 
 
@@ -413,12 +634,15 @@ def main() -> None:
     parser.add_argument("--out", type=Path, default=Path.home() / "Movies" / "OilLevelTracker" / "intro.mp4")
     parser.add_argument("--music", type=Path, help="the music track; without it, the effects alone")
     parser.add_argument("--skip-assets", action="store_true", help="use design/intro/assets/ as it is")
+    parser.add_argument("--assets-only", action="store_true", help="make the assets and stop")
     parser.add_argument("--stills", help="only screenshots at these times (comma-separated), beside --out")
     args = parser.parse_args()
     if not args.skip_assets:
         make_assets(args.video.resolve())
+    if args.assets_only:
+        return
     if args.stills:
-        stills([float(s) for s in args.stills.split(",")], args.out.parent / "stills")
+        stills([float(s) for s in args.stills.split(",")], args.out.expanduser().parent / "stills")
     else:
         render(args.out.expanduser(), args.music)
 

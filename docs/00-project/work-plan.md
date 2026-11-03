@@ -1,8 +1,9 @@
 # Current Work Plan
 
-**Current milestone:** `P-1 — Introduction video` / `ACTIVE`: a 55 s
-kinetic-type introduction ([scenes](../40-operations/intro-video.md));
-draft 2 is with the user, whose remaining notes come next session. **The first version is accepted**
+**Current milestone:** `P-1 — Introduction video` / `ACTIVE`: draft 3, an
+89 s light product film around real app screens
+([scenes](../40-operations/intro-video.md)), is with the user for review;
+drafts 1–2 were dropped. **The first version is accepted**
 (2026-11-02): V2-5 passed every row on the workstation and the slowest PC.
 **After P-1** (user, 2026-11-02): P-2 user manual, P-3 field-use fixes.
 **Last completed:** `V2-5 — Windows acceptance` / `DONE` (2026-11-02).
@@ -496,54 +497,48 @@ The three v1 remote branches that v1 docs cite stay.
     on `8448e79`: every row, A5 2.2 / 9.3 ms.
 - **Now, P-1 — an introduction video** of the app; the
   [scene and making document](../40-operations/intro-video.md) holds the
-  decisions. In short (user, 2026-11-02):
-  - an **introduction, not a how-to**, in kinetic type; any tone; no
-    app-icon SVG in the video. The earlier walkthrough storyboard moves to
-    P-2 as short clips;
-  - real app screens from an inspection of `sample/sample7.mp4` (public,
-    milk poured into a glass; none of the compressor samples fit), marked
-    as an example; Korean text; the video file outside Git;
-  - music: the user's Suno track (free account, internal use), cut on its
-    bars to 55 s; a few synthesised effects under it.
-  **Now:** draft 2 (55 s) is with the user; they asked for the report's
-  cut-off left edge to be fixed (done) and continue with the rest of their
-  notes in the next session.
+  decisions. In short:
+  - an **introduction, not a how-to**; Korean words on screen, no voice;
+    the user's Suno track cut on its bars; the video file outside Git
+    (user, 2026-11-02);
+  - **draft 3 is new, not a fix of drafts 1–2** (user, 2026-11-03, after an
+    interview): problem → app → result in about 90 s for inspectors and
+    managers; a light product film; the app's real screens, driven by a
+    script; no numbers for how long things take; sample7 (the public
+    compressor videos do not fit), its Glass without the cup's upper part.
+  **Now:** draft 3 is with the user for review.
 - **Then, in order** (user, 2026-11-02):
   1. **P-2 — a user manual**, as HTML or another fitting form;
   2. **P-3 — fixes for problems found in field use.**
   The open items above (speed-ups on the slowest PC, small facts) stay
   for reference until P-3 picks any up.
 
-## Session handoff — 2026-11-02 (P-1, draft 2)
+## Session handoff — 2026-11-03 (P-1, draft 3)
 
 **Where it stands:** the first version is accepted (`8448e79`); P-1 is
-`ACTIVE`. `main` is clean and in sync with the remote. 280 tests pass on
-macOS; Windows expects `261 passed, 4 skipped`.
+`ACTIVE`. 280 tests pass on macOS; Windows expects `261 passed, 4 skipped`.
 
 **The video so far:**
 - `design/intro/intro.html` draws each moment with `seek(t)` and holds the
-  timeline (bars of the music: `bar(n)`) and the sound cues;
-  `scripts/render_intro.py` makes its assets (an inspection of sample7
-  analysed through this folder's server, the Oil line taken from the
-  context image, the screens), captures the frames and muxes the MP4.
-  The page checks that its live judgment matches the app's.
+  timeline (bars of the music: `bar(n)`, `B(n, beats)`) and the sound cues.
+  `scripts/render_intro.py` makes its assets by driving this folder's app in
+  Chrome (clips: a screenshot per frame and the pointer, which the page
+  draws), captures the frames and muxes the MP4.
 - Outside Git, in `~/Movies/OilLevelTracker/`: the user's track
-  `music-test_2.mp3`, `intro-draft2.mp4` (55 MB, CRF 20) and
-  `intro-draft2-small.mp4` (16 MB, CRF 25, the one sent). Both drafts
-  include the fix for the report's cut-off left edge.
-- To render again (about 1.5 min; `--skip-assets` reuses the assets):
+  `music-test_2.mp3`, the dropped drafts `intro-draft2*.mp4`, and
+  `intro-draft3.mp4` (CRF 20).
+- To render again (assets about 3 min, frames about 2 min; `--skip-assets`
+  reuses the assets):
 
   ```bash
-  PYTHONPATH=src .venv/bin/python scripts/render_intro.py --music ~/Movies/OilLevelTracker/music-test_2.mp3 --out ~/Movies/OilLevelTracker/intro-draft3.mp4
+  PYTHONPATH=src .venv/bin/python scripts/render_intro.py --music ~/Movies/OilLevelTracker/music-test_2.mp3 --out ~/Movies/OilLevelTracker/intro-draft4.mp4
   ```
 
   `--stills 25.2,47.8` captures single moments into a `stills/` folder
   beside `--out`; look at those before a full render.
 
-**Next session:** ask the user for the rest of their notes on draft 2
-(they reviewed it and stopped after the report fix). Unchecked by the
-agent, who cannot hear: the music splice at 40.0 s and the effects'
-level. Then P-2, then P-3 (the order above).
+**Next session:** take the user's notes on draft 3. Unchecked by the agent,
+who cannot hear: the splice at 75.6 s and the effects' level.
 
 **Then P-2:** settle with the user its readers, form (one offline HTML
 file that opens in Edge, like the report, is the natural fit, perhaps
