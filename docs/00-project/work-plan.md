@@ -470,6 +470,8 @@ behind; the new one sought once (the start) and stayed within 0.06 s, at
   test. At `11e4745`: `272 passed, 3 skipped` on macOS, so
   `271 passed, 4 skipped` on Windows when its venv has no Playwright
   (confirmed there).
+  - Since `scripts/make_manual_file.py` (after `v2.0.0`): `276 passed, 3 skipped`
+    on macOS, so `275 passed, 4 skipped` on Windows.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -501,11 +503,15 @@ behind; the new one sought once (the start) and stayed within 0.06 s, at
 ## Left to the user, with no deadline
 
 - deleting `~/Developer/oil_level_tracker-v1-evidence/`;
-- **handing out release 2.0.0:**
-  - put the accepted ZIP in the shared folder and tell the inspectors,
-    with the distributor's name and contact (template in
+- **handing out release 2.0.0** (user, 2026-11-03: three files):
+  - the accepted ZIP;
+  - the introduction video;
+  - the user manual as one file,
+    `OilLevelTracker-2.0.0-사용설명서.html`. It is made on the Mac in
+    `build/release/` by `scripts/make_manual_file.py`.
+  - Put them in the shared folder and tell the inspectors, with the
+    distributor's name and contact (template in
     [distribution.md](../40-operations/distribution.md));
-  - share the introduction video apart from the app;
   - replace the slowest PC's first 2.0.0 if it should match (optional).
 
 The three v1 remote branches that v1 docs cite stay.

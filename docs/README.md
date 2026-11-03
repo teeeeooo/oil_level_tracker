@@ -62,7 +62,7 @@ When documents disagree, use the owner of the responsibility in question:
 | colours, type or layout rules | `../DESIGN.md` |
 | a completed Windows result or an acceptance judgment | `60-evidence/YYYY-MM-DD-topic.md` |
 | a new route to past material | `00-project/recall-index.md` |
-| how to use the app, for inspectors | the user manual, `src/oil_tracker/web/manual/` (shipped with the app; how it is made: `40-operations/user-manual.md`) |
+| how to use the app, for inspectors | the user manual, `src/oil_tracker/web/manual/` (shipped with the app, and handed out as one file by `scripts/make_manual_file.py`; how it is made: `40-operations/user-manual.md`) |
 | how to install the app and what a release changed, for inspectors | the install guide, `packaging/install-guide.html` (in the release ZIP; how a release is made: `40-operations/distribution.md`) |
 
 - Current-state documents are rewritten, not appended to. History lives in

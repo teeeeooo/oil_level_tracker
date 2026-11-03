@@ -101,6 +101,11 @@ PYTHONPATH=src .venv/bin/python scripts/render_manual.py
   - 포인터 모양은 그 자리의 CSS 커서를 따른다(화살표, 십자, 양방향 화살표,
     이동).
 
+**배포용 파일 하나:** 앱 밖으로 따로 나가는 설명서는
+`scripts/make_manual_file.py`가 이 쪽과 스타일, 스크립트, 그림, 클립을 HTML
+한 파일로 묶는다([distribution.md](distribution.md)). 설명서를 고치면 배포할
+때 다시 만든다.
+
 **바뀌면 다시 찍는다:** 앱 화면이 바뀌면 스크립트를 다시 돌린다. 그림 크기가
 달라졌으면 `index.html`의 `width`/`height`도 고친다. `tests/test_manual.py`가
 확인하는 것:

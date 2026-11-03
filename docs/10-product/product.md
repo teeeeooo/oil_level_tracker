@@ -345,6 +345,9 @@ Each Glass in a Recipe has one rule.
   - the first release is version 2.0.0; the help shows the version;
   - one ZIP holds the app folder and a Korean install guide with the
     release notes;
+  - the user manual also goes out on its own, as one HTML file, with the
+    ZIP and the introduction video (user, 2026-11-03: inspectors rarely
+    open it from the help);
   - the user puts it in a shared folder, and each inspector installs it
     on their own PC, where they choose, without an installer or
     administrator rights;
