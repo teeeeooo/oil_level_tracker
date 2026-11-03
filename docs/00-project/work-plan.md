@@ -266,10 +266,10 @@ Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
   with the time until the window shows the list. Checked on macOS with a
   stand-in app (Chrome with the same port). It found a page bug, fixed:
   a resize while an inspection opened drew before the view was set. The
-  app also logs `window: page loaded … s after start`. **Unproven on
-  Windows:** the port through pywebview; the request falls back to Edge
-  with the source if it fails.
-- **The V2-5 request — waits on the user:**
+  app also logs `window: page loaded … s after start`. The port through
+  pywebview worked on Windows: the V2-5 runs measured A4–A6 in
+  `WebView2 (앱 창)`.
+- **The V2-5 request — done** (2026-11-02; results in "Next"):
   [2026-11-02-v2-5-acceptance-windows-request.md](../40-operations/2026-11-02-v2-5-acceptance-windows-request.md),
   revised twice and pinned to `daf381a` (`checked=108`), run again from
   §0 in a new folder (backup `C:\olt-v25c-backup`). Second attempt
@@ -291,31 +291,38 @@ Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
 
 ## Session state — 2026-11-03
 
-**The release:** the accepted ZIP is in the workstation's
-`C:\0.Coding\0.Release\`.
+**What gets handed out** (the user's three files):
+- `OilLevelTracker-2.0.0.zip` (SHA-256 `f1580dda…69e67`), in the
+  workstation's `C:\0.Coding\0.Release\`;
+- the introduction video, `~/Movies/OilLevelTracker/intro-draft3.mp4` on
+  the Mac;
+- the manual as one file, `OilLevelTracker-2.0.0-사용설명서.html`, in the
+  Mac's `build/release/`. `scripts/make_manual_file.py` makes it again.
 
 **The workstation:**
-- `V25b 선택 확인` was submitted as v1 in the P-2b run; the other six
-  inspections are unchanged;
-- backup: `C:\olt-p2b-backup`;
-- the unzipped test copies are in `C:\olt-p2b\ws` (`008c13f`) and
-  `C:\olt-p2b\ws2` (`11e4745`).
+- **Inspections (seven):**
+  - the four from V2-2 to V2-4;
+  - `V25 SPL#4 인수` (v1, v2);
+  - `20261102-1521_SPL#1_Heating_coldstart` (v1);
+  - `V25b 선택 확인` (v1, submitted in the P-2b run).
+- **Recipes:** `V25 SPL#4` and `V25 SPL#1`, beside the two earlier ones.
+- **The latest backup:** `C:\olt-p2b-backup`.
 
-**The slowest PC:** it holds the first P-2b ZIP's 2.0.0 (`008c13f`, the
-longer editor help), unzipped where the user chose, beside the V2-5 build
-in `C:\olt-v25\`.
+**The slowest PC:**
+- the V2-5 build in `C:\olt-v25\OilLevelTracker`;
+- the first P-2b ZIP's 2.0.0 (`008c13f`, the longer editor help),
+  unzipped where the user chose. That ZIP (`920dfbef…`) is still in
+  Downloads and is not the one to hand out;
+- one submitted SPL#1 inspection.
 
-## Session state — 2026-11-02
-
-The first version is accepted on the one-folder build of `8448e79`
-(`OilLevelTracker.exe`, 159.6 MB). On the workstation the data folder now
-holds seven inspections: the four earlier ones unchanged, `V25 SPL#4 인수`
-(v1, v2 submitted), `20261102-1521_SPL#1_Heating_coldstart` (Recipe
-`V25 SPL#1`, v1 submitted) and `V25b 선택 확인` (saved, both Glasses
-checked, not submitted); Recipes `V25 SPL#4` and `V25 SPL#1` beside the
-two earlier ones. Backups: `C:\olt-v25c-backup`, `C:\olt-v25d-backup`.
-The slowest PC holds the moved build in `C:\olt-v25\OilLevelTracker` and
-one submitted SPL#1 inspection.
+**The Mac:** cleaned on 2026-11-03.
+- Moved to `~/.Trash/olt-cleanup-20261103`, gone once the Trash is
+  emptied:
+  - the build outputs;
+  - the intro assets;
+  - the PyInstaller cache;
+  - intro draft 2 and the music candidates.
+- Branch `spike/webui` is now a tag of the same name.
 
 ## Session notes
 
@@ -398,6 +405,14 @@ one submitted SPL#1 inspection.
   Check each step against the current screen.
 - A result block's "before" list can be taken after the run: compare it
   with the previous run's final list and the backup's file count.
+- PyInstaller's `versioninfo` module imports `pefile`, which PyInstaller
+  installs only on Windows. The spec imports it inside the Windows branch.
+- The Windows agent leaves long outputs in "spill" files and relays only a
+  summary. Ask for long listings inline.
+  - A file name copied from a relayed result can carry a slip. Let a later
+    command find the file instead.
+- Explorer, .NET and `Expand-Archive` read a Korean file name from a ZIP
+  made by Python's `zipfile` correctly (the UTF-8 flag).
 
 ## Open items
 
@@ -512,7 +527,17 @@ behind; the new one sought once (the start) and stayed within 0.06 s, at
   - Put them in the shared folder and tell the inspectors, with the
     distributor's name and contact (template in
     [distribution.md](../40-operations/distribution.md));
-  - replace the slowest PC's first 2.0.0 if it should match (optional).
+  - replace the slowest PC's first 2.0.0 if it should match (optional);
+- **cleaning the Windows PCs** (listed on 2026-11-03, not done):
+  - the P-2b source and test folders (`C:\olt-p2b\…`). The first run's
+    source folder holds the first ZIP;
+  - the V2-5 and V2-3 working folders (`C:\olt-v25\`, `C:\olt-v23\`,
+    `C:\a4\`);
+  - the older backups (`C:\olt-v24…`, `C:\olt-v25…`);
+  - the V2-1 and V2-2 folders in `C:\0.Coding\`;
+  - the first ZIP in the slowest PC's Downloads;
+  - the test inspections, if a PC is to be used for real work. Some
+    sources are in those working folders.
 
 The three v1 remote branches that v1 docs cite stay.
 
@@ -545,7 +570,10 @@ The three v1 remote branches that v1 docs cite stay.
   - the version is in the help, on the report's page 1 and in the exe's
     properties;
   - `build_package.py --release` makes the ZIP;
-  - the editor's help was condensed after the first run (the user's note).
+  - the editor's help was condensed after the first run (the user's note);
+  - after acceptance the manual also goes out as one HTML file
+    (`scripts/make_manual_file.py`, `e1ed22c`). The user hands out three
+    files: the ZIP, the introduction video and the manual.
   - Evidence:
     [first run](../60-evidence/2026-11-03-p2b-release-windows-result.md)
     on `008c13f` (the slowest PC installed with the guide alone; the
@@ -564,8 +592,10 @@ The three v1 remote branches that v1 docs cite stay.
 
 **Where it stands:**
 - Release 2.0.0 is accepted and tagged: `v2.0.0` on `11e4745`.
-- `main` holds only docs after it.
-- Nothing is in progress.
+- After the tag, `main` adds docs and `scripts/make_manual_file.py` (the
+  manual as one file). The app is unchanged.
+- The Mac was cleaned ("Session state").
+- Nothing is in progress. Handing out the three files is the user's.
 
 **Next session:**
 - P-3 begins with the inspectors' problem reports, which the user
