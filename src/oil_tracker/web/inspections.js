@@ -247,7 +247,7 @@ export async function openSetup(inspectionId) {
       compressor_start_sec: compressor,
     },
   });
-  if (!opened.ok) $("setupVideoErr").textContent = `영상을 열 수 없습니다: ${opened.data.error ?? ""}`;
+  if (!opened.ok) $("setupVideoErr").textContent = opened.data.error ?? "영상을 열 수 없습니다.";  // the server says what failed
 }
 
 function enterSetup({ inspection, name, header, video, recipe, original, needsCompressor, settings }) {

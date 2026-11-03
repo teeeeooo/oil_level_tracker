@@ -37,10 +37,10 @@ async function start() {
   wire();
   try {
     const opened = await api.call("POST", `/api/inspections/${encodeURIComponent(inspectionId)}/video`);
-    if (!opened.ok) throw new Error(opened.data.error ?? `HTTP ${opened.status}`);
+    if (!opened.ok) throw new Error(opened.data.error ?? `영상을 열 수 없습니다 (HTTP ${opened.status}).`);
     state.info = opened.data;
   } catch (error) {
-    $("vwCaption").textContent = `영상을 열 수 없습니다: ${error.message}`;
+    $("vwCaption").textContent = error.message;  // the server says what failed
     return;
   }
   const video = $("vwVideo");

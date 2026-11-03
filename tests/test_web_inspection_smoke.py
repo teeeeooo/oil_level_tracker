@@ -384,6 +384,21 @@ def test_editing_saving_and_leaving(tmp_path, video, browser_page):
         source.write_bytes(original)
         page.locator("#sourceWarning").get_by_role("button", name="다시 확인").click()
         page.locator("#sourceWarning").wait_for(state="hidden")
+
+        # a missing video: the warning, and the player's notice says it once (it said its prefix twice)
+        page.get_by_role("button", name="검사 목록").click()
+        page.locator("#inspectionsView").wait_for()
+        moved = source.with_name(f"moved-{source.name}")
+        source.rename(moved)
+        try:
+            row.get_by_role("button", name="열기", exact=True).click()
+            page.locator("#sourceWarning").get_by_text("원본 영상을 찾을 수 없습니다").wait_for()
+            page.wait_for_function("document.getElementById('editorNotice').textContent !== ''")
+            assert page.locator("#editorNotice").inner_text() == f"영상을 열 수 없습니다: {source.name}"
+        finally:
+            moved.rename(source)
+        page.locator("#sourceWarning").get_by_role("button", name="다시 확인").click()
+        page.locator("#sourceWarning").wait_for(state="hidden")
         assert errors == []
     finally:
         running.close()

@@ -101,7 +101,7 @@ export async function open(inspectionId, version = null) {
   try {
     await player.open(inspectionId, { time: onPlayerTime, overlay, repeat: () => state.selection, changed: videolink.stateChanged });
   } catch (error) {
-    notify("editorNotice", `영상을 열 수 없습니다: ${error.message}`, "error");
+    notify("editorNotice", error.message || "영상을 열 수 없습니다.", "error");  // the server says what failed
   }
   await showGlass(true);
 }

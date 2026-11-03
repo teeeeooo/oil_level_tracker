@@ -30,12 +30,13 @@ This document is the milestone-order and milestone-state SSOT.
 | V2-4b — Video window and pattern copy | `DONE` | The user's additions for the first version (2026-11-02): the source video at full size in its own window; copying and pasting a stretch of the Oil and Foam lines |
 | V2-5 — Windows acceptance | `DONE` | One-folder package and the Product SSOT §2 criteria A1–A9 on target Windows |
 | P-1 — Introduction video | `DONE` | A short video that introduces the app (user, 2026-11-02); the user fixed draft 3, 76 s, on 2026-11-03 ([scenes and making](../40-operations/intro-video.md)) |
-| P-2 — User manual | `ACTIVE` | How to use the app: an offline HTML page shipped with the app and opened from the help (user, 2026-11-02; interview 2026-11-03, [decisions and making](../40-operations/user-manual.md)) |
+| P-2 — User manual | `DONE` | How to use the app: an offline HTML page shipped with the app and opened from the help (user, 2026-11-02); the user fixed the first draft on 2026-11-03 ([decisions and making](../40-operations/user-manual.md)) |
+| P-2b — Windows package and distribution | `PLANNED` | The Windows build and what is needed to hand it to the inspectors' PCs (user, 2026-11-03); its scope is settled in a short interview first |
 | P-3 — Field-use fixes | `PLANNED` | Problems found once inspectors use the first version (user, 2026-11-02) |
 
 ## Current sequence
 
-`v1 SUPERSEDED` → `V2-0 DONE` → `V2-1 DONE` → `V2-2 DONE` → `V2-3 DONE` → `V2-4 DONE` → `V2-4b DONE` → `V2-5 DONE` → `P-1 DONE` → `P-2 ACTIVE` → `P-3 PLANNED`.
+`v1 SUPERSEDED` → `V2-0 DONE` → `V2-1 DONE` → `V2-2 DONE` → `V2-3 DONE` → `V2-4 DONE` → `V2-4b DONE` → `V2-5 DONE` → `P-1 DONE` → `P-2 DONE` → `P-2b PLANNED` → `P-3 PLANNED`.
 
 The first version is accepted only at V2-5, against the Product SSOT §2. **It was accepted on 2026-11-02** ([re-check](../60-evidence/2026-11-02-v2-5-recheck-windows-result.md), on the build of `8448e79`).
 
