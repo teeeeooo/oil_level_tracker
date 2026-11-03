@@ -53,6 +53,7 @@
 | 2026-11-02 | [2026-11-02-v2-5-recheck-windows-request.md](40-operations/2026-11-02-v2-5-recheck-windows-request.md) | V2-5 재확인 요청(선택 도구, 고른 선 지우기, FULL/EMPTY, 새 빌드로 A4–A6) |
 | 2026-11-02 | [2026-11-02-v2-5-acceptance-windows-request.md](40-operations/2026-11-02-v2-5-acceptance-windows-request.md) | V2-5 인수 확인 요청(워크스테이션 빌드와 A1–A9, 최저 사양 PC에서 옮긴 빌드 실행) |
 | 2026-11-02 | [intro-video.md](40-operations/intro-video.md) | P-1 앱 소개 모션 영상의 장면 구성과 만드는 방법(합성 효과음, sample7), P-2로 넘긴 사용법 녹화안 |
+| 2026-11-03 | [2026-11-03-p2b-release-recheck-windows-request.md](40-operations/2026-11-03-p2b-release-recheck-windows-request.md) | P-2b 재확인 요청(줄인 편집기 도움말로 2.0.0 다시 빌드, 앞 실행 R 보충) |
 | 2026-11-03 | [2026-11-03-p2b-release-windows-request.md](40-operations/2026-11-03-p2b-release-windows-request.md) | P-2b 배포판 2.0.0 Windows 요청(워크스테이션 빌드·ZIP, 최저 사양 PC에서 검사자처럼 설치) |
 | 2026-11-03 | [distribution.md](40-operations/distribution.md) | P-2b 배포 인터뷰 결정, ZIP과 설치 안내, 버전마다 배포판 만드는 방법 |
 | 2026-11-03 | [user-manual.md](40-operations/user-manual.md) | P-2 사용 설명서의 인터뷰 결정, 목차, 스크린샷·클립을 찍는 방법 |

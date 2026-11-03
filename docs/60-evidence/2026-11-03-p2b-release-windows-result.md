@@ -90,4 +90,11 @@ Compare-Object $before $after | ForEach-Object { "$($_.SideIndicator) $($_.Input
 
 The editor's F1 help is too long and wordy. The manual has the details,
 so the help should be condensed. This is a request for the app, not a
-failed row. Whether it goes into 2.0.0 is the user's call (work plan).
+failed row.
+
+**What followed:**
+- The user put it into 2.0.0: every key and mouse action, each in a few
+  words (`11e4745`).
+- This ZIP (`920dfbef…`) is therefore not the one to distribute.
+- The [re-check](../40-operations/2026-11-03-p2b-release-recheck-windows-request.md)
+  rebuilds it and carries R's follow-up.

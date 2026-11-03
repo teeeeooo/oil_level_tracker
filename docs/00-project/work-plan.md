@@ -1,11 +1,11 @@
 # Current Work Plan
 
 **Current milestone:** `P-2b — Windows package and distribution` /
-`ACTIVE`: release 2.0.0's Windows run passed every row except R, which
-waits on a read-only follow-up
+`ACTIVE`: release 2.0.0's Windows run passed every row except R
 ([result](../60-evidence/2026-11-03-p2b-release-windows-result.md)). The
-user asked for a shorter editor help; whether it goes into 2.0.0 is
-theirs to decide ([decisions and making](../40-operations/distribution.md)).
+user then put a shorter editor help into 2.0.0 (`11e4745`). Next comes a
+workstation re-check that rebuilds the ZIP and carries R's follow-up
+([decisions and making](../40-operations/distribution.md)).
 **Last completed:** `P-2 — User manual` / `DONE` (2026-11-03): the user
 fixed the first draft, an offline page opened from the help
 ([decisions and making](../40-operations/user-manual.md)). Before it, P-1
@@ -534,37 +534,48 @@ The three v1 remote branches that v1 docs cite stay.
   - on the slowest PC the user installed with the guide alone;
   - the ZIP went by hand, not through the shared folder.
 
-  **Waiting on the user:**
-  - **R's follow-up:** a read-only diff of the two listings the agent
-    kept, in the result document;
-  - **the user's note:** the editor's F1 help is too long; the manual
-    holds the details, so condense it. Decide whether it goes into 2.0.0
-    (not yet announced) or a later version.
+  **The user's note, done:** the editor's F1 help listed too much. It now
+  lists every key and mouse action in a few words, and points to the
+  manual (`11e4745`, user, 2026-11-03: into 2.0.0). DESIGN.md §4 states
+  the rule.
+
+  **Waiting on the user:** the
+  [re-check](../40-operations/2026-11-03-p2b-release-recheck-windows-request.md)
+  on the workstation, pinned to `11e4745` (`checked=154`):
+  - R's follow-up from the first run;
+  - tests, `--release`, the exe and ZIP checks;
+  - the condensed help in the build;
+  - the new ZIP replacing the first in `C:\0.Coding\0.Release\`.
+
+  The slowest PC is not needed: its install steps and the guide did not
+  change.
 
   **To close P-2b:**
-  - R passes;
-  - the tag `v2.0.0` goes on the commit that is released: `008c13f`, or
-    a new one if the help change goes in. A new one needs a rebuild and a
-    short Windows check;
+  - the re-check passes;
+  - tag `11e4745` as `v2.0.0` and push the tag;
   - the user announces the ZIP (template in distribution.md).
 - **After P-2b** (user, 2026-11-02): **P-3 — fixes for problems found in
   field use.** The open items above (speed-ups on the slowest PC, small
   facts) stay for reference until P-3 picks any up.
 
-## Session handoff — 2026-11-03 (P-2b: R's follow-up and the help)
+## Session handoff — 2026-11-03 (P-2b: the re-check)
 
-**Where it stands:** release 2.0.0 (`008c13f`) passed its Windows run
-except R, whose listings were not relayed. The result is judged in
-`60-evidence/`. Nothing is tagged yet.
+**Where it stands:**
+- Release 2.0.0's first Windows run (`008c13f`) passed except R. Its
+  listings were not relayed.
+- The user put a condensed editor help into 2.0.0. The code is
+  `11e4745`; the commits after it are docs only.
+- The re-check request is with the user. Nothing is tagged yet.
 
 **Next session:**
-- judge R's follow-up when it comes back;
-- act on the user's choice about condensing the editor help. If it goes
-  into 2.0.0: change `web/index.html`'s editor help, then pin a new commit
-  for a short Windows check (tests, `--release`, the help, the ZIP);
-- then tag and close P-2b ("Next" above).
+- judge the re-check;
+- record it as
+  `docs/60-evidence/2026-11-0X-p2b-release-recheck-windows-result.md`;
+- note R there and in the first result;
+- if it passes, tag `11e4745` as `v2.0.0`, push the tag, and close P-2b
+  (roadmap `DONE`, this file, distribution.md's status).
 
 **Read first:**
 - this file's "Next";
-- the [result](../60-evidence/2026-11-03-p2b-release-windows-result.md);
-- [distribution.md](../40-operations/distribution.md).
+- the re-check request;
+- the [first result](../60-evidence/2026-11-03-p2b-release-windows-result.md).
