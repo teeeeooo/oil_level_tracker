@@ -1,5 +1,6 @@
 // Which screen is on show, its help (DESIGN.md §4 "Help") and where keys go.
-import { $, typing } from "./ui.js";
+import { $, notify, typing } from "./ui.js";
+import * as api from "./api.js";
 import * as frame from "./frame.js";
 
 const screens = new Map();  // view id -> { help title, onKey(event), onHelp() }
@@ -45,6 +46,10 @@ export function wire() {
   for (const button of document.querySelectorAll(".help-open")) button.addEventListener("click", openHelp);
   const help = $("help");
   $("helpClose").addEventListener("click", () => help.close());
+  $("helpManual").addEventListener("click", async () => {
+    const result = await api.call("POST", "/api/manual/open", {});
+    if (!result.ok) notify("helpNotice", result.data.error ?? "사용 설명서를 열지 못했습니다.", "error");
+  });
   help.addEventListener("click", (event) => {  // a click on the backdrop lands on the dialog itself
     const box = help.getBoundingClientRect();
     const inside = event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom;

@@ -72,9 +72,12 @@ class Clip:
     screenshot. marks name frames the page times its scene to; keys are the keys pressed, which the
     page shows beside the pointer."""
 
-    def __init__(self, page, name: str, at: tuple[float, float]) -> None:
+    def __init__(self, page, name: str, at: tuple[float, float], root: Path | None = None,
+                 region: dict | None = None) -> None:
         self.page, self.name = page, name
-        self.folder = ASSETS / "clips" / name
+        self.root = root or ASSETS / "clips"
+        self.region = region  # the part of the page each screenshot keeps; None for all of it
+        self.folder = self.root / name
         self.folder.mkdir(parents=True)
         self.frames: list[list] = []  # [screenshot, x, y, pressed, pointer kind]
         self.shots = 0
@@ -92,7 +95,8 @@ class Clip:
     def frame(self, fresh: bool = True) -> None:
         if fresh or not self.shots:
             self.settle()
-            self.page.screenshot(path=str(self.folder / f"{self.shots:04d}.jpg"), type="jpeg", quality=88)
+            self.page.screenshot(path=str(self.folder / f"{self.shots:04d}.jpg"), type="jpeg", quality=88,
+                                 clip=self.region)
             self.shots += 1
         self.frames.append([self.shots - 1, round(self.x, 1), round(self.y, 1), self.down, self.kind])
 
@@ -159,7 +163,7 @@ class Clip:
     def save(self) -> None:
         facts = {"fps": FPS, "size": [APP["width"], APP["height"]], "frames": self.frames, "marks": self.marks,
                  "keys": self.keys}
-        (ASSETS / "clips" / f"{self.name}.json").write_text(json.dumps(facts))
+        (self.root / f"{self.name}.json").write_text(json.dumps(facts))
         print(f"  clip {self.name}: {len(self.frames)} frames, {self.shots} screenshots", flush=True)
 
 

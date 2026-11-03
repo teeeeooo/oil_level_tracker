@@ -47,8 +47,9 @@ src/oil_tracker/
                    per-launch token and a local Host.
     desktop/       Operating-system integration: the native file dialog,
                    the close question and the full-size video window
-                   (supplied by app.py from pywebview), opening a folder
-                   and opening a report in the default browser.
+                   (supplied by app.py from pywebview), opening a folder,
+                   and opening a report or the user manual in the default
+                   browser.
   web/             index.html, tokens.css (copied from DESIGN.md; a test
                    checks it), app.css; main.js (entry), nav.js (views,
                    help, keys), ui.js (helpers), api.js; frame.js (the
@@ -63,6 +64,10 @@ src/oil_tracker/
                    editor, the video window and the report). video.html
                    with video-window.js is the full-size video window's
                    page. Plain JavaScript modules, no build step.
+                   manual/ is the user manual (P-2): one offline page with
+                   its screenshots and clips, opened from the help through
+                   application/manual.py; a classic script, as it opens
+                   from a file.
   bootstrap.py     Builds the concrete adapters and hands them to the use
                    cases. The only wiring point.
   app.py           pywebview windows (the app's and the full-size video

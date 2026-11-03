@@ -172,6 +172,16 @@ def test_file_dialog_needs_a_window(app):
     assert call(running, "POST", "/api/videos/pick", {})[0] == 501
 
 
+def test_the_help_opens_the_shipped_manual(app, monkeypatch):
+    opened = []
+    monkeypatch.setattr("oil_tracker.adapters.desktop._open", opened.append)
+    running, _ = app
+    status, body, _ = call(running, "POST", "/api/manual/open", {})
+    assert (status, body) == (200, {"ok": True})
+    assert opened == [bootstrap.WEB_FOLDER / "manual" / "index.html"]  # not the served test folder
+    assert opened[0].is_file()
+
+
 def test_check_and_defaults(app, video):
     running, tmp_path = app
     _, opened, _ = call(running, "POST", "/api/videos", {"path": str(video)})

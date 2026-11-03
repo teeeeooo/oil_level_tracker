@@ -29,6 +29,7 @@ from oil_tracker.application.inspections import (
     Inspections,
     InvalidSetup,
 )
+from oil_tracker.application.manual import Manual
 from oil_tracker.application.ports import (
     DesktopUnavailable,
     InspectionEntry,
@@ -122,6 +123,7 @@ class ApiContext:
     editing: Editing
     videos: VideoSessions
     jobs: Jobs
+    manual: Manual
     web_folder: Path
     token: str
     relay: Relay = field(default_factory=Relay)
@@ -552,6 +554,10 @@ def routes(ctx: ApiContext) -> list[Route]:
         recipes.open_folder()
         return json_response({"ok": True})
 
+    def open_manual(_query, _body) -> Response:
+        ctx.manual.open()
+        return json_response({"ok": True})
+
     def pick_video(_query, _body) -> Response:
         path = recipes.pick_sample_video()
         return json_response({"path": None if path is None else str(path)})
@@ -793,6 +799,7 @@ def routes(ctx: ApiContext) -> list[Route]:
         ("POST", re.compile(r"/api/recipes"), save_recipe),
         ("POST", re.compile(r"/api/recipes/check"), check_recipe),
         ("POST", re.compile(r"/api/recipes/open-folder"), open_folder),
+        ("POST", re.compile(r"/api/manual/open"), open_manual),
         ("GET", re.compile(r"/api/defaults"), defaults),
         ("GET", re.compile(rf"/api/recipes/{segment}"), get_recipe),
         ("GET", re.compile(rf"/api/recipes/{segment}/reference\.jpg"), reference_jpeg),

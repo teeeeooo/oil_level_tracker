@@ -1,0 +1,79 @@
+/* The user manual (DESIGN.md §5 "User manual"). Colours come from ../tokens.css. */
+* { box-sizing: border-box; }
+html { scroll-padding-top: 64px; }
+body { margin: 0; background: var(--bg-1); color: var(--fg-1); font: 14px/20px var(--font); }
+a { color: var(--brand); }
+a:hover { color: var(--brand-hover); }
+
+.top { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 12px; height: 48px; padding: 0 24px; background: var(--bg-3); border-bottom: 1px solid var(--stroke-2); }
+.top b { font: 600 16px/22px var(--font); }
+.top span { color: var(--fg-3); font-size: 12px; line-height: 16px; }
+
+.layout { display: grid; grid-template-columns: 248px minmax(0, 1fr); }
+.toc { position: sticky; top: 48px; height: calc(100vh - 48px); overflow: auto; padding: 16px 12px 32px; background: var(--bg-2); border-right: 1px solid var(--stroke-2); }
+.toc a { display: block; padding: 4px 8px; border-radius: 4px; color: var(--fg-2); text-decoration: none; }
+.toc a:hover { background: var(--bg-4); color: var(--fg-1); }
+.toc a.chapter { margin-top: 8px; font-weight: 600; color: var(--fg-1); }
+.toc a.section { padding-left: 20px; font-size: 12px; line-height: 16px; }
+.toc a.on { background: var(--brand-tint); color: var(--brand); }
+
+main { min-width: 0; padding: 32px 40px 96px; }
+main > * { max-width: 720px; }
+main > .wide { max-width: 1200px; }
+h1 { margin: 0 0 8px; font: 600 24px/32px var(--font); }
+h2 { margin: 48px 0 12px; padding-top: 24px; border-top: 1px solid var(--stroke-2); font: 600 20px/28px var(--font); }
+h3 { margin: 32px 0 8px; font: 600 16px/22px var(--font); }
+p, li, dd { line-height: 22px; }
+p { margin: 0 0 12px; }
+ul, ol { margin: 0 0 12px; padding-left: 22px; }
+li { margin: 2px 0; }
+b, strong { font-weight: 600; }
+code { font: 13px/20px var(--mono); }
+
+kbd { display: inline-block; min-width: 20px; height: 20px; padding: 0 6px; border: 1px solid var(--stroke-1); border-radius: 4px; background: var(--bg-3); color: var(--fg-1); font: 600 12px/18px var(--font); text-align: center; vertical-align: 1px; }
+
+figure { margin: 16px 0 24px; }
+figure img, figure video { display: block; max-width: 100%; height: auto; border: 1px solid var(--stroke-2); }
+figure img { cursor: zoom-in; }
+figure video { cursor: pointer; background: var(--bg-3); }
+figcaption { margin-top: 6px; color: var(--fg-3); font-size: 12px; line-height: 16px; }
+.pair { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+.pair figure { margin: 16px 0 24px; }
+
+ol.callouts { list-style: none; padding: 0; counter-reset: callout; }
+ol.callouts li { position: relative; padding-left: 32px; margin: 6px 0; counter-increment: callout; }
+ol.callouts li::before { content: counter(callout); position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--brand); color: var(--bg-1); font: 600 12px/22px var(--font); text-align: center; }
+
+.note, .caution { margin: 16px 0; padding: 8px 12px; border-radius: 4px; }
+.note { background: var(--brand-tint); }
+.caution { background: var(--warning-bg); border: 1px solid var(--warning-border); }
+.note p:last-child, .caution p:last-child { margin-bottom: 0; }
+
+table { width: 100%; margin: 12px 0 20px; border-collapse: collapse; }
+th, td { padding: 8px 12px 8px 0; border-bottom: 1px solid var(--stroke-2); text-align: left; vertical-align: top; line-height: 22px; }
+thead th { border-bottom-color: var(--stroke-1); color: var(--fg-2); font-weight: 600; }
+tbody th { width: 9em; font-weight: 600; }
+
+.quick { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin: 16px 0 24px; padding: 0; list-style: none; counter-reset: step; }
+.quick li { margin: 0; padding: 12px; border: 1px solid var(--stroke-2); border-radius: 4px; counter-increment: step; }
+.quick img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: left top; margin-bottom: 10px; border: 1px solid var(--stroke-2); cursor: zoom-in; }
+.quick b::before { content: counter(step) ". "; }
+
+dl.faq dt { margin-top: 16px; font-weight: 600; line-height: 22px; }
+dl.faq dd { margin: 4px 0 0; }
+
+#zoom { max-width: 96vw; max-height: 94vh; padding: 0; border: 0; border-radius: 8px; background: var(--bg-1); box-shadow: 0 0 2px rgba(0,0,0,.12), 0 8px 16px rgba(0,0,0,.14); }
+#zoom::backdrop { background: var(--backdrop); }
+#zoom img { display: block; max-width: 96vw; max-height: 94vh; cursor: zoom-out; }
+
+@media (max-width: 900px) {
+  .layout { display: block; }
+  .toc { display: none; }
+  main { padding: 24px 16px 64px; }
+}
+@media print {
+  .top, .toc { display: none; }
+  .layout { display: block; }
+  main { padding: 0; }
+  figure, .quick li { break-inside: avoid; }
+}

@@ -23,6 +23,7 @@ from oil_tracker.adapters.video.frames import open_video
 from oil_tracker.adapters.video.trace import ContextEdgeTracer
 from oil_tracker.application.editing import Editing
 from oil_tracker.application.inspections import Inspections
+from oil_tracker.application.manual import Manual
 from oil_tracker.application.recipes import Recipes
 from oil_tracker.application.videos import VideoSessions
 
@@ -91,10 +92,11 @@ def start(
         new_id,
     )
     reports = HtmlReports(WEB_FOLDER)  # the shipped drawing module, whatever folder is served
+    manual = Manual(WEB_FOLDER / "manual" / "index.html", desktop)  # the shipped one, as the report
     editing = Editing(inspection_store, ContextEdgeTracer(), sha256_of, desktop, utc_now, reports)
     jobs = Jobs(new_id)
     token = secrets.token_urlsafe(24)
     server = start_server(
-        make_handler(ApiContext(recipes, inspections, editing, videos, jobs, web_folder, token)), port
+        make_handler(ApiContext(recipes, inspections, editing, videos, jobs, manual, web_folder, token)), port
     )
     return Running(server, videos, jobs, token)

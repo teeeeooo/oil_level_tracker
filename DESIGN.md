@@ -142,6 +142,7 @@ video that changed (A9). It never stands in for a judgment status (§2.4).
 |---|---|---|---|
 | Caption 1 | 12 / 16 | 400 | tick labels, units, hints |
 | Body 1 | 14 / 20 | 400 | default text, inputs |
+| Body 1 Reading | 14 / 22 | 400 | paragraphs and lists in the user manual |
 | Body 1 Strong | 14 / 20 | 600 | panel titles, table headers |
 | Subtitle 2 | 16 / 22 | 600 | dialog and section titles |
 | Subtitle 1 | 20 / 28 | 600 | report title, judgment badge text |
@@ -218,6 +219,8 @@ Do not use sizes outside this ramp.
     `--backdrop`. It has a Subtitle 2 title, Body 1 Strong group headings,
     and two columns: the key or mouse action, and what it does;
   - Esc, "닫기" or a click outside closes it;
+  - its footer also has "사용 설명서" on the left (P-2, user, 2026-11-03),
+    which opens the user manual (§5) in the default browser;
   - **a screen shows a hint inline only when it must be read every time,**
     such as the save hint on the Recipe screen. Keys, mouse actions and
     tips go into the help.
@@ -561,6 +564,24 @@ Do not use sizes outside this ramp.
     "보고서 열기" opens it in the default browser, where printing makes the
     PDF; an older version that a later re-analysis no longer fits offers
     its report from the version picker.
+- **User manual** (P-2, user, 2026-11-03): one offline page shipped in
+  `web/manual/`, opened from the help (§4) in the default browser.
+  - **Layout:** a 48 px `--bg-3` top bar with the title; a 248 px
+    `--bg-2` table of contents on the left that stays in place and marks
+    the section on screen with `--brand-tint`; the text on the right in a
+    720 px column, with figures of whole screens up to 1,200 px.
+  - **Text:** Title 3 for the title, Subtitle 1 for chapters, Subtitle 2
+    for sections, Body 1 Reading for paragraphs and lists, Caption 1 for
+    figure captions in `--fg-3`. Keys use the key chip (§4).
+  - **Figures:** screenshots of the app at its smallest window (1280 ×
+    800) with a 1 px `--stroke-2` border; a click shows one larger.
+    Numbered callouts are `--brand` circles with white numbers, also
+    outlining their target, and the list under the figure repeats them.
+  - **Clips:** a few seconds of one action, muted and looping while on
+    screen, with the pointer, a ring while pressed and the key pressed
+    drawn in. A click pauses or plays one.
+  - **Notes:** a `--brand-tint` box for a tip; the message bar colours
+    (§2.7) for a caution.
 
 ## 6. Depth & Elevation
 

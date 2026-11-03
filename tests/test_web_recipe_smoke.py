@@ -174,8 +174,10 @@ def test_create_edit_save_and_reopen_a_recipe(tmp_path, video, browser_page):
         running.close()
 
 
-def test_speed_field_and_help(tmp_path, video, browser_page):
+def test_speed_field_and_help(tmp_path, video, browser_page, monkeypatch):
     page, errors = browser_page
+    opened = []
+    monkeypatch.setattr("oil_tracker.adapters.desktop._open", opened.append)
     running = bootstrap.start(data_folder=tmp_path / "data")
     try:
         page.on("dialog", lambda dialog: dialog.accept(str(video)))
@@ -187,6 +189,15 @@ def test_speed_field_and_help(tmp_path, video, browser_page):
         help_box.get_by_text("Recipe 파일이 있는 폴더를").wait_for()
         assert help_box.locator("#helpTitle").inner_text() == "도움말 · Recipe 목록"
         assert not help_box.get_by_text("타원 안쪽 끌기").is_visible()
+        assert page.evaluate("document.activeElement.id") == "helpClose"  # Enter closes, as before
+        # "사용 설명서" opens the shipped manual in the default browser
+        help_box.get_by_role("button", name="사용 설명서").click()
+        page.wait_for_function("document.getElementById('helpNotice').textContent === ''")
+        for _ in range(50):
+            if opened:
+                break
+            page.wait_for_timeout(20)
+        assert opened == [bootstrap.WEB_FOLDER / "manual" / "index.html"]
         page.keyboard.press("Escape")
         assert not help_box.is_visible()
 
