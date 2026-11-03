@@ -7,7 +7,7 @@
      an app screen: a light motion piece in the app's own colours (DESIGN.md §2) around real screens
      of the app. seek(t) draws the frame at t seconds and resolves once its images are decoded;
      scripts/render_intro.py captures it 30 times a second, edits the music to it and synthesises the
-     sound effects listed in CUES. Scenes keep to the music's bars (108 BPM: bar n starts at bar(n)).
+     sound effects listed in CUES. Scenes keep to the music's bars (bar n starts at bar(n)).
      Open with ?t=12.5 for one moment, ?play to watch. assets/ is made by scripts/render_intro.py
      (ignored by Git): clips of the app driven as an inspector would, one screenshot per frame with
      the pointer's place, which this page draws. -->
@@ -146,7 +146,10 @@
 <script>
 "use strict";
 const FPS = 30, DURATION = 89.4;
-const BEAT = 60 / 108, bar = (n) => 0.034 + n * 4 * BEAT;
+// the music's bars, as measured (render_intro.py MUSIC_EDIT): 108.05 BPM from 0.115 s; after the
+// splice at bar 34 the last section runs at 107.05 BPM
+const BEAT = 60 / 108.05, BEAT_END = 60 / 107.05, SPLICE = 0.115 + 34 * 4 * BEAT;
+const bar = (n) => (n <= 34 ? 0.115 + n * 4 * BEAT : SPLICE + (n - 34) * 4 * BEAT_END);
 const $ = (id) => document.getElementById(id);
 
 // sound effects, synthesised by scripts/render_intro.py under the music: [time, kind, gain]
@@ -175,7 +178,7 @@ let seed = 11;
 const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 
 // ---- the timeline: bars of the edited music (render_intro.py MUSIC_EDIT) ----
-const B = (n, beats = 0) => bar(n) + beats * BEAT;
+const B = (n, beats = 0) => bar(n) + beats * (n < 34 ? BEAT : BEAT_END);
 const CLIP_AT = { recipe: B(12, 1.0), setup: B(16, 0.2), edit: B(22, 0.2), submit: B(31, 0.2) };
 
 // ---- type: lines of words, each word with its own time ----
@@ -497,7 +500,14 @@ function clipFrame(name, t) {
   return { clip, i, f: clip.frames[i] };
 }
 const clipTime = (name, mark) => CLIP_AT[name] + (typeof mark === "number" ? mark : CLIPS[name].marks[mark]) / FPS;
-const camMix = (a, b, k) => ({ cx: mix(a.cx, b.cx, k), cy: mix(a.cy, b.cy, k), z: mix(a.z, b.z, k) });
+// from camera a to b: a zoom about the one point that stays where it is on the screen (each point
+// then moves one way only), or a plain pan when the zoom does not change
+function camMix(a, b, k) {
+  const z = a.z * (b.z / a.z) ** k;
+  if (Math.abs(b.z - a.z) < 1e-4) return { cx: mix(a.cx, b.cx, k), cy: mix(a.cy, b.cy, k), z };
+  const qx = (b.cx * b.z - a.cx * a.z) / (b.z - a.z), qy = (b.cy * b.z - a.cy * a.z) / (b.z - a.z);
+  return { cx: qx - (qx - a.cx) * a.z / z, cy: qy - (qy - a.cy) * a.z / z, z };
+}
 // the body's (x, y) in the window's coordinates
 const W = (x, y) => [x, y + 36];
 
@@ -508,9 +518,9 @@ function clipCam(name, t, keys) {
   const target = (key) => {
     if (key.follow) {
       const [x, y] = W(sm[0], sm[1]);
-      return { cx: mix(key.cx ?? x, x, key.follow), cy: mix(key.cy ?? y, y, key.follow), z: key.z };
+      return cover({ cx: mix(key.cx ?? x, x, key.follow), cy: mix(key.cy ?? y, y, key.follow), z: key.z });
     }
-    return key;
+    return cover(key);
   };
   let cam = target(keys[0]);
   for (const key of keys.slice(1)) {
@@ -547,6 +557,7 @@ function drawRipple(name, t, cam) {
   show($("ripple"), (1 - k) * 0.9, `translate(${best.f[1]}px, ${best.f[2] + 36}px) scale(${mix(0.2, 1, outCubic(k)) / cam.z})`);
 }
 
+// a camera that never shows past the window's edge when close, and keeps the whole window when far
 function cover(cam) {
   const fit = (c, span, half) => { const a = half / cam.z, b = span - half / cam.z; return clamp(c, Math.min(a, b), Math.max(a, b)); };
   return { cx: fit(cam.cx, 1600, 960), cy: fit(cam.cy, 936, 540), z: cam.z };
@@ -617,7 +628,7 @@ function drawAct2(t) {
     place($("missLabel"), { x: x0, y: m.y - 52, w: null, h: null });
     $("missLabel").style.width = $("missLabel").style.height = "";
     show($("missLabel"), missIn);
-    const look = { cx: (x0 + x1) / 2 + 40, cy: m.y + 36 + m.height / 2 - 70, z: 1.32 };
+    const look = cover({ cx: (x0 + x1) / 2 + 40, cy: m.y + 36 + m.height / 2 - 70, z: 1.32 });
     cam = camMix(cam, look, ease(t, B(20), B(20, 2.2), inOutCubic));
   } else if (t < B(27)) {
     const { f } = clipFrame("edit", t);
@@ -630,13 +641,13 @@ function drawAct2(t) {
       look,
       { at: 4, follow: 0.7, cx: 600, cy: 300, z: 1.12, over: 0.9 },
       { at: "stroke", after: -16, follow: 0.45, cx: look.cx, cy: look.cy, z: 1.3, over: 0.9 },
-      { at: "stroked", after: 4, cx: j.x + j.width / 2, cy: j.y + 36 + 110, z: 2.0, over: 0.9 },
-      { at: "look", after: -18, follow: 0.5, cx: 700, cy: 600, z: 1.1, over: 0.7 },
-      { at: "look", after: 14, cx: v.x + v.width / 2, cy: v.y + 36 + v.height / 2 + 60, z: 2.0, over: 0.9 },
-      { at: "check", after: -20, cx: j.x + j.width / 2, cy: j.y + 36 + 200, z: 1.9, over: 0.8 },
+      { at: "stroked", after: 4, cx: j.x + j.width / 2, cy: j.y + 36 + 110, z: 2.0, over: 0.8 },
+      { at: "look", after: -14, follow: 0.5, cx: 700, cy: 600, z: 1.1, over: 0.7 },
+      { at: "look", after: 12, cx: v.x + v.width / 2, cy: v.y + 36 + v.height / 2 + 60, z: 2.0, over: 0.8 },
+      { at: "check", after: -16, cx: j.x + j.width / 2, cy: j.y + 36 + 200, z: 1.9, over: 0.8 },
     ]);
-    cam = camMix(cam, HOME, ease(t, B(26, 1), B(26, 3), inOutCubic));
-    cursor = { name: "edit", f, alpha: life(t, CLIP_AT.edit, B(26, 2), 0.3, 0.4) };
+    cam = camMix(cam, HOME, ease(t, B(26, 2), B(27), inOutCubic));
+    cursor = { name: "edit", f, alpha: life(t, CLIP_AT.edit, B(26, 2.5), 0.3, 0.4) };
     show($("miss"), (1 - ease(t, CLIP_AT.edit, CLIP_AT.edit + 0.6)) * 0.9);
     place($("miss"), { x: x0, y: m.y - 4, w: x1 - x0, h: m.height + 8 });
   } else if (t < CLIP_AT.submit) {
@@ -656,7 +667,6 @@ function drawAct2(t) {
     const report = clipTime("submit", "submitted") + 0.7;
     alpha *= 1 - ease(t, report, report + 0.9);
   }
-  cam = cover(cam);
   drawWindow(cam, alpha, dy);
   if (cursor && alpha > 0) {
     drawCursor(cursor.f[1], cursor.f[2], cursor.f[4], cursor.f[3], cam, cursor.alpha * alpha);
@@ -866,7 +876,7 @@ function setup() {
   pill(968, "맥락 이미지의 경계를 따라 그리면", clipTime("edit", "stroke") - 0.4, clipTime("edit", "stroked"));
   pill(968, "판정이 바로 다시 계산되고", clipTime("edit", "stroked"), clipTime("edit", "look") - 0.2);
   pill(968, "원본 영상과 나란히 확인하고", clipTime("edit", "look") - 0.2, clipTime("edit", "check") - 0.1);
-  pill(968, "판단은 검사자의 확인으로", clipTime("edit", "check") - 0.1, B(26, 3));
+  pill(968, "판단은 검사자의 확인으로", clipTime("edit", "check") - 0.1, B(27));
   line(top + 40, 68, [["규칙대로,", B(27, 0.4)], ["근거와", B(27, 0.8)], ["함께", B(27, 1.1), 1]], B(31, -0.1));
   pill(968, "제출하면 이 버전은 잠깁니다", clipTime("submit", "dialog") - 0.2, clipTime("submit", "submitted") + 0.6);
   line(top, size, [["제출하면,", clipTime("submit", "submitted") + 0.5], ["보고서까지", clipTime("submit", "submitted") + 0.8, 1]], B(34, 0.4));
@@ -895,6 +905,7 @@ function setup() {
   for (let i = 0; i < 4; i += 1) cue(i === 0 ? B(28) : B(28, 2 * i), "tick", 0.6);
   cue(clipTime("submit", "submitted") + 0.1, "stamp", 0.9);
   cue(clipTime("submit", "submitted") + 0.7, "whoosh", 0.6);
+  cue(SPLICE - 2.1, "riser", 0.5);  // into the last section
   for (let i = 0; i < 3; i += 1) cue(B(35 + i), "flip", 0.8);
   cue(B(38, 0.3), "shimmer", 0.9);
 }

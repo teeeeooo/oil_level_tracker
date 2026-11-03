@@ -537,8 +537,10 @@ The three v1 remote branches that v1 docs cite stay.
   `--stills 25.2,47.8` captures single moments into a `stills/` folder
   beside `--out`; look at those before a full render.
 
-**Next session:** take the user's notes on draft 3. Unchecked by the agent,
-who cannot hear: the splice at 75.6 s and the effects' level.
+**Next session:** take the user's notes on draft 3. After the user's first
+notes the zooms no longer swing aside and back, and the splice keeps the
+beat (both cuts on measured beats). Unchecked by the agent, who cannot hear:
+how the splice sounds now and the effects' level.
 
 **Then P-2:** settle with the user its readers, form (one offline HTML
 file that opens in Edge, like the report, is the natural fit, perhaps

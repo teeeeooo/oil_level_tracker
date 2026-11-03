@@ -313,12 +313,12 @@ def record_edit(page, facts: dict) -> None:
     clip.path(points, 78)
     clip.release(wait_ms=700)
     clip.mark("stroked")
-    clip.hold(14, wait_ms=300)
+    clip.hold(40, wait_ms=300)  # time for the camera to show the judgment
     clip.kind = "arrow"
     clip.click(*centre(page.locator("#editorView button[data-tool=select]")), 18)
     clip.mark("look")
-    clip.click(*context_point(page, 20.0, 760.0, facts), 22, wait_ms=900)
-    clip.hold(30, wait_ms=300)
+    clip.click(*context_point(page, 20.0, facts["top"] + 40, facts), 22, wait_ms=900)  # above the line: no pick
+    clip.hold(44, wait_ms=300)  # and the video
     clip.mark("check")
     clip.click(*centre(page.locator("#checkGlass")), 24, wait_ms=700)
     clip.hold(12)
@@ -547,13 +547,14 @@ def write_wav(path: Path, samples: np.ndarray) -> None:
         out.writeframes(pcm.tobytes())
 
 
-# the music (user, 2026-11-02: a Suno track, for the department's own use): 108 BPM, bars of 2.222 s
-# from 0.034 s. The video keeps bars 0-33 (intro, build, the second section and the whole main
-# section), then jumps to bar 66, the last section, whose final hit (bar 70, the video's bar 38) and
-# tail end the video: 88.9 s in all. design/intro/intro.html times its scenes to these bars.
-BAR, FIRST_BEAT = 60 / 108 * 4, 0.034
-MUSIC_EDIT = ((0.0, FIRST_BEAT + 34 * BAR), (FIRST_BEAT + 66 * BAR, None))
-SPLICE_SEC = 0.03
+# the music (user, 2026-11-02: a Suno track, for the department's own use). Its beats, measured from
+# its onsets (2026-11-03): 108.05 BPM from 0.115 s until the last section, which runs at 107.05 BPM.
+# The video keeps bars 0-33 (intro, build, the second section and the whole main section), up to bar
+# 34's first beat at 75.636 s, then goes on from bar 66's first beat at 146.691 s: the last section,
+# whose final hit (bar 70, the video's bar 38) and tail end the video. Both cuts are on a beat, so the
+# beat runs on through the splice. design/intro/intro.html times its scenes to these bars.
+MUSIC_EDIT = ((0.0, 75.636), (146.691, None))
+SPLICE_SEC = 0.05  # the crossfade, just before the beat: the new section's first beat comes in whole
 
 
 def music_track(path: Path, duration: float) -> np.ndarray:
@@ -566,11 +567,13 @@ def music_track(path: Path, duration: float) -> np.ndarray:
     fade = int(SPLICE_SEC * RATE)
     out = np.zeros((0, 2))
     for start, end in MUSIC_EDIT:
-        piece = audio[int(start * RATE): None if end is None else int(end * RATE)].copy()
-        if len(out):
-            ramp = np.linspace(0, 1, fade)[:, None]
-            out[-fade:] = out[-fade:] * (1 - ramp) + piece[:fade] * ramp
+        if len(out):  # from fade before the cut, both pieces at equal power
+            piece = audio[int(start * RATE) - fade: None if end is None else int(end * RATE)].copy()
+            ramp = np.sin(np.linspace(0, np.pi / 2, fade))[:, None]
+            out[-fade:] = out[-fade:] * np.cos(np.linspace(0, np.pi / 2, fade))[:, None] + piece[:fade] * ramp
             piece = piece[fade:]
+        else:
+            piece = audio[int(start * RATE): None if end is None else int(end * RATE)].copy()
         out = np.concatenate([out, piece])
     total = int(duration * RATE)
     out = np.pad(out, ((0, max(0, total - len(out))), (0, 0)))[:total]
