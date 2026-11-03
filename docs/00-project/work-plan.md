@@ -447,8 +447,8 @@ behind; the new one sought once (the start) and stayed within 0.06 s, at
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `8c9ea35`: `202 passed, 3 skipped` on macOS, so
-  `201 passed, 4 skipped` on Windows when its venv has no Playwright.
+  test. At `e67f2b1`: `267 passed, 3 skipped` on macOS, so
+  `266 passed, 4 skipped` on Windows when its venv has no Playwright.
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -513,26 +513,55 @@ The three v1 remote branches that v1 docs cite stay.
     above);
   - the ZIP the V2-5 run made for the slowest PC.
 
-  To settle in the interview: the version number (`pyproject.toml` says
-  `2.0.0.dev0`), the form (the folder as a ZIP, or an installer), how it
-  reaches the PCs and who installs it, whether the introduction video and
-  the user manual go with it, and release notes. The build's first
-  Windows run also checks that the help opens the manual in Edge (P-2
-  left that to this run).
+  To settle in the interview:
+  - the version number (`pyproject.toml` says `2.0.0.dev0`);
+  - the form: the folder as a ZIP, or an installer;
+  - how it reaches the PCs, and who installs it;
+  - whether the introduction video goes with it. Its music is the
+    user's Suno free-account track, made for sharing inside the
+    department ([intro-video.md](../40-operations/intro-video.md));
+  - release notes.
+
+  The user manual already ships inside the build (`web/manual/`). The
+  build's first Windows run also checks that the help opens it in Edge;
+  P-2 left that to this run.
 - **After P-2b** (user, 2026-11-02): **P-3 — fixes for problems found in
   field use.** The open items above (speed-ups on the slowest PC, small
   facts) stay for reference until P-3 picks any up.
 
 ## Session handoff — 2026-11-03 (P-2 done; P-2b next)
 
-**Where it stands:** the first version is accepted (`8448e79`). Since
-then the app has gained the user manual, its help button and the fix of
-the doubled video notice; no Windows build has these yet.
+**Where it stands:** `main` is clean and in sync with the remote at
+`e67f2b1`. The first version is accepted on the build of `8448e79`.
+Since then:
+- `f19b624`: the user manual, its help button and its capture script;
+- `e67f2b1`: the doubled "영상을 열 수 없습니다:" notice fixed (editor,
+  video window, setup); P-2 closed.
 
-**Next session: start P-2b** with the interview above. **Read first:**
-- this file, including "Notes for Windows runs";
+No Windows build has these yet. 285 tests pass on macOS. Windows
+expects `266 passed, 4 skipped` (see "Notes for Windows runs").
+
+**The last Windows builds** (V2-5, `8448e79`):
+- on the workstation: `OilLevelTracker.exe`, one folder, 159.6 MB. The
+  manual adds about 2.2 MB;
+- the slowest PC runs the moved build in `C:\olt-v25\OilLevelTracker`;
+- the data on both is in "Session state — 2026-11-02".
+
+`scripts/build_package.py` builds into `build/dist/OilLevelTracker` and
+ends in `package=PASS`. The V2-5 request made the ZIP for the slowest PC
+on the workstation.
+
+**Next session: start P-2b** with the short interview in "Next". Its
+answers decide the first Windows request: the version, the form,
+delivery, the intro video, release notes. Windows runs stay one-way:
+a Korean request document goes to the user, and the result comes back
+as text (execution policy).
+
+**Read first:**
+- this file: "Next", "Notes for Windows runs" and "V2-5 — the steps";
 - the [roadmap](roadmap.md);
-- the [execution policy](execution-policy.md) for Windows runs;
-- `scripts/build_package.py`;
-- the V2-5 requests in `docs/40-operations/` as the latest models of a
-  Windows request.
+- the [execution policy](execution-policy.md);
+- `scripts/build_package.py` and `packaging/OilLevelTracker.spec`;
+- the latest model of a Windows request:
+  [2026-11-02-v2-5-recheck-windows-request.md](../40-operations/2026-11-02-v2-5-recheck-windows-request.md),
+  and before it the V2-5 acceptance request.
