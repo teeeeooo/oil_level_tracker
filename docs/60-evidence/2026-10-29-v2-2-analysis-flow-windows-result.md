@@ -36,7 +36,7 @@ closed.
 | WebView2 runtime | 156.0.4314.50 |
 | Firewall or security prompt | none |
 | Other heavy work | none left running, as relayed |
-| Documents | `C:\Users\teeoo.kim\Documents` |
+| Documents | `C:\Users\<사용자>\Documents` |
 
 ## Judgment
 

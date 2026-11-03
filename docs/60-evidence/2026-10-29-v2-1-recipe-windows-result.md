@@ -34,7 +34,7 @@
 |---|---|---|
 | R1 | `checked=41 mismatched=0`, no `MISMATCH` line | PASS |
 | R2 | `77 passed, 2 skipped in 9.24s` | PASS |
-| R3 | `documents=C:\Users\teeoo.kim\Documents` equals `GetFolderPath('MyDocuments')`; the app folder and `folder=` are `…\Documents\OilLevelTracker\Recipes` | PASS |
+| R3 | `documents=C:\Users\<사용자>\Documents` equals `GetFolderPath('MyDocuments')`; the app folder and `folder=` are `…\Documents\OilLevelTracker\Recipes` | PASS |
 | R4 | O: the file dialog opened; scrubbing, playback and frame steps worked | PASS |
 | R5 | O: the user judged the Glass editing usable | PASS |
 | R6 | O for "숫자를 입력하세요." and for the save refused at `-1` | PASS |
