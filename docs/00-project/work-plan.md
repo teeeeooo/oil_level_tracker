@@ -1,16 +1,15 @@
 # Current Work Plan
 
-**Current milestone:** `P-2b — Windows package and distribution` /
-`ACTIVE`: release 2.0.0's Windows run passed every row except R
-([result](../60-evidence/2026-11-03-p2b-release-windows-result.md)). The
-user then put a shorter editor help into 2.0.0 (`11e4745`). Next comes a
-workstation re-check that rebuilds the ZIP and carries R's follow-up
-([decisions and making](../40-operations/distribution.md)).
-**Last completed:** `P-2 — User manual` / `DONE` (2026-11-03): the user
-fixed the first draft, an offline page opened from the help
-([decisions and making](../40-operations/user-manual.md)). Before it, P-1
-(the introduction video) closed the same day. **The first version is
-accepted** (2026-11-02). **After P-2b:** P-3 field-use fixes.
+**Current milestone:** `P-3 — Field-use fixes` / `PLANNED`. It waits for
+the inspectors' first problem reports once the user has handed out
+release 2.0.0.
+**Last completed:** `P-2b — Windows package and distribution` / `DONE`
+(2026-11-03). Release 2.0.0 was accepted on Windows: tag `v2.0.0` on
+`11e4745`, `OilLevelTracker-2.0.0.zip` with SHA-256 `f1580dda…69e67`
+([re-check](../60-evidence/2026-11-03-p2b-release-recheck-windows-result.md),
+[decisions and making](../40-operations/distribution.md)). Before it, P-2
+(the user manual) and P-1 (the introduction video) closed the same day.
+**The first version is accepted** (2026-11-02).
 
 This is the sole owner of the current state, authorization and next action.
 Rewrite it; do not append to it.
@@ -289,6 +288,22 @@ Held until V2-4b closed (user, 2026-11-02); V2-4b closed the same day:
   build there; A8's "runs with only WebView2" is judged there, its times
   are reference. The four existing inspections are not submitted.
 
+## Session state — 2026-11-03
+
+**The release:** the accepted ZIP is in the workstation's
+`C:\0.Coding\0.Release\`.
+
+**The workstation:**
+- `V25b 선택 확인` was submitted as v1 in the P-2b run; the other six
+  inspections are unchanged;
+- backup: `C:\olt-p2b-backup`;
+- the unzipped test copies are in `C:\olt-p2b\ws` (`008c13f`) and
+  `C:\olt-p2b\ws2` (`11e4745`).
+
+**The slowest PC:** it holds the first P-2b ZIP's 2.0.0 (`008c13f`, the
+longer editor help), unzipped where the user chose, beside the V2-5 build
+in `C:\olt-v25\`.
+
 ## Session state — 2026-11-02
 
 The first version is accepted on the one-folder build of `8448e79`
@@ -451,8 +466,9 @@ behind; the new one sought once (the start) and stayed within 0.06 s, at
   (`sys.modules['playwright'] = None` and
   `sys.modules['playwright.sync_api'] = None`, then `pytest.main`), then
   subtract one passed and add one skipped for the macOS-only Documents
-  test. At `008c13f`: `272 passed, 3 skipped` on macOS, so
-  `271 passed, 4 skipped` on Windows when its venv has no Playwright.
+  test. At `11e4745`: `272 passed, 3 skipped` on macOS, so
+  `271 passed, 4 skipped` on Windows when its venv has no Playwright
+  (confirmed there).
 - `scripts/compare_draft_methods.py` is the diagnostic behind the draft
   decision; it is the only code that reads v1 files.
 - Smoke-test screenshots: set `OLT_SMOKE_SHOTS` to a folder.
@@ -484,7 +500,13 @@ behind; the new one sought once (the start) and stayed within 0.06 s, at
 ## Left to the user, with no deadline
 
 - deleting `~/Developer/oil_level_tracker-v1-evidence/`;
-- deleting branch `spike/webui` once the porting is done.
+- deleting branch `spike/webui` once the porting is done;
+- **handing out release 2.0.0:**
+  - put the accepted ZIP in the shared folder and tell the inspectors,
+    with the distributor's name and contact (template in
+    [distribution.md](../40-operations/distribution.md));
+  - share the introduction video apart from the app;
+  - replace the slowest PC's first 2.0.0 if it should match (optional).
 
 The three v1 remote branches that v1 docs cite stay.
 
@@ -510,72 +532,48 @@ The three v1 remote branches that v1 docs cite stay.
   - the user's review changed only two captions ("우유" → "유체");
   - the doubled "영상을 열 수 없습니다:" notice found while making it is
     fixed in three places, with a smoke-test step.
-- **Now: P-2b — Windows package and distribution** (user, 2026-11-03).
-  The interview settled it ([distribution.md](../40-operations/distribution.md)):
-  - version 2.0.0; a folder ZIP; the user puts it in a shared folder and
-    each inspector installs it on their own PC, where they choose;
-  - `설치 안내.html` beside the app folder in the ZIP: install, data,
-    updating, problem reports to "배포 담당자" (no name: the repository
-    is public), and the release notes;
-  - the version in the help and on the report's page 1;
-  - the introduction video is shared apart from the app, not in Git.
+- **Done:** P-2b, Windows package and distribution (2026-11-03,
+  [decisions and making](../40-operations/distribution.md)):
+  - release 2.0.0 is a folder ZIP with `설치 안내.html` beside the app
+    folder. Each inspector installs it themselves from the shared folder;
+  - the version is in the help, on the report's page 1 and in the exe's
+    properties;
+  - `build_package.py --release` makes the ZIP;
+  - the editor's help was condensed after the first run (the user's note).
+  - Evidence:
+    [first run](../60-evidence/2026-11-03-p2b-release-windows-result.md)
+    on `008c13f` (the slowest PC installed with the guide alone; the
+    manual opens in Edge) and
+    [re-check](../60-evidence/2026-11-03-p2b-release-recheck-windows-result.md)
+    on `11e4745` (every row, R settled). Tag `v2.0.0`.
+- **Next: P-3 — fixes for problems found in field use** (user,
+  2026-11-02).
+  - It starts when the inspectors report problems (to "배포 담당자": a
+    screenshot, the version, the inspection's name, `app.log`).
+  - The open items above (speed-ups on the slowest PC, small facts) stay
+    for reference until P-3 picks any up.
+  - A fix ships as 2.0.1, made as distribution.md's "배포판 만들기" says.
 
-  Done on macOS (`008c13f`): the version resource, `GET /api/about`, the
-  report line, `packaging/install-guide.html`,
-  `build_package.py --release`, the manual's header and a problem-report
-  entry, the report figure recaptured. 290 tests pass; the macOS build
-  with `--release` passes.
-
-  **Windows run** ([request](../40-operations/2026-11-03-p2b-release-windows-request.md),
-  [result](../60-evidence/2026-11-03-p2b-release-windows-result.md), on
-  `008c13f`):
-  - every row passes except R;
-  - the manual opens in Edge on both PCs (closing P-2's open check);
-  - on the slowest PC the user installed with the guide alone;
-  - the ZIP went by hand, not through the shared folder.
-
-  **The user's note, done:** the editor's F1 help listed too much. It now
-  lists every key and mouse action in a few words, and points to the
-  manual (`11e4745`, user, 2026-11-03: into 2.0.0). DESIGN.md §4 states
-  the rule.
-
-  **Waiting on the user:** the
-  [re-check](../40-operations/2026-11-03-p2b-release-recheck-windows-request.md)
-  on the workstation, pinned to `11e4745` (`checked=154`):
-  - R's follow-up from the first run;
-  - tests, `--release`, the exe and ZIP checks;
-  - the condensed help in the build;
-  - the new ZIP replacing the first in `C:\0.Coding\0.Release\`.
-
-  The slowest PC is not needed: its install steps and the guide did not
-  change.
-
-  **To close P-2b:**
-  - the re-check passes;
-  - tag `11e4745` as `v2.0.0` and push the tag;
-  - the user announces the ZIP (template in distribution.md).
-- **After P-2b** (user, 2026-11-02): **P-3 — fixes for problems found in
-  field use.** The open items above (speed-ups on the slowest PC, small
-  facts) stay for reference until P-3 picks any up.
-
-## Session handoff — 2026-11-03 (P-2b: the re-check)
+## Session handoff — 2026-11-03 (P-2b done; P-3 waits on field use)
 
 **Where it stands:**
-- Release 2.0.0's first Windows run (`008c13f`) passed except R. Its
-  listings were not relayed.
-- The user put a condensed editor help into 2.0.0. The code is
-  `11e4745`; the commits after it are docs only.
-- The re-check request is with the user. Nothing is tagged yet.
+- Release 2.0.0 is accepted and tagged: `v2.0.0` on `11e4745`.
+- `main` holds only docs after it.
+- Nothing is in progress.
 
 **Next session:**
-- judge the re-check;
-- record it as
-  `docs/60-evidence/2026-11-0X-p2b-release-recheck-windows-result.md`;
-- note R there and in the first result;
-- if it passes, tag `11e4745` as `v2.0.0`, push the tag, and close P-2b
-  (roadmap `DONE`, this file, distribution.md's status).
+- P-3 begins with the inspectors' problem reports, which the user
+  relays.
+- For each report:
+  - reproduce it on macOS where possible;
+  - fix it with its tests;
+  - when a release is due, follow distribution.md: version 2.0.1, the
+    guide's "바뀐 것", a Windows run with `--release`.
+- Use the latest requests as models:
+  [first run](../40-operations/2026-11-03-p2b-release-windows-request.md),
+  [re-check](../40-operations/2026-11-03-p2b-release-recheck-windows-request.md).
+- Ask the agent to relay long listings inline, not in spill files.
 
 **Read first:**
-- this file's "Next";
-- the re-check request;
-- the [first result](../60-evidence/2026-11-03-p2b-release-windows-result.md).
+- this file's "Next" and "Open items";
+- [distribution.md](../40-operations/distribution.md).

@@ -82,4 +82,5 @@
 | 2026-11-02 | [2026-11-02-v2-5-recheck-windows-result.md](60-evidence/2026-11-02-v2-5-recheck-windows-result.md) | V2-5 재확인 결과 판정(전 항목 통과, V2-5 종료, 첫 버전 인수) |
 | 2026-11-02 | [2026-11-02-v2-5-acceptance-slowest-pc-windows-result.md](60-evidence/2026-11-02-v2-5-acceptance-slowest-pc-windows-result.md) | V2-5 최저 사양 PC 결과 판정(옮긴 빌드 실행 통과, 분석 156.0초) |
 | 2026-11-02 | [2026-11-02-v2-5-acceptance-workstation-windows-result.md](60-evidence/2026-11-02-v2-5-acceptance-workstation-windows-result.md) | V2-5 워크스테이션 인수 결과 판정(빌드로 A1–A9 전 항목 통과, 사용자 소감 3건) |
+| 2026-11-03 | [2026-11-03-p2b-release-recheck-windows-result.md](60-evidence/2026-11-03-p2b-release-recheck-windows-result.md) | P-2b 재확인 결과 판정(전 항목 통과, R 해결, 배포판 2.0.0 인수, 태그 v2.0.0) |
 | 2026-11-03 | [2026-11-03-p2b-release-windows-result.md](60-evidence/2026-11-03-p2b-release-windows-result.md) | P-2b 배포판 2.0.0 Windows 결과 판정(R 외 전 항목 통과, 설명서 Edge 확인, 최저 사양 PC에서 안내만으로 설치) |

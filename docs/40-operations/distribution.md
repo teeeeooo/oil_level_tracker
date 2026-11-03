@@ -1,17 +1,24 @@
 # 배포 — 정한 것과 배포판 만드는 방법 (P-2b)
 
-**상태:** 진행 중. Windows 확인([요청](2026-11-03-p2b-release-windows-request.md),
+**상태:** 완료(2026-11-03). 배포판 2.0.0을 받아들였다. 커밋은 `11e4745`(태그
+`v2.0.0`)이고, ZIP의 SHA-256은 `f1580dda…69e67`이다
+([재확인 결과](../60-evidence/2026-11-03-p2b-release-recheck-windows-result.md)).
+ZIP은 워크스테이션의 `C:\0.Coding\0.Release\`에 있다. 공유 폴더에 두고
+검사자에게 알리는 일은 사용자가 한다(아래 "배포판 만들기" 6).
+
+첫 Windows 확인([요청](2026-11-03-p2b-release-windows-request.md),
 [결과](../60-evidence/2026-11-03-p2b-release-windows-result.md))은 R 한 줄만
 남기고 모두 통과했다:
 - 워크스테이션에서 ZIP을 만들었다;
 - 최저 사양 PC에서 설치 안내만 보고 설치했다;
 - 설명서가 Edge로 열렸다.
 
-R은 검사 목록 원문이 전달되지 않아 읽기 전용 보충 확인을 기다린다.
+R은 검사 목록 원문이 전달되지 않아 판정하지 못했다.
 
 사용자가 편집기 도움말을 줄여 달라고 했고, 2.0.0에 넣기로 했다(`11e4745`).
-그래서 2.0.0 ZIP을 다시 만든다. R 보충과 함께 워크스테이션에서
-[재확인](2026-11-03-p2b-release-recheck-windows-request.md)한다.
+그래서 2.0.0 ZIP을 다시 만들어, R 보충과 함께 워크스테이션에서
+[재확인](2026-11-03-p2b-release-recheck-windows-request.md)했다. 모든 항목이
+통과했다.
 
 - **배포판:** `OilLevelTracker-<버전>.zip` 하나.
   - 안에는 앱 폴더 `OilLevelTracker\`와 `설치 안내.html`이 나란히 있다.
