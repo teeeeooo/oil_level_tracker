@@ -1,12 +1,12 @@
 # Current Work Plan
 
-**Current milestone:** `P-1 — Introduction video` / `ACTIVE`: draft 3, a
-76 s light product film around real app screens
-([scenes](../40-operations/intro-video.md)), revised after the user's notes,
-is with the user for review; drafts 1–2 were dropped. **The first version is accepted**
-(2026-11-02): V2-5 passed every row on the workstation and the slowest PC.
-**After P-1** (user, 2026-11-02): P-2 user manual, P-3 field-use fixes.
-**Last completed:** `V2-5 — Windows acceptance` / `DONE` (2026-11-02).
+**Current milestone:** `P-2 — User manual` / `PLANNED`, next: it starts
+with a short interview with the user (readers, form, language).
+**Last completed:** `P-1 — Introduction video` / `DONE` (2026-11-03): the
+user fixed draft 3, a 76 s light product film around the app's real screens
+([scenes](../40-operations/intro-video.md)). **The first version is
+accepted** (2026-11-02): V2-5 passed every row on the workstation and the
+slowest PC. **After P-2** (user, 2026-11-02): P-3 field-use fixes.
 
 This is the sole owner of the current state, authorization and next action.
 Rewrite it; do not append to it.
@@ -495,69 +495,62 @@ The three v1 remote branches that v1 docs cite stay.
     FULL/EMPTY made easy, the refusal wording; Product SSOT §6),
     [re-check](../60-evidence/2026-11-02-v2-5-recheck-windows-result.md)
     on `8448e79`: every row, A5 2.2 / 9.3 ms.
-- **Now, P-1 — an introduction video** of the app; the
+- **Done:** P-1, the introduction video (user fixed it, 2026-11-03). The
   [scene and making document](../40-operations/intro-video.md) holds the
-  decisions. In short:
-  - an **introduction, not a how-to**; Korean words on screen, no voice;
-    the user's Suno track cut on its bars; the video file outside Git
-    (user, 2026-11-02);
-  - **draft 3 is new, not a fix of drafts 1–2** (user, 2026-11-03, after an
-    interview): problem → app → result in about 90 s for inspectors and
-    managers; a light product film; the app's real screens, driven by a
-    script; no numbers for how long things take; sample7 (the public
-    compressor videos do not fit), its Glass without the cup's upper part.
-  After the first notes (user, 2026-11-03): straight zooms; the music's
-  cuts on beats measured from kick and snare, chosen by ear from audio
-  candidates; the problem and before/after parts about 1.75 times as fast;
-  the correction shown as a range deleted, then the pencil, then joined
-  points.
-  **Now:** the revised draft 3 is with the user for review.
-- **Then, in order** (user, 2026-11-02):
+  decisions and the scenes; the page and its render script are
+  `design/intro/intro.html` and `scripts/render_intro.py` (`157366b`). The
+  video is outside Git: `~/Movies/OilLevelTracker/intro-draft3.mp4`
+  (75.8 s, 19 MB).
+- **Next, in order** (user, 2026-11-02):
   1. **P-2 — a user manual**, as HTML or another fitting form;
   2. **P-3 — fixes for problems found in field use.**
   The open items above (speed-ups on the slowest PC, small facts) stay
   for reference until P-3 picks any up.
 
-## Session handoff — 2026-11-03 (P-1, draft 3)
+## Session handoff — 2026-11-03 (P-1 done; P-2 next)
 
-**Where it stands:** the first version is accepted (`8448e79`); P-1 is
-`ACTIVE`. 280 tests pass on macOS; Windows expects `261 passed, 4 skipped`.
+**Where it stands:** `main` is clean and in sync with the remote. The first
+version is accepted (`8448e79`); no app code changed since. 280 tests pass
+on macOS; Windows expects `261 passed, 4 skipped`.
 
-**The video so far:**
-- `design/intro/intro.html` draws each moment with `seek(t)` and holds the
-  timeline (bars of the music: `bar(n)`, `B(n, beats)`) and the sound cues.
-  `scripts/render_intro.py` makes its assets by driving this folder's app in
-  Chrome (clips: a screenshot per frame and the pointer, which the page
-  draws), captures the frames and muxes the MP4.
-- Outside Git, in `~/Movies/OilLevelTracker/`: the user's track
-  `music-test_2.mp3`, the dropped drafts `intro-draft2*.mp4`,
-  `intro-draft3.mp4` (CRF 20) and the music candidates the user chose from
-  (`music-candidates/`).
-- To render again (assets about 3 min, frames about 2 min; `--skip-assets`
-  reuses the assets):
+**P-1 as it ended:**
+- The user fixed draft 3. It is outside Git in `~/Movies/OilLevelTracker/`:
+  `intro-draft3.mp4` is the video. Beside it are the user's track
+  `music-test_2.mp3`, the music candidates the user chose by ear
+  (`music-candidates/`) and the dropped drafts `intro-draft2*.mp4`.
+- To render it again (assets about 3 min, frames about 2 min;
+  `--skip-assets` reuses the assets, `--stills 25.2,47.8` captures single
+  moments):
 
   ```bash
-  PYTHONPATH=src .venv/bin/python scripts/render_intro.py --music ~/Movies/OilLevelTracker/music-test_2.mp3 --out ~/Movies/OilLevelTracker/intro-draft4.mp4
+  PYTHONPATH=src .venv/bin/python scripts/render_intro.py --music ~/Movies/OilLevelTracker/music-test_2.mp3 --out ~/Movies/OilLevelTracker/intro.mp4
   ```
 
-  `--stills 25.2,47.8` captures single moments into a `stills/` folder
-  beside `--out`; look at those before a full render.
+- Lessons, in the intro document: the camera zooms about a fixed point and
+  fits each target only; music beats are measured from kick and snare
+  onsets, never the whole spectrum; a new music cut is offered to the user
+  as audio first, because the agent cannot hear.
 
-**Next session:** take the user's notes on the revised draft 3. The music
-cuts are the ones the user chose by ear (S1, E2), checked to be the same
-signal in the video. Unchecked by the agent, who cannot hear: the effects'
-level. A new cut is offered as audio candidates first; beats are measured
-from kick and snare onsets, never the whole spectrum (the hats are off the
-beat).
+**Next session: start P-2.** Settle with the user, in a short interview:
+- its readers (inspectors new to the app, or also managers);
+- its form: one offline HTML file that opens in Edge, like the report, is
+  the natural fit, perhaps opened from the app's help;
+- its language;
+- whether it has short clips of the app.
 
-**Then P-2:** settle with the user its readers, form (one offline HTML
-file that opens in Edge, like the report, is the natural fit, perhaps
-opened from the app's help) and language; it follows the screens as
-built (DESIGN.md §5, the help dialog's tables in `web/index.html`) and
-the flow in Product SSOT §3, and can use the walkthrough storyboard moved
-from P-1 (in the intro document). A manual is a new kind of document:
-route it through [docs/README.md](../README.md) first.
+What it can build on:
+- **Content:** it follows the screens as built (DESIGN.md §5, the help
+  dialog's tables in `web/index.html`) and the flow in Product SSOT §3.
+- **Storyboard:** "P-2로 넘긴 것" in the intro document has the walkthrough
+  moved from P-1.
+- **Clips:** `Clip` in `scripts/render_intro.py` can record any task in the
+  real app: a screenshot per frame, the pointer and keys kept for a page to
+  draw.
 
-**Read first:** this file, the roadmap,
-[intro-video.md](../40-operations/intro-video.md), then
-`design/intro/intro.html`.
+A manual is a new kind of document: route it through
+[docs/README.md](../README.md) first, and add it to the date catalog in the
+same change.
+
+**Read first:** this file, the [roadmap](roadmap.md),
+[docs/README.md](../README.md), Product SSOT §3, DESIGN.md §5, then
+"P-2로 넘긴 것" in [intro-video.md](../40-operations/intro-video.md).
