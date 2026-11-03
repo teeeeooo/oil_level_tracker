@@ -8,7 +8,7 @@ Stages:
    pencil along the context image's milk edge, the Glass checked, the version submitted; then
    stills of the editor, the judgment, the report and frames of the video;
 2. the frames: design/intro/intro.html in Chrome, seek(t) and a screenshot every 1/30 s;
-3. the sound: the music, edited to the video (MUSIC_EDIT), with the page's cues synthesised here on top;
+3. the sound: the music, edited as the page's MUSIC says, with the page's cues synthesised here on top;
 4. both muxed by imageio-ffmpeg's ffmpeg into an H.264 + AAC MP4.
 
 Usage: python scripts/render_intro.py [--video sample/sample7.mp4] [--music TRACK.mp3]
@@ -52,7 +52,11 @@ ZERO_Y, LIMIT_SEC = 700.0, 30.0
 WHITE = 195  # the milk in the context image: every channel above this
 NAME, HEADER = "예시 검사", {"compressor_model": "예시 모델", "test_type": "예시 시험"}
 RECIPE = "예시 유리컵"
-EDGE_SEC = 31.5  # the pencil follows the milk's edge up to here; the draft is right after it
+# the correction (user, 2026-11-03): the draft's wrong stretch selected and deleted, then the milk's
+# edge drawn back: the pencil up to PENCIL_SEC, points joined from there to where the draft is right
+WRONG_SEC = (12.0, 32.5)
+PENCIL_SEC = 17.0
+POINT_SECS = (21.0, 25.0, 29.0)
 
 
 # ---- 1. assets ----
@@ -65,7 +69,8 @@ class Clip:
     """One action in the app as a clip: a screenshot per video frame and the pointer in each.
 
     The pointer is Playwright's mouse; a frame whose screen cannot have changed reuses the last
-    screenshot. marks name frames the page times its scene to."""
+    screenshot. marks name frames the page times its scene to; keys are the keys pressed, which the
+    page shows beside the pointer."""
 
     def __init__(self, page, name: str, at: tuple[float, float]) -> None:
         self.page, self.name = page, name
@@ -74,6 +79,7 @@ class Clip:
         self.frames: list[list] = []  # [screenshot, x, y, pressed, pointer kind]
         self.shots = 0
         self.marks: dict[str, int] = {}
+        self.keys: list[list] = []  # [frame, label]
         self.x, self.y = at
         self.down, self.kind = False, "arrow"
         page.mouse.move(self.x, self.y)
@@ -139,13 +145,20 @@ class Clip:
         self.press()
         self.release(wait_ms)
 
+    def key(self, key: str, label: str, wait_ms: int = 150) -> None:
+        self.keys.append([len(self.frames), label])
+        self.page.keyboard.press(key)
+        self.settle(wait_ms)
+        self.frame()
+
     def drag(self, x: float, y: float, frames: int, wait_ms: int = 0) -> None:
         self.press()
         self.move(x, y, frames, arc=0.04)
         self.release(wait_ms)
 
     def save(self) -> None:
-        facts = {"fps": FPS, "size": [APP["width"], APP["height"]], "frames": self.frames, "marks": self.marks}
+        facts = {"fps": FPS, "size": [APP["width"], APP["height"]], "frames": self.frames, "marks": self.marks,
+                 "keys": self.keys}
         (ASSETS / "clips" / f"{self.name}.json").write_text(json.dumps(facts))
         print(f"  clip {self.name}: {len(self.frames)} frames, {self.shots} screenshots", flush=True)
 
@@ -283,9 +296,16 @@ def context_point(page, t: float, y: float, facts: dict) -> tuple[float, float]:
             box["y"] + (y - facts["top"]) / (facts["bottom"] - facts["top"]) * box["height"])
 
 
+def edge_at(facts: dict, t: float) -> float:
+    i = min(range(len(facts["times"])), key=lambda k: abs(facts["times"][k] - t))
+    return facts["edge"][i]
+
+
 def record_edit(page, facts: dict) -> None:
-    """The editor: the draft as it came, then the pencil along the milk's edge where the draft
-    missed it, a click that shows that moment in the video, the Glass checked."""
+    """The editor: the draft as it came; then the inspector selects the stretch where it missed the
+    milk's edge and deletes it, draws the edge back with the pencil and then with joined points, and
+    checks the Glass after a look at that moment in the video. Tools are switched with their keys,
+    so the view can stay on the context image."""
     page.wait_for_function("document.querySelectorAll('#context image').length === 1")
     page.mouse.move(800, 450)
     page.wait_for_timeout(1500)
@@ -297,27 +317,51 @@ def record_edit(page, facts: dict) -> None:
     facts["boxes"] = {name: page.locator(selector).first.bounding_box() for name, selector in (
         ("graph", "#graphBox"), ("context", "#contextBox"), ("contextImage", "#context image"),
         ("video", "#videoBox"), ("judgment", "#judgmentSection"), ("toolbar", "#editorView header.toolbar"),
-        ("pencil", "#editorView button[data-tool=pencil]"), ("submit", "#editorSubmit"))}
+        ("submit", "#editorSubmit"))}
 
-    points = [context_point(page, t, y, facts) for t, y in zip(facts["times"], facts["edge"]) if t <= EDGE_SEC]
-    points.insert(0, context_point(page, 0.0, facts["bottom"] - 2, facts))  # from the Glass bottom: EMPTY
+    at = lambda t, y: context_point(page, t, y, facts)  # noqa: E731
+    band_y = facts["top"] + 0.3 * (facts["bottom"] - facts["top"])
+    pencil = [at(0.0, facts["bottom"] - 2)]  # from the Glass bottom: EMPTY
+    pencil += [at(t, y) for t, y in zip(facts["times"], facts["edge"]) if t <= PENCIL_SEC]
+    joined = [at(t, edge_at(facts, t)) for t in (PENCIL_SEC, *POINT_SECS)]
+    end = WRONG_SEC[1]
+    joined.append(at(end, facts["draft"][min(range(len(facts["times"])), key=lambda k: abs(facts["times"][k] - end))]))
 
     clip = Clip(page, "edit", (900, 420))
     clip.hold(4)
-    clip.click(*centre(page.locator("#editorView button[data-tool=pencil]")), 20)
-    clip.hold(3)
-    clip.move(*points[0], 20)
+    clip.move(*at(WRONG_SEC[0], band_y), 18)
+    clip.mark("range")
+    clip.key("KeyR", "R  범위")
+    clip.hold(6)
+    clip.drag(*at(WRONG_SEC[1], band_y), 26)
+    clip.hold(8)
+    clip.mark("delete")
+    clip.key("Delete", "Delete", wait_ms=400)
+    clip.hold(22)
+    clip.move(*pencil[0], 18)
+    clip.mark("pencil")
+    clip.key("KeyP", "P  연필")
     clip.kind = "pencil"
-    clip.mark("stroke")
+    clip.hold(4)
     clip.press()
-    clip.path(points, 78)
-    clip.release(wait_ms=700)
-    clip.mark("stroked")
-    clip.hold(40, wait_ms=300)  # time for the camera to show the judgment
+    clip.path(pencil, 40)
+    clip.release(wait_ms=300)
+    clip.hold(6)
     clip.kind = "arrow"
-    clip.click(*centre(page.locator("#editorView button[data-tool=select]")), 18)
+    clip.mark("point")
+    clip.key("KeyL", "L  점 잇기")
+    clip.hold(4)
+    for x, y in joined:
+        clip.click(x, y, 12, wait_ms=350)
+        clip.hold(2)
+    clip.hold(6, wait_ms=300)
+    clip.mark("enter")
+    clip.key("Enter", "Enter", wait_ms=900)
+    clip.mark("stroked")
+    clip.hold(44, wait_ms=300)  # time for the camera to show the judgment
     clip.mark("look")
-    clip.click(*context_point(page, 20.0, facts["top"] + 40, facts), 22, wait_ms=900)  # above the line: no pick
+    clip.key("KeyV", "V  선택")
+    clip.click(*at(20.0, facts["top"] + 40), 22, wait_ms=900)  # above the line: no pick
     clip.hold(44, wait_ms=300)  # and the video
     clip.mark("check")
     clip.click(*centre(page.locator("#checkGlass")), 24, wait_ms=700)
@@ -525,14 +569,14 @@ def effects(cues: list, duration: float) -> np.ndarray:
     return reverb(mix_)[: int(duration * RATE)]
 
 
-def soundtrack(cues: list, duration: float, music: Path | None) -> np.ndarray:
+def soundtrack(cues: list, duration: float, music: Path | None, edit: list) -> np.ndarray:
     """Stereo: the music with the effects on top, or the effects alone; about -2 dBFS at the loudest
     (the AAC encoder overshoots a mix at -1 dBFS)."""
     sfx = effects(cues, duration)
     if music is None:
         mix_ = np.repeat(sfx[:, None] / max(1e-9, np.abs(sfx).max()) * 0.5, 2, axis=1)
     else:
-        song = music_track(music, duration)
+        song = music_track(music, duration, edit)
         sfx *= 0.35 * np.abs(song).max() / max(1e-9, np.abs(sfx).max())  # under the music
         mix_ = song + sfx[:, None]
     return mix_ * (0.78 / max(1e-9, np.abs(mix_).max()))
@@ -547,33 +591,23 @@ def write_wav(path: Path, samples: np.ndarray) -> None:
         out.writeframes(pcm.tobytes())
 
 
-# the music (user, 2026-11-02: a Suno track, for the department's own use). Its beats, measured from
-# its onsets (2026-11-03): 108.05 BPM from 0.115 s until the last section, which runs at 107.05 BPM.
-# The video keeps bars 0-33 (intro, build, the second section and the whole main section), up to bar
-# 34's first beat at 75.636 s, then goes on from bar 66's first beat at 146.691 s: the last section,
-# whose final hit (bar 70, the video's bar 38) and tail end the video. Both cuts are on a beat, so the
-# beat runs on through the splice. design/intro/intro.html times its scenes to these bars.
-MUSIC_EDIT = ((0.0, 75.636), (146.691, None))
-SPLICE_SEC = 0.05  # the crossfade, just before the beat: the new section's first beat comes in whole
-
-
-def music_track(path: Path, duration: float) -> np.ndarray:
-    """The edited music, stereo at RATE, duration seconds long."""
+def music_track(path: Path, duration: float, edit: list) -> np.ndarray:
+    """The edited music, stereo at RATE, duration seconds long. edit is the page's MUSIC: pieces of the
+    track [start, end or None, crossfade]; each piece after the first comes in with its crossfade
+    over the span just before its start, so both pieces' beats line up and its first beat is whole."""
     import imageio_ffmpeg
 
     raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), "-loglevel", "error", "-i", str(path), "-vn",
                           "-ac", "2", "-ar", str(RATE), "-f", "f32le", "-"], capture_output=True, check=True).stdout
     audio = np.frombuffer(raw, "<f4").reshape(-1, 2).astype(float)
-    fade = int(SPLICE_SEC * RATE)
     out = np.zeros((0, 2))
-    for start, end in MUSIC_EDIT:
-        if len(out):  # from fade before the cut, both pieces at equal power
-            piece = audio[int(start * RATE) - fade: None if end is None else int(end * RATE)].copy()
-            ramp = np.sin(np.linspace(0, np.pi / 2, fade))[:, None]
-            out[-fade:] = out[-fade:] * np.cos(np.linspace(0, np.pi / 2, fade))[:, None] + piece[:fade] * ramp
+    for start, end, crossfade in edit:
+        fade = int(crossfade * RATE) if len(out) else 0
+        piece = audio[int(start * RATE) - fade: None if end is None else int(end * RATE)].copy()
+        if fade:  # equal power
+            k = np.linspace(0, np.pi / 2, fade)[:, None]
+            out[-fade:] = out[-fade:] * np.cos(k) + piece[:fade] * np.sin(k)
             piece = piece[fade:]
-        else:
-            piece = audio[int(start * RATE): None if end is None else int(end * RATE)].copy()
         out = np.concatenate([out, piece])
     total = int(duration * RATE)
     out = np.pad(out, ((0, max(0, total - len(out))), (0, 0)))[:total]
@@ -593,7 +627,7 @@ def render(out: Path, music: Path | None) -> None:
         browser, page, meta, errors = open_page(playwright)
         fps, duration = meta["fps"], meta["duration"]
         audio = Path(temp) / "sound.wav"
-        write_wav(audio, soundtrack(meta["cues"], duration, music))
+        write_wav(audio, soundtrack(meta["cues"], duration, music, meta["music"]))
         command = [
             imageio_ffmpeg.get_ffmpeg_exe(), "-y", "-loglevel", "error",
             "-f", "image2pipe", "-framerate", str(fps), "-i", "-", "-i", str(audio),

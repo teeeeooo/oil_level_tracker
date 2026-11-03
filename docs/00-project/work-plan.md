@@ -1,9 +1,9 @@
 # Current Work Plan
 
-**Current milestone:** `P-1 — Introduction video` / `ACTIVE`: draft 3, an
-89 s light product film around real app screens
-([scenes](../40-operations/intro-video.md)), is with the user for review;
-drafts 1–2 were dropped. **The first version is accepted**
+**Current milestone:** `P-1 — Introduction video` / `ACTIVE`: draft 3, a
+76 s light product film around real app screens
+([scenes](../40-operations/intro-video.md)), revised after the user's notes,
+is with the user for review; drafts 1–2 were dropped. **The first version is accepted**
 (2026-11-02): V2-5 passed every row on the workstation and the slowest PC.
 **After P-1** (user, 2026-11-02): P-2 user manual, P-3 field-use fixes.
 **Last completed:** `V2-5 — Windows acceptance` / `DONE` (2026-11-02).
@@ -506,7 +506,12 @@ The three v1 remote branches that v1 docs cite stay.
     managers; a light product film; the app's real screens, driven by a
     script; no numbers for how long things take; sample7 (the public
     compressor videos do not fit), its Glass without the cup's upper part.
-  **Now:** draft 3 is with the user for review.
+  After the first notes (user, 2026-11-03): straight zooms; the music's
+  cuts on beats measured from kick and snare, chosen by ear from audio
+  candidates; the problem and before/after parts about 1.75 times as fast;
+  the correction shown as a range deleted, then the pencil, then joined
+  points.
+  **Now:** the revised draft 3 is with the user for review.
 - **Then, in order** (user, 2026-11-02):
   1. **P-2 — a user manual**, as HTML or another fitting form;
   2. **P-3 — fixes for problems found in field use.**
@@ -525,8 +530,9 @@ The three v1 remote branches that v1 docs cite stay.
   Chrome (clips: a screenshot per frame and the pointer, which the page
   draws), captures the frames and muxes the MP4.
 - Outside Git, in `~/Movies/OilLevelTracker/`: the user's track
-  `music-test_2.mp3`, the dropped drafts `intro-draft2*.mp4`, and
-  `intro-draft3.mp4` (CRF 20).
+  `music-test_2.mp3`, the dropped drafts `intro-draft2*.mp4`,
+  `intro-draft3.mp4` (CRF 20) and the music candidates the user chose from
+  (`music-candidates/`).
 - To render again (assets about 3 min, frames about 2 min; `--skip-assets`
   reuses the assets):
 
@@ -537,10 +543,12 @@ The three v1 remote branches that v1 docs cite stay.
   `--stills 25.2,47.8` captures single moments into a `stills/` folder
   beside `--out`; look at those before a full render.
 
-**Next session:** take the user's notes on draft 3. After the user's first
-notes the zooms no longer swing aside and back, and the splice keeps the
-beat (both cuts on measured beats). Unchecked by the agent, who cannot hear:
-how the splice sounds now and the effects' level.
+**Next session:** take the user's notes on the revised draft 3. The music
+cuts are the ones the user chose by ear (S1, E2), checked to be the same
+signal in the video. Unchecked by the agent, who cannot hear: the effects'
+level. A new cut is offered as audio candidates first; beats are measured
+from kick and snare onsets, never the whole spectrum (the hats are off the
+beat).
 
 **Then P-2:** settle with the user its readers, form (one offline HTML
 file that opens in Edge, like the report, is the natural fit, perhaps

@@ -68,6 +68,12 @@
   #missLabel { position: absolute; padding: 6px 14px; border-radius: 8px; background: var(--fail); color: #fff; font-size: 20px; font-weight: 700; white-space: nowrap; }
   .lift { position: absolute; left: 0; top: 0; transform-origin: 0 0; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); background: #fff; }
   .lift img { display: block; width: 100%; height: 100%; }
+  #keycap { position: absolute; left: 0; top: 0; z-index: 40; display: flex; align-items: center; gap: 12px; padding: 10px;
+            border-radius: 14px; background: rgba(255,255,255,0.97); box-shadow: var(--shadow); font-size: 28px; font-weight: 700;
+            white-space: nowrap; transform-origin: 0 0; }
+  #keycap span { padding-right: 8px; }
+  #keycap kbd { font-family: inherit; font-size: 26px; font-weight: 800; padding: 6px 14px; border-radius: 8px; color: var(--fg-1);
+                background: var(--bg-3); border: 1px solid var(--stroke-1); box-shadow: inset 0 -3px 0 var(--stroke-1); }
   .rowmark { position: absolute; border-radius: 8px; background: rgba(15,108,189,0.10); box-shadow: inset 0 0 0 2px rgba(15,108,189,0.65); }
 
   /* act 3 */
@@ -123,6 +129,7 @@
     <div id="ripple"></div>
     <svg id="cursor" width="32" height="32" viewBox="0 0 32 32"></svg>
   </div>
+  <div id="keycap"></div>
   <div id="cupCard" class="card" style="width:520px;height:498px"><img id="cupImg" style="width:520px;height:498px" alt="">
     <div id="cupBand" style="position:absolute;border:3px solid var(--brand);border-radius:6px;box-sizing:border-box;background:rgba(15,108,189,0.08)"></div></div>
   <div id="ctxCard" class="card" style="border-radius:16px"><div id="ctxClip" style="position:absolute;inset:0;overflow:hidden">
@@ -145,11 +152,20 @@
 
 <script>
 "use strict";
-const FPS = 30, DURATION = 89.4;
-// the music's bars, as measured (render_intro.py MUSIC_EDIT): 108.05 BPM from 0.115 s; after the
-// splice at bar 34 the last section runs at 107.05 BPM
-const BEAT = 60 / 108.05, BEAT_END = 60 / 107.05, SPLICE = 0.115 + 34 * 4 * BEAT;
-const bar = (n) => (n <= 34 ? 0.115 + n * 4 * BEAT : SPLICE + (n - 34) * 4 * BEAT_END);
+const FPS = 30;
+// the music (the user's Suno track) and how it is cut. Its beats, measured from its kick and snare
+// onsets (2026-11-03; the hats sit off the beat): 108.05 BPM from 0.115 s; the last section, from
+// bar 66 at 146.820 s, at 107.05 BPM. The video plays the track's bars 0-1 (intro), 6-33 (the second
+// half of the build, the second section, the main section) and 68 to the end (two bars before the
+// final hit, the hit and its tail); the user chose these cuts by ear (S1, E2). MUSIC lists the pieces
+// [start, end, crossfade]: each comes in over the crossfade just before its first beat, so the beat
+// runs on through the cut. render_intro.py edits the music by it.
+const BEAT = 60 / 108.05, BEAT_END = 60 / 107.05;
+const trackBar = (k) => (k <= 34 ? 0.115 + 4 * k * BEAT : 146.820 + 4 * (k - 66) * BEAT_END);
+const MUSIC = [[0, trackBar(2), 0], [trackBar(6), trackBar(34), 0.05], [trackBar(68), null, BEAT]];
+// the video's bars: 0-29 are the track's 0-1 and 6-33; 30 on are the track's 68 on (the final hit is 32)
+const SPLICE = 0.115 + 30 * 4 * BEAT;
+const bar = (n) => (n <= 30 ? 0.115 + n * 4 * BEAT : SPLICE + (n - 30) * 4 * BEAT_END);
 const $ = (id) => document.getElementById(id);
 
 // sound effects, synthesised by scripts/render_intro.py under the music: [time, kind, gain]
@@ -178,8 +194,9 @@ let seed = 11;
 const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 
 // ---- the timeline: bars of the edited music (render_intro.py MUSIC_EDIT) ----
-const B = (n, beats = 0) => bar(n) + beats * (n < 34 ? BEAT : BEAT_END);
-const CLIP_AT = { recipe: B(12, 1.0), setup: B(16, 0.2), edit: B(22, 0.2), submit: B(31, 0.2) };
+const B = (n, beats = 0) => bar(n) + beats * (n < 30 ? BEAT : BEAT_END);
+const DURATION = B(32) + 4.6;
+const CLIP_AT = { recipe: B(8, 1.0), setup: B(12, 0.2), edit: B(17, 0.2), submit: B(27, 0.2) };
 
 // ---- type: lines of words, each word with its own time ----
 const TEXTS = [];
@@ -297,6 +314,8 @@ let sheetRows = [];      // [{row, bars: [[el, width]], caret}]
 let typed = [];          // when each row is typed
 let points = [];         // the hand-made chart's points
 let pages = [];
+const POINT_AT = (i) => B(3, 1.8) + i * BEAT * 0.3;  // the chart's points, from the rows
+const PAGE_AT = (i) => B(4, 2.1 + i * 0.9);         // the report's pages
 
 function buildSheet() {
   const sheet = $("sheet");
@@ -338,7 +357,7 @@ function buildSheet() {
   }
   // a row each "적고", sooner as it goes on: watching, pausing, typing, again and again
   let at = B(2, 2);
-  const gaps = [3, 3, 2, 2, 1.5, 1.5, 1, 1, 1, 0.75, 0.75, 0.75, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
+  const gaps = [1, 0.75, 0.75, 0.5, 0.5, 0.5, 0.35, 0.35, 0.35, 0.35, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3];
   for (let i = 0; i < 18; i += 1) {
     typed.push(at);
     cue(at, "type", 0.6);
@@ -388,13 +407,13 @@ function buildPages() {
 }
 
 function drawAct1(t) {
-  const end = B(9, 1);
+  const end = B(5, 2);
   // backdrop: two soft lights drifting
   $("glowA").style.transform = `translate(${-200 + 120 * Math.sin(t * 0.11)}px, ${-260 + 80 * Math.cos(t * 0.09)}px)`;
   $("glowB").style.transform = `translate(${1200 + 140 * Math.cos(t * 0.08)}px, ${420 + 90 * Math.sin(t * 0.12)}px)`;
 
   // collapse at bar 9: everything of the old way pulls into the middle and goes
-  const gone = ease(t, B(9, 0.6), B(9, 2.4), inOutCubic);
+  const gone = ease(t, B(5, 1.3), B(5, 3.0), inOutCubic);
   const pull = (x, y, el) => {
     const k = gone;
     return { x: mix(x, 960 - el.offsetWidth / 2, k * 0.85), y: mix(y, 540 - el.offsetHeight / 2, k * 0.85), s: mix(1, 0.35, k), a: 1 - k };
@@ -408,7 +427,7 @@ function drawAct1(t) {
   const pin = ease(t, 0.05, 0.9, outQuint);
   const small = ease(t, B(1), B(1, 1.6), inOutCubic);
   const left = ease(t, B(2), B(2, 1.4), inOutCubic);
-  const exit = ease(t, B(5), B(5, 1.4), inOutCubic);
+  const exit = ease(t, B(3, 1), B(3, 2.2), inOutCubic);
   const px = mix(mix(510, 330, small), 120, left) - 1100 * exit, py = mix(mix(150, 210, small), 210, left) + mix(40, 0, pin);
   const ps = mix(mix(1, 0.8, small), 0.8, left);
   const pp = pull(px, py, $("player"));
@@ -425,10 +444,10 @@ function drawAct1(t) {
   $("playerGlass").style.borderRadius = "12px";
 
   // the sheet, filling row by row; then to the left for the chart
-  const sin = ease(t, B(2, 0.3), B(2, 1.8), outQuint);
+  const sin = ease(t, B(2, 0.3), B(2, 1.5), outQuint);
   const sx = mix(1010, 120, exit), sy = 210 + mix(40, 0, sin);
   const sp = pull(sx, sy, $("sheet"));
-  const sheetFade = 1 - ease(t, B(8, 0.2), B(8, 1.6));
+  const sheetFade = 1 - ease(t, B(4, 2.1), B(4, 3.2));
   show($("sheet"), sin * sp.a * mix(1, 0.45, 1 - sheetFade), `translate(${sp.x}px, ${sp.y}px) scale(${sp.s * mix(1, 0.9, 1 - sheetFade)})`);
   $("sheet").style.transformOrigin = "0 0";
   let rowsDone = 0;
@@ -444,15 +463,15 @@ function drawAct1(t) {
   $("sheetInner").style.transform = `translateY(${-Math.max(0, rowsDone - 9) * 50}px)`;
 
   // the chart, point by point from the rows; the axis set wrong once; then the line by hand
-  const cin = ease(t, B(5, 0.3), B(5, 1.7), outQuint);
+  const cin = ease(t, B(3, 1.3), B(3, 2.5), outQuint);
   const cx = 1010, cy = 210 + mix(40, 0, cin);
   const cp = pull(cx, cy, $("chart"));
-  const chartFade = 1 - ease(t, B(8, 0.2), B(8, 1.6));
+  const chartFade = 1 - ease(t, B(4, 2.1), B(4, 3.2));
   show($("chart"), cin * cp.a * mix(1, 0.45, 1 - chartFade), `translate(${cp.x}px, ${cp.y}px) scale(${cp.s * mix(1, 0.9, 1 - chartFade)})`);
   $("chart").style.transformOrigin = "0 0";
-  const wrong = ease(t, B(6, 1), B(6, 1.25), outCubic) * (1 - ease(t, B(6, 2.6), B(7, 0.2), outBack));
+  const wrong = ease(t, B(3, 3.2), B(3, 3.4), outCubic) * (1 - ease(t, B(4, 0.2), B(4, 0.8), outBack));
   points.forEach((p, i) => {
-    const at = B(5, 1) + i * BEAT * 0.55;
+    const at = POINT_AT(i);
     const k = ease(t, at, at + 0.4, outBack);
     const c = $(`pt${i}`);
     c.setAttribute("cx", p.x);
@@ -460,7 +479,7 @@ function drawAct1(t) {
     c.setAttribute("r", 9 * clamp(k));
     c.style.opacity = clamp(k * 3);
   });
-  const drawn = ease(t, B(7, 0.2), B(7, 2.4), inOutCubic);
+  const drawn = ease(t, B(4, 1.2), B(4, 2.2), inOutCubic);
   const hl = $("handLine");
   const len = 700;
   hl.style.strokeDasharray = `${len}`;
@@ -468,7 +487,7 @@ function drawAct1(t) {
 
   // the report: pages slide in, each with its capture pasted
   pages.forEach((page, i) => {
-    const at = B(8, 0.25 + i * 1.6);
+    const at = PAGE_AT(i);
     const k = ease(t, at, at + 0.8, outQuint);
     const paste = ease(t, at + 0.45, at + 0.85, outBack);
     const x = 600 + i * 220, y = 236 - i * 36 + mix(520, 0, k);
@@ -562,6 +581,23 @@ function cover(cam) {
   const fit = (c, span, half) => { const a = half / cam.z, b = span - half / cam.z; return clamp(c, Math.min(a, b), Math.max(a, b)); };
   return { cx: fit(cam.cx, 1600, 960), cy: fit(cam.cy, 936, 540), z: cam.z };
 }
+// a key pressed in a clip, shown beside the pointer for a moment
+function drawKey(cursor, t, cam, dy, alpha) {
+  const el = $("keycap");
+  let hit = null;
+  for (const [k, label] of (cursor && CLIPS[cursor.name].keys) || []) {
+    const at = CLIP_AT[cursor.name] + k / FPS;
+    if (t >= at - 0.05 && t < at + 1.0) hit = { at, label };
+  }
+  if (!hit) { show(el, 0); return; }
+  const [key, name] = hit.label.split(/\s{2,}/);
+  const html = `<kbd>${key}</kbd>${name ? `<span>${name}</span>` : ""}`;
+  if (el.innerHTML !== html) el.innerHTML = html;
+  const p = onStage(cursor.f[1], cursor.f[2] + 36, cam, dy);
+  const k = ease(t, hit.at, hit.at + 0.25, outBack), out = ease(t, hit.at + 0.75, hit.at + 1.0);
+  const below = p.y < 860;  // above the pointer near the bottom, clear of the captions
+  show(el, Math.min(clamp(k * 2), 1 - out) * alpha, `translate(${p.x + 34}px, ${below ? p.y + 26 : p.y - 92}px) scale(${mix(0.7, 1, k)})`);
+}
 function drawWindow(cam, alpha, dy = 0) {
   show($("win"), alpha, `translate(${960 - cam.cx * cam.z}px, ${540 - cam.cy * cam.z + dy}px) scale(${cam.z})`);
 }
@@ -575,10 +611,10 @@ function ctxX(time) {
 }
 
 function drawAct2(t) {
-  const rise = ease(t, B(10, 2.6), B(11, 1.6), outQuint);
-  const away = ease(t, B(16, 3.0), B(16, 3.8), inOutCubic) * (1 - ease(t, B(18), B(18, 1.3), outQuint));
-  const final = ease(t, B(33, 3), B(34, 1), inOutCubic);
-  let cam = { ...HOME, z: mix(0.76, 0.82, rise) + 0.02 * lin(t, B(11), B(12)) };
+  const rise = ease(t, B(6, 2.6), B(7, 1.6), outQuint);
+  const away = ease(t, B(12, 3.0), B(12, 3.8), inOutCubic) * (1 - ease(t, B(14), B(14, 1.3), outQuint));
+  const final = ease(t, B(29, 3), B(30, 1), inOutCubic);
+  let cam = { ...HOME, z: mix(0.76, 0.82, rise) + 0.02 * lin(t, B(7), B(8)) };
   let alpha = rise * (1 - away) * (1 - final);
   let dy = mix(560, 0, rise);
   let cursor = null, ripple = null;
@@ -603,34 +639,34 @@ function drawAct2(t) {
       { at: "save", after: 20, ...HOME, over: 1.0 },
     ]), 1);
     cursor = { name: "recipe", f, alpha: life(t, CLIP_AT.recipe, CLIP_AT.setup - 0.2, 0.3, 0.3) };
-  } else if (t < B(18)) {
+  } else if (t < B(14)) {
     const { f } = clipFrame("setup", t);
     setSrc($("appImg"), clipSrc("setup", f[0]));
     setSrc($("appFade"), clipSrc("recipe", CLIPS.recipe.frames.at(-1)[0]));
     show($("appFade"), 1 - ease(t, CLIP_AT.setup, CLIP_AT.setup + 0.4));
     cam = clipCam("setup", t, [HOME, { at: 6, follow: 0.6, z: 1.06, over: 0.7 }]);
     cam = camMix(cam, { cx: 800, cy: 468, z: 0.7 }, away);
-    cursor = { name: "setup", f, alpha: life(t, CLIP_AT.setup, B(16, 3.2), 0.2, 0.3) };
+    cursor = { name: "setup", f, alpha: life(t, CLIP_AT.setup, B(12, 3.2), 0.2, 0.3) };
   } else if (t < CLIP_AT.edit) {
     // the editor as the analysis left it: the draft drawn on, then where it misses the edge
     setSrc($("appImg"), "assets/editor-noline.jpg");
     setSrc($("appTop"), "assets/editor-draft.jpg");
-    const wipe = ease(t, B(18, 1.6), B(19, 2.2), inOutCubic);
+    const wipe = ease(t, B(14, 1.4), B(15, 1.4), inOutCubic);
     const edge = mix(50, 1226, wipe);
     show($("appTop"), wipe > 0 ? 1 : 0);
     $("appTop").style.clipPath = `inset(0 ${1600 - edge}px 0 0)`;
     const m = F.boxes.contextImage;
     const x0 = ctxX(6.5), x1 = ctxX(31.5);
     place($("miss"), { x: x0, y: m.y - 4, w: x1 - x0, h: m.height + 8 });
-    const pulse = 0.75 + 0.25 * Math.sin((t - B(20)) * Math.PI / BEAT);
-    const missIn = life(t, B(20, 1), CLIP_AT.edit + 0.6, 0.5, 0.5);
+    const pulse = 0.75 + 0.25 * Math.sin((t - B(15, 3)) * Math.PI / BEAT);
+    const missIn = life(t, B(16, 0.2), CLIP_AT.edit + 0.6, 0.5, 0.5);
     show($("miss"), missIn * pulse);
     place($("missLabel"), { x: x0, y: m.y - 52, w: null, h: null });
     $("missLabel").style.width = $("missLabel").style.height = "";
     show($("missLabel"), missIn);
     const look = cover({ cx: (x0 + x1) / 2 + 40, cy: m.y + 36 + m.height / 2 - 70, z: 1.32 });
-    cam = camMix(cam, look, ease(t, B(20), B(20, 2.2), inOutCubic));
-  } else if (t < B(27)) {
+    cam = camMix(cam, look, ease(t, B(15, 3), B(16, 1.6), inOutCubic));
+  } else if (t < B(24)) {
     const { f } = clipFrame("edit", t);
     setSrc($("appImg"), clipSrc("edit", f[0]));
     const m = F.boxes.contextImage;
@@ -639,21 +675,20 @@ function drawAct2(t) {
     const v = F.boxes.video, j = F.boxes.judgment;
     cam = clipCam("edit", t, [
       look,
-      { at: 4, follow: 0.7, cx: 600, cy: 300, z: 1.12, over: 0.9 },
-      { at: "stroke", after: -16, follow: 0.45, cx: look.cx, cy: look.cy, z: 1.3, over: 0.9 },
+      { at: "range", after: -6, follow: 0.5, cx: look.cx, cy: look.cy + 60, z: 1.55, over: 0.9 },
       { at: "stroked", after: 4, cx: j.x + j.width / 2, cy: j.y + 36 + 110, z: 2.0, over: 0.8 },
       { at: "look", after: -14, follow: 0.5, cx: 700, cy: 600, z: 1.1, over: 0.7 },
       { at: "look", after: 12, cx: v.x + v.width / 2, cy: v.y + 36 + v.height / 2 + 60, z: 2.0, over: 0.8 },
       { at: "check", after: -16, cx: j.x + j.width / 2, cy: j.y + 36 + 200, z: 1.9, over: 0.8 },
     ]);
-    cam = camMix(cam, HOME, ease(t, B(26, 2), B(27), inOutCubic));
-    cursor = { name: "edit", f, alpha: life(t, CLIP_AT.edit, B(26, 2.5), 0.3, 0.4) };
+    cam = camMix(cam, HOME, ease(t, B(23, 2), B(24), inOutCubic));
+    cursor = { name: "edit", f, alpha: life(t, CLIP_AT.edit, B(23, 2.5), 0.3, 0.4) };
     show($("miss"), (1 - ease(t, CLIP_AT.edit, CLIP_AT.edit + 0.6)) * 0.9);
     place($("miss"), { x: x0, y: m.y - 4, w: x1 - x0, h: m.height + 8 });
   } else if (t < CLIP_AT.submit) {
     setSrc($("appImg"), clipSrc("edit", CLIPS.edit.frames.at(-1)[0]));
     const aside = { cx: 1467, cy: 368, z: 0.6 };
-    cam = camMix(HOME, aside, ease(t, B(27), B(27, 2), inOutCubic) * (1 - ease(t, B(30, 2), B(31), inOutCubic)));
+    cam = camMix(HOME, aside, ease(t, B(24), B(24, 2), inOutCubic) * (1 - ease(t, B(26, 2), B(27), inOutCubic)));
   } else {
     const { f } = clipFrame("submit", t);
     setSrc($("appImg"), clipSrc("submit", f[0]));
@@ -668,6 +703,7 @@ function drawAct2(t) {
     alpha *= 1 - ease(t, report, report + 0.9);
   }
   drawWindow(cam, alpha, dy);
+  drawKey(cursor, t, cam, dy, alpha);
   if (cursor && alpha > 0) {
     drawCursor(cursor.f[1], cursor.f[2], cursor.f[4], cursor.f[3], cam, cursor.alpha * alpha);
     drawRipple(cursor.name, t, cam);
@@ -693,25 +729,25 @@ function buildStrips() {
   }
 }
 function drawBuild(t) {
-  const start = B(16, 3.3), end = B(17, 3.2);
-  const k = life(t, start, B(18, 1.2), 0.6, 0.01);
-  const fly = ease(t, B(18), B(18, 1.4), inOutCubic);
+  const start = B(12, 3.3), end = B(13, 3.2);
+  const k = life(t, start, B(14, 1.2), 0.6, 0.01);
+  const fly = ease(t, B(14), B(14, 1.4), inOutCubic);
   const scale = CUP.w / 730;
   const band = { x: (F.band[0] - 760) * scale, y: (F.top - 300) * scale, w: (F.band[1] - F.band[0]) * scale, h: (F.bottom - F.top) * scale };
   const n = clamp(Math.floor(lin(t, start, end) * STRIPS), 0, STRIPS - 1);
   setSrc($("cupImg"), `assets/cup-${String(n).padStart(2, "0")}.jpg`);
-  show($("cupCard"), k * (1 - ease(t, B(18), B(18, 0.9))), `translate(${CUP.x - 60 * fly}px, ${CUP.y + mix(40, 0, ease(t, start, start + 0.6))}px)`);
+  show($("cupCard"), k * (1 - ease(t, B(14), B(14, 0.9))), `translate(${CUP.x - 60 * fly}px, ${CUP.y + mix(40, 0, ease(t, start, start + 0.6))}px)`);
   place($("cupBand"), band);
   // the context image: revealed as strips land; at bar 18 it flies into the editor
   const target = boxOnStage(F.boxes.contextImage, HOME);
   const r = mixRect(CTX, target, fly);
   place($("ctxCard"), r);
   const enter = ease(t, start - 0.2, start + 0.5, outQuint);
-  show($("ctxCard"), enter * (1 - ease(t, B(18, 1.0), B(18, 1.4))), `translateY(${mix(30, 0, enter)}px)`);
+  show($("ctxCard"), enter * (1 - ease(t, B(14, 1.0), B(14, 1.4))), `translateY(${mix(30, 0, enter)}px)`);
   $("ctxCard").style.borderRadius = `${mix(16, 2, fly)}px`;
   const shown = lin(t, start + 0.25, end + 0.35);
   $("ctxClip").style.clipPath = `inset(0 ${(1 - shown) * 100}% 0 0)`;
-  show($("ctxLabel"), life(t, B(17, 0.6), B(18, 0.3)), `translateY(${CTX.y + CTX.h + 34}px)`);
+  show($("ctxLabel"), life(t, B(13, 0.6), B(14, 0.3)), `translateY(${CTX.y + CTX.h + 34}px)`);
   strips.forEach((s, i) => {
     const at = start + (end - start) * i / STRIPS;
     const p = ease(t, at, at + 0.55, inOutCubic);
@@ -728,13 +764,13 @@ function drawBuild(t) {
 function drawJudgment(t) {
   const j = F.boxes.judgment;
   const aside = { cx: 1467, cy: 368, z: 0.6 };
-  const k = ease(t, B(27, 0.5), B(27, 2.3), inOutCubic);
-  const back = ease(t, B(30, 2), B(31), inOutCubic);
-  const camNow = camMix(HOME, aside, ease(t, B(27), B(27, 2), inOutCubic) * (1 - back));
+  const k = ease(t, B(24, 0.5), B(24, 2.3), inOutCubic);
+  const back = ease(t, B(26, 2), B(27), inOutCubic);
+  const camNow = camMix(HOME, aside, ease(t, B(24), B(24, 2), inOutCubic) * (1 - back));
   const from = boxOnStage(j, camNow);
   const to = { x: 1090, y: 220, w: 720, h: 720 * j.height / j.width };
   const r = mixRect(from, to, k * (1 - back));
-  show($("judgeLift"), t > B(27, 0.4) && t < B(31) ? 1 : 0);
+  show($("judgeLift"), t > B(24, 0.4) && t < B(27) ? 1 : 0);
   place($("judgeLift"), r);
   $("judgeLift").style.boxShadow = `0 ${40 * k}px ${90 * k}px rgba(16,42,77,${0.18 * k}), 0 0 0 1px rgba(16,42,77,0.08)`;
   // its rows lit one by one: the rule's evidence
@@ -757,8 +793,8 @@ function drawJudgment(t) {
   [...marks.children].forEach((m, i) => {
     const b = JSON.parse(m.dataset.box);
     if (!b) return;
-    const at = i === 0 ? B(28) : B(28, 2 * i);
-    const a = life(t, at, i === 0 ? B(30, 1) : at + 2 * BEAT + 0.1, 0.25, 0.3) * (1 - back);
+    const at = i === 0 ? B(25) : B(25, 1.5 * i);
+    const a = life(t, at, i === 0 ? B(26, 1.5) : at + 1.5 * BEAT + 0.1, 0.25, 0.3) * (1 - back);
     place(m, { x: (b.x - 6) * sc, y: (b.y - 2) * sc, w: (b.width + 12) * sc, h: (b.height + 4) * sc });
     show(m, a);
   });
@@ -767,8 +803,8 @@ function drawJudgment(t) {
 function drawReport(t) {
   const at = clipTime("submit", "submitted") + 0.7;
   const k = ease(t, at, at + 1.3, outQuint);
-  const second = ease(t, B(33), B(33, 1.6), outQuint);
-  const out = ease(t, B(33, 3), B(34, 1), inOutCubic);
+  const second = ease(t, B(29), B(29, 1.6), outQuint);
+  const out = ease(t, B(29, 3), B(30, 1), inOutCubic);
   const w = 1150, h = w * 1588 / 2248;
   const from = { x: 960 - 200, y: 540 - 140, w: 400, h: 400 * 1588 / 2248 };
   const to = { x: 960 - w / 2 + 60, y: 214, w, h };
@@ -786,6 +822,7 @@ const FLIPS = [
   { before: "캡처를 붙여 보고서 만들기", after: "제출하면 보고서", key: "보고서" },
 ];
 let flips = [];
+const FLIP_AT = (i) => B(30, 1.5 + 2 * i);
 function buildFlips() {
   FLIPS.forEach((item, i) => {
     const box = document.createElement("div");
@@ -805,11 +842,11 @@ function buildFlips() {
   });
 }
 function drawAct3(t) {
-  const out = ease(t, B(37, 2.6), B(38, 0.5), inOutCubic);
+  const out = ease(t, B(31, 3.0), B(32, 0.5), inOutCubic);
   flips.forEach((box, i) => {
-    const at = B(34, 0.3 + i * 0.4);
+    const at = B(30, 0.1 + i * 0.25);
     const k = ease(t, at, at + 0.9, outQuint);
-    const turn = ease(t, B(35 + i), B(35 + i, 1.3), outBack);
+    const turn = ease(t, FLIP_AT(i), FLIP_AT(i) + 1.2 * BEAT_END, outBack);
     const x = 120 + i * 580, y = 330 + mix(80, 0, k);
     show(box, k * (1 - out), `translate(${x}px, ${y - 60 * out}px) scale(${mix(1, 0.92, out)})`);
     const [before, after] = box.children;
@@ -817,13 +854,13 @@ function drawAct3(t) {
     after.style.transform = `rotateY(${180 - 180 * turn}deg)`;
   });
   // the name: the level rises under it
-  const n = ease(t, B(38, 0.2), B(38, 1.5), outQuint);
+  const n = ease(t, B(32, 0.2), B(32, 1.5), outQuint);
   show($("name"), n * (1 - ease(t, DURATION - 1.6, DURATION - 0.4)), `translateY(${mix(40, 0, n)}px)`);
   $("name").style.top = "380px";
-  const rule = ease(t, B(38, 0.6), B(38, 2.4), inOutCubic);
+  const rule = ease(t, B(32, 0.6), B(32, 2.4), inOutCubic);
   place($("nameRule"), { x: 960 - 520 * rule, y: 556, w: 1040 * rule, h: 6 });
   show($("nameRule"), rule > 0 ? 1 - ease(t, DURATION - 1.6, DURATION - 0.4) : 0);
-  show($("tagline"), life(t, B(38, 1.2), DURATION - 0.4, 0.8, 1.2), `translateY(${600 + mix(16, 0, ease(t, B(38, 1.2), B(38, 2)))}px)`);
+  show($("tagline"), life(t, B(32, 1.2), DURATION - 0.4, 0.8, 1.2), `translateY(${600 + mix(16, 0, ease(t, B(32, 1.2), B(32, 2)))}px)`);
 }
 
 // ---- the frame at t ----
@@ -851,63 +888,67 @@ function setup() {
 
   // act 1 (the line at the bottom: the eye learns where the words are)
   line(860, 78, [["긴", B(0, 0.6)], ["검사", B(0, 0.8)], ["영상을,", B(0, 1.0)], ["배속으로,", B(1, 0.2), 1], ["끝까지", B(1, 0.6), 1]], B(2, -0.1));
-  line(860, 78, [["보고,", B(2)], ["멈추고,", B(2, 1)], ["적고.", B(2, 2), 1]], B(5, -0.1));
-  sub(966, "영상이 끝날 때까지, 계속", B(3, 0.5), B(5, -0.1));
-  line(860, 78, [["그래프", B(5, 0.1)], ["작성도", B(5, 0.3)], ["손으로.", B(5, 0.6), 1]], B(8, -0.1));
-  sub(966, "범위를 맞추고, 다시 그리고", B(6, 1.6), B(8, -0.1));
-  line(860, 78, [["캡처를", B(8, 0.1)], ["붙여", B(8, 0.3)], ["보고서까지.", B(8, 0.6), 1]], B(9, 1.0));
-  const all = line(470, 96, [["이", B(9, 2.3)], ["모든", B(9, 2.5)], ["일을,", B(9, 2.7)], ["하나의", B(10), 1], ["앱으로.", B(10, 0.3), 1]], B(12, -0.15));
+  line(860, 78, [["보고,", B(2)], ["멈추고,", B(2, 1)], ["적고.", B(2, 2), 1]], B(3, 0.8));
+  sub(966, "영상이 끝날 때까지, 계속", B(2, 3), B(3, 0.9));
+  line(860, 78, [["그래프", B(3, 1.1)], ["작성도", B(3, 1.3)], ["손으로.", B(3, 1.6), 1]], B(4, 2.0));
+  sub(966, "범위를 맞추고, 다시 그리고", B(3, 3.2), B(4, 2.0));
+  line(860, 78, [["캡처를", B(4, 2.1)], ["붙여", B(4, 2.3)], ["보고서까지.", B(4, 2.6), 1]], B(5, 1.8));
+  const all = line(470, 96, [["이", B(5, 2.6)], ["모든", B(5, 2.8)], ["일을,", B(5, 3.0)], ["하나의", B(6), 1], ["앱으로.", B(6, 0.3), 1]], B(8, -0.15));
   all.move = (t) => {
-    const k = ease(t, B(10, 1.5), B(10, 3.3), inOutCubic);
+    const k = ease(t, B(6, 1.5), B(6, 3.3), inOutCubic);
     return `translateY(${mix(0, -410, k)}px) scale(${mix(1, 0.62, k)})`;
   };
 
   // act 2 (above the window, and pills over it while the camera is close)
-  const top = 44, size = 60;
-  line(top, size, [["장비마다", B(12, 0.2)], ["한", B(12, 0.4)], ["번,", B(12, 0.6)], ["Recipe", B(12, 1.0), 1]], clipTime("recipe", "move") - 0.45);
+  const top = 44, size = 60, edit = (mark) => clipTime("edit", mark);
+  line(top, size, [["장비마다", B(8, 0.2)], ["한", B(8, 0.4)], ["번,", B(8, 0.6)], ["Recipe", B(8, 1.0), 1]], clipTime("recipe", "move") - 0.45);
   pill(968, "타원을 끌어 Glass에 맞추고", clipTime("recipe", "move") - 0.3, clipTime("recipe", "zero") - 0.1);
   pill(968, "0선을 끌어 기준을 정하면", clipTime("recipe", "zero") - 0.1, clipTime("recipe", "save"));
-  pill(968, "저장. 장비마다 한 번이면 됩니다", clipTime("recipe", "save"), B(16, -0.05));
-  line(top, size, [["분석을", B(16, 0.3)], ["시작하면", B(16, 0.6)]], B(16, 3.2));
-  line(150, 72, [["긴", B(17)], ["영상이", B(17, 0.2)], ["한", B(17, 0.5)], ["장의", B(17, 0.7)], ["그림으로", B(17, 1.0), 1]], B(18, 0.6));
-  line(top, size, [["초안은", B(19)], ["앱이", B(19, 0.25)], ["그리고", B(19, 0.5), 1]], B(20, 0.6));
-  pill(968, "흐릿한 경계에서는 초안이 빗나가기도 합니다", B(20, 1.5), CLIP_AT.edit);
-  line(top, size, [["판단은", B(22)], ["검사자가", B(22, 0.4), 1]], B(22, 2.0));
-  pill(968, "맥락 이미지의 경계를 따라 그리면", clipTime("edit", "stroke") - 0.4, clipTime("edit", "stroked"));
-  pill(968, "판정이 바로 다시 계산되고", clipTime("edit", "stroked"), clipTime("edit", "look") - 0.2);
-  pill(968, "원본 영상과 나란히 확인하고", clipTime("edit", "look") - 0.2, clipTime("edit", "check") - 0.1);
-  pill(968, "판단은 검사자의 확인으로", clipTime("edit", "check") - 0.1, B(27));
-  line(top + 40, 68, [["규칙대로,", B(27, 0.4)], ["근거와", B(27, 0.8)], ["함께", B(27, 1.1), 1]], B(31, -0.1));
+  pill(968, "저장. 장비마다 한 번이면 됩니다", clipTime("recipe", "save"), B(12, -0.05));
+  line(top, size, [["분석을", B(12, 0.3)], ["시작하면", B(12, 0.6)]], B(12, 3.2));
+  line(150, 72, [["긴", B(13)], ["영상이", B(13, 0.2)], ["한", B(13, 0.5)], ["장의", B(13, 0.7)], ["그림으로", B(13, 1.0), 1]], B(14, 0.6));
+  line(top, size, [["초안은", B(14, 2.2)], ["앱이", B(14, 2.45)], ["그리고", B(14, 2.7), 1]], B(15, 3.3));
+  pill(968, "흐릿한 경계에서는 초안이 빗나가기도 합니다", B(16, 0.5), CLIP_AT.edit);
+  line(top, size, [["판단은", B(17)], ["검사자가", B(17, 0.4), 1]], B(17, 2.6));
+  pill(968, "어긋난 구간을 골라 지우고", edit("range") - 0.3, edit("pencil") - 0.2);
+  pill(968, "연필로 그리거나", edit("pencil") - 0.2, edit("point") - 0.1);
+  pill(968, "점만 찍으면 경계를 따라 이어지고", edit("point") - 0.1, edit("stroked"));
+  pill(968, "판정이 바로 다시 계산되고", edit("stroked"), edit("look") - 0.2);
+  pill(968, "원본 영상과 나란히 확인하고", edit("look") - 0.2, edit("check") - 0.1);
+  pill(968, "판단은 검사자의 확인으로", edit("check") - 0.1, B(24));
+  line(top + 40, 68, [["규칙대로,", B(24, 0.4)], ["근거와", B(24, 0.8)], ["함께", B(24, 1.1), 1]], B(27, -0.1));
   pill(968, "제출하면 이 버전은 잠깁니다", clipTime("submit", "dialog") - 0.2, clipTime("submit", "submitted") + 0.6);
-  line(top, size, [["제출하면,", clipTime("submit", "submitted") + 0.5], ["보고서까지", clipTime("submit", "submitted") + 0.8, 1]], B(34, 0.4));
+  line(top, size, [["제출하면,", clipTime("submit", "submitted") + 0.5], ["보고서까지", clipTime("submit", "submitted") + 0.8, 1]], B(30, 0.3));
 
   // act 3
-  line(150, 72, [["같은", B(34, 0.2)], ["검사,", B(34, 0.4)], ["더", B(34, 0.7)], ["가볍게", B(34, 0.9), 1]], B(38, 0.3));
+  line(150, 72, [["같은", B(30, 0.1)], ["검사,", B(30, 0.3)], ["더", B(30, 0.5)], ["가볍게", B(30, 0.7), 1]], B(32, 0.3));
 
   // sounds that follow the pictures
   cue(B(1, 0.4), "whoosh", 0.5);
   cue(B(2), "whoosh", 0.4);
-  points.forEach((_, i) => cue(B(5, 1) + i * BEAT * 0.55, "tick", 0.5));
-  cue(B(6, 1), "tok", 0.8);
-  cue(B(6, 2.7), "tok", 0.6);
-  cue(B(7, 0.2), "scribble", 0.5);
-  pages.forEach((_, i) => { cue(B(8, 0.25 + i * 1.6), "whoosh", 0.45); cue(B(8, 0.7 + i * 1.6), "click", 0.8); });
-  cue(B(9, 0.6), "whoosh", 0.7);
-  cue(B(10, 2), "whoosh", 0.6);
-  cue(B(11), "shimmer", 0.8);
-  for (const name of Object.keys(CLIP_AT)) for (const p of CLIPS[name].presses) cue(CLIP_AT[name] + p / FPS, "click", 0.9);
-  for (let i = 0; i < STRIPS; i += 1) cue(B(16, 3.3) + (B(17, 3.2) - B(16, 3.3)) * i / STRIPS + 0.5, "tick", 0.35);
-  cue(B(18), "whoosh", 0.7);
-  cue(clipTime("edit", "stroke"), "scribble", 0.6);
-  cue(clipTime("edit", "stroked") + 0.3, "chime", 0.8);
-  cue(clipTime("edit", "check") + 0.3, "chime", 0.5);
-  cue(B(27, 0.5), "whoosh", 0.5);
-  for (let i = 0; i < 4; i += 1) cue(i === 0 ? B(28) : B(28, 2 * i), "tick", 0.6);
+  points.forEach((_, i) => cue(POINT_AT(i), "tick", 0.5));
+  cue(B(3, 3.2), "tok", 0.8);
+  cue(B(4, 0.2), "tok", 0.6);
+  cue(B(4, 1.2), "scribble", 0.4);
+  pages.forEach((_, i) => { cue(PAGE_AT(i), "whoosh", 0.45); cue(PAGE_AT(i) + 0.45, "click", 0.8); });
+  cue(B(5, 1.3), "whoosh", 0.7);
+  cue(B(6, 2), "whoosh", 0.6);
+  cue(B(7), "shimmer", 0.8);
+  for (const name of Object.keys(CLIP_AT)) {
+    for (const p of CLIPS[name].presses) cue(CLIP_AT[name] + p / FPS, "click", 0.9);
+    for (const [k] of CLIPS[name].keys ?? []) cue(CLIP_AT[name] + k / FPS, "click", 0.7);
+  }
+  for (let i = 0; i < STRIPS; i += 1) cue(B(12, 3.3) + (B(13, 3.2) - B(12, 3.3)) * i / STRIPS + 0.5, "tick", 0.35);
+  cue(B(14), "whoosh", 0.7);
+  cue(edit("pencil") + 0.25, "scribble", 0.45);
+  cue(edit("stroked") + 0.3, "chime", 0.8);
+  cue(edit("check") + 0.3, "chime", 0.5);
+  cue(B(24, 0.5), "whoosh", 0.5);
+  for (let i = 0; i < 4; i += 1) cue(i === 0 ? B(25) : B(25, 1.5 * i), "tick", 0.6);
   cue(clipTime("submit", "submitted") + 0.1, "stamp", 0.9);
   cue(clipTime("submit", "submitted") + 0.7, "whoosh", 0.6);
-  cue(SPLICE - 2.1, "riser", 0.5);  // into the last section
-  for (let i = 0; i < 3; i += 1) cue(B(35 + i), "flip", 0.8);
-  cue(B(38, 0.3), "shimmer", 0.9);
+  for (let i = 0; i < 3; i += 1) cue(FLIP_AT(i), "flip", 0.8);
+  cue(B(32, 0.3), "shimmer", 0.9);
 }
 
 async function ready() {
@@ -929,7 +970,7 @@ async function ready() {
   await Promise.all([...document.images].map((img) => (img.complete ? null : new Promise((r) => { img.onload = img.onerror = r; }))));
   await document.fonts.ready;
   await seek(0);
-  return { fps: FPS, duration: DURATION, cues: CUES };
+  return { fps: FPS, duration: DURATION, cues: CUES, music: MUSIC };
 }
 
 window.intro = { ready: ready(), seek };
